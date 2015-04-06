@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :measurements
+
   resources :instruments
 
   resources :sites
