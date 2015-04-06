@@ -16,8 +16,11 @@
     <%= f.text_field :name %>
   </div>
   <div class="field">
-    <%= f.label :site_id %><br>
-    <%= f.text_field :site_id %>
+	
+	 <%= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
+	
+    <%#= f.label :site_id %>
+    <%#= f.text_field :site_id %>
   </div>
   <div class="actions">
     <%= f.submit %>
