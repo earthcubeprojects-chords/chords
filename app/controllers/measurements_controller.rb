@@ -36,6 +36,21 @@ class MeasurementsController < ApplicationController
       end
     end
   end
+  
+  def url_create
+    @measurement = Measurement.new(:instrument_id => params[:instrument_id], :parameter => params[:parameter], :value => params[:value], :unit => params[:unit])
+
+
+    respond_to do |format|
+      if @measurement.save
+        format.html { redirect_to @measurement, notice: 'Measurement was successfully created.' }
+        format.json { render :show, status: :created, location: @measurement }
+      else
+        format.html { render :new }
+        format.json { render json: @measurement.errors, status: :unprocessable_entity }
+      end
+    end
+  end  
 
   # PATCH/PUT /measurements/1
   # PATCH/PUT /measurements/1.json
