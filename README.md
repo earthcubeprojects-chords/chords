@@ -24,6 +24,8 @@ functionality:
 * A query that can return data from the database.
 * A webpage that can navigate and show data in a tabular form, and perhaps 
   deliver a CSV file.
+* A webpage that provides a URL builder, than can be used immediately, and used
+  as a template for client applications.
 * A webpage which provides a summary of the current data holdings and 
   ingest activity.
 
