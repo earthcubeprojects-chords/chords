@@ -5,7 +5,8 @@ Rails.application.routes.draw do
 
   resources :sites
 
-
+  root to: 'sites#index'
+  
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
   get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
   
