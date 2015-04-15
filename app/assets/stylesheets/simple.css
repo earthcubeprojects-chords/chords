@@ -3,9 +3,13 @@
  */
 main {
   background-color: #FBEEA5;
-  padding-bottom: 80px;
-  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width:100%;
   }
+main h1 {
+	text-align: center;
+}
 header {
   border: 1px solid black;
   background-image: linear-gradient(to bottom, grey, white);
@@ -15,6 +19,9 @@ header {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+section h1 {
+	text-align: center;
 }
 ul.nav li {
   display: inline;
