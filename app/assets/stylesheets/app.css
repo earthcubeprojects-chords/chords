@@ -1,10 +1,10 @@
-main {
-display:block;
+.main {
 background-color: cornsilk;
 text-align: left;
 padding-top: 10px;
 padding-bottom: 10px;
 padding-left:10px;
+float: left;
 }
 
 .appheader 
@@ -55,6 +55,14 @@ text-decoration: none;
 color: #fff;
 background-color: #369;
 text-decoration: none;
+}
+
+.footer 
+{
+position: absolute;
+bottom: 0px;
+left: 10%;
+right:10%;
 }
 
 .flash_notice, .flash_alert {
