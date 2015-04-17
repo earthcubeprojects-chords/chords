@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+  	<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= content_for?(:title) ? yield(:title) : "Chords Testbed" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Chords Testbed" %>">
@@ -11,13 +12,16 @@
  </head>
  
   <body>
-    <header>
+    <header id="appheader">
       <%= render 'layouts/navigation' %>  		
     </header>
-    <main role="main">
+    <aside id="appsidebar">
+	  <%= render 'layouts/sidebar' %>    	
+    </aside>
+	<section id="content">
 	  <%= render 'layouts/messages' %>
 	  <%= yield %>
-    </main>
+	</section>
     <footer>
       <%= render 'layouts/footer' %>  		
     </footer>

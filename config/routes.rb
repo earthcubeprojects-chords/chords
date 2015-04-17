@@ -1,11 +1,16 @@
 Rails.application.routes.draw do
+  get 'configure/index'
+
+  get 'dashboard/index'
+
+  resources :about
+  resources :dashboard
+  resources :configure
   resources :measurements
-
   resources :instruments
-
   resources :sites
 
-  root to: 'home#index'
+  root to: 'dashboard#index'
 
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
   get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'

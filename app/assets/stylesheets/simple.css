@@ -1,56 +1,93 @@
-/*
- * Simple CSS stylesheet for a navigation bar and flash messages.
- */
-main {
-  background-color: #FBEEA5;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  width:100%;
-  }
-main h1 {
-	text-align: left;
-}
-header {
-  border: 1px solid black;
-  background-image: linear-gradient(to bottom, grey, white);
-  background-color: #00d0ff;
-  -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-section h1 {
-	text-align: left;
-}
-ul.nav li {
-  display: inline;
-}
-ul.nav li a {
-  padding: 10px 15px 10px;
-  color: #black;
-  text-decoration: none;
-}
-.flash_notice, .flash_alert {
-  padding: 8px 35px 8px 14px;
-  margin-bottom: 20px;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  border: 1px solid #fbeed5;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-}
-.flash_notice {
-  background-color: #dff0d8;
-  border-color: #d6e9c6;
-  color: #468847;
-}
-.flash_alert {
-  background-color: #f2dede;
-  border-color: #eed3d7;
-  color: #b94a48;
+header#appheader {
+border: 1px solid black;
+background-color: firebrick;
+-webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+-moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+margin-bottom: 10px;
+font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+color: cornsilk;
 }
 
+aside#appsidebar {
+float: left; 
+width: 100px; 
+min-height: 100%;
+background-color: cornsilk;
+padding-right: 10px;
+text-align: left;
+}
+
+section#content {
+padding-bottom: 10px;
+background-color: cornsilk;
+text-align: left;
+}
+
+#horizmenu 
+{
+display: inline;
+}
+
+#horizmenu li
+{
+display: inline;
+padding-left: 10px;
+}
+
+#horizmenu li h1
+{
+display: inline;
+}
+
+#vertmenu ul
+{
+list-style: none;
+text-align: left;
+}
+
+ul#vertmenu
+{
+list-style: none;
+padding-left: 0;
+text-align: left;
+}
+
+#horizmenu a:link, #horizmenu a:visited, #vertmenu a:link, #vertmenu a:visited
+{
+color: black;
+background-color: cornsilk;
+text-decoration: none;
+}
+
+#horizmenu a:hover, #vertmenu a:hover
+{
+color: #fff;
+background-color: #369;
+text-decoration: none;
+}
+
+.flash_notice, .flash_alert {
+padding: 8px 35px 8px 14px;
+margin-bottom: 20px;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+border: 1px solid #fbeed5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 20px;
+}
+
+.flash_notice {
+background-color: #dff0d8;
+border-color: #d6e9c6;
+color: #468847;
+}
+
+.flash_alert {
+background-color: #f2dede;
+border-color: #eed3d7;
+color: #b94a48;
+}
