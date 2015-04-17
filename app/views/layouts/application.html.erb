@@ -12,16 +12,16 @@
  </head>
  
   <body>
-    <header id="appheader">
+    <header class="appheader">
       <%= render 'layouts/navigation' %>  		
     </header>
-    <aside id="appsidebar">
+    <aside class="appsidebar">
 	  <%= render 'layouts/sidebar' %>    	
     </aside>
-	<section id="content">
+	<main role="main">
 	  <%= render 'layouts/messages' %>
 	  <%= yield %>
-	</section>
+	</main>
     <footer>
       <%= render 'layouts/footer' %>  		
     </footer>

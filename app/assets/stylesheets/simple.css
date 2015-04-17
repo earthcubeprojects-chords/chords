@@ -1,4 +1,14 @@
-header#appheader {
+main {
+display:block;
+background-color: cornsilk;
+text-align: left;
+padding-top: 10px;
+padding-bottom: 10px;
+padding-left:10px;
+}
+
+.appheader 
+{
 border: 1px solid black;
 background-color: firebrick;
 -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
@@ -9,58 +19,38 @@ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 color: cornsilk;
 }
 
-aside#appsidebar {
+.appsidebar 
+{
 float: left; 
-width: 100px; 
+width: 10%; 
 min-height: 100%;
 background-color: cornsilk;
 padding-right: 10px;
 text-align: left;
 }
 
-section#content {
-padding-bottom: 10px;
-background-color: cornsilk;
-text-align: left;
-}
-
-#horizmenu 
-{
-display: inline;
-}
-
-#horizmenu li
+.horizmenu ul, .horizmenu li, .horizmenu h1
 {
 display: inline;
 padding-left: 10px;
 }
 
-#horizmenu li h1
-{
-display: inline;
-}
-
-#vertmenu ul
+.vertmenu
 {
 list-style: none;
 text-align: left;
-}
-
-ul#vertmenu
-{
-list-style: none;
 padding-left: 0;
 text-align: left;
 }
 
-#horizmenu a:link, #horizmenu a:visited, #vertmenu a:link, #vertmenu a:visited
+.horizmenu a:link, .horizmenu a:visited, .vertmenu a:link, .vertmenu a:visited
 {
 color: black;
 background-color: cornsilk;
 text-decoration: none;
 }
 
-#horizmenu a:hover, #vertmenu a:hover
+.horizmenu a:hover, .vertmenu a:hover
 {
 color: #fff;
 background-color: #369;
