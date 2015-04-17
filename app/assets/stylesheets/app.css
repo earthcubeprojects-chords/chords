@@ -50,6 +50,13 @@ background-color: cornsilk;
 text-decoration: none;
 }
 
+.vertmenu a:link, .vertmenu a:visited
+{
+color: black;
+background-color: lightblue;
+text-decoration: none;
+}
+
 .horizmenu a:hover, .vertmenu a:hover
 {
 color: #fff;
