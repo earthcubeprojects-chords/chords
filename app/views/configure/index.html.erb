@@ -1,4 +1,6 @@
 <h1>Configuration</h1>
+<hr>
+<h2>Project Information</h2>
 <%= form_tag("about", method: "get") do %>
   <%= label_tag 'projectname', 'Project Name:' %>
   <%= text_field_tag 'projectname', nil, size: 60 %>
@@ -13,4 +15,19 @@
   <br>
   <br>
   <%= submit_tag("Save") %>
+<% end %>
+<hr>
+<h2>User Files</h2>
+<% if @user_files.blank? %>
+  <p>There are no user files.</p>
+<% else %>
+  <% @user_files.each do |f| %>
+  <li>type: <%= f.type%> name:<%= f.name%></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<%= form_tag({action: :upload}, multipart: true) do %>
+  <%= label_tag 'sitelogofilename', 'Site Logo File:' %>
+  <%= file_field_tag 'file' %>
 <% end %>
