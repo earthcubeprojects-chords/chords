@@ -1,3 +1,16 @@
 <h1>Configuration</h1>
-<p>All of the configuration that a user provides.</p>
-<p>For the future: provide a wizard-like configuration process.</p>
+<%= form_tag("about", method: "get") do %>
+  <%= label_tag 'projectname', 'Project Name:' %>
+  <%= text_field_tag 'projectname', nil, size: 60 %>
+  <br>
+  <br>
+  <%= label_tag 'affiliation', "Affiliation:" %>
+  <%= text_field_tag 'affiliation', nil, size: 60 %>
+  <br>
+  <br>
+  <%= label_tag 'description', 'Project Description' %>
+  <%= text_area_tag 'description', nil, size: "60x20" %>
+  <br>
+  <br>
+  <%= submit_tag("Save") %>
+<% end %>
