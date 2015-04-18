@@ -153,14 +153,14 @@ $(function () {
         }],
     
         series: [{
-            name: 'Speed',
+            name: 'Requests',
             data: [80],
             dataLabels: {
                 formatter: function () {
                     var kmh = this.y,
                         mph = Math.round(kmh * 0.621);
-                    return '<span style="color:#339">'+ kmh + ' km/h</span><br/>' +
-                        '<span style="color:#933">' + mph + ' mph</span>';
+                    return '<span style="color:#339">'+ kmh + '</span><br/>' +
+                        '<span style="color:#933">' + mph + '</span>';
                 },
                 backgroundColor: {
                     linearGradient: {
@@ -176,7 +176,7 @@ $(function () {
                 }
             },
             tooltip: {
-                valueSuffix: ' km/h'
+                valueSuffix: '/s'
             }
         }]
     
