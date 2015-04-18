@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'datafetch/index'
+
   get 'urlbuilder/index'
 
   get 'configure/index'
@@ -9,6 +11,7 @@ Rails.application.routes.draw do
   resources :dashboard
   resources :configure
   resources :urlbuilder
+  resources :datafetch
   resources :measurements
   resources :instruments
   resources :sites
