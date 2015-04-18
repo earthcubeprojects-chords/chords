@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'urlbuilder/index'
+
   get 'configure/index'
 
   get 'dashboard/index'
@@ -6,6 +8,7 @@ Rails.application.routes.draw do
   resources :about
   resources :dashboard
   resources :configure
+  resources :urlbuilder
   resources :measurements
   resources :instruments
   resources :sites
