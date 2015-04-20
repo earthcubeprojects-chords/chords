@@ -14,10 +14,11 @@ margin-top:95vh;
 
 .main {
 background-color: cornsilk;
+width: 87%;
+padding-left:2%;
 text-align: left;
 padding-top: 10px;
 padding-bottom: 10px;
-padding-left:10px;
 float: left;
 }
 
