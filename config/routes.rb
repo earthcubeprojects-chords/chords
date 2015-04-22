@@ -1,12 +1,4 @@
 Rails.application.routes.draw do
-  get 'datafetch/index'
-
-  get 'urlbuilder/index'
-
-  get 'configure/index'
-
-  get 'dashboard/index'
-
   resources :about
   resources :dashboard
   resources :configure
