@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :about
   resources :dashboard
-  resources :configure
+  resources :profile
   resources :urlbuilder
   resources :datafetch
   resources :measurements
@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   root to: 'dashboard#index'
   
-  post '/upload', to: 'configure#upload', as: 'user_file'
+  post '/upload', to: 'profile#upload', as: 'user_file'
 
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
   get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
