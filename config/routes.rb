@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  resources :profiles, only: [:index, :create]
   resources :about
   resources :dashboard
-  resources :profile
   resources :urlbuilder
   resources :datafetch
   resources :measurements
@@ -9,8 +9,6 @@ Rails.application.routes.draw do
   resources :sites
 
   root to: 'dashboard#index'
-  
-  post '/upload', to: 'profile#upload', as: 'user_file'
 
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
   get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'

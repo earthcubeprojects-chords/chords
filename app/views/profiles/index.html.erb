@@ -1,0 +1,22 @@
+<h1>Configuration</h1>
+<hr>
+<h2>Project Information</h2>
+<%= form_for(:profile, method: "post", multipart: true) do %>
+  <%= label_tag 'project', 'Project Name:' %>
+  <%= text_field_tag 'project', @profile.project, size: 60 %>
+  <br>
+  <br>
+  <%= label_tag 'affiliation', "Affiliation:" %>
+  <%= text_field_tag 'affiliation', @profile.affiliation, size: 60 %>
+  <br>
+  <br>
+  <%= label_tag 'description', 'Project Description' %><br>
+  <%= text_area_tag 'description', @profile.description, size: "60x20" %>
+  <br>
+  <%= label_tag 'sitelogofilename', 'Site Logo File:' %>
+  <%= file_field_tag :file %>
+  <br>
+  <%= submit_tag("Save") %>
+<% end %>
+<hr>
+
