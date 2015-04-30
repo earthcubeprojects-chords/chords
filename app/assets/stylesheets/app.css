@@ -58,21 +58,20 @@ padding-left: 0;
 text-align: left;
 }
 
-.horizmenu a:link, .horizmenu a:visited, .vertmenu a:link, .vertmenu a:visited
-{
+.navlink1 {
 color: black;
 background-color: cornsilk;
-text-decoration: none;
+text-decoration: none;	
 }
 
-.vertmenu a:link, .vertmenu a:visited
+.navlink2
 {
 color: black;
 background-color: lightblue;
 text-decoration: none;
 }
 
-.horizmenu a:hover, .vertmenu a:hover
+.navlink1 a:hover, .navlink2 a:hover
 {
 color: #fff;
 background-color: #369;
