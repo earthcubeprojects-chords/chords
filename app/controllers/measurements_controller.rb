@@ -5,6 +5,8 @@ class MeasurementsController < ApplicationController
   # GET /measurements.json
   def index
     @measurements = Measurement.all
+    @sites = Site.all
+    @instruments = Instrument.all
   end
 
   # GET /measurements/1

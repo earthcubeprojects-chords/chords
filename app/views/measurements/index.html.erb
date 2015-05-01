@@ -5,6 +5,7 @@
 <table>
   <thead>
     <tr>
+      <th>Site</th>
       <th>Instrument</th>
       <th>Parameter</th>
       <th>Value</th>
@@ -16,7 +17,8 @@
   <tbody>
     <% @measurements.each do |measurement| %>
       <tr>
-        <td><%= measurement.instrument %></td>
+        <td><%= @sites.find(@instruments.find(measurement.instrument_id).site_id).name %></td>
+        <td><%= @instruments.find(measurement.instrument_id).name %></td>
         <td><%= measurement.parameter %></td>
         <td><%= measurement.value %></td>
         <td><%= measurement.unit %></td>
