@@ -26,7 +26,9 @@ class ProfilesController < ApplicationController
       affiliation: affiliation, 
       description: description
       )
-
+      
+    flash[:notice] = 'Configuration saved.'
+    
     render "profiles/index"
   end
   
