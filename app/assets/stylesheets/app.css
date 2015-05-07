@@ -85,6 +85,9 @@ background-color: #dff0d8;
 border-color: #d6e9c6;
 color: #468847;
 border: 1px solid #fbeed5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
 }
 
 .flash_notice, .flash_alert {
