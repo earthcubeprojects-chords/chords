@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   resources :dashboard
   resources :urlbuilder
   resources :datafetch
-  resources :monitor
   resources :measurements
   resources :instruments
   resources :sites
@@ -12,7 +11,9 @@ Rails.application.routes.draw do
   root to: 'dashboard#index'
 
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
-  get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
+  # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
+  get 'measurements/url_create/:instrument_id' => 'measurements#url_create'
+  # get 'measurements/url_create' => 'measurements#url_create'
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
