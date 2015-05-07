@@ -13,7 +13,7 @@ margin-top:95vh;
 }
 
 .main {
-background-color: cornsilk;
+/*background-color: cornsilk;*/
 width: 87%;
 padding-left:2%;
 text-align: left;
@@ -38,8 +38,8 @@ color: cornsilk;
 {
 float: left; 
 width: 10%; 
-min-height: 100%;
-background-color: cornsilk;
+/*min-height: 100%;*/
+/*background-color: cornsilk;*/
 padding-right: 10px;
 text-align: left;
 }
@@ -60,7 +60,7 @@ text-align: left;
 
 .navlink1 {
 color: black;
-background-color: cornsilk;
+/*background-color: cornsilk;*/
 text-decoration: none;	
 }
 
