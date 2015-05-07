@@ -1,5 +1,5 @@
 $(function () { 
-    $('#chart_data_requests').highcharts({
+    $('#chart_data_gets').highcharts({
         chart: {
             type: 'line'
         },
