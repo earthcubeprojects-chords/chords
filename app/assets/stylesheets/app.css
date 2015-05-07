@@ -79,6 +79,14 @@ background-color: #369;
 text-decoration: none;
 }
 
+.last_post_table {
+padding: 4px 4px 4px 4px;
+background-color: #dff0d8;
+border-color: #d6e9c6;
+color: #468847;
+border: 1px solid #fbeed5;
+}
+
 .flash_notice, .flash_alert {
 padding: 8px 35px 8px 14px;
 margin-bottom: 20px;
