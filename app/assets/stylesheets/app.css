@@ -9,7 +9,9 @@ height: 100vh;
 float:left;
 width:100%;
 height:5vh;
-margin-top:95vh;
+text-align: center;
+/*margin-top:95vh;*/
+
 }
 
 .main {
