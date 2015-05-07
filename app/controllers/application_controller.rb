@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_before_profile
   
   def set_before_profile
-    @before_profile = Profile.new
+    @before_profile = Profile.find(1)
   end
   
 end
