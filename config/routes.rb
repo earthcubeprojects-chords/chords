@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   resources :dashboard
   resources :urlbuilder
   resources :datafetch
+  resources :monitor
   resources :measurements
   resources :instruments
   resources :sites
