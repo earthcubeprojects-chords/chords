@@ -31,7 +31,6 @@ background-color: darkorange;
 -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-margin-bottom: 10px;
 font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 color: cornsilk;
 }
@@ -52,6 +51,7 @@ display: inline;
 list-style: none;
 display: flex;
 justify-content: space-between;
+align-items: center;
 padding-left: 10px;
 padding-right: 10px;
 }
