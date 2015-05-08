@@ -13,10 +13,11 @@
   <%= label_tag 'description', 'Project Description (HTML markup is supported)' %><br>
   <%= text_area_tag 'description', @profile.description, size: "60x20" %>
   <br>
+  <br>
   <%= label_tag 'sitelogofilename', 'Site Logo File:' %>
   <%= file_field_tag :file %>
   <br>
+  <br>
   <%= submit_tag("Save") %>
 <% end %>
-<hr>
 
