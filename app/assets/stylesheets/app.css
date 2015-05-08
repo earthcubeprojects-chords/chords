@@ -46,10 +46,14 @@ padding-right: 10px;
 text-align: left;
 }
 
-.horizmenu ul, .horizmenu li, .horizmenu h1
+.horizmenu
 {
 display: inline;
+list-style: none;
+display: flex;
+justify-content: space-between;
 padding-left: 10px;
+padding-right: 10px;
 }
 
 .vertmenu
@@ -80,6 +84,8 @@ text-decoration: none;
 }
 
 .last_post_table {
+display: flex;
+justify-content: center;
 padding: 4px 4px 4px 4px;
 background-color: #dff0d8;
 border-color: #d6e9c6;
