@@ -1,4 +1,14 @@
-<h1>Data Fetch Support</h1>
-<p>This page will allow users to specify a data query and download the results directly.</p>
-<p>The data navigation functionality should be shared with the URL Builder.</p>
-<p>The will be a choice of file output formats: CSV, what else?</p>
+<h1>Data Fetch</h1>
+<h2>Select the measurements</h2>
+
+<ul>
+  <% Site.all.each do |site| %>
+    <li>
+    	<%= site.name %>
+    	<br>
+		<%= collection_check_boxes(:post, :site_choice, site.instruments, :site_id, :name) %>
+		<br>
+    </li>
+  <% end %>
+</ul>
+<%= submit_tag("Generate CSV File") %>
