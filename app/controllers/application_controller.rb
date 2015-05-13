@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
   
   def set_before_profile
     @before_profile = Profile.find(1)
+
+    @measurements_by_minute = Measurement.group("date_format(created_at, '%Y/%m/%d %H:%i')").count
+    @measurements_by_hour = Measurement.group("date_format(created_at, '%Y/%m/%d %H')").count
+
   end
   
 end
