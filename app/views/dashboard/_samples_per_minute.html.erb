@@ -37,7 +37,7 @@ $(function () {
             data: [
 			<%= @measurements_by_minute_data %>
             ],
-            pointStart: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
+            // pointStart: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
             pointInterval: 24 * 3600 * 1000 // one day
         }]
     });
