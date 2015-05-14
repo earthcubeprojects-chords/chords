@@ -10,13 +10,19 @@
 </div>
 
 <hr />
- <%= @measurements_by_hour %>
+
+<%#= @measurements_by_hour_data %>
+ <%#= @measurements_by_hour %>
 
 
 
+<%= render 'samples_per_minute' %>
 
 
-<script>
+<!-- script>
+
+
+
 $(function () { 
     $('#test').highcharts({
         chart: {
@@ -41,5 +47,5 @@ $(function () {
     });
 });
 
-</script>
-<div id="test"></div>
+</script -->
+

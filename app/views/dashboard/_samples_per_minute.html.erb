@@ -1,0 +1,38 @@
+<%#= debug(@measurements_by_hour_data) %>
+
+<div id="samples_per_minute"></div>
+<script>
+$(function () {
+    $('#samples_per_minute').highcharts({
+		title: {
+		    text: 'Total Samples per Hour'
+		},
+        chart: {
+            zoomType: 'x',
+        },
+        xAxis: {
+            type: 'datetime',
+            tickInterval: 3600 * 1000,
+            // min: Date.UTC(2015,5,12),
+            // max: Date.UTC(2015,4,15),
+        },
+        yAxis: {
+        	min: 0,
+            title: {
+                text: 'Samples'
+            }
+        },
+		legend: {
+			title: 'test'
+		},
+        series: [{
+			text: 'etst',
+            data: [
+			<%= @measurements_by_hour_data %>
+            ],
+            pointStart: Date.UTC(2015, 05, 12),
+            pointInterval: 24 * 3600 * 1000 // one day
+        }]
+    });
+});
+</script>
