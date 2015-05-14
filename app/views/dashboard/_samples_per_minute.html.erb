@@ -1,5 +1,14 @@
 <%#= debug(@measurements_by_hour_data) %>
 
+<%=
+
+now = Date.today
+start_date = (now - 7)
+start_date.strftime('%Y')
+
+
+%>
+
 <div id="samples_per_minute"></div>
 <script>
 $(function () {
@@ -13,8 +22,8 @@ $(function () {
         xAxis: {
             type: 'datetime',
             tickInterval: 3600 * 1000,
-            // min: Date.UTC(2015,5,12),
-            // max: Date.UTC(2015,4,15),
+            // min: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
+            // max: Date.UTC(<%= now.strftime('%Y') %>, <%= now.strftime('%m') %>, <%= now.strftime('%d') %>),
         },
         yAxis: {
         	min: 0,
@@ -30,7 +39,7 @@ $(function () {
             data: [
 			<%= @measurements_by_hour_data %>
             ],
-            pointStart: Date.UTC(2015, 05, 12),
+            pointStart: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
             pointInterval: 24 * 3600 * 1000 // one day
         }]
     });
