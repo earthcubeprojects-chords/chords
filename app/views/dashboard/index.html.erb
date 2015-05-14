@@ -11,41 +11,9 @@
 
 <hr />
 
-<%#= @measurements_by_hour_data %>
- <%#= @measurements_by_hour %>
 
 
 
 <%= render 'samples_per_minute' %>
-
-
-<!-- script>
-
-
-
-$(function () { 
-    $('#test').highcharts({
-        chart: {
-            type: 'line'
-        },
-        title: {
-            text: null
-        },
-        legend: {
-            enabled: false
-        },
-        yAxis: {
-        	min: 0,
-            title: {
-                text: 'Samples per minute'
-            }
-        },
-        series: [{
-            name: 'samples',
-            data: [<%= @measurements_by_minute.values.join(',') %>]
-        }]
-    });
-});
-
-</script -->
+<%= render 'samples_per_hour' %>
 

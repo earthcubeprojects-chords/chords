@@ -2,24 +2,22 @@
 
 <%
 now = Date.today
-start_date = (now - 1)
+start_date = (now - 7)
 %>
 
-<%#= @measurements_by_minute_data %>
-
-<div id="samples_per_minute"></div>
+<div id="samples_per_hour"></div>
 <script>
 $(function () {
-    $('#samples_per_minute').highcharts({
+    $('#samples_per_hour').highcharts({
 		title: {
-		    text: 'Total Samples per Minute'
+		    text: 'Total Samples per Hour'
 		},
         chart: {
             zoomType: 'x',
         },
         xAxis: {
             type: 'datetime',
-            tickInterval: 3600 * 1000 /60,
+            tickInterval: 3600 * 1000,
             // min: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
             // max: Date.UTC(<%= now.strftime('%Y') %>, <%= now.strftime('%m') %>, <%= now.strftime('%d') %>),
         },
@@ -35,7 +33,7 @@ $(function () {
         series: [{
 			text: 'etst',
             data: [
-			<%= @measurements_by_minute_data %>
+			<%= @measurements_by_hour_data %>
             ],
             pointStart: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
             pointInterval: 24 * 3600 * 1000 // one day
