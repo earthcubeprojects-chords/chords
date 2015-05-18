@@ -8,9 +8,8 @@ class ApplicationController < ActionController::Base
   def set_before_profile
     @before_profile = Profile.find(1)
 
-    # @measurements_by_minute = Measurement.group("date_format(created_at, '%Y-%m-%dT%H:%i')").count
-
-    @measurements_by_minute = Measurement.group("date_format(created_at, '%Y-%m-%dT%H:%i')").count
+    start_time = Time.zone.now - 10.hour
+    @measurements_by_minute = Measurement.where("created_at >= ?", start_time).group("date_format(created_at, '%Y-%m-%dT%H:%i')").count
 
     data_array = Array.new
     @measurements_by_minute.each do |measurement_by_minute| 
