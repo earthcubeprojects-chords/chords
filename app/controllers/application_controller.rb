@@ -6,9 +6,9 @@ class ApplicationController < ActionController::Base
   before_filter :set_before_profile
   
   def set_before_profile
-    @before_profile = Profile.first
+    
 
-    if @before_profile == nil
+    if ! @before_profile = Profile.first
       Profile.initialize
       @before_profile = Profile.first
     end
