@@ -6,37 +6,56 @@ require 'net/http'
 
 
 
-if (ARGV.count != 6)
-  put "./fake_sensor URL INSTRUMENT_ID PARAMETER VALUE UNIT FREQUENCY"
+if (ARGV.count != 1)
+  # put "./fake_sensor URL INSTRUMENT_ID PARAMETER VALUE UNIT FREQUENCY"
+  put "./fake_sensor URL"
   exit
 end
 # puts ARGV
 
+
+
 hostname = ARGV[0]
-instrument_id = ARGV[1]
-parameter = ARGV[2]
-value = ARGV[3]
-unit = ARGV[4]
+# instrument_id = ARGV[1]
+# parameter = ARGV[2]
+# value = ARGV[3]
+# unit = ARGV[4]
+# 
+# frequency = ARGV[5].to_i
 
-frequency = ARGV[5].to_i
+frequency = 1
 
-current_value = value.to_f
+measurement_configurations = Array.new
 
-while 1 do  
-  rand = Random.rand(5.0) / 100 
+measurement_configurations.push({:instrument_id => 1, :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 2, :parameter => 'velocity', :current_value => 11, :unit => 'mps'})
 
-  temp_diff = rand - 0.025
-  current_value = current_value + temp_diff
-# puts "#{rand} #{temp_diff} #{current_temp}"
-# puts temp_diff 
-encoded = URI::encode(current_value.to_s)
-  # url = URI.parse("http://52.11.141.168:3000/measurements/url_create/1?parameter=temperature&value=#{encoded}&unit=C")
-  url = URI.parse("http://#{hostname}/measurements/url_create/#{instrument_id}?parameter=#{current_value}&value=#{value}&unit=#{unit}")
-  puts url
-  req = Net::HTTP::Get.new(url.to_s)
-  res = Net::HTTP.start(url.host, url.port) {|http|
-    http.request(req)
-  }
+
+while 1 do 
+  
+  measurement_configurations.each do |measurement_configuration|
+    # instrument_id = measurement_configuration[:instrument_id]
+    # parameter = measurement_configuration[:parameter]
+    # current_value = measurement_configuration[:current_value]
+    # unit = measurement_configuration[:unit]
+    # 
+
+    rand = Random.rand(5.0) / 100 
+    temp_diff = rand - 0.025
+    measurement_configuration[:current_value] = measurement_configuration[:current_value] + temp_diff
+
+    encoded = URI::encode(measurement_configuration[:current_value].to_s)
+
+    url = URI.parse("http://#{hostname}/measurements/url_create/#{measurement_configuration[:instrument_id]}?parameter=#{measurement_configuration[:parameter]}&value=#{measurement_configuration[:current_value]}&unit=#{measurement_configuration[:unit]}")
+    puts url
+
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+
+  end 
+
 #   # puts res.body
   sleep(frequency)
 end
