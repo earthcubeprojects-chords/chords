@@ -7,9 +7,8 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
+# Profile.initialize
+# Site.initialize
+# Instrument.initialize
 
-Site.initialize
-Instrument.initialize
-
-Profile.initialize
 
