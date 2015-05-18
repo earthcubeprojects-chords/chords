@@ -5,11 +5,8 @@ class ProfilesController < ApplicationController
     @profile = Profile.first
     
     if @profile == nil
-      @profile = Profile.new
-      @profile.project = "Unnamed Project"
-      @profile.description = ""
-      @profile.affiliation = ""
-      @profile.save
+      Profile.initialize
+      @profile = Profile.first
     end
     
   end

@@ -6,7 +6,14 @@ class ApplicationController < ActionController::Base
   before_filter :set_before_profile
   
   def set_before_profile
-    @before_profile = Profile.find(1)
+    @before_profile = Profile.first
+
+    if @before_profile == nil
+      Profile.initialize
+      @before_profile = Profile.first
+    end
+
+
 
     start_time = Time.zone.now - 10.hour
     @measurements_by_minute = Measurement.where("created_at >= ?", start_time).group("date_format(created_at, '%Y-%m-%dT%H:%i')").count
