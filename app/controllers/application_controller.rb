@@ -24,8 +24,11 @@ class ApplicationController < ActionController::Base
 
 
 
+    start_time = Time.zone.now - 10.day
+    @measurements_by_hour = Measurement.where("created_at >= ?", start_time).group("date_format(created_at, '%Y-%m-%dT%H')").count
 
-    @measurements_by_hour = Measurement.group("date_format(created_at, '%Y-%m-%dT%H')").count
+
+    # @measurements_by_hour = Measurement.group("date_format(created_at, '%Y-%m-%dT%H')").count
 
     data_array = Array.new
     @measurements_by_hour.each do |measurement_by_hour| 

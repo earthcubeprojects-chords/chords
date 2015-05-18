@@ -13,6 +13,7 @@ $(function () {
 		    text: 'Total Samples per Hour'
 		},
         chart: {
+			 type: 'column',
             zoomType: 'x',
         },
         xAxis: {
@@ -27,11 +28,7 @@ $(function () {
                 text: 'Samples'
             }
         },
-		legend: {
-			title: 'test'
-		},
         series: [{
-			text: 'etst',
             data: [
 			<%= @measurements_by_hour_data %>
             ],
