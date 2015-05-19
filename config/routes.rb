@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  get 'monitor/live' => 'monitor#live'
+
   resources :profiles, only: [:index, :create]
   resources :about
   resources :dashboard
@@ -9,11 +12,25 @@ Rails.application.routes.draw do
   resources :instruments
   resources :sites
 
-  root to: 'dashboard#index'
+  root 'dashboard#index'
 
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
+
+
   get 'measurements/url_create/:instrument_id' => 'measurements#url_create'
+
+
+    # namespace :monitor do
+    #   # Directs /admin/products/* to Admin::ProductsController
+    #   # (app/controllers/admin/products_controller.rb)
+    #   resources :live
+    # end
+
+
+    #   get 'monitor/live' => 'monitor#live', as: :live
+
+  
   # get 'measurements/url_create' => 'measurements#url_create'
   
   # The priority is based upon order of creation: first created -> highest priority.
