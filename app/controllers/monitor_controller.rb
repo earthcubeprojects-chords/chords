@@ -8,7 +8,7 @@ class MonitorController < ApplicationController
 
     data = Array.new    
     measurements.each do |measurement|
-      t = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+07:00")
+      t = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+00:00")
 
       x=((t.to_i) * 1000).to_s
       data.push "[#{x}, #{measurement.value}]" 
@@ -27,7 +27,7 @@ class MonitorController < ApplicationController
 
 
     measurement = Measurement.where("instrument_id = ?", 1).order(:created_at).last
-    time = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+07:00")
+    time = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+00:00")
 
     milliseconds = ((time.to_i) * 1000).to_s
 

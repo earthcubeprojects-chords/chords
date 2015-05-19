@@ -18,79 +18,11 @@
 
 <% end %>
 
-<BR/>
-<BR/>
-<BR/>
-143200770000<BR/>
-
-<%= @time %>
-<BR/>
-<BR/>
-<%= @data %>
-<BR/>
-
-
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-
-
-<script type="text/javascript">
-
-/**
- * Request data from the server, add it to the graph and set a timeout 
- * to request again
- */
-function requestData() {
-    $.ajax({
-        url: 'monitor/live',
-        success: function(point) {
-        },
-        cache: false
-    });
-}
-
-// 
-// f.options[:chart][:events] = {
-//   :load => %| function requestData(){
-//     $.ajax({
-//       url:"live",
-//       success: function(a){
-//         var c=chart.series[0], d=c.data.length>20;
-//         chart.series[0].addPoint(a,true,d);
-//         setTimeout(requestData,16e3)
-//       }, cache:false
-//     })
-//   }|.js_code
-// }
-
-            // jQuery(function() {
-            //       // 1. Define JSON options
-            //       var options = {
-            //                     chart: {"defaultSeriesType":"column","renderTo":"my_id","zoomType":"xy"},
-            //                             title: {"text":"Test"},
-            //                             legend: {"layout":"horizontal","style":{}},
-            //                             xAxis: {"type":"datetime"},
-            //                             yAxis: {"title":{"text":"Agents"},"labels":{},"min":"0","allowDecimals":false,"gridLineDashStyle":"LongDash"},
-            //                             tooltip:  {"enabled":true},
-            //                             credits: {"enabled":false},
-            //                             plotOptions: {"areaspline":{}},
-            //                             series: [{"name":"test","data":[1,2,]}],
-            //                             subtitle: {}
-            //                     };
-            // 
-            //       // 2. Add callbacks (non-JSON compliant)                
-            //       // requestData();
-            // 
-            // 
-            //       // 3. Build the chart
-            //         var chart = new Highcharts.Chart(options);
-            //   });
-            // 
-
-</script>
 
 
 <script>
@@ -117,13 +49,8 @@ $(function () {
 								$.ajax({
 								    url: 'monitor/live',
 								    success: function(point) {
-									console.log(point);
-									
-								 var x = (new Date()).getTime(), // current time
-								                                y = Math.random();
-								                            // series.addPoint([x, y], true, true);
-																	
-								series.addPoint(point, true, true);
+										console.log(point);																										
+										series.addPoint(point, true, true);
 								    },
 								    cache: false
 								});
@@ -167,16 +94,6 @@ $(function () {
                 data: (function () {
                     // generate an array of random data
                     var data = [<%= @data %>]
-// 
-                    //     time = (new Date()).getTime(),
-                    //     i;
-                    // 
-                    // for (i = -19; i <= 0; i += 1) {
-                    //     data.push({
-                    //         x: time + i * 1000,
-                    //         y: Math.random()
-                    //     });
-                    // }
                     return data;
                 }())
             }]
