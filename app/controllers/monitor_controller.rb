@@ -3,22 +3,20 @@ class MonitorController < ApplicationController
   def index
     @instruments = Instrument.all
 
-    measurements = Measurement.where("instrument_id = ?", 1).last(20)
+    measurements = Measurement.where("instrument_id = ?", 1).last(100)
     
 
     data = Array.new    
     measurements.each do |measurement|
       t = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+07:00")
 
-      x=((t.to_i) * 100).to_s
+      x=((t.to_i) * 1000).to_s
       data.push "[#{x}, #{measurement.value}]" 
-      # x=ActiveSupport::JSON
-      # @j=x.encode(ret)
       
     end
-@data = data.join(', ')
+    @data = data.join(', ')
 
-    @time = ((t.to_i) * 100).to_s
+
   end
   
   
@@ -26,20 +24,17 @@ class MonitorController < ApplicationController
   end
     
   def live
-    measurement = Measurement.last
-    x = Time.now.to_i * 1000
 
-    measurement = Measurement.last
-    t = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+07:00")
 
-# x=miliseconds
-x=(t.to_i * 100).to_s
-# 1432007770000,10.9686
-    y = Random.rand(11)
+    measurement = Measurement.where("instrument_id = ?", 1).order(:created_at).last
+    time = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+07:00")
+
+    milliseconds = ((time.to_i) * 1000).to_s
+
     #create an array and echo to JSON
-    ret =[x,measurement.value]
-    x=ActiveSupport::JSON
-    @j=x.encode(ret)
+    ret =[milliseconds.to_i,measurement.value]
+
+    @j=ActiveSupport::JSON.encode(ret)
 
     render :json => @j
   end

@@ -117,7 +117,12 @@ $(function () {
 								$.ajax({
 								    url: 'monitor/live',
 								    success: function(point) {
-									// alert(point)
+									console.log(point);
+									
+								 var x = (new Date()).getTime(), // current time
+								                                y = Math.random();
+								                            // series.addPoint([x, y], true, true);
+																	
 								series.addPoint(point, true, true);
 								    },
 								    cache: false
