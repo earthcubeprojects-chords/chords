@@ -27,6 +27,8 @@
 
 <script>
 $(function () {
+	var last_point = [];
+	
     $(document).ready(function () {
         Highcharts.setOptions({
             global: {
@@ -49,8 +51,12 @@ $(function () {
 								$.ajax({
 								    url: 'monitor/live',
 								    success: function(point) {
-										console.log(point);																										
-										series.addPoint(point, true, true);
+
+										if(point[0] != last_point[0]) {
+											series.addPoint(point, true, true);	
+											last_point = point;
+																					
+										}																							
 								    },
 								    cache: false
 								});
