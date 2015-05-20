@@ -11,6 +11,13 @@ class InstrumentsController < ApplicationController
   # GET /instruments/1
   # GET /instruments/1.json
   def show
+    @params = params
+    @measurements =  @instrument.measurements
+    
+    respond_to do |format|
+      format.html
+      format.csv { send_data @measurements.to_csv }
+    end
   end
 
   # GET /instruments/new
