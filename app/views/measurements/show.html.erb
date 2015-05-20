@@ -1,6 +1,6 @@
 <%= @params %>
 <p id="notice"><%= notice %></p>
-
+<%= link_to "CSV", measurements_path(format: "csv") %>
 <p>
   <strong>Site:</strong>
   <%= @measurement.instrument.site.name %>
