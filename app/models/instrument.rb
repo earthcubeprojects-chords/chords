@@ -12,5 +12,15 @@ class Instrument < ActiveRecord::Base
     Instrument.create([{name: '915 Profiler', site_id:'1', }])
     Instrument.create([{name: '915 Profiler', site_id:'3', }])    
   end
+
+
+  def self.to_csv(options = {})
+    CSV.generate(options) do |csv|
+      csv << column_names
+      all.each do |rails_model|
+        csv << rails_model.attributes.values_at(*column_names)
+      end
+    end
+  end
       
 end

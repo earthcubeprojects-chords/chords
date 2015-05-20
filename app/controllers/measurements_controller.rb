@@ -7,6 +7,11 @@ class MeasurementsController < ApplicationController
     @measurements = Measurement.all
     @sites = Site.all
     @instruments = Instrument.all
+    
+    respond_to do |format|
+      format.html
+      format.csv { send_data @measurements.to_csv }
+    end
   end
 
   # GET /measurements/1
