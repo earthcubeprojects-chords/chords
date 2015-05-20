@@ -13,20 +13,24 @@
  
   <body>
   	<div class="wrapper">
-     <header class="appheader">
-      <%= render 'layouts/navigation' %>  		
-    </header>
-    <aside class="appsidebar">
-	  <%= render 'layouts/sidebar' %>    	
-    </aside>
-	<main class="main" role="main">
-	  <%= render 'layouts/messages' %>
-	  <%= yield %>
-	  <hr />
-	</main>
-    <footer class="footer">
-      <%= render 'layouts/footer' %>  		
-    </footer>
+
+		<header class="appheader">
+			<%= render 'layouts/navigation' %>  		
+		</header>
+
+		<aside class="appsidebar">
+			<%= render 'layouts/sidebar' %>    	
+		</aside>
+
+		<main class="main" role="main">
+			<%= render 'layouts/messages' %>
+			<%= yield %>
+			<hr />
+		</main>
+
+		<footer class="footer">
+			<%= render 'layouts/footer' %>  		
+		</footer>
 	</div>
   </body>
 </html>
