@@ -46,7 +46,7 @@ while 1 do
 
     encoded = URI::encode(measurement_configuration[:current_value].to_s)
 
-    url = URI.parse("http://#{hostname}/measurements/url_create/#{measurement_configuration[:instrument_id]}?parameter=#{measurement_configuration[:parameter]}&value=#{measurement_configuration[:current_value]}&unit=#{measurement_configuration[:unit]}")
+    url = URI.parse("http://#{hostname}/measurements/url_create?instrument_id=#{measurement_configuration[:instrument_id]}&parameter=#{measurement_configuration[:parameter]}&value=#{measurement_configuration[:current_value]}&unit=#{measurement_configuration[:unit]}")
     puts url
 
     req = Net::HTTP::Get.new(url.to_s)

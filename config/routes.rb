@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
   get 'monitor/live' => 'monitor#live'
+  get 'measurements/url_create' => 'measurements#url_create'
+
 
   resources :profiles, only: [:index, :create]
   resources :about
@@ -18,7 +20,6 @@ Rails.application.routes.draw do
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
 
 
-  get 'measurements/url_create/:instrument_id' => 'measurements#url_create'
 
 
     # namespace :monitor do

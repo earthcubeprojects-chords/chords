@@ -3,7 +3,7 @@ class MonitorController < ApplicationController
   def index
     @instruments = Instrument.all
 
-    measurements = Measurement.where("instrument_id = ?", 1).last(50)
+    measurements = Measurement.where("instrument_id = ?", 1).last(20)
     
 
     data = Array.new    
