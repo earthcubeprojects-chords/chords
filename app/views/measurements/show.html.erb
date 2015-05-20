@@ -2,8 +2,14 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Site:</strong>
+  <%= @measurement.instrument.site.name %>
+</p>
+
+
+<p>
   <strong>Instrument:</strong>
-  <%= @measurement.instrument %>
+  <%= @measurement.instrument.name %>
 </p>
 
 <p>
