@@ -6,15 +6,15 @@
 <li>select the time span</li>
 <li>see real-time updates</li>
 </ul>
-<p>See the nice ISFF <a href="http://datavis.eol.ucar.edu">data viewer</a></p>
+<!-- p>See the nice ISFF <a href="http://datavis.eol.ucar.edu">data viewer</a></p --> 
 
 <% @instruments.each do |instrument| 	%>
 
-<%= instrument.name %>: 
+<%#= instrument.name %>
 	<% instrument.measurements.order("created_at").last(1).each do |measurement| %>
-		<%= measurement.value %> <%= measurement.unit %>
+		<%#= measurement.value %> <%#= measurement.unit %>
 	<% end %>
-	</BR>	
+
 
 <% end %>
 
@@ -66,7 +66,7 @@ $(function () {
                 }
             },
             title: {
-                text: 'Live random data'
+                text: 'Live Sensor Data'
             },
             xAxis: {
                 type: 'datetime',
