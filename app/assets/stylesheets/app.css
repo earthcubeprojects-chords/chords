@@ -9,20 +9,25 @@ float: left;
 
 .appheader 
 {
-border: 1px solid black;
-background-color: darkorange;
--webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
--moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-color: cornsilk;
+	border: 1px solid black;
+	background-color: darkorange;
+	-webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+	color: cornsilk;
+}
+
+.footer {
+	float: left;
+	width: 100%;
 }
 
 .footer_links 
 {
-list-style: none;
-display: flex;
-justify-content: space-around;
-align-items: center;
+	list-style: none;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }
 
 
