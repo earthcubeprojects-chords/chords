@@ -17,7 +17,7 @@ class InstrumentsController < ApplicationController
     respond_to do |format|
       format.html
       format.csv { send_data @measurements.to_csv }
-    end
+      format.xml { send_data @measurements.to_xml }    end
   end
 
     

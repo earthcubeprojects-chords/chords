@@ -11,7 +11,15 @@
   <%= @instrument.site.name %>
 </p>
 
-<%=  link_to("CSV", instrument_url( :format => 'csv') )%>
+
+<p>
+  <strong>Number of measurements made:</strong>
+  <%= @instrument.measurements.count %> 
+	(Download as <%=  link_to("CSV", instrument_url( :format => 'csv') )%>, <%=  link_to("XML", instrument_url( :format => 'xml') )%>, <%=  link_to("JSON", instrument_url( :format => 'json') )%>, )
+</p>
+
+
+
 
 
 
