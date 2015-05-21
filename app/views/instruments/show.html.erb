@@ -11,8 +11,10 @@
   <%= @instrument.site.name %>
 </p>
 
+<%=  link_to("CSV", instrument_url( :format => 'csv') )%>
 
-<%= link_to "Download measurements as CSV", instruments_path(@instrument, format: "csv") %>
+
+
 
 <%= link_to 'Edit', edit_instrument_path(@instrument) %> |
 <%= link_to 'Back', instruments_path %>
