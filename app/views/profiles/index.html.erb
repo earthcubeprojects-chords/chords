@@ -10,7 +10,8 @@
   <%= text_field_tag 'affiliation', @profile.affiliation, size: 60 %>
   <br>
   <br>
-  <%= label_tag 'description', 'Project Description (HTML markup is supported)' %><br>
+  <%= label_tag 'description', 'Project Description (HTML markup may be used):' %>
+  <br>
   <%= text_area_tag 'description', @profile.description, size: "60x20" %>
   <br>
   <br>

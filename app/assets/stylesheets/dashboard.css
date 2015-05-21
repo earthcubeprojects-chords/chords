@@ -1,12 +1,4 @@
-#samplesperday
+#samples_per_hour, #samples_per_minute
 {
-	height: 200px;
-}
-#dataserved
-{
-	height: 200px;
-}
-#gauge
-{
-	height: 200px;
+	height: 250px;
 }
