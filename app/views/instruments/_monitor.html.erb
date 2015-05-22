@@ -1,7 +1,8 @@
-'instrument/<%= @instrument.id%>/live
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+<% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
 
 
+<div class="instrument_highchart" id="<%= highcharts_dom_id %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 <script>
 $(function () {
@@ -14,7 +15,7 @@ $(function () {
             }
         });
 
-        $('#container').highcharts({
+        $('#<%= highcharts_dom_id %>').highcharts({
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
@@ -27,7 +28,7 @@ $(function () {
                         setInterval(
 							function () {
 								$.ajax({
-								    url: 'instrument/<%= @instrument.id%>/live',
+								    url: '/instruments/<%= @instrument.id%>/live',
 								    success: function(point) {
 
 										if(point[0] != last_point[0]) {
@@ -77,7 +78,7 @@ $(function () {
                 name: 'Random data',
                 data: (function () {
                     // generate an array of random data
-                    var data = [<%= @data %>]
+                    var data = [<%= @instrument.data(20) %>]
                     return data;
                 }())
             }]
