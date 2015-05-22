@@ -12,6 +12,13 @@
 </p>
 
 
+Data Input URL:<br/> 
+<%= measurement_url(:action => 'url_create', :instrument_id => @instrument.id, :parameter => 'PARAMETER', :unit => 'UNIT', :value => 'VALUE' ) %>
+
+<br/>
+<br/>
+
+
 <p>
   <strong>Number of measurements made:</strong>
   <%= @instrument.measurements.count %> 
