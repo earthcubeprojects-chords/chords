@@ -1,25 +1,9 @@
 class InstrumentsController < ApplicationController
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
 
-
   def live
-    # instrument = Instrument.find(params[:id])
-    # 
-    # measurement = instrument.last_measurement
-    # # measurement = Measurement.where("instrument_id = ?", 1).order(:created_at).last
-    # time = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+00:00")
-    # 
-    # milliseconds = ((time.to_i) * 1000).to_s
-    # 
-    # #create an array and echo to JSON
-    # ret =[milliseconds.to_i,measurement.value, measurement.value]
-    # 
-    # @j=ActiveSupport::JSON.encode(ret)
-
     render :json => Instrument.find(params[:id]).last_measurement.json_point
   end
-  
-  
   
 
   # GET /instruments
