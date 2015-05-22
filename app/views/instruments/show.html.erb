@@ -12,8 +12,14 @@
 </p>
 
 
-Data Input URL:<br/> 
-<%= measurement_url(:action => 'url_create', :instrument_id => @instrument.id, :parameter => 'PARAMETER', :unit => 'UNIT', :value => 'VALUE' ) %>
+
+<p>
+	<strong>Data Input URL:</strong>
+	<br/>
+	<%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id, :parameter => 'PARAMETER', :unit => 'UNIT', :value => 'VALUE' ) %>
+</p>
+
+
 
 <br/>
 <br/>
