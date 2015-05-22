@@ -11,7 +11,7 @@
 <% @instruments.each do |instrument| 	%>
 
 <%#= instrument.name %>
-	<% instrument.measurements.order("created_at").last(1).each do |measurement| %>
+	<% instrument.measurements.order("created_at").last(9).each do |measurement| %>
 		<%#= measurement.value %> <%#= measurement.unit %>
 	<% end %>
 
