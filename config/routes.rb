@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
 
   get 'monitor/live' => 'monitor#live'
+  get 'instruments/live' => 'instruments#live'
   get 'measurements/url_create' => 'measurements#url_create'
+
+  # get 'instruments/:id/live' => 'instruments/live'
+
 
 
   resources :profiles, only: [:index, :create]
@@ -16,7 +20,16 @@ Rails.application.routes.draw do
 
   root 'dashboard#index'
 
-  # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' to 'measurements/url_create'
+
+  resources :instruments do
+    member do
+      get 'live'
+    end
+  end
+
+# get 'products/:id' => 'catalog#view'
+
+  
   # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
 
 

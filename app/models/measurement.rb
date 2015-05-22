@@ -11,4 +11,20 @@ class Measurement < ActiveRecord::Base
     end
   end
 
+
+  def json_point
+    time = Time.new(self.created_at.year, self.created_at.month, self.created_at.day, self.created_at.hour, self.created_at.min, self.created_at.sec, "+00:00")
+    milliseconds = ((time.to_i) * 1000).to_s
+
+    #create an array and echo to JSON
+    ret =[milliseconds.to_i, self.value]
+    
+    json = ActiveSupport::JSON.encode(ret)
+    
+    return json    
+  end
+  
+  
 end
+
+

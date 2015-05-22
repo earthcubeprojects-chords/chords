@@ -1,26 +1,4 @@
-<h1>Monitor </h1>
-<p>You can configure charts to monitor traces of selected parameters.</p>
-<ul>
-<li>add multiple charts</li>
-<li>pick and choose the instrument/measurement to add to the chart</li>
-<li>select the time span</li>
-<li>see real-time updates</li>
-</ul>
-<!-- p>See the nice ISFF <a href="http://datavis.eol.ucar.edu">data viewer</a></p --> 
-
-<% @instruments.each do |instrument| 	%>
-
-<%#= instrument.name %>
-	<% instrument.measurements.order("created_at").last(1).each do |measurement| %>
-		<%#= measurement.value %> <%#= measurement.unit %>
-	<% end %>
-
-
-<% end %>
-
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
-
+'instrument/<%= @instrument.id%>/live
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 
@@ -49,7 +27,7 @@ $(function () {
                         setInterval(
 							function () {
 								$.ajax({
-								    url: 'monitor/live',
+								    url: 'instrument/<%= @instrument.id%>/live',
 								    success: function(point) {
 
 										if(point[0] != last_point[0]) {

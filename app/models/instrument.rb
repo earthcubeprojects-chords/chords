@@ -22,5 +22,33 @@ class Instrument < ActiveRecord::Base
       end
     end
   end
+
+  def self.data_insert_url
+    url = instrument_url()
+  end
+
+
+  def last_measurement
+    measurement = Measurement.where("instrument_id = ?", self.id).order(:created_at).last
+    # logger.debug()
+    return measurement
+  end
+
+  def data(count)
+
+    measurements = Measurement.where("instrument_id = ?", self.id).last(20)
+    
+    data = Array.new    
+    measurements.each do |measurement|
+      t = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+00:00")
+
+      x=((t.to_i) * 1000).to_s
+      data.push "[#{x}, #{measurement.value}]" 
+      
+    end
+
+    return data.join(', ')
+    
+  end
       
 end

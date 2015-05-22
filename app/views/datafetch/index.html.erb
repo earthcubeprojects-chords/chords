@@ -1,5 +1,5 @@
 <h1>Data Fetch</h1>
-<h2>Select the measurements</h2>
+<!-- h2>Select the measurements</h2>
 
 <ul>
   <% Site.all.each do |site| %>
@@ -10,5 +10,34 @@
 		<br>
     </li>
   <% end %>
-</ul>
-<%= submit_tag("Generate CSV File") %>
+</ul -->
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Site</th>
+      <th># measurements</th>
+      <th>Site</th>
+      <th>Site</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @instruments.each do |instrument| %>
+      <tr>
+        <td><%= instrument.name %></td>
+        <td><%= @sites.find(instrument.site_id).name %></td>
+	  <td><%= instrument.measurements.count %> </td>
+	  <td><%=  link_to("CSV", instruments_url( :format => 'csv') )%></td>
+
+        <td><%= link_to 'Show', instrument %></td>
+
+	  
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
