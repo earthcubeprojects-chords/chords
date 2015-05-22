@@ -1,5 +1,5 @@
 .main {
-width: 87%;
+width: 86%;
 padding-left:2%;
 text-align: left;
 padding-top: 10px;
@@ -37,6 +37,7 @@ float: left;
 width: 10%; 
 padding-right: 10px;
 text-align: left;
+max-width: 10%;
 }
 
 .horizmenu
