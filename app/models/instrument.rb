@@ -23,6 +23,7 @@ class Instrument < ActiveRecord::Base
     end
   end
 
+
   def self.data_insert_url
     url = instrument_url()
   end
@@ -33,6 +34,7 @@ class Instrument < ActiveRecord::Base
     # logger.debug()
     return measurement
   end
+
 
   def data(count)
 
