@@ -36,7 +36,7 @@ class Instrument < ActiveRecord::Base
 
   def data(count)
 
-    measurements = Measurement.where("instrument_id = ?", self.id).last(20)
+    measurements = Measurement.where("instrument_id = ?", self.id).last(self.display_points)
     
     data = Array.new    
     measurements.each do |measurement|

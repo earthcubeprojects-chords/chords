@@ -15,13 +15,26 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
+
   <div class="field">
-	
+    <%= f.label :site %><br>	
 	 <%= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
 	
-    <%#= f.label :site_id %>
-    <%#= f.text_field :site_id %>
   </div>
+
+
+  <div class="field">
+    <%= f.label :display_points %><br>
+    <%= f.text_field :display_points %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :seconds_before_timeout %><br>
+    <%= f.text_field :seconds_before_timeout %>
+  </div>
+
+
   <div class="actions">
     <%= f.submit %>
   </div>
