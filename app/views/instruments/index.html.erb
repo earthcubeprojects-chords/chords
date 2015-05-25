@@ -7,7 +7,8 @@
     <tr>
       <th>Name</th>
       <th>Site</th>
-      <th># ofMeasurements</th>
+      <th># of Measurements</th>
+      <th>Status</th>
 
       <th colspan="3"></th>
     </tr>
@@ -19,6 +20,7 @@
         <td><%= instrument.name %></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td><%= instrument.measurements.count %></td>
+        <td><%= instrument.is_receiving_data %></td>
         <td><%= link_to 'Show', instrument %></td>
         <td><%= link_to 'Edit', edit_instrument_path(instrument) %></td>
         <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>

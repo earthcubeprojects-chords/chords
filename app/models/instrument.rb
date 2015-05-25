@@ -34,6 +34,18 @@ class Instrument < ActiveRecord::Base
     # logger.debug()
     return measurement
   end
+  
+  def is_receiving_data
+    measurement = Measurement.where("(instrument_id = ?) AND (created_at > ?)", self.id, self.seconds_before_timeout.seconds.ago).order(:created_at).last
+
+    if measurement
+      return TRUE
+    else
+      return FALSE
+    end
+    
+  end
+  
 
 
   def data(count)
