@@ -21,9 +21,9 @@
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><% if instrument.is_receiving_data %>
-	<%= link_to image_tag('glossy-green-icon-button-th.png', size:"20"), "https://github.com/UCAR/chords", :target => "_blank" %>
+	<%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
 	<% else %>
-	<%= link_to image_tag('glossy-red-icon-button-th.png', size:"20"), "https://github.com/UCAR/chords", :target => "_blank" %>
+	<%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
 	<% end %>
 	
 	</td>
