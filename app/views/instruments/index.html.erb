@@ -17,7 +17,7 @@
   <tbody>
     <% @instruments.each do |instrument| %>
       <tr>
-        <td><%= instrument.name %></td>
+        <td> <%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><% if instrument.is_receiving_data %>
