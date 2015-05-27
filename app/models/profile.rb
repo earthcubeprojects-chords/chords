@@ -1,6 +1,24 @@
 class Profile < ActiveRecord::Base
 
   def self.initialize
-    Profile.create([{project: 'PECAN', affiliation: 'NCAR', description: 'The Plains Elevated Convection at Night (PECAN) campaign is aiming to increase the understanding of the conditions that lead to thunderstorm initiation and that control the lifecycle of large-scale thunderstorm systems (known as Mesoscale Convective Systems or MCSs) at night over the continental United States. <p>PECAN involves eight research laboratories and 14 universities, both national and international. PECAN will be conducted across northern Oklahoma, central Kansas and into south-central Nebraska from 1 June to 15 July 2015, and is funded by the NSF, NOAA, NASA, and the U.S. DOE.', logo: ''}])      
+    Profile.create([{project: 'EarthCube All Hands', affiliation: 'NCAR', description: 'This is a demonstration of the CHORDS Portal testbed, configured for the May 2015 NSF EarthCube All Hands Meeting.
+    <br>
+    We want to show that:
+    <ul>
+    <li>CHORDS Portal:</li>
+    <ul>
+    <li>is simple to create and configure.</li>
+    <li>it\'s really easy to post data from sensors into the portal.</li>
+    <li>it\'s really easy to get data from the portal into your diverse applications.</li>
+    <li>the portal provides a simple but comprehensive view of your complete real-time data system.</li>
+    </ul>
+    <li>CHORDS Services:</li>
+    <ul>
+    <li>can connect easily to (many) portals.</li>
+    <li>can leverage the real-time streams into other more sophisticated and standardized web services (such as mapping, data federation, and discovery).</li>
+    </ul>
+    </ul>
+    
+    ', logo: ''}])      
   end
 end
