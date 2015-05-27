@@ -1,3 +1,8 @@
+<% legend_top = 'Live Data'
+	if @instrument.measurements.last
+		legend_top =  "#{@instrument.measurements.last.parameter} (#{@instrument.measurements.last.unit})"
+	end
+%>
 
 <% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
 
@@ -53,7 +58,7 @@ $(function () {
             },
             yAxis: {
                 title: {
-                    text: '<%= @instrument.measurements.last.parameter%> (<%= @instrument.measurements.last.unit%>)'
+                    text: '<%= legend_top %>'
                 },
                 plotLines: [{
                     value: 0,
@@ -86,6 +91,3 @@ $(function () {
     });
 });
 </script>
-
-
-
