@@ -16,11 +16,11 @@
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Site</th>
-      <th># measurements</th>
-      <th>Site</th>
-      <th>Site</th>
+      <th>Instrument Name</th>
+      <th align="center">Site</th>
+      <th align="center"># <br/> measurements</th>
+      <th >Download As</th>
+
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -28,12 +28,11 @@
   <tbody>
     <% @instruments.each do |instrument| %>
       <tr>
-        <td><%= instrument.name %></td>
+        <td> <%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
-	  <td><%= instrument.measurements.count %> </td>
-	  <td><%=  link_to("CSV", instruments_url( :format => 'csv') )%></td>
+	  <td align="center"><%= instrument.measurements.count %> </td>
+	  <td align="center"><%=  link_to("CSV", instrument_url(:id => instrument.id, :format => 'csv') )%> <%=  link_to("XML", instrument_url(:id => instrument.id, :format => 'xml') )%></td>
 
-        <td><%= link_to 'Show', instrument %></td>
 
 	  
 
@@ -41,3 +40,4 @@
     <% end %>
   </tbody>
 </table>
+
