@@ -11,7 +11,6 @@ class MonitorController < ApplicationController
   end
  
   def live
-    instrument_id = 1
     m = Instrument.find(instrument_id).last_measurement
     if m
       render :json => m.json_point
