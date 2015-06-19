@@ -9,10 +9,15 @@ class MonitorController < ApplicationController
   
   def show
   end
-    
+ 
   def live
     instrument_id = 1
-    render :json => Instrument.find(instrument_id).last_measurement.json_point    
+    m = Instrument.find(instrument_id).last_measurement
+    if m
+      render :json => m.json_point
+    else
+      render :json => nil
+    end
   end
       
 end
