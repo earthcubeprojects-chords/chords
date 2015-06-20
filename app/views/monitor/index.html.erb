@@ -14,13 +14,9 @@
 	<% instrument.measurements.order("created_at").last(1).each do |measurement| %>
 		<%#= measurement.value %> <%#= measurement.unit %>
 	<% end %>
-
-
 <% end %>
 
 <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-
-
 
 <script>
 $(function () {
