@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150525034207) do
+ActiveRecord::Schema.define(version: 20150620150850) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -35,6 +35,16 @@ ActiveRecord::Schema.define(version: 20150525034207) do
 
   add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
 
+  create_table "params", force: :cascade do |t|
+    t.string   "name",          limit: 255
+    t.string   "p",             limit: 255
+    t.integer  "instrument_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "params", ["instrument_id"], name: "index_params_on_instrument_id", using: :btree
+
   create_table "profiles", force: :cascade do |t|
     t.string   "project",     limit: 255
     t.string   "affiliation", limit: 255
@@ -54,4 +64,5 @@ ActiveRecord::Schema.define(version: 20150525034207) do
 
   add_foreign_key "instruments", "sites"
   add_foreign_key "measurements", "instruments"
+  add_foreign_key "params", "instruments"
 end

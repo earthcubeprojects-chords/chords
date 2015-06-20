@@ -1,6 +1,7 @@
 class Instrument < ActiveRecord::Base
   belongs_to :site
   has_many :measurements
+  has_many :params
   
   def self.initialize
     Instrument.create([{name: 'Campbell', site_id:'1', }])
