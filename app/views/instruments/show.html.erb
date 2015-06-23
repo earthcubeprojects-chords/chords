@@ -58,10 +58,6 @@
 
 <p>
  	<strong>Data Input URL:</strong>
-	<br/>
-	<%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id, :parameter => 'PARAMETER', :unit => 'UNIT', :value => 'VALUE' ) %>
-	<br/>
-	
 	<% if nvars > 0 %>
 	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create') %>
 	  ?inst=<%=@instrument.id%>?<%= vquery %>
