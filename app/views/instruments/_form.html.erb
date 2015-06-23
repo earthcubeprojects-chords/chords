@@ -22,7 +22,6 @@
 	
   </div>
 
-
   <div class="field">
     <%= f.label :display_points %><br>
     <%= f.text_field :display_points %>
@@ -34,6 +33,23 @@
     <%= f.text_field :seconds_before_timeout %>
   </div>
 
+  <div class="field">    
+    <p>Variables</p>
+    <table>
+    <tr>
+      <th>Name</th>
+      <th>Id</th>
+    </tr>
+    <% @instrument.vars.each do |v| %>
+      <tr>
+        <td> <%=  v.name %></td>
+        <td> <%=  v.v    %></td>
+      </tr>
+    <% end %>
+    </td>
+    </table>
+  <%= link_to 'New Variable', new_var_path(:inst_id => @instrument.id) %>
+  </div>
 
   <div class="actions">
     <%= f.submit %>

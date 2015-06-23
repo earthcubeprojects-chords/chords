@@ -1,0 +1,37 @@
+<% ourvars = Var.where(instrument_id: params[:inst_id]) %>
+<% nvars = ourvars.count %>
+<% newv = nvars+1 %>
+
+<%= form_for(@var) do |f| %>
+  <div class="field">
+  <table>
+    <% ourvars.each do |v| %>
+      <tr>
+        <td align="right">
+          <%= v.name %>
+        </td>
+        <td align="right">
+          <%= v.v %>
+        </td>
+        <td align="right">
+          <%= v.instrument_id %>
+        </td>
+      </tr>
+    <% end %> 
+    <tr>
+      <td align="right">
+        <%= f.text_field :name %>
+      </td>
+     <td align="right">
+        <%= f.text_field :v, :value => newv, :readonly => true %>
+      </td>
+      <td align="right">
+        <%= f.text_field :instrument_id, :value => params[:inst_id], :readonly => true %>
+      </td>
+    </tr>
+  </table>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,16 @@
+<p id="notice"><%= notice %></p>
+<% 
+  v=Var.find(params[:id]) 
+%>
+<table>
+<tr>
+  <td>
+    <strong>Variable:</strong>
+    <%= v.name %>
+  </td>
+  <td>
+    <strong>ID:</strong>
+    v<%= v.v %>
+  </td>
+</tr>
+</table>

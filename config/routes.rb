@@ -17,9 +17,9 @@ Rails.application.routes.draw do
   resources :measurements
   resources :instruments
   resources :sites
+  resources :vars
 
   root 'dashboard#index'
-
 
   resources :instruments do
     member do

@@ -1,6 +1,5 @@
 <p id="notice"><%= notice %></p>
 
-
 <p>
   <strong>Instrument Name:</strong>
   <%= @instrument.name %>
@@ -21,19 +20,14 @@
   <%= @instrument.seconds_before_timeout %>
 </p --> 
 
-
-
 <p>
 	<strong>Data Input URL:</strong>
 	<br/>
 	<%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id, :parameter => 'PARAMETER', :unit => 'UNIT', :value => 'VALUE' ) %>
 </p>
 
-
-
 <br/>
 <br/>
-
 
 <p>
   <strong>Number of measurements made:</strong>
@@ -41,10 +35,7 @@
 	(Download as <%=  link_to("CSV", instrument_url( :format => 'csv') )%>, <%=  link_to("XML", instrument_url( :format => 'xml') )%> )
 </p>
 
-
 <%= render 'monitor' %>
-
-
 
 <%= link_to 'Edit', edit_instrument_path(@instrument) %> |
 <%= link_to 'Back', instruments_path %>
