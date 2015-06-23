@@ -3,13 +3,14 @@
 <% vquery = ''            %>
 <% if nvars > 0           %>
 <%   i = 0                %>
+<%   vquery = '&'         %>
 <%   ourvars.each do |v|  %>
 <%     vquery += 'v'      %>
 <%     vquery += v.v.to_s %>
 <%     vquery += '='      %>
 <%     vquery += v.name   %>
 <%     if i < nvars-1     %>
-<%       vquery += '?'    %>
+<%       vquery += '&'    %>
 <%     end                %>
 <%     i = i + 1          %>
 <%   end                  %>
@@ -59,8 +60,8 @@
 <p>
  	<strong>Data Input URL:</strong>
 	<% if nvars > 0 %>
-	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create') %>
-	  ?inst=<%=@instrument.id%>?<%= vquery %>
+	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %>
+	  <%= vquery %>
 	<% end %>
 </p>
 
