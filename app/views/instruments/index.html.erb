@@ -7,7 +7,8 @@
     <tr>
       <th>Name</th>
       <th>Site</th>
-      <th># of Measurements</th>
+      <th align="center"># of <br/>Measurements</th>
+      <th align="center"># of <br/>Variables</th>
       <th>Status</th>
 
       <th colspan="3"></th>
@@ -20,6 +21,7 @@
         <td> <%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center"><%= instrument.measurements.count %></td>
+        <td align="center"><%= instrument.vars.count %></td>
         <td align="center"><% if instrument.is_receiving_data %>
 	<%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
 	<% else %>
