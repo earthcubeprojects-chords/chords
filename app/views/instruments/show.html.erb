@@ -1,8 +1,44 @@
+<% ourvars = @instrument.vars.all %>
+<% nvars = ourvars.size   %>
+<% vquery = ''            %>
+<% if nvars > 0           %>
+<%   i = 0                %>
+<%   ourvars.each do |v|  %>
+<%     vquery += 'v'      %>
+<%     vquery += v.v.to_s %>
+<%     vquery += '='      %>
+<%     vquery += v.name   %>
+<%     if i < nvars-1     %>
+<%       vquery += '?'    %>
+<%     end                %>
+<%     i = i + 1          %>
+<%   end                  %>
+<% end                    %>
+
 <p id="notice"><%= notice %></p>
 
 <p>
   <strong>Instrument Name:</strong>
   <%= @instrument.name %>
+</p>
+
+<p>
+  <strong>Instrument ID:</strong>
+  inst=<%= @instrument.id %>
+</p>
+
+<p>
+  <strong>Variables:</strong>
+  <br/>
+  <% if nvars > 0 %>
+    <table>
+    <% ourvars.each do |v| %>
+      <tr>
+        <td>v<%=v.v%>=<%=v.name%></td>
+      </tr>
+    <% end %>
+    </table>
+  <% end %>
 </p>
 
 <p>
@@ -21,9 +57,15 @@
 </p --> 
 
 <p>
-	<strong>Data Input URL:</strong>
+ 	<strong>Data Input URL:</strong>
 	<br/>
 	<%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id, :parameter => 'PARAMETER', :unit => 'UNIT', :value => 'VALUE' ) %>
+	<br/>
+	
+	<% if nvars > 0 %>
+	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create') %>
+	  ?inst=<%=@instrument.id%>?<%= vquery %>
+	<% end %>
 </p>
 
 <br/>
@@ -39,3 +81,4 @@
 
 <%= link_to 'Edit', edit_instrument_path(@instrument) %> |
 <%= link_to 'Back', instruments_path %>
+
