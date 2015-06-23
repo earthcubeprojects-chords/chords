@@ -18,8 +18,7 @@
 
   <div class="field">
     <%= f.label :site %><br>	
-	 <%= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
-	
+	<%= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
   </div>
 
   <div class="field">
@@ -34,12 +33,8 @@
   </div>
 
   <div class="field">    
-    <p>Variables</p>
+    Variables
     <table>
-    <tr>
-      <th>Name</th>
-      <th>Id</th>
-    </tr>
     <% @instrument.vars.each do |v| %>
       <tr>
         <td> <%=  v.name %></td>
