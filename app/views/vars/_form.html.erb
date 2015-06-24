@@ -11,7 +11,7 @@
           <%= v.name %>
         </td>
         <td align="right">
-          <%= v.v %>
+          <%= v.shortname %>
         </td>
         <td align="right">
           <%= v.instrument_id %>
@@ -23,7 +23,7 @@
         <%= f.text_field :name %>
       </td>
      <td align="right">
-        <%= f.text_field :v, :value => newv, :readonly => true %>
+        <%= f.text_field :shortname %>
       </td>
       <td align="right">
         <%= f.text_field :instrument_id, :value => params[:inst_id], :readonly => true %>

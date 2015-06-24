@@ -49,23 +49,21 @@ class MeasurementsController < ApplicationController
     ourvars = Instrument.find(params[:instrument_id]).vars
     varnames = Array.new
     ourvars.each do |v|
-      varnames.push('v'+v.v)
+      varnames.push(v.shortname)
     end
     # Go through all of the query parameters
     params.keys.each do |k|
-       kstring = k.to_s
-       # If the query parameter bgins with v, it might be a variable name
-       if kstring[0] == 'v'
-         # Is it an accepted variable name?
-         if varnames.include? kstring
-           # Create a new measurement
-           @measurement = Measurement.new(
-             :instrument_id => params[:instrument_id], 
-             :parameter => kstring, 
-             :value => params[k])
-           @measurement.save
-         end
-       end
+      kstring = k.to_s
+      # If the query parameter bgins with v, it might be a variable name
+      # Is it an accepted variable name?
+      if varnames.include? kstring
+        # Create a new measurement
+        @measurement = Measurement.new(
+          :instrument_id => params[:instrument_id], 
+          :parameter => kstring, 
+          :value => params[k])
+        @measurement.save
+      end
     end
 
     respond_to do |format|

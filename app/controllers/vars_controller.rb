@@ -39,7 +39,7 @@ class VarsController < ApplicationController
   end
 
   def var_params
-    params.require(:var).permit(:name, :v, :instrument_id)
+    params.require(:var).permit(:name, :shortname, :instrument_id)
   end
   
 end

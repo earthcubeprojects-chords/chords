@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150622185523) do
+ActiveRecord::Schema.define(version: 20150624193032) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -54,10 +54,10 @@ ActiveRecord::Schema.define(version: 20150622185523) do
 
   create_table "vars", force: :cascade do |t|
     t.string   "name",          limit: 255
-    t.string   "v",             limit: 255
     t.integer  "instrument_id", limit: 4
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.string   "shortname",     limit: 255
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
