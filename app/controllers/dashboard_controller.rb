@@ -13,10 +13,8 @@ class DashboardController < ApplicationController
     end
     
     @measurements_by_minute_data = data_array.join(',')
-
-
-
-
+    @db_size_mb = ApplicationHelper.total_db_size_mb[0][0].to_f
+    
     start_time = Time.zone.now - 10.day
     @measurements_by_hour = Measurement.where("created_at >= ?", start_time).group("date_format(created_at, '%Y-%m-%dT%H')").count
 
