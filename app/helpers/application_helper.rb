@@ -20,8 +20,7 @@ module ApplicationHelper
       result << res
       puts 'res:' + res.to_s
     end
-    puts 'result is',  result
-    return result
+    return result[0][0].to_f
   end
 
 end
