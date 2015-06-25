@@ -4,10 +4,6 @@ Rails.application.routes.draw do
   get 'instruments/live' => 'instruments#live'
   get 'measurements/url_create' => 'measurements#url_create'
 
-  # get 'instruments/:id/live' => 'instruments/live'
-
-
-
   resources :profiles, only: [:index, :create]
   resources :about
   resources :dashboard
@@ -27,26 +23,6 @@ Rails.application.routes.draw do
     end
   end
 
-# get 'products/:id' => 'catalog#view'
-
-  
-  # get 'measurements/url_create/:instrument_id/:parameter/:value/:unit' => 'measurements#url_create'
-
-
-
-
-    # namespace :monitor do
-    #   # Directs /admin/products/* to Admin::ProductsController
-    #   # (app/controllers/admin/products_controller.rb)
-    #   resources :live
-    # end
-
-
-    #   get 'monitor/live' => 'monitor#live', as: :live
-
-  
-  # get 'measurements/url_create' => 'measurements#url_create'
-  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
