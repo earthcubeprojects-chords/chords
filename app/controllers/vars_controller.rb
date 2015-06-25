@@ -20,6 +20,7 @@ class VarsController < ApplicationController
 
   # GET /vars/1/edit
   def edit
+    @var = Var.find(params[:id])
   end
   
   # POST /vars
@@ -35,6 +36,34 @@ class VarsController < ApplicationController
         format.html { render :new }
         format.json { render json: @var.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  # PATCH/PUT /vars/1
+  # PATCH/PUT /vars/1.json
+  def update
+    # Why do we have to do a find? E.g. SitesController.update() doesn't need to.
+    @var = Var.find(params[:id])
+    respond_to do |format|
+      if @var.update(var_params)
+        format.html { redirect_to @var, notice: 'Variable was successfully updated.' }
+        format.json { render :show, status: :ok, location: @var }
+      else
+        format.html { render :edit }
+        format.json { render json: @var.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /vars/1
+  # DELETE /vars/1.json
+  def destroy
+    # Why do we have to do a find? E.g. SitesController.update() doesn't need to.
+    @var = Var.find(params[:id])
+    @var.destroy
+    respond_to do |format|
+      format.html { redirect_to instruments_url, notice: 'Variable was successfully destroyed.' }
+      format.json { head :no_content }
     end
   end
 

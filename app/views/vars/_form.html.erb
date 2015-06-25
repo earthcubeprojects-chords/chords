@@ -1,35 +1,15 @@
-<% ourvars = Var.where(instrument_id: params[:inst_id]) %>
-<% nvars = ourvars.count %>
-<% newv = nvars+1 %>
-
 <%= form_for(@var) do |f| %>
   <div class="field">
-  <table>
-    <% ourvars.each do |v| %>
-      <tr>
-        <td align="right">
-          <%= v.name %>
-        </td>
-        <td align="right">
-          <%= v.shortname %>
-        </td>
-        <td align="right">
-          <%= v.instrument_id %>
-        </td>
-      </tr>
-    <% end %> 
-    <tr>
-      <td align="right">
-        <%= f.text_field :name %>
-      </td>
-     <td align="right">
-        <%= f.text_field :shortname %>
-      </td>
-      <td align="right">
-        <%= f.text_field :instrument_id, :value => params[:inst_id], :readonly => true %>
-      </td>
-    </tr>
-  </table>
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :shortname %><br>
+    <%= f.text_field :shortname %>
+  </div>
+  <div class="field">
+    <%= f.label :instrument_id %><br>
+    <%= f.text_field :instrument_id, :readonly => true %>
   </div>
   <div class="actions">
     <%= f.submit %>

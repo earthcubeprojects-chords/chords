@@ -1,7 +1,8 @@
 <p id="notice"><%= notice %></p>
-<% 
-  v=Var.find(params[:id]) 
-%>
+
+<%-# Why do we have to do this? Shouldn't @var be defined? -%>
+<% v= Var.find(params[:id]) %>
+
 <table>
 <tr>
   <td>
@@ -14,3 +15,6 @@
   </td>
 </tr>
 </table>
+
+<%= link_to 'Edit', edit_var_path(v, :id=>params[:id]) %> |
+<%= link_to 'Back', vars_path %>

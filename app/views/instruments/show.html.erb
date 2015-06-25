@@ -1,19 +1,21 @@
-<% ourvars = @instrument.vars.all %>
-<% nvars = ourvars.size      %>
-<% vquery = ''               %>
-<% if nvars > 0              %>
-<%   i = 0                   %>
-<%   vquery = '&'            %>
-<%   ourvars.each do |v|     %>
-<%     vquery += v.shortname %>
-<%     vquery += '='         %>
-<%     vquery += v.name.delete(' ')%>
-<%     if i < nvars-1        %>
-<%       vquery += '&'       %>
-<%     end                   %>
-<%     i = i + 1             %>
-<%   end                     %>
-<% end                       %>
+<% 
+ourvars = @instrument.vars.all
+nvars = ourvars.size      
+vquery = ''               
+if nvars > 0              
+  i = 0                   
+  vquery = '&'            
+  ourvars.each do |v|     
+    vquery += v.shortname 
+    vquery += '='
+    vquery += v.name.delete(' ')
+    if i < nvars-1        
+      vquery += '&'       
+    end                   
+    i = i + 1             
+  end
+end
+%>
 
 <p id="notice"><%= notice %></p>
 
@@ -34,7 +36,7 @@
     <table>
     <% ourvars.each do |v| %>
       <tr>
-        <td>v<%=v.shortname%>=<%=v.name%></td>
+        <td><%=v.shortname%>=<%=v.name%></td>
       </tr>
     <% end %>
     </table>
