@@ -13,8 +13,12 @@ class DashboardController < ApplicationController
     end
     
     # 
-    @db_size_mb = ApplicationHelper.total_db_size_mb
-
+    @metrics = {}
+    @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
+    @metrics["measurement_count"] = Measurement.count
+    @metrics["site_count"]        = Site.count
+    @metrics["instrument_count"]  = Instrument.count
+    
     @measurements_by_minute_data = data_array.join(',')
     
     start_time = Time.zone.now - 10.day

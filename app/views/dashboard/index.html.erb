@@ -1,8 +1,18 @@
 <h1>Dashboard</h1>
 <hr />
-<p>
-Database size: <%= @db_size_mb.to_s %>MB
-</p>
+<div>
+<table>
+  <tr>
+    <th>Totals</th>
+  </tr>
+  <tr>
+    <td>Measurements:<%= @metrics["measurement_count"] %></td>
+    <td>Instruments:<%= @metrics["instrument_count"] %></td>
+    <td>Sites:<%= @metrics["site_count"] %></td>
+    <td>Storage:<%= @metrics["db_size_mb"] %>MB</td>
+  </tr>
+</table>
+</div>
 
 <%= render 'samples_per_minute' %>
 <%= render 'samples_per_hour' %>
