@@ -9,12 +9,14 @@ class VarsController < ApplicationController
   # GET /vars/1
   # GET /vars/1.json
   def show
+    @var = Var.find(params[:id])
   end
 
   # GET /vars/new
   # GET /vars/new.1
   def new
     @var = Var.new
+    @currentvars = Var.where(instrument_id: params[:inst_id])
     @instrument = Instrument.find(params[:inst_id])
   end
 

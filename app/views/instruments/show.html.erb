@@ -61,8 +61,7 @@ end
 <p>
  	<strong>Data Input URL:</strong>
 	<% if nvars > 0 %>
-	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %>
-	  <%= vquery %>
+	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>
 	<% end %>
 </p>
 

@@ -8,8 +8,7 @@
     <%= f.text_field :shortname %>
   </div>
   <div class="field">
-    <%= f.label :instrument_id %><br>
-    <%= f.text_field :instrument_id, :readonly => true %>
+    <%= f.hidden_field :instrument_id, :readonly => true %>
   </div>
   <div class="actions">
     <%= f.submit %>

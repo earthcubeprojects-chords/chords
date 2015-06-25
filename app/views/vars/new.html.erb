@@ -1,11 +1,10 @@
 <h1>Create a New Variable for <%= @instrument.name %> </h1>
 
-<% ourvars = Var.where(instrument_id: params[:inst_id]) %>
- <%= form_for(@var) do |f| %>
+<%= form_for(@var) do |f| %>
 
 <div class="field">
   <table>
-    <% ourvars.each do |v| %>
+    <% @currentvars.each do |v| %>
       <tr>
         <td align="right">
           <%= v.name %>
