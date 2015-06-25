@@ -1,6 +1,8 @@
 <h1>Create a New Variable for <%= @instrument.name %> </h1>
 
 <% ourvars = Var.where(instrument_id: params[:inst_id]) %>
+ <%= form_for(@var) do |f| %>
+
 <div class="field">
   <table>
     <% ourvars.each do |v| %>
@@ -16,7 +18,7 @@
         </td>
       </tr>
     <% end %> 
-<%= form_for(@var) do |f| %>
+    
     <tr>
       <td align="right">
         <%= f.label :name %>
@@ -34,10 +36,12 @@
       <br/>
     </tr>
   </table>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+</div>
+
+<div class="field">
+  <%= f.submit %>
+</div>
+
 <% end %>
 
 <%= link_to 'Back', instruments_path %>
