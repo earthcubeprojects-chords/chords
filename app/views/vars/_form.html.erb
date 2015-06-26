@@ -1,4 +1,4 @@
-<%= form_for(@var) do |f| %>
+<%= form_for(@var, html: {class: "new_or_edit_form" }) do |f| %>
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>

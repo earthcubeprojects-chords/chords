@@ -1,7 +1,5 @@
 <h1>Configuration</h1>
-<hr>
-<h2>Project Information</h2>
-<%= form_for(:profile, method: "post", multipart: true) do %>
+<%= form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do %>
   <%= label_tag 'project', 'Project Name:' %>
   <%= text_field_tag 'project', @profile.project, size: 60 %>
   <br>
@@ -21,4 +19,3 @@
   <br>
   <%= submit_tag("Save") %>
 <% end %>
-

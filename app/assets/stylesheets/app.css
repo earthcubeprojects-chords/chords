@@ -30,7 +30,6 @@ float: left;
 	align-items: center;
 }
 
-
 .appsidebar 
 {
 float: left; 
@@ -113,4 +112,8 @@ color: #468847;
 background-color: #f2dede;
 border-color: #eed3d7;
 color: #b94a48;
+}
+
+.new_or_edit_form {
+background-color: #dff0d8;
 }

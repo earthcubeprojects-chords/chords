@@ -1,4 +1,4 @@
-<%= form_for(@measurement) do |f| %>
+<%= form_for(@measurement, html: {class: "new_or_edit_form" }) do |f| %>
   <% if @measurement.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@measurement.errors.count, "error") %> prohibited this measurement from being saved:</h2>

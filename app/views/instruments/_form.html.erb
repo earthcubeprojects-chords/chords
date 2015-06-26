@@ -1,4 +1,4 @@
-<%= form_for(@instrument) do |f| %>
+<%= form_for(@instrument, html: {class: "new_or_edit_form" }) do |f| %>
   <% if @instrument.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@instrument.errors.count, "error") %> prohibited this instrument from being saved:</h2>
