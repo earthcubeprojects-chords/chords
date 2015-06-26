@@ -12,9 +12,6 @@
         <td align="right">
           <%= v.shortname %>
         </td>
-        <td align="right">
-          <%= v.instrument_id %>
-        </td>
       </tr>
     <% end %> 
     
@@ -30,7 +27,7 @@
       </td>
       <br/>
       <td align="right">
-        <%= f.text_field :instrument_id, :value => params[:inst_id], :readonly => true %>
+        <%= f.hidden_field :instrument_id, :value => params[:inst_id], :readonly => true %>
       </td>
       <br/>
     </tr>
