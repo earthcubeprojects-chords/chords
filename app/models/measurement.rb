@@ -27,7 +27,7 @@ class Measurement < ActiveRecord::Base
   end
   
   def age
-    return time_ago_in_words(self.created_at)
+    time_ago_in_words(self.created_at)
   end
   
 end

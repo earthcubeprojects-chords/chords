@@ -48,7 +48,13 @@ class Instrument < ActiveRecord::Base
     
   end
   
-
+  def last_age
+    measurement = measurements.last
+    if measurement
+      return measurement.age
+    end
+    return 'never'
+  end
 
   def data(count)
 
