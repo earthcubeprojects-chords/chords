@@ -9,8 +9,8 @@
       <th>Site</th>
       <th align="center"># of <br/>Measurements</th>
       <th align="center"># of <br/>Variables</th>
-      <th>Status</th>
-
+      <th align="center">Last<br/>Measurement</th>
+      <th align="center">Status</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -22,13 +22,13 @@
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
+	    <td><%= instrument.last_age%></td>
         <td align="center"><% if instrument.is_receiving_data %>
 	       <%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
 	       <% else %>
 	       <%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
 	       <% end %>
 	       </td>
-	    <td><%= instrument.last_age%></td>
         <td><%= link_to 'Show', instrument %></td>
         <td><%= link_to 'Edit', edit_instrument_path(instrument) %></td>
         <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
