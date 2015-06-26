@@ -1,3 +1,5 @@
+include ActionView::Helpers::DateHelper
+
 class Measurement < ActiveRecord::Base
   belongs_to :instrument
 
@@ -24,6 +26,9 @@ class Measurement < ActiveRecord::Base
     return json    
   end
   
+  def age
+    return time_ago_in_words(self.created_at)
+  end
   
 end
 

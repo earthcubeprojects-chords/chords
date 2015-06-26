@@ -18,7 +18,7 @@
   <tbody>
     <% @instruments.each do |instrument| %>
       <tr>
-        <td> <%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
+        <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
@@ -28,6 +28,7 @@
 	       <%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
 	       <% end %>
 	       </td>
+	    <td><%= instrument.measurements.last.age%></td>
         <td><%= link_to 'Show', instrument %></td>
         <td><%= link_to 'Edit', edit_instrument_path(instrument) %></td>
         <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>

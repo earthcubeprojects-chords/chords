@@ -3,7 +3,7 @@ module ApplicationHelper
   # return the database size in MB.
   def self.total_db_size_mb
     # Create a query to determine the database size. Use the information_schema
-    # table, summing data index totals for disk based tables that are using our
+    # table, summing data and index totals for disk based tables that are using our
     # database.
     sql = "SELECT
              sum( data_length + index_length ) / ( 1024 *1024 ) AS size
