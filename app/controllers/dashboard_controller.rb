@@ -7,8 +7,8 @@ class DashboardController < ApplicationController
     @metrics["measurement_count"] = Measurement.count
     @metrics["site_count"]        = Site.count
     @metrics["instrument_count"]  = Instrument.count
-    
-    
+    @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
+
     # Get all of our instrument ids.
     instrument_ids = Instrument.pluck(:id)
     

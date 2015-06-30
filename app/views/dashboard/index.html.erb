@@ -1,12 +1,12 @@
 <h1>Dashboard</h1>
-<hr />
+<div class="last_url">
+<%= @metrics["last_url"] %>
+</div>
+
 <div>
 <table>
   <tr>
-    <th>Totals</th>
-  </tr>
-  <tr>
-    <td>Measurements:<strong><%= @metrics["measurement_count"] %></strong></td>
+    <td>Measurements:<%= @metrics["measurement_count"] %></td>
     <td>Instruments:<%= @metrics["instrument_count"] %></td>
     <td>Sites:<%= @metrics["site_count"] %></td>
     <td>Storage:<%= @metrics["db_size_mb"] %>MB</td>

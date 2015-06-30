@@ -19,34 +19,31 @@ end
 
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Instrument Name:</strong>
-  <%= @instrument.name %>
-</p>
+<div class="last_url">
+<%= @instrument.last_url %>
+</div>
 
-<p>
-  <strong>Instrument ID:</strong>
-  instrument_id=<%= @instrument.id %>
-</p>
+<table>
+  <tr>
+    <td><strong>Instrument Name:</strong>
+    <%= @instrument.name %></td>
+    <td><strong>Site:</strong>
+    <td><%= @instrument.site.name %></td>
+    <td><strong>ID:</strong>
+    instrument_id=<%= @instrument.id %></td>
+  </tr>
+</table>
 
-<p>
-  <strong>Variables:</strong>
-  <br/>
+<table>
+  <tr>
+  <td><strong>Variables:</strong></td>
   <% if nvars > 0 %>
-    <table>
     <% ourvars.each do |v| %>
-      <tr>
         <td><%=v.shortname%>=<%=v.name%></td>
-      </tr>
     <% end %>
-    </table>
   <% end %>
-</p>
-
-<p>
-  <strong>Site:</strong>
-  <%= @instrument.site.name %>
-</p>
+  </tr>
+</table>
 
 <!-- p>
   <strong>Number of Point to Display in Highcharts:</strong>

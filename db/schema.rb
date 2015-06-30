@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624193032) do
+ActiveRecord::Schema.define(version: 20150630201832) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20150624193032) do
     t.datetime "updated_at",                                      null: false
     t.integer  "display_points",         limit: 4,   default: 20
     t.integer  "seconds_before_timeout", limit: 4,   default: 5
+    t.string   "last_url",               limit: 255
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree

@@ -45,6 +45,10 @@ class MeasurementsController < ApplicationController
   end
   
   def url_create
+  
+    # Save the url that invoked us
+    Instrument.update(params[:instrument_id], :last_url => request.original_url)
+    
     # Create an array containing the names of legitimate variable names
     ourvars = Instrument.find(params[:instrument_id]).vars
     varnames = Array.new
