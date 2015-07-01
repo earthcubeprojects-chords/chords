@@ -7,14 +7,18 @@ start_date = (now - 7)
 
 <div id="samples_per_hour"></div>
 <script>
+
+series = JSON.parse('<%= @series_by_hour.to_json.html_safe %>')
+
 $(function () {
     $('#samples_per_hour').highcharts({
 		title: {
-		    text: 'Total Samples per Hour'
+		    text: 'Samples per Hour'
 		},
         chart: {
-			 type: 'column',
+			 type: 'line',
             zoomType: 'x',
+            spacing: [0,0,0,0]
         },
         xAxis: {
             type: 'datetime',
@@ -28,13 +32,8 @@ $(function () {
                 text: 'Samples'
             }
         },
-        series: [{
-            data: [
-			<%= @measurements_by_hour_data %>
-            ],
-            pointStart: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
-            pointInterval: 24 * 3600 * 1000 // one day
-        }]
+        series:
+          series
     });
 });
 </script>

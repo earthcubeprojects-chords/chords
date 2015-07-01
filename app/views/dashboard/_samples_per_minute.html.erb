@@ -9,14 +9,18 @@ start_date = (now - 1)
 
 <div id="samples_per_minute"></div>
 <script>
+
+series = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
+
 $(function () {
     $('#samples_per_minute').highcharts({
 		title: {
-		    text: 'Total Samples per Minute'
+		    text: 'Samples per Minute'
 		},
         chart: {
 			type: 'line',
             zoomType: 'x',
+            spacing: [0,0,0,0]
         },
         xAxis: {
             type: 'datetime',
@@ -32,8 +36,7 @@ $(function () {
 			title: 'test'
 		},
 		series: 
-		  //JSON.parse(<%= @series_by_min.to_json %>)
-		  <%= @series_by_min_js %>
+		  series,
     });
 });
 </script>

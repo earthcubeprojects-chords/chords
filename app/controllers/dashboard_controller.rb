@@ -10,35 +10,79 @@ class DashboardController < ApplicationController
     @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
 
     # Create a table of number of measurements for each minute 
-    start_time = Time.zone.now - 2.hour
+    @series_by_minute =  measurement_counts_by_interval(:minute, 4.hour)
+    
+    # Create a table of number of measurements by hour
+    @series_by_hour =  measurement_counts_by_interval(:hour, 7.day)
+
+  end
+
+  ################################################################
+  def to_ms(time_string)
+      ms = (Time.iso8601(time_string).to_f * 1000.0).to_i
+      return ms
+  end
+  
+  ################################################################
+  # Summarize the number of measurements per time unit,
+  # for each instrument. The time unit and the time span
+  # are parameters.
+  #
+  # A structured object is returned that is suitable for using as the 
+  # series atribute in a highchart chart. It will be an array of hashes. 
+  # Each hash contains attirbutes for one trace, including the data for 
+  # that trace.
+  #
+  # The returned object can be turned into json, using .to_json.
+  # This can then be translated to javascript using the javascript
+  # function JSON.parse(). 
+  #
+  # E.g., if you called make_highchart_series as:
+  #     @series_by_minute = measurement_counts_by_interval(:minute, 4.hour)
+  # you can import this into the javascript with:
+  # series = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
+ 
+  #  
+  def measurement_counts_by_interval(time_resolution, time_span)
+  
+    # Set the time format to be used in SQL group query
+    # 
+    time_format = "%Y-%m-%dT%H:%i"
+    iso_suffix  = ":00+06:00"
+    case time_resolution
+    when :minute
+      time_format = "%Y-%m-%dT%H:%i"
+      iso_suffix  = ":00+06:00"
+    when :hour
+      time_format = "%Y-%m-%dT%H"
+      iso_suffix  = ":00:00+06:00"
+    else
+    end
+
+    # Look at measurements newer than this
+    start_time = Time.zone.now - time_span
     
     # Get all of our instrument id and names.
     instrument_ids   = Instrument.pluck(:id)
     instrument_names = Instrument.pluck(:name)
     ninstruments     = Instrument.count
     
-    # Create a table of number of measurements for each minute 
-    start_time = Time.zone.now - 2.hour
-    
-    measurements_by_minute = []
+    measurements_by_interval = []
     j = 0
     instrument_ids.each do |i|
-      measurements_by_minute[j] = Measurement
+      measurements_by_interval[j] = Measurement
         .where("created_at >= ? and instrument_id = ?", start_time, i)
-        .group("date_format(created_at, '%Y-%m-%dT%H:%i')")
+        .group("date_format(created_at, '#{time_format}')")
         .count
       j += 1
     end
     
     # Create an array of uniq time keys
     time_keys = []
-    measurements_by_minute.each do |m|
+    measurements_by_interval.each do |m|
       time_keys += m.keys
     end
     time_keys = time_keys.uniq.sort
-    
-    # Create an array of millisecond time strings from the unique time keys
-    time_strings = time_keys.map {|t| to_ms_s(t.to_s + ':00+06:00')}
     
     # Create a hash of count arrays, using a integer index as the key. (makes
     # it look like a two dimensional array). Each row has an array containing
@@ -48,53 +92,25 @@ class DashboardController < ApplicationController
     time_keys.each do |k|
       counts_by_time_by_inst[t] = Array.new
       j = 0
-      measurements_by_minute.each do |m|
+      measurements_by_interval.each do |m|
         if m[k] != nil
           counts_by_time_by_inst[t][j] = m[k]
         else
           counts_by_time_by_inst[t][j] = 0
         end
-        if j > 0
-         # stack the lines.
-#        counts_by_time_by_inst[t][j] += counts_by_time_by_inst[t][j-1]
-        end
         j += 1
       end
       t += 1
     end
-
-    # Create the javascript for the highcharts "series" parameter
+    
     ntimes = counts_by_time_by_inst.count
-    @series_by_min_js = '['
-    (0..ninstruments-1).each do |col|
-      @series_by_min_js += '{'
-      #@series_by_min_js += 'name: \'' + instrument_names[col] + '\', '
-      @series_by_min_js += 'lineWidth: 0,'
-      @series_by_min_js += 'data: [ '
-	  (0..ntimes-1).each do |row|
-        @series_by_min_js += '[' 
-        @series_by_min_js +=  time_strings[row]
-        @series_by_min_js +=  ',' 
-        @series_by_min_js += counts_by_time_by_inst[row][col].to_s
-		@series_by_min_js += '],'
-      end
-      @series_by_min_js.chop!
-      @series_by_min_js += ']'
-      @series_by_min_js += ' },'
-    end
-    @series_by_min_js.chop!
-    @series_by_min_js += ']'
 
     # Create an array of millisecond times from the unique time keys
-    times_ms = time_keys.map {|t| to_ms(t.to_s + ':00+06:00')}
+    times_ms = time_keys.map {|t| to_ms(t.to_s + iso_suffix)}
     
-    # Create structured data for the Highcharts series attribute,
-    # that could be converted directly to json (using .to_json)
-    # (But there doesn't seem to be a way to convert from JSON to 
-    # Javascript. There must be a way to pull this directly into
-    # Highcharts rather than building javascript as above.)
+    # Create structured data for the Highcharts series attribute.
     
-    @series = []
+    series = []
     (0..ninstruments-1).each do |col|
       trace = {}
       trace[:name] = instrument_names[col]
@@ -106,33 +122,11 @@ class DashboardController < ApplicationController
 	    point.append(counts_by_time_by_inst[row][col])
 	    trace[:data].append(point)
       end
-      @series.append(trace)
-    end
-      
-    #puts @series.to_json
-
-    # Create a table of number of measurements by hour
-    start_time = Time.zone.now - 10.day
-    @measurements_by_hour = Measurement.where("created_at >= ?", start_time).group("date_format(created_at, '%Y-%m-%dT%H')").count
-
-    data_array = Array.new
-    @measurements_by_hour.each do |measurement_by_hour| 
-      iso8601 =      measurement_by_hour[0] + ':00:00+06:00'
-      miliseconds = (Time.iso8601(iso8601).to_f * 1000.0).to_i
-      str = '[' + miliseconds.to_s + ','+ measurement_by_hour[1].to_s + ']'
-      data_array.push(str)
+      series.append(trace)
     end
     
-    @measurements_by_hour_data = data_array.join(',')
-
-  end
-
-  def to_ms(time_string)
-      ms = (Time.iso8601(time_string).to_f * 1000.0).to_i
-      return ms
+    return series
   end
   
-  def to_ms_s(time_string)
-      return to_ms(time_string).to_s
-  end
+  
 end
