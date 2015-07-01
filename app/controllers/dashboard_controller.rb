@@ -9,11 +9,14 @@ class DashboardController < ApplicationController
     @metrics["instrument_count"]  = Instrument.count
     @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
 
+    @start_time_by_minute    = Time.zone.now - 2.hour
+    @start_time_by_hour      = Time.zone.now - 7.day
+
     # Create a table of number of measurements for each minute 
-    @series_by_minute =  measurement_counts_by_interval(:minute, 4.hour)
+    @series_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute)
     
     # Create a table of number of measurements by hour
-    @series_by_hour =  measurement_counts_by_interval(:hour, 7.day)
+    @series_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour)
 
   end
 
@@ -43,12 +46,12 @@ class DashboardController < ApplicationController
   # series = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
  
   #  
-  def measurement_counts_by_interval(time_resolution, time_span)
+  def measurement_counts_by_interval(time_resolution, start_time)
   
     # Set the time format to be used in SQL group query
     # 
     time_format = "%Y-%m-%dT%H:%i"
-    iso_suffix  = ":00+06:00"
+    iso_suffix  = ":00"
     case time_resolution
     when :minute
       time_format = "%Y-%m-%dT%H:%i"
@@ -59,9 +62,6 @@ class DashboardController < ApplicationController
     else
     end
 
-    # Look at measurements newer than this
-    start_time = Time.zone.now - time_span
-    
     # Get all of our instrument id and names.
     instrument_ids   = Instrument.pluck(:id)
     instrument_names = Instrument.pluck(:name)
