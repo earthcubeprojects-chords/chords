@@ -7,8 +7,6 @@ now = Date.today
 start_date = (now - 1)
 %>
 
-<%#= @measurements_by_minute_data %>
-
 <div id="samples_per_minute"></div>
 <script>
 $(function () {
@@ -17,15 +15,12 @@ $(function () {
 		    text: 'Total Samples per Minute'
 		},
         chart: {
-			 type: 'column',
-	
+			type: 'line',
             zoomType: 'x',
         },
         xAxis: {
             type: 'datetime',
-            tickInterval: 3600 * 1000 /60,
-            // min: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
-            // max: Date.UTC(<%= now.strftime('%Y') %>, <%= now.strftime('%m') %>, <%= now.strftime('%d') %>),
+            tickInterval: 60000,
         },
         yAxis: {
         	min: 0,
@@ -36,13 +31,9 @@ $(function () {
 		legend: {
 			title: 'test'
 		},
-        series: [{
-            data: [
-			<%= @measurements_by_minute_data %>
-            ],
-            // pointStart: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
-            pointInterval: 24 * 3600 * 1000 // one day
-        }]
+		series: 
+		  //JSON.parse(<%= @series_by_min.to_json %>)
+		  <%= @series_by_min_js %>
     });
 });
 </script>
