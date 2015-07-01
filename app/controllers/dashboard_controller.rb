@@ -55,7 +55,8 @@ class DashboardController < ApplicationController
           counts_by_time_by_inst[t][j] = 0
         end
         if j > 0
-          counts_by_time_by_inst[t][j] += counts_by_time_by_inst[t][j-1]
+         # stack the lines.
+#        counts_by_time_by_inst[t][j] += counts_by_time_by_inst[t][j-1]
         end
         j += 1
       end
