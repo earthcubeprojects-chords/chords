@@ -4,7 +4,7 @@ my_dir=`dirname $0`
 $my_dir/simulate_instrument.rb \
 -c localhost:3000 \
 -i 36 \
--s 2 \
+-s 22 \
 -v v1:20:10  \
 -v v2:50:20  \
 -v v3:10:2   \
