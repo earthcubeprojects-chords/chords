@@ -1,18 +1,33 @@
 <h1>Dashboard</h1>
-<div class="last_url">
+
+<div class='badgegroup'>
+  <div class='badge'>
+    <span class='badgetitle'>Measurements</span>
+    <br/>
+    <span class='badgevalue'><%= @metrics["measurement_count"] %></span>
+  </div>
+  <div class='badge'>
+    <span class='badgetitle'>Instruments</span>
+    <br/>
+    <span class='badgevalue'><%= @metrics["instrument_count"] %></span>
+  </div>
+  <div class='badge'>
+    <span class='badgetitle'>Sites</span>
+    <br/>
+    <span class='badgevalue'><%= @metrics["site_count"] %></span>
+  </div>
+  <div class='badge'>
+    <span class='badgetitle'>Storage</span>
+    <br/>
+    <span class='badgevalue'><%= @metrics["db_size_mb"] %>MB</span>
+  </div>
+</div>
+
+<div class="last_url" style="clear:both;">
 <%= @metrics["last_url"] %>
 </div>
 
-<div>
-<table>
-  <tr>
-    <td>Measurements:<%= @metrics["measurement_count"] %></td>
-    <td>Instruments:<%= @metrics["instrument_count"] %></td>
-    <td>Sites:<%= @metrics["site_count"] %></td>
-    <td>Storage:<%= @metrics["db_size_mb"] %>MB</td>
-  </tr>
-</table>
-</div>
+<br/>
 
 <%= render 'samples_per_minute' %>
 <%= render 'samples_per_hour' %>

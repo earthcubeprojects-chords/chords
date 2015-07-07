@@ -99,7 +99,7 @@ border: 1px solid #fbeed5;
 border-radius: 4px;
 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
-line-height: 20px;
+line-height: 120%;
 }
 
 .flash_notice, .last_url {
@@ -116,4 +116,28 @@ color: #b94a48;
 
 .new_or_edit_form {
 background-color: #dff0d8;
+}
+
+.badge {
+background-color: darkorange;
+font-size: 20px;
+padding: 20px;
+margin: 20px;
+text-align: center;
+float: left;
+-webkit-border-radius: 8px;
+-moz-border-radius: 8px;
+border-radius: 8px;
+line-height: 120%;
+}
+.badgetitle {
+color: cornsilk;
+}
+.badgevalue {
+color: darkblue;
+}
+.badgegroup {
+display: inline-block;
+margin-left: auto;
+margin-right: auto;
 }
