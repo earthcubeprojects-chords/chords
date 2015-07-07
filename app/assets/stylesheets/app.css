@@ -121,9 +121,9 @@ background-color: #dff0d8;
 .badge {
 display: inline-block;
 background-color: darkorange;
-font-size: 20px;
-padding: 20px;
-margin: 20px;
+font-size: 16px;
+padding: 16px;
+margin: 16px;
 text-align: center;
 -webkit-border-radius: 8px;
 -moz-border-radius: 8px;

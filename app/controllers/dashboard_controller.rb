@@ -11,12 +11,16 @@ class DashboardController < ApplicationController
 
     @start_time_by_minute    = Time.zone.now - 2.hour
     @start_time_by_hour      = Time.zone.now - 7.day
+    @start_time_by_day       = Time.zone.now - 30.day
 
     # Create a table of number of measurements for each minute 
-    @samples_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute)
+    @samples_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute, by_inst=true)
     
     # Create a table of number of measurements by hour
-    @samples_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour)
+    @samples_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour, by_inst=true)
+
+    # Create a table of number of measurements by day. Not broken out by instrument
+    @samples_by_day =  measurement_counts_by_interval(:day, @start_time_by_day, by_inst=false)
 
   end
 
@@ -30,6 +34,8 @@ class DashboardController < ApplicationController
   # Summarize the number of measurements per time unit,
   # for each instrument. The time unit and the time span
   # are parameters.
+  #
+  # If by_inst is false,  the samples will not be broken ot by instrument.
   #
   # A structured object is returned that is suitable for using as the 
   # series atribute in a highchart chart. It will be an array of hashes. 
@@ -46,7 +52,7 @@ class DashboardController < ApplicationController
   # series = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
  
   #  
-  def measurement_counts_by_interval(time_resolution, start_time)
+  def measurement_counts_by_interval(time_resolution, start_time, by_inst)
   
     # Set the time format to be used in SQL group query
     # 
@@ -59,6 +65,9 @@ class DashboardController < ApplicationController
     when :hour
       time_format = "%Y-%m-%dT%H"
       iso_suffix  = ":00:00+06:00"
+    when :day
+      time_format = "%Y-%m-%d"
+      iso_suffix  = "T00:00:00+06:00"
     else
     end
 
@@ -111,16 +120,37 @@ class DashboardController < ApplicationController
     # Create structured data for the Highcharts series attribute.
     
     series = []
-    (0..ninstruments-1).each do |col|
+    if by_inst == true
+      puts counts_by_time_by_inst
+      (0..ninstruments-1).each do |col|
+        trace = {}
+        trace[:name] = instrument_names[col]
+        trace[:lineWidth] = 2
+        trace[:marker] = {radius: 3}
+        trace[:data] = []
+	    (0..ntimes-1).each do |row|
+	      point = []
+	      point.append(times_ms[row])
+	      point.append(counts_by_time_by_inst[row][col])
+	      trace[:data].append(point)
+        end
+        series.append(trace)
+      end
+    else
+      puts counts_by_time_by_inst
       trace = {}
-      trace[:name] = instrument_names[col]
+      trace[:name] = "All Instruments"
       trace[:lineWidth] = 2
       trace[:marker] = {radius: 3}
       trace[:data] = []
 	  (0..ntimes-1).each do |row|
 	    point = []
 	    point.append(times_ms[row])
-	    point.append(counts_by_time_by_inst[row][col])
+	    sum = 0
+        (0..ninstruments-1).each do |col|
+          sum += counts_by_time_by_inst[row][col]
+        end
+	    point.append(sum)
 	    trace[:data].append(point)
       end
       series.append(trace)

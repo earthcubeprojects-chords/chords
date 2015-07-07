@@ -5,25 +5,25 @@ now = Date.today
 start_date = (now - 7)
 %>
 
-<div id="samples_per_hour"></div>
+<div id="samples_per_day"></div>
 <script>
 
-series_by_hour = JSON.parse('<%= @samples_by_hour.to_json.html_safe %>')
+series_by_day = JSON.parse('<%= @samples_by_day.to_json.html_safe %>')
 
 $(function () {
-    $('#samples_per_hour').highcharts({
+    $('#samples_per_day').highcharts({
 		title: {
-		    text: 'Samples Per Hour'
+		    text: 'Samples Per Day'
 		},
         chart: {
-			type: 'line',
+			type: 'column',
             zoomType: 'x',
             spacing: [0,0,0,0],
             height: 200,
         },
         xAxis: {
             type: 'datetime',
-            tickInterval: 6* 60 * 60 *1000,
+            tickInterval: 24* 60 * 60 *1000,
             // min: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
             // max: Date.UTC(<%= now.strftime('%Y') %>, <%= now.strftime('%m') %>, <%= now.strftime('%d') %>),
         },
@@ -34,7 +34,7 @@ $(function () {
             }
         },
         series:
-          series_by_hour
+          series_by_day
     });
 });
 </script>
