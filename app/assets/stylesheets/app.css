@@ -140,4 +140,11 @@ color: darkblue;
 }
 
 .badgegroup {
+text-align: justify;
+}
+
+.badgegroup:after {
+content: "";
+width: 100%;
+display: inline-block;
 }
