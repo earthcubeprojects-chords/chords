@@ -119,25 +119,25 @@ background-color: #dff0d8;
 }
 
 .badge {
+display: inline-block;
 background-color: darkorange;
 font-size: 20px;
 padding: 20px;
 margin: 20px;
 text-align: center;
-float: left;
 -webkit-border-radius: 8px;
 -moz-border-radius: 8px;
 border-radius: 8px;
 line-height: 120%;
 }
+
 .badgetitle {
 color: cornsilk;
 }
+
 .badgevalue {
 color: darkblue;
 }
+
 .badgegroup {
-display: inline-block;
-margin-left: auto;
-margin-right: auto;
 }
