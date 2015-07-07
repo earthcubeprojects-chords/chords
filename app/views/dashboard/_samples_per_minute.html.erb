@@ -10,7 +10,7 @@ start_date = (now - 1)
 <div id="samples_per_minute"></div>
 <script>
 
-series_by_minute = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
+series_by_minute = JSON.parse('<%= @samples_by_minute.to_json.html_safe %>')
 
 $(function () {
     $('#samples_per_minute').highcharts({

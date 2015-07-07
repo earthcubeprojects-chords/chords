@@ -8,7 +8,7 @@ start_date = (now - 7)
 <div id="samples_per_hour"></div>
 <script>
 
-series_by_hour = JSON.parse('<%= @series_by_hour.to_json.html_safe %>')
+series_by_hour = JSON.parse('<%= @samples_by_hour.to_json.html_safe %>')
 
 $(function () {
     $('#samples_per_hour').highcharts({
@@ -16,7 +16,7 @@ $(function () {
 		    text: 'Samples per Hour'
 		},
         chart: {
-			 type: 'line',
+			type: 'line',
             zoomType: 'x',
             spacing: [0,0,0,0]
         },

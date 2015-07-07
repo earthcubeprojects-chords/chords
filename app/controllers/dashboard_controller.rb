@@ -13,10 +13,10 @@ class DashboardController < ApplicationController
     @start_time_by_hour      = Time.zone.now - 7.day
 
     # Create a table of number of measurements for each minute 
-    @series_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute)
+    @samples_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute)
     
     # Create a table of number of measurements by hour
-    @series_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour)
+    @samples_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour)
 
   end
 
