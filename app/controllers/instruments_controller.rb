@@ -75,6 +75,7 @@ class InstrumentsController < ApplicationController
   # DELETE /instruments/1
   # DELETE /instruments/1.json
   def destroy
+    Measurement.delete_all "instrument_id = #{@instrument.id}"
     @instrument.destroy
     respond_to do |format|
       format.html { redirect_to instruments_url, notice: 'Instrument was successfully destroyed.' }
