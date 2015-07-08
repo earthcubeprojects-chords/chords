@@ -10,7 +10,14 @@ class DashboardController < ApplicationController
     @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
 
     # Create data series with the count of samples (measurements) made within regular time
-    # intervals. The series are time referenced, and the time is always in ms since the Epoch UTC.
+    # intervals. The data series are structured like the elements that provide
+    # data for the highcharts' series: field. For that reason, the series will have plotting
+    # attributes embedded, such as lineWidth:, marker:, etc.
+    #
+    # Use JSON.parse('<%= @samples_by_minute.to_json.html_safe %>')
+    # to convert to javascript.
+    #
+    # The series are time referenced, and the time is in ms since the Epoch UTC.
     # It is important to remember that the times always reference UTC. The local time offset 
     # from UTC is provided as a convenience to functions which want to display in local time.
         
@@ -27,18 +34,15 @@ class DashboardController < ApplicationController
     
     # Create a table of number of measurements by minute
     @start_time_by_minute    = Time.now - 2.hour
-    print  '@start_time_by_minute ', @start_time_by_minute, "\n"
-    @samples_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute, by_inst=true)
+    @samples_by_minute =  highcharts_series(:minute, @start_time_by_minute, by_inst=true)
     
     # Create a table of number of measurements by hour
     @start_time_by_hour      = Time.now - 7.day
-    print '@start_time_by_hour ', @start_time_by_hour, "\n"
-    @samples_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour, by_inst=true)
+    @samples_by_hour =  highcharts_series(:hour, @start_time_by_hour, by_inst=true)
 
     # Create a table of number of measurements by day. Not broken out by instrument
     @start_time_by_day       = Time.now - 30.day
-    print '@start_time_by_day ', @start_time_by_day, "\n"
-    @samples_by_day =  measurement_counts_by_interval(:day, @start_time_by_day, by_inst=false)
+    @samples_by_day =  highcharts_series(:day, @start_time_by_day, by_inst=false)
     
     @end_time = Time.now
 
@@ -67,12 +71,12 @@ class DashboardController < ApplicationController
   # function JSON.parse(). 
   #
   # E.g., if you called make_highchart_series as:
-  #     @series_by_minute = measurement_counts_by_interval(:minute, 4.hour)
+  #     @series_by_minute = highcharts_series(:minute, 4.hour)
   # you can import this into the javascript with:
   # series = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
  
   #  
-  def measurement_counts_by_interval(time_resolution, start_time, by_inst)
+  def highcharts_series(time_resolution, start_time, by_inst)
   
     # Set the time format to be used in SQL group query
     # 
@@ -96,8 +100,12 @@ class DashboardController < ApplicationController
     instrument_names = Instrument.pluck(:name)
     ninstruments     = Instrument.count
     
-    print 'Search for times > ', start_time, "\n"
-    
+    # Get the count of measurements for each instrument, for each interval.
+    # The database queries returns a hash, with the keys being the date, 
+    # and the values being the counts. The vector measurements_by_interval[]
+    # is created, where each entry represents the database hash for one instrument.
+    # The date keys will have the same format as the original query, e.g.
+    # "2015-07-08T14:34" or "2015-07-01T17" or "2015-07-03".
     measurements_by_interval = []
     j = 0
     instrument_ids.each do |i|
@@ -107,17 +115,25 @@ class DashboardController < ApplicationController
         .count
       j += 1
     end
+    puts measurements_by_interval[0]
     
-    # Create an array of uniq time keys
+    # Create a vector of unique time keys. This is accomplished
+    # by collecting all of the time keys for all instruments,
+    # and then making that list uniqued (and sorted).
     time_keys = []
     measurements_by_interval.each do |m|
       time_keys += m.keys
     end
     time_keys = time_keys.uniq.sort
     
-    # Create a hash of count arrays, using a integer index as the key. (makes
-    # it look like a two dimensional array). Each row has an array containing
-    # accumulating counts for the instruments.
+    # time_keys now has all of the times for which at least one instrument has 
+    # at least one measurement.Note that there will be gaps, where no measurements
+    # were found, and thus no key exists.
+    
+    # Create a hash of count arrays, using an integer index as the key. (makes
+    # it look like a two dimensional array). Each entry has an array containing
+    # accumulating counts for the instruments. If there are no counts for a particular
+    # instrument, the value is set to zero.
     counts_by_time_by_inst = {}
     t = 0
     time_keys.each do |k|
@@ -137,6 +153,8 @@ class DashboardController < ApplicationController
     ntimes = counts_by_time_by_inst.count
 
     # Create an array of millisecond times from the unique time keys
+    # The proper iso suffixe has to be added, since the times
+    # returned from the database query doesn't have this.
     times_ms = time_keys.map {|t| to_ms(t.to_s + iso_suffix)}
     
     # Create structured data for the Highcharts series attribute. The
@@ -148,7 +166,7 @@ class DashboardController < ApplicationController
       (0..ninstruments-1).each do |col|
         trace = {}
         trace[:name] = instrument_names[col]
-        trace[:lineWidth] = 2
+        trace[:lineWidth] = 0
         trace[:marker] = {radius: 3}
         trace[:data] = []
 	    (0..ntimes-1).each do |row|
@@ -162,7 +180,7 @@ class DashboardController < ApplicationController
     else
       trace = {}
       trace[:name] = "All Instruments"
-      trace[:lineWidth] = 2
+      trace[:lineWidth] = 0
       trace[:marker] = {radius: 3}
       trace[:data] = []
 	  (0..ntimes-1).each do |row|
