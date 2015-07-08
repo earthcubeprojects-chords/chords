@@ -115,7 +115,6 @@ class DashboardController < ApplicationController
         .count
       j += 1
     end
-    puts measurements_by_interval[0]
     
     # Create a vector of unique time keys. This is accomplished
     # by collecting all of the time keys for all instruments,
