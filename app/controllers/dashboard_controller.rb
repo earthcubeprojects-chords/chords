@@ -1,7 +1,7 @@
 class DashboardController < ApplicationController
   def index
 
-    # Collect summary metrics
+    # Collect some summary metrics
     @metrics = {}
     @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
     @metrics["measurement_count"] = Measurement.count
@@ -9,26 +9,42 @@ class DashboardController < ApplicationController
     @metrics["instrument_count"]  = Instrument.count
     @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
 
+    # Create data series with the count of samples (measurements) made within regular time
+    # intervals. The series are time referenced, and the time is always in ms since the Epoch UTC.
+    # It is important to remember that the times always reference UTC. The local time offset 
+    # from UTC is provided as a convenience to functions which want to display in local time.
+        
+    # Get the timezone and compute the offset in minutes from UTC.
+    # This is made available to anyone who needs display the time as a local time. 
+    timezone = Profile.first.timezone
+    tz = ActiveSupport::TimeZone[timezone]
+    @tz_offset_mins = -tz.utc_offset() / 60
+    if Time#dst?
+      @tz_offset_mins -= 60;
+    end
+    
     # Create a table of number of measurements by minute
-    @start_time_by_minute    = Time.zone.now - 2.hour
-    puts @start_time_by_minute
+    @start_time_by_minute    = Time.now - 2.hour
+    print  '@start_time_by_minute ', @start_time_by_minute, "\n"
     @samples_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute, by_inst=true)
     
     # Create a table of number of measurements by hour
-    @start_time_by_hour      = Time.zone.now - 7.day
-    puts @start_time_by_hour
+    @start_time_by_hour      = Time.now - 7.day
+    print '@start_time_by_hour ', @start_time_by_hour, "\n"
     @samples_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour, by_inst=true)
 
     # Create a table of number of measurements by day. Not broken out by instrument
-    @start_time_by_day       = Time.zone.now - 30.day
-    puts @start_time_by_day
+    @start_time_by_day       = Time.now - 30.day
+    print '@start_time_by_day ', @start_time_by_day, "\n"
     @samples_by_day =  measurement_counts_by_interval(:day, @start_time_by_day, by_inst=false)
+    
+    @end_time = Time.now
 
   end
 
   ################################################################
   def to_ms(time_string)
-      ms = (Time.iso8601(time_string).to_f * 1000.0).to_i
+      ms = ((Time.iso8601(time_string).to_f) * 1000.0).to_i
       return ms
   end
   
@@ -41,7 +57,7 @@ class DashboardController < ApplicationController
   #
   # A structured object is returned that is suitable for using as the 
   # series atribute in a highchart chart. It will be an array of hashes. 
-  # Each hash contains attirbutes for one trace, including the data for 
+  # Each hash contains attributes for one trace, including the data for 
   # that trace.
   #
   # The returned object can be turned into json, using .to_json.
@@ -63,13 +79,13 @@ class DashboardController < ApplicationController
     case time_resolution
     when :minute
       time_format = "%Y-%m-%dT%H:%i"
-      iso_suffix  = ":00+06:00"
+      iso_suffix  = ":00+00:00"
     when :hour
       time_format = "%Y-%m-%dT%H"
-      iso_suffix  = ":00:00+06:00"
+      iso_suffix  = ":00:00+00:00"
     when :day
       time_format = "%Y-%m-%d"
-      iso_suffix  = "T00:00:00+06:00"
+      iso_suffix  = "T00:00:00+00:00"
     else
     end
 
@@ -77,6 +93,8 @@ class DashboardController < ApplicationController
     instrument_ids   = Instrument.pluck(:id)
     instrument_names = Instrument.pluck(:name)
     ninstruments     = Instrument.count
+    
+    print 'Search for times > ', start_time, "\n"
     
     measurements_by_interval = []
     j = 0

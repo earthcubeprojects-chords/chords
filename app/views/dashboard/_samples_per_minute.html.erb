@@ -10,29 +10,39 @@ start_date = (now - 1)
 <div id="samples_per_minute"></div>
 <script>
 
-series_by_minute = JSON.parse('<%= @samples_by_minute.to_json.html_safe %>')
-start_by_minute_ms = <%= ((@start_time_by_minute.to_i()-6.hour)*1000).to_s %>
+series_by_minute   = JSON.parse('<%= @samples_by_minute.to_json.html_safe %>')
+start_by_minute_ms = <%= ((@start_time_by_minute.to_i())*1000).to_s %>
+end_time           = <%= ((@end_time.to_i())*1000).to_s %>
+tz_offset_mins     = <%= @tz_offset_mins.to_s %>
 
 $(function () {
+    Highcharts.setOptions({
+	  global: {
+		timezoneOffset: tz_offset_mins,
+	  }
+    });
     $('#samples_per_minute').highcharts({
 		title: {
-		    text: 'Samples Per Minute'
+		    text: null
 		},
         chart: {
 			type: 'line',
             zoomType: 'x',
-            spacing: [0,0,0,0],
+            spacing: [1,1,1,1],
             height: 200,
+            plotBorderWidth: 1,
+            spacingTop: 10
         },
         xAxis: {
             type: 'datetime',
             tickInterval: 5*60000,
-            min: start_by_minute_ms
+            min: start_by_minute_ms,
+            max: end_time
         },
         yAxis: {
         	min: 0,
             title: {
-                text: 'Samples'
+                text: 'Samples Per Minute'
             }
         },
 		legend: {

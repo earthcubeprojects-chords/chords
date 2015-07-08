@@ -8,29 +8,39 @@ start_date = (now - 7)
 <div id="samples_per_day"></div>
 <script>
 
-series_by_day = JSON.parse('<%= @samples_by_day.to_json.html_safe %>')
-start_by_day_ms = <%= ((@start_time_by_day.to_i()-6.hour)*1000).to_s %>
+series_by_day   = JSON.parse('<%= @samples_by_day.to_json.html_safe %>')
+start_by_day_ms = <%= ((@start_time_by_day.to_i())*1000).to_s %>
+end_time           = <%= ((@end_time.to_i())*1000).to_s %>
+tz_offset_mins  = <%= @tz_offset_mins.to_s %>
 
 $(function () {
+    Highcharts.setOptions({
+	  global: {
+		timezoneOffset: tz_offset_mins,
+	  }
+    });
     $('#samples_per_day').highcharts({
 		title: {
-		    text: 'Samples Per Day'
+		    text: null
 		},
         chart: {
 			type: 'column',
             zoomType: 'x',
-            spacing: [0,0,0,0],
+            spacing: [1,1,1,1],
             height: 200,
+            plotBorderWidth: 1,
+            spacingTop: 10
         },
         xAxis: {
             type: 'datetime',
             tickInterval: 24* 60 * 60 *1000,
-            min: start_by_day_ms
+            min: start_by_day_ms,
+            max: end_time
         },
         yAxis: {
         	min: 0,
             title: {
-                text: 'Samples'
+                text: 'Samples Per Day'
             }
         },
         series:
