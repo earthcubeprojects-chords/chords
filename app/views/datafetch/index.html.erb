@@ -1,6 +1,17 @@
 <h1>Data Fetch</h1>
-<!-- h2>Select the measurements</h2>
+  <script>
+  $(function() {
+    $( "#startpicker" ).datepicker();
+  });
+  </script>
+  <script>
+  $(function() {
+    $( "#endpicker" ).datepicker();
+  });
+  </script>
 
+<!-- h2>Select the measurements</h2>
+  
 <ul>
   <% Site.all.each do |site| %>
     <li>
@@ -12,6 +23,15 @@
   <% end %>
 </ul -->
 
+<div>
+<table>
+<tr>
+<td>Start Date:</td><td><input type="text" id="startpicker"></td>
+</tr>
+<tr>
+<td>End Date:</td><td><input type="text" id="endpicker"></td>
+</tr>
+</div>
 
 <table>
   <thead>
