@@ -1,7 +1,7 @@
 class DashboardController < ApplicationController
   def index
 
-    # Summary metrics
+    # Collect summary metrics
     @metrics = {}
     @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
     @metrics["measurement_count"] = Measurement.count
@@ -9,17 +9,19 @@ class DashboardController < ApplicationController
     @metrics["instrument_count"]  = Instrument.count
     @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
 
+    # Create a table of number of measurements by minute
     @start_time_by_minute    = Time.zone.now - 2.hour
-    @start_time_by_hour      = Time.zone.now - 7.day
-    @start_time_by_day       = Time.zone.now - 30.day
-
-    # Create a table of number of measurements for each minute 
+    puts @start_time_by_minute
     @samples_by_minute =  measurement_counts_by_interval(:minute, @start_time_by_minute, by_inst=true)
     
     # Create a table of number of measurements by hour
+    @start_time_by_hour      = Time.zone.now - 7.day
+    puts @start_time_by_hour
     @samples_by_hour =  measurement_counts_by_interval(:hour, @start_time_by_hour, by_inst=true)
 
     # Create a table of number of measurements by day. Not broken out by instrument
+    @start_time_by_day       = Time.zone.now - 30.day
+    puts @start_time_by_day
     @samples_by_day =  measurement_counts_by_interval(:day, @start_time_by_day, by_inst=false)
 
   end
@@ -117,11 +119,12 @@ class DashboardController < ApplicationController
     # Create an array of millisecond times from the unique time keys
     times_ms = time_keys.map {|t| to_ms(t.to_s + iso_suffix)}
     
-    # Create structured data for the Highcharts series attribute.
+    # Create structured data for the Highcharts series attribute. The
+    # structure will have one series per instrument, if by_inst is true,
+    # or only one series if by_inst_is false.
     
     series = []
     if by_inst == true
-      puts counts_by_time_by_inst
       (0..ninstruments-1).each do |col|
         trace = {}
         trace[:name] = instrument_names[col]
@@ -137,7 +140,6 @@ class DashboardController < ApplicationController
         series.append(trace)
       end
     else
-      puts counts_by_time_by_inst
       trace = {}
       trace[:name] = "All Instruments"
       trace[:lineWidth] = 2

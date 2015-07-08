@@ -9,6 +9,7 @@ start_date = (now - 7)
 <script>
 
 series_by_day = JSON.parse('<%= @samples_by_day.to_json.html_safe %>')
+start_by_day_ms = <%= ((@start_time_by_day.to_i()-6.hour)*1000).to_s %>
 
 $(function () {
     $('#samples_per_day').highcharts({
@@ -24,8 +25,7 @@ $(function () {
         xAxis: {
             type: 'datetime',
             tickInterval: 24* 60 * 60 *1000,
-            // min: Date.UTC(<%= start_date.strftime('%Y') %>, <%= start_date.strftime('%m') %>, <%= start_date.strftime('%d') %>),
-            // max: Date.UTC(<%= now.strftime('%Y') %>, <%= now.strftime('%m') %>, <%= now.strftime('%d') %>),
+            min: start_by_day_ms
         },
         yAxis: {
         	min: 0,

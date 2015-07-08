@@ -12,16 +12,18 @@ class ProfilesController < ApplicationController
   end
   
   def create
-    project     = params[:project]
-    affiliation = params[:affiliation]
-    description = params[:description]
+    project     = params[:profile][:project]
+    affiliation = params[:profile][:affiliation]
+    description = params[:profile][:description]
+    timezone    = params[:profile][:timezone]
     
     @profile = Profile.first
     
     @profile.update(
       project: project, 
       affiliation: affiliation, 
-      description: description
+      description: description,
+      timezone:    timezone
       )
       
     flash[:notice] = 'Configuration saved.'

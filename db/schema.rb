@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150630201832) do
+ActiveRecord::Schema.define(version: 20150708025706) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20150630201832) do
     t.binary   "logo",        limit: 16777215
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+    t.string   "timezone",    limit: 255
   end
 
   create_table "sites", force: :cascade do |t|

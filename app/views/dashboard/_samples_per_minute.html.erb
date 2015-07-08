@@ -11,6 +11,7 @@ start_date = (now - 1)
 <script>
 
 series_by_minute = JSON.parse('<%= @samples_by_minute.to_json.html_safe %>')
+start_by_minute_ms = <%= ((@start_time_by_minute.to_i()-6.hour)*1000).to_s %>
 
 $(function () {
     $('#samples_per_minute').highcharts({
@@ -26,6 +27,7 @@ $(function () {
         xAxis: {
             type: 'datetime',
             tickInterval: 5*60000,
+            min: start_by_minute_ms
         },
         yAxis: {
         	min: 0,

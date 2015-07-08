@@ -1,7 +1,11 @@
 class Profile < ActiveRecord::Base
 
   def self.initialize
-    Profile.create([{project: 'EarthCube All Hands', affiliation: 'NCAR', description: 'This is a demonstration of the CHORDS Portal testbed, configured for the May 2015 NSF EarthCube All Hands Meeting.
+    Profile.create([{
+    project: 'EarthCube All Hands', 
+    affiliation: 'NCAR',
+    time_zone: 'Mountain Time (US & Canada)',
+    description: 'This is a demonstration of the CHORDS Portal testbed, configured for the May 2015 NSF EarthCube All Hands Meeting.
     <br>
     We want to show that:
     <ul>
@@ -19,6 +23,7 @@ class Profile < ActiveRecord::Base
     </ul>
     </ul>
     
-    ', logo: ''}])      
+    ', 
+    logo: ''}])      
   end
 end

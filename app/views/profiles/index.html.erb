@@ -1,21 +1,21 @@
 <h1>Configuration</h1>
-<%= form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do %>
-  <%= label_tag 'project', 'Project Name:' %>
-  <%= text_field_tag 'project', @profile.project, size: 60 %>
+<%= form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f| %>
+  Project Name: <%= f.text_field('project', size: 60) %>
   <br>
   <br>
-  <%= label_tag 'affiliation', "Affiliation:" %>
-  <%= text_field_tag 'affiliation', @profile.affiliation, size: 60 %>
+  Affiliation: <%= f.text_field('affiliation', size: 60) %>
   <br>
   <br>
-  <%= label_tag 'description', 'Project Description (HTML markup may be used):' %>
-  <br>
-  <%= text_area_tag 'description', @profile.description, size: "60x20" %>
+  Time Zone: <%= f.collection_select('timezone', ActiveSupport::TimeZone.us_zones, :name, :name) %>
   <br>
   <br>
-  <%= label_tag 'sitelogofilename', 'Site Logo File:' %>
-  <%= file_field_tag :file %>
+  Project Description (HTML markup may be used):
+  <br>
+  <%= f.text_area('description', size: "60x20") %>
   <br>
   <br>
-  <%= submit_tag("Save") %>
+  Site Logo File: <%= f.file_field('file') %>
+  <br>
+  <br>
+  <%= f.submit('Save') %>
 <% end %>
