@@ -19,7 +19,9 @@ class DashboardController < ApplicationController
     timezone = Profile.first.timezone
     tz = ActiveSupport::TimeZone[timezone]
     @tz_offset_mins = -tz.utc_offset() / 60
+    @tz_name = timezone
     if Time#dst?
+      @tz_name += ' DST'
       @tz_offset_mins -= 60;
     end
     

@@ -35,7 +35,10 @@ $(function () {
             type: 'datetime',
             tickInterval: 24* 60 * 60 *1000,
             min: start_by_day_ms,
-            max: end_time
+            max: end_time,
+            title: {
+              text: '<%= @tz_name.html_safe %>'
+            },
         },
         yAxis: {
         	min: 0,
