@@ -29,6 +29,15 @@ measurement_configurations = Array.new
 
 measurement_configurations.push({:instrument_id => 1, :parameter => 'temperature', :current_value => 15, :unit => 'C'})
 measurement_configurations.push({:instrument_id => 2, :parameter => 'velocity', :current_value => 11, :unit => 'mps'})
+measurement_configurations.push({:instrument_id => 12 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 13 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 14 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 15 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 17 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 18 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 19 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 20 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
+measurement_configurations.push({:instrument_id => 22 , :parameter => 'temperature', :current_value => 15, :unit => 'C'})
 
 
 while 1 do 
