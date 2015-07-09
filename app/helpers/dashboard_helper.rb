@@ -117,8 +117,8 @@ module DashboardHelper
       (0..ninstruments-1).each do |col|
         trace = {}
         trace[:name] = instrument_names[col]
-        trace[:lineWidth] = 0
-        trace[:marker] = {radius: 3}
+#        trace[:lineWidth] = 0
+#        trace[:marker] = {radius: 3}
         trace[:data] = []
 	    (0..ntimes-1).each do |row|
 	      point = []
@@ -131,8 +131,8 @@ module DashboardHelper
     else
       trace = {}
       trace[:name] = "All Instruments"
-      trace[:lineWidth] = 0
-      trace[:marker] = {radius: 3}
+#      trace[:lineWidth] = 0
+#      trace[:marker] = {radius: 3}
       trace[:data] = []
 	  (0..ntimes-1).each do |row|
 	    point = []

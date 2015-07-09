@@ -31,15 +31,9 @@ $(function () {
             spacingTop: 10
         },
         plotOptions: {
-          series: {
-            fillColor: {
-              linearGradient: [0, 0, 0, 100],
-              stops: [
-                [0, Highcharts.getOptions().colors[0]],
-                [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-              ]
-            }
-          }
+          marker: {
+            enabled: false
+          },
         },
         xAxis: {
             type: 'datetime',
