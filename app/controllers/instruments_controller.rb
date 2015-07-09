@@ -11,6 +11,12 @@ class InstrumentsController < ApplicationController
   end
   
 
+  def simulator
+    @instruments = Instrument.all
+    @sites = Site.all
+
+  end
+  
   # GET /instruments
   # GET /instruments.json
   def index

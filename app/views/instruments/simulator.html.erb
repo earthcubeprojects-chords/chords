@@ -1,0 +1,76 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Instruments</h1>
+
+<script>
+function makeHttpObject() {
+  try {return new XMLHttpRequest();}
+  catch (error) {}
+  try {return new ActiveXObject("Msxml2.XMLHTTP");}
+  catch (error) {}
+  try {return new ActiveXObject("Microsoft.XMLHTTP");}
+  catch (error) {}
+
+  throw new Error("Could not create HTTP request object.");
+}
+
+
+
+function simulate_measurement() {
+	var url = "http://localhost:3000/measurements/url_create?instrument_id=1&Temp=3";
+	// alert(url);
+
+	var request = makeHttpObject();
+	// alert(request);
+	request.open("GET", url, false);
+	request.send(null);
+
+}
+
+simulate_measurement();
+
+
+
+</script>
+
+
+<a id="myLink" href="#" onclick="simulate_measurement();">click to simulate a measurement</a>
+
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">Status</th>
+      <th align="center">Name</th>
+      <th align="center">Last<br/>Measurement</th>
+      <th align="center">Site</th>
+      <th align="center"># of <br/>Measurements</th>
+      <th align="center"># of <br/>Variables</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @instruments.each do |instrument| %>
+      <tr>
+        <td align="center"><% if instrument.is_receiving_data %>
+	       <%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
+	       <% else %>
+	       <%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
+	       <% end %>
+	       </td>
+        <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
+	    <td><%= instrument.last_age%></td>
+        <td><%= @sites.find(instrument.site_id).name %></td>
+        <td align="center"><%= instrument.measurements.count %></td>
+        <td align="center"><%= instrument.vars.count %></td>
+        <td><%= link_to 'Edit', edit_instrument_path(instrument) %></td>
+        <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Instrument', new_instrument_path %>
