@@ -7,7 +7,11 @@ class DashboardController < ApplicationController
     @metrics["measurement_count"] = Measurement.count
     @metrics["site_count"]        = Site.count
     @metrics["instrument_count"]  = Instrument.count
-    @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
+    if Measurement.last
+      @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
+    else
+      @metrics["last_url"]          = ''
+    end
 
     # Create data series with the count of samples (measurements) made within regular time
     # intervals. The data series are structured like the elements that provide

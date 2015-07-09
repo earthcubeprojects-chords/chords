@@ -4,7 +4,7 @@ class Profile < ActiveRecord::Base
     Profile.create([{
     project: 'EarthCube All Hands', 
     affiliation: 'NCAR',
-    time_zone: 'Mountain Time (US & Canada)',
+    timezone: 'Mountain Time (US & Canada)',
     description: 'This is a demonstration of the CHORDS Portal testbed, configured for the May 2015 NSF EarthCube All Hands Meeting.
     <br>
     We want to show that:
