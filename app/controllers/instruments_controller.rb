@@ -21,12 +21,20 @@ class InstrumentsController < ApplicationController
   # GET /instruments/1
   # GET /instruments/1.json
   def show
+  
     @params = params
-    @measurements =  @instrument.measurements
+    
+    # Time select the measurements of interest
+    @measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
+    
+    # Get the instrument and variable identifiers.
+    instrument_name = @instrument.name
+    varnames        = Var.all.where("instrument_id = ?", @instrument.id).pluck(:name)
+    varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
     
     respond_to do |format|
       format.html
-      format.csv { send_data @measurements.to_csv }
+      format.csv { send_data @measurements.to_csv(inst_name=instrument_name, varnames=varnames, varshortnames=varshortnames) }
       format.xml { send_data @measurements.to_xml }    
     end
   end

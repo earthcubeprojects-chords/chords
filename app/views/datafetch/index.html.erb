@@ -51,11 +51,8 @@
         <td> <%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
 	  <td align="center"><%= instrument.measurements.count %> </td>
-	  <td align="center"><%=  link_to("CSV", instrument_url(:id => instrument.id, :format => 'csv') )%> <%=  link_to("XML", instrument_url(:id => instrument.id, :format => 'xml') )%></td>
-
-
-	  
-
+	  <td align="center"><%=  link_to("CSV", instrument_url(:id => instrument.id, :format => 'csv') )%> 
+	                     <%=  link_to("XML", instrument_url(:id => instrument.id, :format => 'xml') )%></td>
       </tr>
     <% end %>
   </tbody>
