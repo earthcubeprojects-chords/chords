@@ -26,7 +26,7 @@ $(function () {
 		    text: null
 		},
         chart: {
-			type: 'area',
+			type: 'column',
             zoomType: 'x',
             spacing: [1,1,1,1],
             plotBorderWidth: 1,
@@ -41,6 +41,15 @@ $(function () {
             stacking: 'normal',
             lineColor: '#666666',
             lineWidth: 1,
+          },
+          column: {
+            marker: {
+              enabled: false
+            },
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            groupPadding: 0.0,
           }
         },
         xAxis: {
