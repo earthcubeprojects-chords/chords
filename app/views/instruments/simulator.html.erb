@@ -17,9 +17,14 @@ function makeHttpObject() {
 
 
 function simulate_measurement() {
-	var url = "http://localhost:3000/measurements/url_create?instrument_id=1&Temp=3";
+	
+	var random_number = Math.random();
+	randon_number = (random_number * 3) + 15; 
+	// alert(random_number);
+	var url = "http://localhost:3000/measurements/url_create?instrument_id=1&Temp=" + randon_number;
 	// alert(url);
 
+	$('#insurument_simulator_requests').append(url + "<br/>");
 	var request = makeHttpObject();
 	// alert(request);
 	request.open("GET", url, false);
@@ -27,45 +32,85 @@ function simulate_measurement() {
 
 }
 
-simulate_measurement();
+<% @instruments.each do |instrument| %>
+<%= "window.instrument_#{instrument.id}_simulator_status =  false;" %>
+<% end %>
+window.simulator_on =  false;
+
+// simulate_measurement();
+
+function toggle_instrument_simulator(instrument_id) {
+	// get the value of the simulator status for the instrument
+	var command = "var simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
+	eval(command);
+
+
+
+
+	if (simulator_status == false) {
+		eval("window.instrument_" + instrument_id + "_simulator_status = true;");
+
+
+		var command = "simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
+		
+		// var temp = $('#instrument_1_simulator_icon').attr('src', '/assets/glossy-green-icon-button-th.png');
+		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/glossy-green-icon-button-th.png')");
+		
+	} else {
+			alert(simulator_status);
+		eval("window.instrument_" + instrument_id + "_simulator_status = false;");
+		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/glossy-red-icon-button-th.png')");
+	}
+}
+
+
+function slide() {
+
+
+	window.setInterval(function () {
+		<% @instruments.each do |instrument| %>
+			<%= "if (window.instrument_#{instrument.id}_simulator_status == true) {" %>
+			
+				simulate_measurement();
+			}
+
+		<% end %>
+
+	}, 3000); // repeat forever, polling every 3 seconds
+}
+
+// window.onload = function start() {
+    slide();
+// }
 
 
 
 </script>
 
 
+<a id="myLink" href="#" onclick="toggle_instrument_simulator();">on/off</a>
+<br/>
 <a id="myLink" href="#" onclick="simulate_measurement();">click to simulate a measurement</a>
 
 
 <table>
   <thead>
     <tr>
-      <th align="center">Status</th>
       <th align="center">Name</th>
-      <th align="center">Last<br/>Measurement</th>
       <th align="center">Site</th>
-      <th align="center"># of <br/>Measurements</th>
-      <th align="center"># of <br/>Variables</th>
-      <th colspan="3"></th>
+      <th align="center">Simulator Status</th>
     </tr>
   </thead>
 
   <tbody>
     <% @instruments.each do |instrument| %>
       <tr>
-        <td align="center"><% if instrument.is_receiving_data %>
-	       <%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
-	       <% else %>
-	       <%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
-	       <% end %>
-	       </td>
         <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
-	    <td><%= instrument.last_age%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
-        <td align="center"><%= instrument.measurements.count %></td>
-        <td align="center"><%= instrument.vars.count %></td>
-        <td><%= link_to 'Edit', edit_instrument_path(instrument) %></td>
-        <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td align="center">
+	       <%= image_tag('glossy-red-icon-button-th.png', size:"20", id:"instrument_#{instrument.id}_simulator_icon", onclick:"toggle_instrument_simulator(#{instrument.id});")%>
+       </td>
+
       </tr>
     <% end %>
   </tbody>
@@ -73,4 +118,7 @@ simulate_measurement();
 
 <br>
 
-<%= link_to 'New Instrument', new_instrument_path %>
+
+<div id='insurument_simulator_requests' style="background-color: black; color: white;">
+</div>
+
