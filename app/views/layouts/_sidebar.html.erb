@@ -1,47 +1,34 @@
 <nav>
 <ul class="vertmenu">
-    <br/>
-	<li>
+	<li class="sidebar_link">
 	  <%= link_to '/about' do %>
-	    <%= image_tag('open-iconic/svg/info.svg', alt:  "About", class: 'sidebar_icon') %>
-	    <br/>About
+	    <%= image_tag('open-iconic/svg/info.svg', alt:  "About", class: 'sidebar_icon') %>About
 	  <% end %>
 	</li>
-	<br>
-	<li>
-	  <%= link_to '/datafetch' do %>
-	    <%= image_tag('open-iconic/svg/data-transfer-download.svg', alt:  "About", class: 'sidebar_icon') %>
-	    <br/>Get Data
-	  <% end %>
-	</li>
-	<br>
-	<li>
+	<li class="sidebar_link">
 	  <%= link_to '/dashboard' do %>
-	    <%= image_tag('open-iconic/svg/target.svg', alt:  "About", class: 'sidebar_icon') %>
-	    <br/>Dashboard
+	    <%= image_tag('open-iconic/svg/target.svg', alt:  "About", class: 'sidebar_icon') %>Dashboard
 	  <% end %>
 	</li>
-	<br>
-	<li>
+	<li class="sidebar_link">
+	  <%= link_to '/datafetch' do %>
+	    <%= image_tag('open-iconic/svg/data-transfer-download.svg', alt:  "About", class: 'sidebar_icon') %>Data
+	  <% end %>
+	</li>
+	<li class="sidebar_link">
 	  <%= link_to sites_path do %>
-	    <%= image_tag('open-iconic/svg/globe.svg', alt:  "About", class: 'sidebar_icon') %>
-	    <br/>Sites
+	    <%= image_tag('open-iconic/svg/globe.svg', alt:  "About", class: 'sidebar_icon') %>Sites
 	  <% end %>
 	</li>
-    <br>
-	<li>
+	<li class="sidebar_link">
 	  <%= link_to instruments_path do %>
-	    <%= image_tag('open-iconic/svg/star.svg', alt:  "About", class: 'sidebar_icon') %>
-	    <br/>Instruments
+	    <%= image_tag('open-iconic/svg/star.svg', alt:  "About", class: 'sidebar_icon') %>Instruments
 	  <% end %>
 	</li>
-    <br>
-	<li>
+	<li class="sidebar_link">
 	  <%= link_to '/profiles' do %>
-	    <%= image_tag('open-iconic/svg/cog.svg', alt:  "About", class: 'sidebar_icon') %>
-	    <br/>Configure
+	    <%= image_tag('open-iconic/svg/cog.svg', alt:  "About", class: 'sidebar_icon') %>Configure
 	  <% end %>
 	</li>
-	<br>
 </ul>
 </nav>

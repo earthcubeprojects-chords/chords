@@ -55,13 +55,20 @@ padding-right: 10px;
 list-style: none;
 text-align: left;
 padding-left: 0;
+margin: top: 20px;
 text-align: left;
+}
+
+.sidebar_link {
+margin-top: 20px;
+margin-bottom: 20px;
 }
 
 .sidebar_icon
 {
 height: 18px;
 width:  18px;
+margin-right: 10px;
 }
 
 .last_post_table {
