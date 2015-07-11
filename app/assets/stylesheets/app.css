@@ -58,6 +58,12 @@ padding-left: 0;
 text-align: left;
 }
 
+.sidebar_icon
+{
+height: 16px;
+width:  16px;
+}
+
 .navlink1 {
 color: black;
 text-decoration: none;	
