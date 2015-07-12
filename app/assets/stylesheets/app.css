@@ -84,7 +84,7 @@ border: 1px solid #fbeed5;
 border-radius: 4px;
 }
 
-.flash_notice, .flash_alert, .last_url {
+.flash_notice, .flash_alert {
 padding: 8px 35px 8px 14px;
 margin-bottom: 20px;
 text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -117,8 +117,7 @@ background-color: #dff0d8;
 display: inline-block;
 background-color: darkorange;
 font-size: 16px;
-padding: 16px;
-margin: 16px;
+padding: 16px 16px;
 text-align: center;
 -webkit-border-radius: 8px;
 -moz-border-radius: 8px;
@@ -134,12 +133,45 @@ color: cornsilk;
 color: darkblue;
 }
 
-.badgegroup {
-text-align: justify;
+.badgestrip {
+text-align: center;
+margin-top: 10px;
+margin-bottom: 10px;
 }
 
-.badgegroup:after {
+.badgestrip:after {
 content: "";
 width: 100%;
-display: inline-block;
 }
+
+.instrumentstatus {
+display: inline-block;
+margin-left: 10px;
+margin-right: 10px;
+text-align: center;
+}
+
+.instrumentstrip {
+text-align: center;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+.instrumentstrip:after {
+content: "";
+width: 100%;
+}
+
+.last_url {
+padding: 8px 35px 8px 14px;
+margin-bottom: 20px;
+text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+border: 1px solid #fbeed5;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 120%;
+}
+

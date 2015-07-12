@@ -1,6 +1,6 @@
 <h1>Dashboard</h1>
 
-<div class='badgegroup'>
+<div class='badgestrip'>
   <div class='badge'>
     <span class='badgetitle'>Measurements</span>
     <br/>
@@ -21,6 +21,19 @@
     <br/>
     <span class='badgevalue'><%= @metrics["db_size_mb"] %>MB</span>
   </div>
+</div>
+
+<div class="instrumentstrip">
+<% @instruments.each do |instrument| %>
+  <div class="instrumentstatus">
+  <% if instrument.is_receiving_data %>
+    <%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
+  <% else %>
+    <%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
+  <% end %>
+    <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%>
+  </div>
+<% end %>
 </div>
 
 <div class="last_url" style="clear:both;">

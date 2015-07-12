@@ -1,6 +1,9 @@
 class DashboardController < ApplicationController
   def index
 
+    # Get all of the instruments.
+    @instruments = Instrument.all
+
     # Collect some summary metrics
     @metrics = {}
     @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
