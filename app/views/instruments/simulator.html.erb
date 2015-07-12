@@ -20,13 +20,17 @@ function simulate_measurement() {
 	
 	var random_number = Math.random();
 	randon_number = (random_number * 3) + 15; 
-	// alert(random_number);
 	var url = "http://localhost:3000/measurements/url_create?instrument_id=1&Temp=" + randon_number;
-	// alert(url);
 
-	$('#insurument_simulator_requests').append(url + "<br/>");
+	
+	if ($('#instrument_simulator_requests').children().length > 10) {
+		$('#instrument_simulator_requests').find('div').first().remove();
+	}
+
+	$('#instrument_simulator_requests').append("<div>" + url + "</div>");
+	
 	var request = makeHttpObject();
-	// alert(request);
+
 	request.open("GET", url, false);
 	request.send(null);
 
@@ -57,7 +61,6 @@ function toggle_instrument_simulator(instrument_id) {
 		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/glossy-green-icon-button-th.png')");
 		
 	} else {
-			alert(simulator_status);
 		eval("window.instrument_" + instrument_id + "_simulator_status = false;");
 		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/glossy-red-icon-button-th.png')");
 	}
@@ -88,8 +91,6 @@ function slide() {
 </script>
 
 
-<a id="myLink" href="#" onclick="toggle_instrument_simulator();">on/off</a>
-<br/>
 <a id="myLink" href="#" onclick="simulate_measurement();">click to simulate a measurement</a>
 
 
@@ -119,6 +120,6 @@ function slide() {
 <br>
 
 
-<div id='insurument_simulator_requests' style="background-color: black; color: white;">
+<div id='instrument_simulator_requests' style="background-color: black; color: white;">
 </div>
 
