@@ -9,25 +9,25 @@ float: left;
 
 .appheader 
 {
-	border: 1px solid black;
-	background-color: darkorange;
-	-webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-	-moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-	color: cornsilk;
+border: 1px solid black;
+background-color: darkorange;
+-webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+-moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+color: cornsilk;
 }
 
 .footer {
-	float: left;
-	width: 100%;
+float: left;
+width: 100%;
 }
 
 .footer_links 
 {
-	list-style: none;
-	display: flex;
-	justify-content: space-around;
-	align-items: center;
+list-style: none;
+display: flex;
+justify-content: space-around;
+align-items: center;
 }
 
 .appsidebar 
@@ -97,7 +97,7 @@ font-size: 14px;
 line-height: 120%;
 }
 
-.flash_notice, .last_url {
+.flash_notice {
 background-color: #dff0d8;
 border-color: #d6e9c6;
 color: #468847;
@@ -173,5 +173,7 @@ border-radius: 4px;
 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 font-size: 14px;
 line-height: 120%;
+background-color: #dff0d8;
+border-color: #d6e9c6;
+color: #468847;
 }
-

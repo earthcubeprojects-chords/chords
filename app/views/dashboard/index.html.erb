@@ -27,9 +27,9 @@
 <% @instruments.each do |instrument| %>
   <div class="instrumentstatus">
   <% if instrument.is_receiving_data %>
-    <%= image_tag('glossy-green-icon-button-th.png', size:"20")%>
+    <%= image_tag('glossy-green-icon-button-th.png', size:"16")%>
   <% else %>
-    <%= image_tag('glossy-red-icon-button-th.png', size:"20")%>
+    <%= image_tag('glossy-red-icon-button-th.png', size:"16")%>
   <% end %>
     <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%>
   </div>
