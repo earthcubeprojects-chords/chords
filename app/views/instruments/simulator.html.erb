@@ -2,7 +2,46 @@
 
 <h1>Instruments</h1>
 
+
+<script>	
+var instrument_variables = [];
+
+<% @instruments.each do |instrument| %>
+
+	<% "/measurements/url_create?instrument_id=#{instrument.id}&Temp=" %>
+	var instrument_<%= instrument.id %>_variables = [];
+
+
+	<% instrument.vars.each do |var| %>
+		instrument_<%= instrument.id %>_variables.push("<%= var.shortname %>");
+	<% end %>
+<% end %>
+
+</script>
+
+
+
 <script>
+
+function get_measurement_url(instrument_id) {
+	var command = "var variables = instrument_" + instrument_id + "_variables";
+	eval(command);
+	
+	var url = "/measurements/url_create?instrument_id=" + instrument_id;
+
+	for (var i = 0, len = variables.length; i < len; i++) {
+		// alert(variables[i]);			
+		var random_number = Math.random();
+		randon_number = (random_number * 3) + 15; 
+		
+		url += "&" + variables[i] + "=" + randon_number; 
+	}
+
+	return(url);
+}
+
+
+
 function makeHttpObject() {
   try {return new XMLHttpRequest();}
   catch (error) {}
@@ -16,12 +55,18 @@ function makeHttpObject() {
 
 
 
-function simulate_measurement() {
+
+
+
+
+function simulate_measurement(instrument_id) {
 	
 	var random_number = Math.random();
 	randon_number = (random_number * 3) + 15; 
-	var url = "http://localhost:3000/measurements/url_create?instrument_id=1&Temp=" + randon_number;
+	// var url = "/measurements/url_create?instrument_id=1&Temp=" + randon_number;
 
+
+	var url = get_measurement_url(instrument_id);
 	
 	if ($('#instrument_simulator_requests').children().length > 10) {
 		$('#instrument_simulator_requests').find('div').first().remove();
@@ -41,7 +86,7 @@ function simulate_measurement() {
 <% end %>
 window.simulator_on =  false;
 
-// simulate_measurement();
+
 
 function toggle_instrument_simulator(instrument_id) {
 	// get the value of the simulator status for the instrument
@@ -73,8 +118,7 @@ function slide() {
 	window.setInterval(function () {
 		<% @instruments.each do |instrument| %>
 			<%= "if (window.instrument_#{instrument.id}_simulator_status == true) {" %>
-			
-				simulate_measurement();
+				simulate_measurement(<%= instrument.id %>);
 			}
 
 		<% end %>
