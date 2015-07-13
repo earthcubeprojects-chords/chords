@@ -1,21 +1,58 @@
 <nav>
-<ul class="vertmenu">
-	<br>
-	<li><%= link_to "About", '/about', class:'navlink2'  %></li>
-	<br>
-	<li><%= link_to 'Get Data', '/datafetch', class:'navlink2' %></li>
-	<br>
-	<!-- li><%= link_to 'URL Builder', '/urlbuilder', class:'navlink2' %></li>
-	<br -->
-	<li><%= link_to 'Dashboard', '/dashboard', class:'navlink2' %></li>
-	<br>
-    <li><%= link_to "Sites", sites_path, class:"navlink2" %></li>
-    <br>
-    <li><%= link_to "Instruments", instruments_path, class:"navlink2" %></li>
-    <br>
-    <li><%= link_to "Instrument Simulator", '/instruments/simulator', class:"navlink2" %></li>
-    <br>
-	<li><%= link_to 'Configure', '/profiles', class:'navlink2' %></li>
-	<br>
+<ul class="vertmenu" style="width: 150px;">
+
+	<li class="sidebar_link">
+		<div>
+		  <%= link_to '/about' do %>
+		    <%= image_tag('open-iconic/svg/info.svg', alt:  "About", class: 'sidebar_icon') %>About
+		  <% end %>
+		</div>
+	</li>
+	<li class="sidebar_link">
+		<div>
+	  <%= link_to '/dashboard' do %>
+	    <%= image_tag('open-iconic/svg/target.svg', alt:  "About", class: 'sidebar_icon') %>Dashboard
+	  <% end %>
+	</div>
+	</li>
+	<li class="sidebar_link">
+		<div>
+	  <%= link_to '/datafetch' do %>
+	    <%= image_tag('open-iconic/svg/data-transfer-download.svg', alt:  "About", class: 'sidebar_icon') %>Data
+	  <% end %>
+	</div>
+	</li>
+	<li class="sidebar_link">
+		<div>
+	  <%= link_to sites_path do %>
+	    <%= image_tag('open-iconic/svg/globe.svg', alt:  "About", class: 'sidebar_icon') %>Sites
+	  <% end %>
+	</div>
+	</li>
+	<li class="sidebar_link">
+		<div>
+	  <%= link_to instruments_path do %>
+	    <%= image_tag('open-iconic/svg/star.svg', alt:  "About", class: 'sidebar_icon') %>Instruments
+	  <% end %>
+	</div>
+	</li>
+    <li>
+	<div>
+
+	  <%= link_to '/instruments/simulator' do %>
+	    <%= image_tag('open-iconic/svg/check.svg', alt:  "About", class: 'sidebar_icon') %>Simulator
+	  <% end %>
+
+	</div>	
+	</li>
+	<li class="sidebar_link">
+		<div>
+	  <%= link_to '/profiles' do %>
+	    <%= image_tag('open-iconic/svg/cog.svg', alt:  "About", class: 'sidebar_icon') %>Configure
+	  <% end %>
+	</div>
+	</li>
+
+
 </ul>
 </nav>
