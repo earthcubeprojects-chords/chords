@@ -56,9 +56,9 @@ class Instrument < ActiveRecord::Base
     return 'never'
   end
 
-  def data(count)
+  def data(count, parameter)
 
-    measurements = Measurement.where("instrument_id = ?", self.id).last(self.display_points)
+    measurements = Measurement.where("instrument_id = ? and parameter = ?", self.id, parameter).last(self.display_points)
     
     data = Array.new    
     measurements.each do |measurement|

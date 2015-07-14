@@ -6,7 +6,13 @@
 
 <% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
 
-<% series = "[{ data: [" + @instrument.data(@instrument.display_points) + "]}]" %>
+<% index = 0 %>
+<% varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname) %>
+<% varnames        = Var.all.where("instrument_id = ?", @instrument.id).pluck(:name) %>
+<% varshortname    = varshortnames[index] %>
+<% varname         = varnames[index] %>
+
+<% series = "[{data: [" + @instrument.data(@instrument.display_points, varshortname) + "]}]" %>
 
 <div class="instrument_highchart" id="<%= highcharts_dom_id %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
