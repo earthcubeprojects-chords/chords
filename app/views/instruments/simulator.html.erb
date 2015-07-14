@@ -1,6 +1,5 @@
 <h1>Simulator</h1>
 
-
 <script>	
 var instrument_variables = [];
 
@@ -17,8 +16,6 @@ var instrument_variables = [];
 
 </script>
 
-
-
 <script>
 
 function get_measurement_url(instrument_id) {
@@ -27,18 +24,21 @@ function get_measurement_url(instrument_id) {
 	
 	var url = "/measurements/url_create?instrument_id=" + instrument_id;
 
+  // these values to be replaced later by confguration values:
+  var min   = 5.0;
+  var max   = 25.0;
+  var sigma = 1.0;
+  
+  var avg   = (max+min)/2.0;
 	for (var i = 0, len = variables.length; i < len; i++) {
-		// alert(variables[i]);			
-		var random_number = Math.random();
-		randon_number = (random_number * 3) + 15; 
-		
-		url += "&" + variables[i] + "=" + randon_number; 
+		// alert(variables[i]);
+		var value = avg + (Math.random()-0.5) * 2 * sigma;
+		value = value.toPrecision(4);
+		url += "&" + variables[i] + "=" + value; 
 	}
 
 	return(url);
 }
-
-
 
 function makeHttpObject() {
   try {return new XMLHttpRequest();}
@@ -51,20 +51,8 @@ function makeHttpObject() {
   throw new Error("Could not create HTTP request object.");
 }
 
-
-
-
-
-
-
 function simulate_measurement(instrument_id) {
-	
-	var random_number = Math.random();
-	randon_number = (random_number * 3) + 15; 
-	// var url = "/measurements/url_create?instrument_id=1&Temp=" + randon_number;
-
-
-	var url = get_measurement_url(instrument_id);
+		var url = get_measurement_url(instrument_id);
 	
 	if ($('#instrument_simulator_requests').children().length > 10) {
 		$('#instrument_simulator_requests').find('div').first().remove();
@@ -84,19 +72,13 @@ function simulate_measurement(instrument_id) {
 <% end %>
 window.simulator_on =  false;
 
-
-
 function toggle_instrument_simulator(instrument_id) {
 	// get the value of the simulator status for the instrument
 	var command = "var simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
 	eval(command);
 
-
-
-
 	if (simulator_status == false) {
 		eval("window.instrument_" + instrument_id + "_simulator_status = true;");
-
 
 		var command = "simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
 		
@@ -109,9 +91,7 @@ function toggle_instrument_simulator(instrument_id) {
 	}
 }
 
-
 function slide() {
-
 
 	window.setInterval(function () {
 		<% @instruments.each do |instrument| %>
@@ -128,10 +108,7 @@ function slide() {
     slide();
 // }
 
-
-
 </script>
-
 
 <table>
   <thead>
@@ -157,7 +134,6 @@ function slide() {
 </table>
 
 <br>
-
 
 <div id='instrument_simulator_requests' style="background-color: black; color: white;">
 </div>
