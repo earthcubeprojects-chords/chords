@@ -35,12 +35,12 @@ class InstrumentsController < ApplicationController
     
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
-    varnames        = Var.all.where("instrument_id = ?", @instrument.id).pluck(:name)
-    varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
+    @varnames        = Var.all.where("instrument_id = ?", @instrument.id).pluck(:name)
+    @varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
     
     respond_to do |format|
       format.html
-      format.csv { send_data @measurements.to_csv(inst_name=instrument_name, varnames=varnames, varshortnames=varshortnames) }
+      format.csv { send_data @measurements.to_csv(inst_name=instrument_name, varnames=@varnames, varshortnames=@varshortnames) }
       format.xml { send_data @measurements.to_xml }    
     end
   end
