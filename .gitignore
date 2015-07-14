@@ -34,5 +34,9 @@ bower.json
 # Ignore pow environment settings
 .powenv
 
-* Ignore eclipse project files
+# Ignore eclipse project files
 .project
+
+# Ignore the OSX directory store
+.DS_Store
+
