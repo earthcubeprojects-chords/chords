@@ -1,0 +1,71 @@
+<script>
+
+var instrument_live = function () {
+  $.ajax({
+    url: '/instruments/<%= @instrument.id%>/live',
+    success: function(point) {
+      if(point[0] != last_point[0]) {
+        series.addPoint(point, true, true); 
+        last_point = point;
+      }                                             
+    },
+    cache: false
+    });
+  };
+        
+var load_event = function () {
+  // set up the updating of the chart each second
+  var series = this.series[0];
+  setInterval(instrument_live, 1000.0);
+};
+        
+$(function () {
+  var last_point = [];
+
+  $(document).ready(function () {
+    Highcharts.setOptions({
+    global: { 
+      useUTC: false,
+    },
+  });
+
+  $('#<%= highcharts_dom_id %>').highcharts({
+    chart: {
+      type: 'spline',
+      animation: Highcharts.svg, // don't animate in old IE
+      marginRight: 10,
+      events: {
+        load: load_event,
+      },
+    },
+    credits: { enabled: false, }, 
+    title: { text: '<%= @instrument.name%> - Live Data' },
+    xAxis: { 
+      type: 'datetime', 
+      tickPixelInterval: 150 
+    },
+    yAxis: { 
+      title: { text: '<%= legend_top %>' },
+      plotLines: [{
+        value: 0,
+        width: 1,
+        color: '#808080'
+      }]
+    },
+    tooltip: {
+      formatter: function () {
+        return '<b>' + this.series.name + '</b><br/>' +
+          Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+          Highcharts.numberFormat(this.y, 2);
+        }
+      },
+    legend: { enabled: false },
+    exporting: { enabled: false },
+    series: [{
+      name: 'Random data',
+      data: [<%= @instrument.data(@instrument.display_points) %>]
+      }]
+    });
+  });
+});
+</script>
