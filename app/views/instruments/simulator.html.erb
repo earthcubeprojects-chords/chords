@@ -103,11 +103,11 @@ function toggle_instrument_simulator(instrument_id) {
 		var command = "simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
 		
 		// var temp = $('#instrument_1_simulator_icon').attr('src', '/assets/glossy-green-icon-button-th.png');
-		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/glossy-green-icon-button-th.png')");
+		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/toggle-switch-on.png')");
 		
 	} else {
 		eval("window.instrument_" + instrument_id + "_simulator_status = false;");
-		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/glossy-red-icon-button-th.png')");
+		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/toggle-switch-off.png')");
 	}
 }
 
@@ -135,8 +135,6 @@ function slide() {
 </script>
 
 
-
-
 <table>
   <thead>
     <tr>
@@ -152,7 +150,7 @@ function slide() {
         <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center">
-	       <%= image_tag('glossy-red-icon-button-th.png', size:"20", id:"instrument_#{instrument.id}_simulator_icon", onclick:"toggle_instrument_simulator(#{instrument.id});")%>
+	       <%= image_tag('toggle-switch-off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", onclick:"toggle_instrument_simulator(#{instrument.id});")%>
        </td>
 
       </tr>
