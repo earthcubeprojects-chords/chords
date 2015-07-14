@@ -45,7 +45,7 @@ $(function () {
       tickPixelInterval: 150 
     },
     yAxis: { 
-      title: { text: '<%= legend_top %>' },
+      title: { text: '<%= varname %>' },
       plotLines: [{
         value: 0,
         width: 1,
@@ -59,7 +59,7 @@ $(function () {
           Highcharts.numberFormat(this.y, 2);
         }
       },
-    legend: { enabled: false },
+    legend: { enabled: true },
     exporting: { enabled: false },
     series: <%= series %>,
     });

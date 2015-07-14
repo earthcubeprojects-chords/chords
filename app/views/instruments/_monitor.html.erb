@@ -1,9 +1,3 @@
-<% legend_top = 'Live Data'
-	if @instrument.measurements.last
-		legend_top =  "#{@instrument.measurements.last.parameter} (#{@instrument.measurements.last.unit})"
-	end
-%>
-
 <% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
 
 <% index = 0 %>
@@ -12,8 +6,9 @@
 <% varshortname    = varshortnames[index] %>
 <% varname         = varnames[index] %>
 
-<% series = "[{data: [" + @instrument.data(@instrument.display_points, varshortname) + "]}]" %>
+<% series = "[{name:" + "\"" + varname + "\"" + ", data: [" + @instrument.data(@instrument.display_points, varshortname) + "]}]" %>
+<% series = series.as_json.html_safe %>
 
 <div class="instrument_highchart" id="<%= highcharts_dom_id %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-<%= render 'monitor_chart', legend_top: legend_top, highcharts_dom_id: highcharts_dom_id, series: series %>
+<%= render 'monitor_chart', highcharts_dom_id: highcharts_dom_id, series: series, varname:varname %>
