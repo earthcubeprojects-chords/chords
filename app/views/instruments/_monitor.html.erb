@@ -6,7 +6,8 @@
 
 <% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
 
+<% series = "[{ data: [" + @instrument.data(@instrument.display_points) + "]}]" %>
 
 <div class="instrument_highchart" id="<%= highcharts_dom_id %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-<%= render 'monitor_chart', legend_top: legend_top, highcharts_dom_id: highcharts_dom_id %>
+<%= render 'monitor_chart', legend_top: legend_top, highcharts_dom_id: highcharts_dom_id, series: series %>

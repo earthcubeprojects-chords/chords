@@ -61,10 +61,7 @@ $(function () {
       },
     legend: { enabled: false },
     exporting: { enabled: false },
-    series: [{
-      name: 'Random data',
-      data: [<%= @instrument.data(@instrument.display_points) %>]
-      }]
+    series: <%= series %>,
     });
   });
 });
