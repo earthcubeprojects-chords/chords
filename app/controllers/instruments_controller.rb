@@ -27,22 +27,34 @@ class InstrumentsController < ApplicationController
   def show
   
     @params = params
-    
+
     # Time select the measurements of interest
     @measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
     
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
-    @varnames        = Var.all.where("instrument_id = ?", @instrument.id).pluck(:name)
-    @varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
-    if @varnames.count > 0
-      if params[:var]
-        if @varshortnames.include? params[:var]
-          @varname       = Var.where("instrument_id = ? and shortname = ?", @instrument.id, params[:var]).pluck(:name)[0]
-          @varshortname  = params[:var]
-        end
+    varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
+    
+    # Create a hash, with shortname => name
+    @varnames = {}
+    varshortnames.each do |vshort|
+      @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", @instrument.id, vshort).pluck(:name)[0]
+    end
+
+    # Specify the selected variable shortname
+    if params[:var]
+      if varshortnames.include? params[:var]
+        @varshortname  = params[:var]
+      end
+    else
+      # the var parameter was not suppied, so select the first variable
+      if @varnames.count > 0
+        @varshortname = @varnames.first[0]
       end
     end
+    puts @varnames
+    puts @varshortname
+    
     
     respond_to do |format|
       format.html

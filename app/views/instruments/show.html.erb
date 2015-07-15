@@ -1,26 +1,22 @@
 <% 
-ourvars = @instrument.vars.all
-nvars = ourvars.size      
+# Create the query string for submitting measurements for all variables
 vquery = ''               
-if nvars > 0              
   i = 0                   
   vquery = '&'            
-  ourvars.each do |v|     
-    vquery += v.shortname 
+  @varnames.each do |v|
+    vquery += v[0] 
     vquery += '='
-    vquery += v.name.delete(' ')
-    if i < nvars-1        
+    vquery += v[1]
+    if i < @varnames.count-1        
       vquery += '&'       
     end                   
     i = i + 1             
   end
-end
 %>
 
 <div class="last_url">
 <%= @instrument.last_url %>
 </div>
-
 <table>
   <tr>
     <td><strong>Instrument Name:</strong>
@@ -35,33 +31,18 @@ end
 <table>
   <tr>
   <td><strong>Variables:</strong></td>
-  <% if nvars > 0 %>
-    <% ourvars.each do |v| %>
-        <td><%=v.shortname%>=<%=v.name%></td>
+    <% @varnames.each do |v| %>
+        <td><%=v[0]%>=<%=v[1]%></td>
     <% end %>
-  <% end %>
   </tr>
 </table>
 
-<!-- p>
-  <strong>Number of Point to Display in Highcharts:</strong>
-  <%= @instrument.display_points %>
-</p -->
-
-<!-- p>
-  <strong>Seconds Before Timeout:</strong>
-  <%= @instrument.seconds_before_timeout %>
-</p --> 
-
 <p>
  	<strong>Data Input URL:</strong>
-	<% if nvars > 0 %>
+	<% if @varnames.count > 0 %>
 	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>
 	<% end %>
 </p>
-
-<br/>
-<br/>
 
 <p>
   <strong>Number of measurements made:</strong>
@@ -69,8 +50,14 @@ end
 	(Download as <%=  link_to("CSV", instrument_url( :format => 'csv') )%>, <%=  link_to("XML", instrument_url( :format => 'xml') )%> )
 </p>
 
+<div class="instrumentstrip">
+Graph:
+<% @varnames.each do |v| %>
+  <%= link_to v[1], instrument_path(@instrument, var: v[0]) %>
+<% end %>
+</div>
+
 <%= render 'monitor' %>
 
 <%= link_to 'Edit', edit_instrument_path(@instrument) %> |
 <%= link_to 'Back', instruments_path %>
-
