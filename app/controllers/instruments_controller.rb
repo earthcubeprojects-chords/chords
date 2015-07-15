@@ -25,6 +25,12 @@ class InstrumentsController < ApplicationController
   # GET /instruments/1
   # GET /instruments/1.json
   def show
+    # This method sets:
+    #  @params
+    #  @measurements
+    #  @varnames - A hash of variable names for the instrument, keyed by the shortname
+    #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    
   
     @params = params
 
@@ -47,23 +53,18 @@ class InstrumentsController < ApplicationController
         @varshortname  = params[:var]
       end
     else
-      # the var parameter was not suppied, so select the first variable
+      # the var parameter was not supplied, so select the first variable
       if @varnames.count > 0
         @varshortname = @varnames.first[0]
       end
     end
-    puts @varnames
-    puts @varshortname
-    
     
     respond_to do |format|
       format.html
-      format.csv { send_data @measurements.to_csv(inst_name=instrument_name, varnames=@varnames, varshortnames=@varshortnames) }
+      format.csv { send_data @measurements.to_csv(inst_name=instrument_name, varnames=@varnames) }
       format.xml { send_data @measurements.to_xml }    
     end
   end
-
-    
     
   # GET /instruments/new
   def new
@@ -125,8 +126,5 @@ class InstrumentsController < ApplicationController
     def instrument_params
       params.require(:instrument).permit(:name, :site_id, :display_points, :seconds_before_timeout, :var)
     end
-    
 
-
-    
 end

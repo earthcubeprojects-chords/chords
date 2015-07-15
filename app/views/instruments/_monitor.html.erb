@@ -1,7 +1,7 @@
-<% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
-
 <% 
-if @varshortname != nil 
+ highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"
+ 
+ if @varshortname != nil 
    # Determine the selected variable full name
    varname = @varnames[@varshortname]
    # Easrier to read doulble quote

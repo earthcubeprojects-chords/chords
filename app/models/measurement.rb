@@ -4,7 +4,7 @@ class Measurement < ActiveRecord::Base
   belongs_to :instrument
 
 
-  def self.to_csv(inst_name, varnames, varshortnames, options = {})
+  def self.to_csv(inst_name, varnames, options = {})
   
     # Upon entry, we contain the measurements of interest (i.e.
     # they have been time and instrument selected.
@@ -15,7 +15,7 @@ class Measurement < ActiveRecord::Base
     # Collect the CSV column titles from varnames
     column_titles = []
     column_titles << "Time" << "Instrument Name"
-    varnames.each {|v| column_titles << v}
+    varnames.each {|v| column_titles << v[1]}
     
     # How many Vars do we have?
     nvars = varnames.count
@@ -24,11 +24,11 @@ class Measurement < ActiveRecord::Base
     # Each entry in vardata will be a hash, where the keys will be the
     # timestamp, and the value will be the measurement value.
     vardata = {}
-    varshortnames.each do |vname|
-      vararrays = self.where("parameter = ?", vname).pluck(:created_at, :value)
-      vardata[vname] = {}
+    varnames.keys.each do |shortname|
+      vararrays = self.where("parameter = ?", shortname).pluck(:created_at, :value)
+      vardata[shortname] = {}
       vararrays.each do |v|
-        vardata[vname][v[0]] = v[1]
+        vardata[shortname][v[0]] = v[1]
       end
     end
     
@@ -39,7 +39,7 @@ class Measurement < ActiveRecord::Base
         row = []
         row << t
         row << inst_name
-        varshortnames.each do |shortname|
+        varnames.keys.each do |shortname|
           vdata = vardata[shortname]
           # Nil values will create ',,'
           row << vdata[t]
