@@ -17,9 +17,6 @@ class Measurement < ActiveRecord::Base
     column_titles << "Time" << "Instrument Name"
     varnames.each {|v| column_titles << v[1]}
     
-    # How many Vars do we have?
-    nvars = varnames.count
-    
     # Extract the Var time and data value for each varshortname.
     # Each entry in vardata will be a hash, where the keys will be the
     # timestamp, and the value will be the measurement value.

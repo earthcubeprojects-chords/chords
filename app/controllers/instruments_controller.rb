@@ -25,18 +25,13 @@ class InstrumentsController < ApplicationController
   # GET /instruments/1
   # GET /instruments/1.json
   def show
-    # This method sets:
+    # This method sets the following instance variables:
     #  @params
-    #  @measurements
-    #  @varnames - A hash of variable names for the instrument, keyed by the shortname
+    #  @varnames     - A hash of variable names for the instrument, keyed by the shortname
     #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
-    
-  
+
     @params = params
 
-    # Time select the measurements of interest
-    @measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
-    
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
     varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
@@ -61,8 +56,14 @@ class InstrumentsController < ApplicationController
     
     respond_to do |format|
       format.html
-      format.csv { send_data @measurements.to_csv(inst_name=instrument_name, varnames=@varnames) }
-      format.xml { send_data @measurements.to_xml }    
+      format.csv { 
+        measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
+        send_data measurements.to_csv(inst_name=instrument_name, varnames=@varnames) 
+      }
+      format.xml { 
+        measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
+        send_data measurements.to_xml 
+      }    
     end
   end
     
