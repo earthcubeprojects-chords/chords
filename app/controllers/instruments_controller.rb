@@ -10,11 +10,9 @@ class InstrumentsController < ApplicationController
     end
   end
   
-
   def simulator
     @instruments = Instrument.all
     @sites = Site.all
-
   end
   
   # GET /instruments
@@ -37,6 +35,14 @@ class InstrumentsController < ApplicationController
     instrument_name = @instrument.name
     @varnames        = Var.all.where("instrument_id = ?", @instrument.id).pluck(:name)
     @varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
+    if @varnames.count > 0
+      if params[:var]
+        if @varshortnames.include? params[:var]
+          @varname       = Var.where("instrument_id = ? and shortname = ?", @instrument.id, params[:var]).pluck(:name)[0]
+          @varshortname  = params[:var]
+        end
+      end
+    end
     
     respond_to do |format|
       format.html
@@ -105,7 +111,7 @@ class InstrumentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
-      params.require(:instrument).permit(:name, :site_id, :display_points, :seconds_before_timeout)
+      params.require(:instrument).permit(:name, :site_id, :display_points, :seconds_before_timeout, :var)
     end
     
 

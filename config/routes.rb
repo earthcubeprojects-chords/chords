@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
 
-  get 'monitor/live' => 'monitor#live'
-  get 'instruments/live' => 'instruments#live'
-  get 'instruments/simulator' => 'instruments#simulator'
-
+  get 'monitor/live'            => 'monitor#live'
+  get 'instruments/live'        => 'instruments#live'
+  get 'instruments/simulator'   => 'instruments#simulator'
   get 'measurements/url_create' => 'measurements#url_create'
 
   resources :profiles, only: [:index, :create]

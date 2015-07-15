@@ -1,9 +1,9 @@
 <% highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"%>
 
-<% if @varshortnames.count > 0 %>
+<% if @varshortname != nil %>
 <%   index = 0 %>
-<%   varshortname    = @varshortnames[index] %>
-<%   varname         = @varnames[index] %>
+<%   varshortname    = @varshortname %>
+<%   varname         = @varname %>
 <%   series = "[{name:" + "\"" + varname + "\"" + ", data: [" + @instrument.data(@instrument.display_points, varshortname) + "]}]" %>
 <%   series = series.as_json.html_safe %>
 
