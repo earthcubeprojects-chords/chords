@@ -151,6 +151,10 @@ loop do
   url = make_url(options[:chordshost], options[:instrument_id], variables)
   puts url
   uri = URI(url)
-  Net::HTTP.get(uri) 
+  begin
+    Net::HTTP.get(uri) 
+  rescue => ex
+    puts "#{ex.class}: #{ex.message}"
+  end
   sleep(options[:seconds].to_f)
 end
