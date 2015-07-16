@@ -50,14 +50,14 @@ vquery = ''
 	(Download as <%=  link_to("CSV", instrument_url( :format => 'csv') )%>, <%=  link_to("XML", instrument_url( :format => 'xml') )%> )
 </p>
 
-<%= render 'monitor' %>
-
 <div class="instrumentstrip">
-Variable:
+Graph:
 <% @varnames.each do |v| %>
   <%= link_to v[1], instrument_path(@instrument, var: v[0]) %>
 <% end %>
 </div>
+
+<%= render 'monitor' %>
 
 <%= link_to 'Edit', edit_instrument_path(@instrument) %> |
 <%= link_to 'Back', instruments_path %>
