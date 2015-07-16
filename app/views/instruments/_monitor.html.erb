@@ -17,6 +17,6 @@
 
 <div class="instrument_highchart" id="<%= highcharts_dom_id %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
-<%= render 'monitor_chart', highcharts_dom_id: highcharts_dom_id, series: series, title: title, varname:@varnames[@varshortname] %>
+<%= render 'monitor_chart', highcharts_dom_id: highcharts_dom_id, series: series, title: title, varname: @varnames[@varshortname], varshortname: @varshortname %>
 
 <% end %>

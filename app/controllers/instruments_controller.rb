@@ -2,7 +2,7 @@ class InstrumentsController < ApplicationController
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
 
   def live
-    m = Instrument.find(params[:id]).last_measurement
+    m = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last
     if m
       render :json => m.json_point
     else
