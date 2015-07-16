@@ -1,8 +1,13 @@
 <script>
-        
+
 $(function () {
+  var intervalId = null;    
   var last_point = [];
 
+  $(window).unload(function() {
+    clearInterval(intervalId);
+  });
+    
   $(document).ready(function () {
     Highcharts.setOptions({
     global: { 
@@ -19,7 +24,7 @@ $(function () {
         load: function () {
           // set up the updating of the chart each second
           var series = this.series[0];
-          setInterval(function () {
+          intervalId = setInterval(function () {
             $.ajax({
               url: '/instruments/<%= @instrument.id%>/live?var=<%= varshortname %>',
               success: function(point) {
