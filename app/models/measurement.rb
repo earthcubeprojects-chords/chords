@@ -12,9 +12,13 @@ class Measurement < ActiveRecord::Base
     # Create a vector of unique times
     times = self.pluck(:created_at).uniq.sort
     
+    # Instrument line
+    instrument_line = []
+    instrument_line << "Instrument" << inst_name
+    
     # Collect the CSV column titles from varnames
     column_titles = []
-    column_titles << "Time" << "Instrument Name"
+    column_titles << "Time"
     varnames.each {|v| column_titles << v[1]}
     
     # Extract the Var time and data value for each varshortname.
@@ -31,11 +35,11 @@ class Measurement < ActiveRecord::Base
     
     # Create the csv file, with one column for each var
     CSV.generate(options) do |csv|
+      csv << instrument_line
       csv << column_titles
       times.each do |t|
         row = []
         row << t
-        row << inst_name
         varnames.keys.each do |shortname|
           vdata = vardata[shortname]
           # Nil values will create ',,'
