@@ -35,7 +35,8 @@ class InstrumentsController < ApplicationController
     #  @varnames     - A hash of variable names for the instrument, keyed by the shortname
     #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
 
-    @params = params
+    @params = params.slice(:start, :end)
+    puts "*******Params are #{params}"
 
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
@@ -130,7 +131,7 @@ class InstrumentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
-      params.require(:instrument).permit(:name, :site_id, :display_points, :seconds_before_timeout, :var)
+      params.require(:instrument).permit(:name, :site_id, :display_points, :seconds_before_timeout, :var, :start, :end)
     end
 
 end
