@@ -29,6 +29,27 @@
         alert("Start date must be less than or equal to the end date");
       }
     });
+
+    $('.xmlButton').click(function(){
+      var startdate = $("#startpicker").datepicker("getDate").toDateString();
+      var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
+      var startms   = Date.parse(startdate);
+      var endms     = Date.parse(enddate);
+      if (startms <= endms) {
+      /* add a day to the end date */
+        endms += 24*60*60*1000;
+        var url = '';
+        url += '/instruments/'
+        url += this.value;
+        url += '.xml\?';
+        url += 'startsecs=' + startms/1000;
+        url += '&endsecs='  + endms/1000;
+        document.location.href = url;
+      } else {
+        alert("Start date must be less than or equal to the end date");
+      }
+    });
+
   });
   </script>
 
@@ -56,7 +77,6 @@
       <th align="center">Site</th>
       <th align="center"># <br/> measurements</th>
       <th>Download As</th>
-
       <th colspan="4"></th>
     </tr>
   </thead>
@@ -64,12 +84,12 @@
   <tbody>
     <% @instruments.each do |instrument| %>
       <tr>
-        <td> <%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
+        <td><%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
-	  <td align="center"><%= instrument.measurements.count %> </td>
-	  <td align="center"><%=  link_to("CSV", instrument_url(:id => instrument.id, :format => 'csv') )%> 
-	                     <%=  link_to("XML", instrument_url(:id => instrument.id, :format => 'xml') )%></td>
-	                     <td><input type="button" value=<%= instrument.id%> class="csvButton"></td>
+	      <td align="center"><%= instrument.measurements.count %> </td>
+	      <td align="center">
+	        <button value=<%= instrument.id%> class="csvButton">CSV</button>
+	        <button value=<%= instrument.id%> class="xmlButton">XML</button></td>
       </tr>
     <% end %>
   </tbody>
