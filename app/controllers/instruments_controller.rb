@@ -36,7 +36,6 @@ class InstrumentsController < ApplicationController
     #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
 
     @params = params.slice(:start, :end)
-    puts "*******Params are #{params}"
 
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
@@ -60,15 +59,30 @@ class InstrumentsController < ApplicationController
       end
     end
     
+    # Determine the time range
+    # Default to the most recent day
+    endtime   = Time.now
+    starttime = endtime - 1.day
+    # if we have the start and end parameters
+    if params[:startsecs] && params[:endsecs]
+      # if they are well formed
+      if params[:endsecs].to_i >= params[:startsecs].to_i
+        endtime   = Time.at(params[:endsecs].to_i).to_datetime
+        starttime = Time.at(params[:startsecs].to_i).to_datetime
+      end
+    end
+    
     respond_to do |format|
       format.html
       format.csv { 
-        measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
+        measurements =  @instrument.measurements.where(
+          "created_at >= ? and created_at < ?", starttime, endtime)
         send_data measurements.to_csv(inst_name=instrument_name, varnames=@varnames) 
       }
       format.xml { 
-        measurements =  @instrument.measurements.where("created_at >= ?", Time.now-1.day)
-        send_data measurements.to_xml 
+        measurements =  @instrument.measurements.where(
+          "created_at >= ? and created_at < ?", starttime, endtime)
+        send_data measurements.to_xml
       }    
     end
   end
@@ -131,7 +145,8 @@ class InstrumentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
-      params.require(:instrument).permit(:name, :site_id, :display_points, :seconds_before_timeout, :var, :start, :end)
+      params.require(:instrument).permit(
+        :name, :site_id, :display_points, :seconds_before_timeout)
     end
 
 end

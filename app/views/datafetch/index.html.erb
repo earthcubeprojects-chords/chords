@@ -20,8 +20,8 @@
       url += '/instruments/'
       url += this.value;
       url += '.csv\?';
-      url += 'start=' + startms;
-      url += '&end='  + endms;
+      url += 'startsecs=' + startms/1000;
+      url += '&endsecs='  + endms/1000;
       document.location.href = url;
     });
   });
