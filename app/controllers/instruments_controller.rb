@@ -39,6 +39,7 @@ class InstrumentsController < ApplicationController
 
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
+    site            = @instrument.site.name
     varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
     
     # Create a hash, with shortname => name
@@ -77,7 +78,7 @@ class InstrumentsController < ApplicationController
       format.csv { 
         measurements =  @instrument.measurements.where(
           "created_at >= ? and created_at < ?", starttime, endtime)
-        send_data measurements.to_csv(inst_name=instrument_name, varnames=@varnames) 
+        send_data measurements.to_csv(instrument_name, site, @varnames) 
       }
       format.xml { 
         measurements =  @instrument.measurements.where(
