@@ -47,7 +47,7 @@ vquery = ''
 <p>
   <strong>Number of measurements made:</strong>
   <%= @instrument.measurements.count %> 
-	(Download as <%=  link_to("CSV", instrument_url( :format => 'csv') )%>, <%=  link_to("XML", instrument_url( :format => 'xml') )%> )
+	(Download current day as <%=  link_to("CSV", instrument_url( :format => 'csv') )%>, <%=  link_to("XML", instrument_url( :format => 'xml') )%> )
 </p>
 
 <div class="instrumentstrip">

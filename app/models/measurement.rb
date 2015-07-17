@@ -4,20 +4,13 @@ class Measurement < ActiveRecord::Base
   belongs_to :instrument
 
 
-  def self.to_csv(inst_name, site, varnames, options = {})
+  def self.to_csv(metadata, varnames, options = {})
   
     # Upon entry, we contain the measurements of interest (i.e.
     # they have been time and instrument selected.
     
     # Create a vector of unique times
     times = self.pluck(:created_at).uniq.sort
-    
-    # Headers
-    header1 = ["CHORDS dataset delivered at " + Time.now.to_s]
-    header2 = ["Site", site]
-    header3 = ["Instrument", inst_name]
-    
-    headers = [header1, header2, header3]
     
     # Collect the CSV column titles from varnames
     column_titles = []
@@ -36,10 +29,12 @@ class Measurement < ActiveRecord::Base
       end
     end
     
+    puts "metadata is #{metadata}"
     # Create the csv file, with one column for each var
     CSV.generate(options) do |csv|
-      headers.each do |h|
-        csv << h
+      # Put the metadata at the head of the file, one line per group
+      metadata.each do |line|
+        csv << line
       end
       csv << column_titles
       times.each do |t|

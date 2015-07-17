@@ -39,8 +39,21 @@ class InstrumentsController < ApplicationController
 
     # Get the instrument and variable identifiers.
     instrument_name = @instrument.name
-    site            = @instrument.site.name
+    site_name       = @instrument.site.name
     varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
+    project         = Profile.first.project
+    affiliation     = Profile.first.affiliation
+    metadata = [
+      ["Project", project], 
+      ["Site", site_name], 
+      ["Affiliation", affiliation], 
+      ["Instrument", instrument_name]
+    ]
+
+    # File name root
+    file_root = "#{project}_#{site_name}_#{instrument_name}"
+    file_root = file_root.split.join
+    
     
     # Create a hash, with shortname => name
     @varnames = {}
@@ -78,7 +91,8 @@ class InstrumentsController < ApplicationController
       format.csv { 
         measurements =  @instrument.measurements.where(
           "created_at >= ? and created_at < ?", starttime, endtime)
-        send_data measurements.to_csv(instrument_name, site, @varnames) 
+        send_data measurements.to_csv(metadata, @varnames),
+          filename: file_root+'.csv' 
       }
       format.xml { 
         measurements =  @instrument.measurements.where(
