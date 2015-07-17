@@ -1,57 +1,45 @@
-  <script>
-  $(document).ready(function() { 
-    $(function() {
-      $("#startpicker").datepicker();
-      $("#startpicker").datepicker('setDate', new Date());
-    });
-
-    $(function() {
-      $("#endpicker").datepicker();
-      $("#endpicker").datepicker('setDate', new Date());
-    });
-  
-    $('.csvButton').click(function(){
-      var startdate = $("#startpicker").datepicker("getDate").toDateString();
-      var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
-      var startms   = Date.parse(startdate);
-      var endms     = Date.parse(enddate);
-      if (startms <= endms) {
-      /* add a day to the end date */
-        endms += 24*60*60*1000;
-        var url = '';
-        url += '/instruments/'
-        url += this.value;
-        url += '.csv\?';
-        url += 'startsecs=' + startms/1000;
-        url += '&endsecs='  + endms/1000;
-        document.location.href = url;
-      } else {
-        alert("Start date must be less than or equal to the end date");
-      }
-    });
-
-    $('.xmlButton').click(function(){
-      var startdate = $("#startpicker").datepicker("getDate").toDateString();
-      var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
-      var startms   = Date.parse(startdate);
-      var endms     = Date.parse(enddate);
-      if (startms <= endms) {
-      /* add a day to the end date */
-        endms += 24*60*60*1000;
-        var url = '';
-        url += '/instruments/'
-        url += this.value;
-        url += '.xml\?';
-        url += 'startsecs=' + startms/1000;
-        url += '&endsecs='  + endms/1000;
-        document.location.href = url;
-      } else {
-        alert("Start date must be less than or equal to the end date");
-      }
-    });
-
+<script>
+$(document).ready(function() { 
+  $(function() {
+    $("#startpicker").datepicker();
+    $("#startpicker").datepicker('setDate', new Date());
   });
-  </script>
+
+  $(function() {
+    $("#endpicker").datepicker();
+    $("#endpicker").datepicker('setDate', new Date());
+  });
+
+  function send_url(id, datatype) {
+    var startdate = $("#startpicker").datepicker("getDate").toDateString();
+    var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
+    var startms   = Date.parse(startdate);
+    var endms     = Date.parse(enddate);
+    if (startms <= endms) {
+    /* add a day to the end date */
+      endms += 24*60*60*1000;
+      var url = '';
+      url += '/instruments/'
+      url += id;
+      url += '.' + datatype + '?';
+      url += 'startsecs=' + startms/1000;
+      url += '&endsecs='  + endms/1000;
+      document.location.href = url;
+    } else {
+      alert("Start date must be less than or equal to the end date");
+    }
+  };
+  
+  $('.csvButton').click(function(){
+    send_url(this.value, 'csv');
+  });
+
+  $('.xmlButton').click(function(){
+    send_url(this.value, 'xml');
+  });
+
+});
+</script>
 
 <h1>Data Fetch</h1>
 <h2>Download Data By Day</h2>
