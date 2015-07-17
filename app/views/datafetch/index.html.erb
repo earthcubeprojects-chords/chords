@@ -14,15 +14,20 @@
       var startdate = $("#startpicker").datepicker("getDate").toDateString();
       var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
       var startms   = Date.parse(startdate);
+      var endms     = Date.parse(enddate);
+      if (startms <= endms) {
       /* add a day to the end date */
-      var endms     = Date.parse(enddate) + 24*60*60*1000;
-      var url = '';
-      url += '/instruments/'
-      url += this.value;
-      url += '.csv\?';
-      url += 'startsecs=' + startms/1000;
-      url += '&endsecs='  + endms/1000;
-      document.location.href = url;
+        endms += 24*60*60*1000;
+        var url = '';
+        url += '/instruments/'
+        url += this.value;
+        url += '.csv\?';
+        url += 'startsecs=' + startms/1000;
+        url += '&endsecs='  + endms/1000;
+        document.location.href = url;
+      } else {
+        alert("Start date must be less than or equal to the end date");
+      }
     });
   });
   </script>
@@ -44,21 +49,25 @@
 
 <div>
 <table>
-<tr>
-<td>Start Date:</td><td><input type="text" id="startpicker"></td>
-</tr>
-<tr>
-<td>End Date:</td><td><input type="text" id="endpicker"></td>
-</tr>
-</div>
-
+  <thead>
+    <tr>
+      <td align="center">Start Date (start of day)</td><td align="center">End Date (end of day)</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+     <td><div id="startpicker"></div></td><td><div id="endpicker"></div></td>
+    </tr>
+  </tbody>
+</table> 
+<br/>
 <table>
   <thead>
     <tr>
       <th>Instrument Name</th>
       <th align="center">Site</th>
       <th align="center"># <br/> measurements</th>
-      <th >Download As</th>
+      <th>Download As</th>
 
       <th colspan="4"></th>
     </tr>
