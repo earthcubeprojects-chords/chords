@@ -29,7 +29,6 @@ class Measurement < ActiveRecord::Base
       end
     end
     
-    puts "metadata is #{metadata}"
     # Create the csv file, with one column for each var
     CSV.generate(options) do |csv|
       # Put the metadata at the head of the file, one line per group

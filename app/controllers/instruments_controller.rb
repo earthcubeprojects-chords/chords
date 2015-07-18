@@ -97,7 +97,7 @@ class InstrumentsController < ApplicationController
       format.xml { 
         measurements =  @instrument.measurements.where(
           "created_at >= ? and created_at < ?", starttime, endtime)
-        send_data measurements.to_xml
+        send_data measurements.to_xml, filename: file_root+'.xml'
       }    
     end
   end
