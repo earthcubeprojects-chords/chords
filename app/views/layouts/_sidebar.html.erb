@@ -8,6 +8,7 @@
 		  <% end %>
 		</div>
 	</li>
+	
 	<li class="sidebar_link">
 		<div>
 	  <%= link_to '/dashboard' do %>
@@ -15,6 +16,7 @@
 	  <% end %>
 	</div>
 	</li>
+	
 	<li class="sidebar_link">
 		<div>
 	  <%= link_to '/datafetch' do %>
@@ -22,21 +24,32 @@
 	  <% end %>
 	</div>
 	</li>
-	<li class="sidebar_link">
-		<div>
-	  <%= link_to sites_path do %>
-	    <%= image_tag('open-iconic/svg/globe.svg', alt:  "About", class: 'sidebar_icon') %>Sites
-	  <% end %>
-	</div>
-	</li>
-	<li class="sidebar_link">
-		<div>
-	  <%= link_to instruments_path do %>
-	    <%= image_tag('open-iconic/svg/star.svg', alt:  "About", class: 'sidebar_icon') %>Instruments
-	  <% end %>
-	</div>
-	</li>
-    <li>
+  
+  <li class="sidebar_link">
+    <div>
+    <%= link_to instruments_path do %>
+      <%= image_tag('open-iconic/svg/star.svg', alt:  "About", class: 'sidebar_icon') %>Instruments
+    <% end %>
+  </div>
+  </li>
+	
+  <li class="sidebar_link">
+    <div>
+    <%= link_to sites_path do %>
+      <%= image_tag('open-iconic/svg/home.svg', alt:  "About", class: 'sidebar_icon') %>Sites
+    <% end %>
+  </div>
+  </li>
+  
+  <li class="sidebar_link">
+    <div>
+    <%= link_to sites_geo_path do %>
+      <%= image_tag('open-iconic/svg/globe.svg', alt:  "About", class: 'sidebar_icon') %>Geo
+    <% end %>
+  </div>
+  </li>
+  
+  <li>
 	<div>
 
 	  <%= link_to '/instruments/simulator' do %>
@@ -45,6 +58,7 @@
 
 	</div>	
 	</li>
+	
 	<li class="sidebar_link">
 		<div>
 	  <%= link_to '/profiles' do %>
@@ -52,7 +66,6 @@
 	  <% end %>
 	</div>
 	</li>
-
 
 </ul>
 </nav>

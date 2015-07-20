@@ -20,7 +20,18 @@ class SitesController < ApplicationController
   # GET /sites/1/edit
   def edit
   end
-
+  
+  # GET /sites/geo
+  def geo
+    @sites = Site.all
+    @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
+      marker.infowindow(ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site)).html_safe)
+      marker.lat site.lat
+      marker.lng site.lon
+      marker.title site.name
+    end
+  end
+  
   # POST /sites
   # POST /sites.json
   def create

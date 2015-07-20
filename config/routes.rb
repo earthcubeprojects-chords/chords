@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'instruments/live'        => 'instruments#live'
   get 'instruments/simulator'   => 'instruments#simulator'
   get 'measurements/url_create' => 'measurements#url_create'
+  get 'sites/geo'               => 'sites#geo'
 
   resources :profiles, only: [:index, :create]
   resources :about
