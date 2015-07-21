@@ -19,6 +19,13 @@
         <td><%= link_to 'Edit', edit_site_path(site) %></td>
         <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
+      <tr>
+        <td><ul style="list-style-type:none;padding:0; margin:0px 0px 0px 30px;">
+        <% @instruments.where('site_id = ?', site.id).each do |i| %>
+        <li><%= link_to(i.name, instrument_url(i)) %></li>
+        <% end %>
+        </ul></td>
+      <tr>
     <% end %>
   </tbody>
 </table>
