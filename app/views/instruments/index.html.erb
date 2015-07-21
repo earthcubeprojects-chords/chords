@@ -23,8 +23,8 @@
 	       <% end %>
 	       </td>
         <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
-	    <td><%= instrument.last_age%></td>
-        <td><%= @sites.find(instrument.site_id).name %></td>
+	      <td><%= instrument.last_age%></td>
+        <td><%= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id)) %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
         <td><%= link_to 'Edit', edit_instrument_path(instrument) %></td>

@@ -13,5 +13,15 @@
   <%= @site.lon %>
 </p>
 
+<p>
+  <strong>Instruments:</strong>
+  <ul class="site_instrument_list">
+  <%  @instruments.each do |i| %>
+  <li><%= link_to(i.name, instrument_url(i)) %></li>
+  <% end %>
+  </ul>
+</p>
+
+
 <%= link_to 'Edit', edit_site_path(@site) %> |
 <%= link_to 'Back', sites_path %>

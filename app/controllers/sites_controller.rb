@@ -10,6 +10,7 @@ class SitesController < ApplicationController
   # GET /sites/1
   # GET /sites/1.json
   def show
+    @instruments = Instrument.all.where("site_id = ?", params[:id])
   end
 
   # GET /sites/new
