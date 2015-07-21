@@ -1,38 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-  	<meta charset="utf-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= content_for?(:title) ? yield(:title) : "CHORDS Portal" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "CHORDS Portal" %>">
-	<%= favicon_link_tag 'CHORDS_7.png' %>
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>    
-
+    <%= favicon_link_tag 'CHORDS_7.png' %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-
     <%= csrf_meta_tags %>
- </head>
- 
+    <script src="//maps.google.com/maps/api/js?v=3.13&sensor=false&libraries=geometry" type="text/javascript"></script>
+  </head>
   <body>
   	<div class="wrapper">
-
-		<header class="appheader">
-			<%= render 'layouts/navigation' %>  		
-		</header>
-
-		<aside class="appsidebar">
-			<%= render 'layouts/sidebar' %>    	
-		</aside>
-
-		<main class="main" role="main">
-			<%= render 'layouts/messages' %>
-			<%= yield %>
-			<hr />
-		</main>
-
-		<footer class="footer">
-			<%= render 'layouts/footer' %>  		
-		</footer>
-	</div>
+  		<header class="appheader">
+  			<%= render 'layouts/navigation' %>  		
+  		</header>
+  		<aside class="appsidebar">
+  			<%= render 'layouts/sidebar' %>    	
+  		</aside>
+  		<main class="main" role="main">
+  			<%= render 'layouts/messages' %>
+  			<%= yield %>
+  			<hr />
+  		</main>
+  		<footer class="footer">
+  			<%= render 'layouts/footer' %>  		
+  		</footer>
+    </div>
   </body>
 </html>
