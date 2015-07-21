@@ -17,9 +17,8 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'jquery-rails'
 # Jqueryui
 gem 'jquery-ui-rails'
-# Google Maps For Rails
+# Google Maps For Rails and dependencies
 gem 'gmaps4rails'
-# Underscore
 gem 'underscore-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
