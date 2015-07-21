@@ -1,21 +1,26 @@
-<script src="//maps.google.com/maps/api/js?libraries=geometry"></script>
-
 <script>
+    
 $(function() {
-  var handler = Gmaps.build('Google');
-  handler.buildMap({ 
-    provider: { }, 
-    internal: {id: 'map'}}, 
-    function(){
+
+  var chords_map = function(mapId) {
+    var handler = Gmaps.build('Google');
+    handler.buildMap({ 
+      provider: { }, 
+      internal: {id: mapId}}, 
+      function() {
       var site_markers = <%= raw @site_markers.to_json %>;
-      markers = handler.addMarkers(site_markers);
-      handler.bounds.extendWith(markers);
-      handler.fitMapToBounds();
-    }
-  );
+        markers = handler.addMarkers(site_markers);
+        handler.bounds.extendWith(markers);
+        handler.fitMapToBounds();
+      }
+    );
+  };
+  
+  chords_map('geomap');
 });
+
 </script>
 
 <div>
-  <div id="map" style='width: 800px; height: 600px;'></div>
+  <div id="geomap" style='width: 800px; height: 600px;'></div>
 </div>
