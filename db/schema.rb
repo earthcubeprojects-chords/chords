@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20150722222902) do
     t.string   "unit",          limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.datetime "measeured_at"
+    t.datetime "measured_at"
   end
 
   add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
