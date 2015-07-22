@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150708025706) do
+ActiveRecord::Schema.define(version: 20150722222902) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20150708025706) do
     t.string   "unit",          limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.datetime "measeured_at"
   end
 
   add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
