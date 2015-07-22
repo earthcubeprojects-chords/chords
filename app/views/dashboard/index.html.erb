@@ -4,7 +4,7 @@
   <div class='badge'>
     <span class='badgetitle'>Measurements</span>
     <br/>
-    <span class='badgevalue'><%= @metrics["measurement_count"] %></span>
+    <span class='badgevalue'><%= number_with_delimiter(@metrics["measurement_count"], :delimiter => ',') %></span>
   </div>
   <div class='badge'>
     <span class='badgetitle'>Instruments</span>
