@@ -40,9 +40,8 @@ vquery = ''
 	<ul>
 		<% @instrument.vars.each do |v| %>
 	        <li>
-				<%= best_in_place v, :name, :as => :input, :path => edit_var_path(v) %> 
-				= 
-				<%= best_in_place v, :shortname, :as => :input %>
+<%= render partial: 'vars/bip_form', v: v, locals: {v: v} %>
+
 			</li>
 	    <% end %>		
 		<li>
