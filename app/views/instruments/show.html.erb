@@ -31,9 +31,20 @@ vquery = ''
 
 <div>
 	  <strong>Site:</strong>
-	
 	<%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %>
 </div>
+
+<div>
+	  <strong>Display Points:</strong>
+	<%= best_in_place @instrument, :display_points, :as => :input %>
+</div>
+
+<div>
+	  <strong>Expected Data Input Rate (in Seconds):</strong>
+	<%= best_in_place @instrument, :seconds_before_timeout, :as => :input %>
+</div>
+
+
 
 <div>
 	  <strong>Variables:</strong>
