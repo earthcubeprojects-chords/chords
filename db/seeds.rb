@@ -11,7 +11,10 @@
 # Site.initialize
 # Instrument.initialize
 
+Site.create(id:7, name: 'Boulder ', lat: 40.029,lon: -105.337 )
+
 Site.create(id:8, name: 'Boulder Sugarloaf', lat: 40.0293,lon: -105.397 )
+
 Instrument.create(id: 21, name: 'Acurite Wx Station', site_id: 8, display_points: 100, seconds_before_timeout: 300)
 Var.create(id:9, name: 'Tdry', shortname: 'v1', instrument_id: 21)
 Var.create(id:10, name: 'RH', shortname: 'v2', instrument_id: 21)
