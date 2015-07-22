@@ -1,3 +1,10 @@
+<script>
+
+$(document).ready(function() {
+  $('.best_in_place').best_in_place();
+})
+</script>
+
 <% 
 # Create the query string for submitting measurements for all variables
 vquery = ''               
@@ -17,16 +24,22 @@ vquery = ''
 <div class="last_url">
 <%= @instrument.last_url %>
 </div>
+
+<div>
+	  <strong>Instrument Name:</strong>
+
+	<%= best_in_place @instrument, :name, :as => :input, :class => 'best_in_place' %>
+</div>
+
 <table>
   <tr>
-    <td><strong>Instrument Name:</strong>
-    <%= @instrument.name %></td>
     <td><strong>Site:</strong>
     <td><%= @instrument.site.name %></td>
     <td><strong>ID:</strong>
     instrument_id=<%= @instrument.id %></td>
   </tr>
 </table>
+
 
 <table>
   <tr>
