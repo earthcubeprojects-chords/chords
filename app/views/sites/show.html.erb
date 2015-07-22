@@ -15,7 +15,7 @@
 
 <p>
   <strong>Instruments:</strong>
-  <ul class="site_instrument_list">
+  <ul style="list-style-type:none;padding:0; margin:0px 0px 0px 30px;">
   <%  @instruments.each do |i| %>
   <li><%= link_to(i.name, instrument_url(i)) %></li>
   <% end %>

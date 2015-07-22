@@ -11,10 +11,8 @@
   </thead>
 
   <tbody>
-    <% @sites.each do |site| %>
-
-				
-<%= render partial: 'sites/bip_form', locals: {site: site} %>
+    <% @sites.each do |site| %>				
+		<%= render partial: 'sites/bip_form', locals: {site: site} %>
     <% end %>
   </tbody>
 </table>
