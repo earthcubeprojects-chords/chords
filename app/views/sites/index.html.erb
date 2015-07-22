@@ -12,17 +12,19 @@
 
   <tbody>
     <% @sites.each do |site| %>
-      <tr>
-        <td><%= link_to(site.name, site_url(:id => site.id)) %></td>
-        <td><%= site.lat %></td>
-        <td><%= site.lon %></td>
-        <td><%= link_to 'Edit', edit_site_path(site) %></td>
-        <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+
+				
+<%= render partial: 'sites/bip_form', locals: {site: site} %>
     <% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New Site', new_site_path %>
+<%= form_for :site, url: sites_path, :remote => false, :format => :js do |f| %>
+	<%= f.hidden_field :name, :value => 'site name' %>
+	<%= f.hidden_field :lat, :value => 'lat' %>
+	<%= f.hidden_field :lon, :value => 'lon' %>
+
+	 <%= f.submit :value	 => 'Add a New Site' %>
+<% end %>
