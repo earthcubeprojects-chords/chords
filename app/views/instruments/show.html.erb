@@ -37,17 +37,25 @@ vquery = ''
 
 <div>
 	  <strong>Variables:</strong>
-	<ul>
-		<% @instrument.vars.each do |v| %>
+	<ul id="variables_list">
+		<% @instrument.vars.each do |variable| %>
 	        <li>
-<%= render partial: 'vars/bip_form', v: v, locals: {v: v} %>
-
+				<%= render partial: 'vars/bip_form', variable: variable, locals: {variable: variable} %>
 			</li>
 	    <% end %>		
-		<li>
 	</ul>
 </div>
 
+<div>
+	
+<%= form_for :var, url: vars_path, :remote => false, :format => :js do |f| %>
+	<%= f.hidden_field :name, :value => 'name' %>
+	<%= f.hidden_field :shortname, :value => 'shortname' %>
+	<%= f.hidden_field :instrument_id, :value => @instrument.id %>
+
+	 <%= f.submit :value	 => 'Add a New Variable' %>
+<% end %>
+</div>
 
 
 <p>
@@ -72,5 +80,5 @@ Graph:
 
 <%= render 'graph' %>
 
-<%= link_to 'Edit', edit_instrument_path(@instrument) %> |
+
 <%= link_to 'Back', instruments_path %>
