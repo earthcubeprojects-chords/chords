@@ -21,18 +21,20 @@ vquery = ''
 
 <div>
 	  <strong>Instrument Name:</strong>
-
 	<%= best_in_place @instrument, :name, :as => :input, :class => 'best_in_place' %>
 </div>
 
-<table>
-  <tr>
-    <td><strong>Site:</strong>
-    <td><%= @instrument.site.name %></td>
-    <td><strong>ID:</strong>
-    instrument_id=<%= @instrument.id %></td>
-  </tr>
-</table>
+<div>
+	  <strong>ID:</strong>
+	   instrument_id=<%= @instrument.id %>
+</div>
+
+<div>
+	  <strong>Site:</strong>
+	
+	<%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %>
+</div>
+
 
 
 <table>
