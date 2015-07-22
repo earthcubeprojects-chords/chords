@@ -17,3 +17,5 @@
 //= require gmaps/google
 //= require turbolinks
 //= require_tree .
+
+//= require best_in_place
