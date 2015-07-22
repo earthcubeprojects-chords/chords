@@ -1,4 +1,16 @@
-<%= form_for(@var, html: {class: "new_or_edit_form" }) do |f| %>
+<%= form_for(@var) do |f| %>
+  <% if @var.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@var.errors.count, "error") %> prohibited this var from being saved:</h2>
+
+      <ul>
+      <% @var.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
@@ -8,7 +20,8 @@
     <%= f.text_field :shortname %>
   </div>
   <div class="field">
-    <%= f.hidden_field :instrument_id, :readonly => true %>
+    <%= f.label :instrument_id %><br>
+    <%= f.text_field :instrument_id %>
   </div>
   <div class="actions">
     <%= f.submit %>

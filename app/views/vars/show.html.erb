@@ -1,15 +1,19 @@
-<table>
-<tr>
-  <td>
-    <strong>Variable:</strong>
-    <%= @var.name %>
-  </td>
-  <td>
-    <strong>Shortname:</strong>
-    <%= @var.shortname %>
-  </td>
-</tr>
-</table>
+<p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_var_path(@var) %>
-<%= link_to 'Back', instruments_path(@var.instrument) %>
+<p>
+  <strong>Name:</strong>
+  <%= @var.name %>
+</p>
+
+<p>
+  <strong>Shortname:</strong>
+  <%= @var.shortname %>
+</p>
+
+<p>
+  <strong>Instrument:</strong>
+  <%= @var.instrument %>
+</p>
+
+<%= link_to 'Edit', edit_var_path(@var) %> |
+<%= link_to 'Back', vars_path %>

@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  v: MyString
+  shortname: MyString
   instrument_id: 
 
 two:
   name: MyString
-  v: MyString
+  shortname: MyString
   instrument_id: 

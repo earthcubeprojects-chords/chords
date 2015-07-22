@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :vars
+
   get 'monitor/live'            => 'monitor#live'
   get 'instruments/live'        => 'instruments#live'
   get 'instruments/simulator'   => 'instruments#simulator'
@@ -15,8 +17,6 @@ Rails.application.routes.draw do
   resources :measurements
   resources :instruments
   resources :sites
-  resources :vars
-
   root 'dashboard#index'
 
   resources :instruments do
