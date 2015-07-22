@@ -51,7 +51,7 @@ vquery = ''
 	<ul id="variables_list">
 		<% @instrument.vars.each do |variable| %>
 	        <li>
-				<%= render partial: 'vars/bip_form', variable: variable, locals: {variable: variable} %>
+				<%= render partial: 'vars/bip_form', locals: {variable: variable} %>
 			</li>
 	    <% end %>		
 	</ul>
