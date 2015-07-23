@@ -63,6 +63,20 @@ require 'net/http'
 require 'json'
   
 ############################################################
+############################################################
+class Instrument
+  def initialize(name, template, short_names)
+    @name = name
+    @template = template
+    @short_names = short_names
+  end
+  
+  def decode(msg)
+    # Use the template to decode the msg into tokens,
+    # and then pair them with the short names
+  end
+end
+############################################################
 # Parse the command line arguments, and process the configuration file. 
 # Return {:config_file, :verbose, :config}
 # See the sample configuration (above) for the description of :config
@@ -142,6 +156,9 @@ def options_and_configure(program_name, options)
         end
       end
     end
+  else
+    puts "At least one instrument must be defined in the configuration"
+    error = true
   end
   
   if error == true
@@ -163,6 +180,13 @@ end
 # get the options and configuration
 options = options_and_configure($0, ARGV)
 
-puts options
+config = options[:config]
 
+instruments = {}
+config[:instruments].each do |key, i|
+  if i[:enabled]
+    instruments[i[:port]] = Instrument.new(key.to_s, i[:template], i[:short_names])
+  end
+end
 
+puts instruments
