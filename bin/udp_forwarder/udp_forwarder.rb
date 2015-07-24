@@ -65,17 +65,43 @@ require 'json'
 ############################################################
 ############################################################
 class Instrument
-  def initialize(name, template, short_names)
+  attr_reader :sample
+  attr_reader :template
+  
+  def initialize(name, template, short_names, sample)
     @name = name
     @template = template
     @short_names = short_names
+    @sample = sample
   end
   
   def decode(msg)
     # Use the template to decode the msg into tokens,
     # and then pair them with the short names
+    md = /#{@template}/.match(msg)
+    values = {}
+    if md
+      if md.length != (@short_names.length+1)
+        puts 'Incorrect number of variables decoded in message'
+        puts '  decoding:' + msg
+        puts '  using:' + @template
+      else
+        i = 1
+        @short_names.each do |s|
+          values[s] = md[i]
+          i += 1
+        end
+      end
+    end
+    return values
+  end
+  
+  def test
+    # return the result of decoding the sample message
+    return decode(@sample)
   end
 end
+
 ############################################################
 # Parse the command line arguments, and process the configuration file. 
 # Return {:config_file, :verbose, :config}
@@ -180,13 +206,27 @@ end
 # get the options and configuration
 options = options_and_configure($0, ARGV)
 
+# Config contains the configuration structure as defined in the configuration file
 config = options[:config]
 
+# Create an array od Instrument, bit only for those that have :enabled == true
 instruments = {}
 config[:instruments].each do |key, i|
   if i[:enabled]
-    instruments[i[:port]] = Instrument.new(key.to_s, i[:template], i[:short_names])
+    instruments[i[:port]] = Instrument.new(key.to_s, i[:template], i[:short_names], i[:sample])
   end
 end
 
-puts instruments
+# Iterate through the instruments, testing the sample string against the template.
+instruments.each do |key, i|
+   variables = i.test
+   if variables
+     query = "?"
+     variables.each do |key, value|
+       query += key + "=" + value + "&"
+     end
+     query = query.chomp("&")
+     puts query
+  end
+end
+
