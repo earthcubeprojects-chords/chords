@@ -79,6 +79,9 @@ class MessageProcessor
     
     while 1
       msg, ipaddr = @socket.recvfrom 65536
+      if @verbose
+        puts msg
+      end
       url = "http://" + @chords_host
       url += @instrument.url_create(msg)
       if @verbose
