@@ -54,6 +54,7 @@
 require 'optparse'
 require 'socket'
 require 'net/http'
+require 'rubygems'
 require 'json'
   
 ############################################################
