@@ -4,56 +4,50 @@
 =begin
 # Sample configuration file, which also demonstrates the structure of the final configuration (options[:config])
 {
-  # Note: These comment lines must be striped from this file before attempting to parse it as pure JSON.
+  # Note: These comment lines must be striped from this file before attempting to parse it 
+  # as pure JSON. udp_forwarder does this internally.
   
   # Configuration file for the CHORDS udp_forward program.
-  # The :re_terms and :template fields contain Ruby RegExp patterns. 
   #
-  # :template specifies a ruby RegExp that is used to decode the incoming datagram.
+  # chords_host:   String, the host name or IP of a CHORDS instance.
+  # re_terms:      Array of arrays. Each sub-array contains a name and a Rexexp.
+  # instruments:   Hash of instrument definitions. Each instrument receieves messages on one port.
+  #   enabled:     Boolean, true if the instrument messages will be processed. If false, the port is not used.
+  #   port:        Integer, the port to listen for datagrams on.
+  #   id:          Integer, the instrument id, as it is known to the CHORDS instance.
+  #   sample:      String, an example of a typical message from this instrument.
+  #   template:    String, a ruby Regexp with capture fields, for parsing the datagrams into CHORDS variables.
+  #   short_names: Array of strings. Each string is paired with on capture field from the template.
+  #
+  # The re_terms and template fields specify ruby Regexp patterns. 
+  #
+  # template specifies a ruby RegExp that is used to decode the incoming datagram.
   # The () sections idendify a value that will be paired with the successive :short_name(s).
   #
-  # :re_terms specify strings that can be substituted into the :template string,
-  # so that the template strings don't get unwieldy.
+  # re_terms specify Regexps that can be substituted into the template string,
+  # so that the template string doesn't get unwieldy.
   # 
-  # If using the backslash character (likely), it must be escaped so that it can pass 
+  # Note: If using the backslash character (likely), it must be escaped so that it can pass 
   # through the json parsing.
   
-  # The host that HTTP GET will be sent to.
   "chords_host": "chords.dyndns.org",
   
-  # These terms will replace tokens of the same name in the template.
   "re_terms": [ 
     # Match a floating point number
     ["_fp_", "[-+]?[0-9]*\\.?[0-9]+"]
   ],
     
-  # An array of instruments that will be received and forwarded. 
   "instruments": {
    "FL": { 
        "enabled":    true,
        "port":       29110,
+       "id":         50,
        "sample":     "1R0,Dm=077D,Sm=1.2M,Sx=2.4M,Ta=29.0C,Ua=27.5P,Pa=838.2H,Rc=317.20M,Vs=18.2V",
        "template":   "1R0,Dm=(_fp_)D,Sm=(_fp_)M,Sx=(_fp_)M,Ta=(_fp_)C,Ua=(_fp_)P,Pa=(_fp_)H,Rc=(_fp_)M,Vs=(_fp_)V",
-       "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batt"]
-    },
-    
-   "ML": { 
-       "enabled":    false,
-       "port":       29111,
-       "sample":     "1R0,Dm=358D,Sm=3.1M,Sx=7.0M,Ta=26.5C,Ua=27.0P,Pa=813.5H,Rc=453.20M,Vs=13.9V",
-       "template":   "1R0,Dm=([0-9]*.[0-9]*)D,Sm=([0-9.]*)M,Sx=([0-9.]*)M",
-       "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batt"]
-    },
-    
-   "NWSC": { 
-       "enabled":    false,
-       "port": 29113,
-       "sample":     "1r0,Dm=001D,Sm=5.0M,Sx=6.8M,Ta=21.6C,Ua=42.3P,Pa=806.3H,Rc=420.80M,Vs=12.4VMXu",
-       "template":   "100,Dm=([0-9]*.[0-9]*)D,Sm=([0-9.]*)M,Sx=([0-9.]*)M",
-       "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batt"]
+       "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batv"]
     }
   }
-}
+} 
 =end
 
 
@@ -63,21 +57,32 @@ require 'net/http'
 require 'json'
   
 ############################################################
+class MessageProcessor
+  def initialize(instrument) 
+    @instrument = instrument
+    @port = instrument.port
+    @socket = UDPSocket.new
+    @socket.bind("127.0.0.1", @port)
+  end
+end
 ############################################################
 class Instrument
   attr_reader :sample
   attr_reader :template
+  attr_reader :port
   
-  def initialize(name, template, short_names, sample)
+  def initialize(name, port, id, template, short_names, sample)
     @name = name
     @template = template
     @short_names = short_names
     @sample = sample
+    @id = id
+    @port = port
   end
   
   def decode(msg)
     # Use the template to decode the msg into tokens,
-    # and then pair them with the short names
+    # and then pair them with the short names into a query string
     md = /#{@template}/.match(msg)
     values = {}
     if md
@@ -96,9 +101,29 @@ class Instrument
     return values
   end
   
+  def url_create(msg)
+  
+    # Get the variable names and values from the msg
+    variables = decode(msg)
+   
+    # Create the query string
+    query = "?instrument_id=" + @id.to_s
+    if variables
+      variables.each do |key, value|
+        query += "&" + key + "=" + value
+      end
+    end
+
+    # Build the url
+    url = "/measurements/url_create"
+    url += query
+    
+    return url
+  end
+   
   def test
     # return the result of decoding the sample message
-    return decode(@sample)
+    return url_create(@sample)
   end
 end
 
@@ -213,20 +238,12 @@ config = options[:config]
 instruments = {}
 config[:instruments].each do |key, i|
   if i[:enabled]
-    instruments[i[:port]] = Instrument.new(key.to_s, i[:template], i[:short_names], i[:sample])
+    instruments[i[:port]] = Instrument.new(key.to_s, i[:port], i[:id], i[:template], i[:short_names], i[:sample])
   end
 end
 
 # Iterate through the instruments, testing the sample string against the template.
 instruments.each do |key, i|
-   variables = i.test
-   if variables
-     query = "?"
-     variables.each do |key, value|
-       query += key + "=" + value + "&"
-     end
-     query = query.chomp("&")
-     puts query
-  end
+   puts i.test
 end
 
