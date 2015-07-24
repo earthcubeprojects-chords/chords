@@ -7,7 +7,7 @@
   
   # Configuration file for the CHORDS udp_forward program.
   #
-  # chords_host:   String, the host name or IP of a CHORDS instance.
+  # chords_host:   String, the host name or IP of a CHORDS instance. Include port number if necessary.
   # re_terms:      Array of arrays. Each sub-array contains a name and a Rexexp.
   # instruments:   Hash of instrument definitions. Each instrument receieves messages on one port.
   #   enabled:     Boolean, true if the instrument messages will be processed. If false, the port is not used.
