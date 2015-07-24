@@ -51,37 +51,41 @@
 =end
 
 
+if RUBY_VERSION == "1.8.7"
+  require 'rubygems'
+  class Hash
+    alias :to_s :inspect
+  end
+end
+
 require 'optparse'
 require 'socket'
 require 'net/http'
-require 'rubygems'
 require 'json'
   
 ############################################################
 class MessageProcessor
   @@m = Mutex.new
   
-  def initialize(instrument, chords_host, verbose) 
+  def initialize(instrument, interface, chords_host, verbose) 
     @@m.lock
-    @instrument = instrument
+    @instrument  = instrument
+    @interface   = interface
     @chords_host = chords_host
-    @verbose = verbose
-    @socket = UDPSocket.new
-    @socket.bind("127.0.0.1", @instrument.port)
+    @verbose     = verbose
+    @socket      = UDPSocket.new
+    @socket.bind(interface, @instrument.port)
     @thread = Thread.new { self.process }
     @@m.unlock
   end
   
   def process
     if @verbose
-      puts "reading port " + @instrument.port.to_s
+      puts "reading port " + @interface + ":" + @instrument.port.to_s
     end
     
     while 1
       msg, ipaddr = @socket.recvfrom 65536
-      if @verbose
-        puts msg
-      end
       url = "http://" + @chords_host
       url += @instrument.url_create(msg)
       if @verbose
@@ -238,8 +242,8 @@ def options_and_configure(program_name, options)
           error = true
         else 
           # Perform the :re_terms substitutions
-          if our_opts[:config][:re_terms]
-            our_opts[:config][:re_terms].each do |r|
+          if our_opts[:config]["re_terms"]
+            our_opts[:config]["re_terms"].each do |r|
               term = r[0]
               newvalue = r[1]
                i["template"] = i["template"].gsub(/#{term}/, newvalue)
@@ -294,12 +298,13 @@ if options[:verbose]
   puts ""
 end
 
-# Create an aray of processors. These will start threads listening on instrument ports.
+# Create an aray of processors. These will start the threads listening on instrument ports.
 processors  = []
 instruments.each do |i|
-  processor  = MessageProcessor.new(i, config["chords_host"], options[:verbose])
+  processor  = MessageProcessor.new(i, config["interface"], config["chords_host"], options[:verbose])
   processors  << processor
 end
 
+# Wait for each processor to exit
 processors.each { |p| p.join }
 
