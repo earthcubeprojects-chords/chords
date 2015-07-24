@@ -9,7 +9,7 @@
   
   # Configuration file for the CHORDS udp_forward program.
   #
-  # chords_host:   String, the host name or IP of a CHORDS instance.
+  # chords_host:   String, the host name or IP of a CHORDS instance. Include port number if necessary.
   # re_terms:      Array of arrays. Each sub-array contains a name and a Rexexp.
   # instruments:   Hash of instrument definitions. Each instrument receieves messages on one port.
   #   enabled:     Boolean, true if the instrument messages will be processed. If false, the port is not used.
@@ -58,13 +58,50 @@ require 'json'
   
 ############################################################
 class MessageProcessor
-  def initialize(instrument) 
+  @@m = Mutex.new
+  
+  def initialize(instrument, chords_host, verbose) 
+    @@m.lock
     @instrument = instrument
-    @port = instrument.port
+    @chords_host = chords_host
+    @verbose = verbose
     @socket = UDPSocket.new
-    @socket.bind("127.0.0.1", @port)
+    @socket.bind("127.0.0.1", @instrument.port)
+    @thread = Thread.new { self.process }
+    @@m.unlock
   end
+  
+  def process
+    if @verbose
+      puts "reading port " + @instrument.port.to_s
+    end
+    
+    while 1
+      msg, ipaddr = @socket.recvfrom 65536
+      url = "http://" + @chords_host
+      url += @instrument.url_create(msg)
+      if @verbose
+        puts url
+      end
+      http_get(url)
+    end
+  end
+  
+  def http_get(url)
+    uri = URI(url)
+    begin
+      Net::HTTP.get(uri) 
+    rescue => ex
+      puts "#{ex.class}: #{ex.message}"
+    end
+  end
+  
+  def join
+    @thread.join
+  end
+  
 end
+
 ############################################################
 class Instrument
   attr_reader :sample
@@ -234,16 +271,31 @@ options = options_and_configure($0, ARGV)
 # Config contains the configuration structure as defined in the configuration file
 config = options[:config]
 
-# Create an array od Instrument, bit only for those that have :enabled == true
-instruments = {}
+# Create an array of Instrument, but only for those that have :enabled == true
+instruments = []
 config[:instruments].each do |key, i|
   if i[:enabled]
-    instruments[i[:port]] = Instrument.new(key.to_s, i[:port], i[:id], i[:template], i[:short_names], i[:sample])
+    instrument = Instrument.new(key.to_s, i[:port], i[:id], i[:template], i[:short_names], i[:sample])
+    instruments << instrument
   end
 end
 
-# Iterate through the instruments, testing the sample string against the template.
-instruments.each do |key, i|
-   puts i.test
+# If verbose, iterate through the instruments, testing the sample string against the template.
+if options[:verbose]
+  puts "************ Testing message decoding *************"
+  instruments.each do |i|
+    puts i.test
+  end
+  puts "***************************************************"
+  puts ""
 end
+
+# Create an aray of processors. These will start threads listening on instrument ports.
+processors  = []
+instruments.each do |i|
+  processor  = MessageProcessor.new(i, config[:chords_host], options[:verbose])
+  processors  << processor
+end
+
+processors.each { |p| p.join }
 
