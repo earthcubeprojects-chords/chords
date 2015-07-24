@@ -165,6 +165,13 @@ class Instrument
 end
 
 ############################################################
+def symbolize(obj)
+    return obj.inject({}){|memo,(k,v)| memo[k.to_sym] =  symbolize(v); memo} if obj.is_a? Hash
+    return obj.inject([]){|memo,v    | memo           << symbolize(v); memo} if obj.is_a? Array
+    return obj
+end
+
+############################################################
 # Parse the command line arguments, and process the configuration file. 
 # Return {:config_file, :verbose, :config}
 # See the sample configuration (above) for the description of :config
@@ -213,7 +220,10 @@ def options_and_configure(program_name, options)
     end
   end
   
-  our_opts[:config] = JSON.parse(config_text, symbolize_names: true)
+  # Ruby 1.8.7 doesn't have the symbolize_names option, so
+  # comment it out and use our own method.
+  # our_opts[:config] = JSON.parse(config_text, symbolize_names: true)
+  our_opts[:config] = symbolize(JSON.parse(config_text))
   
   if our_opts[:verbose]
     puts "Input configuration:"
