@@ -36,6 +36,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+#best_im_place
+gem "best_in_place"
+  
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -48,9 +51,6 @@ group :development, :test do
   
   # layout 
   gem 'rails_layout'
-  
-  #best_im_place
-  gem "best_in_place"
   
 end
 
