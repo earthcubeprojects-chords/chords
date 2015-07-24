@@ -105,9 +105,9 @@ end
 
 ############################################################
 class Instrument
-  attr_reader :sample
-  attr_reader :template
-  attr_reader :port
+  attr_reader "sample"
+  attr_reader "template"
+  attr_reader "port"
   
   def initialize(name, port, id, template, short_names, sample)
     @name = name
@@ -166,13 +166,6 @@ class Instrument
 end
 
 ############################################################
-def symbolize(obj)
-    return obj.inject({}){|memo,(k,v)| memo[k.to_sym] =  symbolize(v); memo} if obj.is_a? Hash
-    return obj.inject([]){|memo,v    | memo           << symbolize(v); memo} if obj.is_a? Array
-    return obj
-end
-
-############################################################
 # Parse the command line arguments, and process the configuration file. 
 # Return {:config_file, :verbose, :config}
 # See the sample configuration (above) for the description of :config
@@ -221,10 +214,7 @@ def options_and_configure(program_name, options)
     end
   end
   
-  # Ruby 1.8.7 doesn't have the symbolize_names option, so
-  # comment it out and use our own method.
-  # our_opts[:config] = JSON.parse(config_text, symbolize_names: true)
-  our_opts[:config] = symbolize(JSON.parse(config_text))
+  our_opts[:config] = JSON.parse(config_text)
   
   if our_opts[:verbose]
     puts "Input configuration:"
@@ -232,15 +222,15 @@ def options_and_configure(program_name, options)
     puts
   end
   
-  instruments = our_opts[:config][:instruments]
+  instruments = our_opts[:config]["instruments"]
   if instruments
     # Process the configuration for each instrument
     instruments.each do |key, i|
-      if !i[:template]
+      if !i["template"]
         puts "A template is required for instrument #{key.to_s}"
         error = true
       else
-        if ![:short_names]
+        if !["short_names"]
           puts "Short names are required for instrument #{key.to_s}"
           error = true
         else 
@@ -249,7 +239,7 @@ def options_and_configure(program_name, options)
             our_opts[:config][:re_terms].each do |r|
               term = r[0]
               newvalue = r[1]
-               i[:template] = i[:template].gsub(/#{term}/, newvalue)
+               i["template"] = i["template"].gsub(/#{term}/, newvalue)
             end
           end
         end
@@ -282,11 +272,11 @@ options = options_and_configure($0, ARGV)
 # Config contains the configuration structure as defined in the configuration file
 config = options[:config]
 
-# Create an array of Instrument, but only for those that have :enabled == true
+# Create an array of Instrument, but only for those that have "enabled" == true
 instruments = []
-config[:instruments].each do |key, i|
-  if i[:enabled]
-    instrument = Instrument.new(key.to_s, i[:port], i[:id], i[:template], i[:short_names], i[:sample])
+config["instruments"].each do |key, i|
+  if i["enabled"]
+    instrument = Instrument.new(key.to_s, i["port"], i["id"], i["template"], i["short_names"], i["sample"])
     instruments << instrument
   end
 end
@@ -304,7 +294,7 @@ end
 # Create an aray of processors. These will start threads listening on instrument ports.
 processors  = []
 instruments.each do |i|
-  processor  = MessageProcessor.new(i, config[:chords_host], options[:verbose])
+  processor  = MessageProcessor.new(i, config["chords_host"], options[:verbose])
   processors  << processor
 end
 
