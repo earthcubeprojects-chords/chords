@@ -225,10 +225,16 @@ def options_and_configure(program_name, options)
   # Read the configuration file, strip out the comments, and parse as json
   config_text = ''
   File.readlines(our_opts[:config_file]).each do |line|
-    line = line.gsub(/#.*/,'').strip
+    line = line.gsub(/(^#.*)|(\s#.*)/,'').strip
     if line.length > 0
       config_text << line
     end
+  end
+  
+  if our_opts[:verbose]
+    puts "Configuration text:"
+    puts config_text
+    puts
   end
   
   our_opts[:config] = JSON.parse(config_text)
