@@ -85,17 +85,26 @@ class MessageProcessor
     end
     
     while 1
+      # Block on reading the datagram
       msg, ipaddr = @socket.recvfrom 65536
+      if @verbose
+        puts msg
+      end
+      
+      # Build the url
       url = "http://" + @chords_host
       url += @instrument.url_create(msg)
       if @verbose
         puts url
       end
+      
+      # Send the url
       http_get(url)
     end
   end
   
   def http_get(url)
+    # Send an HTTP GET
     uri = URI(url)
     begin
       Net::HTTP.get(uri) 
@@ -105,6 +114,7 @@ class MessageProcessor
   end
   
   def join
+    # Join the thread that is handling the datagram reading.
     @thread.join
   end
   
