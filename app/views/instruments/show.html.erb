@@ -47,14 +47,14 @@ vquery = ''
 
 
 <div>
-	  <strong>Variables:</strong>
-	<ul id="variables_list">
+  <strong>Variables:</strong>
+	<table id="variables_list">
 		<% @instrument.vars.each do |variable| %>
-	        <li>
+    <tr>
 				<%= render partial: 'vars/bip_form', locals: {variable: variable} %>
-			</li>
-	    <% end %>		
-	</ul>
+    </tr>
+    <% end %>		
+  </table>
 </div>
 
 <div>
