@@ -8,6 +8,7 @@
   # Configuration file for the CHORDS udp_forward program.
   #
   # chords_host:   String, the host name or IP of a CHORDS instance. Include port number if necessary.
+  # interface:     The interface to listen for datagrams on.
   # re_terms:      Array of arrays. Each sub-array contains a name and a Rexexp.
   # instruments:   Hash of instrument definitions. Each instrument receieves messages on one port.
   #   enabled:     Boolean, true if the instrument messages will be processed. If false, the port is not used.
@@ -29,6 +30,8 @@
   # through the json parsing.
   
   "chords_host": "127.0.0.1:3000",
+  
+  "interface":   "127.0.0.1",
   
   "re_terms": [ 
     # Match a floating point number
