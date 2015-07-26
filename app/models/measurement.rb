@@ -41,7 +41,7 @@ class Measurement < ActiveRecord::Base
     end
   end
 
-  def self.to_json(varnames)
+  def self.array_json(varnames)
   
     # Upon entry, we contain the measurements of interest (i.e.
     # they have been time and instrument selected.
@@ -50,8 +50,14 @@ class Measurement < ActiveRecord::Base
     # an entry "Time", with data times, and entries for each of the 
     # varnames.
     vardata = MeasurementsHelper.columnize(self, varnames)
-
-    return vardata.to_json
+    
+    # Convert the nested hashes into vectors
+    retval = {}
+    vardata.each do |key, value|
+      retval[key] = value.values
+    end
+    
+    return retval
 
   end
 

@@ -99,6 +99,13 @@ class InstrumentsController < ApplicationController
           "created_at >= ? and created_at < ?", starttime, endtime)
         send_data measurements.to_xml, filename: file_root+'.xml'
       }    
+      format.json { 
+        puts 'Im in format.json'
+        measurements =  @instrument.measurements.where(
+          "created_at >= ? and created_at < ?", starttime, endtime)
+        send_data measurements.array_json(@varnames)
+      }
+      
     end
   end
     
