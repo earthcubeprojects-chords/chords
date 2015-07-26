@@ -9,6 +9,7 @@
       <th align="center">Site</th>
       <th align="center"># of <br/>Measurements</th>
       <th align="center"># of <br/>Variables</th>
+      <th align="center">Id</th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -27,6 +28,7 @@
         <td><%= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id)) %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
+        <td> <%= instrument.id %></td>
         <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
