@@ -3,31 +3,23 @@ include ActionView::Helpers::DateHelper
 class Measurement < ActiveRecord::Base
   belongs_to :instrument
 
-
   def self.to_csv(metadata, varnames, options = {})
   
     # Upon entry, we contain the measurements of interest (i.e.
     # they have been time and instrument selected.
     
-    # Create a vector of unique times
-    times = self.pluck(:created_at).uniq.sort
+    # Fetch the desired data. A hash is returned. It contains
+    # an entry "Time", with data times, and entries for each of the 
+    # varnames.
+    vardata = MeasurementsHelper.columnize(self, varnames)
+    
+    # Get the time values
+    times = vardata["Time"].values.sort
     
     # Collect the CSV column titles from varnames
     column_titles = []
     column_titles << "Time"
     varnames.each {|v| column_titles << v[1]}
-    
-    # Extract the Var time and data value for each varshortname.
-    # Each entry in vardata will be a hash, where the keys will be the
-    # timestamp, and the value will be the measurement value.
-    vardata = {}
-    varnames.keys.each do |shortname|
-      vararrays = self.where("parameter = ?", shortname).pluck(:created_at, :value)
-      vardata[shortname] = {}
-      vararrays.each do |v|
-        vardata[shortname][v[0]] = v[1]
-      end
-    end
     
     # Create the csv file, with one column for each var
     CSV.generate(options) do |csv|
@@ -49,6 +41,19 @@ class Measurement < ActiveRecord::Base
     end
   end
 
+  def self.to_json(varnames)
+  
+    # Upon entry, we contain the measurements of interest (i.e.
+    # they have been time and instrument selected.
+    
+    # Fetch the desired data. A hash is returned. It contains
+    # an entry "Time", with data times, and entries for each of the 
+    # varnames.
+    vardata = MeasurementsHelper.columnize(self, varnames)
+
+    return vardata.to_json
+
+  end
 
   def json_point
     time = Time.new(self.created_at.year, self.created_at.month, self.created_at.day, self.created_at.hour, self.created_at.min, self.created_at.sec, "+00:00")
