@@ -58,8 +58,9 @@ class Measurement < ActiveRecord::Base
     
     # Convert the nested hashes into vectors
     retval = metadata
+    retval["Data"] = {}
     vardata.each do |key, value|
-      retval[key] = value.values
+      retval["Data"][key] = value.values
     end
     
     return retval
