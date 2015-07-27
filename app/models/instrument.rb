@@ -32,15 +32,15 @@ class Instrument < ActiveRecord::Base
 
 
   def last_measurement
-    measurement = Measurement.where("instrument_id = ?", self.id).order(:created_at).last
+    measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
     # logger.debug()
     return measurement
   end
   
   def is_receiving_data
-    measurement = Measurement.where("(instrument_id = ?) AND (created_at > ?)", self.id, self.seconds_before_timeout.seconds.ago).order(:created_at).last
-
+    measurement = Measurement.where("(instrument_id = ?) AND (measured_at > ?)", self.id, self.seconds_before_timeout.seconds.ago).order(:measured_at).last
     if measurement
+      printf "is_receiving_data returning true"
       return TRUE
     else
       return FALSE
@@ -62,7 +62,7 @@ class Instrument < ActiveRecord::Base
     
     data = Array.new    
     measurements.each do |measurement|
-      t = Time.new(measurement.created_at.year, measurement.created_at.month, measurement.created_at.day, measurement.created_at.hour, measurement.created_at.min, measurement.created_at.sec, "+00:00")
+      t = Time.new(measurement.measured_at.year, measurement.measured_at.month, measurement.measured_at.day, measurement.measured_at.hour, measurement.measured_at.min, measurement.measured_at.sec, "+00:00")
 
       x=((t.to_i) * 1000).to_s
       data.push "[#{x}, #{measurement.value}]" 

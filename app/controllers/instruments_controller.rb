@@ -90,19 +90,19 @@ class InstrumentsController < ApplicationController
       format.html
       format.csv { 
         measurements =  @instrument.measurements.where(
-          "created_at >= ? and created_at < ?", starttime, endtime)
+          "measured_at >= ? and measured_at < ?", starttime, endtime)
         send_data measurements.to_csv(metadata, @varnames),
           filename: file_root+'.csv' 
       }
       format.xml { 
         measurements =  @instrument.measurements.where(
-          "created_at >= ? and created_at < ?", starttime, endtime)
+          "measured_at >= ? and measured_at < ?", starttime, endtime)
         send_data measurements.to_xml, filename: file_root+'.xml'
       }    
       format.json { 
         puts 'Im in format.json'
         measurements =  @instrument.measurements.where(
-          "created_at >= ? and created_at < ?", starttime, endtime)
+          "measured_at >= ? and measured_at < ?", starttime, endtime)
         render json: measurements.array_json(@varnames)
       }
       

@@ -62,7 +62,7 @@ class Measurement < ActiveRecord::Base
   end
 
   def json_point
-    time = Time.new(self.created_at.year, self.created_at.month, self.created_at.day, self.created_at.hour, self.created_at.min, self.created_at.sec, "+00:00")
+    time = Time.new(self.measured_at.year, self.measured_at.month, self.measured_at.day, self.measured_at.hour, self.measured_at.min, self.measured_at.sec, "+00:00")
     milliseconds = ((time.to_i) * 1000).to_s
 
     #create an array and echo to JSON
@@ -74,7 +74,7 @@ class Measurement < ActiveRecord::Base
   end
   
   def age
-    time_ago_in_words(self.created_at)
+    time_ago_in_words(self.measured_at)
   end
   
 end

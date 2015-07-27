@@ -13,7 +13,7 @@ include ActionView::Helpers::DateHelper
     # data is not avialable at a given time, the value will be nil.
     
     # Create a vector of unique times
-    times = m.pluck(:created_at).uniq.sort
+    times = m.pluck(:measured_at).uniq.sort
     
     vardata = {}
     # Create the time hash entry.
@@ -26,7 +26,7 @@ include ActionView::Helpers::DateHelper
     # Each entry in vardata will be a hash, where the keys will be the
     # timestamp, and the value will be the measurement value.
     varnames.keys.each do |shortname|
-      vararrays = m.where("parameter = ?", shortname).pluck(:created_at, :value)
+      vararrays = m.where("parameter = ?", shortname).pluck(:measured_at, :value)
       vardata[shortname] = {}
       vararrays.each do |v|
         vardata[shortname][v[0]] = v[1]

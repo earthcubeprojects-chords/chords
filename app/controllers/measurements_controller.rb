@@ -46,6 +46,9 @@ class MeasurementsController < ApplicationController
   
   def url_create
   
+    # get the current time
+    measured_time = Time.now
+    
     # Save the url that invoked us
     Instrument.update(params[:instrument_id], :last_url => request.original_url)
     
@@ -63,9 +66,10 @@ class MeasurementsController < ApplicationController
       if varnames.include? kstring
         # Create a new measurement
         @measurement = Measurement.new(
+          :measured_at   => measured_time,
           :instrument_id => params[:instrument_id], 
-          :parameter => kstring, 
-          :value => params[k])
+          :parameter     => kstring, 
+          :value         => params[k])
         @measurement.save
       end
     end
