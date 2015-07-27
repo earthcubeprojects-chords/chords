@@ -69,12 +69,31 @@ vquery = ''
 </div>
 
 
-<p>
- 	<strong>Data Input URL:</strong>
-	<% if @varnames.count > 0 %>
+<div>
+<strong>URLs for data ingest and download</strong>
+<table>
+  <tr>
+ 	<td>Put values:</td>
+	<td><% if @varnames.count > 0 %>
 	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>
-	<% end %>
-</p>
+	<% end %></td>
+  </tr>
+  <tr>
+  <td>Fetch CSV file:</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv?startsecs=start&endsecs=end
+  <% end %></td>
+  </tr>
+  <tr>
+  <td>Fetch JSON:</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json?startsecs=start&endsecs=end
+  <% end %></td>
+ </tr>
+</table>
+<i>'?startsecs=start&endsecs=end' is optional. If left off, the current day will be returned. <br/>
+'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</i>
+</div>
 
 <p>
   <strong>Number of measurements made:</strong>
