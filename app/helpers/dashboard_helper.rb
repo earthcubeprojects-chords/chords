@@ -48,8 +48,12 @@ module DashboardHelper
     end
 
     # Get all of our instrument id and names.
-    instrument_ids   = Instrument.pluck(:id)
-    instrument_names = Instrument.pluck(:name)
+    instrument_ids = []
+    instrument_names = []
+    Instrument.all.each do |i|
+      instrument_ids << i.id
+      instrument_names << i.name
+    end
     ninstruments     = Instrument.count
     
     # Get the count of measurements for each instrument, for each interval.
@@ -62,8 +66,8 @@ module DashboardHelper
     j = 0
     instrument_ids.each do |i|
       measurements_by_interval[j] = Measurement
-        .where("created_at >= ? and instrument_id = ?", start_time, i)
-        .group("date_format(created_at, '#{time_format}')")
+        .where("measured_at >= ? and instrument_id = ?", start_time, i)
+        .group("date_format(measured_at, '#{time_format}')")
         .count
       j += 1
     end
