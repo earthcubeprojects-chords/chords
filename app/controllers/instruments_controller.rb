@@ -103,7 +103,7 @@ class InstrumentsController < ApplicationController
         puts 'Im in format.json'
         measurements =  @instrument.measurements.where(
           "created_at >= ? and created_at < ?", starttime, endtime)
-        send_data measurements.array_json(@varnames), filename: file_root+'.json'
+        render json: measurements.array_json(@varnames)
       }
       
     end
