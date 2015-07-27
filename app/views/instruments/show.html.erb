@@ -19,46 +19,43 @@ vquery = ''
 <%= @instrument.last_url %>
 </div>
 
-<div>
-	  <strong>Instrument Name:</strong>
-	<%= best_in_place @instrument, :name, :as => :input %>
-</div>
-
-<div>
-	  <strong>ID:</strong>
-	   instrument_id=<%= @instrument.id %>
-</div>
-
-<div>
-	  <strong>Site:</strong>
-	<%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %>
-</div>
-
-<div>
-	  <strong>Display Points:</strong>
-	<%= best_in_place @instrument, :display_points, :as => :input %>
-</div>
-
-<div>
-	  <strong>Expected Data Input Rate (in Seconds):</strong>
-	<%= best_in_place @instrument, :seconds_before_timeout, :as => :input %>
-</div>
-
-
-
-<div>
-  <strong>Variables:</strong>
-	<table id="variables_list">
-		<% @instrument.vars.each do |variable| %>
-    <tr>
+<table>
+<tr>
+  <td style="vertical-align:top"><strong>Instrument name</strong></td>
+	<td style="vertical-align:top"><%= best_in_place @instrument, :name, :as => :input %></td>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>ID:</strong></td>
+  <td style="vertical-align:top">instrument_id=<%= @instrument.id %></td>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>Site</strong></td>
+  <td style="vertical-align:top"><%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %></td>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>Display points</strong></td>
+  <td style="vertical-align:top"><%= best_in_place @instrument, :display_points, :as => :input %></td>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>Expected data input<br/>rate (in seconds)</strong></td>
+  <td style="vertical-align:top"><%= best_in_place @instrument, :seconds_before_timeout, :as => :input %></td>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>Variables</strong></td>
+	<td style="vertical-align:top">
+	  <table id="variables_list">
+		  <% @instrument.vars.each do |variable| %>
+      <tr>
 				<%= render partial: 'vars/bip_form', locals: {variable: variable} %>
-    </tr>
-    <% end %>		
-  </table>
-</div>
-
-<div>
-	
+      </tr>
+      <% end %>		
+    </td>
+    </table>
+  </td>
+</tr>
+<tr>
+<td></td>
+<td>
 <%= form_for :var, url: vars_path, :remote => false, :format => :js do |f| %>
 	<%= f.hidden_field :name, :value => 'name' %>
 	<%= f.hidden_field :shortname, :value => 'shortname' %>
@@ -66,7 +63,8 @@ vquery = ''
 
 	 <%= f.submit :value	 => 'Add a New Variable' %>
 <% end %>
-</div>
+</td>
+</table>
 
 
 <div>
@@ -75,7 +73,7 @@ vquery = ''
   <tr>
  	<td>Put values:</td>
 	<td><% if @varnames.count > 0 %>
-	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>
+	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&test
 	<% end %></td>
   </tr>
   <tr>
@@ -91,8 +89,13 @@ vquery = ''
   <% end %></td>
  </tr>
 </table>
-<i>'?startsecs=start&endsecs=end' is optional. If left off, the current day will be returned. <br/>
-'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</i>
+<ul>
+<i>
+<li>Add '&test' to indicate that the put values are test data, and can be deleted using the "delete Test Data" button.</li>
+<li>'?startsecs=start&endsecs=end' are optional. If not present, the current day will be returned. 
+'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</li>
+</i>
+</ul>
 </div>
 
 <p>
