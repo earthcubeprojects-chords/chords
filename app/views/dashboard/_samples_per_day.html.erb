@@ -5,7 +5,7 @@
 
 series_by_day   = JSON.parse('<%= @samples_by_day.to_json.html_safe %>')
 start_by_day_ms = <%= ((@start_time_by_day.to_i())*1000).to_s %>
-end_time           = <%= ((@end_time.to_i())*1000).to_s %>
+end_time        = <%= ((@end_time.to_i())*1000).to_s %>
 tz_offset_mins  = <%= @tz_offset_mins.to_s %>
 
 $(function () {
@@ -19,20 +19,35 @@ $(function () {
 		    text: null
 		},
         chart: {
-			type: 'area',
+          type: 'column',
             zoomType: 'x',
             spacing: [1,1,1,1],
             plotBorderWidth: 1,
-            spacingTop: 10
-        },
-        plotOptions: {
-          marker: {
-            enabled: false
+            spacingTop: 10        
           },
+        plotOptions: {
+          area: {
+            marker: {
+              enabled: false
+            },
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+          },
+          column: {
+            marker: {
+              enabled: false
+            },
+            stacking: 'normal',
+            lineColor: '#666666',
+            lineWidth: 1,
+            groupPadding: 0.0,
+            
+          }
         },
         xAxis: {
             type: 'datetime',
-            tickInterval: 24* 60 * 60 *1000,
+            tickInterval: 2*24* 60 * 60 *1000,
             min: start_by_day_ms,
             max: end_time,
             title: {

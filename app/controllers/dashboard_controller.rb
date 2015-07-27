@@ -47,9 +47,9 @@ class DashboardController < ApplicationController
     @start_time_by_hour = Time.now - 7.day
     @samples_by_hour    =  DashboardHelper.highcharts_series(:hour, @start_time_by_hour, by_inst=true)
 
-    # Create a table of number of measurements by day. Not broken out by instrument
-    @start_time_by_day = Time.now - 30.day
-    @samples_by_day    =  DashboardHelper.highcharts_series(:day, @start_time_by_day, by_inst=false)
+    # Create a table of number of measurements by day.
+    @start_time_by_day = Time.now - 60.day
+    @samples_by_day    =  DashboardHelper.highcharts_series(:day, @start_time_by_day, by_inst=true)
     
     @end_time = Time.now
 
