@@ -41,10 +41,15 @@ class Measurement < ActiveRecord::Base
     end
   end
 
-  def self.array_json(varnames)
+  def self.columns_with_metadata(varnames, metadata = {})
+    # Return an object of columnized Var data.
+    # Metadata may be included in the object.
   
     # Upon entry, we contain the measurements of interest (i.e.
     # they have been time and instrument selected.
+    
+    # varnames are the names of parameters of interest.
+    # Metadata is a hash of metadata than will be prepended to the result.
     
     # Fetch the desired data. A hash is returned. It contains
     # an entry "Time", with data times, and entries for each of the 
@@ -52,7 +57,7 @@ class Measurement < ActiveRecord::Base
     vardata = MeasurementsHelper.columnize(self, varnames)
     
     # Convert the nested hashes into vectors
-    retval = {}
+    retval = metadata
     vardata.each do |key, value|
       retval[key] = value.values
     end

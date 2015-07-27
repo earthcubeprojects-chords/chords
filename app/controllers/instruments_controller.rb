@@ -100,10 +100,14 @@ class InstrumentsController < ApplicationController
         send_data measurements.to_xml, filename: file_root+'.xml'
       }    
       format.json { 
-        puts 'Im in format.json'
         measurements =  @instrument.measurements.where(
           "measured_at >= ? and measured_at < ?", starttime, endtime)
-        render json: measurements.array_json(@varnames)
+        # Convert metadata to a hash
+        mdata = {}
+        metadata.each do |m|
+          mdata[m[0]] = m[1]
+        end
+        render json: measurements.columns_with_metadata(@varnames, mdata)
       }
       
     end
