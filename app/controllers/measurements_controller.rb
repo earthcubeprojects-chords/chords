@@ -49,6 +49,12 @@ class MeasurementsController < ApplicationController
     # get the current time
     measured_time = Time.now
     
+    # Is this a test value?
+    testvalue = false
+    if params.key?(:test)
+      testvalue = true
+    end
+    
     # Save the url that invoked us
     Instrument.update(params[:instrument_id], :last_url => request.original_url)
     
@@ -68,6 +74,7 @@ class MeasurementsController < ApplicationController
         @measurement = Measurement.new(
           :measured_at   => measured_time,
           :instrument_id => params[:instrument_id], 
+          :test          => testvalue,
           :parameter     => kstring, 
           :value         => params[k])
         @measurement.save
@@ -117,6 +124,6 @@ class MeasurementsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def measurement_params
-      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit)
+      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :test)
     end
 end
