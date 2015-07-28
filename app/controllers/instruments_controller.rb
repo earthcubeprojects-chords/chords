@@ -77,31 +77,41 @@ class InstrumentsController < ApplicationController
     # Default to the most recent day
     endtime   = Time.now
     starttime = endtime - 1.day
-    # if we have the start and end parameters
-    if params[:startsecs] && params[:endsecs]
-      # if they are well formed
-      if params[:endsecs].to_i >= params[:startsecs].to_i
-        endtime   = Time.at(params[:endsecs].to_i).to_datetime
-        starttime = Time.at(params[:startsecs].to_i).to_datetime
+    if params.key?(:last)
+      m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
+      starttime = m.measured_at
+      endtime   = starttime
+      puts "starttime: #{starttime}  endtime: #{endtime}"
+    else
+      # if we have the start and end parameters
+      if params[:startsecs] && params[:endsecs]
+        # if they are well formed
+        if params[:endsecs].to_i >= params[:startsecs].to_i
+          endtime   = Time.at(params[:endsecs].to_i).to_datetime
+          starttime = Time.at(params[:startsecs].to_i).to_datetime
+        end
       end
+    end
+    
+    # get the measurements
+    if params.key?(:last)
+      # if 'last' was specified, use the exact time.
+      measurements =  @instrument.measurements.where("measured_at = ?", starttime)
+    else
+      # otherwise, everything from the start time to less than the endtime.
+      measurements =  @instrument.measurements.where("measured_at >= ? and measured_at < ?", starttime, endtime)
     end
     
     respond_to do |format|
       format.html
       format.csv { 
-        measurements =  @instrument.measurements.where(
-          "measured_at >= ? and measured_at < ?", starttime, endtime)
         send_data measurements.to_csv(metadata, @varnames),
           filename: file_root+'.csv' 
       }
       format.xml { 
-        measurements =  @instrument.measurements.where(
-          "measured_at >= ? and measured_at < ?", starttime, endtime)
         send_data measurements.to_xml, filename: file_root+'.xml'
       }    
       format.json { 
-        measurements =  @instrument.measurements.where(
-          "measured_at >= ? and measured_at < ?", starttime, endtime)
         # Convert metadata to a hash
         mdata = {}
         metadata.each do |m|

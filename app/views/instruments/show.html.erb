@@ -83,28 +83,30 @@ Download current day as
   <tr>
  	<td>Put data:</td>
 	<td><% if @varnames.count > 0 %>
-	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&test
+	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %><i>&test</i>
 	<% end %></td>
   </tr>
   <tr>
   <td>Fetch CSV file:</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv?startsecs=start&endsecs=end
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv<i>?time_range</i>
   <% end %></td>
   </tr>
   <tr>
   <td>Fetch JSON:</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json?startsecs=start&endsecs=end
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json<i>?time_range</i>
   <% end %></td>
  </tr>
 </table>
 <ul style="margin-top: 0">
-<i>
-<li>NOTE: Only add '&test' to indicate that the values are test data, and can be deleted using the "Delete Test Data" button.</li>
-<li>'?startsecs=start&endsecs=end' are optional. If not present, the current day will be returned. 
-'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</li>
-</i>
+<li>NOTE: <i>&test</i> is optional, indicates that the values are test data, and can be deleted using the "Delete Test Data" button.</li>
+<li>An optional <i>time_range</i> may be appended. It may be either:
+<ul style="margin-top: 0">
+<li><i>?last</i>: return all variables for the last measurement time.</li>
+<li><i>?startsecs=start&endsecs=end</i>: specify a time range. 'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</li>
+</ul>
+<li>If <i>time_range</i> is not present, data for the current day will be returned. </li>
 </ul>
 </div>
 
