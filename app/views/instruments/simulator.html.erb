@@ -1,6 +1,9 @@
 <h1>Simulator</h1>
-<p><strong>Note:</strong> Measurements will be marked as "test"</p>
-
+<p>Simulated measurements will be marked as "test", and 
+<strong>will be deleted</strong> when the "Delete Test Data" button is pressed.</p>
+<p>The simulations will be stopped if you close this page. You may want 
+to run them in a separate tab by right-clicking the 
+<%= link_to 'simulator', '/instruments/simulator' %> link and choosing "Open Link in New Tab".</p>
 <script>	
 var instrument_variables = [];
 
@@ -23,7 +26,7 @@ function get_measurement_url(instrument_id) {
 	var command = "var variables = instrument_" + instrument_id + "_variables";
 	eval(command);
 	
-	var url = "/measurements/url_create?instrument_id=" + instrument_id + "&test"
+	var url = "/measurements/url_create?instrument_id=" + instrument_id
 
   // these values to be replaced later by confguration values:
   var min   = 5.0;
@@ -37,6 +40,8 @@ function get_measurement_url(instrument_id) {
 		value = value.toPrecision(4);
 		url += "&" + variables[i] + "=" + value; 
 	}
+	
+	url += "&test"
 
 	return(url);
 }
