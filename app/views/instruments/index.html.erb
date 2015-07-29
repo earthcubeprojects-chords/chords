@@ -5,6 +5,7 @@
     <tr>
       <th align="center">Status</th>
       <th align="center">Name</th>
+      <th align="center">Interval<br/>(s)</th>
       <th align="center">Last<br/>Measurement</th>
       <th align="center">Site</th>
       <th align="center"># of <br/>Measurements</th>
@@ -24,7 +25,8 @@
 	       <% end %>
 	       </td>
         <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
-	      <td><%= instrument.last_age%></td>
+        <td align="center"><%= instrument.seconds_before_timeout%></td>
+        <td><%= instrument.last_age%></td>
         <td><%= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id)) %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
