@@ -27,11 +27,19 @@ Download current day as
 <table>
 <tr>
   <td style="vertical-align:top"><strong>Instrument</strong></td>
-	<td style="vertical-align:top"><%= best_in_place @instrument, :name, :as => :input %></td>
+  <td style="vertical-align:top"><%= best_in_place @instrument, :name, :as => :input %></td>
 </tr>
 <tr>
   <td style="vertical-align:top"><strong>Site</strong></td>
   <td style="vertical-align:top"><%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %></td>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>Description</strong></td>
+  <td style="vertical-align:top"><%= best_in_place @instrument, 
+    :description, 
+    :as => :input,
+    :type => :textarea,
+    :html_attrs => {:style => 'width:500px; height:100px;'} %></td>
 </tr>
 <tr>
   <td style="vertical-align:top"><strong>Measurements</strong></td>

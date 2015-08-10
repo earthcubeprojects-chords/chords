@@ -12,6 +12,7 @@ class SitesController < ApplicationController
   # GET /sites/1.json
   def show
     @instruments = Instrument.all.where("site_id = ?", params[:id])
+    @site = Site.find(params[:id])
   end
 
   # GET /sites/new
@@ -82,6 +83,6 @@ class SitesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def site_params
-      params.require(:site).permit(:name, :lat, :lon)
+      params.require(:site).permit(:name, :lat, :lon, :description)
     end
 end

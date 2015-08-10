@@ -5,6 +5,14 @@
 
   <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 </tr>
+<tr>
+  <td colspan="4"><ul style="list-style-type:none;padding:0; margin:0px 0px 0px 30px;">
+  Description: <%= best_in_place site, 
+    :description, 
+    :as => :input,
+    :type => :textarea,
+    :html_attrs => {:style => 'width:500px; height:100px;'} %></td>
+</tr>
 
 <tr>
   <td><ul style="list-style-type:none;padding:0; margin:0px 0px 0px 30px;">
