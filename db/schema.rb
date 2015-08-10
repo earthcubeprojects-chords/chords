@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150727152237) do
+ActiveRecord::Schema.define(version: 20150810195410) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
     t.integer  "site_id",                limit: 4
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.integer  "display_points",         limit: 4,   default: 20
-    t.integer  "seconds_before_timeout", limit: 4,   default: 5
-    t.string   "last_url",               limit: 255
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.integer  "display_points",         limit: 4,     default: 20
+    t.integer  "seconds_before_timeout", limit: 4,     default: 5
+    t.text     "last_url",               limit: 65535
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree

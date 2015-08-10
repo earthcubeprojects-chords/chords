@@ -57,7 +57,7 @@ class MeasurementsController < ApplicationController
     end
     
     # Save the url that invoked us
-    # Instrument.update(params[:instrument_id], :last_url => request.original_url)
+    Instrument.update(params[:instrument_id], :last_url => request.original_url)
 
     # Create an array containing the names of legitimate variable names
     measured_at_parameters = Array.new
