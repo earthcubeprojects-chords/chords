@@ -30,7 +30,10 @@ function get_measurement_url(instrument_id) {
   var sigma = 1.0;
 
 
-  var utc_time = new Date().getTime();
+  var utc_time = new Date();
+  utc_time.setUTCMilliseconds(0);
+
+
   
   var avg   = (max+min)/2.0;
 	for (var i = 0, len = variables.length; i < len; i++) {
@@ -40,7 +43,7 @@ function get_measurement_url(instrument_id) {
 		url += "&" + variables[i] + "=" + value; 
 
 		// add the timesatmp
-		url += "&" + variables[i] + "_measuread_at=" + utc_time; 
+		url += "&" + variables[i] + "_at=" + utc_time.toISOString(); 
 
 	}
 	
@@ -97,21 +100,23 @@ function toggle_instrument_simulator(instrument_id) {
 	}
 }
 
-function slide() {
+function start_graph_updating() {
 
-	window.setInterval(function () {
 	  <% @instruments.each do |instrument| %>
+	
+	window.setInterval(function () {
 			<%= "if (window.instrument_#{instrument.id}_simulator_status == true) {" %>
 				simulate_measurement(<%= instrument.id %>);
 			}
+
+	}, <%= instrument.seconds_before_timeout %> * 1000 ); // repeat forever, polling every 3 seconds
+
 	  <% end %>
 
-
-	}, 3000 ); // repeat forever, polling every 3 seconds
 }
 
 // window.onload = function start() {
-    slide();
+    start_graph_updating();
 // }
 
 </script>
