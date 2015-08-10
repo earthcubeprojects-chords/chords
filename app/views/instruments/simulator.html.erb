@@ -23,12 +23,15 @@ function get_measurement_url(instrument_id) {
 	var command = "var variables = instrument_" + instrument_id + "_variables";
 	eval(command);
 	
-	var url = "/measurements/url_create?instrument_id=" + instrument_id + "&test"
+	var url = "/measurements/url_create?instrument_id=" + instrument_id + "&test";
 
   // these values to be replaced later by confguration values:
   var min   = 5.0;
   var max   = 25.0;
   var sigma = 1.0;
+
+
+  var utc_time = new Date().getTime();
   
   var avg   = (max+min)/2.0;
 	for (var i = 0, len = variables.length; i < len; i++) {
@@ -36,6 +39,10 @@ function get_measurement_url(instrument_id) {
 		var value = avg + (Math.random()-0.5) * 2 * sigma;
 		value = value.toPrecision(4);
 		url += "&" + variables[i] + "=" + value; 
+
+		// add the timesatmp
+		url += "&" + variables[i] + "_measuread_at=" + utc_time; 
+
 	}
 
 	return(url);
