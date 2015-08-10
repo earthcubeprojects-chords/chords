@@ -99,15 +99,15 @@ function toggle_instrument_simulator(instrument_id) {
 
 function slide() {
 
-  <% @instruments.each do |instrument| %>
 	window.setInterval(function () {
+	  <% @instruments.each do |instrument| %>
 			<%= "if (window.instrument_#{instrument.id}_simulator_status == true) {" %>
 				simulate_measurement(<%= instrument.id %>);
 			}
+	  <% end %>
 
 
-	}, <%=instrument.seconds_before_timeout*1000%> ); // repeat forever, polling every 3 seconds
-  <% end %>
+	}, 3000 ); // repeat forever, polling every 3 seconds
 }
 
 // window.onload = function start() {
