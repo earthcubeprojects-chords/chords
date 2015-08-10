@@ -1,0 +1,14 @@
+python chords_json.py chords.dyndns.org 26
+{u'Affiliation': u'NSF EarthCube',
+ u'Data': {u'Time': [u'2015-07-28T21:15:51.000Z'],
+           u'batv': [13.9],
+           u'pres': [814.5],
+           u'raintot': [453.69999999999999],
+           u'rh': [24.699999999999999],
+           u'tdry': [25.399999999999999],
+           u'wdir': [99.0],
+           u'wmax': [4.9000000000000004],
+           u'wspd': [2.3999999999999999]},
+ u'Instrument': u'ML Wx Station',
+ u'Project': u'CHORDS Testbed',
+ u'Site': u'NCAR Mesa Lab'}
