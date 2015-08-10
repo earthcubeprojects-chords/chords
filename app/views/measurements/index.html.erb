@@ -8,6 +8,7 @@
       <th>Parameter</th>
       <th>Value</th>
       <th>Unit</th>
+      <th>Measured At</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -20,6 +21,7 @@
         <td><%= measurement.parameter %></td>
         <td><%= measurement.value %></td>
         <td><%= measurement.unit %></td>
+        <td><%= measurement.measured_at %></td>
         <td><%= link_to 'Show', measurement %></td>
         <td><%= link_to 'Edit', edit_measurement_path(measurement) %></td>
         <td><%= link_to 'Destroy', measurement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
