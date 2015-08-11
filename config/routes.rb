@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   resources :vars
 
   get 'monitor/live'            => 'monitor#live'
