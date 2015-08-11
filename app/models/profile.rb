@@ -6,10 +6,8 @@ class Profile < ActiveRecord::Base
     affiliation: 'My Organization',
     timezone: 'Mountain Time (US & Canada)',
     description: 'This is a CHORDS Portal.
-    <br>
-    We want to show that:
     <ul>
-    <li>CHORDS Portal:</li>
+    <li>A CHORDS Portal:</li>
     <ul>
     <li>is simple to create and configure.</li>
     <li>it\'s really easy to post data from sensors into the portal.</li>
