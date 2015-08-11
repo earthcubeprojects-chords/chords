@@ -2,10 +2,10 @@ class Profile < ActiveRecord::Base
 
   def self.initialize
     Profile.create([{
-    project: 'EarthCube All Hands', 
-    affiliation: 'NCAR',
+    project: 'Real-time Measurements', 
+    affiliation: 'My Organization',
     timezone: 'Mountain Time (US & Canada)',
-    description: 'This is a demonstration of the CHORDS Portal testbed, configured for the May 2015 NSF EarthCube All Hands Meeting.
+    description: 'This is a CHORDS Portal.
     <br>
     We want to show that:
     <ul>
