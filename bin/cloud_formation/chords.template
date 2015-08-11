@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion" : "2010-09-09",
   
-  "Description" : "AWS CloudFormation Sample Template Rails_Single_Instance: Create a Ruby on Rails stack using a single EC2 instance with a local MySQL database for storage. This template demonstrates using the AWS CloudFormation bootstrap scripts to install the packages and files necessary to deploy a Rails application. This example creates a simple hello world application from the template. **WARNING** This template creates an Amazon EC2 instance. You will be billed for the AWS resources used if you create a stack from this template.",
+  "Description" : "AWS CloudFormation Template for a CHORDS Portal.",
   
   "Parameters" : {
       
@@ -284,21 +284,14 @@
                   "# Kill the rails server if it is running to allow update\n",
                   "if pgrep ruby &> /dev/null ; then pkill -TERM ruby ; fi\n",
 
-                  "# This sample template creates a new application inline\n",
-                  "# Typically you would use files and/or sources to download\n",
-                  "# your application package and perform any configuration here.\n",
+                  "# Install the CHORDS Rails application\n",
+                  "git clone https://github.com/NCAR/chords_testbed.git\n",
 
-                  "# Create a new application, with therubyracer javascript library\n",
-                  "rails new sample -d mysql --skip-spring --skip-bundle --force\n",
-                  "cd /home/ec2-user/sample\n",
-                  "sed -i 's/^# \\(.*therubyracer.*$\\)/\\1/' Gemfile\n",
+                  "# Configure the CHORDS Rails application\n",
+                  "cd /home/ec2-user/chords_testbed\n",
                   "bundle install\n",
-
-                  "# Create a sample scoffold\n",
-                  "rails generate scaffold Note title:string body:text --force\n",
-
+                  
                   "# Configure the database connection\n",
-                  "mv /tmp/database.yml config\n",
                   "rake db:create db:migrate\n"
                 ]]},
                 "mode"  : "000500",
@@ -310,7 +303,7 @@
                   "#!/bin/bash -e\n",
                   "export HOME=/home/ec2-user\n",
                   "export PATH=$PATH:/usr/local/bin\n",
-                  "cd /home/ec2-user/sample\n",
+                  "cd /home/ec2-user/chords_testbed\n",
 
                   "# Startup the application\n",
                   "rails server --binding 0.0.0.0 -p 80 -d\n"
@@ -381,7 +374,7 @@
   "Outputs" : {
     "WebsiteURL" : {
       "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "WebServer", "PublicDnsName" ]}, "/notes" ]] },
-      "Description" : "URL for newly created Rails application"
+      "Description" : "URL for newly created CHORDS Portal"
     }
   }
 }
