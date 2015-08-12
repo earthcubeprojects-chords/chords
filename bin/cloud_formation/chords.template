@@ -14,16 +14,18 @@
     "DBName": {
       "Default": "chords_demo_development",
       "Description" : "MySQL database name",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[a-zA-Z][_a-zA-Z0-9]*",
-      "ConstraintDescription" : "must begin with a letter and contain only alphanumeric  or underscore characters."
+      "ConstraintDescription" : "must begin with a letter and contain only alphanumeric and/or underscore characters."
     },
 
     "DBUser": {
       "Default": "chords_demo_user",
       "Description" : "Username for MySQL database access",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "16",
@@ -34,6 +36,7 @@
     "DBPassword": {
       "Default": "chords_ec_demo",
       "Description" : "Password MySQL database access",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "41",
@@ -44,6 +47,7 @@
     "DBRootPassword": {
       "Default": "chords_ec_demo",
       "Description" : "Root password for MySQL",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "41",
