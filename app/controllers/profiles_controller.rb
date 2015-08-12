@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
 # There will only be one record in the Profiles table
+  before_action :authenticate_user!
 
   def index
     @profile = Profile.first

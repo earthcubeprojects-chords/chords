@@ -11,6 +11,10 @@
 # Site.initialize
 # Instrument.initialize
 
+
+User.create(:email => "mdye@ucar.edu", :password => "realtimedata")
+User.create(:email => "martin@ucar.edu", :password => "realtimedata")
+
 Site.create(id:7, name: 'Boulder ', lat: 40.029,lon: -105.337 )
 
 Site.create(id:8, name: 'Boulder Sugarloaf', lat: 40.0293,lon: -105.397 )

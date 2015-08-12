@@ -1,5 +1,6 @@
 class MonitorController < ApplicationController
-
+  before_action :authenticate_user!
+  
   def index
     @instruments = Instrument.all
 

@@ -1,4 +1,6 @@
 class VarsController < ApplicationController
+  before_action :authenticate_user!
+  
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
   # GET /vars

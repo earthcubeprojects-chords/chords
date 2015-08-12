@@ -1,4 +1,6 @@
 class DashboardController < ApplicationController
+  before_action :authenticate_user!
+  
   def index
 
     # Get all of the instruments.

@@ -1,5 +1,8 @@
 class InstrumentsController < ApplicationController
+
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
+
+  before_action :authenticate_user!
 
   def live
     if params[:id]
