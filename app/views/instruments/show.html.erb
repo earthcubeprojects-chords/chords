@@ -105,6 +105,8 @@ Download current day as
   <td><% if @varnames.count > 0 %>
     <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf<i>?time_range</i>
   <% end %></td>
+  </tr>
+  <tr>
   <td>Fetch JSON:</td>
   <td><% if @varnames.count > 0 %>
     <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json<i>?time_range</i>
