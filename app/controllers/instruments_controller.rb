@@ -125,7 +125,8 @@ class InstrumentsController < ApplicationController
         metadata.each do |m|
           mdata[m[0]] = m[1]
         end
-        send_data measurements.columns_with_metadata(@varnames, mdata)
+        send_data measurements.columns_with_metadata(@varnames, mdata),
+           filename: file_root+'.json'
       }
       
     end
