@@ -5,14 +5,6 @@ class Instrument < ActiveRecord::Base
   accepts_nested_attributes_for :vars
   
   def self.initialize
-#    Instrument.create([{name: 'Campbell', site_id:'1', }])
-#    Instrument.create([{name: 'Campbell', site_id:'2', }])
-#    Instrument.create([{name: 'Campbell', site_id:'3', }])
-
-#    Instrument.create([{name: '449 Profiler', site_id:'2', }])
-
-#    Instrument.create([{name: '915 Profiler', site_id:'1', }])
-#    Instrument.create([{name: '915 Profiler', site_id:'3', }])    
   end
 
 
@@ -40,7 +32,6 @@ class Instrument < ActiveRecord::Base
   def is_receiving_data
     measurement = Measurement.where("(instrument_id = ?) AND (measured_at > ?)", self.id, self.seconds_before_timeout.seconds.ago).order(:measured_at).last
     if measurement
-      printf "is_receiving_data returning true"
       return TRUE
     else
       return FALSE
