@@ -6,7 +6,8 @@
       <th>Name</th>
       <th>Lat</th>
       <th>Lon</th>
-      <th colspan="3"></th>
+      <th>Elevation</th>
+      <th colspan="1"></th>
     </tr>
   </thead>
 
@@ -20,9 +21,10 @@
 <br>
 
 <%= form_for :site, url: sites_path, :remote => false, :format => :js do |f| %>
-	<%= f.hidden_field :name, :value => 'site name' %>
-	<%= f.hidden_field :lat, :value => 'lat' %>
-	<%= f.hidden_field :lon, :value => 'lon' %>
+	<%= f.hidden_field :name,      :value => 'site name' %>
+	<%= f.hidden_field :lat,       :value => 'lat' %>
+  <%= f.hidden_field :lon,       :value => 'lon' %>
+  <%= f.hidden_field :elevation, :value => 'elevation' %>
 
 	 <%= f.submit :value	 => 'Add a New Site' %>
 <% end %>
