@@ -30,7 +30,7 @@ class Instrument < ActiveRecord::Base
   end
   
   def is_receiving_data
-    measurement = Measurement.where("(instrument_id = ?) AND (measured_at > ?)", self.id, self.seconds_before_timeout.seconds.ago).order(:measured_at).last
+    measurement = Measurement.where("(instrument_id = ?) AND (measured_at > ?)", self.id, self.seconds_before_timeout.seconds.ago-5).order(:measured_at).last
     if measurement
       return TRUE
     else
