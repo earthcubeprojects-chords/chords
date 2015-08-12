@@ -119,6 +119,14 @@ class InstrumentsController < ApplicationController
         end
         render json: measurements.columns_with_metadata(@varnames, mdata)
       }
+      format.jsonfile { 
+        # Convert metadata to a hash
+        mdata = {}
+        metadata.each do |m|
+          mdata[m[0]] = m[1]
+        end
+        send_data measurements.columns_with_metadata(@varnames, mdata)
+      }
       
     end
   end
