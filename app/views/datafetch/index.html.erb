@@ -38,6 +38,10 @@ $(document).ready(function() {
     send_url(this.value, 'xml');
   });
 
+  $('.jsonButton').click(function(){
+    send_url(this.value, 'jsf');
+  });
+
 });
 </script>
 
@@ -62,10 +66,9 @@ $(document).ready(function() {
   <thead>
     <tr>
       <th>Instrument Name</th>
-      <th align="center">Site</th>
+      <th>Site</th>
       <th align="center"># <br/> measurements</th>
-      <th>Download As</th>
-      <th colspan="4"></th>
+      <th  align="center" colspan="3">Download As</th>
     </tr>
   </thead>
 
@@ -76,8 +79,10 @@ $(document).ready(function() {
         <td><%= @sites.find(instrument.site_id).name %></td>
 	      <td align="center"><%= instrument.measurements.count %> </td>
 	      <td align="center">
-	        <button value=<%= instrument.id%> class="csvButton">CSV</button>
-	        <button value=<%= instrument.id%> class="xmlButton">XML</button></td>
+	        <button value=<%= instrument.id%> class="csvButton" >CSV</button>
+          <button value=<%= instrument.id%> class="jsonButton">JSON</button>
+          <button value=<%= instrument.id%> class="xmlButton" >XML</button>
+        </td>
       </tr>
     <% end %>
   </tbody>

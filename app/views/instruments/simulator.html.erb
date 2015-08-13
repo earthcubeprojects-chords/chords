@@ -42,11 +42,15 @@ function get_measurement_url(instrument_id) {
 		value = value.toPrecision(4);
 		url += "&" + variables[i] + "=" + value; 
 
-		// add the timesatmp
-		url += "&" + variables[i] + "_at=" + utc_time.toISOString(); 
+		// add the time of the measurement
+		// url += "&" + variables[i] + "_at=" + utc_time.toISOString(); 
 
 	}
+
+	// ad the time of ALL measurements submitted 
+	url += "&at=" + utc_time.toISOString(); 
 	
+	// flag this as test data
 	url += "&test"
 	return(url);
 }

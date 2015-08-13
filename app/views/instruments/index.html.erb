@@ -39,4 +39,8 @@
 
 <br>
 
-<%= link_to 'New Instrument', new_instrument_path %>
+<% if @sites.count > 0 %>
+  <%= link_to 'New Instrument', new_instrument_path %>
+<% else %>
+  <strong>At least one site must be defined before creating a new instrument.</strong>
+<% end %>

@@ -1,7 +1,8 @@
 <tr>
-  <td><%= best_in_place site, :name, :as => :input %></td>
-  <td><%= best_in_place site, :lat, :as => :input %></td>
-  <td><%= best_in_place site, :lon, :as => :input %></td>
+  <td><%= best_in_place site, :name,      :as => :input %></td>
+  <td><%= best_in_place site, :lat,       :as => :input %></td>
+  <td><%= best_in_place site, :lon,       :as => :input %></td>
+  <td><%= best_in_place site, :elevation, :as => :input %></td>
 
   <td><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
 </tr>
