@@ -139,8 +139,15 @@
 
   },
 
-  "Resources" : {     
+  "Resources" : {
 
+    "ChordsEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "InstanceId" : { "Ref" : "WebServer" }
+      }
+    },
+    
     "WebServer": {  
       "Type": "AWS::EC2::Instance",
       "Metadata" : {
