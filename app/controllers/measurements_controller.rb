@@ -75,7 +75,9 @@ class MeasurementsController < ApplicationController
           measured_at = params[var.measured_at_parameter]
         elsif params.key?(var.at_parameter)
           measured_at = params[var.at_parameter]
-        else 
+        elsif params[:at]
+          measured_at = params[:at]
+        else           
           measured_at = Time.now  
         end
         # Create a new measurement
