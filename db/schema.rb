@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20150812151314) do
     t.datetime "updated_at",                                        null: false
     t.integer  "display_points",         limit: 4,     default: 20
     t.integer  "seconds_before_timeout", limit: 4,     default: 5
-    t.string   "last_url",               limit: 255
+    t.text     "last_url",               limit: 65535
     t.text     "description",            limit: 65535
   end
 

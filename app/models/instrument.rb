@@ -25,7 +25,7 @@ class Instrument < ActiveRecord::Base
 
   def last_measurement
     measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
-    # logger.debug()
+
     return measurement
   end
   

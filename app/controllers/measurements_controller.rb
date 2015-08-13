@@ -45,45 +45,57 @@ class MeasurementsController < ApplicationController
   end
   
   def url_create
-  
+
     # get the current time
-    measured_time = Time.now
+    # measured_time = Time.now
     
-    # Is this a test value?
-    testvalue = false
+          
+    # Are the data submitted in this query a test?
+    is_test_value = false
     if params.key?(:test)
-      testvalue = true
+      is_test_value = true
     end
     
     # Save the url that invoked us
     Instrument.update(params[:instrument_id], :last_url => request.original_url)
-    
+
     # Create an array containing the names of legitimate variable names
-    ourvars = Instrument.find(params[:instrument_id]).vars
-    varnames = Array.new
-    ourvars.each do |v|
-      varnames.push(v.shortname)
-    end
-    # Go through all of the query parameters
-    params.keys.each do |k|
-      kstring = k.to_s
-      # If the query parameter bgins with v, it might be a variable name
-      # Is it an accepted variable name?
-      if varnames.include? kstring
+    measured_at_parameters = Array.new
+    variable_shortnames = Array.new
+    
+    Instrument.find(params[:instrument_id]).vars.each do |var|
+      measured_at_parameters.push(var.measured_at_parameter)
+      variable_shortnames.push(var.shortname)
+      
+      # see if the parmeter was submitted
+      
+      if params.include? var.shortname
+
+        if params.key?(var.measured_at_parameter)
+          measured_at = params[var.measured_at_parameter]
+        elsif params.key?(var.at_parameter)
+          measured_at = params[var.at_parameter]
+        elsif params[:at]
+          measured_at = params[:at]
+        else           
+          measured_at = Time.now  
+        end
         # Create a new measurement
         @measurement = Measurement.new(
-          :measured_at   => measured_time,
+          :measured_at   => measured_at,
           :instrument_id => params[:instrument_id], 
-          :test          => testvalue,
-          :parameter     => kstring, 
-          :value         => params[k])
+          :test          => is_test_value,
+          :parameter     => var.shortname, 
+          :value         => params[var.shortname])
         @measurement.save
       end
     end
 
+
+
     respond_to do |format|
       if @measurement.save
-        format.html { redirect_to @measurement, notice: 'Measurement was successfully created.' }
+        format.html { redirect_to @measurement, notice: "Measurement was successfully created. "  }
         format.json { render :show, status: :created, location: @measurement }
       else
         format.html { render :new }
@@ -124,6 +136,6 @@ class MeasurementsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def measurement_params
-      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :test)
+      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test)
     end
 end
