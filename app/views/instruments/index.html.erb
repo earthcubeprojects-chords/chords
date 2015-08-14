@@ -31,6 +31,7 @@
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
         <td> <%= instrument.id %></td>
+        <td><%= link_to 'Clone', instruments_duplicate_path(id: instrument.id) %></td>
         <td><%= link_to 'Destroy', instrument, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

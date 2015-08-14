@@ -20,6 +20,25 @@ class InstrumentsController < ApplicationController
     @sites = Site.all
   end
   
+  def duplicate
+    puts "duplicate instrument #{params[:id]}"
+
+    old_instrument = Instrument.find(params[:id])
+
+    new_instrument = old_instrument.dup
+    new_instrument.save
+
+    old_instrument.vars.each do |v|
+      new_v = v.dup
+      new_v.save
+      new_instrument.vars << new_v
+    end
+    
+    @instruments = Instrument.all
+    @sites = Site.all
+    render 'instruments/index'
+  end
+  
   # GET /instruments
   # GET /instruments.json
   def index
