@@ -356,7 +356,8 @@
         "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
         "Tags"           : [
-          {"Key"         : "Name", "Value" : { "Ref": "AWS::StackName" }}
+          {"Key"         : "Name",       "Value" : { "Ref": "AWS::StackName" }},
+          {"Key"         : "ChordsType", "Value" : "Portal"}
         ], 
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash -xe\n",
