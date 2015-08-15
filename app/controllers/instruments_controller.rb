@@ -20,27 +20,36 @@ class InstrumentsController < ApplicationController
     @sites = Site.all
   end
   
+  # GET /instruments/duplicate?id=1
   def duplicate
-    puts "duplicate instrument #{params[:id]}"
 
-    old_instrument = Instrument.find(params[:id])
-
-    new_instrument = old_instrument.dup
-    if !new_instrument.name.include? "clone" 
-      new_instrument.name = new_instrument.name + " clone"
-    end
-    new_instrument.last_url = nil
-
-    old_instrument.vars.each do |v|
-      new_v = v.dup
-      new_v.save
-      new_instrument.vars << new_v
+    # Does it exist?
+    if Instrument.exists?(params[:id])
+    
+      old_instrument = Instrument.find(params[:id])
+      
+      # Make a copy
+      new_instrument = old_instrument.dup
+      
+      # Add"clone" to the name
+      if !new_instrument.name.include? "clone" 
+        new_instrument.name = new_instrument.name + " clone"
+      end
+      
+      # Zero out the last url
+      new_instrument.last_url = nil
+  
+      # Create duplicates of the vars
+      old_instrument.vars.each do |v|
+        new_var = v.dup
+        new_var.save
+        new_instrument.vars << new_var
+      end
+      
+      # Save the new instrument
+      new_instrument.save
     end
     
-    new_instrument.save
-    
-    @instruments = Instrument.all
-    @sites = Site.all
     redirect_to instruments_path
   end
   
