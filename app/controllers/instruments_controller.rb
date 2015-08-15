@@ -26,7 +26,10 @@ class InstrumentsController < ApplicationController
     old_instrument = Instrument.find(params[:id])
 
     new_instrument = old_instrument.dup
-    new_instrument.save
+    if !new_instrument.name.include? "clone" 
+      new_instrument.name = new_instrument.name + " clone"
+    end
+    new_instrument.last_url = nil
 
     old_instrument.vars.each do |v|
       new_v = v.dup
@@ -34,9 +37,11 @@ class InstrumentsController < ApplicationController
       new_instrument.vars << new_v
     end
     
+    new_instrument.save
+    
     @instruments = Instrument.all
     @sites = Site.all
-    render 'instruments/index'
+    redirect_to instruments_path
   end
   
   # GET /instruments
