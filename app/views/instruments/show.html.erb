@@ -42,13 +42,19 @@ Download current day as
     :html_attrs => {:style => 'width:500px; height:100px;'} %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Measurements</strong></td>
-  <td style="vertical-align:top"><%= @instrument.measurements.count %> 
-  </td>
+  <td style="vertical-align:top"><strong>Instrument ID</strong></td>
+  <td style="vertical-align:top"><%= @instrument.id %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>ID</strong></td>
-  <td style="vertical-align:top"><%= @instrument.id %></td>
+  <td style="vertical-align:top"><strong>All Measurements</strong></td>
+  <td style="vertical-align:top"><%= @instrument.measurements.count %>
+</tr>
+<tr>
+  <td style="vertical-align:top"><strong>Test Measurements</strong></td>
+  <td style="vertical-align:top"><%= @instrument.measurements.where(test: 1).count %>
+  <td><%= link_to 'Delete Test Data', measurements_delete_test_path(instrument_id: @instrument.id), 
+    data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %></td>
+  </td>
 </tr>
 <tr>
   <td style="vertical-align:top"><strong>Display points</strong></td>
