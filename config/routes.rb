@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   resources :vars
 
+  get 'about/data_urls'          => 'about#data_urls'
   get 'sites/geo'                => 'sites#geo'
   get 'monitor/live'             => 'monitor#live'
 

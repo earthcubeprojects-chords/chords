@@ -1,0 +1,60 @@
+<% 
+# Create the query string for submitting measurements for all variables
+vquery = ''               
+  i = 0                   
+  vquery = '&'            
+  @varnames.each do |v|
+    vquery += v[0] 
+    vquery += '='
+    vquery += v[1]
+    if i < @varnames.count-1        
+      vquery += '&'       
+    end                   
+    i = i + 1             
+  end
+%>
+
+<h1>CHORDS Data URLs</h1>
+
+
+<div>
+<strong>URLs for data ingest and download</strong>
+<br/>
+<strong>Instrument: <%= @instrument.name %> (id: <%= @instrument.id %>)</strong>
+<br/>
+<table>
+  <tr>
+  <td>Put data:</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %><i>&test</i>
+  <% end %></td>
+  </tr>
+  <tr>
+  <td>Fetch CSV file:</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv<i>?time_range</i>
+  <% end %></td>
+  </tr>
+  <tr>
+  <td>Fetch JSON file:</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf<i>?time_range</i>
+  <% end %></td>
+  </tr>
+  <tr>
+  <td>Fetch JSON:</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json<i>?time_range</i>
+  <% end %></td>
+ </tr>
+</table>
+<ul style="margin-top: 0">
+<li>NOTE: <i>&test</i> is optional, indicates that the values are test data, and can be deleted using the "Delete Test Data" button.</li>
+<li>An optional <i>time_range</i> may be appended. It may be either:
+<ul style="margin-top: 0">
+<li><i>?last</i>: return all variables for the last measurement time.</li>
+<li><i>?startsecs=start&endsecs=end</i>: specify a time range. 'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</li>
+</ul>
+<li>If <i>time_range</i> is not present, data for the current day will be returned. </li>
+</ul>
+</div>

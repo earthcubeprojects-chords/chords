@@ -42,6 +42,10 @@ Download current day as
     :html_attrs => {:style => 'width:500px; height:100px;'} %></td>
 </tr>
 <tr>
+  <td style="vertical-align:top"><strong>Data ingest/fetch</strong></td>
+  <td><%= link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id) %></td>
+</tr>
+<tr>
   <td style="vertical-align:top"><strong>Instrument ID</strong></td>
   <td style="vertical-align:top"><%= @instrument.id %></td>
 </tr>
@@ -90,45 +94,6 @@ Download current day as
 </td>
 </table>
 
-
-<div>
-<strong>URLs for data ingest and download</strong>
-<table>
-  <tr>
- 	<td>Put data:</td>
-	<td><% if @varnames.count > 0 %>
-	  <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %><i>&test</i>
-	<% end %></td>
-  </tr>
-  <tr>
-  <td>Fetch CSV file:</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv<i>?time_range</i>
-  <% end %></td>
-  </tr>
-  <tr>
-  <td>Fetch JSON file:</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf<i>?time_range</i>
-  <% end %></td>
-  </tr>
-  <tr>
-  <td>Fetch JSON:</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json<i>?time_range</i>
-  <% end %></td>
- </tr>
-</table>
-<ul style="margin-top: 0">
-<li>NOTE: <i>&test</i> is optional, indicates that the values are test data, and can be deleted using the "Delete Test Data" button.</li>
-<li>An optional <i>time_range</i> may be appended. It may be either:
-<ul style="margin-top: 0">
-<li><i>?last</i>: return all variables for the last measurement time.</li>
-<li><i>?startsecs=start&endsecs=end</i>: specify a time range. 'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</li>
-</ul>
-<li>If <i>time_range</i> is not present, data for the current day will be returned. </li>
-</ul>
-</div>
 
 <div class="instrumentstrip">
 Graph:
