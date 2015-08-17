@@ -26,51 +26,60 @@ Download current day as
 </p>
 <table>
 <tr>
-  <td style="vertical-align:top"><strong>Instrument</strong></td>
-  <td style="vertical-align:top"><%= best_in_place @instrument, :name, :as => :input %></td>
+  <td><strong>Instrument</strong></td>
+  <td><%= best_in_place @instrument, :name, :as => :input %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Site</strong></td>
-  <td style="vertical-align:top"><%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %></td>
+  <td><strong>Status</strong></td>
+    <td><% if @instrument.is_receiving_data %>
+      <%= image_tag('glossy-green-icon-button-th.png', size:"16")%>
+    <% else %>
+      <%= image_tag('glossy-red-icon-button-th.png', size:"16")%>
+    <% end %>
+  </td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Description</strong></td>
-  <td style="vertical-align:top"><%= best_in_place @instrument, 
+  <td><strong>Site</strong></td>
+  <td><%= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options  %></td>
+</tr>
+<tr>
+  <td><strong>Description</strong></td>
+  <td><%= best_in_place @instrument, 
     :description, 
     :as => :input,
     :type => :textarea,
     :html_attrs => {:style => 'width:500px; height:100px;'} %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Data ingest/fetch</strong></td>
+  <td><strong>Data ingest/fetch</strong></td>
   <td><%= link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id) %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Instrument ID</strong></td>
-  <td style="vertical-align:top"><%= @instrument.id %></td>
+  <td><strong>Instrument ID</strong></td>
+  <td><%= @instrument.id %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>All Measurements</strong></td>
-  <td style="vertical-align:top"><%= @instrument.measurements.count %>
+  <td><strong>All Measurements</strong></td>
+  <td><%= @instrument.measurements.count %>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Test Measurements</strong></td>
-  <td style="vertical-align:top"><%= @instrument.measurements.where(test: 1).count %>
+  <td><strong>Test Measurements</strong></td>
+  <td><%= @instrument.measurements.where(test: 1).count %>
   <td><%= link_to 'Delete Test Data', measurements_delete_test_path(instrument_id: @instrument.id), 
     data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %></td>
   </td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Display points</strong></td>
-  <td style="vertical-align:top"><%= best_in_place @instrument, :display_points, :as => :input %></td>
+  <td><strong>Display points</strong></td>
+  <td><%= best_in_place @instrument, :display_points, :as => :input %></td>
 </tr>
 <tr>
-  <td style="vertical-align:top"><strong>Measurement<br/>interval (s)</strong></td>
-  <td style="vertical-align:top"><%= best_in_place @instrument, :seconds_before_timeout, :as => :input %></td>
+  <td><strong>Measurement<br/>interval (s)</strong></td>
+  <td><%= best_in_place @instrument, :seconds_before_timeout, :as => :input %></td>
 </tr>
 <tr>
   <td style="vertical-align:top"><strong>Variables</strong></td>
-	<td style="vertical-align:top">
+	<td>
 	  <table id="variables_list">
 		  <% @instrument.vars.each do |variable| %>
       <tr>
