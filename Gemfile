@@ -39,7 +39,7 @@ gem 'passenger'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-#best_im_place
+# best_im_place
 gem "best_in_place"
   
 group :development, :test do

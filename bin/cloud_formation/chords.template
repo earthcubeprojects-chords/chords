@@ -302,12 +302,8 @@
                   "# Kill the rails server if it is running to allow update\n",
                   "if pgrep ruby &> /dev/null ; then pkill -TERM ruby ; fi\n",
                   
-                  "# Install passenger\n",
-                  "git clone https://github.com/phusion/passenger-ruby-rails-demo.git\n",
-
                   "# Install the CHORDS Rails application\n",
-                  "#git clone https://github.com/NCAR/chords_testbed.git\n",
-                  "git clone -b passenger https://github.com/NCAR/chords_testbed.git\n",
+                  "git clone https://github.com/NCAR/chords_testbed.git\n",
 
                   "# Configure the CHORDS Rails application\n",
                   "cd /home/ec2-user/chords_testbed\n",
@@ -328,9 +324,8 @@
                   "export PATH=$PATH:/usr/local/bin\n",
                   "cd /home/ec2-user/chords_testbed\n",
 
-                  "# Startup the application\n",
-                  "#rails server --binding 0.0.0.0 -p 80 -d\n",
-                  "bundle exec passenger start\n"
+                  "# Start the passenger app server\n",
+                  "bundle exec passenger start --port 80 --daemonize\n"
                 ]]},
                 "mode"  : "000500",
                 "owner" : "root",
