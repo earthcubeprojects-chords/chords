@@ -20,19 +20,14 @@ class ProfilesController < ApplicationController
     timezone    = params[:profile][:timezone]
     reset_logo  = params[:reset_logo].to_i
     
-    puts "reset_logo is #{reset_logo}"
-    
     @profile = Profile.last
     
     if reset_logo == 1
       logo = nil
-      puts "because reset_logo is #{reset_logo}"
-      puts 'reset logo'
     else
       uploaded_io = params[:profile][:logo]
       if uploaded_io != nil
         logo =  uploaded_io.read
-        puts 'got a logo'
       end
     end
     
