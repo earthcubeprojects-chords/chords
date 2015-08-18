@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
   # There will only be one record in the Profiles table
 
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :if => proc {|c| @profile.secure_administration}
 
 
   def index
@@ -29,6 +29,10 @@ class ProfilesController < ApplicationController
     render "profiles/index"
   end
   
+
+  # def conditionally_authenticate_user!
+  #   before_action :authenticate_user   
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.
