@@ -14,7 +14,8 @@
   <%= f.text_area('description', size: "60x20") %>
   <br>
   <br>
-  Site Logo File: <%= f.file_field('file') %>
+  <%= hidden_field_tag :reset_logo, "0" %>
+  Site Logo File: <%= f.file_field :logo %> Reset: <%= check_box_tag :reset_logo %>
   <br>
   <br>
   <%= f.submit('Save') %>
