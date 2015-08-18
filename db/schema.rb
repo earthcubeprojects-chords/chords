@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150812151314) do
+ActiveRecord::Schema.define(version: 20150817162521) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                   limit: 255
@@ -40,13 +40,18 @@ ActiveRecord::Schema.define(version: 20150812151314) do
   add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
 
   create_table "profiles", force: :cascade do |t|
-    t.string   "project",     limit: 255
-    t.string   "affiliation", limit: 255
-    t.string   "description", limit: 1000
-    t.binary   "logo",        limit: 16777215
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.string   "timezone",    limit: 255
+    t.string   "project",               limit: 255
+    t.string   "affiliation",           limit: 255
+    t.string   "description",           limit: 1000
+    t.binary   "logo",                  limit: 16777215
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.string   "timezone",              limit: 255
+    t.boolean  "secure_administration", limit: 1,        default: true
+    t.boolean  "secure_data_viewing",   limit: 1,        default: true
+    t.boolean  "secure_data_download",  limit: 1,        default: true
+    t.boolean  "secure_data_entry",     limit: 1,        default: true
+    t.string   "data_entry_key",        limit: 255
   end
 
   create_table "sites", force: :cascade do |t|
@@ -60,18 +65,21 @@ ActiveRecord::Schema.define(version: 20150812151314) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "email",                  limit: 255, default: "",    null: false
+    t.string   "encrypted_password",     limit: 255, default: "",    null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
     t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.boolean  "is_administrator",       limit: 1,   default: false
+    t.boolean  "is_data_viewer",         limit: 1,   default: true
+    t.boolean  "is_data_downloader",     limit: 1,   default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

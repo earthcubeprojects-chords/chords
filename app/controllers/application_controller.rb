@@ -3,13 +3,13 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
-  before_filter :set_before_profile
+  before_filter :set_profile
   
-  def set_before_profile
+  def set_profile
     
-    if ! @before_profile = Profile.first
+    if ! @profile = Profile.first
       Profile.initialize
-      @before_profile = Profile.first
+      @profile = Profile.first
     end
 
     if ! Site.first
@@ -21,5 +21,9 @@ class ApplicationController < ActionController::Base
     end
     
   end
-  
+
+  # Access denied redirect
+  rescue_from "AccessGranted::AccessDenied" do |exception|
+    redirect_to '/about', alert: "You don't have permissions to access this page."
+  end  
 end

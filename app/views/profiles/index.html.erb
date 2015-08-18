@@ -16,6 +16,21 @@
   <br>
   Site Logo File: <%= f.file_field('file') %>
   <br>
+
+  <br>
+
+	<div>
+		<div class= "section"><strong>Security Options</strong></div>
+		  <div><%= f.check_box :secure_administration %> Require administrator role to edit configuration</div>
+		  <div><%= f.check_box :secure_data_viewing %> Only allow users with the "view data" role to view data</div>
+		  <div><%= f.check_box :secure_data_download %> Only allow users with the "download data" role to download data</div>
+		<br/>
+		  <div><%= f.check_box :secure_data_entry %> Require the security key in order to submit a measurement</div>
+		  <div><%= f.text_area :data_entry_key %> The key required to submit data</div>
+	</div>
   <br>
   <%= f.submit('Save') %>
 <% end %>
+
+
+
