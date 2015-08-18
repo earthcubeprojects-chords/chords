@@ -28,6 +28,8 @@ class ProfilesController < ApplicationController
       uploaded_io = params[:profile][:logo]
       if uploaded_io != nil
         logo =  uploaded_io.read
+      else
+        logo = @profile.logo
       end
     end
     
