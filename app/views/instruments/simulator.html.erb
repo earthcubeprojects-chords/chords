@@ -1,3 +1,4 @@
+
 <h1>Simulator</h1>
 <p>Simulated measurements will be marked as "test", and 
 <strong>will be deleted</strong> when the "Delete Test Data" button is pressed.</p>
@@ -51,11 +52,13 @@ function get_measurement_url(instrument_id) {
 	url += "&at=" + utc_time.toISOString(); 
 	
 	// flag this as test data
-	url += "&test"
+	url += "&test";
 
 
 	// add the security data_entry_key
-	url += "&data_entry_key=BAD"
+	<% if @profile.secure_data_entry == true %>
+		url += "&data_entry_key=" + "<%= @profile.data_entry_key %>";
+	<% end %>
 	
 	
 	return(url);
