@@ -25,7 +25,15 @@ class InstrumentsController < ApplicationController
   end
   
   def simulator
+    # 
+
     @instruments = Instrument.all
+
+    if @profile.secure_administration
+      authenticate_user!
+      authorize! :manage, @instruments[0]
+    end    
+    
     @sites = Site.all
   end
   
@@ -192,6 +200,7 @@ class InstrumentsController < ApplicationController
     @instrument = Instrument.new
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @instrument
     end
     
@@ -207,6 +216,7 @@ class InstrumentsController < ApplicationController
     @instrument = Instrument.new(instrument_params)
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @instrument
     end
 
@@ -226,6 +236,7 @@ class InstrumentsController < ApplicationController
   def update
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @instrument
     end
         
@@ -245,6 +256,7 @@ class InstrumentsController < ApplicationController
   def destroy
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @instrument
     end
     
