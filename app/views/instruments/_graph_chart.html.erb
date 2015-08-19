@@ -43,7 +43,7 @@ $(function () {
     title: { text: <%= title %> },
     xAxis: {             
       title: {
-        text: '<%= @tz_name %>'
+        text: '<%= @tz_name.html_safe %>'
       },
       type: 'datetime', 
       tickPixelInterval: 150 
