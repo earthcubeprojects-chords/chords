@@ -11,12 +11,12 @@ $(function () {
   $(document).ready(function () {
     Highcharts.setOptions({
     global: { 
-      useUTC: false,
+      timezoneOffset: <%= @tz_offset_mins %>
     },
   });
-
+  
   $('#<%= highcharts_dom_id %>').highcharts({
-    chart: {
+     chart: {
       type: 'line',
       animation: Highcharts.svg, // don't animate in old IE
       marginRight: 10,
@@ -41,7 +41,10 @@ $(function () {
     },
     credits: { enabled: false, }, 
     title: { text: <%= title %> },
-    xAxis: { 
+    xAxis: {             
+      title: {
+        text: '<%= @tz_name %>'
+      },
       type: 'datetime', 
       tickPixelInterval: 150 
     },

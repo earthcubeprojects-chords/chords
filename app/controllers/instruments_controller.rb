@@ -65,8 +65,10 @@ class InstrumentsController < ApplicationController
   def show
     # This method sets the following instance variables:
     #  @params
-    #  @varnames     - A hash of variable names for the instrument, keyed by the shortname
-    #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @varnames       - A hash of variable names for the instrument, keyed by the shortname
+    #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @tz_name        - the timezone name
+    #  @tz_offset_mins - the timezone offset, in minutes
 
     @params = params.slice(:start, :end)
 
@@ -83,11 +85,13 @@ class InstrumentsController < ApplicationController
       ["Instrument", instrument_name]
     ]
 
+    # Get the timezone name and offset in minutes from UTC.
+    @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
+    
     # File name root
     file_root = "#{project}_#{site_name}_#{instrument_name}"
     file_root = file_root.split.join
-    
-    
+     
     # Create a hash, with shortname => name
     @varnames = {}
     varshortnames.each do |vshort|
@@ -114,7 +118,6 @@ class InstrumentsController < ApplicationController
       m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
       starttime = m.measured_at
       endtime   = starttime
-      puts "starttime: #{starttime}  endtime: #{endtime}"
     else
       # if we have the start and end parameters
       if params[:startsecs] && params[:endsecs]

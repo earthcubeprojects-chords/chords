@@ -13,7 +13,7 @@ tz_offset_mins     = <%= @tz_offset_mins.to_s %>
 $(function () {
     Highcharts.setOptions({
 	  global: {
-		timezoneOffset: tz_offset_mins,
+		  timezoneOffset: tz_offset_mins,
 	  }
     });
     $('#samples_per_minute').highcharts({
