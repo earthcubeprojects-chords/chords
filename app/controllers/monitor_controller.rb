@@ -1,21 +1,37 @@
 class MonitorController < ApplicationController
-  before_action :authenticate_user!
-  
+
+  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
+    
   def index
     @instruments = Instrument.all
 
+    if @profile.secure_data_viewing
+      authorize! :view, @instruments[0]
+    end
+
+
     @data = Instrument.find(1).data(20)
+
   end
   
   
   def show
+
+    if @profile.secure_data_viewing
+      authorize! :view, @monitor
+    end
+    
   end
  
   def live
-    m = Instrument.find(params[:instrument_id]).last_measurement
+    measurement = Instrument.find(params[:instrument_id]).last_measurement
+
+    if @profile.secure_data_viewing
+      authorize! :view, measurement
+    end
 
     if m
-      render :json => m.json_point
+      render :json => measurement.json_point
     else
       render :json => nil
     end

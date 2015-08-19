@@ -1,12 +1,18 @@
 class InstrumentsController < ApplicationController
 
+  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
+  
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
 
-  before_action :authenticate_user!
-
   def live
+    
     if params[:id]
       m = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last
+
+      if @profile.secure_data_viewing
+        authorize! :view, m
+      end
+
     else
       m = nil
     end
@@ -28,6 +34,11 @@ class InstrumentsController < ApplicationController
   def index
     @instruments = Instrument.all
     @sites = Site.all
+
+    if @profile.secure_data_viewing
+      authorize! :view, @instruments[0]
+    end
+
   end
 
   # GET /instruments/1
@@ -38,6 +49,11 @@ class InstrumentsController < ApplicationController
     #  @varnames     - A hash of variable names for the instrument, keyed by the shortname
     #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
 
+    if @profile.secure_data_viewing
+      authorize! :view, @instrument
+    end
+
+          
     @params = params.slice(:start, :end)
 
     # Get the instrument and variable identifiers.
@@ -138,6 +154,11 @@ class InstrumentsController < ApplicationController
   # GET /instruments/new
   def new
     @instrument = Instrument.new
+
+    if @profile.secure_administration
+      authorize! :manage, @instrument
+    end
+    
   end
 
   # GET /instruments/1/edit
@@ -148,6 +169,10 @@ class InstrumentsController < ApplicationController
   # POST /instruments.json
   def create
     @instrument = Instrument.new(instrument_params)
+
+    if @profile.secure_administration
+      authorize! :manage, @instrument
+    end
 
     respond_to do |format|
       if @instrument.save
@@ -163,6 +188,11 @@ class InstrumentsController < ApplicationController
   # PATCH/PUT /instruments/1
   # PATCH/PUT /instruments/1.json
   def update
+
+    if @profile.secure_administration
+      authorize! :manage, @instrument
+    end
+        
     respond_to do |format|
       if @instrument.update(instrument_params)
         format.html { redirect_to @instrument, notice: 'Instrument was successfully updated.' }
@@ -177,6 +207,11 @@ class InstrumentsController < ApplicationController
   # DELETE /instruments/1
   # DELETE /instruments/1.json
   def destroy
+
+    if @profile.secure_administration
+      authorize! :manage, @instrument
+    end
+    
     Measurement.delete_all "instrument_id = #{@instrument.id}"
     @instrument.destroy
     respond_to do |format|

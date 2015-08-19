@@ -52,6 +52,12 @@ function get_measurement_url(instrument_id) {
 	
 	// flag this as test data
 	url += "&test"
+
+
+	// add the security data_entry_key
+	url += "&data_entry_key=BAD"
+	
+	
 	return(url);
 }
 

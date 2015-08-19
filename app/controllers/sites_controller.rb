@@ -1,5 +1,6 @@
 class SitesController < ApplicationController
-  before_action :authenticate_user!
+  
+  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
   
   before_action :set_site, only: [:show, :edit, :update, :destroy]
 
@@ -20,15 +21,28 @@ class SitesController < ApplicationController
   # GET /sites/new
   def new
     @site = Site.new
+    
+    if @profile.secure_administration
+      authorize! :manage, @site
+    end
+    
   end
 
   # GET /sites/1/edit
   def edit
+    if @profile.secure_administration
+      authorize! :manage, @site
+    end    
   end
   
   # GET /sites/geo
   def geo
     @sites = Site.all
+
+    if @profile.secure_data_viewing
+      authorize! :manage, @sites[0]
+    end    
+
     @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
       marker.infowindow(ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site)).html_safe)
       marker.lat site.lat
@@ -41,6 +55,10 @@ class SitesController < ApplicationController
   # POST /sites.json
   def create
     @site = Site.new(site_params)
+
+    if @profile.secure_administration
+      authorize! :manage, @site
+    end
 
     respond_to do |format|
       if @site.save
@@ -56,6 +74,11 @@ class SitesController < ApplicationController
   # PATCH/PUT /sites/1
   # PATCH/PUT /sites/1.json
   def update
+    
+    if @profile.secure_administration
+      authorize! :manage, @site
+    end
+    
     respond_to do |format|
       if @site.update(site_params)
         format.html { redirect_to @site, notice: 'Site was successfully updated.' }
@@ -70,6 +93,11 @@ class SitesController < ApplicationController
   # DELETE /sites/1
   # DELETE /sites/1.json
   def destroy
+
+    if @profile.secure_administration
+      authorize! :manage, @site
+    end
+    
     @site.destroy
     respond_to do |format|
       format.html { redirect_to sites_url, notice: 'Site was successfully destroyed.' }

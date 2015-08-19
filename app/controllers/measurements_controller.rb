@@ -1,10 +1,20 @@
 class MeasurementsController < ApplicationController
+
+  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
+
   before_action :set_measurement, only: [:show, :edit, :update, :destroy]
 
   # GET /measurements
   # GET /measurements.json
   def index
+
+    
     @measurements = Measurement.all
+
+    if @profile.secure_data_viewing
+      authorize! :view, @measurements[0]
+    end
+
     @sites = Site.all
     @instruments = Instrument.all
     
@@ -17,21 +27,39 @@ class MeasurementsController < ApplicationController
   # GET /measurements/1
   # GET /measurements/1.json
   def show
+    
+    if @profile.secure_data_viewing
+      authorize! :view, @measurement
+    end
+
   end
 
   # GET /measurements/new
   def new
     @measurement = Measurement.new
+
+    if @profile.secure_administration
+      authorize! :view, @measurement
+    end
+    
   end
 
   # GET /measurements/1/edit
   def edit
+    if @profile.secure_administration
+      authorize! :view, @measurement
+    end
   end
 
   # POST /measurements
   # POST /measurements.json
   def create
     @measurement = Measurement.new(measurement_params)
+
+    if @profile.secure_data_entry
+      authorize! :view, @measurement
+    end
+
 
     respond_to do |format|
       if @measurement.save
@@ -48,6 +76,14 @@ class MeasurementsController < ApplicationController
 
     # get the current time
     # measured_time = Time.now
+
+
+    # secure the creation of new measurements
+    if @profile.secure_data_entry
+      unless @profile.data_entry_key == params[:data_entry_key]
+        return
+      end
+    end
     
           
     # Are the data submitted in this query a test?
@@ -107,6 +143,11 @@ class MeasurementsController < ApplicationController
   # PATCH/PUT /measurements/1
   # PATCH/PUT /measurements/1.json
   def update
+
+    if @profile.secure_administration
+      authorize! :view, @measurement
+    end
+    
     respond_to do |format|
       if @measurement.update(measurement_params)
         format.html { redirect_to @measurement, notice: 'Measurement was successfully updated.' }
@@ -121,6 +162,11 @@ class MeasurementsController < ApplicationController
   # DELETE /measurements/1
   # DELETE /measurements/1.json
   def destroy
+
+    if @profile.secure_administration
+      authorize! :view, @measurement
+    end
+    
     @measurement.destroy
     respond_to do |format|
       format.html { redirect_to measurements_url, notice: 'Measurement was successfully destroyed.' }
