@@ -30,16 +30,8 @@ class DashboardController < ApplicationController
     # It is important to remember that the times always reference UTC. The local time offset 
     # from UTC is provided as a convenience to functions which want to display in local time.
         
-    # Get the timezone and compute the offset in minutes from UTC.
-    # This is made available to anyone who needs display the time as a local time. 
-    timezone = Profile.first.timezone
-    tz = ActiveSupport::TimeZone[timezone]
-    @tz_offset_mins = -tz.utc_offset() / 60
-    @tz_name = timezone
-    if tz.parse(Time.now.to_s).dst?
-      @tz_name += ' DST'
-      @tz_offset_mins -= 60;
-    end
+    # Get the timezone name and offset in minutes from UTC.
+    @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
     
     # Create a table of number of measurements by minute
     @start_time_by_minute = Time.now - 2.hour

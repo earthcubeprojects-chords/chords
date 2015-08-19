@@ -29,6 +29,39 @@ class InstrumentsController < ApplicationController
     @sites = Site.all
   end
   
+  # GET /instruments/duplicate?id=1
+  def duplicate
+
+    # Does it exist?
+    if Instrument.exists?(params[:id])
+    
+      old_instrument = Instrument.find(params[:id])
+      
+      # Make a copy
+      new_instrument = old_instrument.dup
+      
+      # Add"clone" to the name
+      if !new_instrument.name.include? "clone" 
+        new_instrument.name = new_instrument.name + " clone"
+      end
+      
+      # Zero out the last url
+      new_instrument.last_url = nil
+  
+      # Create duplicates of the vars
+      old_instrument.vars.each do |v|
+        new_var = v.dup
+        new_var.save
+        new_instrument.vars << new_var
+      end
+      
+      # Save the new instrument
+      new_instrument.save
+    end
+    
+    redirect_to instruments_path
+  end
+  
   # GET /instruments
   # GET /instruments.json
   def index
@@ -46,8 +79,10 @@ class InstrumentsController < ApplicationController
   def show
     # This method sets the following instance variables:
     #  @params
-    #  @varnames     - A hash of variable names for the instrument, keyed by the shortname
-    #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @varnames       - A hash of variable names for the instrument, keyed by the shortname
+    #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @tz_name        - the timezone name
+    #  @tz_offset_mins - the timezone offset, in minutes
 
     if @profile.secure_data_viewing
       authorize! :view, @instrument
@@ -69,11 +104,13 @@ class InstrumentsController < ApplicationController
       ["Instrument", instrument_name]
     ]
 
+    # Get the timezone name and offset in minutes from UTC.
+    @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
+    
     # File name root
     file_root = "#{project}_#{site_name}_#{instrument_name}"
     file_root = file_root.split.join
-    
-    
+     
     # Create a hash, with shortname => name
     @varnames = {}
     varshortnames.each do |vshort|
@@ -100,7 +137,6 @@ class InstrumentsController < ApplicationController
       m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
       starttime = m.measured_at
       endtime   = starttime
-      puts "starttime: #{starttime}  endtime: #{endtime}"
     else
       # if we have the start and end parameters
       if params[:startsecs] && params[:endsecs]

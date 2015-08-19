@@ -23,7 +23,7 @@ function get_measurement_url(instrument_id) {
 	var command = "var variables = instrument_" + instrument_id + "_variables";
 	eval(command);
 	
-	var url = "/measurements/url_create?instrument_id=" + instrument_id + "&test";
+	var url = "/measurements/url_create?instrument_id=" + instrument_id;
 
   // these values to be replaced later by confguration values:
   var min   = 5.0;

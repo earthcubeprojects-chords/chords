@@ -4,6 +4,7 @@ class ProfilesController < ApplicationController
   before_action :authenticate_user!, :if => proc {|c| @profile.secure_administration}
 
 
+  # GET /profiles
   def index
     if (@profile.secure_administration == true) 
       authorize! :manage, @profile
@@ -17,16 +18,33 @@ class ProfilesController < ApplicationController
   end
 
 
+# POST /profile
+
   def create
+    
     if (@profile.secure_administration == true) 
       authorize! :manage, @profile
     end
   
+    # update attributes
     @profile.update(profile_params)      
+
+
+    # Handle the logo stuff separately
+    if params[:reset_logo].to_i == 1
+      @profile.update_attribute(:logo, nil)
+    else
+      if params[:profile][:logo] != nil
+        @profile.update_attribute(:logo, params[:profile][:logo].read)
+      else
+        @profile.update_attribute(:logo, @profile.logo)
+      end
+    end  
+
       
     flash[:notice] = 'Configuration saved.'
     
-    render "profiles/index"
+    redirect_to profiles_path
   end
   
 

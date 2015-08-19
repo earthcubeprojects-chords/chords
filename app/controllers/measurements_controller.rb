@@ -72,11 +72,14 @@ class MeasurementsController < ApplicationController
     end
   end
   
+  # GET 'measurements/url_create?<many params>
+  # Params:
+  # test
+  # instrument_id
+  # shortname=val
+  # at=iso8061
+  # var_at=iso801
   def url_create
-
-    # get the current time
-    # measured_time = Time.now
-
 
     # secure the creation of new measurements
     if @profile.secure_data_entry
@@ -85,7 +88,7 @@ class MeasurementsController < ApplicationController
       end
     end
     
-          
+
     # Are the data submitted in this query a test?
     is_test_value = false
     if params.key?(:test)
@@ -103,7 +106,7 @@ class MeasurementsController < ApplicationController
       measured_at_parameters.push(var.measured_at_parameter)
       variable_shortnames.push(var.shortname)
       
-      # see if the parmeter was submitted
+      # see if the parameter was submitted
       
       if params.include? var.shortname
 
@@ -127,8 +130,6 @@ class MeasurementsController < ApplicationController
       end
     end
 
-
-
     respond_to do |format|
       if @measurement.save
         format.html { redirect_to @measurement, notice: "Measurement was successfully created. "  }
@@ -140,6 +141,25 @@ class MeasurementsController < ApplicationController
     end
   end  
 
+  # GET 'measurements/delete_test?instrument_id=1
+  def delete_test
+    if params.key?(:instrument_id)
+      inst_id = params[:instrument_id]
+      if Instrument.exists?(inst_id)
+        instrument = Instrument.find(inst_id)
+        # Can we use delete_all rather than destroy_all here? It would be
+        # infinitely faster for larger data sets.
+        Measurement.where(instrument_id: inst_id, test: '1').destroy_all
+      end
+    end
+    
+    respond_to do |format|
+      format.html { head :no_content }
+      format.json { head :no_content }
+    end
+    
+  end
+  
   # PATCH/PUT /measurements/1
   # PATCH/PUT /measurements/1.json
   def update
