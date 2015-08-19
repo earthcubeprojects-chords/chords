@@ -21,6 +21,6 @@ class Profile < ActiveRecord::Base
     </ul>
     </ul>
     ', 
-    logo: ''}])      
+    logo: nil}])      
   end
 end
