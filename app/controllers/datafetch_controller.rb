@@ -6,7 +6,7 @@ class DatafetchController < ApplicationController
     @instruments = Instrument.all
 
     if @profile.secure_data_download
-      authorize! :view, @instruments[0]
+      authorize! :download, @instruments[0]
     end
     
     @sites = Site.all
