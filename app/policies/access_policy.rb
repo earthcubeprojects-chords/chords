@@ -8,10 +8,26 @@ class AccessPolicy
     role :administrator, { is_administrator: true } do
       can [:view, :manage], User
       can [:manage], Profile
-      can [:view, :manage], Site
-      can [:view, :manage], Instrument
+      can [:view, :download, :manage], Site
+      can [:view, :download, :manage], Instrument
+      can [:view, :download, :manage], Var
+      can [:view, :download, :manage], Measurement
+    end
 
-      can [:view, :manage], Measurement
+
+    role :data_viewer, { is_data_viewer: true } do
+      can [:view], Site
+      can [:view], Instrument
+      can [:view], Var
+      can [:view], Measurement
+
+    end
+
+    role :data_downloader, { is_data_downloader: true } do
+      can [:download], Site
+      can [:download], Instrument
+      can [:download], Var
+      can [:download], Measurement
     end
 
     # Less privileged moderator role
