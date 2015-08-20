@@ -16,45 +16,71 @@ vquery = ''
 
 <h1>CHORDS Data URLs</h1>
 
-
 <div>
 <strong>URLs for data ingest and download</strong>
 <br/>
 <strong>Instrument: <%= @instrument.name %> (id: <%= @instrument.id %>)</strong>
 <br/>
+<br/>
 <table>
   <tr>
-  <td>Put data:</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %><i>&test</i>
-  <% end %></td>
+  <th>Action</th><th>URL format</th><th>Qualifiers</th><th>Example</th>
   </tr>
   <tr>
-  <td>Fetch CSV file:</td>
+  <td>Put data</td><td></td><td>at, test</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv<i>?time_range</i>
+    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>?at=2015-08-20T19:50:28
+  <% end %></td>
+   </tr>
+  
+  <tr>
+  <td>Fetch a CSV file</td><td>.csv</td><td>start, end, last</td>
+  <td><% if @varnames.count > 0 %>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
   <% end %></td>
   </tr>
+  
   <tr>
-  <td>Fetch JSON file:</td>
+  <td>Fetch a JSON file</td><td>.jsf</td><td>start, end, last</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf<i>?time_range</i>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf
   <% end %></td>
   </tr>
+  
   <tr>
-  <td>Fetch JSON:</td>
+  <td>Fetch JSON</td><td>.json</td><td>start, end, last</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json<i>?time_range</i>
+    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json?last
   <% end %></td>
  </tr>
 </table>
+
+<table>
+<tr>
+<th>Qualifier</th><th>Meaning</th>
+</tr>
+<tr>
+<td>at=<i>time</i></td><td>A time to assign to the measurement. If not present, the measurement will 
+be time stamped with the time that it was received by the server.</td>
+</tr>
+<tr>
+<td>test</td><td>If present, this measurement will be marked as a test value.
+Test values can be deleted from the database using the "Delete Test Button" on the instrument page.</td>
+</tr>
+<tr>
+<td>start=<i>time</i></td><td>A start time for the returned measurements.</td>
+</tr>
+<tr>
+<td>last</td><td>Return all measurements for the most recent measurement time stamp, for this instrument.</td>
+</tr>
+<tr>
+<td>end=<i>time</i></td><td>An end time for the returned measurements.</td>
+</tr>
+</table>
 <ul style="margin-top: 0">
-<li>NOTE: <i>&test</i> is optional, indicates that the values are test data, and can be deleted using the "Delete Test Data" button.</li>
-<li>An optional <i>time_range</i> may be appended. It may be either:
-<ul style="margin-top: 0">
-<li><i>?last</i>: return all variables for the last measurement time.</li>
-<li><i>?startsecs=start&endsecs=end</i>: specify a time range. 'start' and 'end' specify the number of seconds since the epoch (Jan 1, 1970).</li>
-</ul>
-<li>If <i>time_range</i> is not present, data for the current day will be returned. </li>
+<li>The optional qualifier section begins with a "?", followed by one or more qualifiers. Each is separated by "&".
+Some qualifiers (e.g. at, start and end) have an associated value.
+<li>Time qualifiers (at, start and end) are in ISO8061 format.</li>
+<li>If none of the time qualifiers are present for a data fetch, measurements for the current day are returned.</li>
 </ul>
 </div>
