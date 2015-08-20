@@ -61,6 +61,8 @@ class InstrumentsController < ApplicationController
   end
 
   # GET /instruments/1
+  # GET /instruments/1.csv
+  # GET /instruments/1.jsf
   # GET /instruments/1.json
   def show
     # This method sets the following instance variables:
@@ -120,12 +122,11 @@ class InstrumentsController < ApplicationController
       endtime   = starttime
     else
       # if we have the start and end parameters
-      if params[:startsecs] && params[:endsecs]
-        # if they are well formed
-        if params[:endsecs].to_i >= params[:startsecs].to_i
-          endtime   = Time.at(params[:endsecs].to_i).to_datetime
-          starttime = Time.at(params[:startsecs].to_i).to_datetime
-        end
+      if params.key?(:start)
+        starttime = Time.parse(params[:start])
+      end
+      if params.key?(:end)
+        endtime = Time.parse(params[:end])
       end
     end
     
