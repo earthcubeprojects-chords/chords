@@ -98,7 +98,9 @@ Download current day as
 	<%= f.hidden_field :shortname, :value => 'shortname' %>
 	<%= f.hidden_field :instrument_id, :value => @instrument.id %>
 
-	 <%= f.submit :value	 => 'Add a New Variable' %>
+	<% if @profile.secure_administration == true && current_user  && can?(:manage, Var)  %>
+	 	<%= f.submit :value	 => 'Add a New Variable' %>
+	<% end %>
 <% end %>
 </td>
 </table>
