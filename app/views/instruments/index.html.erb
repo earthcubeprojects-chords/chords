@@ -31,10 +31,10 @@
         <td><%= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id)) %></td>
         <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
-        <td><%= link_to 'Clone', instruments_duplicate_path(id: instrument.id) %></td>
-        <td><%= link_to 'Delete Test Data', measurements_delete_test_path(instrument_id: instrument.id), 
+        <td><%= button_to 'Clone', instruments_duplicate_path(id: instrument.id), :method => :get %></td>
+        <td><%= button_to 'Delete Test Data', measurements_delete_test_path(instrument_id: instrument.id), :method => :get,
           data: { confirm: "Are you sure you want to delete the test data for the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nALL TEST DATA WILL BE LOST" } %></td>
-        <td><%= link_to 'Destroy', instrument, method: :delete, 
+        <td><%= button_to 'Destroy', instrument, method: :delete, :method => :get,
           data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTURMENT AND ALL DATA WILL BE LOST" } %></td>
       </tr>
     <% end %>

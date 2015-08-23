@@ -65,7 +65,7 @@ Download current day as
 <tr>
   <td><strong>Test Measurements</strong></td>
   <td><%= @instrument.measurements.where(test: 1).count %>
-  <td><%= link_to 'Delete Test Data', measurements_delete_test_path(instrument_id: @instrument.id), 
+  <td><%= delete_to 'Delete Test Data', measurements_delete_test_path(instrument_id: @instrument.id), method: => :get, 
     data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %></td>
   </td>
 </tr>
