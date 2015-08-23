@@ -20,13 +20,13 @@ class InstrumentsController < ApplicationController
     @sites = Site.all
   end
   
-  # GET /instruments/duplicate?id=1
+  # GET /instruments/duplicate?instrument_id=1
   def duplicate
 
     # Does it exist?
-    if Instrument.exists?(params[:id])
+    if Instrument.exists?(params[:instrument_id])
     
-      old_instrument = Instrument.find(params[:id])
+      old_instrument = Instrument.find(params[:instrument_id])
       
       # Make a copy
       new_instrument = old_instrument.dup
@@ -228,7 +228,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :seconds_before_timeout, :description)
+        :name, :site_id, :display_points, :seconds_before_timeout, :description, :instrument_id)
     end
 
 end
