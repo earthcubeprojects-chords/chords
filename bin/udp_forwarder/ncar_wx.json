@@ -31,7 +31,7 @@
   
   "chords_host": "chords.dyndns.org",
   
-  "interface":   "eol-rt-data.fl-ext.ucar.edu",
+  "interface":   "chords.fl-ext.ucar.edu",
 
   "re_terms": [ 
     # Match a floating point number
