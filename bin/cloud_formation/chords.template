@@ -14,16 +14,18 @@
     "DBName": {
       "Default": "chords_demo_development",
       "Description" : "MySQL database name",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "64",
       "AllowedPattern" : "[a-zA-Z][_a-zA-Z0-9]*",
-      "ConstraintDescription" : "must begin with a letter and contain only alphanumeric  or underscore characters."
+      "ConstraintDescription" : "must begin with a letter and contain only alphanumeric and/or underscore characters."
     },
 
     "DBUser": {
       "Default": "chords_demo_user",
       "Description" : "Username for MySQL database access",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "16",
@@ -34,6 +36,7 @@
     "DBPassword": {
       "Default": "chords_ec_demo",
       "Description" : "Password MySQL database access",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "41",
@@ -44,6 +47,7 @@
     "DBRootPassword": {
       "Default": "chords_ec_demo",
       "Description" : "Root password for MySQL",
+      "NoEcho": "true",
       "Type": "String",
       "MinLength": "1",
       "MaxLength": "41",
@@ -135,8 +139,15 @@
 
   },
 
-  "Resources" : {     
+  "Resources" : {
 
+    "ChordsEIP" : {
+      "Type" : "AWS::EC2::EIP",
+      "Properties" : {
+        "InstanceId" : { "Ref" : "WebServer" }
+      }
+    },
+    
     "WebServer": {  
       "Type": "AWS::EC2::Instance",
       "Metadata" : {
@@ -290,7 +301,7 @@
 
                   "# Kill the rails server if it is running to allow update\n",
                   "if pgrep ruby &> /dev/null ; then pkill -TERM ruby ; fi\n",
-
+                  
                   "# Install the CHORDS Rails application\n",
                   "git clone https://github.com/NCAR/chords_testbed.git\n",
 
@@ -313,8 +324,8 @@
                   "export PATH=$PATH:/usr/local/bin\n",
                   "cd /home/ec2-user/chords_testbed\n",
 
-                  "# Startup the application\n",
-                  "rails server --binding 0.0.0.0 -p 80 -d\n"
+                  "# Start the passenger app server\n",
+                  "bundle exec passenger start --port 80 --daemonize\n"
                 ]]},
                 "mode"  : "000500",
                 "owner" : "root",
@@ -345,7 +356,8 @@
         "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
         "Tags"           : [
-          {"Key"         : "Name", "Value" : { "Ref": "AWS::StackName" }}
+          {"Key"         : "Name",       "Value" : { "Ref": "AWS::StackName" }},
+          {"Key"         : "ChordsType", "Value" : "Portal"}
         ], 
         "UserData"       : { "Fn::Base64" : { "Fn::Join" : ["", [
           "#!/bin/bash -xe\n",

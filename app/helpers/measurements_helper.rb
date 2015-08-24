@@ -8,18 +8,18 @@ include ActionView::Helpers::DateHelper
     # contains the var shortnames that we want to extract.
     #
     # We will return a hash. There will be a hash entry identified as "Time",
-    # containg a vector of the data times. Additional hash entries will be
+    # containing a vector of the data times. Additional hash entries will be
     # keyed by the shortname, and will contain a vector of data values. If
     # data is not avialable at a given time, the value will be nil.
     
     # Create a vector of unique times
     times = m.pluck(:measured_at).uniq.sort
-    
+
     vardata = {}
     # Create the time hash entry.
     vardata["Time"] = {}
     times.each do |t|
-      vardata["Time"][t] = t
+      vardata["Time"][t] = t.to_formatted_s(:iso8601)
     end
     
     # Extract the Var data value for each varshortname.
@@ -29,9 +29,10 @@ include ActionView::Helpers::DateHelper
       vararrays = m.where("parameter = ?", shortname).pluck(:measured_at, :value)
       vardata[shortname] = {}
       vararrays.each do |v|
-        vardata[shortname][v[0]] = v[1]
+        vardata[shortname][v[0].to_formatted_s(:iso8601)] = v[1]
       end
     end
+    
     return vardata
   end
 

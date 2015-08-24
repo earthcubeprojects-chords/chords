@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
       @before_profile = Profile.first
     end
 
+    if @before_profile.logo != nil
+      @logo_base64 = Base64.encode64(@before_profile.logo)
+    else 
+      @logo_base64 = nil
+    end
+
     if ! Site.first
       Site.initialize
     end

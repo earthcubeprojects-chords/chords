@@ -2,11 +2,16 @@ Rails.application.routes.draw do
 
   resources :vars
 
-  get 'monitor/live'            => 'monitor#live'
-  get 'instruments/live'        => 'instruments#live'
-  get 'instruments/simulator'   => 'instruments#simulator'
-  get 'measurements/url_create' => 'measurements#url_create'
-  get 'sites/geo'               => 'sites#geo'
+  get 'about/data_urls'          => 'about#data_urls'
+  get 'sites/geo'                => 'sites#geo'
+  get 'monitor/live'             => 'monitor#live'
+
+  get 'instruments/live'         => 'instruments#live'
+  get 'instruments/simulator'    => 'instruments#simulator'
+  get 'instruments/duplicate'    => 'instruments#duplicate'
+
+  get 'measurements/url_create'  => 'measurements#url_create'
+  get 'measurements/delete_test' => 'measurements#delete_test'
 
   resources :profiles, only: [:index, :create]
   resources :about

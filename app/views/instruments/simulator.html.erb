@@ -22,12 +22,18 @@ function get_measurement_url(instrument_id) {
 	var command = "var variables = instrument_" + instrument_id + "_variables";
 	eval(command);
 	
-	var url = "/measurements/url_create?instrument_id=" + instrument_id
+	var url = "/measurements/url_create?instrument_id=" + instrument_id;
 
   // these values to be replaced later by confguration values:
   var min   = 5.0;
   var max   = 25.0;
   var sigma = 1.0;
+
+
+  var utc_time = new Date();
+  utc_time.setUTCMilliseconds(0);
+
+
   
   var avg   = (max+min)/2.0;
 	for (var i = 0, len = variables.length; i < len; i++) {
@@ -35,8 +41,16 @@ function get_measurement_url(instrument_id) {
 		var value = avg + (Math.random()-0.5) * 2 * sigma;
 		value = value.toPrecision(4);
 		url += "&" + variables[i] + "=" + value; 
+
+		// add the time of the measurement
+		// url += "&" + variables[i] + "_at=" + utc_time.toISOString(); 
+
 	}
+
+	// ad the time of ALL measurements submitted 
+	url += "&at=" + utc_time.toISOString(); 
 	
+	// flag this as test data
 	url += "&test"
 	return(url);
 }
@@ -90,21 +104,23 @@ function toggle_instrument_simulator(instrument_id) {
 	}
 }
 
-function slide() {
+function start_graph_updating() {
 
-  <% @instruments.each do |instrument| %>
+	  <% @instruments.each do |instrument| %>
+	
 	window.setInterval(function () {
 			<%= "if (window.instrument_#{instrument.id}_simulator_status == true) {" %>
 				simulate_measurement(<%= instrument.id %>);
 			}
 
+	}, <%= instrument.seconds_before_timeout %> * 1000 ); // repeat forever, polling every 3 seconds
 
-	}, <%=instrument.seconds_before_timeout*1000%> ); // repeat forever, polling every 3 seconds
-  <% end %>
+	  <% end %>
+
 }
 
 // window.onload = function start() {
-    slide();
+    start_graph_updating();
 // }
 
 </script>

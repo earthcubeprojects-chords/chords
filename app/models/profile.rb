@@ -2,7 +2,7 @@ class Profile < ActiveRecord::Base
 
   def self.initialize
     Profile.create([{
-    project: 'Real-time Measurements', 
+    project: 'Real-Time Measurements', 
     affiliation: 'My Organization',
     timezone: 'Mountain Time (US & Canada)',
     description: 'This is a CHORDS Portal.
@@ -20,8 +20,7 @@ class Profile < ActiveRecord::Base
     <li>can leverage the real-time streams into other more sophisticated and standardized web services (such as mapping, data federation, and discovery).</li>
     </ul>
     </ul>
-    
     ', 
-    logo: ''}])      
+    logo: nil}])      
   end
 end

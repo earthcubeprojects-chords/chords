@@ -20,6 +20,39 @@ class InstrumentsController < ApplicationController
     @sites = Site.all
   end
   
+  # GET /instruments/duplicate?instrument_id=1
+  def duplicate
+
+    # Does it exist?
+    if Instrument.exists?(params[:instrument_id])
+    
+      old_instrument = Instrument.find(params[:instrument_id])
+      
+      # Make a copy
+      new_instrument = old_instrument.dup
+      
+      # Add"clone" to the name
+      if !new_instrument.name.include? "clone" 
+        new_instrument.name = new_instrument.name + " clone"
+      end
+      
+      # Zero out the last url
+      new_instrument.last_url = nil
+  
+      # Create duplicates of the vars
+      old_instrument.vars.each do |v|
+        new_var = v.dup
+        new_var.save
+        new_instrument.vars << new_var
+      end
+      
+      # Save the new instrument
+      new_instrument.save
+    end
+    
+    redirect_to instruments_path
+  end
+  
   # GET /instruments
   # GET /instruments.json
   def index
@@ -28,12 +61,16 @@ class InstrumentsController < ApplicationController
   end
 
   # GET /instruments/1
+  # GET /instruments/1.csv
+  # GET /instruments/1.jsf
   # GET /instruments/1.json
   def show
     # This method sets the following instance variables:
     #  @params
-    #  @varnames     - A hash of variable names for the instrument, keyed by the shortname
-    #  @varshortname - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @varnames       - A hash of variable names for the instrument, keyed by the shortname
+    #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @tz_name        - the timezone name
+    #  @tz_offset_mins - the timezone offset, in minutes
 
     @params = params.slice(:start, :end)
 
@@ -50,11 +87,13 @@ class InstrumentsController < ApplicationController
       ["Instrument", instrument_name]
     ]
 
+    # Get the timezone name and offset in minutes from UTC.
+    @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
+    
     # File name root
     file_root = "#{project}_#{site_name}_#{instrument_name}"
     file_root = file_root.split.join
-    
-    
+     
     # Create a hash, with shortname => name
     @varnames = {}
     varshortnames.each do |vshort|
@@ -81,15 +120,13 @@ class InstrumentsController < ApplicationController
       m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
       starttime = m.measured_at
       endtime   = starttime
-      puts "starttime: #{starttime}  endtime: #{endtime}"
     else
       # if we have the start and end parameters
-      if params[:startsecs] && params[:endsecs]
-        # if they are well formed
-        if params[:endsecs].to_i >= params[:startsecs].to_i
-          endtime   = Time.at(params[:endsecs].to_i).to_datetime
-          starttime = Time.at(params[:startsecs].to_i).to_datetime
-        end
+      if params.key?(:start)
+        starttime = Time.parse(params[:start])
+      end
+      if params.key?(:end)
+        endtime = Time.parse(params[:end])
       end
     end
     
@@ -118,6 +155,15 @@ class InstrumentsController < ApplicationController
           mdata[m[0]] = m[1]
         end
         render json: measurements.columns_with_metadata(@varnames, mdata)
+      }
+      format.jsf { 
+        # Convert metadata to a hash
+        mdata = {}
+        metadata.each do |m|
+          mdata[m[0]] = m[1]
+        end
+        send_data measurements.columns_with_metadata(@varnames, mdata),
+           filename: file_root+'.json'
       }
       
     end
@@ -182,7 +228,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :seconds_before_timeout, :description)
+        :name, :site_id, :display_points, :seconds_before_timeout, :description, :instrument_id)
     end
 
 end

@@ -11,19 +11,17 @@ $(document).ready(function() {
   });
 
   function send_url(id, datatype) {
-    var startdate = $("#startpicker").datepicker("getDate").toDateString();
-    var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
-    var startms   = Date.parse(startdate);
-    var endms     = Date.parse(enddate);
-    if (startms <= endms) {
-    /* add a day to the end date */
-      endms += 24*60*60*1000;
+    var startdate = $("#startpicker").datepicker("getDate");
+    var enddate   = $("#endpicker"  ).datepicker("getDate");
+    enddate.setDate(enddate.getDate() + 1);
+    
+    if (startdate < enddate) {
       var url = '';
       url += '/instruments/'
       url += id;
       url += '.' + datatype + '?';
-      url += 'startsecs=' + startms/1000;
-      url += '&endsecs='  + endms/1000;
+      url += 'start=' + startdate.toISOString();
+      url += '&end='  + enddate.toISOString();
       document.location.href = url;
     } else {
       alert("Start date must be less than or equal to the end date");
@@ -36,6 +34,10 @@ $(document).ready(function() {
 
   $('.xmlButton').click(function(){
     send_url(this.value, 'xml');
+  });
+
+  $('.jsonButton').click(function(){
+    send_url(this.value, 'jsf');
   });
 
 });
@@ -62,10 +64,9 @@ $(document).ready(function() {
   <thead>
     <tr>
       <th>Instrument Name</th>
-      <th align="center">Site</th>
+      <th>Site</th>
       <th align="center"># <br/> measurements</th>
-      <th>Download As</th>
-      <th colspan="4"></th>
+      <th  align="center" colspan="3">Download As</th>
     </tr>
   </thead>
 
@@ -76,8 +77,10 @@ $(document).ready(function() {
         <td><%= @sites.find(instrument.site_id).name %></td>
 	      <td align="center"><%= instrument.measurements.count %> </td>
 	      <td align="center">
-	        <button value=<%= instrument.id%> class="csvButton">CSV</button>
-	        <button value=<%= instrument.id%> class="xmlButton">XML</button></td>
+	        <button value=<%= instrument.id%> class="csvButton" >CSV</button>
+          <button value=<%= instrument.id%> class="jsonButton">JSON</button>
+          <button value=<%= instrument.id%> class="xmlButton" >XML</button>
+        </td>
       </tr>
     <% end %>
   </tbody>

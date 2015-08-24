@@ -39,13 +39,12 @@
       <tr>
         <td> <%= link_to(v.name, var_url(:id => v.id) ) %></td>
         <td> <%= v.shortname %></td>
-        <td> <%= link_to 'Edit', edit_var_path(v) %></td>
-        <td><%= link_to 'Destroy', v, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td> <%= button_to 'Edit', edit_var_path(v), method: => :get %></td>
+        <td><%= button_to 'Destroy', v, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
     </td>
     </table>
-  <%= link_to 'New Variable', new_var_path(:inst_id => @instrument.id) %>
   </div>
 
   <div class="actions">
