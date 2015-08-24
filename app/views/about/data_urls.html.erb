@@ -29,7 +29,7 @@ vquery = ''
   <tr>
   <td>Put data</td><td></td><td>at, test</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>?at=2015-08-20T19:50:28
+    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&at=2015-08-20T19:50:28
   <% end %></td>
    </tr>
   
@@ -71,10 +71,10 @@ Test values can be deleted from the database using the "Delete Test Button" on t
 <td>start=<i>time</i></td><td>A start time for the returned measurements.</td>
 </tr>
 <tr>
-<td>last</td><td>Return all measurements for the most recent measurement time stamp, for this instrument.</td>
+<td>end=<i>time</i></td><td>An end time for the returned measurements.</td>
 </tr>
 <tr>
-<td>end=<i>time</i></td><td>An end time for the returned measurements.</td>
+<td>last</td><td>Return all measurements for the most recent measurement time stamp.</td>
 </tr>
 </table>
 <ul style="margin-top: 0">
