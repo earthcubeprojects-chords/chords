@@ -1,5 +1,6 @@
 #
 # Systemd unit description for managing the CHORDS udp_forwarder.
+# It assumes that the source and configuration exist in /usr/local/src/chords_testbed/bin/udp_forwarder/.
 #
 # When you make a change to a service file:
 #  systemctl daemon-reload
@@ -10,9 +11,9 @@
 #
 # Here's how to see your log files:
 #  since the last boot:
-#    journalctl -b -0 _SYSTEMD_UNIT=chords_udp_forwarder.service
+#    journalctl -b -u chords_udp_forwarder.service
 #  To "follow" the log messages add a -f  (like tail -f):
-#    journalctl -f _SYSTEMD_UNIT=chords_udp_forwarder.service
+#    journalctl -f -u chords_udp_forwarder.service
 #
 [Unit]
 Description=CHORDS UDP Forwarder
