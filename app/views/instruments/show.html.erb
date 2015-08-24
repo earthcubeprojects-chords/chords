@@ -27,16 +27,12 @@ Download current day as
 <table>
 <tr>
   <td><strong>Instrument</strong></td>
-  <td><%= best_in_place @instrument, :name, :as => :input %></td>
-</tr>
-<tr>
-  <td><strong>Status</strong></td>
-    <td><% if @instrument.is_receiving_data %>
+  <td><% if @instrument.is_receiving_data %>
       <%= image_tag('glossy-green-icon-button-th.png', size:"16")%>
     <% else %>
       <%= image_tag('glossy-red-icon-button-th.png', size:"16")%>
     <% end %>
-  </td>
+    <%= best_in_place @instrument, :name, :as => :input %></td>
 </tr>
 <tr>
   <td><strong>Site</strong></td>
