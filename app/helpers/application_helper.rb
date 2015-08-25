@@ -29,5 +29,10 @@ module ApplicationHelper
     end
     return result
   end
+  
+  # Return the uptime, in words
+  def self.uptime
+    time_ago_in_words(BOOTED_AT)
+  end
 
 end
