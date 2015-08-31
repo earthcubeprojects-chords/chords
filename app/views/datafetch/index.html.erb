@@ -66,6 +66,7 @@ $(document).ready(function() {
       <th>Instrument Name</th>
       <th>Site</th>
       <th align="center"># <br/> measurements</th>
+      <th align="center">Fetch/Ingest<br/>Data</th>
       <th  align="center" colspan="3">Download As</th>
     </tr>
   </thead>
@@ -76,6 +77,7 @@ $(document).ready(function() {
         <td><%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
 	      <td align="center"><%= instrument.measurements.count %> </td>
+        <td align="center"><%= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id) %></td>
 	      <td align="center">
 	        <button value=<%= instrument.id%> class="csvButton" >CSV</button>
           <button value=<%= instrument.id%> class="jsonButton">JSON</button>
@@ -85,4 +87,8 @@ $(document).ready(function() {
     <% end %>
   </tbody>
 </table>
+<p>
+See the <i>Data URLs</i> for URL syntax definitions used to make customized data ingest and download
+requests. These URLs are also used for program generated requests, e.g from browsers, Matlab, R, Python, etc.
+</p>
 

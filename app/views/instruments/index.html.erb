@@ -9,8 +9,9 @@
       <th align="center">Interval<br/>(s)</th>
       <th align="center">Last<br/>Measurement</th>
       <th align="center">Site</th>
-      <th align="center"># of <br/>Measurements</th>
       <th align="center"># of <br/>Variables</th>
+      <th align="center"># of <br/>Measurements</th>
+      <th align="center">Fetch/Ingest<br/>Data</th>
       <th colspan="1"></th>
     </tr>
   </thead>
@@ -29,8 +30,9 @@
         <td align="center"><%= instrument.seconds_before_timeout%></td>
         <td><%= instrument.last_age%></td>
         <td><%= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id)) %></td>
-        <td align="center"><%= instrument.measurements.count %></td>
         <td align="center"><%= instrument.vars.count %></td>
+        <td align="center"><%= instrument.measurements.count %></td>
+        <td align="center"><%= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id) %></td>
         <td><%= button_to 'Clone', instruments_duplicate_path, method: :get, params: {instrument_id: instrument.id} %></td>
         <td><%= button_to 'Delete Test Data', measurements_delete_test_path, method: :get, params: {instrument_id: instrument.id},
           data: { confirm: "Are you sure you want to delete the test data for the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nALL TEST DATA WILL BE LOST" } %></td>
