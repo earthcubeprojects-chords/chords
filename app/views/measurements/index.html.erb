@@ -22,9 +22,9 @@
         <td><%= measurement.value %></td>
         <td><%= measurement.unit %></td>
         <td><%= measurement.measured_at %></td>
-        <td><%= link_to 'Show', measurement %></td>
-        <td><%= link_to 'Edit', edit_measurement_path(measurement) %></td>
-        <td><%= link_to 'Destroy', measurement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= button_to 'Show', measurement, method: => :get %></td>
+        <td><%= button_to 'Edit', edit_measurement_path(measurement), method: => :get  %></td>
+        <td><%= button_to 'Destroy', measurement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

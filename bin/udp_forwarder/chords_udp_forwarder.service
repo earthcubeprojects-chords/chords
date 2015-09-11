@@ -1,0 +1,29 @@
+#
+# Systemd unit description for managing the CHORDS udp_forwarder.
+# It assumes that the source and configuration exist in /usr/local/src/chords_testbed/bin/udp_forwarder/.
+#
+# When you make a change to a service file:
+#  systemctl daemon-reload
+#
+# To enable and start:
+#  systemctl enable chords_udp_forwarder
+#  systemctl start  chords_udp_forwarder
+#
+# Here's how to see your log files:
+#  since the last boot:
+#    journalctl -b -u chords_udp_forwarder.service
+#  To "follow" the log messages add a -f  (like tail -f):
+#    journalctl -f -u chords_udp_forwarder.service
+#
+[Unit]
+Description=CHORDS UDP Forwarder
+
+[Service]
+Type=simple
+ExecStart=/usr/local/src/chords_testbed/bin/udp_forwarder/udp_forwarder.rb -v -c /usr/local/src/chords_testbed/bin/udp_forwarder/ncar_wx.json
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

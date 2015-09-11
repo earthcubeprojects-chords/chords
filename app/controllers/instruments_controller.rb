@@ -37,13 +37,13 @@ class InstrumentsController < ApplicationController
     @sites = Site.all
   end
   
-  # GET /instruments/duplicate?id=1
+  # GET /instruments/duplicate?instrument_id=1
   def duplicate
 
     # Does it exist?
-    if Instrument.exists?(params[:id])
+    if Instrument.exists?(params[:instrument_id])
     
-      old_instrument = Instrument.find(params[:id])
+      old_instrument = Instrument.find(params[:instrument_id])
       
       # Make a copy
       new_instrument = old_instrument.dup
@@ -83,6 +83,8 @@ class InstrumentsController < ApplicationController
   end
 
   # GET /instruments/1
+  # GET /instruments/1.csv
+  # GET /instruments/1.jsf
   # GET /instruments/1.json
   def show
     # This method sets the following instance variables:
@@ -147,12 +149,11 @@ class InstrumentsController < ApplicationController
       endtime   = starttime
     else
       # if we have the start and end parameters
-      if params[:startsecs] && params[:endsecs]
-        # if they are well formed
-        if params[:endsecs].to_i >= params[:startsecs].to_i
-          endtime   = Time.at(params[:endsecs].to_i).to_datetime
-          starttime = Time.at(params[:startsecs].to_i).to_datetime
-        end
+      if params.key?(:start)
+        starttime = Time.parse(params[:start])
+      end
+      if params.key?(:end)
+        endtime = Time.parse(params[:end])
       end
     end
     
@@ -277,7 +278,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :seconds_before_timeout, :description)
+        :name, :site_id, :display_points, :seconds_before_timeout, :description, :instrument_id)
     end
 
 end

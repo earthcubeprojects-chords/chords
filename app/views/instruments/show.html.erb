@@ -27,16 +27,12 @@ Download current day as
 <table>
 <tr>
   <td><strong>Instrument</strong></td>
-  <td><%= best_in_place @instrument, :name, :as => :input %></td>
-</tr>
-<tr>
-  <td><strong>Status</strong></td>
-    <td><% if @instrument.is_receiving_data %>
+  <td><% if @instrument.is_receiving_data %>
       <%= image_tag('glossy-green-icon-button-th.png', size:"16")%>
     <% else %>
       <%= image_tag('glossy-red-icon-button-th.png', size:"16")%>
     <% end %>
-  </td>
+    <%= best_in_place @instrument, :name, :as => :input %></td>
 </tr>
 <tr>
   <td><strong>Site</strong></td>
@@ -65,7 +61,7 @@ Download current day as
 <tr>
   <td><strong>Test Measurements</strong></td>
   <td><%= @instrument.measurements.where(test: 1).count %>
-  <td><%= link_to 'Delete Test Data', measurements_delete_test_path(instrument_id: @instrument.id), 
+  <td><%= button_to 'Delete Test Data', measurements_delete_test_path, method: :get, params: {instrument_id: @instrument.id}, 
     data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %></td>
   </td>
 </tr>

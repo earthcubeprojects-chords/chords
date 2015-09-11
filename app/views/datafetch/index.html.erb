@@ -11,19 +11,17 @@ $(document).ready(function() {
   });
 
   function send_url(id, datatype) {
-    var startdate = $("#startpicker").datepicker("getDate").toDateString();
-    var enddate   = $("#endpicker"  ).datepicker("getDate").toDateString();
-    var startms   = Date.parse(startdate);
-    var endms     = Date.parse(enddate);
-    if (startms <= endms) {
-    /* add a day to the end date */
-      endms += 24*60*60*1000;
+    var startdate = $("#startpicker").datepicker("getDate");
+    var enddate   = $("#endpicker"  ).datepicker("getDate");
+    enddate.setDate(enddate.getDate() + 1);
+    
+    if (startdate < enddate) {
       var url = '';
       url += '/instruments/'
       url += id;
       url += '.' + datatype + '?';
-      url += 'startsecs=' + startms/1000;
-      url += '&endsecs='  + endms/1000;
+      url += 'start=' + startdate.toISOString();
+      url += '&end='  + enddate.toISOString();
       document.location.href = url;
     } else {
       alert("Start date must be less than or equal to the end date");
@@ -68,6 +66,7 @@ $(document).ready(function() {
       <th>Instrument Name</th>
       <th>Site</th>
       <th align="center"># <br/> measurements</th>
+      <th align="center">Fetch/Ingest<br/>Data</th>
       <th  align="center" colspan="3">Download As</th>
     </tr>
   </thead>
@@ -78,6 +77,7 @@ $(document).ready(function() {
         <td><%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
 	      <td align="center"><%= instrument.measurements.count %> </td>
+        <td align="center"><%= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id) %></td>
 	      <td align="center">
 	        <button value=<%= instrument.id%> class="csvButton" >CSV</button>
           <button value=<%= instrument.id%> class="jsonButton">JSON</button>
@@ -87,4 +87,8 @@ $(document).ready(function() {
     <% end %>
   </tbody>
 </table>
+<p>
+See the <i>Data URLs</i> for URL syntax definitions used to make customized data ingest and download
+requests. These URLs are also used for program generated requests, e.g from browsers, Matlab, R, Python, etc.
+</p>
 

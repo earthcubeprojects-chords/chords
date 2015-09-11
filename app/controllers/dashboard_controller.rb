@@ -18,6 +18,7 @@ class DashboardController < ApplicationController
     @metrics["measurement_count"] = Measurement.count
     @metrics["site_count"]        = Site.count
     @metrics["instrument_count"]  = Instrument.count
+    @metrics["uptime"]            = ApplicationHelper.uptime
     if Measurement.last
       @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
     else
