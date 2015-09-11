@@ -12,7 +12,7 @@
 	<li class="sidebar_link">
 		<div>
 	  <%= link_to '/dashboard' do %>
-	    <%= image_tag('open-iconic/svg/target.svg', alt:  "About", class: 'sidebar_icon') %>Dashboard
+	    <%= image_tag('open-iconic/svg/target.svg', alt:  "Dashboard", class: 'sidebar_icon') %>Dashboard
 	  <% end %>
 	</div>
 	</li>
@@ -20,7 +20,7 @@
 	<li class="sidebar_link">
 		<div>
 	  <%= link_to '/datafetch' do %>
-	    <%= image_tag('open-iconic/svg/data-transfer-download.svg', alt:  "About", class: 'sidebar_icon') %>Data
+	    <%= image_tag('open-iconic/svg/data-transfer-download.svg', alt:  "Data", class: 'sidebar_icon') %>Data
 	  <% end %>
 	</div>
 	</li>
@@ -28,7 +28,7 @@
   <li class="sidebar_link">
     <div>
     <%= link_to sites_path do %>
-      <%= image_tag('open-iconic/svg/home.svg', alt:  "About", class: 'sidebar_icon') %>Sites
+      <%= image_tag('open-iconic/svg/home.svg', alt:  "Sites", class: 'sidebar_icon') %>Sites
     <% end %>
   </div>
   </li>
@@ -36,7 +36,7 @@
   <li class="sidebar_link">
     <div>
     <%= link_to instruments_path do %>
-      <%= image_tag('open-iconic/svg/star.svg', alt:  "About", class: 'sidebar_icon') %>Instruments
+      <%= image_tag('open-iconic/svg/star.svg', alt:  "Instruments", class: 'sidebar_icon') %>Instruments
     <% end %>
   </div>
   </li>
@@ -44,7 +44,7 @@
   <li class="sidebar_link">
     <div>
     <%= link_to sites_geo_path do %>
-      <%= image_tag('open-iconic/svg/globe.svg', alt:  "About", class: 'sidebar_icon') %>Geo
+      <%= image_tag('open-iconic/svg/globe.svg', alt:  "Geo", class: 'sidebar_icon') %>Geo
     <% end %>
   </div>
   </li>
@@ -53,7 +53,7 @@
 	<div>
 
 	  <%= link_to '/instruments/simulator' do %>
-	    <%= image_tag('open-iconic/svg/check.svg', alt:  "About", class: 'sidebar_icon') %>Simulator
+	    <%= image_tag('open-iconic/svg/check.svg', alt:  "Simulator", class: 'sidebar_icon') %>Simulator
 	  <% end %>
 
 	</div>	
@@ -61,11 +61,37 @@
 	
 	<li class="sidebar_link">
 		<div>
-	  <%= link_to '/profiles' do %>
-	    <%= image_tag('open-iconic/svg/cog.svg', alt:  "About", class: 'sidebar_icon') %>Configure
-	  <% end %>
-	</div>
+		  <%= link_to '/profiles' do %>
+		    <%= image_tag('open-iconic/svg/cog.svg', alt:  "Configure", class: 'sidebar_icon') %>Configure
+		  <% end %>
+		</div>
 	</li>
+
+	<% if user_signed_in? %>
+		<li class="sidebar_link">
+			<div>
+			  <%= link_to '/users' do %>
+			    <%= image_tag('open-iconic/svg/people.svg', alt:  "Users", class: 'sidebar_icon') %>Users
+			  <% end %>
+			</div>
+		</li>
+	<% end %>
+
+	<li class="sidebar_link">
+		<div>
+
+			<% if user_signed_in? %>
+			  <%= link_to '/users/sign_out' do %>
+			    <%= image_tag('open-iconic/svg/account-logout.svg', alt:  "Log Out", class: 'sidebar_icon') %>Log Out
+			  <% end %>			
+			<% else %>
+			  <%= link_to '/users/sign_in' do %>
+			    <%= image_tag('open-iconic/svg/account-login.svg', alt:  "Log In", class: 'sidebar_icon') %>Log In
+			  <% end %>			
+			<% end %>
+		</div>
+	</li>
+
 
 </ul>
 </nav>
