@@ -48,26 +48,28 @@
     <% end %>
   </div>
   </li>
-  
-  <li>
-	<div>
 
-	  <%= link_to '/instruments/simulator' do %>
-	    <%= image_tag('open-iconic/svg/check.svg', alt:  "Simulator", class: 'sidebar_icon') %>Simulator
-	  <% end %>
-
-	</div>	
-	</li>
-	
-	<li class="sidebar_link">
+  <% if user_signed_in? %>  
+	  <li>
 		<div>
-		  <%= link_to '/profiles' do %>
-		    <%= image_tag('open-iconic/svg/cog.svg', alt:  "Configure", class: 'sidebar_icon') %>Configure
-		  <% end %>
-		</div>
-	</li>
 
-	<% if user_signed_in? %>
+		  <%= link_to '/instruments/simulator' do %>
+		    <%= image_tag('open-iconic/svg/check.svg', alt:  "Simulator", class: 'sidebar_icon') %>Simulator
+		  <% end %>
+
+		</div>	
+		</li>
+
+	
+		<li class="sidebar_link">
+			<div>
+			  <%= link_to '/profiles' do %>
+			    <%= image_tag('open-iconic/svg/cog.svg', alt:  "Configure", class: 'sidebar_icon') %>Configure
+			  <% end %>
+			</div>
+		</li>
+
+	
 		<li class="sidebar_link">
 			<div>
 			  <%= link_to '/users' do %>
