@@ -1,0 +1,34 @@
+<h3>User</h3>
+
+<p>Email: <%= @user.email if @user.email %></p>
+
+
+<table>
+	<tr>
+		<td><strong>Email</strong></td>
+		<td><%= best_in_place @user, :email, :as => :input %></td>
+	</tr>
+
+
+	<tr>
+		<td><strong>Is site administrator?</strong></td>
+		<td>
+			<%= best_in_place @user, :is_administrator, as: :checkbox, collection: {false: "No", true: "Yes"} %>		
+		</td>
+	</tr>
+		
+	<tr>
+		<td><strong>May view data?</strong></td>
+		<td>
+			<%= best_in_place @user, :is_data_viewer, as: :checkbox, collection: {false: "No", true: "Yes"} %>		
+		</td>
+	</tr>
+
+	<tr>
+		<td><strong>May download data?</strong></td>
+		<td>
+			<%= best_in_place @user, :is_data_downloader, as: :checkbox, collection: {false: "No", true: "Yes"} %>		
+		</td>
+	</tr>
+
+</table>

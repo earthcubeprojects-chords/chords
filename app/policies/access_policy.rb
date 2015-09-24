@@ -30,13 +30,19 @@ class AccessPolicy
       can [:download], Measurement
     end
 
+    # The basic role. Applies to every user.
+    role :registered_user do
+      can [:view, :manage], User do |registered_user|
+        registered_user.id == user.id
+      end
+    end
+
     # Less privileged moderator role
     # role :data_viewer, proc {|u| u.moderator? } do
     #   can [:update, :destroy], Post
     #   can :update, User
     # end
 
-    # The basic role. Applies to every user.
     # role :data_viewer do
     #   can :create, Post
     # 
