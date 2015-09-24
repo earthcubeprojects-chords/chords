@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Sys
 
   # return the database size in MB.
   def self.total_db_size_mb
@@ -32,8 +33,7 @@ module ApplicationHelper
   
   # Return the uptime, in words
   def self.uptime
-    # time_ago_in_words(BOOTED_AT)
-    time_ago_in_words(Time.now)
+    time_ago_in_words(Uptime.boot_time)
   end
 
 end
