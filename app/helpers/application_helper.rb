@@ -32,7 +32,8 @@ module ApplicationHelper
   
   # Return the uptime, in words
   def self.uptime
-    time_ago_in_words(BOOTED_AT)
+    # time_ago_in_words(BOOTED_AT)
+    time_ago_in_words(Time.now)
   end
 
 end

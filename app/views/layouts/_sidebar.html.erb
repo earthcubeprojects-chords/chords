@@ -60,14 +60,15 @@
 		</div>	
 		</li>
 
-	
-		<li class="sidebar_link">
-			<div>
-			  <%= link_to '/profiles' do %>
-			    <%= image_tag('open-iconic/svg/cog.svg', alt:  "Configure", class: 'sidebar_icon') %>Configure
-			  <% end %>
-			</div>
-		</li>
+		<% if ( (@profile.secure_administration) && (can? :manage, Profile) || (! @profile.secure_administration)) %>
+			<li class="sidebar_link">
+				<div>
+				  <%= link_to '/profiles' do %>
+				    <%= image_tag('open-iconic/svg/cog.svg', alt:  "Configure", class: 'sidebar_icon') %>Configure
+				  <% end %>
+				</div>
+			</li>
+		<% end %>
 
 	
 		<li class="sidebar_link">
