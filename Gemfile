@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.0'
 # Use mysql as the database for Active Record
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.19'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -47,6 +47,9 @@ gem 'devise'
 
 # authorization 
 gem 'access-granted'
+
+# system uptime
+gem 'sys-uptime'
   
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
