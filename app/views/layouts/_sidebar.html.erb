@@ -1,6 +1,14 @@
 <nav>
 <ul class="vertmenu" style="width: 150px;">
 
+	<% if user_signed_in? %>
+	<li class="sidebar_link">
+	  <div>
+	  <%= current_user.email %>
+	  </div>
+	</li>
+	<% end %>
+	
 	<li class="sidebar_link">
 		<div>
 		  <%= link_to '/about' do %>
