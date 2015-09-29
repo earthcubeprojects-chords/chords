@@ -1,6 +1,6 @@
 class MeasurementsController < ApplicationController
 
-  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
+  #before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
 
   before_action :set_measurement, only: [:show, :edit, :update, :destroy]
 
