@@ -31,7 +31,9 @@ class InstrumentsController < ApplicationController
 
     if @profile.secure_administration
       authenticate_user!
-      authorize! :manage, @instruments[0]
+      if @instruments.count > 0
+        authorize! :manage, @instruments[0]
+      end
     end    
     
     @sites = Site.all
@@ -81,9 +83,11 @@ class InstrumentsController < ApplicationController
     @instruments = Instrument.all
     @sites = Site.all
 
-    if @profile.secure_data_viewing
-      authorize! :view, @instruments[0]
-    end
+   if @profile.secure_data_viewing
+     if @instruments.count > 0
+       authorize! :view, @instruments[0]
+     end
+   end
 
   end
 
@@ -103,7 +107,6 @@ class InstrumentsController < ApplicationController
       authorize! :view, @instrument
     end
 
-          
     @params = params.slice(:start, :end)
 
     # Get the instrument and variable identifiers.

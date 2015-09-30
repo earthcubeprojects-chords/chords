@@ -10,7 +10,9 @@ class VarsController < ApplicationController
     @vars = Var.all
 
     if @profile.secure_data_viewing
-      authorize! :view, @vars[0]
+      if @vars.count > 0
+        authorize! :view, @vars[0]
+      end
     end
 
   end
