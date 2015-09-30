@@ -12,7 +12,9 @@ class MeasurementsController < ApplicationController
     @measurements = Measurement.all
 
     if @profile.secure_data_viewing
-      authorize! :view, @measurements[0]
+      if @measurements.count > 0
+        authorize! :view, @measurements[0]
+      end
     end
 
     @sites = Site.all
@@ -83,7 +85,7 @@ class MeasurementsController < ApplicationController
 
     # secure the creation of new measurements
     if @profile.secure_data_entry
-      unless @profile.data_entry_key == params[:data_entry_key]
+      unless @profile.data_entry_key == params[:key]
         return
       end
     end

@@ -57,7 +57,7 @@ function get_measurement_url(instrument_id) {
 
 	// add the security data_entry_key
 	<% if @profile.secure_data_entry == true %>
-		url += "&data_entry_key=" + "<%= @profile.data_entry_key %>";
+		url += "&key=" + "<%= @profile.data_entry_key %>";
 	<% end %>
 	
 	

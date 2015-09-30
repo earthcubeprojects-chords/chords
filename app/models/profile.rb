@@ -23,7 +23,7 @@ class Profile < ActiveRecord::Base
     ', 
     logo: nil,
     secure_administration: true,
-    data_entry_key: 'enter_key_here'
+    data_entry_key: 'key'
     
     }])      
   end
