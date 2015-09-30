@@ -311,7 +311,7 @@
                   
                   "# Configure the database connection\n",
                   "mv /tmp/database.yml config\n",
-                  "rake db:create db:migrate\n"
+                  "rake db:create db:seed db:migrate\n"
                 ]]},
                 "mode"  : "000500",
                 "owner" : "root",
