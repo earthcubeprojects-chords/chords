@@ -40,7 +40,7 @@ class SitesController < ApplicationController
     @sites = Site.all
 
     if @profile.secure_data_viewing
-      authorize! :manage, @sites[0]
+      authorize! :view, @sites[0]
     end    
 
     @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
