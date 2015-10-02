@@ -4,39 +4,74 @@ class InstrumentsController < ApplicationController
   
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
 
+ # GET /instruments/1/live?var=varshortname&after=time
+ # Return measurements and metadata for a given instrument, var and time period.
+ # Limit the number of points returned to the instrument's display_points value.
   def live
-    
-    if params[:id]
-      m = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last
+    puts "********************************************************************************"
 
-      if @profile.secure_data_viewing
-        authorize! :view, m
+    # Initialze the return value
+    livedata = {
+      :points         => [], 
+      :display_points => 0,
+      :refresh_msecs  => 1000
+      }
+
+    # Verify the parameters
+    if params[:id] && params[:var] && params[:after]
+    
+      # Get the instrument
+      our_instrument = Instrument.find(params[:id])
+      
+      # Fetch the data
+      if our_instrument
+      
+        display_points            = our_instrument.display_points
+        livedata[:display_points] = display_points
+        livedata[:refresh_msecs]  = our_instrument.seconds_before_timeout*1000
+        
+        # Get the measurements
+        our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
+        if our_measurements
+
+          # Authorize access to the measurements
+          if @profile.secure_data_viewing
+            authorize! :view, our_measurements[0]
+          end
+
+          # Collect the times and values for the measurements
+          points = []
+          our_measurements.each {|x| points.append(x.mstime_and_value)}
+          livedata[:points] = points
+        end
       end
-
-    else
-      m = nil
     end
     
-    if m
-      render :json => m.json_point
-    else
-      render :json => nil
-    end
+    
+    # Convert to JSON
+    livedata_json = ActiveSupport::JSON.encode(livedata)
+    
+    # Return result
+    render :json => livedata_json
   end
   
+  # GET instruments/simulator
   def simulator
-    # 
+  
+    # Returns:
+    #  @instruments
+    #  @sites
 
     @instruments = Instrument.all
+    @sites       = Site.all
 
+    # Authenitcate
     if @profile.secure_administration
       authenticate_user!
       if @instruments.count > 0
         authorize! :manage, @instruments[0]
       end
-    end    
-    
-    @sites = Site.all
+    end
   end
   
   # GET /instruments/duplicate?instrument_id=1

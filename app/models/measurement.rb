@@ -67,16 +67,11 @@ class Measurement < ActiveRecord::Base
 
   end
 
-  def json_point
+  # Return a vector containing time(ms) and value
+  def mstime_and_value
     time = Time.new(self.measured_at.year, self.measured_at.month, self.measured_at.day, self.measured_at.hour, self.measured_at.min, self.measured_at.sec, "+00:00")
     milliseconds = ((time.to_i) * 1000).to_s
-
-    #create an array and echo to JSON
-    ret =[milliseconds.to_i, self.value]
-    
-    json = ActiveSupport::JSON.encode(ret)
-    
-    return json    
+    return [milliseconds.to_i, self.value]
   end
   
   def age
