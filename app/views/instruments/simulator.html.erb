@@ -94,43 +94,37 @@ function simulate_measurement(instrument_id) {
 <% end %>
 window.simulator_on =  false;
 
-function toggle_instrument_simulator(instrument_id) {
+function toggle_instrument_simulator(id, refresh_ms) {
 	// get the value of the simulator status for the instrument
-	var command = "var simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
+	var command = "var simulator_status = window.instrument_" + id + "_simulator_status;";
 	eval(command);
 
 	if (simulator_status == false) {
-		eval("window.instrument_" + instrument_id + "_simulator_status = true;");
+		eval("window.instrument_" + id + "_simulator_status = true;");
 
-		var command = "simulator_status = window.instrument_" + instrument_id + "_simulator_status;";
+		var command = "simulator_status = window.instrument_" + id + "_simulator_status;";
 		
 		// var temp = $('#instrument_1_simulator_icon').attr('src', '/assets/glossy-green-icon-button-th.png');
-		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/toggle-switch-on.png')");
+		eval("$('#instrument_" + id + "_simulator_icon').attr('src', '/assets/toggle-switch-on.png')");
+		repeat_measurement(id, refresh_ms);
 		
 	} else {
-		eval("window.instrument_" + instrument_id + "_simulator_status = false;");
-		eval("$('#instrument_" + instrument_id + "_simulator_icon').attr('src', '/assets/toggle-switch-off.png')");
+		eval("window.instrument_" + id + "_simulator_status = false;");
+		eval("$('#instrument_" + id + "_simulator_icon').attr('src', '/assets/toggle-switch-off.png')");
 	}
 }
 
-function start_graph_updating() {
+function repeat_measurement(id, refresh_ms) {
 
-	  <% @instruments.each do |instrument| %>
-	
-	window.setInterval(function () {
-			<%= "if (window.instrument_#{instrument.id}_simulator_status == true) {" %>
-				simulate_measurement(<%= instrument.id %>);
-			}
+  // get the value of the simulator status for the instrument
+  var command = "var simulator_status = window.instrument_" + id + "_simulator_status;";
+  eval(command);
 
-	}, <%= instrument.sample_rate_seconds %> * 1000 ); // repeat forever, at the sample rate
-
-	  <% end %>
-
+  if (simulator_status == true) {
+    simulate_measurement(id);
+    setTimeout(function() {repeat_measurement(id, refresh_ms);}, refresh_ms);
+  }
 }
-
-// window.onload = function start() {
-    start_graph_updating();
-// }
 
 </script>
 
@@ -153,7 +147,8 @@ function start_graph_updating() {
         <td><%= @sites.find(instrument.site_id).name %></td>
         <td align="center"><%= instrument.sample_rate_seconds %></td>
         <td align="center">
-	       <%= image_tag('toggle-switch-off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", onclick:"toggle_instrument_simulator(#{instrument.id});")%>
+	       <%= image_tag('toggle-switch-off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", 
+	           onclick:"toggle_instrument_simulator(#{instrument.id}, #{instrument.sample_rate_seconds}*1000);")%>
        </td>
 
       </tr>
