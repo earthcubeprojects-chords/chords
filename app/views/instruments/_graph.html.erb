@@ -1,5 +1,4 @@
 <% 
- highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"
   
  if @varshortname != nil 
    # Determine the selected variable full name
@@ -20,7 +19,7 @@
 
 %>
 
-<div class="instrument_highchart" id="container" style="min-width: 310px; height: 400px; margin: 0 auto">
+<div class="instrument_highchart" id="instrument_live_chart" style="min-width: 310px; height: 400px; margin: 0 auto">
 
 <%= render 'graph_chart', series: series, title: title, varname: @varnames[@varshortname], varshortname: @varshortname %>
 
