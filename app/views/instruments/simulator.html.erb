@@ -122,7 +122,7 @@ function start_graph_updating() {
 				simulate_measurement(<%= instrument.id %>);
 			}
 
-	}, <%= instrument.seconds_before_timeout %> * 1000 ); // repeat forever, polling every 3 seconds
+	}, <%= instrument.sample_rate_seconds %> * 1000 ); // repeat forever, at the sample rate
 
 	  <% end %>
 
@@ -151,7 +151,7 @@ function start_graph_updating() {
         <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td align="center"><%= instrument.id %></td>
         <td><%= @sites.find(instrument.site_id).name %></td>
-        <td align="center"><%= instrument.seconds_before_timeout %></td>
+        <td align="center"><%= instrument.sample_rate_seconds %></td>
         <td align="center">
 	       <%= image_tag('toggle-switch-off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", onclick:"toggle_instrument_simulator(#{instrument.id});")%>
        </td>

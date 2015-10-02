@@ -8,8 +8,7 @@ class InstrumentsController < ApplicationController
  # Return measurements and metadata for a given instrument, var and time period.
  # Limit the number of points returned to the instrument's display_points value.
   def live
-    puts "********************************************************************************"
-
+ 
     # Initialze the return value
     livedata = {
       :points         => [], 
@@ -28,7 +27,12 @@ class InstrumentsController < ApplicationController
       
         display_points            = our_instrument.display_points
         livedata[:display_points] = display_points
-        livedata[:refresh_msecs]  = our_instrument.seconds_before_timeout*1000
+        refresh_rate_ms           = our_instrument.sample_rate_seconds*1000
+        # Limit the chart refresh rate
+        if (refresh_rate_ms < 1000) 
+          refresh_rate_ms = 1000
+        end
+        livedata[:refresh_msecs]  = refresh_rate_ms
         
         # Get the measurements
         our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
@@ -321,7 +325,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :seconds_before_timeout, :description, :instrument_id)
+        :name, :site_id, :display_points, :sample_rate_seconds, :description, :instrument_id)
     end
 
 end
