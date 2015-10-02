@@ -1,16 +1,13 @@
 <script>	
 
-// run status for each instrument
+// run status and variable shortnames for each instrument.
 <% @instruments.each do |instrument| %>
-<%= "window.instrument_#{instrument.id}_run_status =  false;" %>
-<% end %>
-
-// variable shortnames for each instrument.
-<% @instruments.each do |instrument| %>
+var instrument_<%= instrument.id %>_run_status = false;
 var instrument_<%= instrument.id %>_shortnames = [];
 <% instrument.vars.each do |var| %>
 instrument_<%= instrument.id %>_shortnames.push("<%= var.shortname %>");
 <% end %>
+
 <% end %>
 
 function shortnames(id) {
@@ -19,9 +16,9 @@ function shortnames(id) {
   return names;
 }
 
-function running(id) {
+function is_running(id) {
   // return the running status for this id
-  var command = "var run_status = window.instrument_" + id + "_run_status;";
+  var command = "var run_status = instrument_" + id + "_run_status;";
   eval(command);
   return run_status;
 }
@@ -54,23 +51,25 @@ function send_url(url) {
   request.send(null);
 }
 
-function measurement_url(id) {
+function make_url(id) {
+  // create base url
   var url = "/measurements/url_create?instrument_id=" + id;
 
+  // add variable values
   var s = shortnames(id);
   for (var i = 0; i < s.length; i++) {
     url += "&" + s[i] + "=" + random_value(); 
   }
 
-  // Set the measurement time. 
+  // add the measurement time
   var utc_time = new Date();
   utc_time.setUTCMilliseconds(0);
   url += "&at=" + utc_time.toISOString(); 
   
-  // flag this as test data
+  // add test data flag
   url += "&test";
 
-  // add the security data_entry_key
+  // add the security key
   <% if @profile.secure_data_entry == true %>
     url += "&key=" + "<%= @profile.data_entry_key %>";
   <% end %>
@@ -78,21 +77,23 @@ function measurement_url(id) {
   return(url);
 }
 
-function single_measurement(id) {
-  // create the url_create string
-  var url = measurement_url(id);
-  
-  if ($('#instrument_simulator_requests').children().length > 10) {
+function display_url(url) {
+  // manage a running display of the urls
+  if ($('#instrument_simulator_requests').children().length > 20) {
     $('#instrument_simulator_requests').find('div').first().remove();
   }
 
   $('#instrument_simulator_requests').append("<div>" + url + "</div>");
-  
+}
+
+function single_measurement(id) {
+  var url = make_url(id);
+  display_url(url);
   send_url(url);
 }
 
 function repeat_measurement(id, refresh_ms) {
-  if (running(id) == true) {
+  if (is_running(id) == true) {
     // schedule next measurement
     setTimeout(function() {repeat_measurement(id, refresh_ms);}, refresh_ms);
     // create and send a new measurement
@@ -101,20 +102,17 @@ function repeat_measurement(id, refresh_ms) {
 }
 
 function toggle_run_state(id, refresh_ms) {
-  // get the value of the simulator status for the instrument
-  var command = "var simulator_status = window.instrument_" + id + "_run_status;";
-  eval(command);
-
-  if (simulator_status == false) {
-    eval("window.instrument_" + id + "_run_status = true;");
-
-    var command = "simulator_status = window.instrument_" + id + "_run_status;";
-    
+  if (is_running(id) == false) {
+    // set the run status to true
+    eval("instrument_" + id + "_run_status = true;");
+    // set the indicator to on
     eval("$('#instrument_" + id + "_simulator_icon').attr('src', '/assets/toggle-switch-on.png')");
+    // start a repeating measurement
     repeat_measurement(id, refresh_ms);
-    
   } else {
-    eval("window.instrument_" + id + "_run_status = false;");
+    // set the run status to false
+    eval("instrument_" + id + "_run_status = false;");
+    // set the indicator to off
     eval("$('#instrument_" + id + "_simulator_icon').attr('src', '/assets/toggle-switch-off.png')");
   }
 }
