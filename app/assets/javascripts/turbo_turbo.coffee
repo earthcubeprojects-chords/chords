@@ -1,3 +1,4 @@
+# From https://gist.github.com/dv/fc51f798d825bff5a371#file-turbo_turbo-js-coffee
 # This library fixes common problems with turbolinks
 # - Overwrite setTimeout and setInterval to intercept generated ID's
 # - Keep track of Ajax requests
