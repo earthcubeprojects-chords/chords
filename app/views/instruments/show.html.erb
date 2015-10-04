@@ -18,12 +18,16 @@ vquery = ''
 <div class="last_url">
 <%= @instrument.last_url %>
 </div>
+
 <p>
 Download current day as
   <%= link_to("CSV",  instrument_url( :format => 'csv')  )%>, 
   <%= link_to("XML",  instrument_url( :format => 'xml')  )%>,
   <%= link_to("JSON", instrument_url( :format => 'jsf') )%>
 </p>
+
+<div class="instrument_details_and_variables">
+<div class="instrument_details">
 <table>
 <tr>
   <td><strong>Instrument</strong></td>
@@ -77,8 +81,15 @@ Download current day as
   <td><strong>Measurement<br/>interval (s)</strong></td>
   <td><%= best_in_place @instrument, :sample_rate_seconds, :as => :input %></td>
 </tr>
+</table>
+</div>
+
+<div class="instrument_variables">
+<table>
 <tr>
   <td style="vertical-align:top"><strong>Variables</strong></td>
+</tr>
+<tr>
 	<td>
 	  <table id="variables_list">
 		  <% @instrument.vars.each do |variable| %>
@@ -91,7 +102,6 @@ Download current day as
   </td>
 </tr>
 <tr>
-<td></td>
 <td>
 <%= form_for :var, url: vars_path, :remote => false, :format => :js do |f| %>
 	<%= f.hidden_field :name, :value => 'name' %>
@@ -104,7 +114,8 @@ Download current day as
 <% end %>
 </td>
 </table>
-
+</div>
+</div>
 
 <div class="instrumentstrip">
 Graph:
