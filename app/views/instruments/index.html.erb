@@ -27,7 +27,7 @@
 	       </td>
         <td> <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
         <td> <%= instrument.id %></td>
-        <td align="center"><%= instrument.seconds_before_timeout%></td>
+        <td align="center"><%= instrument.sample_rate_seconds%></td>
         <td><%= instrument.last_age%></td>
         <td><%= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id)) %></td>
         <td align="center"><%= instrument.vars.count %></td>

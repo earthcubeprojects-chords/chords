@@ -1,43 +1,51 @@
 <script>
+var live_chart; 
+var last_time = 0;
 
-$(function () {
-  var intervalId = null;    
-  var last_point = [];
+function requestData() 
+{
+  $.getJSON(
+  '/instruments/<%= @instrument.id%>/live?var=<%=varshortname%>&after='+last_time,
+  function(live_data) 
+    {
+      var points         = live_data["points"]
+      var display_points = live_data["display_points"]
+      var refresh_msecs  = live_data["refresh_msecs"];
 
-  $(window).unload(function() {
-    clearInterval(intervalId);
-  });
-    
-  $(document).ready(function () {
-    Highcharts.setOptions({
+      // Trim the graph if the display width is decreased
+      while (live_chart.series[0].data.length > display_points) {
+        live_chart.series[0].removePoint(0, false);
+      }
+
+      var i;
+      for (i = 0; i < points.length; i++) {
+        if (points[i][0] > last_time) {
+          var shift = live_chart.series[0].data.length >= display_points;
+          live_chart.series[0].addPoint(points[i], false, shift);
+          last_time = points[i][0]
+        }
+      }
+
+      live_chart.redraw();
+      setTimeout(requestData, refresh_msecs);    
+    }
+  );
+}
+
+$(document).ready(function () {
+  Highcharts.setOptions({
     global: { 
       timezoneOffset: <%= @tz_offset_mins %>
     },
   });
-  
-  $('#<%= highcharts_dom_id %>').highcharts({
-     chart: {
+
+  live_chart = new Highcharts.Chart(
+  {
+    chart: {
+      renderTo: 'instrument_live_chart',
       type: 'line',
       animation: Highcharts.svg, // don't animate in old IE
-      marginRight: 10,
-      events: {
-        load: function () {
-          // set up the updating of the chart each second
-          var series = this.series[0];
-          intervalId = setInterval(function () {
-            $.ajax({
-              url: '/instruments/<%= @instrument.id%>/live?var=<%= varshortname %>',
-              success: function(point) {
-                if(point[0] != last_point[0]) {
-                  series.addPoint(point, true, true); 
-                  last_point = point;
-                }                                             
-              },
-              cache: false
-            });
-          }, 1000.0);
-        },
-      },
+      marginRight: 10
     },
     credits: { enabled: false, }, 
     title: { text: <%= title %> },
@@ -66,7 +74,11 @@ $(function () {
     legend: { enabled: true },
     exporting: { enabled: false },
     series: <%= series %>,
-    });
   });
-});
+    
+  // Make first data request
+  requestData();
+  }
+);
+
 </script>

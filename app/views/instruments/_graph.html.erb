@@ -1,5 +1,4 @@
 <% 
- highcharts_dom_id = "highcharts_instrument_#{@instrument.id}"
   
  if @varshortname != nil 
    # Determine the selected variable full name
@@ -9,7 +8,7 @@
    quote = "\""
    
    # Create the highcharts data series for a single variable
-   series = "[{name:" + quote + varname + quote + ", data: [" + @instrument.data(@instrument.display_points, @varshortname) + "]}]"
+   series = "[{name:" + quote + varname + quote + ", data: []}]"
 
    # Convert items containing quotes into suitable json
    series         = series.as_json.html_safe
@@ -20,8 +19,9 @@
 
 %>
 
-<div class="instrument_highchart" id="<%= highcharts_dom_id %>" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+<div class="instrument_highchart" id="instrument_live_chart" style="min-width: 310px; height: 400px; margin: 0 auto">
 
-<%= render 'graph_chart', highcharts_dom_id: highcharts_dom_id, series: series, title: title, varname: @varnames[@varshortname], varshortname: @varshortname %>
+<%= render 'graph_chart', series: series, title: title, varname: @varnames[@varshortname], varshortname: @varshortname %>
 
+</div>
 <% end %>

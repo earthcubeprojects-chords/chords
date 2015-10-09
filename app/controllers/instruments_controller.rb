@@ -4,37 +4,78 @@ class InstrumentsController < ApplicationController
   
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
 
+ # GET /instruments/1/live?var=varshortname&after=time
+ # Return measurements and metadata for a given instrument, var and time period.
+ # Limit the number of points returned to the instrument's display_points value.
   def live
-    
-    if params[:id]
-      m = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last
+ 
+    # Initialze the return value
+    livedata = {
+      :points         => [], 
+      :display_points => 0,
+      :refresh_msecs  => 1000
+      }
 
-      if @profile.secure_data_viewing
-        authorize! :view, m
+    # Verify the parameters
+    if params[:id] && params[:var] && params[:after]
+    
+      # Get the instrument
+      our_instrument = Instrument.find(params[:id])
+      
+      # Fetch the data
+      if our_instrument
+      
+        display_points            = our_instrument.display_points
+        livedata[:display_points] = display_points
+        refresh_rate_ms           = our_instrument.sample_rate_seconds*1000
+        # Limit the chart refresh rate
+        if (refresh_rate_ms < 1000) 
+          refresh_rate_ms = 1000
+        end
+        livedata[:refresh_msecs]  = refresh_rate_ms
+        
+        # Get the measurements
+        our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
+        if our_measurements
+
+          # Authorize access to the measurements
+          if @profile.secure_data_viewing
+            authorize! :view, our_measurements[0]
+          end
+
+          # Collect the times and values for the measurements
+          points = []
+          our_measurements.each {|x| points.append(x.mstime_and_value)}
+          livedata[:points] = points
+        end
       end
-
-    else
-      m = nil
     end
     
-    if m
-      render :json => m.json_point
-    else
-      render :json => nil
-    end
+    
+    # Convert to JSON
+    livedata_json = ActiveSupport::JSON.encode(livedata)
+    
+    # Return result
+    render :json => livedata_json
   end
   
+  # GET instruments/simulator
   def simulator
-    # 
+  
+    # Returns:
+    #  @instruments
+    #  @sites
 
     @instruments = Instrument.all
+    @sites       = Site.all
 
+    # Authenitcate
     if @profile.secure_administration
       authenticate_user!
-      authorize! :manage, @instruments[0]
-    end    
-    
-    @sites = Site.all
+      if @instruments.count > 0
+        authorize! :manage, @instruments[0]
+      end
+    end
   end
   
   # GET /instruments/duplicate?instrument_id=1
@@ -42,9 +83,14 @@ class InstrumentsController < ApplicationController
 
     # Does it exist?
     if Instrument.exists?(params[:instrument_id])
-    
+
       old_instrument = Instrument.find(params[:instrument_id])
 
+      if @profile.secure_administration
+        authenticate_user!
+        authorize! :manage, old_instrument
+      end
+      
       if @profile.secure_administration
         authenticate_user!
         authorize! :manage, old_instrument
@@ -81,9 +127,11 @@ class InstrumentsController < ApplicationController
     @instruments = Instrument.all
     @sites = Site.all
 
-    if @profile.secure_data_viewing
-      authorize! :view, @instruments[0]
-    end
+   if @profile.secure_data_viewing
+     if @instruments.count > 0
+       authorize! :view, @instruments[0]
+     end
+   end
 
   end
 
@@ -103,7 +151,6 @@ class InstrumentsController < ApplicationController
       authorize! :view, @instrument
     end
 
-          
     @params = params.slice(:start, :end)
 
     # Get the instrument and variable identifiers.
@@ -283,7 +330,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :seconds_before_timeout, :description, :instrument_id)
+        :name, :site_id, :display_points, :sample_rate_seconds, :description, :instrument_id)
     end
 
 end

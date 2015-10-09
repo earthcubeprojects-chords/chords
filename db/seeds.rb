@@ -20,7 +20,7 @@ User.create(:email => "daniels@ucar.edu", :password => "realtimedata", :is_admin
 
 #Site.create(id:8, name: 'Boulder Sugarloaf', lat: 40.0293,lon: -105.397 )
 
-#Instrument.create(id: 21, name: 'Acurite Wx Station', site_id: 8, display_points: 100, seconds_before_timeout: 3)
+#Instrument.create(id: 21, name: 'Acurite Wx Station', site_id: 8, display_points: 100, sample_rate_seconds: 3)
 #Var.create(id:9, name: 'Tdry', shortname: 'v1', instrument_id: 21)
 #Var.create(id:10, name: 'RH', shortname: 'v2', instrument_id: 21)
 #Var.create(id:11, name: 'Wspd', shortname: 'v3', instrument_id: 21)

@@ -6,7 +6,9 @@ class MonitorController < ApplicationController
     @instruments = Instrument.all
 
     if @profile.secure_data_viewing
-      authorize! :view, @instruments[0]
+      if @instruments.count > 0
+        authorize! :view, @instruments[0]
+      end
     end
 
 

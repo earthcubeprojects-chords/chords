@@ -1,6 +1,6 @@
-<td><%= best_in_place variable, :name, :as => :input %></td>
-<td>=</td>
 <td><%= best_in_place variable, :shortname, :as => :input %></td>
+<td>=</td>
+<td><%= best_in_place variable, :name, :as => :input %></td>
 <td>
 	<% if @profile.secure_administration == true && current_user  && can?(:manage, Var)  %>
 		<%= link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do %>

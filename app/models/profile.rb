@@ -22,8 +22,8 @@ class Profile < ActiveRecord::Base
     </ul>
     ', 
     logo: nil,
-    secure_administration: false,
-    data_entry_key: 'enter_key_here'
+    secure_administration: true,
+    data_entry_key: 'key'
     
     }])      
   end
