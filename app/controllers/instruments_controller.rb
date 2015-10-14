@@ -85,6 +85,11 @@ class InstrumentsController < ApplicationController
     if Instrument.exists?(params[:instrument_id])
 
       old_instrument = Instrument.find(params[:instrument_id])
+
+      if @profile.secure_administration
+        authenticate_user!
+        authorize! :manage, old_instrument
+      end
       
       if @profile.secure_administration
         authenticate_user!
