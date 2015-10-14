@@ -1,3 +1,5 @@
+# Fetch data from a CHORDS Portal, in json format.
+#
 # If your system does not already have the python 'requests' or 'pprint'
 # modules install them with 'pip install <module>'                              
 #                                                                                                                                        
