@@ -134,7 +134,7 @@ class MeasurementsController < ApplicationController
 
     respond_to do |format|
       if @measurement.save
-        format.html { redirect_to @measurement, notice: "Measurement was successfully created. "  }
+        format.html { render text: "OK"  }
         format.json { render :show, status: :created, location: @measurement }
       else
         format.html { render :new }
