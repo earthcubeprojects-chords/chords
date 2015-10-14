@@ -40,3 +40,4 @@ bower.json
 # Ignore the OSX directory store
 .DS_Store
 
+/.pydevproject
