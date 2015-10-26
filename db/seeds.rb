@@ -31,3 +31,4 @@ Var.create(id:15, name: 'RainTotal', shortname: 'v7', instrument_id: 21)
 Var.create(id:16, name: 'DewPoint', shortname: 'v8', instrument_id: 21)
 
 
+MeasuredProperty.create(name: 'Temperature', label: 'Temperature', url: 'http://sensorml.com/ont/swe/property/Temperature', definition: 'Intensity of heat as measured on a definite scale.')
