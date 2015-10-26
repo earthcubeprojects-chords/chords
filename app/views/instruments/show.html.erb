@@ -19,12 +19,18 @@ vquery = ''
 <%= @instrument.last_url %>
 </div>
 
-<p>
+<div>
 Download current day as
   <%= link_to("CSV",  instrument_url( :format => 'csv')  )%>, 
   <%= link_to("XML",  instrument_url( :format => 'xml')  )%>,
   <%= link_to("JSON", instrument_url( :format => 'jsf') )%>
-</p>
+</div>
+
+<div>
+  Download instrument description <%= link_to("SensorML", instrument_url( :format => 'sensorml') )%>
+</div>
+
+<br/>
 
 <div class="instrument_details_and_variables">
 <div class="instrument_details">
