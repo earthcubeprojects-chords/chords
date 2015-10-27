@@ -1,4 +1,6 @@
 class MeasuredProperty < ActiveRecord::Base
+  has_many :vars
+  
   validates :name, uniqueness: { case_sensitive: false }
   validates :label, uniqueness: { case_sensitive: false }
 
