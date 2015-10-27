@@ -34,4 +34,4 @@ Var.create(id:16, name: 'DewPoint', shortname: 'v8', instrument_id: 21)
 # Using the ontology  http://sensorml.com/ont/swe/property
 # (Recommended by Manil Maskey)
 # another possibility is http://mmisw.org/ont/cf/parameter/
-# MeasuredProperty.create(name: 'Temperature', label: 'Temperature', url: 'http://sensorml.com/ont/swe/property/Temperature', definition: 'Intensity of heat as measured on a definite scale.')
+MeasuredProperty.populate
