@@ -1,6 +1,17 @@
 <td><%= best_in_place variable, :shortname, :as => :input %></td>
 <td>=</td>
 <td><%= best_in_place variable, :name, :as => :input %></td>
+<td><%= best_in_place variable, :units, :as => :input %></td>
+
+<td>
+	<%#= best_in_place variable, :measured_property, :as => :select, :collection => {"1" => "Spain", "2" => "Italy", "3" => "Germany", "4" => "France"} %>
+	<%= best_in_place variable, :measured_property, :as => :select, :collection => MeasuredProperty.order(:name).all.collect {|p| [ p.id, p.label	 ] } %>
+
+<%#= collection_select :measured_property_id, MeasuredProperty.order(:label),:id,:label, include_blank: false %>
+<%#= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
+
+</td>
+
 <td>
 	<% if @profile.secure_administration == true && current_user  && can?(:manage, Var)  %>
 		<%= link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do %>
