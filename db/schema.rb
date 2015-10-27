@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151002012211) do
+ActiveRecord::Schema.define(version: 20151026201845) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -25,6 +25,15 @@ ActiveRecord::Schema.define(version: 20151002012211) do
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
+
+  create_table "measured_properties", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "label",      limit: 255
+    t.string   "url",        limit: 255
+    t.text     "definition", limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
 
   create_table "measurements", force: :cascade do |t|
     t.integer  "instrument_id", limit: 4
@@ -44,10 +53,10 @@ ActiveRecord::Schema.define(version: 20151002012211) do
     t.string   "affiliation",           limit: 255
     t.string   "description",           limit: 1000
     t.binary   "logo",                  limit: 16777215
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.string   "timezone",              limit: 255
-    t.boolean  "secure_administration", limit: 1,        default: true
+    t.boolean  "secure_administration", limit: 1,        default: false
     t.boolean  "secure_data_viewing",   limit: 1,        default: true
     t.boolean  "secure_data_download",  limit: 1,        default: true
     t.boolean  "secure_data_entry",     limit: 1,        default: true
