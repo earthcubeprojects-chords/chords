@@ -13,7 +13,6 @@
         <omvmmi:creditRequired>not specified</omvmmi:creditRequired>
         <dc:description>This is a large collection of sensor terms throughout the various sensor communities</dc:description>
         <omv:description>This is a large collection of sensor terms throughout the various sensor communities</omv:description>
-        <omv:creationDate>2015-10-23T20:22:43+0000</omv:creationDate>
         <omvmmi:shortNameUri>http://mmisw.org/ont/mmi/resourcetype/parameter</omvmmi:shortNameUri>
         <dc:creator>Various sources</dc:creator>
         <omvmmi:hasResourceType>parameter</omvmmi:hasResourceType>
@@ -26,6 +25,7 @@
         <omv:name>Ontology of general sensor terms</omv:name>
         <omv:usedOntologyEngineeringTool rdf:resource="http://mmisw.org/ont/mmi/20081020/ontologyMetadata/voc2rdf"/>
         <omv:keywords>sensor, SWE,</omv:keywords>
+        <omv:creationDate>2015-10-26T20:06:12+0000</omv:creationDate>
         <omv:version>20131010T204657</omv:version>
     </owl:Ontology>
     <owl:Class rdf:about="http://sensorml.com/ont/swe/property/Property">
