@@ -9,7 +9,10 @@ class AboutController < ApplicationController
   # GET about/data_urls
   # GET about/data_urls?instrument_id=1
   def data_urls
-  
+    # returns
+    # @instrument
+    # @varnames: a hash keyed on the shortname, containing the long name
+    
     if params.key?(:instrument_id) 
       if Instrument.exists?(params[:instrument_id])
         inst_id = params[:instrument_id]

@@ -6,7 +6,7 @@ vquery = ''
   @varnames.each do |v|
     vquery += v[0] 
     vquery += '='
-    vquery += v[1]
+    vquery += v[1].gsub(/\s+/, "")
     if i < @varnames.count-1        
       vquery += '&'       
     end                   
@@ -23,7 +23,7 @@ vquery = ''
 <br/>
 Although this example is for a specific instrument, the syntax is common to all of them. <i>instrument_id</i>
 specifies the instrument. For putting data, there is a list of variable short names with their corresponding 
-measurement value. All of the query parameters (i.e. the fields following "?" and "&") are order independent.
+measurement value. All of the qualifiers (i.e. the fields following "?" and "&") are order independent.
 <br/>
 <br/>
 <table>
@@ -33,7 +33,7 @@ measurement value. All of the query parameters (i.e. the fields following "?" an
   <tr>
   <td>Put data</td><td></td><td>at, key, test</td>
   <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&at=2015-08-20T19:50:28&key=5914&test
+    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&at=2015-08-20T19:50:28&key=KeyValue&test
   <% end %></td>
    </tr>
   
@@ -61,11 +61,11 @@ measurement value. All of the query parameters (i.e. the fields following "?" an
 
 <table>
 <tr>
-<th>Qualifier</th><th>Meaning</th>
+<th>Optional<br/>Qualifiers</th><th>Meaning</th>
 </tr>
 <tr>
 <td>at=<i>time</i></td><td>A time to assign to the measurement. If not present, the measurement will 
-be time stamped with the time that it was received by the server.</td>
+be time stamped with the time that it was received by the portal.</td>
 </tr>
 <tr>
 <td>key=<i>key</i></td><td>An optional validation key. It is required if "Require the security key in order to submit a measurement"
