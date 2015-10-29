@@ -1,1 +1,1 @@
-ApplicationHelper::BOOTED_AT = Time.now
+ApplicationHelper::GIT_SHA = `git rev-parse HEAD`.chomp
