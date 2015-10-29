@@ -28,9 +28,9 @@ def chords_url(ip, inst_id, data_vars, mtime=None, mkey=None, mtest=None):
     for var in data_vars:
         url = url + "&" + var[0] + "=" + var[1]
     if mtime != None:
-        url = url + "?at=" + mtime
+        url = url + "&at=" + mtime
     if mkey != None:
-        url = url + "?key=" + mkey
+        url = url + "&key=" + mkey
     if mtest != None:
         url = url + "&test"
     return url
@@ -50,7 +50,7 @@ if __name__ == '__main__':
     # Create data variables
     data_vars = [ ['t',  '21.5'], ['rh', '32'], ['ws', '14.2'], ['wd', '321.1'], ['p',  '854.5'], ['b',  '12.1'] ]
     # Security key
-    mkey = None
+    mkey = "123423187AC"
     # Create url
     url = chords_url(ip=chords_ip, inst_id=inst_id, data_vars=data_vars,mkey=mkey,mtest=1)
     print url
