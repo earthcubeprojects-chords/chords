@@ -1,6 +1,9 @@
 class AboutController < ApplicationController
+  helper :all
+  
   def index
     @profile = Profile.first
+    @source_revision = ApplicationHelper::GIT_SHA
   end
   
   # GET about/data_urls
