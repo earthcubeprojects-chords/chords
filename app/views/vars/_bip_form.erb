@@ -20,7 +20,77 @@
 $(document).ready(function(){
     $("#<%= form_tag_id %>").bind('railsAutocomplete.select', function(event, data){
   /* Submit the new value to update the DB */
-  alert(JSON.stringify(data, null, 4));
+
+// var data = {measured_property_id: '123'}
+// alert(JSON.stringify(data['item']['id'], null, 4));
+
+var url = "/vars/<%= variable.id %>";
+// var data = JSON.stringify({ var:{measured_property_id:data['item']['id']}, _method:'put' });
+
+// To prevent xss attacks, a csrf token must be defined as a meta attribute
+      var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
+          csrf_param = jQuery('meta[name=csrf-param]').attr('content');
+
+      var submit_data = "_method=" + 'put';
+      submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=' + data['item']['id'];
+      // submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=';
+
+      // submit_data += data['item']['id'];
+
+      if (csrf_param !== undefined && csrf_token !== undefined) {
+          submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
+      }
+	// alert(submit_data);
+
+// alert(data);
+
+	// $.ajax({
+	//     type: "PUT",
+	//     dataType: "script",
+	//     url: url,
+	//     contentType: 'application/json',
+	//     data: submit_data
+	// }).done(function( msg )
+	//         {
+	//             alert( "Data Saved: " + msg );
+	//         });
+
+
+			$.ajax({
+			    type: "PUT",
+			    dataType: "script",
+			    url: url,
+			    contentType: 'application/json',
+			    data: JSON.stringify({ var:{measured_property_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
+			}).done(function( msg )
+			        {
+			            alert( "Data Saved: " + msg );
+			        });
+
+
+// alert(data['item']['id']);
+
+
+// alert(url);
+
+// $.post( url, { 'measured_property_id':  '795'} );
+// 
+
+// $.ajax({
+//       type: "POST",
+//       url: "/vars/update",
+//       data: { var: {measured_property_id: "123"} }
+// });
+
+// alert(data);
+
+// var url = form.attr("update");
+// var url = window.location.hostname;
+// var action = $(<%= form_tag_id %>).attr("action");
+// alert(action);
+
+
+// alert($("#<%= form_tag_id %>"));
 	});
 });
 </script>
