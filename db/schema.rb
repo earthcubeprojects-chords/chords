@@ -97,11 +97,11 @@ ActiveRecord::Schema.define(version: 20151027212853) do
   create_table "vars", force: :cascade do |t|
     t.string   "name",                 limit: 255
     t.integer  "instrument_id",        limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "shortname",            limit: 255
-    t.string   "units",                limit: 255
-    t.integer  "measured_property_id", limit: 4
+    t.string   "units",                limit: 255, default: "C", null: false
+    t.integer  "measured_property_id", limit: 4,   default: 1,   null: false
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
