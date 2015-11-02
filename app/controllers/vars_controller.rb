@@ -113,6 +113,6 @@ class VarsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def var_params
-      params.require(:var).permit(:name, :shortname, :instrument_id, :unit, :measured_property_id)
+      params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id)
     end
 end
