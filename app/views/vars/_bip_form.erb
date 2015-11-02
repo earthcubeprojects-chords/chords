@@ -4,43 +4,49 @@
 <td><%= best_in_place variable, :units, :as => :input %></td>
 
 <td>
-	<% form_tag_id = "mp_for_tag_#{variable.id}"%>
+	
+	<% if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)  %>	
+	
+		<% form_tag_id = "mp_for_tag_#{variable.id}"%>
 
-	<%#= autocomplete_field_tag form_tag_id, params[:search], autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"} %>  
-	<%= autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"} %>  
-
-
-	<script>
-	$(document).ready(function(){
-		$("#<%= form_tag_id %>").bind('railsAutocomplete.select', function(event, data){
-			/* Submit the new value to update the DB */
+		<%#= autocomplete_field_tag form_tag_id, params[:search], autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"} %>  
+		<%= autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"} %>  
 
 
-			var url = "/vars/<%= variable.id %>";
+		<script>
+		$(document).ready(function(){
+			$("#<%= form_tag_id %>").bind('railsAutocomplete.select', function(event, data){
+				/* Submit the new value to update the DB */
 
-			// To prevent xss attacks, a csrf token must be defined as a meta attribute
-			var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
-			csrf_param = jQuery('meta[name=csrf-param]').attr('content');
 
-			var submit_data = "_method=" + 'put';
-			submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=' + data['item']['id'];
+				var url = "/vars/<%= variable.id %>";
 
-			if (csrf_param !== undefined && csrf_token !== undefined) {
-				submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
-			}
+				// To prevent xss attacks, a csrf token must be defined as a meta attribute
+				var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
+				csrf_param = jQuery('meta[name=csrf-param]').attr('content');
 
-			$.ajax({
-				type: "PUT",
-				dataType: "script",
-				url: url,
-				contentType: 'application/json',
-				data: JSON.stringify({ var:{measured_property_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
-			}).done(function( msg ) {
-				alert( "Data Saved: " + msg );
+				var submit_data = "_method=" + 'put';
+				submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=' + data['item']['id'];
+
+				if (csrf_param !== undefined && csrf_token !== undefined) {
+					submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
+				}
+
+				$.ajax({
+					type: "PUT",
+					dataType: "script",
+					url: url,
+					contentType: 'application/json',
+					data: JSON.stringify({ var:{measured_property_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
+				}).done(function( msg ) {
+					alert( "Data Saved: " + msg );
+				});
 			});
 		});
-	});
-	</script>
+		</script>
+	<% else %>
+		<%= variable.measured_property.label %>
+	<% end %>
 
 </td>
 

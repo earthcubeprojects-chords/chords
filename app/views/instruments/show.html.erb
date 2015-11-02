@@ -75,8 +75,11 @@ Download current day as
 <tr>
   <td><strong>Test Measurements</strong></td>
   <td><%= @instrument.measurements.where(test: 1).count %>
-  <td><%= button_to 'Delete Test Data', measurements_delete_test_path, method: :get, params: {instrument_id: @instrument.id}, 
-    data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %></td>
+  <td>
+	<% if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)  %>		
+		<%= button_to 'Delete Test Data', measurements_delete_test_path, method: :get, params: {instrument_id: @instrument.id}, data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %>
+	<% end %>
+  </td>
   </td>
 </tr>
 <tr>
@@ -124,7 +127,7 @@ Download current day as
 	<%= f.hidden_field :shortname, :value => 'shortname' %>
 	<%= f.hidden_field :instrument_id, :value => @instrument.id %>
 
-	<% if @profile.secure_administration == true && current_user  && can?(:manage, Var)  %>
+	<% if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)  %>
 	 	<%= f.submit :value	 => 'Add a New Variable' %>
 	<% end %>
 <% end %>

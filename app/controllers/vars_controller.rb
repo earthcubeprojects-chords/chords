@@ -54,6 +54,7 @@ class VarsController < ApplicationController
     @var = Var.new(var_params)
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @var
     end
 
@@ -74,6 +75,7 @@ class VarsController < ApplicationController
   def update
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @var
     end
     
