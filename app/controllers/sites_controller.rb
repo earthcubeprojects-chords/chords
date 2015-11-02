@@ -23,6 +23,7 @@ class SitesController < ApplicationController
     @site = Site.new
     
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @site
     end
     
@@ -31,6 +32,7 @@ class SitesController < ApplicationController
   # GET /sites/1/edit
   def edit
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @site
     end    
   end
@@ -59,6 +61,7 @@ class SitesController < ApplicationController
     @site = Site.new(site_params)
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @site
     end
 
@@ -78,6 +81,7 @@ class SitesController < ApplicationController
   def update
     
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @site
     end
     
@@ -97,6 +101,7 @@ class SitesController < ApplicationController
   def destroy
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @site
     end
     
