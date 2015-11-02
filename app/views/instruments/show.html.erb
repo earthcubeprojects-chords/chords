@@ -95,14 +95,24 @@ Download current day as
 <tr>
   <td style="vertical-align:top"><strong>Variables</strong></td>
 </tr>
+
+
 <tr>
 	<td>
 	  <table id="variables_list">
-		  <% @instrument.vars.each do |variable| %>
-      <tr>
+		<tr>
+			<td style="vertical-align:top"><em>Short Name</em></td>
+			<td></td>
+			<td style="vertical-align:top"><em>Name</em></td>
+			<td style="vertical-align:top"><em>Units</em></td>
+			<td style="vertical-align:top"><em>Measured Property</em></td>
+		</tr>
+
+		<% @instrument.vars.each do |variable| %>
+			<tr>
 				<%= render partial: 'vars/bip_form', locals: {variable: variable} %>
-      </tr>
-      <% end %>		
+			</tr>
+		<% end %>		
     </td>
     </table>
   </td>
