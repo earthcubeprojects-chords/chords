@@ -8,8 +8,24 @@
 	<%= best_in_place variable, :measured_property, :as => :select, :collection => MeasuredProperty.order(:name).all.collect {|p| [ p.id, p.label	 ] } %>
 
 
-<%= autocomplete_field_tag :search, params[:search], autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "United States", type: "search"} %>  
 
+<% form_tag_id = "mp_for_tag_#{variable.id}"%>
+
+
+
+<%= autocomplete_field_tag form_tag_id, params[:search], autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"} %>  
+
+
+<script>
+$(document).ready(function(){
+    $("#<%= form_tag_id %>").bind('railsAutocomplete.select', function(event, data){
+  /* Submit the new value to update the DB */
+  alert(JSON.stringify(data, null, 4));
+	});
+});
+</script>
+
+	
 
 <%#= collection_select :measured_property_id, MeasuredProperty.order(:label),:id,:label, include_blank: false %>
 <%#= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
