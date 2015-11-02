@@ -35,9 +35,6 @@
     <%= f.collection_select :measured_property_id, MeasuredProperty.order(:label),:id,:label, include_blank: false %>
   </div>
 
-
-<%#= f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false %>
-
   <div class="actions">
     <%= f.submit %>
   </div>
