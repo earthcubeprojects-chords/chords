@@ -37,12 +37,13 @@
                                  />
                               </swe:Time>
                            </swe:field>
-                           <swe:field name="temperature">
-                              <swe:Quantity
-                                 definition="http://mmisw.org/ont/cf/parameter/air_temperature">
-                                 <swe:uom code="Cel"/>
-                              </swe:Quantity>
-                           </swe:field>
+<% @instrument.vars.each do |variable| %>
+							<swe:field name="<%= variable.name %>">
+							   <swe:Quantity definition="<%= variable.measured_property.url %>">
+							      <swe:uom code="<%= variable.units %>"/>
+							   </swe:Quantity>
+							</swe:field>
+<% end %>
                         </swe:DataRecord>
                      </swe:elementType>
  
