@@ -101,7 +101,7 @@ ActiveRecord::Schema.define(version: 20151027212853) do
     t.datetime "updated_at",                                     null: false
     t.string   "shortname",            limit: 255
     t.string   "units",                limit: 255, default: "C", null: false
-    t.integer  "measured_property_id", limit: 4,   default: 1,   null: false
+    t.integer  "measured_property_id", limit: 4,   default: 795, null: false
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
