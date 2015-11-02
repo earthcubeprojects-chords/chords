@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery-ui
 //= require jquery_ujs
 //= require jquery-ui/datepicker
 //= require underscore
@@ -19,3 +20,4 @@
 //= require_tree .
 
 //= require best_in_place
+//= require autocomplete-rails

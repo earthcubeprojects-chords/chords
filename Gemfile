@@ -42,6 +42,9 @@ gem 'passenger'
 # best_im_place
 gem "best_in_place"
 
+#autocomplete
+gem 'rails4-autocomplete'
+
 # authentication
 gem 'devise'
 

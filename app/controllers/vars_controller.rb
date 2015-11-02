@@ -4,6 +4,8 @@ class VarsController < ApplicationController
   
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
+  autocomplete :measured_property, :label
+
   # GET /vars
   # GET /vars.json
   def index
