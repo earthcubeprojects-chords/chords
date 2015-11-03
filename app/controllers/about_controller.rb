@@ -3,7 +3,7 @@ class AboutController < ApplicationController
   
   def index
     @profile = Profile.first
-    @source_revision = ApplicationHelper::GIT_SHA
+    @source_revision = `git rev-parse HEAD`.chomp
   end
   
   # GET about/data_urls
