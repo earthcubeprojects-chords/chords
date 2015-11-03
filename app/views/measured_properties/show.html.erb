@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @measured_property.name %>
+</p>
+
+<p>
+  <strong>Label:</strong>
+  <%= @measured_property.label %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @measured_property.url %>
+</p>
+
+<p>
+  <strong>Definition:</strong>
+  <%= @measured_property.definition %>
+</p>
+
+<%= link_to 'Edit', edit_measured_property_path(@measured_property) %> |
+<%= link_to 'Back', measured_properties_path %>

@@ -244,6 +244,9 @@ class InstrumentsController < ApplicationController
         send_data measurements.columns_with_metadata(@varnames, mdata),
            filename: file_root+'.json'
       }
+      format.sensorml {
+        render :file => "app/views/instruments/sensorml.xml.erb", :layout => false
+      }
       
     end
   end

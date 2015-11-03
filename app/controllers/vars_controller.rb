@@ -4,6 +4,8 @@ class VarsController < ApplicationController
   
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
+  autocomplete :measured_property, :label, :full => true
+
   # GET /vars
   # GET /vars.json
   def index
@@ -52,6 +54,7 @@ class VarsController < ApplicationController
     @var = Var.new(var_params)
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @var
     end
 
@@ -72,6 +75,7 @@ class VarsController < ApplicationController
   def update
 
     if @profile.secure_administration
+      authenticate_user!
       authorize! :manage, @var
     end
     
@@ -111,6 +115,6 @@ class VarsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def var_params
-      params.require(:var).permit(:name, :shortname, :instrument_id)
+      params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id)
     end
 end

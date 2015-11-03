@@ -19,12 +19,18 @@ vquery = ''
 <%= @instrument.last_url %>
 </div>
 
-<p>
+<div>
 Download current day as
   <%= link_to("CSV",  instrument_url( :format => 'csv')  )%>, 
   <%= link_to("XML",  instrument_url( :format => 'xml')  )%>,
   <%= link_to("JSON", instrument_url( :format => 'jsf') )%>
-</p>
+</div>
+
+<div>
+  Download instrument description <%= link_to("SensorML", instrument_url( :format => 'sensorml') )%>
+</div>
+
+<br/>
 
 <div class="instrument_details_and_variables">
 <div class="instrument_details">
@@ -69,8 +75,11 @@ Download current day as
 <tr>
   <td><strong>Test Measurements</strong></td>
   <td><%= @instrument.measurements.where(test: 1).count %>
-  <td><%= button_to 'Delete Test Data', measurements_delete_test_path, method: :get, params: {instrument_id: @instrument.id}, 
-    data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %></td>
+  <td>
+	<% if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)  %>		
+		<%= button_to 'Delete Test Data', measurements_delete_test_path, method: :get, params: {instrument_id: @instrument.id}, data: { confirm: "Are you sure you want to delete the test data for \n#{@instrument.name}}?\n\nALL TEST DATA WILL BE LOST" } %>
+	<% end %>
+  </td>
   </td>
 </tr>
 <tr>
@@ -89,14 +98,24 @@ Download current day as
 <tr>
   <td style="vertical-align:top"><strong>Variables</strong></td>
 </tr>
+
+
 <tr>
 	<td>
 	  <table id="variables_list">
-		  <% @instrument.vars.each do |variable| %>
-      <tr>
+		<tr>
+			<td style="vertical-align:top"><em>Short Name</em></td>
+			<td></td>
+			<td style="vertical-align:top"><em>Name</em></td>
+			<td style="vertical-align:top"><em>Units</em></td>
+			<td style="vertical-align:top"><em>Measured Property</em></td>
+		</tr>
+
+		<% @instrument.vars.each do |variable| %>
+			<tr>
 				<%= render partial: 'vars/bip_form', locals: {variable: variable} %>
-      </tr>
-      <% end %>		
+			</tr>
+		<% end %>		
     </td>
     </table>
   </td>
@@ -108,7 +127,7 @@ Download current day as
 	<%= f.hidden_field :shortname, :value => 'shortname' %>
 	<%= f.hidden_field :instrument_id, :value => @instrument.id %>
 
-	<% if @profile.secure_administration == true && current_user  && can?(:manage, Var)  %>
+	<% if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)  %>
 	 	<%= f.submit :value	 => 'Add a New Variable' %>
 	<% end %>
 <% end %>

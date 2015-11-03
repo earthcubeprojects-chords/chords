@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Measured Properties</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Label</th>
+      <th>Url</th>
+      <th>Definition</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @measured_properties.each do |measured_property| %>
+      <tr>
+        <td><%= measured_property.name %></td>
+        <td><%= measured_property.label %></td>
+        <td><%= measured_property.url %></td>
+        <td><%= measured_property.definition %></td>
+        <td><%= link_to 'Show', measured_property %></td>
+        <td><%= link_to 'Edit', edit_measured_property_path(measured_property) %></td>
+        <td><%= link_to 'Destroy', measured_property, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Measured property', new_measured_property_path %>

@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :measured_properties
+
+  resources :vars do
+    get :autocomplete_measured_property_label, :on => :collection
+  end
+
   # devise_for :users
   devise_for :users, controllers: {
           sessions: 'users/sessions'

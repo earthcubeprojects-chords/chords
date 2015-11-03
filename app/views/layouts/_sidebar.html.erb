@@ -57,7 +57,7 @@
   </div>
   </li>
 
-  <% if user_signed_in? %>  
+  <% if (@profile.secure_administration == false) || user_signed_in? %>  
 	  <li>
 		<div>
 
