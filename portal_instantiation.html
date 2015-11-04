@@ -1,0 +1,29 @@
+---
+---
+* Choose the *CloudFormation* service from the AWS [services page](https://aws.amazon.com/).
+* Mash *Create Stack* to start the CloudFormation wizard.
+* Configure:
+  1. *Select Template* page:
+    *  Give the stack a name. 
+    * Paste the following link into "Specify an S3 template URL": https://s3-us-west-2.amazonaws.com/chords-template/chords.template
+  2. *Specify Parameters* page: 
+    * Select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, if ever needed.
+  3. *Options* page:
+    * Skip.
+  4. *Review* page: 
+    * Verify that everything looks good.
+    * Mash the *Create* button. 
+
+After the creation has started, you will be taken 
+to the stack summary page. Select the stack, and go to the *Events* tab to watch the progress 
+of the stack creation. It usually takes about 4 minutes to complete, but it can take much longer (even 30 minutes), 
+depending upon AWS loads.
+
+Once the stack is running, the *Outputs* tab will provide a URL for the new CHORDS Portal. Click on the 
+link to access the Portal.
+
+If the provisioning fails, the instance will be stopped, and you won't know why. You can redo the process, 
+and disable the rollback, so that the instance is left running. To do this, when on the *Options* page, 
+open the Advanced section, and change "Rollback on Failure" to *No*. This will
+keep the instance running when the provisioning fails, so that you can ssh in and diagnose the problem.
+
