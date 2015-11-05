@@ -5,7 +5,7 @@ group: navigation
 ---
 
 # CloudFormation Front Page
-![AWS Cloud Formation Step 0](/images/AWS_CF0.png "AWS Cloud Formation Step 0")
+![AWS Cloud Formation Step 0](AWS_CF0.png "AWS Cloud Formation Step 0")
 
  1. Mash *Create Stack* to start the CloudFormation wizard.
 
