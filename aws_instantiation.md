@@ -34,7 +34,7 @@ group: navigation
 # Watch Events
 ![AWS Cloud Formation Step 5](images/AWS_CF5.png "AWS Cloud Formation Step 5")
 
-After the creation has started, you will be taken 
+ * After the creation has started, you will be taken 
 to the stack summary page. Go to the *Events* tab to watch the progress 
 of the stack creation. It usually takes about 4 minutes to complete, but it can take 
 much longer (even 30 minutes), depending upon AWS loads.
@@ -42,16 +42,16 @@ much longer (even 30 minutes), depending upon AWS loads.
 # Find Your URL
 ![AWS Cloud Formation Step 6](images/AWS_CF6.png "AWS Cloud Formation Step 6")
 
-Once the portal is created and running, the *Outputs* tab will provide a WebsiteURL for the new CHORDS Portal. Click on the 
+ * Once the portal is created and running, the *Outputs* tab will provide a WebsiteURL for the new CHORDS Portal. Click on the 
 link to access the Portal.
 
 # Log Into to Your CHORDS Portal
 ![AWS Cloud Formation Step 7](images/AWS_CF7.png "AWS Cloud Formation Step 7")
 
-Clicking the WebsiteURL link will take you to the login page for your Portal.
+ * Clicking the WebsiteURL link will take you to the login page for your Portal.
 
 # If Something Breaks
-If the provisioning fails, the instance will be stopped, and you won\'t know why. You can redo the process, 
+ * If the provisioning fails, the instance will be stopped, and you won\'t know why. You can redo the process, 
 and disable the rollback, so that the instance is left running. To do this, when on the *Options* page, 
 open the Advanced section, and change _Rollback on Failure_ to *No*. This will
 keep the instance running when the provisioning fails, so that you can ssh in and diagnose the problem.
