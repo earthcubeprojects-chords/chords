@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Creating a new CHORDS Portal on Amazon Web Services
-group: navigation
 ---
 
 # CloudFormation Front Page
