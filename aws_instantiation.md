@@ -3,20 +3,20 @@ layout: page
 title: Creating a new CHORDS Portal on Amazon Web Services
 ---
 
-# 1. CloudFormation Front Page
+# 1. CloudFormation front page
 
 * Mash *Create Stack* to start the CloudFormation wizard.
 
 ![AWS Cloud Formation Step 0](images/AWS_CF0.png "AWS Cloud Formation Step 0")
 
-# 2. Specify A Template
+# 2. Specify a portal template 
 
 * Paste the following link into _Specify an S3 template URL_: <br/>
 https://s3-us-west-2.amazonaws.com/chords-template/chords.template
 
 ![AWS Cloud Formation Step 1](images/AWS_CF1.png "AWS Cloud Formation Step 1")
 
-# 3. Specify the Portal Name and Key
+# 3. Specify the portal name and key
 
 * Give the stack a name. The convention is _CHORDS-_ suffixed with your project or organization name, e.g. _CHORDS-CSURadar_.
 * Select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, if ever needed.
@@ -36,7 +36,7 @@ https://s3-us-west-2.amazonaws.com/chords-template/chords.template
 
 ![AWS Cloud Formation Step 4](images/AWS_CF4.png "AWS Cloud Formation Step 4")
 
-# 6. Wait for Portal to be created
+# 6. Wait for The portal to be created
 
 * After the creation has started, you will be taken 
 to the stack summary page. Go to the *Events* tab to watch the progress 
