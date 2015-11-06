@@ -9,7 +9,7 @@
 
 # If you are building a GitHub project page then use these settings:
 url: "http://ncar.github.io/chords_testbed"
-baseurl: ""
+baseurl: "/chords_testbed"
 
 # Of course don't forget to change the username and projectname to YOUR username and project
 
