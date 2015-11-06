@@ -28,6 +28,11 @@ class Instrument < ActiveRecord::Base
 
     return measurement
   end
+
+  def self.last_measurement_url
+    url = instrument_url()
+  end
+
   
   def is_receiving_data
     measurement = Measurement.where("(instrument_id = ?) AND (measured_at > ?)", self.id, self.sample_rate_seconds.seconds.ago-5).order(:measured_at).last
