@@ -11,7 +11,8 @@ title: Creating a new CHORDS Portal on Amazon Web Services
 # Specify A Template
 ![AWS Cloud Formation Step 1](images/AWS_CF1.png "AWS Cloud Formation Step 1")
 
-  1. Paste the following link into _Specify an S3 template URL_: https://s3-us-west-2.amazonaws.com/chords-template/chords.template
+  1. Paste the following link into _Specify an S3 template URL_: <br/>
+  https://s3-us-west-2.amazonaws.com/chords-template/chords.template
 
 # Specify the Portal Name and Key
 ![AWS Cloud Formation Step 2](images/AWS_CF2.png "AWS Cloud Formation Step 2")
