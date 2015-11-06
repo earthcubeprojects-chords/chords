@@ -4,15 +4,16 @@ title: Creating a new CHORDS Portal on Amazon Web Services
 ---
 
 # CloudFormation Front Page
+1. Mash *Create Stack* to start the CloudFormation wizard.
+
 ![AWS Cloud Formation Step 0](images/AWS_CF0.png "AWS Cloud Formation Step 0")
 
- 1. Mash *Create Stack* to start the CloudFormation wizard.
-
 # Specify A Template
+1. Paste the following link into _Specify an S3 template URL_: <br/>
+https://s3-us-west-2.amazonaws.com/chords-template/chords.template
 ![AWS Cloud Formation Step 1](images/AWS_CF1.png "AWS Cloud Formation Step 1")
 
-  1. Paste the following link into _Specify an S3 template URL_: <br/>
-  https://s3-us-west-2.amazonaws.com/chords-template/chords.template
+
 
 # Specify the Portal Name and Key
 ![AWS Cloud Formation Step 2](images/AWS_CF2.png "AWS Cloud Formation Step 2")
@@ -55,5 +56,4 @@ link to access the Portal.
 and disable the rollback, so that the instance is left running. To do this, when on the *Options* page, 
 open the Advanced section, and change _Rollback on Failure_ to *No*. This will
 keep the instance running when the provisioning fails, so that you can ssh in and diagnose the problem.
-
 
