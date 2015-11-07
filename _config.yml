@@ -28,7 +28,6 @@ avatar: "/images/CHORDS_7.png"
 # List of links in the navigation bar
 navbar-links:
   Home: ""
-  About Me: "aboutme.html"
   Contact: "contact.html"
   
 # --- Footer options --- #
