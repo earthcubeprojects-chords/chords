@@ -3,14 +3,20 @@ layout: page
 title: Contacts and More
 ---
 
-<div align="center">
-<img alt="title" src="images/logo_earthcube_cube-only_SMALL.png" style="width: 100px; height: 100px;">
-CHORDS is a project inspired and funded by the National Science Foundation 
-<a href="http://earthcube.org/">EarthCube</a> initiative.
+<div class="row">
+  <div class="col-sm-2"  style="text-align: center;">
+    <img alt="title" src="images/logo_earthcube_cube-only_SMALL.png" style="width: 50px; height: 50px;">
+  </div>
+  <div class="col-sm-10">
+   CHORDS is a project inspired and funded by the National Science Foundation 
+   <a href="http://earthcube.org/">EarthCube</a> initiative.
+  </div>
 </div>
 <p/>
-<div align="center">
-<em>Add links here to the CHORDS project institutions.</em>
+<div class="row">
+  <div class="col-sm-12"  style="text-align: center;">
+    <em>Add links here to the CHORDS project institutions.</em>
+  </div>
 </div>
 <p/>
 <div  align="center">
