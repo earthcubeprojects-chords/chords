@@ -4,7 +4,7 @@ title: Putting Data Into a CHORDS Portal
 ---
 
 It's easy to submit new data to a Portal, simply using standard HTTP URL's. The URL can be submitted 
-directly from the address bar of your browser, but this would quickly get tedious. 
+directly from the address bar of your browser (but of course this would get tedious).
 
 Almost all programming languages have functions for submitting HTTP requests. We will first describe 
 the URL syntax, and follow this with examples that demonstrate how easy it is to feed your
