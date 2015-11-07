@@ -8,11 +8,11 @@ directly from the address bar of your browser, but this would quickly get tediou
 
 Almost all programming languages have functions for submitting HTTP requests. We will first describe 
 the URL syntax, and follow this with examples that demonstrate how easy it is to integrate your data 
-system with a CHORDS Portal.
+system with a CHORDS Portal, using [Python](#python) or a [browser/command line](#browser).
 
 _Insert a description of the URL put syntax_
 
-## Python
+## <a name="python"></a>Python
 
 {% highlight python %}
 # Put a collection of measurements into the portal
@@ -24,7 +24,7 @@ print response
 <Response [200]>
 {% endhighlight %}
 
-## Browser, wget and curl
+## <a name="browser"></a>Browser, wget and curl
 
 Data can be submitted to a portal just by typing the URL into the address bar. The *wget* and *curl* commands, avaiable in Linux and OSX, can accomplish the same thing. The following shows a typical URL submitted with *wget* or *curl*.
 

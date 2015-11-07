@@ -12,11 +12,13 @@ analysis and visulaization apps that can process your real-time observations. Us
 you can even build widgets and pages that display your data on your own web site.
 
 We will first describe the URL syntax for retrieving data, and follow this with examples that 
-demonstrate how easy it is to integrate your analysis activities with a CHORDS Portal.
+demonstrate how easy it is to integrate your analysis activities with a CHORDS Portal using
+[Python](#python), [HTML](#html), [IDL](#idl), [Matlab](#matlab), [R](#r), [sh](#sh), etc. You
+get the idea.
 
 _Insert a description of the URL get syntax_
 
-## Python
+##<a name="python"></a> Python
 
 {% highlight python %}
 # Fetch the most recent measurements from a portal
@@ -56,7 +58,7 @@ print json.dumps(data, indent=4, sort_keys=True)
     "Site": "Boulder"
 }{% endhighlight %}
 
-## HTML with JavaScript
+##<a name="html"></a> HTML with JavaScript
 
 _It appears that there may be cross-domain security issues with this approach. We need to
 look into this._
@@ -94,7 +96,7 @@ Result:
 
 ![CHORDS JavaScript Access](images/chords_ajax.png)
 
-## IDL
+##<a name="idl"></a> IDL
 
 {% highlight idl %}
 url='http://chords.dyndns.org/instruments/26.json?last'
@@ -140,7 +142,7 @@ data
 }
 {% endhighlight %}
 
-## Matlab
+##<a name="matlab"></a> Matlab
 
 {% highlight matlab %}
 % Read CHORDS JSON data into a Matlab program.
@@ -175,7 +177,7 @@ ans =
 >> 
 {% endhighlight %}
 
-## R
+##<a name="r"></a> R
 
 {% highlight r %}
 install.packages('curl')
@@ -227,7 +229,7 @@ $Data$batv
 [1] 13.9
 {% endhighlight %}
 
-## sh
+##<a name="sh"></a> sh
 
 {% highlight sh %}
 #!/bin/sh
