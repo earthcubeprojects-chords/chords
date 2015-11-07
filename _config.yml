@@ -36,7 +36,7 @@ navbar-links:
 # Important: you must keep the "name" parameter, everything else you can remove
 author:
   name: National Center for Atmospheric Reseach
-  email: "chords_removeme@eol.ucar.edu"
+  email: "replacewithaddress@eol.ucar.edu"
   facebook: yourname  # eg. daattali
   github: ncar/chords_testbed    # eg. daattali
   twitter: yourname   # eg. daattali
