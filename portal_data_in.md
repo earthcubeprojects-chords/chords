@@ -9,7 +9,7 @@ directly from the address bar of your browser, but this would quickly get tediou
 Almost all programming languages have functions for submitting HTTP requests. We will first describe 
 the URL syntax, and follow this with examples that demonstrate how easy it is to feed your
 data to a CHORDS Portal, using [Python](#python) or a [browser/command line](#browser). These aren't
-the only languages that work, and you should be able to figure out a simple method for your own
+the only languages that work, and you should be able to figure out a similar method for your own
 particular langauge.
 
 _Insert a description of the URL put syntax_
