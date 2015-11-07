@@ -26,7 +26,7 @@ print response
 <Response [200]>
 {% endhighlight %}
 
-## <a name="browser"></a>Browser, wget and curl
+## <a name="browser"></a>Browser and sh
 
 Data can be submitted to a portal just by typing the URL into the address bar. The *wget* and *curl* commands, avaiable in Linux and OSX, can accomplish the same thing. The following shows a typical URL submitted with *wget* or *curl*.
 
