@@ -1,7 +1,16 @@
 ---
 layout: page
-title: What is a CHORDS Portal?
+title: What is CHORDS?
 ---
+
+"[Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS)](http://earthcube.org/group/chords) is a real-time data services infrastructure that will provide an easy-to-use system to acquire, navigate and distribute real-time data streams via cloud services and the Internet. It will lower the barrier to these services for small instrument teams, employ data and metadata formats that adhere to community accepted standards, and broaden access to real-time data for the geosciences community."
+
+CHORDS consists of two components: a real-time instrument data management server (_Portal_), and a collection
+of higher level web-services that provide advanced, standards based processing (_Services_).
+
+<div class="col-sm-12" style="text-align: center;">
+  <h2><span class="label label-default">This web site is about the CHORDS Portal</span></h2>
+</div>
 
 <img src="images/cartoon1.png" alt="CHORDS Portal Cartoon" style="width: 100%;"/>
 
@@ -15,7 +24,8 @@ operating correctly.
 * Is a rolling archive from which scientists and analysts can easily fetch the data in
 real-time, delivered directly to browsers, programs and mobile apps via standard protocols.
 * Is an entry point to sophisticated real-time web services that can convert your data streams to
-standardized formats such as OGC, and provide discovery, aggregation and other web-enabled functions. 
+standardized formats such as OGC, and provide mapping, visualization, discovery, aggregation and 
+many other web-enabled functions. 
 
 ## Owning a Portal
 
