@@ -20,7 +20,7 @@ standardized formats such as OGC, and provide discovery, aggregation and other w
 # Owning a Portal
 
 The Portal is targeted at users who do not have IT staffs and large IT budgets. It is an appliance which you 
-run on amazon Web Services:
+run on Amazon Web Services:
 
 * Ownership: You have complete control of the portal. You create it and manage it yourself, without
 having to rely on external tech support.
@@ -32,5 +32,5 @@ You then go to your Portal web page and configure it for your project.
 
 # Caveats
 
-* Currently the Portal only processes teme-series measurements. Plans are under way to add 
+* Currently the Portal only processes time-series measurements. Plans are under way to add 
 additional data types, such as soundings, ray-oriented observations, and images.
