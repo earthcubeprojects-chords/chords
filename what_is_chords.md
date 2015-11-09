@@ -5,7 +5,7 @@ title: What is a CHORDS Portal?
 
 <img src="images/cartoon1.png" alt="CHORDS Portal Cartoon" style="width: 100%;"/>
 
-# The CHORDS Portal
+## The CHORDS Portal
 
 * Is a web server that accepts real-time data from distributed instruments, and serves 
 the measurements to anyone on the Internet. The data are pushed to and pulled from the Portal using 
@@ -17,7 +17,7 @@ real-time, delivered directly to browsers, programs and mobile apps via standard
 * Is an entry point to sophisticated real-time web services that can convert your data streams to
 standardized formats such as OGC, and provide discovery, aggregation and other web-enabled functions. 
 
-# Owning a Portal
+## Owning a Portal
 
 The Portal is targeted at users who do not have IT staffs and large IT budgets. It is an appliance which you 
 run on Amazon Web Services:
@@ -30,7 +30,17 @@ on Amazon.
 your account, you will follow a short recipe to create a new Portal (server) running on Amazon. 
 You then go to your Portal web page and configure it for your project.
 
-# Caveats
+## Caveats
 
 * Currently the Portal only processes time-series measurements. Plans are under way to add 
 additional data types, such as soundings, ray-oriented observations, and images.
+
+## Concepts
+
+**Add brief description of portal concepts, including:**
+
+* Sites
+* Measurements
+* Instruments
+* HTML concepts (concise and only the bare bones as related to CHORDS: general URL construction as it relates 
+to data ingest and fetching)

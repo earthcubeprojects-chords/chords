@@ -16,7 +16,7 @@ demonstrate how easy it is to integrate your analysis activities with a CHORDS P
 [Python](#python), [HTML](#html), [IDL](#idl), [Matlab](#matlab), [R](#r), [sh](#sh), etc. You
 get the idea.
 
-_Insert a description of the URL get syntax_
+**Insert a description of the URL get syntax here**
 
 ##<a name="python"></a> Python
 

@@ -12,7 +12,7 @@ data to a CHORDS Portal, using [Python](#python) or a [browser/command line](#br
 the only languages that work, and you should be able to figure out a similar method for your own
 particular langauge.
 
-_Insert a description of the URL put syntax_
+**Insert a description of the URL put syntax here**
 
 ## <a name="python"></a>Python
 
