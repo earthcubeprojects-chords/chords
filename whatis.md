@@ -23,7 +23,7 @@ simple HTTP requests.
 operating correctly.
 * Is a rolling archive from which scientists and analysts can easily fetch the data in
 real-time, delivered directly to browsers, programs and mobile apps via standard protocols.
-One click brings you a CSV file. Or pull data directly into your analysis program 
+One click brings you a CSV file. Or you pull data directly into your analysis program 
 with just a few lines of code.
 * Is an entry point to sophisticated real-time web services that can convert your data streams to
 standardized formats such as OGC, and provide mapping, visualization, discovery, aggregation and 
