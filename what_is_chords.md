@@ -29,7 +29,7 @@ many other web-enabled functions.
 
 ## Owning a Portal
 
-The Portal is targeted at users who do not have IT staffs and large IT budgets. It is an appliance which you 
+The Portal is targeted at users who do not have IT staffs and budgets. It is an appliance which you 
 run on Amazon Web Services:
 
 * Ownership: You have complete control of the portal. You create it and manage it yourself, without
