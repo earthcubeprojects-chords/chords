@@ -57,12 +57,3 @@ code examples for accessing the portal from many languages.
 * Currently the Portal only processes time-series measurements. Plans are under way to add 
 additional data types, such as soundings, ray-oriented observations, and images.
 
-## Concepts
-
-**Add brief description of portal concepts, including:**
-
-* Sites
-* Measurements
-* Instruments
-* HTML concepts (concise and only the bare bones as related to CHORDS: general URL construction as it relates 
-to data ingest and fetching)
