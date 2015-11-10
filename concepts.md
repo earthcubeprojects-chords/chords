@@ -9,13 +9,13 @@ title: CHORDS Concepts
   <table class = "table table-striped">
     <tbody>
       <tr>
-        <td>Sites</td>
+        <td>Site</td>
         <td>A geographic location, which may host one or more instruments. It is the only place where 
            coordinates are specified, so if you need to identify a unique location for an instrument, it
            must be assigned to a distinct site. </td>
       </tr>
       <tr>
-        <td>Instruments</td>
+        <td>Instrument</td>
         <td>A source of related measurements. Typically it is one device, but you can designate multiple
         devices as a single instrument, or you can divide the measurements from a single device among
         multiple instruments, if this results in a more appropriate data organization. </td>
@@ -26,7 +26,7 @@ title: CHORDS Concepts
         Variables have <em>Short Names</em></td>
       </tr>
       <tr>
-        <td>Measurements</td>
+        <td>Measurement</td>
         <td>A single observation of a Variable. Measurements are assigned to 
         instruments, and each one has an associated time of observation. Typically, multiple
         measurements for the same instrument are submitted together, with a common time tag.</td>
@@ -39,7 +39,7 @@ title: CHORDS Concepts
         still be useful for identification.</td>
       </tr>
       <tr>
-        <td>Formats</td>
+        <td>Format</td>
         <td>URL extensions usually indicate the type of data that will be returned to a data request:
           <table>
             <tr><td>.csv</td><td> A comma separated data file.</td></tr>
