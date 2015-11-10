@@ -43,12 +43,12 @@ You then go to your Portal web page and configure it for your project.
 ## The One Gotcha
 
 Nothing is entirely free. You will have to adapt your instrument to send the simple URL's containing
-your measurements, to your Portal. But usually this is really not too hard. Your instrument may already 
-have an Internet connection, and you just need to add a few lines to a processing script. Maybe you need to
+your measurements, to your Portal. But usually this is not too hard. Your instrument may already 
+have an Internet connection, and you just need to add a few lines to a processing script. Maybe you will need to
 add a USB cell modem to your data acquisition computer. Or perhaps you need to add a $50 _Rasberry Pi_ to provide 
 translation from an instrument to the network. Chances are that since you deploy instruments, you are already 
-pretty handy in this area. In any event, we can offer advice on getting connected. And this web site already
-code examples for accessing the portal from many languages..
+pretty handy in this area. In any event, we can offer advice on getting connected. And this web site already has
+code examples for accessing the portal from many languages.
 
 ## Caveats
 
