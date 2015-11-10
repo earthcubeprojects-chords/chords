@@ -19,7 +19,7 @@ of higher level web-services that provide advanced, standards based processing (
 * Is a web server that accepts real-time data from distributed instruments, and serves 
 the measurements to anyone on the Internet. The data are pushed to and pulled from the Portal using 
 simple HTTP requests.
-* Is a monitoring tool which allows you to monitor and insure that your remote instruments are
+* Is a management tool which allows you to monitor and insure that your remote instruments are
 operating correctly.
 * Is a rolling archive from which scientists and analysts can easily fetch the data in
 real-time, delivered directly to browsers, programs and mobile apps via standard protocols.
