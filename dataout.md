@@ -13,13 +13,23 @@ you can even build widgets and pages that display your data on your own web site
 
 We will first describe the URL syntax for retrieving data, and follow this with examples that 
 demonstrate how easy it is to integrate your analysis activities with a CHORDS Portal using
-[Python](#python), [HTML](#html), [IDL](#idl), [Matlab](#matlab), [R](#r), [sh](#sh), etc. You
-get the idea.
+Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
 **Insert a description of the URL get syntax here**
 
-##<a name="python"></a> Python
+<div class="container">
+  <ul class="nav nav-pills">
+    <li><a data-toggle="tab" href="#python">Python</a></li>
+    <li><a data-toggle="tab" href="#htmlajax">HTML</a></li>
+    <li><a data-toggle="tab" href="#idl">IDL</a></li>
+    <li><a data-toggle="tab" href="#matlab">Matlab</a></li>
+    <li><a data-toggle="tab" href="#r">R</a></li>
+    <li><a data-toggle="tab" href="#sh">Sh</a></li>
+  </ul>
 
+  <div class="tab-content">
+  
+    <div id="python" class="tab-pane active">
 {% highlight python %}
 # Fetch the most recent measurements from a portal
 import json, requests
@@ -57,13 +67,14 @@ print json.dumps(data, indent=4, sort_keys=True)
     "Project": "Localhost", 
     "Site": "Boulder"
 }{% endhighlight %}
+    </div>
+    
+    <div id="htmlajax" class="tab-pane">
 
-##<a name="html"></a> HTML with JavaScript
+<p><em>It appears that there may be cross-domain security issues with this approach. We need to
+look into this.</em></p>
 
-_It appears that there may be cross-domain security issues with this approach. We need to
-look into this._
-
-{% highlight python %}
+{% highlight html %}
 <h1>CHORDS HTML/Ajax Example</h1>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -79,7 +90,8 @@ $(function () {
                 table_html += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
             } else {
                 $.each(val, function (datakey, dataval) {
-                    table_html += "<tr><td>Data</td><td>" + datakey + "</td><td>" + dataval + "</td></tr>";
+                    table_html += "<tr><td>Data</td><td>" + datakey 
+                      + "</td><td>" + dataval + "</td></tr>";
                 });
             }
         });
@@ -92,12 +104,11 @@ $(function () {
 });
 </script>
 {% endhighlight %}
-Result:
-
-![CHORDS JavaScript Access](images/chords_ajax.png)
-
-##<a name="idl"></a> IDL
-
+    Result:
+    <img class="img-responsive" src="images/chords_ajax.png" alt="AJAX">
+    </div>
+    
+    <div id="idl" class="tab-pane active">
 {% highlight idl %}
 url='http://chords.dyndns.org/instruments/26.json?last'
 oUrl = OBJ_NEW('IDLnetUrl')
@@ -141,9 +152,9 @@ data
     }
 }
 {% endhighlight %}
+    </div>
 
-##<a name="matlab"></a> Matlab
-
+    <div id="matlab" class="tab-pane">
 {% highlight matlab %}
 % Read CHORDS JSON data into a Matlab program.
 % This code uses the JSONlab toolbox from the Matlab File Exchange.
@@ -176,9 +187,9 @@ ans =
 
 >> 
 {% endhighlight %}
-
-##<a name="r"></a> R
-
+    </div>
+    
+    <div id="r" class="tab-pane">
 {% highlight r %}
 install.packages('curl')
 install.packages('jsonlite')
@@ -229,8 +240,9 @@ $Data$batv
 [1] 13.9
 {% endhighlight %}
 
-##<a name="sh"></a> sh
-
+    </div>
+    
+    <div id="sh" class="tab-pane">
 {% highlight sh %}
 #!/bin/sh
 
@@ -257,6 +269,9 @@ Time,Wind Direction,Wind Speed,Wind Max,Temperature,Humidity,Pressure,Rain Total
 JSON format:
 {"Project":"CHORDS Testbed","Site":"NCAR Mesa Lab","Affiliation":"NSF EarthCube","Instrument":"ML Wx Station","Data":{"Time":["2015-07-28T22:30:51.000Z"],"wdir":[75.0],"wspd":[2.5],"wmax":[6.4],"tdry":[26.3],"rh":[25.3],"pres":[814.3],"raintot":[453.7],"batv":[13.9]}}
 {% endhighlight %}
+  </div>
+
+</div>
 
 
 
