@@ -3,9 +3,7 @@ layout: page
 title: What is CHORDS?
 ---
 
-"[Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS)](http://earthcube.org/group/chords) is a real-time data services infrastructure that will provide an easy-to-use system to acquire, navigate and distribute real-time data streams via cloud services
-and the Internet. It will lower the barrier to these services for small instrument teams, employ data and metadata formats that adhere 
-to community accepted standards, and broaden access to real-time data for the geosciences community."
+"[Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS)](http://earthcube.org/group/chords) is a real-time data services infrastructure that will provide an easy-to-use system to acquire, navigate and distribute real-time data streams via cloud services and the Internet. It will lower the barrier to these services for small instrument teams, employ data and metadata formats that adhere to community accepted standards, and broaden access to real-time data for the geosciences community."
 
 CHORDS consists of two components: a real-time instrument data management server (_Portal_), and a collection
 of higher level web-services that provide advanced, standards based processing (_Services_).
@@ -46,7 +44,7 @@ You then go to your Portal web page and configure it for your project.
 
 ## The One Gotcha
 
-Nothing is entirely free. You will have to adapt your instrument to send the simple URL's containing
+Nothing is entirely free. You will need to adapt your instrument to send the URL's containing
 your measurements, to your Portal. But usually this is not too hard. Your instrument may already 
 have an Internet connection, and you just need to add a few lines to a processing script. Maybe you will need to
 add a USB cell modem to your data acquisition computer. Or perhaps you need to add a $50 _Rasberry Pi_ to provide 
