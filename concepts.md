@@ -60,11 +60,11 @@ title: CHORDS Concepts
     </div>
     
     <div id="dashboard" class="tab-pane">
-      Dashboard here.
+      <img class="img-responsive" src="images/dashboard.png" alt="Dashboard">
     </div>
     
     <div id="data" class="tab-pane">
-      Data here.
+      <img class="img-responsive" src="images/data.png" alt="Data">
     </div>
   </div>
 </div>
