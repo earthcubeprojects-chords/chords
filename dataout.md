@@ -3,7 +3,8 @@ layout: page
 title: Retrieving Data From a CHORDS Portal
 ---
 
-It's just as easy to get data out of a Portal as it is to put data in. Once again, you use HTTP URL's to
+It's just as easy to get data out of a Portal as it is to put data in. This can
+be done directly from the Portal web page. Or you can use HTTP URL's to
 fetch data. The URL can be submitted directly from the address bar of your browser, which will
 deliver the data in standard formats such as CSV files, JSON files, or plain JSON. 
 
@@ -19,6 +20,7 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
 <div class="container">
   <ul class="nav nav-pills">
+    <li><a data-toggle="tab" href="#portal">Portal</a></li>
     <li><a data-toggle="tab" href="#python">Python</a></li>
     <li><a data-toggle="tab" href="#htmlajax">HTML</a></li>
     <li><a data-toggle="tab" href="#idl">IDL</a></li>
@@ -29,7 +31,11 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
   <div class="tab-content">
   
-    <div id="python" class="tab-pane active">
+    <div id="portal" class="tab-pane active">
+      <img class="img-responsive" src="images/data.png" alt="Direct">
+    </div>
+    
+    <div id="python" class="tab-pane">
 {% highlight python %}
 # Fetch the most recent measurements from a portal
 import json, requests
