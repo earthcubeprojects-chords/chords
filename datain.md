@@ -36,9 +36,11 @@ particular langauge.
 
     <div id="browser" class="tab-pane">
     <p>
-    Data can be submitted to a portal just by typing the URL into the address bar. The *wget* and *curl* commands, 
-    available in Linux and OSX, can accomplish the same thing. The following shows a typical URL 
-    submitted with *wget* or *curl*.
+    Data can be submitted to a portal just by typing the URL into the address bar of a browser. 
+    </p>
+    <p>
+    The <em>wget</em> and <em>curl</em> commands, available in Linux and OSX, can accomplish the same thing 
+    from a console. The following shows a typical URL submitted with these commands.
     </p>
     {% highlight sh %}
 wget http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&key=A5F461B1
