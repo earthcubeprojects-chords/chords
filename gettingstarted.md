@@ -3,10 +3,21 @@ layout: page
 title: Getting Started
 ---
 
-## There Are Three Steps
-
-1. [Open](aws.html) an Amazon Web Services (AWS) account.
-
-2. [Create](create.html) a new CHORDS Portal.
-
-3. [Configure](config.html) the Portal.
+  <div class="row">
+    <div class="col-sm-4"  style="text-align: center;">
+      <p/>
+      <a class="btn btn-success btn-lg get-started-btn" href="aws.html">
+      <img src="images/cloud.svg" width="30" /> Open an AWS account</a>
+    </div>
+    <div class="col-sm-4"  style="text-align: center;">
+      <p/>
+      <a class="btn btn-success btn-lg get-started-btn" href="create.html">
+      <img src="images/chevron-left.svg" width="30" /> Create a Portal</a>
+    </div>
+    <div class="col-sm-4" style="text-align: center;">
+     <p/>
+     <a class="btn btn-success btn-lg get-started-btn" href="config.html">
+     <img src="images/cog.svg" width="30" /> Configure a Portale</a>
+    </div>
+  </div>
+  
