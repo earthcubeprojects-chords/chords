@@ -1,6 +1,6 @@
 ---
 layout: page
-title: CHORDS Concepts
+title: Concepts
 ---
 
 <div class="container">

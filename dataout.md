@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Retrieving Data From a CHORDS Portal
+title: Data Out
 ---
 
 It's just as easy to get data out of a Portal as it is to put data in. This can
@@ -114,7 +114,7 @@ $(function () {
     <img class="img-responsive" src="images/chords_ajax.png" alt="AJAX">
     </div>
     
-    <div id="idl" class="tab-pane active">
+    <div id="idl" class="tab-pane">
 {% highlight idl %}
 url='http://chords.dyndns.org/instruments/26.json?last'
 oUrl = OBJ_NEW('IDLnetUrl')

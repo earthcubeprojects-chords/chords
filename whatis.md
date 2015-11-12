@@ -14,18 +14,16 @@ of higher level web-services that provide advanced, standards based processing (
 
 <img  class="img-responsive" src="images/cartoon1.png" alt="CHORDS Portal Cartoon" >
 
-## The CHORDS Portal
+## The CHORDS Portal is a
 
-* Is a web server that accepts real-time data from distributed instruments, and serves 
-the measurements to anyone on the Internet. The data are pushed to and pulled from the Portal using 
+* **web server** that accepts real-time data from distributed instruments, and serves 
+the measurements to anyone on the Internet. The data streams are pushed to and pulled from the Portal using 
 simple HTTP requests. 
-* Is a management tool which allows you to monitor and insure that your remote instruments are
-operating correctly.
-* Is a rolling archive from which scientists and analysts can easily fetch the data in
-real-time, delivered directly to browsers, programs and mobile apps via standard protocols.
-One click brings you a CSV file. Or you pull data directly into your analysis program 
-with just a few lines of code.
-* Is an entry point to sophisticated real-time web services that can convert your data streams to
+* **management tool** that allows you to monitor your remote instruments, insure correct operation, and maximize data collection.
+* **rolling archive** from which scientists and analysts can easily fetch the data in
+real-time, delivered directly to browsers, programs and mobile apps.
+One click brings you a CSV file. A few lines of code brings data directly into your analysis programs.
+* **entry point** to sophisticated real-time web services that can convert your data streams to
 standardized formats such as OGC, and provide mapping, visualization, discovery, aggregation and 
 many other web-enabled functions. 
 
@@ -34,11 +32,11 @@ many other web-enabled functions.
 The Portal is targeted at users who do not have IT staffs and budgets. It is an appliance which you 
 run on Amazon Web Services:
 
-* Ownership: You have complete control of the portal. You create it and manage it yourself, without
+* **Ownership:** You have complete control of the portal. You create it and manage it yourself, without
 having to rely on external tech support.
-* It's Cheap: The portal, for a modest network of instruments (say 10), will cost about $0.50 a day to operate
+* **It's Cheap:** The portal, for a modest network of instruments (say 10), will cost about $0.50 a day to operate
 on Amazon.
-* Setting It Up: The one requirement is a credit card, to create an Amazon Web Services account. From
+* **Setting It Up:** The one requirement is a credit card, to create an Amazon Web Services account. From
 your account, you will follow a short recipe to create a new Portal (server) running on Amazon. 
 You then go to your Portal web page and configure it for your project.
 
@@ -52,8 +50,9 @@ translation from an instrument to the network. Chances are that since you deploy
 pretty handy in this area. In any event, we can offer advice on getting connected. And this web site already has
 code examples for accessing the portal from many languages.
 
-## Caveats
+## Current and Future
 
-* Currently the Portal only processes time-series measurements. Plans are under way to add 
-additional data types, such as soundings, ray-oriented observations, and images.
+A the moment the Portal only processes time-series measurements. We will soon be adding a data type for
+soundings. Plans are under way to add additional data types, such as ray-oriented measurements and imagery.
+And we are always open to suggestions for other observation types.
 

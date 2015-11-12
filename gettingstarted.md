@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Getting Started with CHORDS
+title: Getting Started
 ---
 
 ## There Are Three Steps

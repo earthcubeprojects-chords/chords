@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Creating a new CHORDS Portal on Amazon Web Services
+title: Create a Portal
 ---
 
 The Portal will run as a standalone web server on Amazon Web Services (AWS). 
