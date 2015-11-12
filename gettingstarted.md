@@ -17,7 +17,7 @@ title: Getting Started
     <div class="col-sm-4" style="text-align: center;">
      <p/>
      <a class="btn btn-success btn-lg get-started-btn" href="config.html">
-     <img src="images/cog.svg" width="30" /> Configure a Portale</a>
+     <img src="images/cog.svg" width="30" /> Configure a Portal</a>
     </div>
   </div>
   
