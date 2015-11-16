@@ -1,6 +1,10 @@
 #
 # Systemd unit description for managing the CHORDS udp_forwarder.
-# It assumes that the source and configuration exist in /usr/local/src/chords_testbed/bin/udp_forwarder/.
+#
+# Systemd convention locates this file in /usr/lib/systemd/system/chords_udp_forwarder.service,
+# with a link to it from /etc/systemd/system/multi-user.target.wants/chords_udp_forwarder.service
+# 
+# To customize the udp_forwarder command line, edit /usr/lib/systemd/system/chords_udp_forwarder.service
 #
 # When you make a change to a service file:
 #  systemctl daemon-reload
@@ -8,6 +12,11 @@
 # To enable and start:
 #  systemctl enable chords_udp_forwarder
 #  systemctl start  chords_udp_forwarder
+#
+# To restart:
+#  systemctl restart chords_udp_forwarder
+#
+# "ps -eo cmd" is a good way to see if the command is running.
 #
 # Here's how to see your log files:
 #  since the last boot:
