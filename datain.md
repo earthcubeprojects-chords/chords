@@ -16,7 +16,7 @@ particular langauge.
 
 <div class="container">
   <ul class="nav nav-pills">
-    <li><a data-toggle="tab" href="#browser">Browser and Sh</a></li>
+    <li class="active"><a data-toggle="tab" href="#browser">Browser and Sh</a></li>
     <li><a data-toggle="tab" href="#python">Python</a></li>
     <li><a data-toggle="tab" href="#c">C</a></li>
   </ul>

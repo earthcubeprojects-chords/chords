@@ -5,7 +5,7 @@ title: Concepts
 
 <div class="container">
   <ul class="nav nav-pills">
-    <li><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
+    <li class="active"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
     <li><a data-toggle="tab" href="#data">Data</a></li>
     <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>

@@ -20,7 +20,7 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
 <div class="container">
   <ul class="nav nav-pills">
-    <li><a data-toggle="tab" href="#portal">Portal</a></li>
+    <li class="active"><a data-toggle="tab" href="#portal">Portal</a></li>
     <li><a data-toggle="tab" href="#python">Python</a></li>
     <li><a data-toggle="tab" href="#htmlajax">HTML</a></li>
     <li><a data-toggle="tab" href="#idl">IDL</a></li>
