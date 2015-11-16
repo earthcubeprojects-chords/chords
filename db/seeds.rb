@@ -12,9 +12,7 @@
 # Instrument.initialize
 
 
-User.create(:email => "mdye@ucar.edu",    :password => "realtimedata", :is_administrator => 1)
-User.create(:email => "martinc@ucar.edu", :password => "realtimedata", :is_administrator => 1)
-User.create(:email => "daniels@ucar.edu", :password => "realtimedata", :is_administrator => 1)
+User.create(:email => "admin@chordsrt.com",    :password => "realtimedata", :is_administrator => 1)
 
 # Site.create(id:7, name: 'Boulder ', lat: 40.029,lon: -105.337 )
 # 
