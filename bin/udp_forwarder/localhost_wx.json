@@ -33,6 +33,8 @@
   
   "interface":   "127.0.0.1",
   
+  "skey":        "123456",
+  
   "re_terms": [ 
     # Match a floating point number
     ["_fp_", "[-+]?[0-9]*\\.?[0-9]+"]

@@ -10,6 +10,8 @@
   # Configuration file for the CHORDS udp_forward program.
   #
   # chords_host:   String, the host name or IP of a CHORDS instance. Include port number if necessary.
+  # interface:     The interface to listen for datagrams on.
+  # skey:          The security key to add to the data put url. (optional, may also be specified on the command line)
   # re_terms:      Array of arrays. Each sub-array contains a name and a Rexexp.
   # instruments:   Hash of instrument definitions. Each instrument receieves messages on one port.
   #   enabled:     Boolean, true if the instrument messages will be processed. If false, the port is not used.
@@ -32,6 +34,10 @@
   
   "chords_host": "chords.dyndns.org",
   
+  "interface":   "127.0.0.1",
+  
+  "skey":        "123456",
+
   "re_terms": [ 
     # Match a floating point number
     ["_fp_", "[-+]?[0-9]*\\.?[0-9]+"]
@@ -126,9 +132,10 @@ class Instrument
   attr_reader "template"
   attr_reader "port"
   
-  def initialize(name, port, id, template, short_names, sample)
+  def initialize(name, port, id, skey, template, short_names, sample)
     @name = name
     @template = template
+    @skey = skey
     @short_names = short_names
     @sample = sample
     @id = id
@@ -168,6 +175,10 @@ class Instrument
         query += "&" + key + "=" + value
       end
     end
+    
+    if @skey != ""
+      query += "&key=" + @skey
+    end
 
     # Build the url
     url = "/measurements/url_create"
@@ -184,15 +195,20 @@ end
 
 ############################################################
 # Parse the command line arguments, and process the configuration file. 
-# Return {:config_file, :verbose, :config}
+# Return {:config_file, :verbose, :skey, :config}
 # See the sample configuration (above) for the description of :config
 def options_and_configure(program_name, options)
   error = false
   our_opts = {}
   our_opts[:verbose] = false
+  our_opts[:skey] = ""
     
   opt_parser = OptionParser.new do |opts|
     opts.banner = "Usage: " + program_name + " [options]"
+
+    opts.on("-s", "--skey key", "Security key (overrides config file)") do |a|
+      our_opts[:skey] = a
+    end
 
     opts.on("-c", "--config CONFIGFILE", "Configuration file (JSON)") do |a|
       our_opts[:config_file] = a
@@ -222,6 +238,13 @@ def options_and_configure(program_name, options)
     exit
   end
   
+  # Print the command line options
+  if our_opts[:verbose]
+    puts "Program options:"
+    puts our_opts
+    puts
+  end
+  
   # Read the configuration file, strip out the comments, and parse as json
   config_text = ''
   File.readlines(our_opts[:config_file]).each do |line|
@@ -237,15 +260,17 @@ def options_and_configure(program_name, options)
     puts
   end
   
-  our_opts[:config] = JSON.parse(config_text)
+  config = JSON.parse(config_text)
   
+  # If verbose, print configuration
   if our_opts[:verbose]
     puts "Input configuration:"
-    puts our_opts[:config]
+    puts config
     puts
   end
   
-  instruments = our_opts[:config]["instruments"]
+  # Adjust the configuration for each instrument.
+  instruments = config["instruments"]
   if instruments
     # Process the configuration for each instrument
     instruments.each do |key, i|
@@ -253,13 +278,28 @@ def options_and_configure(program_name, options)
         puts "A template is required for instrument #{key.to_s}"
         error = true
       else
-        if !["short_names"]
+
+        # substitute the command line provided key, if specified
+        if our_opts[:skey] != ""
+          i["skey"] = our_opts[:skey]
+        else
+          # no key specified on the command line, see if there is one in the configuration
+          if config["skey"] && config["skey"] != ""
+            i["skey"] = config["skey"]
+          else
+            i["skey"] = ""
+          end
+        end
+         
+        # check for shortnqames
+        if !i["short_names"]
           puts "Short names are required for instrument #{key.to_s}"
           error = true
         else 
+          # Do the regular expresion substitution in the template
           # Perform the :re_terms substitutions
-          if our_opts[:config]["re_terms"]
-            our_opts[:config]["re_terms"].each do |r|
+          if config["re_terms"]
+            config["re_terms"].each do |r|
               term = r[0]
               newvalue = r[1]
                i["template"] = i["template"].gsub(/#{term}/, newvalue)
@@ -279,11 +319,12 @@ def options_and_configure(program_name, options)
   
   if our_opts[:verbose]
     puts "Configuration after :re_terms substitutions:"
-    puts our_opts[:config]
+    puts config
     puts
   end
   
   # If the options pass muster, return the results
+  our_opts[:config] = config
   return our_opts
   
 end
@@ -299,7 +340,7 @@ config = options[:config]
 instruments = []
 config["instruments"].each do |key, i|
   if i["enabled"]
-    instrument = Instrument.new(key.to_s, i["port"], i["id"], i["template"], i["short_names"], i["sample"])
+    instrument = Instrument.new(key.to_s, i["port"], i["id"], i["skey"], i["template"], i["short_names"], i["sample"])
     instruments << instrument
   end
 end

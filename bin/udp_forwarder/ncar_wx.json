@@ -9,6 +9,7 @@
   #
   # chords_host:   String, the host name or IP of a CHORDS instance. Include port number if necessary.
   # interface:     The interface to listen for datagrams on.
+  # skey:          The security key to add to the data put url. (optional, may also be specified on the command line)
   # re_terms:      Array of arrays. Each sub-array contains a name and a Rexexp.
   # instruments:   Hash of instrument definitions. Each instrument receieves messages on one port.
   #   enabled:     Boolean, true if the instrument messages will be processed. If false, the port is not used.
@@ -33,6 +34,8 @@
   
   "interface":   "chords.fl-ext.ucar.edu",
 
+  "skey": "123456",
+  
   "re_terms": [ 
     # Match a floating point number
     ["_fp_", "[-+]?[0-9]*\\.?[0-9]+"]
