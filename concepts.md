@@ -83,9 +83,14 @@ title: Concepts
     </div>
     
     <div id="data" class="tab-pane">
-      <p>The "Data" link on the Portal takes you to a page where instrument data for selected days can be downloaded in
-      various file formats. Links are also provided to "Data URLs" pages, which describe how to construct a data request
-      for each instrument.</p>
+      <ul>
+      <li>The Data page the Portal lets you download instrument data for selected days in
+      various file formats.</li>
+      <li>Links are also provided to "Data URLs" pages, which describe how to 
+      construct a data request for each instrument.</li>
+      <li>Remember that data can also be fetched directly by programs. You don't have
+      to download files.</li>
+      </li>
       <img class="img-responsive" src="images/data.png" alt="Data">
     </div>
   </div>
