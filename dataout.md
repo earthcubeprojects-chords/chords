@@ -20,7 +20,7 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
 <div class="container">
   <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="tab" href="#portal">Portal</a></li>
+    <li class="active"><a data-toggle="tab" href="#browser">Browser</a></li>
     <li><a data-toggle="tab" href="#python">Python</a></li>
     <li><a data-toggle="tab" href="#htmlajax">HTML</a></li>
     <li><a data-toggle="tab" href="#idl">IDL</a></li>
@@ -31,7 +31,9 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
   <div class="tab-content">
   
-    <div id="portal" class="tab-pane active">
+    <div id="browser" class="tab-pane active">
+      <p>Use the "Data" page on the Portal to fetch data files using your browser.
+      Various file formats can be selected.</p>
       <img class="img-responsive" src="images/data.png" alt="Direct">
     </div>
     
