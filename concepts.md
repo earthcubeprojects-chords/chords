@@ -5,20 +5,21 @@ title: Concepts
 
 <div class="container">
   <ul class="nav nav-pills">
-    <li><a data-toggle="tab" href="#terms">Terminology</a></li>
     <li><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
     <li><a data-toggle="tab" href="#data">Data</a></li>
+    <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>
 
   <div class="tab-content">
   
-    <div id="terms" class="tab-pane active">
+    <div id="terms" class="tab-pane">
+    <p>Some of the terminology used in CHORDS is described here.</p>
     <table class = "table table-striped">
       <tbody>
         <tr>
           <td>Site</td>
           <td>A geographic location, which may host one or more instruments. It is the only place where 
-             coordinates are specified, so if you need to identify a unique location for an instrument, it
+             geographic coordinates are specified, so if you need to identify a unique location for an instrument, it
              must be assigned to a distinct site. </td>
         </tr>
         <tr>
@@ -46,11 +47,17 @@ title: Concepts
           still be useful for identification.</td>
         </tr>
         <tr>
+          <td>Data URL</td>
+          <td>The syntax used to submit and fetch data from the Portal. "Data URL" links, found on several
+          pages of the Portal, take you to a page which provides examples for a particular instrument.</td>
+        </tr>
+        <tr>
           <td>Format</td>
           <td>URL extensions usually indicate the type of data that will be returned to a data request:
             <table>
               <tr><td>.csv</td><td> A comma separated data file.</td></tr>
               <tr><td>.jsf</td><td> A JSON file.</td></tr>
+              <tr><td>.xml</td><td> An XML file.</td></tr>
               <tr><td>.json</td><td> A JSON string.</td></tr>
             </table>
           </td>
@@ -59,11 +66,26 @@ title: Concepts
     </table>
     </div>
     
-    <div id="dashboard" class="tab-pane">
+    <div id="dashboard" class="tab-pane active">
+      <p>
+      The dashboard provides an overview of your system performance. It's the default
+      view, accesible from the top level domain name, the CHORDS logo, and the 
+      Dashboard link.
+      </p>
+      <ul>
+        <li>A list of instrument links have status indicators which are green/red  indicating if a measurement 
+        has been received within the nominal reporting interval for the instrument.</li>
+        <li>The most recent measurement URL is shown in the green box.</li>
+        <li>Three bar graphs show the number of measurements received for each instrument,
+        over different time spans.</li>
+      </ul>
       <img class="img-responsive" src="images/dashboard.png" alt="Dashboard">
     </div>
     
     <div id="data" class="tab-pane">
+      <p>The "Data" link on the Portal takes you to a page where instrument data for selected days can be downloaded in
+      various file formats. Links are also provided to "Data URLs" pages, which describe how to construct a data request
+      for each instrument.</p>
       <img class="img-responsive" src="images/data.png" alt="Data">
     </div>
   </div>
