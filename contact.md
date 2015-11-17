@@ -6,7 +6,7 @@ title: Contacts and More
 <div class="container" style="text-align: center;">
 <div class="row">
   <div class="col-sm-4">
-    <a href="http://earthcube.org/">
+    <a href="http://earthcube.org/group/chords">
       <img class="img-responsive" alt="title" src="images/earthcube_small.png" style="max-height: 50px; margin: 0 auto;">
     </a>
   </div>
