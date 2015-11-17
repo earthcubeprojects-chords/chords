@@ -3,4 +3,4 @@ layout: page
 title: Portal Configuration
 ---
 
-**Provide tutorial for configuration**
+**A short tutorial for Portal configuration goes here**

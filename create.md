@@ -3,13 +3,14 @@ layout: page
 title: Create a Portal
 ---
 
-<div class="well" style="text-align: center;">
+<div class="well" style="text-align: left;">
 If someone else has already created a Portal for you, you can skip Portal creation. Just point
 your browser at the new Portal and perform the initial login as user: <em>admin@chordsrt.com</em>, 
 password: <em>realtimedata</em>. You will be prompted to change the password during this first login.
+You can then proceed to <a href="{{site.baseurl}}/config.html">Portal configuration</a>.
 </div>
 
-The Portal will run as a standalone web server on Amazon Web Services (AWS). 
+The Portal runs as a standalone web server on Amazon Web Services (AWS). 
 The interface to AWS can seem a bit overwhelming (currently offering 52
 services!). There are only two that are necessary for managing the Portal
 on Amazon.
