@@ -3,13 +3,20 @@ layout: page
 title: Create a Portal
 ---
 
+<div class="well" style="text-align: center;">
+If someone else has already created a Portal for you, you can skip Portal creation. Just point
+your browser at the new Portal and perform the initial login as user: 'admin@chordsrt.com', 
+password: 'realtimedata'. You will be prompted to change the password during this first login.
+</div>
+
 The Portal will run as a standalone web server on Amazon Web Services (AWS). 
 The interface to AWS can seem a bit overwhelming (currently offering 52
 services!). There are only two that are necessary for managing the Portal
 on Amazon.
 
-We use the **AWS CloudFormation** service to create a new portal. The
-steps are given next. 
+We use the **AWS CloudFormation** service to create a new portal. The steps are
+simple and few.
+
 
 Log onto your AWS account to begin.
 
@@ -70,7 +77,9 @@ CHORDS Portal. Click on the link to access the Portal.
 
 ## 9. Log Into to Your CHORDS Portal
 
-* Log into your new portal, as user *admin*, password *admin*.
+* Log into your new portal, as user: *admin@chordsrt.com*, and password: *realtimedata*. 
+**Be sure to log in immediately. You will be required to change the password, and this needs to
+happen before someone else accesses the portal.**
 
 <img class="img-responsive" src="images/AWS_CF7.png" alt="Login">
 
