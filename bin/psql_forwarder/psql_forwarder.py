@@ -288,10 +288,11 @@ instrument_id = config['instrument_id']
 time_col      = config['time_column']
 # config['var_short_names'] will be a dictionary of column_names:short_name entries.
 vars          = config['var_short_names']
-# Extract the column names
-columns = []
-for col,short_name in vars.iteritems():
-    columns.append(col)
+
+if verbose:
+    print "Columns and shortnames:"
+    for k,v in vars.iteritems():
+        print "   ", k + ":", v
 
 # Open the database
 db = ADS_db(dbhost=db_host, dbname=db_name, dbtable=db_table, dbuser=db_user)
