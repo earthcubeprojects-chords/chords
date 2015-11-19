@@ -2,8 +2,7 @@
 # psql_forwarder configuration file, in JSON format.
 #
 # Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
-# from this file before attempting to parse it 
-# as pure JSON. psql_forwarder does this internally.
+# from this file before attempting to parse it as pure JSON. psql_forwarder does this internally.
 #
 # Configuration file for the CHORDS psql_forward program.
 # Those marked with a * are required in the configuration file. 
