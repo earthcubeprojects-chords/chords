@@ -34,6 +34,7 @@ class CommandArgs:
 
 #####################################################################
 class Config:
+    # Extract configuration key value pairs from a json configuration file.
     def __init__(self, path):
         self.lines = []
         self.json = ""
@@ -50,6 +51,7 @@ class Config:
 
 #####################################################################
 class ADS_db:
+    # Manage the database connection
     def __init__(self, dbhost, dbname, dbuser, dbtable):
         self.dbname  = dbname
         self.dbuser  = dbuser
@@ -76,6 +78,7 @@ class ADS_db:
         return retval
 
     def get_values(self, cols):
+        # Execute a query for the specified columns
         # cols is an array containing column names
         sql = "select "
         i = 0
@@ -123,29 +126,37 @@ def option_override(name, options, config):
 
 #####################################################################
 
+# Get the command line options
 options = CommandArgs().get_options()
-print options
 
-c = Config(options['config']).get_config()
-print c
+# Load the configuration file
+config  = Config(options['config']).get_config()
             
-chords_host = option_override('chords_host', options, c)
-key         = option_override('key', options, c)
-db_name     = option_override('db_name', options, c)
-db_host     = option_override('db_host', options, c)
-db_user     = option_override('db_user', options, c)
-db_table    = option_override('db_table', options, c)
+# Set values from configuration and options. Options override the configuration.
+# If the value was not specified in either place, it is set to None
+chords_host = option_override('chords_host', options, config)
+key         = option_override('key',         options, config)
+db_name     = option_override('db_name',     options, config)
+db_host     = option_override('db_host',     options, config)
+db_user     = option_override('db_user',     options, config)
+db_table    = option_override('db_table',    options, config)
 
-instrument_id = c['instrument_id']
-time_col      = c['time_column']
-column_dict   = c['var_short_names']
+# These options must be in the configuration file
+instrument_id = config['instrument_id']
+# The name of the column used for the timestamp
+time_col      = config['time_column']
+# config['var_short_names'] will be a dictionary of column_names:short_name entries.
+column_dict   = config['var_short_names']
 
+# Open the database
 db = ADS_db(dbhost=db_host, dbname=db_name, dbtable=db_table, dbuser=db_user)
 
+# Get the column names
 columns = []
 for col,short_name in column_dict.iteritems():
     columns.append(col)
 
+# Make sure that the columns exist in the database
 missing_cols = db.verify_columns(columns)
 if (len(missing_cols) > 0):
     print "Columns",
@@ -154,18 +165,16 @@ if (len(missing_cols) > 0):
     print "do not exist in database:" + db.dbname + ", table:" + db.dbtable
     exit(1)
 
+# Get rows for these columns
 db.get_values(columns)
 
-for c, s in column_dict.iteritems():
-    print c+":"+s,
-print
-
+# Process a few of the rows
 for r in range(10):
     row = db.next_row()
     measurements = []
     time = None
     for c, v in zip(columns, row):
-        if c != 'datetime':
+        if c != time_col:
             short_name = column_dict[c]
             m = Measurement(short_name, v)
             measurements.append(m)
