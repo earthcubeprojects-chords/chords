@@ -1,8 +1,52 @@
 #!/usr/local/bin/python
 
-# Install psycopg2:
+# You may need to:
 #  pip install psycopg2
 #  pip install pycurl
+
+#
+# psql_forwarder configuration file, in JSON format.
+#
+# Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
+# from this file before attempting to parse it 
+# as pure JSON. psql_forwarder does this internally.
+#
+# Configuration file for the CHORDS psql_forward program.
+# Those marked with a * are required in the configuration file. 
+# Others may be specified either here or on the command line of the program.
+# Those marked "O" are completely optional, and do not have to be specified
+# at all unless the option is needed.
+#
+#    chords_host:     The CHORDS Portal IP.
+#    db_host:         The ADS database IP.
+#    db_name:         The ADS database name.
+#    db_user:         The ADS database user.
+#    db_table:        The ADS database table.
+#  O test:            If true, the "&test" query parameter will be atteed to the CHORDS url.
+#  O verbose:         If true, enable verbose reporting.
+#  * instrument_id:   The CHORDS instrument id.
+#  * time_column:     The name of the database table column containing the row timestamp.
+#  * var_short_names": A hash of mappings between db columns and CHORDS variable short names.
+#
+#{
+#  "chords_host":     "xxx.xxx.xxx",
+#  "db_host":         "xxx.xxx.xxx",
+#  "db_name":         "xxxxxxx",
+#  "db_user":         "xxx",
+#  "db_table":        "xxxx",
+#  "time_at":         true,
+#  "test ":           false,
+#  "verbose"          false,
+#  "instrument_id":   "100",
+#  "time_column":     "datetime",
+#  "var_short_names": {
+#     "cnts":   "cnts",
+#     "pcn":    "pcn",
+#     "bdifr":  "bdifr",
+#     "adifr":  "adifr"
+#   }
+# }
+
 
 import psycopg2
 import pycurl
@@ -230,12 +274,13 @@ config  = Config(options['config']).get_config()
 # Set values from configuration and options. Options override the configuration.
 # If the value was not specified in either place, it is set to None
 chords_host = option_override('chords_host', options, config)
-key         = option_override('key',         options, config)
-test        = option_override('test',        options, config)
 db_name     = option_override('db_name',     options, config)
 db_host     = option_override('db_host',     options, config)
 db_user     = option_override('db_user',     options, config)
 db_table    = option_override('db_table',    options, config)
+key         = option_override('key',         options, config)
+test        = option_override('test',        options, config)
+verbose     = option_override('verbose',     options, config)
 
 # These options must be in the configuration file
 instrument_id = config['instrument_id']
@@ -267,11 +312,11 @@ url = make_CHORDS_url(
     key=key,
     test=test)
 
-if options["verbose"]:
+if verbose:
     print url
 
 # Send the url
 status = http_GET(url)
-if options["verbose"]:
+if verbose:
     print status
 
