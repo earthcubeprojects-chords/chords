@@ -96,12 +96,16 @@ class Config:
         for l in configfile:
             if len(l) > 0:
                 if l[0] != "#":
-                    self.lines.append(l.strip())
-                    self.json += l.strip()
+                    self.lines.append(l)
+                    self.json += l
         self.config = json.loads(self.json)
         
     def get_config(self):
         return self.config
+    
+    def json_str(self):
+        # Return the json that was parsed.
+        return self.json
 
 #####################################################################
 class ADS_db:
@@ -192,7 +196,8 @@ def option_override(name, options, config):
     if name in config:
         retval = config[name]
     if name in options:
-        retval = options[name]
+        if options[name] != None:
+          retval = options[name]
     return retval
 
 #####################################################################
@@ -269,8 +274,9 @@ def get_measurements(db, vars):
 options = CommandArgs().get_options()
 
 # Load the configuration file
-config  = Config(options['config']).get_config()
-            
+config_file  = Config(options['config'])
+config = config_file.get_config()
+
 # Set values from configuration and options. Options override the configuration.
 # If the value was not specified in either place, it is set to None
 chords_host = option_override('chords_host', options, config)
@@ -284,18 +290,30 @@ verbose     = option_override('verbose',     options, config)
 
 # These options must be in the configuration file
 instrument_id = config['instrument_id']
+
 # The name of the column used for the timestamp
 time_col      = config['time_column']
+
 # config['var_short_names'] will be a dictionary of column_names:short_name entries.
 vars          = config['var_short_names']
 
+# Show the json configuration
 if verbose:
-    print "Columns and shortnames:"
+    print 'JSON configuration:'
+    print config_file.json_str()
+
+if verbose:
+    print "Requested columns and shortnames:"
     for k,v in vars.iteritems():
         print "   ", k + ":", v
-
+        
 # Open the database
 db = ADS_db(dbhost=db_host, dbname=db_name, dbtable=db_table, dbuser=db_user)
+if verbose:
+    print 'Database columns:'
+    cols = db.list_columns()
+    for c in cols:
+        print "   ", c[0]
 
 # Make sure that the columns exist in the database. The program will
 # exit if they don't exist
