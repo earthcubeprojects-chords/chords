@@ -1,0 +1,23 @@
+#
+# var_short_names: A hash of mappings between db columns and CHORDS variable short names.
+#
+#
+#
+{
+  "chords_host":   "xxx.xxx.xxx",
+  "db_host":       "xxx.xxx.xxx",
+  "db_name":       "xxxxxxx",
+  "db_user":       "xxx",
+  "db_table":      "xxxx",
+  "instrument_id": "100",
+  "time_at":       true,
+  "time_column":   "datetime",
+  "var_short_names": {
+     "cnts":   "cnts",
+     "pcn":    "pcn",
+     "bdifr":  "bdifr",
+     "adifr":  "adifr"
+   }
+ }
+ 
+ 

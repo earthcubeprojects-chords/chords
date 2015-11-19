@@ -6,13 +6,55 @@
 
 import psycopg2
 import pycurl
+import json
+import argparse
 
-class ADS_db:
+#####################################################################
+class CommandArgs:
     def __init__(self):
-        self.dbname = "real-time-C130"
-        self.dbuser = "ads"
-        self.dbhost = "eol-rt-data.fl-ext.ucar.edu"
-        self.dbtable = "raf_lrt"
+        parser = argparse.ArgumentParser()
+        parser.add_argument("-f", "--config",      help="config file (required)")
+        parser.add_argument("-d", "--db_host",     help="database host")
+        parser.add_argument("-n", "--db_name",     help="database name")
+        parser.add_argument("-u", "--db_user",     help="database user")
+        parser.add_argument("-t", "--db_table",    help="database table")
+        parser.add_argument("-c", "--chords_host", help="chords host")
+        parser.add_argument("-k", "--key",         help="key")
+        parser.add_argument("-v", "--verbose",     help="verbose output", action="store_true")
+
+        args = parser.parse_args()
+        self.options = vars(args)
+        
+        if not args.config:
+            parser.print_help()
+            exit(1)
+
+    def get_options(self):
+        return self.options 
+
+#####################################################################
+class Config:
+    def __init__(self, path):
+        self.lines = []
+        self.json = ""
+        configfile = open(path, "r")
+        for l in configfile:
+            if len(l) > 0:
+                if l[0] != "#":
+                    self.lines.append(l.strip())
+                    self.json += l.strip()
+        self.config = json.loads(self.json)
+        
+    def get_config(self):
+        return self.config
+
+#####################################################################
+class ADS_db:
+    def __init__(self, dbhost, dbname, dbuser, dbtable):
+        self.dbname  = dbname
+        self.dbuser  = dbuser
+        self.dbhost  = dbhost
+        self.dbtable = dbtable
     
         conn = psycopg2.connect(host=self.dbhost, database=self.dbname, user=self.dbuser)
         self.cursor = conn.cursor()
@@ -49,11 +91,13 @@ class ADS_db:
         row = self.cursor.fetchone()
         return row
 
+#####################################################################
 class Measurement:
     def __init__(self, short_name, value):
         self.short_name = short_name
         self.value_str = str(value)    
     
+#####################################################################
 def make_CHORDS_url(host, id, measurements=[], key=None, time=None):
     # instrument_id: string
     # measurements: an array of Measurement
@@ -68,14 +112,40 @@ def make_CHORDS_url(host, id, measurements=[], key=None, time=None):
         url += "&at=" + time 
     return url
 
-chords_host = "testbed.chordsrt.com"
-instrument_id = 100
-key = None
-key = "AC341F4"
+#####################################################################
+def option_override(name, options, config):
+    retval = None
+    if name in config:
+        retval = config[name]
+    if name in options:
+        retval = options[name]
+    return retval
 
-db = ADS_db()
+#####################################################################
 
-columns = ['datetime', 'bdifr', 'cnts', 'pcn', 'dpxc']
+options = CommandArgs().get_options()
+print options
+
+c = Config(options['config']).get_config()
+print c
+            
+chords_host = option_override('chords_host', options, c)
+key         = option_override('key', options, c)
+db_name     = option_override('db_name', options, c)
+db_host     = option_override('db_host', options, c)
+db_user     = option_override('db_user', options, c)
+db_table    = option_override('db_table', options, c)
+
+instrument_id = c['instrument_id']
+time_col      = c['time_column']
+column_dict   = c['var_short_names']
+
+db = ADS_db(dbhost=db_host, dbname=db_name, dbtable=db_table, dbuser=db_user)
+
+columns = []
+for col,short_name in column_dict.iteritems():
+    columns.append(col)
+
 missing_cols = db.verify_columns(columns)
 if (len(missing_cols) > 0):
     print "Columns",
@@ -86,8 +156,8 @@ if (len(missing_cols) > 0):
 
 db.get_values(columns)
 
-for c in columns:
-    print c,
+for c, s in column_dict.iteritems():
+    print c+":"+s,
 print
 
 for r in range(10):
@@ -96,7 +166,8 @@ for r in range(10):
     time = None
     for c, v in zip(columns, row):
         if c != 'datetime':
-            m = Measurement(c, v)
+            short_name = column_dict[c]
+            m = Measurement(short_name, v)
             measurements.append(m)
         else:
             time = str(v).replace(" ","T")
