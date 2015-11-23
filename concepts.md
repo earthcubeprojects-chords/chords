@@ -7,6 +7,7 @@ title: Concepts
   <ul class="nav nav-pills">
     <li class="active"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
     <li><a data-toggle="tab" href="#data">Data</a></li>
+    <li><a data-toggle="tab" href="#sim">Simulation</a></li>
     <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>
 
@@ -62,6 +63,13 @@ title: Concepts
             </table>
           </td>
         </tr>
+        <tr>
+          <td>Simulation</td>
+          <td>The CHORDS Portal provides a capability to simulate your instrument data delivery. This
+          is invaluable for configuring and testing your Portal, even before you have instruments deployed.
+          Data that are submitted under simulation are tagged as test values, and can easily be removed
+          from the database.</td>
+        </tr>
       </tbody>
     </table>
     </div>
@@ -90,8 +98,25 @@ title: Concepts
       construct a data request for each instrument.</li>
       <li>Remember that data can also be fetched directly by programs. You don't have
       to download files.</li>
-      </li>
+      </ul>
       <img class="img-responsive" src="images/data.png" alt="Data">
+    </div>
+    
+    <div id="sim" class="tab-pane">
+      <p>
+      Simulation allows you to test the configuration and operation of your portal. This
+      test data can be easily deleted when testing is completed.
+      </p>
+      <ul>
+      <li>Select Simulator from the side bar to open the simulation page. It's best to right-click 
+      the link, and select "Open Link In New Tab".</li>
+      <li>You can  individually toggle each intrument on/off.</li>
+      <li>URLs with simulated measurements will be sent to the Portal, at the nominal instrument
+      data rate.</li>
+      <li>The "test" flag will be added to the measurements."</li>
+      <li>If the simulation window is closed or you navigate away from it, the simulation will end.</li>
+      </ul>
+      <img class="img-responsive" src="images/simulate.png" alt="Simulate">
     </div>
   </div>
 </div>
