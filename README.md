@@ -4,7 +4,7 @@ A testbed for CHORDS developer and user experiences. It will allow us
 to explore technical and usabilty aspects of CHORDS. It can be used
 to demonstrate CHORDS design and operational concepts.
 
-See the user documentation [pages](http://ncar.github.io/chords_testbed).
+See the user documentation [pages](http://chordsrt.com).
 
 The goal is to demonstrate that:
 * The development and deployment workflow can be rational and organized,
