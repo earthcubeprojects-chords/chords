@@ -91,8 +91,13 @@ title: Concepts
     </div>
     
     <div id="data" class="tab-pane">
+      <p>
+      The sidebar Data link takes you to a page where instrument data can be directly downloaded with
+      a few button clicks. Simple URLs can also be used by programs to 
+      <a href="{{site.baseurl}}/dataout.html">fetch data</a>.
+      </p>
       <ul>
-      <li>The Data page the Portal lets you download instrument data for selected days in
+      <li>The Data page of the Portal lets you download instrument data for selected days in
       various file formats.</li>
       <li>Links are also provided to "Data URLs" pages, which describe how to 
       construct a data request for each instrument.</li>
