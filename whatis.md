@@ -13,8 +13,10 @@ title: What is CHORDS?
 
 "[Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS)](http://earthcube.org/group/chords) is a real-time data services infrastructure that will provide an easy-to-use system to acquire, navigate and distribute real-time data streams via cloud services and the Internet. It will lower the barrier to these services for small instrument teams, employ data and metadata formats that adhere to community accepted standards, and broaden access to real-time data for the geosciences community."
 
-CHORDS consists of two components: a real-time instrument data management server (_Portal_), and a collection
-of higher level web-services that provide advanced, standards based processing (_Services_).
+CHORDS consists of two components: 
+
+* a real-time instrument data management server (_Portal_)
+* a collection of higher level web-services that provide advanced, standards based processing (_Services_).
 
 <div class="col-sm-12" style="text-align: center;">
   <h2><span class="label label-default">This web site is about the CHORDS Portal</span></h2>
