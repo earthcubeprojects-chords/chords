@@ -303,10 +303,10 @@
                   "if pgrep ruby &> /dev/null ; then pkill -TERM ruby ; fi\n",
                   
                   "# Install the CHORDS Rails application\n",
-                  "git clone https://github.com/NCAR/chords_testbed.git\n",
+                  "git clone https://github.com/NCAR/chords_portal.git\n",
 
                   "# Configure the CHORDS Rails application\n",
-                  "cd /home/ec2-user/chords_testbed\n",
+                  "cd /home/ec2-user/chords_portal\n",
                   "bundle install\n",
                   
                   "# Configure the database connection\n",
@@ -323,7 +323,7 @@
                   "#!/bin/bash -e\n",
                   "export HOME=/home/ec2-user\n",
                   "export PATH=$PATH:/usr/local/bin\n",
-                  "cd /home/ec2-user/chords_testbed\n",
+                  "cd /home/ec2-user/chords_portal\n",
 
                   "# Start the passenger app server\n",
                   "bundle exec passenger start --port 80 --daemonize\n"
