@@ -5,7 +5,7 @@
 
 		<li> 
 		<% if @logo_base64 != nil %>
-			<%= ("<img width='100' height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe %>
+			<%= ("<img height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe %>
 		<% else %>
 			<%= image_tag('CHORDS_QR.png', size:"100x100")%>
 		<% end %>
