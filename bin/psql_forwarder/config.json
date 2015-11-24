@@ -15,6 +15,7 @@
 #    db_name:         The ADS database name.
 #    db_user:         The ADS database user.
 #    db_table:        The ADS database table.
+#    time_at:         If true, the value from the db time_column will be submitted with the ?at= parameter.
 #  O test:            If true, the "&test" query parameter will be atteed to the CHORDS url.
 #  O verbose:         If true, enable verbose reporting.
 #  * instrument_id:   The CHORDS instrument id.
