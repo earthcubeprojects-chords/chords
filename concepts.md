@@ -21,7 +21,7 @@ title: Concepts
           <td>URL</td>
           <td>Uniform Resource Locator: simply the same old Internet address and qualifiers that you are used to typing into
           the address bar of a browser. All CHORDS transactions are made via URLs.</td>
-        </td>
+        </tr>
         <tr>
           <td>Site</td>
           <td>A geographic location, which may host one or more instruments. It is the only place where 
