@@ -1,4 +1,4 @@
-# --- Serving options --- #
+J# --- Serving options --- #
 
 # url is the full website URL
 # baseurl is the website's URL without the hostname
@@ -36,7 +36,7 @@ navbar-links:
 # Important: you must keep the "name" parameter, everything else you can remove
 author:
   name: National Center for Atmospheric Reseach
-  email: "replacewithaddress@eol.ucar.edu"
+  email: "chordsateoldotucardotedu"
   facebook: yourname  # eg. daattali
   github: ncar/chords_portal    # eg. daattali
   twitter: yourname   # eg. daattali
