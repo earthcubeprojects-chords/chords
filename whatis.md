@@ -52,7 +52,7 @@ You then go to your Portal web page and configure it for your project.
 
 ## The One Gotcha
 
-Nothing is entirely free(unlike beer). You will need to adapt your instrument to send the URL's containing
+Nothing is entirely free (unlike beer). You will need to adapt your instrument to send the URL's containing
 your measurements, to your Portal. But usually this is not too hard. Your instrument may already 
 have an Internet connection, and you just need to add a few lines to a processing script. Maybe you will need to
 add a USB cell modem to your data acquisition computer. Or perhaps you need to add a $50 _Rasberry Pi_ to provide 
