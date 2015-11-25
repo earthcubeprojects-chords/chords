@@ -1,5 +1,5 @@
 class DashboardController < ApplicationController
-  
+
   before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
     
   def index
@@ -13,6 +13,14 @@ class DashboardController < ApplicationController
       end
     end
 
+    # Determine if we should sanitize the url
+    sanitize = true
+    if current_user
+      if (can? :manage, Measurement)
+        # User is logged in and authorized, so don't sanitize
+        sanitize = false
+      end
+    end
 
     # Collect some summary metrics
     @metrics = {}
@@ -22,7 +30,11 @@ class DashboardController < ApplicationController
     @metrics["instrument_count"]  = Instrument.count
     @metrics["uptime"]            = ApplicationHelper.uptime
     if Measurement.last
-      @metrics["last_url"]          = Instrument.find(Measurement.last.instrument_id).last_url
+      @metrics["last_url"]          = InstrumentsHelper.sanitize_url(
+        !@profile.secure_administration,
+        sanitize, 
+        Instrument.find(Measurement.last.instrument_id).last_url
+        )
     else
       @metrics["last_url"]          = ''
     end
