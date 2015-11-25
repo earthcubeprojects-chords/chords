@@ -13,15 +13,6 @@ class DashboardController < ApplicationController
       end
     end
 
-    # Determine if we should sanitize the url
-    sanitize = true
-    if current_user
-      if (can? :manage, Measurement)
-        # User is logged in and authorized, so don't sanitize
-        sanitize = false
-      end
-    end
-
     # Collect some summary metrics
     @metrics = {}
     @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
@@ -31,8 +22,8 @@ class DashboardController < ApplicationController
     @metrics["uptime"]            = ApplicationHelper.uptime
     if Measurement.last
       @metrics["last_url"]          = InstrumentsHelper.sanitize_url(
-        !@profile.secure_administration,
-        sanitize, 
+        !@profile.secure_administration, 
+        !(current_user && (can? :manage, Measurement)), 
         Instrument.find(Measurement.last.instrument_id).last_url
         )
     else

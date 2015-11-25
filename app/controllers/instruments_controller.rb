@@ -146,9 +146,20 @@ class InstrumentsController < ApplicationController
     #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
+    #  @last_url       - the last url
 
     if @profile.secure_data_viewing
       authorize! :view, @instrument
+    end
+
+    # Determine and sanitize the last_url
+    @last_url = ''
+    if @instrument.last_url
+      @last_url = InstrumentsHelper.sanitize_url(
+        !@profile.secure_administration, 
+        !(current_user && (can? :manage, Measurement)), 
+        @instrument.last_url
+        )
     end
 
     @params = params.slice(:start, :end)
