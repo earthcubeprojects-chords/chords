@@ -11,7 +11,8 @@ title: Contacts and More
     </a>
   </div>
   <div class="col-sm-8">
-   CHORDS is a project inspired and funded by the National Science Foundation EarthCube initiative.
+      The CHORDS project is inspired and funded by the 
+      <br/>National Science Foundation <a href="http://earthcube.org/">EarthCube</a> initiative.
   </div>
 </div>
 <p/>
