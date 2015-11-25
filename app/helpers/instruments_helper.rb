@@ -1,8 +1,18 @@
 module InstrumentsHelper
   def self.sanitize_url(always_allow, sanitize, url)
-    # if allways_allow is true, do not sanitize
+    #
+    # Sanitize a url by obscuring the security key in the url.
+    # The key is located between &key=...&,
+    # or at the end of the string &key=...
+
+    # "always_allow" and "sanitize" offer control
+    # over whether to perform the sanitizing. always_allow
+    # is meant as a global override, and sanitize would
+    # be applicable to things like user roles.
+    
+    # if "always_allow" is true, do not sanitize
     # otherwise
-    #  if do_sanitize is false, do not sanitize
+    #  if "sanitize" is false, do not sanitize
     #    otherwise
     #       sanitize
     #      
@@ -28,6 +38,7 @@ module InstrumentsHelper
       end
     end
       
+    # Return the sanitized url.
     return newurl
 
   end
