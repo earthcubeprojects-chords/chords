@@ -3,6 +3,7 @@ layout: page
 title: Getting Started
 ---
 
+  <div class="well" style="background: lightblue;">
   <div class="row">
     <div class="col-sm-4"  style="text-align: center;">
       <p/>
@@ -19,5 +20,6 @@ title: Getting Started
      <a class="btn btn-success btn-lg get-started-btn" href="config.html">
      <img src="images/cog.svg" width="30" /> Configure a Portal</a>
     </div>
+  </div>
   </div>
   
