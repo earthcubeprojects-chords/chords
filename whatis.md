@@ -22,7 +22,7 @@ CHORDS consists of two components:
   <h2><span class="label label-default">This web site is about the CHORDS Portal</span></h2>
 </div>
 
-<img  class="img-responsive" src="images/cartoon1.png" alt="CHORDS Portal Cartoon" >
+<img  class="img-responsive" src="images/overview.png" alt="CHORDS Portal Cartoon" >
 
 ## The CHORDS Portal is a
 
