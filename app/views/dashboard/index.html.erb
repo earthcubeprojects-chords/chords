@@ -36,7 +36,7 @@
   <% else %>
     <%= image_tag('glossy-red-icon-button-th.png', size:"16")%>
   <% end %>
-    <%= link_to(instrument.name, instrument_url(:id => instrument.id) )%>
+    <%= link_to(instrument.name+" (#{instrument.id})", instrument_url(:id => instrument.id) )%>
   </div>
 <% end %>
 </div>
