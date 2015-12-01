@@ -13,7 +13,7 @@
 # All of the short_name/value pairs will be used to build a CHORDS URL which will then
 # be submitted to a chords_portal.
 #
-# usage: paws_to_chords --config config_file [--test] [--verbose]
+# usage: paws_to_chords --config config_file [--key key_value] [--test] [--verbose]
 #  --config file_name  The configuration file
 #  --key key_value     (optional) The chords portal security key.
 #  --test              (optional) Add the "test" data qualifier.
