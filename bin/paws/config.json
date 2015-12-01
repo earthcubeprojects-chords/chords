@@ -1,5 +1,5 @@
 #
-# psql_forwarder configuration file, in JSON format.
+# paws_to_chords configuration file, in JSON format.
 #
 # Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
 # from this file before attempting to parse it as pure JSON. paws_to_chords does this internally.
@@ -19,6 +19,7 @@
 #  --test              (optional) Add the "test" data qualifier.
 #  --verbose           (optional) Print detailed diagnostic information.
 #
+#  Configuration keys:
 #  chords_host:     The CHORDS Portal IP.
 #  instrument_id:   The CHORDS instrument id.
 #  top_dir:         The top directory for all of the sensor subdirectories.
@@ -30,7 +31,7 @@
 #                   in the configuration. Each sensor name must be unique.
 #  short_names:     A list of short names, corresponding to the data field for each
 #                   variable. Most sensors will only have one variable in the PAWS data file,
-#                   but may have multiple variables on each data line, e.g. a 
+#                   but some may have multiple variables on each data line, e.g. a 
 #                   wind sensor which produces the pair wind speed, wind direction.
 #  sub_dir:         Combine with top_dir as top_dir/sub_dir to specify the location
 #                   where data files are found for that sensor.
