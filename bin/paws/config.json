@@ -1,0 +1,67 @@
+#
+# psql_forwarder configuration file, in JSON format.
+#
+# Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
+# from this file before attempting to parse it as pure JSON. paws_to_chords does this internally.
+#
+# Configuration file for the paws_to_chords program. 
+#
+# paws_to_chords will periodically scan a list of directories, finding the file that
+# was most recently updated in each directory. It will then examine the last line
+# that file, and extract a timestamp and one or more variable values. If the timestamp
+# is different than the previous timestamp, the values will be paired with the short_names.
+# All of the short_name/value pairs will be used to build a CHORDS URL which will then
+# be submitted to a chords_portal.
+#
+# usage: paws_to_chords --config config_file [--test] [--verbose]
+#  --config file_name  The configuration file
+#  --key key_value     (optional) The chords portal security key.
+#  --test              (optional) Add the "test" data qualifier.
+#  --verbose           (optional) Print detailed diagnostic information.
+#
+#  chords_host:     The CHORDS Portal IP.
+#  instrument_id:   The CHORDS instrument id.
+#  top_dir:         The top directory for all of the sensor subdirectories.
+#                   If there is no common top directory, just set it to root
+#                   and specify all sub-directories as absolute paths.
+#  cycle_secs:      The repeat interval, in seconds.
+#  sensors:         A list of sensors, with one entry for each sensor data directory.
+#                   The name of each sensor is arbitrary, and just used for identification
+#                   in the configuration. Each sensor name must be unique.
+#  short_names:     A list of short names, corresponding to the data field for each
+#                   variable. Most sensors will only have one variable in the PAWS data file,
+#                   but may have multiple variables on each data line, e.g. a 
+#                   wind sensor which produces the pair wind speed, wind direction.
+#  sub_dir:         Combine with top_dir as top_dir/sub_dir to specify the location
+#                   where data files are found for that sensor.
+#
+{
+  "chords_host":     "xxx.xxx.xxx",
+  "instrument_id":   "1",
+  "top_dir":         "/data",
+  "cycle_secs":       "60",
+  "sensors": {
+     "temperature 1": {
+       "short_names": ["t1"],
+       "sub_dir":     "temperature_sensor"
+      },
+      "humidity 1": {
+        "short_names": ["rh1"],
+        "sub_dir":     "humidity_sensor"
+      },
+      "pressure 1": {
+        "short_names": ["msl1"],
+        "sub_dir":     "pressure_sensor"
+      },
+      "wind": {
+        "short_names": ["ws", "wd"],
+        "sub_dir":   "wind"
+      },
+        "rain accumulation": {
+        "short_names": ["rain"],
+        "sub_dir":     "rain_sensor"
+      }
+   }
+}
+ 
+ 
