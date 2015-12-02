@@ -83,7 +83,7 @@ title: Contacts and More
 </div>
 <p/>
 <div  align="center">
-If you have comments, suggestions, or just want to say hi, we would love to <a href="mailto:{{ site.author.email }}" title="Email CHORDS">hear</a> from you.
+If you have comments, suggestions, or just want to say hi, we would love to <a href="mailto:{{ site.email }}" title="Email CHORDS">hear</a> from you.
 </div>
 
 
