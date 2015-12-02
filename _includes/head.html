@@ -1,72 +1,22 @@
 <head>
   <link rel="icon" type="image/png" href="{{site.url}}/images/favicon_org.png">
-  
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
-  <meta name="author" content="{{ site.author.name }}" />
+  <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+  <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
   
-  {% if page.subtitle %}
-  <meta name="description" content="{{ page.subtitle }}">
-  {% endif %}
-
-  <link rel="alternate" type="application/rss+xml" title="{{ site.title }} - {{ site.description }}" href="{{ site.baseurl }}/feed.xml" />
-
-  {% if page.common-ext-css %}
-    {% for css in page.common-ext-css %}
-      <link rel="stylesheet" href="{{ css }}" />
-    {% endfor %}
-  {% endif %}  
+  <link rel="stylesheet" href="{{ "/assets/stylesheets/style.css" | prepend: site.baseurl }}">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+  <script src="assets/javascripts/bootstrap.min.js" type="text/javascript"></script>
   
-  {% if page.common-css %}
-    {% for css in page.common-css %}
-      <link rel="stylesheet" href="{{ css | prepend: site.baseurl | replace: '//', '/' }}" />
-    {% endfor %}
-  {% endif %}
-  
-  {% if page.common-googlefonts %}
-    {% for font in page.common-googlefonts %}
-	  <link rel="stylesheet" href="//fonts.googleapis.com/css?family={{ font }}" />
-    {% endfor %}
-  {% endif %}
-
-  {% if page.ext-css %}
-    {% for css in page.ext-css %}
-      <link rel="stylesheet" href="{{ css }}" />
-    {% endfor %}
-  {% endif %}  
-  
-  {% if page.css %}
-    {% for css in page.css %}
-      <link rel="stylesheet" href="{{ css | prepend: site.baseurl | replace: '//', '/' }}" />
-    {% endfor %}
-  {% endif %}
-  
-  {% if page.googlefonts %}
-    {% for font in page.googlefonts %}
-	  <link rel="stylesheet" href="//fonts.googleapis.com/css?family={{ font }}" />
-    {% endfor %}
-  {% endif %}
-  
-  <!-- Facebook OpenGraph tags -->
-  <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}" />
-  <meta property="og:type" content="website" />
-  
-  {% if page.id %}
-  <meta property="og:url" content="{{ site.url }}{{ page.url }}/" />
-  {% else %}
-  <meta property="og:url" content="{{ site.url }}{{ page.url | remove: '/index.html' | remove: '.html' }}" />
-  {% endif %}
-  
-  {% if page.fb-img %}
-  <meta property="og:image" content="{{ page.fb-img }}" />
-  {% elsif site.avatar %}
-  <meta property="og:image" content="{{ site.url }}{{ site.avatar }}" />
-  {% else %}
-  <meta property="og:image" content="" />
-  {% endif %}
-  
+<script type="text/javascript">
+</script>
 </head>
