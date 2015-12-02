@@ -8,7 +8,7 @@ title: Partners
 <div class="row">
   <div class="col-sm-4">
     <a href="http://earthcube.org/group/chords">
-      <img class="img-responsive" alt="title" src="images/earthcube_small.png" style="max-height: 70px; margin: 0 auto;">
+      <img class="img-responsive" alt="title" src="images/earthcube_full.png" style="max-height: 70px; margin: 0 auto;">
     </a>
   </div>
   <div class="col-sm-8">
