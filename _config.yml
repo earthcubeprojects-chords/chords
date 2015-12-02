@@ -8,8 +8,7 @@
 # Site settings
 title: "Cloud Hosted Real-Time Data Services for the Geosciences"
 
-description: > # this means to ignore newlines until "baseurl:"
-  CHORDS Portal User Documentation
+description: "CHORDS Portal User Documentation"
   
 url: "http://ncar.github.io/chords_portal"
 baseurl: "/chords_portal"
