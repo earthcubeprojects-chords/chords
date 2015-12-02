@@ -1,13 +1,14 @@
 ---
 layout: page
-title: Contacts and More
+title: Partners
 ---
 
+## Our Sponsor
 <div class="container" style="text-align: center;">
 <div class="row">
   <div class="col-sm-4">
     <a href="http://earthcube.org/group/chords">
-      <img class="img-responsive" alt="title" src="images/earthcube_small.png" style="max-height: 50px; margin: 0 auto;">
+      <img class="img-responsive" alt="title" src="images/earthcube_small.png" style="max-height: 70px; margin: 0 auto;">
     </a>
   </div>
   <div class="col-sm-8">
@@ -15,9 +16,10 @@ title: Contacts and More
       <br/>National Science Foundation <a href="http://earthcube.org/">EarthCube</a> initiative.
   </div>
 </div>
-<p/>
+</div>
 
-<p/>
+## Developers and Contributors
+<div class="container" style="text-align: center;">
 <div class="row">
   <div class="col-sm-4">
     <a href="http://ncar.ucar.edu/">
