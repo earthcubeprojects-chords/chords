@@ -18,9 +18,7 @@ CHORDS consists of two components:
 * a real-time instrument data management server (_Portal_)
 * a collection of higher level web-services that provide advanced, standards based processing (_Services_).
 
-<div class="col-sm-12" style="text-align: center;">
-  <span class="badge">This web site is about the CHORDS Portal</span>
-</div>
+<span class="badge center-block">This web site is about the CHORDS Portal</span>
 
 <img  class="img-responsive" src="images/overview.png" alt="CHORDS Portal Cartoon" >
 
