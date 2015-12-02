@@ -22,11 +22,10 @@ replacements. I'm not sure that I have completely finished this. But
 the pages seem to look pretty good.
 
 ## _config.yml
-* Tell jekyll to use a different _sass directory, which contains the 
-  bootstrap styling:
+Tell jekyll to use a different _sass directory, which contains the bootstrap styling:
 
     sass:
-      sass_dir: assets/stylesheets
+        sass_dir: assets/stylesheets
 
 ## Syntax Highlighting
 Jekyll seems to support pygments highlighting out of the box, but for 
