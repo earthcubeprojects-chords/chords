@@ -9,6 +9,7 @@ Jekyll does not employ bootstrap out of the box, and so we must
 integrate the two. There seem to be many ways to do this, and I relied
 more or less on the instructions found at
 [jekyll-with-twitter-bootstrap-sass](http://jekyll.pygmeeweb.com/2014/08/02/jekyll-with-twitter-bootstrap-sass/).
+Similar guidance is provided by [Veithen](http://veithen.github.io/2015/03/26/jekyll-bootstrap.html). 
 These instructions point out that this is an "authorized" version
 of bootstrap, created for use with sass. There are probably simple ways
 to integrate the vanilla bootstrap with jekyll. It's all very
