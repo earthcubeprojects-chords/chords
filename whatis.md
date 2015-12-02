@@ -19,7 +19,7 @@ CHORDS consists of two components:
 * a collection of higher level web-services that provide advanced, standards based processing (_Services_).
 
 <div class="col-sm-12" style="text-align: center;">
-  <h2><span class="label label-default">This web site is about the CHORDS Portal</span></h2>
+  <span class="badge">This web site is about the CHORDS Portal</span>
 </div>
 
 <img  class="img-responsive" src="images/overview.png" alt="CHORDS Portal Cartoon" >
