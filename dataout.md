@@ -22,7 +22,7 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
   <ul class="nav nav-pills">
     <li class="active"><a data-toggle="tab" href="#browser">Browser</a></li>
     <li><a data-toggle="tab" href="#python">Python</a></li>
-    <li><a data-toggle="tab" href="#htmlajax">HTML</a></li>
+    <li><a data-toggle="tab" href="#htmlajax">HTML/JavaScript</a></li>
     <li><a data-toggle="tab" href="#idl">IDL</a></li>
     <li><a data-toggle="tab" href="#matlab">Matlab</a></li>
     <li><a data-toggle="tab" href="#r">R</a></li>
