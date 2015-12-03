@@ -7,6 +7,7 @@ title: Concepts
   <ul class="nav nav-pills">
     <li class="active"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
     <li><a data-toggle="tab" href="#data">Data</a></li>
+    <li><a data-toggle="tab" href="#monitor">Monitoring</a></li>
     <li><a data-toggle="tab" href="#sim">Simulation</a></li>
     <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>
@@ -81,9 +82,8 @@ title: Concepts
     
     <div id="dashboard" class="tab-pane active">
       <p>
-      The dashboard provides an overview of your system performance. It's the default
-      view, accesible from the top level domain name, the CHORDS logo, and the 
-      Dashboard link.
+      Clicking on an instrument link takes you to a page where you can monitor data from 
+      that instrument. You can also modify the instrument configuration.
       </p>
       <ul>
         <li>A list of instrument links have status indicators which are green/red  indicating if a measurement 
@@ -93,6 +93,22 @@ title: Concepts
         over different time spans.</li>
       </ul>
       <img class="img-responsive" src="images/dashboard.png" alt="Dashboard">
+    </div>
+    
+    <div id="monitor" class="tab-pane active">
+      <p>
+      The dashboard provides an overview of your system performance. It's the default
+      view, accesible from the top level domain name, the CHORDS logo, and the 
+      Dashboard link.
+      </p>
+      <ul>
+        <li>Select the variableto be plotted by pressing a link above the graph.</li>
+        <li>The graph has live updates. When a new measurement is recieved, it is plotted.</li>
+        <li>The most recent URL received from the instrument is displayed in the green alert box.</li>
+        <li>Configuration parameters appear in green boxes.You can editthem directly,to change the 
+        setup for thisinstrument.</li>
+      </ul>
+      <img class="img-responsive" src="images/monitor.png" alt="Dashboard">
     </div>
     
     <div id="data" class="tab-pane">
