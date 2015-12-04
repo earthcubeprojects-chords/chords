@@ -82,8 +82,9 @@ title: Concepts
     
     <div id="dashboard" class="tab-pane active">
       <p>
-      Clicking on an instrument link takes you to a page where you can monitor data from 
-      that instrument. You can also modify the instrument configuration.
+      The dashboard provides an overview of your system performance. It's the default
+      view, accesible from the top level domain name, the CHORDS logo, and the 
+      Dashboard link.
       </p>
       <ul>
         <li>A list of instrument links have status indicators which are green/red  indicating if a measurement 
@@ -97,9 +98,8 @@ title: Concepts
     
     <div id="monitor" class="tab-pane active">
       <p>
-      The dashboard provides an overview of your system performance. It's the default
-      view, accesible from the top level domain name, the CHORDS logo, and the 
-      Dashboard link.
+      Clicking on an instrument link takes you to a page where you can monitor data from 
+      that instrument. You can also modify the instrument configuration.
       </p>
       <ul>
         <li>Select the variableto be plotted by pressing a link above the graph.</li>
