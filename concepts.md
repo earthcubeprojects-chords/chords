@@ -105,8 +105,8 @@ title: Concepts
         <li>Select the variableto be plotted by pressing a link above the graph.</li>
         <li>The graph has live updates. When a new measurement is recieved, it is plotted.</li>
         <li>The most recent URL received from the instrument is displayed in the green alert box.</li>
-        <li>Configuration parameters appear in green boxes.You can editthem directly,to change the 
-        setup for thisinstrument.</li>
+        <li>Configuration parameters appear in green boxes.You can edit them directly, to change the 
+        setup for this instrument.</li>
       </ul>
       <img class="img-responsive" src="images/monitor.png" alt="Dashboard">
     </div>
