@@ -3,8 +3,12 @@
     
 @import "bootstrap";
 
-.container .jumbotron, .well {
+.container-fluid .jumbotron, .well {
   border-radius: 0px;
+}
+
+.div .jumbotron, .well {
+  padding: 0px;
 }
 
 .navbar {
