@@ -31,7 +31,7 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 <div class="tab-content">
 
   <div id="browser" class="tab-pane active">
-    <p>Use the "Data" page on the Portal to fetch data files using your browser.
+    <p>Use the "Data" link on the Portal to fetch daily data files using your browser.
     Various file formats can be selected.</p>
     <img class="img-responsive" src="images/data.png" alt="Direct">
   </div>
