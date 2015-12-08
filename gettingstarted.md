@@ -13,7 +13,7 @@ title: Getting Started
       <h3>Amazon Web Services</h3>
       <p>If you don't have an AWS account, it's easy
       to create one. The standard CHORDS portal uses an Amazon
-      "micro instance", which can free for the first year.</p>
+      "micro instance", which can be free for the first year.</p>
     </div>
   </div>
 
