@@ -18,26 +18,25 @@ Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
 **Insert a description of the URL get syntax here**
 
-<div class="container">
-  <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="tab" href="#browser">Browser</a></li>
-    <li><a data-toggle="tab" href="#python">Python</a></li>
-    <li><a data-toggle="tab" href="#htmlajax">HTML/JavaScript</a></li>
-    <li><a data-toggle="tab" href="#idl">IDL</a></li>
-    <li><a data-toggle="tab" href="#matlab">Matlab</a></li>
-    <li><a data-toggle="tab" href="#r">R</a></li>
-    <li><a data-toggle="tab" href="#sh">Sh</a></li>
-  </ul>
+<ul class="nav nav-pills">
+  <li class="active"><a data-toggle="tab" href="#browser">Browser</a></li>
+  <li><a data-toggle="tab" href="#python">Python</a></li>
+  <li><a data-toggle="tab" href="#htmlajax">HTML/JavaScript</a></li>
+  <li><a data-toggle="tab" href="#idl">IDL</a></li>
+  <li><a data-toggle="tab" href="#matlab">Matlab</a></li>
+  <li><a data-toggle="tab" href="#r">R</a></li>
+  <li><a data-toggle="tab" href="#sh">Sh</a></li>
+</ul>
 
-  <div class="tab-content">
+<div class="tab-content">
+
+  <div id="browser" class="tab-pane active">
+    <p>Use the "Data" page on the Portal to fetch data files using your browser.
+    Various file formats can be selected.</p>
+    <img class="img-responsive" src="images/data.png" alt="Direct">
+  </div>
   
-    <div id="browser" class="tab-pane active">
-      <p>Use the "Data" page on the Portal to fetch data files using your browser.
-      Various file formats can be selected.</p>
-      <img class="img-responsive" src="images/data.png" alt="Direct">
-    </div>
-    
-    <div id="python" class="tab-pane">
+  <div id="python" class="tab-pane">
 {% highlight python %}
 # Fetch the most recent measurements from a portal
 import json, requests
@@ -75,12 +74,12 @@ print json.dumps(data, indent=4, sort_keys=True)
     "Project": "Localhost", 
     "Site": "Boulder"
 }{% endhighlight %}
-    </div>
-    
-    <div id="htmlajax" class="tab-pane">
+  </div>
+  
+  <div id="htmlajax" class="tab-pane">
 
-<p><em>It appears that there may be cross-domain security issues with this approach. We need to
-look into this.</em></p>
+  <p><em>It appears that there may be cross-domain security issues with this approach. We need to
+  look into this.</em></p>
 
 {% highlight html %}
 <h1>CHORDS HTML/Ajax Example</h1>
@@ -114,9 +113,9 @@ $(function () {
 {% endhighlight %}
     Result:
     <img class="img-responsive" src="images/chords_ajax.png" alt="AJAX">
-    </div>
-    
-    <div id="idl" class="tab-pane">
+  </div>
+  
+  <div id="idl" class="tab-pane">
 {% highlight idl %}
 url='http://chords.dyndns.org/instruments/26.json?last'
 oUrl = OBJ_NEW('IDLnetUrl')
@@ -160,9 +159,9 @@ data
     }
 }
 {% endhighlight %}
-    </div>
+  </div>
 
-    <div id="matlab" class="tab-pane">
+  <div id="matlab" class="tab-pane">
 {% highlight matlab %}
 % Read CHORDS JSON data into a Matlab program.
 % This code uses the JSONlab toolbox from the Matlab File Exchange.
@@ -195,9 +194,9 @@ ans =
 
 >> 
 {% endhighlight %}
-    </div>
-    
-    <div id="r" class="tab-pane">
+  </div>
+  
+  <div id="r" class="tab-pane">
 {% highlight r %}
 install.packages('curl')
 install.packages('jsonlite')
@@ -247,10 +246,9 @@ $Data$raintot
 $Data$batv
 [1] 13.9
 {% endhighlight %}
-
-    </div>
-    
-    <div id="sh" class="tab-pane">
+  </div>
+  
+  <div id="sh" class="tab-pane">
 {% highlight sh %}
 #!/bin/sh
 
@@ -278,8 +276,8 @@ JSON format:
 {"Project":"CHORDS Testbed","Site":"NCAR Mesa Lab","Affiliation":"NSF EarthCube","Instrument":"ML Wx Station","Data":{"Time":["2015-07-28T22:30:51.000Z"],"wdir":[75.0],"wspd":[2.5],"wmax":[6.4],"tdry":[26.3],"rh":[25.3],"pres":[814.3],"raintot":[453.7],"batv":[13.9]}}
 {% endhighlight %}
   </div>
-
 </div>
+
 
 
 
