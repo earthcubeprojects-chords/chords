@@ -7,10 +7,9 @@ It is easy to submit new data to a Portal, simply using standard HTTP URLs. The 
 directly from the address bar of your browser (but of course this would get tedious).
 
 We will first describe the URL syntax, and follow this with examples that demonstrate how easy it is to feed your
-data to a CHORDS Portal, using Python, C, or a browser or the command line. Almost all programming languages 
-have functions for submitting HTTP requests. These are only afew
+data to a CHORDS Portal, using Python, C, a browser or the command line. These are only a few
 of the languages that work, and you should be able to figure out a similar method for your own
-particular langauge.
+particular langauge. Almost all programming languages have functions for submitting HTTP requests. 
 
 ###  URL Syntax
 
