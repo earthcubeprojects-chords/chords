@@ -96,7 +96,7 @@ title: Concepts
       <img class="img-responsive" src="images/dashboard.png" alt="Dashboard">
     </div>
     
-    <div id="monitor" class="tab-pane active">
+    <div id="monitor" class="tab-pane">
       <p>
       Clicking on an instrument link takes you to a page where you can monitor data from 
       that instrument. You can also modify the instrument configuration.
