@@ -7,8 +7,8 @@ It is easy to submit new data to a Portal, simply using standard HTTP URLs. The 
 directly from the address bar of your browser (but of course this would get tedious).
 
 We will first describe the URL syntax, and follow this with examples that demonstrate how easy it is to feed your
-data to a CHORDS Portal, using Python, C, or a browser or the command line. Almost all programming languages have functions for submitting HTTP requests.
-These are only afew
+data to a CHORDS Portal, using Python, C, or a browser or the command line. Almost all programming languages 
+have functions for submitting HTTP requests. These are only afew
 of the languages that work, and you should be able to figure out a similar method for your own
 particular langauge.
 
@@ -18,11 +18,11 @@ A typical URL for submitting measurements to the Portal:
 
     http://myportal.org/measurements/url_create?instrument_id=25&wdir=038&wspd=3.2&at=2015-08-20T19:50:28
 
-_myportal.org_ is the hostname of your Portal. The fields after the question mark are quallifiers, each
+_myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
 separated by "&". 
 
 Measurements for variables are specified by _shortname=value_ pairs. You do not need to include
-measurements all variables defined for the instrument, if they are not available.
+measurements for all variables defined for the instrument, if they are not available.
 
 <table class="table table-striped">
   <thead>
