@@ -3,23 +3,42 @@ layout: page
 title: Getting Started
 ---
 
-  <div class="well" style="background: lightblue;">
-  <div class="row">
-    <div class="col-sm-4"  style="text-align: center;">
-      <p/>
-      <a class="btn btn-success" href="aws.html">
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-sm-4">
+      <br/>
+      <a class="btn btn-success pull-right" href="aws.html">
       <img src="images/cloud.svg" width="30" /> Open an AWS account</a>
     </div>
-    <div class="col-sm-4"  style="text-align: center;">
-      <p/>
-      <a class="btn btn-success" href="create.html">
+    <div class="col-sm-8">
+      <h3>Amazon Web Services</h3>
+      <p>If you don't have an AWS account, it's easy
+      to create one. The standard CHORDS portal uses an Amazon
+      "micro instance", which can free for the first year.</p>
+    </div>
+  </div>
+
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-sm-4">
+      <br/>
+      <a class="btn btn-success pull-right" href="create.html">
       <img src="images/chevron-left.svg" width="30" /> Create a Portal</a>
     </div>
-    <div class="col-sm-4" style="text-align: center;">
-     <p/>
-     <a class="btn btn-success" href="config.html">
-     <img src="images/cog.svg" width="30" /> Configure a Portal</a>
+    <div class="col-sm-8">
+      <h3>CHORDS Portal</h3>
+      <p>Once you have an AWS account, you can create a CHORDS Portal
+      instance (server) in just a few steps.</p>
     </div>
   </div>
+
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-sm-4">
+     <br/>
+     <a class="btn btn-success pull-right" href="config.html">
+     <img src="images/cog.svg" width="30" /> Configure the Portal</a>
+    </div>
+    <div class="col-sm-8">
+      <h3>Configure</h3>
+      <p>After the Portal is created, you will use your browser to configure and manage it.</p>
+    </div>
   </div>
-  
+ 
