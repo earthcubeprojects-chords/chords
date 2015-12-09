@@ -27,13 +27,13 @@
 #                   and specify all sub-directories as absolute paths.
 #  cycle_secs:      The repeat interval, in seconds.
 #  sensors:         A list of sensors, with one entry for each sensor data directory.
-#                   The name of each sensor is arbitrary, and just used for identification
+#                   The name of each sensor is arbitrary, and just used for identification.
 #                   in the configuration. Each sensor name must be unique.
-#  short_names:     A list of short names, corresponding to the data field for each
+#    short_names:   A list of short names, corresponding to the data field for each
 #                   variable. Most sensors will only have one variable in the PAWS data file,
 #                   but some may have multiple variables on each data line, e.g. a 
 #                   wind sensor which produces the pair wind speed, wind direction.
-#  sub_dir:         Combine with top_dir as top_dir/sub_dir to specify the location
+#    sub_dir:       Combine with top_dir as top_dir/sub_dir to specify the location
 #                   where data files are found for that sensor.
 #
 {
