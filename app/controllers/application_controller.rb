@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_profile
   
   def set_profile
+    ActionMailer::Base.default_url_options = {:host => request.host_with_port}
     
     if ! @profile = Profile.first
       Profile.initialize
