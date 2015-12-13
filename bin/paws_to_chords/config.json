@@ -1,19 +1,24 @@
 #
-# paws_to_chords configuration file, in JSON format.
+# paws_to_chords instructions and configuration.
+# The configuration is the section that is in JSON format.
 #
 # Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
-# from this file before attempting to parse it as pure JSON. paws_to_chords does this internally.
+# from this file before attempting to parse it as pure JSON. paws_to_chords does this automatically.
 #
-# Configuration file for the paws_to_chords program. 
-#
+# One instance of paws_to_chords will process data for a single CHORDS instrument, submitting
+# it to a CHORDS Portal. Use this file as the template to create configuration(s)
+# for your particular instrument(s). 
+# 
 # paws_to_chords will periodically scan a list of directories, finding the file that
-# was most recently updated in each directory. It will then examine the last line
-# that file, and extract a timestamp and one or more variable values. If the timestamp
-# is different than the previous timestamp, the values will be paired with the short_names.
-# All of the short_name/value pairs will be used to build a CHORDS URL which will then
-# be submitted to a chords_portal.
+# was most recently modified in each directory. It will then examine the last line
+# that file, and extract a timestamp and one or more variable values. 
 #
-# The data lines in a file are formatted with whitespace separated values as follows:
+# The variable values will be paired with the CHORDS short_names.
+# All of the timestamp/short_name/value triples will be used to build a CHORDS URL which will then
+# be submitted to a chords_portal. If different timestamps are encountered, a URL for
+# each unique timestamp will be submitted.
+#
+# The data lines in a file are formatted with whitespace separated variable values as follows:
 # month day year hour minute var1 ... varN
 #
 # Command line usage of paws_to_chords
@@ -30,10 +35,8 @@
 #  top_dir:         The top directory for all of the sensor subdirectories.
 #                   If there is no common top directory, just set it to root
 #                   and specify all sub-directories as absolute paths.
-#  cycle_secs:      The repeat interval, in seconds.
+#  cycle_secs:      The directory scan interval, in seconds.
 #  sensors:         A list of sensors, with one entry for each sensor data directory.
-#                   The name of each sensor is arbitrary, and just used for identification.
-#                   in the configuration. Each sensor name must be unique.
 #    short_names:   A list of short names, corresponding to the data field for each
 #                   variable. Most sensors will only have one variable in the PAWS data file,
 #                   but some may have multiple variables on each data line, e.g. a 
@@ -41,6 +44,8 @@
 #                   Use a "*" to indicate a field which should be skipped.
 #    sub_dir:       Combine with top_dir as top_dir/sub_dir to specify the location
 #                   where data files are found for that sensor.
+#    file_pattern:  A shell style "glob pattern" for matching files. Thus the 
+#                   selected files will be top_dir/sub_dir/file_pattern.
 #
 {
   "chords_host":     "xxx.xxx.xxx",
