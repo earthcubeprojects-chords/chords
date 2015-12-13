@@ -161,7 +161,7 @@ class SensorFile:
     
     Returns:
       None - if there is no file, or an empty file
-      The last line
+      Otherwise - The last line
 
     This first implementation is very inefficient: it reads the 
     whole file just to find the last line. Not an issue if the file
@@ -172,6 +172,8 @@ class SensorFile:
     """
     def last_line(self):
         filepath = self.current_file()
+        if not filepath:
+            return None
         f = open(filepath, 'r')
         lines = f.readlines()
         if len(lines) == 0:
@@ -187,6 +189,8 @@ class SensorFile:
     """
     def time_and_values(self):
         line = self.last_line()
+        if not line:
+            return (None, None)            
         tokens = line.split()
         if len(tokens) < 6:
             return (None, None)
