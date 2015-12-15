@@ -29,7 +29,7 @@ CHORDS consists of two components:
 
 ## The CHORDS Portal is a
 
-* **web server** that accepts real-time data from distributed instruments, and serves 
+* **web server and database** that accepts real-time data from distributed instruments, and serves 
 the measurements to anyone on the Internet. The data streams are pushed to and pulled from the Portal using 
 simple HTTP requests. 
 * **management tool** that allows you to monitor your remote instruments, insure correct operation, and maximize data collection.
