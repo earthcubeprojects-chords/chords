@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/python
 
 """
 psql_forwarder is used to relay time series observations from a postgress database to
