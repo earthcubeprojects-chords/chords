@@ -18,10 +18,14 @@
 #    time_at:         If true, the value from the db time_column will be submitted with the ?at= parameter.
 #  O test:            If true, the "&test" query parameter will be atteed to the CHORDS url.
 #  O verbose:         If true, enable verbose reporting.
+#  * condition_name:  The Postgres NOTIFY condition name.
 #  * instrument_id:   The CHORDS instrument id.
 #  * time_column:     The name of the database table column containing the row timestamp.
 #  * var_short_names": A hash of mappings between db columns and CHORDS variable short names.
 #
+# Generally you will have all of the fields specified in the configuration file, in which case
+# the command line would look like:
+# ./psql_forwarder.py -f g5.json -k ABCDEF
 {
   "chords_host":     "xxx.xxx.xxx",
   "db_host":         "xxx.xxx.xxx",
@@ -31,6 +35,7 @@
   "time_at":         true,
   "test":            false,
   "verbose":         false,
+  "condition_name":  "current",
   "instrument_id":   "100",
   "time_column":     "datetime",
   "var_short_names": {

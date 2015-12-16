@@ -49,6 +49,7 @@
 # }
 
 
+import select
 import psycopg2
 import pycurl
 import json
@@ -118,8 +119,11 @@ class ADS_db:
         self.dbhost  = dbhost
         self.dbtable = dbtable
     
-        conn = psycopg2.connect(host=self.dbhost, database=self.dbname, user=self.dbuser)
-        self.cursor = conn.cursor()
+        self.conn = psycopg2.connect(host=self.dbhost, database=self.dbname, user=self.dbuser)
+        # This seems to be recommended when using listen
+        self.conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
+        # get a cursor
+        self.cursor = self.conn.cursor()
     
     def list_columns(self):
         # Return a list of olumn names,
@@ -158,6 +162,31 @@ class ADS_db:
         # Returns: a list of values.
         row = self.cursor.fetchone()
         return row
+
+    def listen(self, condition_name):
+        # Enable the listen
+        sql = "LISTEN " + condition_name + ";"
+        self.cursor.execute(sql)
+    
+    """
+    Return True if one or more notifications were received
+    Return False if the select timed out
+    """
+    def wait_for_notify(self, timeout, verbose=False):
+        # Wait for action on the socket
+        if select.select([self.conn],[],[],timeout) == ([],[],[]):
+            # Select timed out
+            if verbose:
+                print "wait_for_notify: select timeout"
+            return False
+        else:
+            # select returned
+            self.conn.poll()
+            while self.conn.notifies:
+                notify = conn.notifies.pop(0)
+                if verbose:
+                    print "wait_for_notify:", notify.pid, notify.channel, notify.payload
+            return True
 
 #####################################################################
 class Measurement:
@@ -290,6 +319,9 @@ test        = option_override('test',        options, config)
 verbose     = option_override('verbose',     options, config)
 
 # These options must be in the configuration file
+
+# The postgres notify condition name
+condition_name= config['condition_name']
 instrument_id = config['instrument_id']
 
 # The name of the column used for the timestamp
@@ -320,23 +352,29 @@ if verbose:
 # exit if they don't exist
 verify_columns(db, vars)
 
-# Get a set of measurements from the database
-time, measurements = get_measurements(db, vars)
+# Set up a listen
+db.listen("current")
 
-# Make a url
-url = make_CHORDS_url(
-    host=chords_host, 
-    id=instrument_id, 
-    measurements=measurements, 
-    time=time,
-    key=key,
-    test=test)
-
-if verbose:
-    print url
-
-# Send the url
-status = http_GET(url)
-if verbose:
-    print status
-
+while 1:
+    # Wait for a notification
+    if db.wait_for_notify(5, verbose):
+        # Get a set of measurements from the database
+        time, measurements = get_measurements(db, vars)
+        
+        # Make a url
+        url = make_CHORDS_url(
+            host=chords_host, 
+            id=instrument_id, 
+            measurements=measurements, 
+            time=time,
+            key=key,
+            test=test)
+        
+        if verbose:
+            print url
+        
+        # Send the url
+        status = http_GET(url)
+        if verbose:
+            print status
+        
