@@ -29,7 +29,7 @@ Description=CHORDS UDP Forwarder
 
 [Service]
 Type=simple
-ExecStart=/usr/local/src/chords_testbed/bin/psql_forwarder/psql_forwarder.rb -f /usr/local/src/chords_testbed/bin/psql_forwarder/g5.json
+ExecStart=/usr/local/src/chords_testbed/bin/psql_forwarder/psql_forwarder.py -f /usr/local/src/chords_testbed/bin/psql_forwarder/g5.json
 Restart=always
 RestartSec=10
 
