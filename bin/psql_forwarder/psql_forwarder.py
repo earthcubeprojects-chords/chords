@@ -1,15 +1,26 @@
 #!/usr/local/bin/python
 
-# You may need to:
-#  pip install psycopg2
-#  pip install pycurl
+"""
+psql_forwarder is used to relay time series observations from a postgress database to
+a CHORDS Portal (http://chordsrt.com)
 
-#
-# psql_forwarder configuration file, in JSON format.
+It connects to the database, and then LISTENS for NOTIFY events. Upon reception
+of the event, it reads the last row from the selected table, extracts those values,
+creates a URL, and transmits it to the CHORDS Portal.
+
+A configuration file specifies the data columns, database specifictions, CHORDS
+variables, etc. Security sensitive configuration detains can be specified on the
+command line, so that they are not published to your revision control system.
+
+Psycopg2 is used for postgress access. Pycurl provides URL handling. You may need to:
+  pip install psycopg2
+  pip install pycurl
+
+The following is a copy of a psql_forwarder configuration file. The configuration is
+provided in json.
 #
 # Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
-# from this file before attempting to parse it 
-# as pure JSON. psql_forwarder does this internally.
+# from this file before attempting to parse it as pure JSON. psql_forwarder does this internally.
 #
 # Configuration file for the CHORDS psql_forward program.
 # Those marked with a * are required in the configuration file. 
@@ -25,35 +36,40 @@
 #    time_at:         If true, the value from the db time_column will be submitted with the ?at= parameter.
 #  O test:            If true, the "&test" query parameter will be atteed to the CHORDS url.
 #  O verbose:         If true, enable verbose reporting.
+#  * condition_name:  The Postgres NOTIFY condition name.
 #  * instrument_id:   The CHORDS instrument id.
 #  * time_column:     The name of the database table column containing the row timestamp.
 #  * var_short_names": A hash of mappings between db columns and CHORDS variable short names.
 #
-#{
-#  "chords_host":     "xxx.xxx.xxx",
-#  "db_host":         "xxx.xxx.xxx",
-#  "db_name":         "xxxxxxx",
-#  "db_user":         "xxx",
-#  "db_table":        "xxxx",
-#  "time_at":         true,
-#  "test ":           false,
-#  "verbose"          false,
-#  "instrument_id":   "100",
-#  "time_column":     "datetime",
-#  "var_short_names": {
-#     "cnts":   "cnts",
-#     "pcn":    "pcn",
-#     "bdifr":  "bdifr",
-#     "adifr":  "adifr"
-#   }
-# }
+# Generally you will have all of the fields specified in the configuration file, in which case
+# the command line would look like:
+# ./psql_forwarder.py -f g5.json -k ABCDEF
+{
+  "chords_host":     "xxx.xxx.xxx",
+  "db_host":         "xxx.xxx.xxx",
+  "db_name":         "xxxxxxx",
+  "db_user":         "xxx",
+  "db_table":        "xxxx",
+  "time_at":         true,
+  "test":            false,
+  "verbose":         false,
+  "condition_name":  "current",
+  "instrument_id":   "100",
+  "time_column":     "datetime",
+  "var_short_names": {
+     "cnts":   "cnts",
+     "pcn":    "pcn",
+     "bdifr":  "bdifr",
+     "adifr":  "adifr"
+   }
+}
+"""
 
-
-import select
 import psycopg2
 import pycurl
 import json
 import argparse
+import select
 import pycurl
 try:
     from io import BytesIO
@@ -61,10 +77,13 @@ except ImportError:
     from StringIO import StringIO as BytesIO
 
 #####################################################################
+"""
+Manage the command line arguments
+
+The options are collated in a dictionary keyed on the option long name.
+The option dictionary will only contain the options that are present on the command line.
+"""
 class CommandArgs:
-    # Manage the command line options.
-    # The options are collated in a dictionary keyed on the option long name.
-    # The option dictionary will only contain the options that are present on the command line.
     def __init__(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("-f", "--config",      help="config file (required)")
@@ -77,9 +96,11 @@ class CommandArgs:
         parser.add_argument("-s", "--test",        help="add test flag", action="store_true")
         parser.add_argument("-v", "--verbose",     help="verbose output", action="store_true")
 
+        # Parse the options and put them in the
         args = parser.parse_args()
         self.options = vars(args)
         
+        # Check for required options.
         if not args.config:
             parser.print_help()
             exit(1)
@@ -89,35 +110,70 @@ class CommandArgs:
         return self.options 
 
 #####################################################################
+"""
+Configuration management. 
+
+The JSON configuration file is read and converted to a python object.
+"""
 class Config:
-    # Extract configuration key value pairs from a json configuration file.
+    """
+    Extract configuration key value pairs from a json configuration file.
+    """
     def __init__(self, path):
         self.lines = []
         self.json = ""
         configfile = open(path, "r")
+        # read the configuration file, removing the commented lines.
+        # save the text in elf.json
         for l in configfile:
             if len(l) > 0:
                 if l[0] != "#":
                     self.lines.append(l)
                     self.json += l
+        # self.config contains the decoded structure.
         self.config = json.loads(self.json)
         
+    """
+    Returns: the configuration structure.
+    """
     def get_config(self):
         return self.config
     
+    """
+    Returns: The configuration source JSON text.
+    """
     def json_str(self):
         # Return the json that was parsed.
         return self.json
 
 #####################################################################
+"""
+Abstraction for an ADS database. Although it probably could represent
+any postgres database.
+
+The last row of a designated table in the database will be the
+a source of variable values.
+
+One column will be designated as the time source.
+
+"""
 class ADS_db:
-    # Manage the database connection.
-    # All future transactions will be made against dbtable.
-    def __init__(self, dbhost, dbname, dbuser, dbtable):
-        self.dbname  = dbname
-        self.dbuser  = dbuser
-        self.dbhost  = dbhost
-        self.dbtable = dbtable
+    """
+    Connect to the database.
+    
+    Parameters
+      dbhost      - The postgres db host.
+      dbname      - The postgres db name. 
+      dbuser      - The postgres db user.
+      dbtable     - The postgres db table source for variables. 
+      sort_column - The column to sort on when retrieving the last row
+    """
+    def __init__(self, dbhost, dbname, dbuser, dbtable, sort_column):
+        self.dbname      = dbname
+        self.dbuser      = dbuser
+        self.dbhost      = dbhost
+        self.dbtable     = dbtable
+        self.sort_column = sort_column
     
         self.conn = psycopg2.connect(host=self.dbhost, database=self.dbname, user=self.dbuser)
         # This seems to be recommended when using listen
@@ -125,15 +181,20 @@ class ADS_db:
         # get a cursor
         self.cursor = self.conn.cursor()
     
-    def list_columns(self):
-        # Return a list of olumn names,
+    """
+    Return the columns in self.dbtable
+    """
+    def get_columns(self):
+        # Return a list of column names,
         self.cursor.execute("select column_name from information_schema.columns where table_name = '" + self.dbtable +"';")
         return self.cursor.fetchall()
     
+    """
+    """
     def verify_columns(self, columns):
         # Return a list of missing column names
         retval = []
-        x = self.list_columns()
+        x = self.get_columns()
         db_cols = []
         for y in x:
             db_cols.append(y[0])
@@ -154,7 +215,7 @@ class ADS_db:
                 sql = sql + ','
             sql = sql + c
             i += 1
-        sql = sql + " from " + self.dbtable + " limit 1;"
+        sql = sql + " from "+self.dbtable+" order by "+self.sort_column+" desc limit 1;"
         self.cursor.execute(sql)
 
     def next_row(self):
@@ -176,26 +237,29 @@ class ADS_db:
         # Wait for action on the socket
         if select.select([self.conn],[],[],timeout) == ([],[],[]):
             # Select timed out
-            if verbose:
-                print "wait_for_notify: select timeout"
             return False
         else:
             # select returned
             self.conn.poll()
             while self.conn.notifies:
-                notify = conn.notifies.pop(0)
-                if verbose:
-                    print "wait_for_notify:", notify.pid, notify.channel, notify.payload
+                notify = self.conn.notifies.pop(0)
             return True
 
 #####################################################################
+"""
+"""
 class Measurement:
     # Represent a CHORDS measurement.
     def __init__(self, short_name, value):
         self.short_name = short_name
         self.value_str = str(value)    
     
+    def __repr__(self):
+        return '(' + self.short_name + ',' + self.value_str + ')'
+
 #####################################################################
+"""
+"""
 def make_CHORDS_url(host, id, measurements=[], key=None, time=None, test=None):
     # Create a CHORDS URL.
     # instrument_id: string
@@ -204,7 +268,11 @@ def make_CHORDS_url(host, id, measurements=[], key=None, time=None, test=None):
     # time (optional): ISO time string
     url = "http://" + host + "/measurements/url_create?instrument_id="+str(instrument_id)
     for m in measurements:
-        url += "&" + m.short_name + "=" + m.value_str
+        # Do not try to add lists
+        if m.value_str[0] != '[':
+            # Don't add missing values
+            if m.value_str != "-32767.0":
+                url += "&" + m.short_name + "=" + m.value_str
     if key:
         url += "&key=" + key 
     if time:
@@ -214,6 +282,8 @@ def make_CHORDS_url(host, id, measurements=[], key=None, time=None, test=None):
     return url
 
 #####################################################################
+"""
+"""
 def option_override(name, options, config):
     # Determine the final value of the configuration option.
     # If the named item exists in options, that  will be returned. 
@@ -231,12 +301,14 @@ def option_override(name, options, config):
     return retval
 
 #####################################################################
+"""
+"""
 def http_GET(url):
     # Send the URL
     
     buffer = BytesIO()
     c = pycurl.Curl()
-    c.setopt(c.URL, 'http://pycurl.sourceforge.net/')
+    c.setopt(c.URL, url)
     c.setopt(c.WRITEDATA, buffer)
     c.perform()
     
@@ -248,6 +320,8 @@ def http_GET(url):
     return status
 
 #####################################################################
+"""
+"""
 def verify_columns(db, vars):
     # Verify that the specified columns exist in the database
     # db: the database
@@ -267,14 +341,19 @@ def verify_columns(db, vars):
         exit(1)
 
 #####################################################################
+"""
+Interogate the database for a row of values.
+Return these as a list of measurements
+
+Parameters
+  db - the database
+  vars - a dictionary of column_name:short_name
+
+Return: (time, Measurement[])
+"""
 def get_measurements(db, vars):
-    # Interogate the database for a row of values.
-    # Return these as a list of measurements
-    # db: the database
-    # vars: a dictionary of column_name:short_name
-    # Return: time, Measurement[]
     
-    # Extract the column names
+    # Create a list of column names from the list of variables
     columns = []
     for col,short_name in vars.iteritems():
         columns.append(col)
@@ -297,6 +376,10 @@ def get_measurements(db, vars):
     return time, measurements
     
 #####################################################################
+#####################################################################
+
+# Main
+
 # Get a row from the database, convert it to a URL, and send to a
 # CORDS Portal
 
@@ -341,10 +424,10 @@ if verbose:
         print "   ", k + ":", v
         
 # Open the database
-db = ADS_db(dbhost=db_host, dbname=db_name, dbtable=db_table, dbuser=db_user)
+db = ADS_db(dbhost=db_host, dbname=db_name, dbtable=db_table, dbuser=db_user, sort_column=time_col)
 if verbose:
     print 'Database columns:'
-    cols = db.list_columns()
+    cols = db.get_columns()
     for c in cols:
         print "   ", c[0]
 
