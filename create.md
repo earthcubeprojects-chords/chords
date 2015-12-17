@@ -78,9 +78,18 @@ CHORDS Portal. Click on the link to access the Portal.
 
 ## 9. Log Into to Your CHORDS Portal
 
-* Log into your new portal, as user: *admin@chordsrt.com*, and password: *realtimedata*. 
-**Be sure to log in immediately. You will be required to change the password, and this needs to
-happen before someone else accesses the portal.**
+Once the Portal is running, you will want to immediately change the admin acount and password to your
+own email and password.
+
+* Log into your new portal, as user: **admin@chordsrt.com**, and password: **realtimedata**.
+* Go to the users page, and change the user name from *admin@chordsrt.com* 
+  to your *email address*.
+* Logout of the Portal.
+* Select **Forgot your password?"**
+* Enter your email and punch *send me reset password instructions". 
+* An email will be sent, containing a link that you can use to change the password on your account. **It's
+very likely that this email will go into your spam folder. Use the link to change your password to something 
+secure"**
 
 <img class="img-responsive" src="images/AWS_CF7.png" alt="Login">
 
