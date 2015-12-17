@@ -12,11 +12,10 @@ You can then proceed to <a href="{{site.baseurl}}/config.html">Portal configurat
 
 The Portal runs as a standalone web server on Amazon Web Services (AWS). 
 The interface to AWS can seem a bit overwhelming (currently offering 52
-services!). There are only two that are necessary for managing the Portal
-on Amazon.
+services!).
 
 We use the **AWS CloudFormation** service to create a new portal. The steps are
-simple and few.
+simple.
 
 
 Log onto your AWS account to begin.
@@ -29,34 +28,37 @@ Log onto your AWS account to begin.
       
 ## 2. Start stack creation
 
-* AWS refers to a program as a *stack*. Mash *Create Stack* to start the CloudFormation wizard.
+* AWS refers to a program as a *stack*. Mash **Create Stack** to start the CloudFormation wizard.
 
 <img class="img-responsive" src="images/AWS_CF0.png" alt="Create Stack">
 
 ## 3. Specify a portal template 
 
 * Paste the following link into _Specify an S3 template URL_: <br/>
-https://s3-us-west-2.amazonaws.com/chords-template/chords.template
+**https://s3-us-west-2.amazonaws.com/chords-template/chords.template**
+* Hit **Next**
 
 <img class="img-responsive" src="images/AWS_CF1.png" alt="Cloud Formation Template">
 
 ## 4. Specify the portal name and key
 
 * Give the stack a name. The convention is _CHORDS-_ suffixed with your project or organization name, e.g. _CHORDS-CSURadar_.
-* Select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, if ever needed.
+* If you created a key for your Amazon account, select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, 
+  if ever needed.
+* Hit **Next**
 
 <img class="img-responsive" src="images/AWS_CF2.png" alt="Portal Name">
 
 ## 5. Options
 
-* Hit _Next_.
+* Hit **Next**.
 
 <img class="img-responsive" src="images/AWS_CF3.png" alt="Options">
 
 ## 6. Review
 
 * Verify that everything looks good.
-* Mash the *Create* button.
+* Mash the **Create** button.
 
 <img class="img-responsive" src="images/AWS_CF4.png" alt="Review">
 
@@ -71,8 +73,9 @@ much longer (even 30 minutes), depending upon AWS performance.
 
 ## 8. Access the new Portal
 
-* Once the portal is created and running, the *Outputs* tab will provide a WebsiteURL for the new 
-CHORDS Portal. Click on the link to access the Portal.
+* Once the portal is created and running, the *Outputs* tab will show a *WebsiteURL* for the new 
+CHORDS Portal. 
+* **Click** on the link to access the Portal.
 
 <img class="img-responsive" src="images/AWS_CF6.png" alt="Portal URL">
 
