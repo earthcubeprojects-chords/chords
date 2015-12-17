@@ -85,8 +85,8 @@ own email and password.
 * Go to the users page, and change the user name from *admin@chordsrt.com* 
   to your *email address*.
 * Logout of the Portal.
-* Select **Forgot your password?"**
-* Enter your email and punch *send me reset password instructions*. 
+* Select **Forgot your password?**
+* Enter your email and punch **send me reset password instructions**. 
 * An email will be sent, containing a link that you can use to change the password on your account. **It's
 very likely that this email will go into your spam folder. Use the link to change your password to something 
 secure"**
