@@ -71,10 +71,7 @@ import json
 import argparse
 import select
 import pycurl
-try:
-    from io import BytesIO
-except ImportError:
-    from StringIO import StringIO as BytesIO
+from StringIO import StringIO
 
 #####################################################################
 """
@@ -306,10 +303,10 @@ def option_override(name, options, config):
 def http_GET(url):
     # Send the URL
     
-    buffer = BytesIO()
+    buffer = StringIO()
     c = pycurl.Curl()
-    c.setopt(c.URL, url)
-    c.setopt(c.WRITEDATA, buffer)
+    c.setopt(c.URL, str(url))
+    c.setopt(c.WRITEFUNCTION, buffer.write)
     c.perform()
     
     # HTTP response code, e.g. 200.
@@ -440,7 +437,7 @@ db.listen("current")
 
 while 1:
     # Wait for a notification
-    if db.wait_for_notify(5, verbose):
+    if not db.wait_for_notify(5, verbose):
         # Get a set of measurements from the database
         time, measurements = get_measurements(db, vars)
         
