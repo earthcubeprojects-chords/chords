@@ -1,17 +1,19 @@
 #
 # paws_to_chords instructions and configuration.
-# The configuration is the section that is in JSON format.
 #
-# Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
-# from this file before attempting to parse it as pure JSON. paws_to_chords does this automatically.
+# Instructions for 'paws_to_chords', followed by a sample configuration
+# JSON structure.
+#
+# This whole file can be used a configuration template. Comment lines that begin with a 
+# leading hash charcter will be stripped by paws_to_chords.
 #
 # One instance of paws_to_chords will process data for a single CHORDS instrument, submitting
-# it to a CHORDS Portal. Use this file as the template to create configuration(s)
+# it to a CHORDS Portal.  template to create configuration(s)
 # for your particular instrument(s). 
 # 
 # paws_to_chords will periodically scan a list of directories, finding the file that
 # was most recently modified in each directory. It will then examine the last line
-# that file, and extract a timestamp and one or more variable values. 
+# that file, and extract a timestamp and one or more variable values.
 #
 # The variable values will be paired with the CHORDS short_names.
 # All of the timestamp/short_name/value triples will be used to build a CHORDS URL which will then
@@ -21,7 +23,8 @@
 # The data lines in a file are formatted with whitespace separated variable values as follows:
 # month day year hour minute var1 ... varN
 #
-# Command line usage of paws_to_chords
+###############################################################################
+# Command line usage of paws_to_chords:
 #
 # usage: paws_to_chords --config config_file [--key key_value] [--test] [--verbose]
 #  --config file_name  The configuration file
@@ -29,7 +32,8 @@
 #  --test              (optional) Add the "test" data qualifier.
 #  --verbose           (optional) Print detailed diagnostic information.
 #
-#  Configuration keys:
+###############################################################################
+#  Configuration keys (used in the JSON structure below):
 #  chords_host:     The CHORDS Portal IP.
 #  instrument_id:   The CHORDS instrument id.
 #  top_dir:         The top directory for all of the sensor subdirectories.
@@ -70,5 +74,3 @@
       }
    ]
 }
- 
- 

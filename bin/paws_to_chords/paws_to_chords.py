@@ -8,6 +8,7 @@ import argparse
 import pycurl
 import os
 import fnmatch
+import time
 
 try:
     from io import BytesIO
@@ -15,10 +16,12 @@ except ImportError:
     from StringIO import StringIO as BytesIO
 
 #####################################################################
+"""
+Manage the command line options.
+The options are collated in a dictionary keyed on the option long name.
+The option dictionary will only contain the options that are present on the command line.
+"""
 class CommandArgs:
-    # Manage the command line options.
-    # The options are collated in a dictionary keyed on the option long name.
-    # The option dictionary will only contain the options that are present on the command line.
     def __init__(self):
         parser = argparse.ArgumentParser()
         parser.add_argument("-c", "--config",      help="config file (required)")
@@ -47,16 +50,20 @@ class CommandArgs:
         return self.options 
 
 #####################################################################
+#####################################################################
 """
 Manage the configuration of paws_to_chords
 
 The configuration is defined in a json file, which is converted directly to
 a python object. The syntax of the configuration file is given in the 
-sample config.json file, and this class will validate the configuration
+sample config.json file. This class will validate the configuration,
 as expected in that definition.
 """
 class Config:
-    # Extract configuration key value pairs from a json configuration file.
+    """
+    Parameters
+      path - path to the configuration file
+    """
     def __init__(self, path):
         self.lines = []
         self.json = ""
@@ -72,6 +79,15 @@ class Config:
         if not self.validate_config():
             exit(1)
         
+    """
+    Validate the confguration.
+    
+    This occurs after the file text has been turned into the self.config
+    object. Make sure that required keys exist in the object, which will be
+    a nested dictionary. 
+    
+    Return -  True if ok, False if otherwise.
+    """
     def validate_config(self):
         # return true if config is valid, false otherwise.
         retval = True
@@ -94,35 +110,48 @@ class Config:
         return retval
         
     
+    """
+    Return the configuration dictionary.
+    """
     def get_config(self):
         return self.config
     
+    """
+    return the json string version of the configuration.
+    """
     def json_str(self):
-        # Return the json that was parsed.
         return self.json
 
 #####################################################################
+#####################################################################
+"""
+Represent a measurement, with short name, timestamp and value.
+"""
 class Measurement:
-    # Represent a CHORDS measurement.
     def __init__(self, short_name, timestamp, value):
         self.short_name = short_name
         self.timestamp  = timestamp
         self.value      = value   
     
+    """
+    Provide printable version of Measurement instances.
+    """
     def __repr__(self):
         return self.short_name + ',' + self.timestamp + ',' + self.value
             
 #####################################################################
+#####################################################################
 """
-Work the files that will be provide measurements for one sensor.
+Access the files that provide variables for one sensor.
 
-Funcionality is provided to search a directory for the last modified
+SensorFile will search a directory for the last modified
 file, and to parse the last line of the file. 
 
 The data lines in a file are formatted with whitespace separated values as follows:
 month day year hour minute var1 ... varN 
 
-Too do: keep track of modification time, and only read the file if it has changed.
+Enhancement: keep track of modification time, and only read the file if it has changed
+since the last time we looked at it.
 """
 class SensorFile:
     """
@@ -199,25 +228,46 @@ class SensorFile:
         return (timestamp, values)
    
 #####################################################################
+#####################################################################
 """
-Represent one sensor, as defined in the paws_to_chords configuration.
-
-
+Represent one sensor, which is associated with one file.
+There can multiple variables for a single sensor. This
+class will "scan" the sensors for the most recent variable
+values, and return them as a consolidated list of Measurements.
+Note that the measurements will not necessarily all have the
+same timestamp.
 """
 class Sensor:
+    """
+    Parameters
+      short_names - A list of variable shortnames to be paired with
+        columns in the data file. The columns following the datestamp will
+        be considered. If the shortname is "*", the column will be skipped.
+      dir - The directroy which will be searched for data files
+      file_pattern - The file matching pattern, which uses shell globbing syntax.
+    """
     def __init__(self, short_names, dir, file_pattern):
         self.short_names = short_names
-        self.sf = SensorFile(dir, file_pattern)
+        self.sensor_file = SensorFile(dir, file_pattern)
         
+    """
+    Returns - the most recent data file for the sensor.
+    """
     def current_file(self):
-        print self.sf.last_line()
-        return self.sf.current_file()
+        return self.sensor_file.current_file()
     
+    """
+    Returns - The measurements for this sensor. There may be no
+    measurements avaiable, if a file is not avaiable.
+    """
     def measurements(self):
+        # Get the current timetamp and the associated values
+        (timestamp, values) = self.sensor_file.time_and_values()
+        
         measurements = []
-        (timestamp, values) = self.sf.time_and_values()
         if not timestamp:
             return measurements
+        
         # Match the variable short_names to the values,
         # creating the Measurements
         for i in range(len(self.short_names)):
@@ -230,16 +280,27 @@ class Sensor:
         return measurements
     
 #####################################################################
+#####################################################################
+"""
+Represent an instrument, which contains Sensors. 
+
+On demand, collect all of the current measurements for all 
+sensors.
+"""
 class Instrument:
     def __init__(self, id, top_dir, sensors):
         self.id = id
         self.sensors = []
-        #print sensors
         for s in sensors:
             dir = os.path.join(top_dir, s['sub_dir'])
             sensor = Sensor(s['short_names'], dir, s['file_pattern'])
             self.sensors.append(sensor)
             
+    """
+    A utility function, mainly useful for debugging.
+    
+    Returns - a list of the currently relevant files for all sensors.
+    """
     def files(self):
         f = []
         for s in self.sensors:
@@ -247,12 +308,16 @@ class Instrument:
 
         return f
 
+    """
+    Returns - a list of last Measurements for all sensors.
+    """
     def measurements(self):
         measurements = []
         for s in self.sensors:
             measurements = measurements + s.measurements()
         return measurements
 
+#####################################################################
 #####################################################################
 '''
 Create CHORDS URLs from measurements.
@@ -272,7 +337,7 @@ def make_CHORDS_urls(host, id, measurements=[], key=None, test=None):
     timestamps = [m.timestamp for m in measurements]
     timestamps = set(timestamps)
     
-    # Build URLs for each timestamp
+    # Build URLs for each unique timestamp
     urls = []
     for timestamp in timestamps:
         # Get all measurements at this time
@@ -294,12 +359,17 @@ def make_CHORDS_urls(host, id, measurements=[], key=None, test=None):
     return urls
 
 #####################################################################
+"""
+Send the URL
+
+Parameters
+  url - the full url
+ """
 def http_GET(url):
-    # Send the URL
     
     buffer = BytesIO()
     c = pycurl.Curl()
-    c.setopt(c.URL, 'http://pycurl.sourceforge.net/')
+    c.setopt(c.URL, url)
     c.setopt(c.WRITEDATA, buffer)
     c.perform()
     
@@ -311,6 +381,26 @@ def http_GET(url):
     return status
 
 #####################################################################
+def make_and_send_url(instrument):
+
+     # fetch measurements from the files.
+    measurements = instrument.measurements()
+
+    # Make a url
+    urls = make_CHORDS_urls(
+        host=config['chords_host'], 
+        id=config['instrument_id'], 
+        measurements=measurements, 
+        key=key,
+        test=test)
+    
+    # Send the url
+    for url in urls:
+        status = http_GET(url)
+        if verbose:
+            print url
+            print status
+
 #####################################################################
 
 # Get the command line options
@@ -319,38 +409,29 @@ if options['verbose']:
     print "Command line options:"
     print options
 
-verbose = options['verbose']
-key     = options['key']
-test    = options['test']
+verbose    = options['verbose']
+key        = options['key']
+test       = options['test']
 
 # Parse the configuration file
 config_file  = Config(options['config'])
 
-# Get the configuration as a dictionary
+# Convert the configuration to a dictionary
 config        = config_file.get_config()
+
 # Show the json configuration
 if verbose:
     print 'JSON configuration:'
     print config_file.json_str()
 
-
+# Create an instrument, based on a list of sensors.
+# The sensors know which files to scan.
 instrument = Instrument(config['instrument_id'], 
                         config['top_dir'], 
                         config['sensors'])
-measurements = instrument.measurements()
 
-# Make a url
-urls = make_CHORDS_urls(
-    host=config['chords_host'], 
-    id=config['instrument_id'], 
-    measurements=measurements, 
-    key=key,
-    test=test)
-
-# Send the url
-for url in urls:
-    status = http_GET(url)
-    if verbose:
-        print url
-        print status
+# Repeat
+while True:
+    make_and_send_url(instrument)
+    time.sleep(float(config['cycle_secs']))
 
