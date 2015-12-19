@@ -32,6 +32,7 @@
   "db_name":         "xxxxxxx",
   "db_user":         "xxx",
   "db_table":        "xxxx",
+  "key":             "xxxxxxxx",
   "time_at":         true,
   "test":            false,
   "verbose":         false,
