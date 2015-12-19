@@ -437,7 +437,7 @@ db.listen("current")
 
 while 1:
     # Wait for a notification
-    if not db.wait_for_notify(5, verbose):
+    if db.wait_for_notify(5, verbose):
         # Get a set of measurements from the database
         time, measurements = get_measurements(db, vars)
         
