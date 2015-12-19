@@ -1,0 +1,73 @@
+#
+# psql_forwarder configuration file, in JSON format.
+#
+# Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
+# from this file before attempting to parse it as pure JSON. psql_forwarder does this internally.
+#
+# Configuration file for the CHORDS psql_forward program.
+# Those marked with a * are required in the configuration file. 
+# Others may be specified either here or on the command line of the program.
+# Those marked "O" are completely optional, and do not have to be specified
+# at all unless the option is needed.
+#
+#    chords_host:     The CHORDS Portal IP.
+#    db_host:         The ADS database IP.
+#    db_name:         The ADS database name.
+#    db_user:         The ADS database user.
+#    db_table:        The ADS database table.
+#    time_at:         If true, the value from the db time_column will be submitted with the ?at= parameter.
+#  O test:            If true, the "&test" query parameter will be atteed to the CHORDS url.
+#  O verbose:         If true, enable verbose reporting.
+#  * condition_name:  The Postgres NOTIFY condition name.
+#  * instrument_id:   The CHORDS instrument id.
+#  * time_column:     The name of the database table column containing the row timestamp.
+#  * var_short_names": A hash of mappings between db columns and CHORDS variable short names.
+#
+{
+  "chords_host":     "xxx.xxx.xxx",
+  "db_host":         "xxx.xxx.xxx",
+  "db_name":         "xxxxxxx",
+  "db_user":         "xxx",
+  "db_table":        "xxxx",
+  "key":             "xxxxxxxx",
+  "time_at":         true,
+  "test":            true,
+  "verbose":         false,
+  "condition_name":  "current",
+  "instrument_id":   "1",
+  "time_column":     "datetime",
+  "var_short_names": {
+    "datetime":     "datetime",
+    "adifr":        "adifr",
+    "bdifr":        "bdifr",
+    "ggalt":        "ggalt",
+    "gglat":        "gglat",
+    "gglon":        "gglon",
+    "pcn":          "pcn",
+    "psf":          "psf",
+    "qcf":          "qcf",
+    "qcr":          "qcr",
+    "ubtmp_rwo":    "ubtmp_rwo",
+    "upress_rwo":   "upress_rwo",
+    "uref_rwo":     "uref_rwo",
+    "uscat_rwo":    "uscat_rwo",
+    "ushflw_rwo":   "ushflw_rwo",
+    "usmpflw_rwo":  "usmpflw_rwo",
+    "utemp_rwo":    "utemp_rwo",
+    "atx":          "atx",
+    "concu100_rwo": "concu100_rwo",
+    "concu_rwo":    "concu_rwo",
+    "cuhsas_rwo":   "cuhsas_rwo",
+    "dpxc":         "dpxc",
+    "fcnc":         "fcnc",
+    "paltf":        "paltf",
+    "psxc":         "psxc",
+    "tasx":         "tasx",
+    "wdc":          "wdc",
+    "wic":          "wic",
+    "wsc":          "wsc",
+    "xicnc":        "xicnc"
+   }
+}
+ 
+ 
