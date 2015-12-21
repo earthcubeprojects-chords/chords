@@ -78,11 +78,12 @@ from StringIO import StringIO
 Manage the command line arguments
 
 The options are collated in a dictionary keyed on the option long name.
-The option dictionary will only contain the options that are present on the command line.
+The option dictionary will only contain the options that are present on 
+the command line.
 """
 class CommandArgs:
     def __init__(self):
-        parser = argparse.ArgumentParser()
+        parser = argparse.ArgumentParser(argument_default=argparse.SUPPRESS)
         parser.add_argument("-f", "--config",      help="config file (required)")
         parser.add_argument("-d", "--db_host",     help="database host")
         parser.add_argument("-n", "--db_name",     help="database name")
@@ -93,7 +94,7 @@ class CommandArgs:
         parser.add_argument("-s", "--test",        help="add test flag", action="store_true")
         parser.add_argument("-v", "--verbose",     help="verbose output", action="store_true")
 
-        # Parse the options and put them in the
+        # Parse the options and put them in self.options
         args = parser.parse_args()
         self.options = vars(args)
         
@@ -294,7 +295,7 @@ def option_override(name, options, config):
         retval = config[name]
     if name in options:
         if options[name] != None:
-          retval = options[name]
+            retval = options[name]
     return retval
 
 #####################################################################
