@@ -8,8 +8,7 @@
 # leading hash charcter will be stripped by paws_to_chords.
 #
 # One instance of paws_to_chords will process data for a single CHORDS instrument, submitting
-# it to a CHORDS Portal.  template to create configuration(s)
-# for your particular instrument(s). 
+# it to a CHORDS Portal.
 # 
 # paws_to_chords will periodically scan a list of directories, finding the file that
 # was most recently modified in each directory. It will then examine the last line
