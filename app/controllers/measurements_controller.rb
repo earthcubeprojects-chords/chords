@@ -148,10 +148,7 @@ class MeasurementsController < ApplicationController
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
       if Instrument.exists?(inst_id)
-        instrument = Instrument.find(inst_id)
-        # Can we use delete_all rather than destroy_all here? It would be
-        # infinitely faster for larger data sets.
-        Measurement.where(instrument_id: inst_id, test: '1').destroy_all
+        Measurement.where(instrument_id: inst_id, test: '1').delete_all
       end
     end
     
