@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151027212853) do
+ActiveRecord::Schema.define(version: 20151230210846) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -47,16 +47,17 @@ ActiveRecord::Schema.define(version: 20151027212853) do
   end
 
   add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
+  add_index "measurements", ["measured_at"], name: "index_measurements_on_measured_at", using: :btree
 
   create_table "profiles", force: :cascade do |t|
     t.string   "project",               limit: 255
     t.string   "affiliation",           limit: 255
     t.string   "description",           limit: 1000
     t.binary   "logo",                  limit: 16777215
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
     t.string   "timezone",              limit: 255
-    t.boolean  "secure_administration", limit: 1,        default: false
+    t.boolean  "secure_administration", limit: 1,        default: true
     t.boolean  "secure_data_viewing",   limit: 1,        default: true
     t.boolean  "secure_data_download",  limit: 1,        default: true
     t.boolean  "secure_data_entry",     limit: 1,        default: true
