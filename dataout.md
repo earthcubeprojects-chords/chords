@@ -8,7 +8,8 @@ be done directly from the Portal web page. Or you can use HTTP URL's to
 fetch data. The URL can be submitted directly from the address bar of your browser, which will
 deliver the data in standard formats such as CSV files, JSON files, or plain JSON. 
 
-You can also retrieve data using your favorite programming language, letting you build
+You can also retrieve data using your favorite programming language to construct 
+a program to send URLs and receive data, letting you build
 analysis and visulaization apps that can process your real-time observations. Using JavaScipt,
 you can even build widgets and pages that display your data on your own web site.
 
@@ -16,7 +17,91 @@ We will first describe the URL syntax for retrieving data, and follow this with 
 demonstrate how easy it is to integrate your analysis activities with a CHORDS Portal using
 Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
 
-**Insert a description of the URL get syntax here**
+###  URL Syntax
+
+Sample URLs for fetching data from the Portal:
+
+    http://myportal.org/instruments/1.csv
+    http://myportal.org/instruments/1.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
+    http://myportal.org/instruments/4.jsf&key=A56F421
+    http://myportal.org/instruments/3.json
+    http://myportal.org/instruments/3.json?last
+
+_myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
+separated by "&". 
+
+The number following _instruments/_ is the instrument identifier. 
+
+Following the instrument identifier is the format that the data will be returned in (_csv, jsf, json or xml_).
+
+Some formats result in a data file being returned to you browser, which can be saved 
+in a directory. The other formats directly return text, which can
+be easily ingested into programs.
+
+Fields after "?" are quallifier pairs, with each separated by "&". The qualifiers are 
+optional, and are used to refine the data request. 
+
+If time qualifiers are not specified, data for the curent day are returned. 
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Format</th>
+      <th>File or Text</th>
+      <th>Data Product</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>.csv</td>
+      <td>File</td>
+      <td>Data in a comma-separated-value  (CSV) file. CSV files can be opened automatically
+          by spreadsheet programs such as MS Excel.</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>.jsf</td>
+      <td>File</td>
+      <td>Data in a JSON structured file. Most scripting programs can easily read JSON
+          into a structured variable.</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>.json</td>
+      <td>Text</td>
+      <td>Data in straight JSON format. This format is used to bring data directly into a
+          processing program.</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Qualifier</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start=time</td>
+      <td>Start time of the data span, in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a> format.</td>
+    </tr>
+    <tr>
+      <td>end=time</td>
+      <td>Start time of the data span, in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a> format.</td>
+    </tr>
+    <tr>
+      <td>key=value</td>
+      <td>If the Portal has been configured to require a security key for downloading data, it
+      is specified with the <em>key</em> qualifier. Keys are case sensitive.</td>
+    </tr>
+  </tbody>
+</table>
+
+### Programming Examples
 
 <ul class="nav nav-pills">
   <li class="active"><a data-toggle="tab" href="#browser">Browser</a></li>
@@ -87,7 +172,7 @@ print json.dumps(data, indent=4, sort_keys=True)
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
 <script>
-var url = "http://chords.dyndns.org/instruments/26.json?last";
+var url = "http://myportal.org/instruments/26.json?last";
 $(function () {
     $.getJSON(url, function (data) {
         var table_html = "<table>";
@@ -117,7 +202,7 @@ $(function () {
   
   <div id="idl" class="tab-pane">
 {% highlight idl %}
-url='http://chords.dyndns.org/instruments/26.json?last'
+url='http://myportal.org/instruments/26.json?last'
 oUrl = OBJ_NEW('IDLnetUrl')
 json_data = oUrl->Get(URL=url, /STRING_ARRAY)
 data = JSON_PARSE(json_data)
@@ -166,7 +251,7 @@ data
 % Read CHORDS JSON data into a Matlab program.
 % This code uses the JSONlab toolbox from the Matlab File Exchange.
 % (Matlab >= R2014b)
-url='http://chords.dyndns.org/instruments/26.json?last';
+url='http://myportal.org/instruments/26.json?last';
 json_data = urlread(url);
 inst_data =loadjson(json_data);
 inst_data
@@ -202,7 +287,7 @@ install.packages('curl')
 install.packages('jsonlite')
 library('jsonlite')
 
-url <- 'http://chords.dyndns.org/instruments/26.json?last'
+url <- 'http://myportal.org/instruments/26.json?last'
 data <- fromJSON(txt=url)
 data
 ...
@@ -252,8 +337,8 @@ $Data$batv
 {% highlight sh %}
 #!/bin/sh
 
-urlcsv='http://chords.dyndns.org/instruments/26.csv?last'
-urljson='http://chords.dyndns.org/instruments/26.json?last'
+urlcsv='http://myportal.org/instruments/26.csv?last'
+urljson='http://myportal.org/instruments/26.json?last'
 
 echo 'CSV format:'
 curl $urlcsv
