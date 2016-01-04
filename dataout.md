@@ -38,11 +38,6 @@ Some formats result in a data file being returned to you browser, which can be s
 in a directory. The other formats directly return text, which can
 be easily ingested into programs.
 
-Fields after "?" are quallifier pairs, with each separated by "&". The qualifiers are 
-optional, and are used to refine the data request. 
-
-If time qualifiers are not specified, data for the curent day are returned. 
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -77,6 +72,11 @@ If time qualifiers are not specified, data for the curent day are returned.
     </tr>
   </tbody>
 </table>
+
+Fields after "?" are quallifier pairs, with each separated by "&". The qualifiers are 
+optional, and are used to refine the data request. 
+
+If time qualifiers are not specified, data for the curent day are returned. 
 
 <table class="table table-striped">
   <thead>
