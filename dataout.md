@@ -23,7 +23,7 @@ Sample URLs for fetching data from the Portal:
 
     http://myportal.org/instruments/1.csv
     http://myportal.org/instruments/1.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
-    http://myportal.org/instruments/4.jsf&key=A56F421
+    http://myportal.org/instruments/4.jsf?key=A56F421
     http://myportal.org/instruments/3.xml
     http://myportal.org/instruments/3.json?last
 
