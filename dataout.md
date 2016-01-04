@@ -24,7 +24,7 @@ Sample URLs for fetching data from the Portal:
     http://myportal.org/instruments/1.csv
     http://myportal.org/instruments/1.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
     http://myportal.org/instruments/4.jsf&key=A56F421
-    http://myportal.org/instruments/3.json
+    http://myportal.org/instruments/3.xml
     http://myportal.org/instruments/3.json?last
 
 _myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
@@ -58,16 +58,17 @@ If time qualifiers are not specified, data for the curent day are returned.
       <td>Data in a comma-separated-value  (CSV) file. CSV files can be opened automatically
           by spreadsheet programs such as MS Excel.</td>
     </tr>
-  </tbody>
-  <tbody>
     <tr>
       <td>.jsf</td>
       <td>File</td>
       <td>Data in a JSON structured file. Most scripting programs can easily read JSON
           into a structured variable.</td>
     </tr>
-  </tbody>
-  <tbody>
+    <tr>
+      <td>.xml</td>
+      <td>File</td>
+      <td>Data in an eXtensible-Markup-Language (XML) structured file.</td>
+    </tr>
     <tr>
       <td>.json</td>
       <td>Text</td>
