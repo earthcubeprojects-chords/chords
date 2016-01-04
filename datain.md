@@ -13,9 +13,11 @@ particular langauge. Almost all programming languages have functions for submitt
 
 ###  URL Syntax
 
-A typical URL for submitting measurements to the Portal:
+Sample URLs for submitting measurements to the Portal:
 
     http://myportal.org/measurements/url_create?instrument_id=25&wdir=038&wspd=3.2&at=2015-08-20T19:50:28
+    http://myportal.org/measurements/url_create?instrument_id=1&p=981.2&key=A56F421
+    http://myportal.org/measurements/url_create?instrument_id=4&p=981.2&key=A56F421&at=2015-08-20T19:50:28&test
 
 _myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
 separated by "&". 
