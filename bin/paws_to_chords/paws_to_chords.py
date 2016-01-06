@@ -1,5 +1,4 @@
-#!/usr/local/bin/python
-
+#
 # You may need to:
 #  pip install pycurl
 
@@ -9,11 +8,7 @@ import pycurl
 import os
 import fnmatch
 import time
-
-try:
-    from io import BytesIO
-except ImportError:
-    from StringIO import StringIO as BytesIO
+from StringIO import StringIO
 
 #####################################################################
 """
@@ -367,15 +362,19 @@ Parameters
  """
 def http_GET(url):
     
-    buffer = BytesIO()
+    # Note: pycurl is very sensitive to unicode/string issues
+    
     c = pycurl.Curl()
-    c.setopt(c.URL, url)
-    c.setopt(c.WRITEDATA, buffer)
+    c.setopt(c.URL, str(url))
+
+    buffer = StringIO()
+    c.setopt(c.WRITEFUNCTION, buffer.write)
+    
     c.perform()
     
     # HTTP response code, e.g. 200.
-    status = c.getinfo(c.RESPONSE_CODE)   
     # getinfo must be called before close.
+    status = c.getinfo(c.RESPONSE_CODE)   
     c.close()
     
     return status
