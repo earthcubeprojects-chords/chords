@@ -218,7 +218,7 @@ class SensorFile:
         tokens = line.split()
         if len(tokens) < 6:
             return (None, None)
-        timestamp = tokens[2]+'-'+tokens[1]+'-'+tokens[0]+'T'+tokens[3]+':'+tokens[4]
+        timestamp = tokens[2]+'-'+tokens[0]+'-'+tokens[1]+'T'+tokens[3]+':'+tokens[4]
         values = tokens[5:]
         return (timestamp, values)
    
