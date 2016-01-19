@@ -10,7 +10,12 @@ $(document).ready(function() {
     $("#endpicker").datepicker('setDate', new Date());
   });
 
-  function send_url(id, datatype) {
+  $(function() {
+    $("#trimpicker").datepicker();
+    $("#trimpicker").datepicker('setDate', new Date());
+  });
+
+  function send_download_url(id, datatype) {
     var startdate = $("#startpicker").datepicker("getDate");
     var enddate   = $("#endpicker"  ).datepicker("getDate");
     enddate.setDate(enddate.getDate() + 1);
@@ -28,25 +33,52 @@ $(document).ready(function() {
     }
   };
   
+  function send_trim_url(trimdate) {
+      var url = '';
+      url += '/measurements/trim'
+      url += '?';
+      url += 'end=' + trimdate.toISOString();
+      document.location.href = url;
+  }
+    
   $('.csvButton').click(function(){
-    send_url(this.value, 'csv');
+    send_download_url(this.value, 'csv');
   });
 
   $('.xmlButton').click(function(){
-    send_url(this.value, 'xml');
+    send_download_url(this.value, 'xml');
   });
 
   $('.jsonButton').click(function(){
-    send_url(this.value, 'jsf');
+    send_download_url(this.value, 'jsf');
+  });
+
+  $('.trimButton').click(function(){
+    var trimdate = $("#trimpicker").datepicker("getDate");
+
+    var minDays = 2;
+    var oldest = new Date();
+    oldest.setDate(oldest.getDate() - minDays);
+     if (trimdate > oldest) {
+       var msg = trimdate + "\nis too recent.\nYou must retain at least 2 days of data.";
+      alert(msg);
+    } else {
+      var now = new Date();
+      var days = Math.floor((now - trimdate) / (1000 * 60 *60 * 24));
+      var msg = "Are you sure that you want to erase data before\n" + trimdate + "?\nThis is " + days + " days ago.";
+      var response = confirm(msg);
+      if (response == true) {
+        send_trim_url(trimdate);
+      }
+    }
   });
 
 });
 </script>
 
-<h1>Data Fetch</h1>
+<h1>Data Functions</h1>
 <h2>Download Data By Day</h2>
 
-<div>
 <table>
   <thead>
     <tr>
@@ -92,3 +124,26 @@ See the <i>Data URLs</i> for URL syntax definitions used to make customized data
 requests. These URLs are also used for program generated requests, e.g from browsers, Matlab, R, Python, etc.
 </p>
 
+<h2>Trim Database</h2>
+<p>
+Remove all measurements before this date from the database.
+</p>
+<p>
+<strong>Use this carefully. It will permanently erase data from your database!</strong>
+</p>
+<table>
+  <thead>
+    <tr>
+      <td align="center">End Date (from the start start of this day)</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+     <td><div id="trimpicker"></div></td>
+    </tr>
+    <tr><td></td></tr>
+    <tr>
+      <td align="center"><button class="trimButton" ><strong>Erase Data!</strong></button></td>
+    </tr>
+  </tbody>
+</table> 

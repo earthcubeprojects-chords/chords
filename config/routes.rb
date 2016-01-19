@@ -25,12 +25,13 @@ Rails.application.routes.draw do
 
   get 'measurements/url_create'  => 'measurements#url_create'
   get 'measurements/delete_test' => 'measurements#delete_test'
+  get 'measurements/trim'        => 'measurements#trim'
 
   resources :profiles, only: [:index, :create]
   resources :about
   resources :dashboard
   resources :urlbuilder
-  resources :datafetch
+  resources :data
   resources :monitor
   resources :measurements
   resources :instruments

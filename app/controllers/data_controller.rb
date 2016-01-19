@@ -1,4 +1,4 @@
-class DatafetchController < ApplicationController
+class DataController < ApplicationController
 
   before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_download}
   
