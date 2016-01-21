@@ -144,7 +144,11 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/delete_test?instrument_id=1
   def delete_test
-    # NEED TO ADD AUTHORIZATION
+
+    if @profile.secure_administration
+      authorize! :manage, Measurement
+    end
+
 
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
@@ -154,7 +158,7 @@ class MeasurementsController < ApplicationController
     end
     
     respond_to do |format|
-      format.html { head :no_content }
+      format.html { redirect_to :back }
       format.json { head :no_content }
     end
     
@@ -162,7 +166,10 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/trim?end=date
   def trim
-    # NEED TO ADD AUTHORIZATION
+
+    if @profile.secure_administration
+      authorize! :manage, Measurement
+    end
     
     notice_text = nil
     if params.key?(:end)
