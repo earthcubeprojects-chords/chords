@@ -360,20 +360,25 @@ Send the URL
 Parameters
   url - the full url
  """
-def http_GET(url):
-    
+def http_GET(url):    
     # Note: pycurl is very sensitive to unicode/string issues
     
+    status = None
+
     c = pycurl.Curl()
+    buffer = StringIO()
+    
+    c.setopt(c.FAILONERROR, True)
+    c.setopt(c.WRITEFUNCTION, buffer.write)
     c.setopt(c.URL, str(url))
 
-    buffer = StringIO()
-    c.setopt(c.WRITEFUNCTION, buffer.write)
-    
-    c.perform()
-    
-    # HTTP response code, e.g. 200.
-    # getinfo must be called before close.
+    try:
+        c.perform()
+    except pycurl.error, error:
+        errno, errstr = error
+        print 'Error, could not submit URL: ' + url
+        print 'Error cause: ' + errstr
+
     status = c.getinfo(c.RESPONSE_CODE)   
     c.close()
     
@@ -398,7 +403,7 @@ def make_and_send_url(instrument):
         status = http_GET(url)
         if verbose:
             print url
-            print status
+            print 'Status: ', status
 
 #####################################################################
 
