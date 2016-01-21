@@ -144,7 +144,11 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/delete_test?instrument_id=1
   def delete_test
-    # NEED TO ADD AUTHORIZATION
+
+    if @profile.secure_administration
+      authorize! :manage, Measurement
+    end
+
 
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
