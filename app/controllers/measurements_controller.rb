@@ -166,7 +166,10 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/trim?end=date
   def trim
-    # NEED TO ADD AUTHORIZATION
+
+    if @profile.secure_administration
+      authorize! :manage, Measurement
+    end
     
     notice_text = nil
     if params.key?(:end)
