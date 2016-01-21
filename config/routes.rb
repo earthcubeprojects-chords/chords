@@ -24,8 +24,8 @@ Rails.application.routes.draw do
   get 'instruments/duplicate'    => 'instruments#duplicate'
 
   get 'measurements/url_create'  => 'measurements#url_create'
-  get 'measurements/delete_test' => 'measurements#delete_test'
-  get 'measurements/trim'        => 'measurements#trim'
+  post 'measurements/delete_test' => 'measurements#delete_test'
+  post 'measurements/trim'        => 'measurements#trim'
 
   resources :profiles, only: [:index, :create]
   resources :about
