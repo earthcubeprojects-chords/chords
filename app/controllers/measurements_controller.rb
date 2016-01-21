@@ -158,7 +158,7 @@ class MeasurementsController < ApplicationController
     end
     
     respond_to do |format|
-      format.html { head :no_content }
+      format.html { redirect_to :back }
       format.json { head :no_content }
     end
     
