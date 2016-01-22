@@ -1,0 +1,95 @@
+<script>
+$(document).ready(function() { 
+  $(function() {
+    $("#startpicker").datepicker();
+    $("#startpicker").datepicker('setDate', new Date());
+  });
+
+  $(function() {
+    $("#endpicker").datepicker();
+    $("#endpicker").datepicker('setDate', new Date());
+  });
+
+
+  function send_download_url(id, datatype) {
+    var startdate = $("#startpicker").datepicker("getDate");
+    var enddate   = $("#endpicker"  ).datepicker("getDate");
+    enddate.setDate(enddate.getDate() + 1);
+    
+    if (startdate < enddate) {
+      var url = '';
+      url += '/instruments/'
+      url += id;
+      url += '.' + datatype + '?';
+      url += 'start=' + startdate.toISOString();
+      url += '&end='  + enddate.toISOString();
+      document.location.href = url;
+    } else {
+      alert("Start date must be less than or equal to the end date");
+    }
+  };
+  
+    
+  $('.csvButton').click(function(){
+    send_download_url(this.value, 'csv');
+  });
+
+  $('.xmlButton').click(function(){
+    send_download_url(this.value, 'xml');
+  });
+
+  $('.jsonButton').click(function(){
+    send_download_url(this.value, 'jsf');
+  });
+
+
+});
+</script>
+
+
+<h2>Download Data By Day</h2>
+
+<table>
+  <thead>
+    <tr>
+      <td align="center">Start Date (start of day)</td><td align="center">End Date (end of day)</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+     <td><div id="startpicker"></div></td><td><div id="endpicker"></div></td>
+    </tr>
+  </tbody>
+</table> 
+<br/>
+<table>
+  <thead>
+    <tr>
+      <th>Instrument Name</th>
+      <th>Site</th>
+      <th align="center"># <br/> measurements</th>
+      <th align="center">Fetch/Ingest<br/>Data</th>
+      <th  align="center" colspan="3">Download As</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @instruments.each do |instrument| %>
+      <tr>
+        <td><%=  link_to(instrument.name, instrument_url(:id => instrument.id) )%></td>
+        <td><%= @sites.find(instrument.site_id).name %></td>
+	      <td align="center"><%= instrument.measurements.count %> </td>
+        <td align="center"><%= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id) %></td>
+	      <td align="center">
+	        <button value=<%= instrument.id%> class="csvButton" >CSV</button>
+          <button value=<%= instrument.id%> class="jsonButton">JSON</button>
+          <button value=<%= instrument.id%> class="xmlButton" >XML</button>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p>
+See the <i>Data URLs</i> for URL syntax definitions used to make customized data ingest and download
+requests. These URLs are also used for program generated requests, e.g from browsers, Matlab, R, Python, etc.
+</p>
