@@ -8,7 +8,6 @@ class MeasurementsController < ApplicationController
   # GET /measurements.json
   def index
 
-    
     @measurements = Measurement.all
 
     if @profile.secure_data_viewing
@@ -145,6 +144,12 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/delete_test?instrument_id=1
   def delete_test
+
+    if @profile.secure_administration
+      authorize! :manage, Measurement
+    end
+
+
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
       if Instrument.exists?(inst_id)
@@ -153,12 +158,30 @@ class MeasurementsController < ApplicationController
     end
     
     respond_to do |format|
-      format.html { head :no_content }
+      format.html { redirect_to :back }
       format.json { head :no_content }
     end
     
   end
-  
+
+  # GET 'measurements/trim?end=date
+  def trim
+
+    if @profile.secure_administration
+      authorize! :manage, Measurement
+    end
+    
+    notice_text = nil
+    if params.key?(:end)
+      puts 'trim measurements before ' + params[:end]
+      Measurement.where("measured_at < ?", params[:end]).delete_all    
+      notice_text = 'Measurements before ' + params[:end] + ' were deleted.'
+    end
+    
+    redirect_to data_path, notice: notice_text
+    
+  end
+
   # PATCH/PUT /measurements/1
   # PATCH/PUT /measurements/1.json
   def update
@@ -201,6 +224,6 @@ class MeasurementsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def measurement_params
-      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test)
+      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test, :end)
     end
 end

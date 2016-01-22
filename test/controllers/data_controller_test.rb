@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DatafetchControllerTest < ActionController::TestCase
+class DataControllerTest < ActionController::TestCase
   test "should get index" do
     get :index
     assert_response :success

@@ -10,7 +10,8 @@ $(document).ready(function() {
     $("#endpicker").datepicker('setDate', new Date());
   });
 
-  function send_url(id, datatype) {
+
+  function send_download_url(id, datatype) {
     var startdate = $("#startpicker").datepicker("getDate");
     var enddate   = $("#endpicker"  ).datepicker("getDate");
     enddate.setDate(enddate.getDate() + 1);
@@ -28,25 +29,26 @@ $(document).ready(function() {
     }
   };
   
+    
   $('.csvButton').click(function(){
-    send_url(this.value, 'csv');
+    send_download_url(this.value, 'csv');
   });
 
   $('.xmlButton').click(function(){
-    send_url(this.value, 'xml');
+    send_download_url(this.value, 'xml');
   });
 
   $('.jsonButton').click(function(){
-    send_url(this.value, 'jsf');
+    send_download_url(this.value, 'jsf');
   });
+
 
 });
 </script>
 
-<h1>Data Fetch</h1>
+
 <h2>Download Data By Day</h2>
 
-<div>
 <table>
   <thead>
     <tr>
@@ -91,4 +93,3 @@ $(document).ready(function() {
 See the <i>Data URLs</i> for URL syntax definitions used to make customized data ingest and download
 requests. These URLs are also used for program generated requests, e.g from browsers, Matlab, R, Python, etc.
 </p>
-

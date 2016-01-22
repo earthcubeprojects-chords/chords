@@ -1,0 +1,76 @@
+<script>
+$(document).ready(function() { 
+
+	$(function() {
+		// $("#trimpicker").datepicker();
+		// $("#trimpicker").datepicker('setDate', new Date());
+
+		$("#trimpicker").datepicker({
+			altField: "#end",
+			altFormat: "yy-mm-dd"
+		});
+	});
+
+
+	$( "#trim_data_form" ).submit(function( event ) {
+
+		var trimdate = $("#trimpicker").datepicker("getDate");
+
+		var minDays = 2;
+		var oldest = new Date();
+		oldest.setDate(oldest.getDate() - minDays);
+		if (trimdate > oldest) {
+			var msg = trimdate + "\nis too recent.\nYou must retain at least 2 days of data.";
+			alert(msg);
+			event.preventDefault();
+		} else {
+			var now = new Date();
+			var days = Math.floor((now - trimdate) / (1000 * 60 *60 * 24));
+			var msg = "Are you sure that you want to erase data before\n" + trimdate + "?\nThis is " + days + " days ago.";
+
+			var response = confirm(msg);
+			if (response == false) {
+				event.preventDefault();
+			}
+		}
+	});
+
+
+});
+</script>
+
+
+
+
+<h2>Trim Database</h2>
+<p>
+Remove all measurements before this date from the database.
+</p>
+<p>
+<strong>Use this carefully. It will permanently erase data from your database!</strong>
+</p>
+<table>
+  <thead>
+    <tr>
+      <td align="center">End Date (from the start of this day)</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+     <td><div id="trimpicker"></div></td>
+    </tr>
+    <tr><td></td></tr>
+    <tr>
+      <td align="center">
+
+		<%= form_tag(measurements_trim_path, :method => 'post', :id => 'trim_data_form') do %>
+			<%= hidden_field_tag('end' ) %>
+			<%= submit_tag("Erase Data!",  :id => 'trim_data_submit') %>	
+		<% end %>	
+	
+	<!-- button class="trimButton" ><strong></strong></button -->
+	
+	</td>
+    </tr>
+  </tbody>
+</table>
