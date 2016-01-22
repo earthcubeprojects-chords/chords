@@ -144,6 +144,7 @@ class InstrumentsController < ApplicationController
     #  @params
     #  @varnames       - A hash of variable names for the instrument, keyed by the shortname
     #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
+    #  @units          - the units of the selected variable
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
@@ -201,7 +202,10 @@ class InstrumentsController < ApplicationController
         @varshortname = @varnames.first[0]
       end
     end
-    
+
+    # get the units
+    @units = Var.all.where("instrument_id = ? and shortname = ?", @instrument.id, @varshortname).pluck(:units)[0]
+        
     # Determine the time range
     # Default to the most recent day
     endtime   = Time.now

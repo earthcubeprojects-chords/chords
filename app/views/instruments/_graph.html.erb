@@ -16,12 +16,14 @@
    # Craft a title for the chart
    title = quote + @instrument.name + ": " + varname + " - Live Data"+quote
    title  = title.as_json.html_safe 
+   
+   units = @units
 
 %>
 
 <div class="instrument_highchart" id="instrument_live_chart" style="min-width: 310px; height: 400px; margin: 0 auto">
 
-<%= render 'graph_chart', series: series, title: title, varname: @varnames[@varshortname], varshortname: @varshortname %>
+<%= render 'graph_chart', series: series, title: title, varname: @varnames[@varshortname], varshortname: @varshortname, units: units %>
 
 </div>
 <% end %>
