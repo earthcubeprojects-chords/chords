@@ -286,7 +286,7 @@
                   "  database: ", { "Ref" : "DBName" }, "\n",
                   "  username: ", { "Ref" : "DBUser" }, "\n",
                   "  password: ", { "Ref" : "DBPassword" }, "\n",
-                  "  socket: /tmp/mysql.sock\n"
+                  "  socket: /var/lib/mysql/mysql.sock\n"
                   ]]},
                 "mode"  : "000400",
                 "owner" : "root",
