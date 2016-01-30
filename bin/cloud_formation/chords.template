@@ -310,9 +310,9 @@
                   "bundle install\n",
                   
                   "# Configure the database connection\n",
-                  "mv /tmp/database.yml config\n",
-                  "rake db:create db:migrate\n",
-                  "rake db:seed\n"
+                  "mv -f /tmp/database.yml config\n",
+                  "bundle exec rake db:create db:migrate\n",
+                  "bundle exec rake db:seed\n"
                 ]]},
                 "mode"  : "000500",
                 "owner" : "root",
