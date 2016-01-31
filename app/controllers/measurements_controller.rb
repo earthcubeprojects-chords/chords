@@ -172,10 +172,17 @@ class MeasurementsController < ApplicationController
     end
     
     notice_text = nil
-    if params.key?(:end)
-      puts 'trim measurements before ' + params[:end]
-      Measurement.where("measured_at < ?", params[:end]).delete_all    
-      notice_text = 'Measurements before ' + params[:end] + ' were deleted.'
+    if params.key?(:end) and params.key?(:trim_id)
+      trim_id = params[:trim_id]
+      if trim_id == "all"
+        Measurement.where("measured_at < ?", params[:end]).delete_all  
+        notice_text = 'Measurements before ' + params[:end] + ' were deleted for ALL instruments.'
+      else
+        if Instrument.exists?(trim_id)
+          Measurement.where("measured_at < ? and instrument_id = ?", params[:end], params[:trim_id]).delete_all  
+          notice_text = 'Measurements before ' + params[:end] + ' were deleted for instrument ' + Instrument.find(trim_id).name
+        end
+      end
     end
     
     redirect_to data_path, notice: notice_text
@@ -224,6 +231,6 @@ class MeasurementsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def measurement_params
-      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test, :end)
+      params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test, :end, :trim_id)
     end
 end

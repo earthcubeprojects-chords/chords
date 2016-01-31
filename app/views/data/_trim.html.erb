@@ -2,9 +2,6 @@
 $(document).ready(function() { 
 
 	$(function() {
-		// $("#trimpicker").datepicker();
-		// $("#trimpicker").datepicker('setDate', new Date());
-
 		$("#trimpicker").datepicker({
 			altField: "#end",
 			altFormat: "yy-mm-dd"
@@ -16,30 +13,52 @@ $(document).ready(function() {
 
 		var trimdate = $("#trimpicker").datepicker("getDate");
 
-		var minDays = 2;
-		var oldest = new Date();
-		oldest.setDate(oldest.getDate() - minDays);
-		if (trimdate > oldest) {
-			var msg = trimdate + "\nis too recent.\nYou must retain at least 2 days of data.";
-			alert(msg);
-			event.preventDefault();
-		} else {
-			var now = new Date();
-			var days = Math.floor((now - trimdate) / (1000 * 60 *60 * 24));
-			var msg = "Are you sure that you want to erase data before\n" + trimdate + "?\nThis is " + days + " days ago.";
+    var radios = document.getElementsByName('trim_id');
+    var labels = document.getElementsByName('instrument_radio_label');
+    var trim_id = "";
+    var trim_name = "";
 
-			var response = confirm(msg);
-			if (response == false) {
-				event.preventDefault();
-			}
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            // get the radio button value and label text
+            trim_id = radios[i].value;
+            trim_name = labels[i].innerHTML;
+            // only one radio can be logically checked, don't check the rest
+            break;
+        }
+    }
+    
+		if (trim_id == "") {
+  		alert ("You must select an instrument.");
+		} else {
+  		var minDays = 5;
+  		var oldest = new Date();
+  		oldest.setDate(oldest.getDate() - minDays);
+  		if (trimdate > oldest) {
+  			var msg = trimdate + "\nis too recent.\nYou must retain at least " + minDays + " days of data.";
+  			alert(msg);
+  			event.preventDefault();
+  		} else {
+  			var now = new Date();
+  			var days = Math.floor((now - trimdate) / (1000 * 60 *60 * 24));
+  			var msg = "Are you sure that you want to erase data before\n" + trimdate + ",\n"
+  			if (trim_id == "all") {
+          msg = msg + "for ALL instruments? ";
+  			} else {
+          msg = msg + "for instrument " + trim_name + "? ";
+        }
+  			msg = msg + "This is " + days + " days ago.";
+  
+  			var response = confirm(msg);
+  			if (response == false) {
+  				event.preventDefault();
+  			}
+  		}
 		}
 	});
 
-
 });
 </script>
-
-
 
 
 <h2>Trim Database</h2>
@@ -57,20 +76,31 @@ Remove all measurements before this date from the database.
   </thead>
   <tbody>
     <tr>
-     <td><div id="trimpicker"></div></td>
+     <td><div id="trimpicker" align="center"></div></td>
     </tr>
-    <tr><td></td></tr>
+    <%= form_tag(measurements_trim_path, :method => 'post', :id => 'trim_data_form') do %>
     <tr>
       <td align="center">
-
-		<%= form_tag(measurements_trim_path, :method => 'post', :id => 'trim_data_form') do %>
-			<%= hidden_field_tag('end' ) %>
-			<%= submit_tag("Erase Data!",  :id => 'trim_data_submit') %>	
-		<% end %>	
-	
-	<!-- button class="trimButton" ><strong></strong></button -->
-	
-	</td>
+      <div class="instrumentstrip">
+        <div class="instrumentstatus">
+          <%= radio_button_tag(:trim_id, "all", :checked=>true) %>
+          <%= label_tag(:trim_id, "All", name: 'instrument_radio_label') %>
+        </div>
+        <% @instruments.each do |instrument| %>
+        <div class="instrumentstatus">
+          <%= radio_button_tag(:trim_id, instrument.id) %>
+          <%= label_tag(:trim_id, instrument.name, name: 'instrument_radio_label') %>
+        </div>
+        <% end %>
+      </div>
+      </td>
     </tr>
+    <tr>
+      <td align="center">
+			<%= hidden_field_tag('end') %>
+			<%= submit_tag("Erase Data!", :id => 'trim_data_submit') %>	
+	    </td>
+    </tr>
+    <% end %> 
   </tbody>
 </table>
