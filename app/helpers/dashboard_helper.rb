@@ -62,14 +62,23 @@ module DashboardHelper
     # is created, where each entry represents the database hash for one instrument.
     # The date keys will have the same format as the original query, e.g.
     # "2015-07-08T14:34" or "2015-07-01T17" or "2015-07-03".
+    counts_for_all = Measurement
+    .where("measured_at >= ?", start_time)
+    .group("instrument_id")
+    .group("date_format(measured_at, '#{time_format}')")
+    .count
+    
+    # Break the query result into an array of hashes, one per instrument
     measurements_by_interval = []
-    j = 0
-    instrument_ids.each do |i|
-      measurements_by_interval[j] = Measurement
-        .where("measured_at >= ? and instrument_id = ?", start_time, i)
-        .group("date_format(measured_at, '#{time_format}')")
-        .count
-      j += 1
+    ii = 0
+    id_map = {}
+    Instrument.all.each do |i|
+      measurements_by_interval.append(Hash.new)
+      id_map[i.id] = ii
+      ii = ii + 1
+    end
+    counts_for_all.keys.each do |k|
+      measurements_by_interval[id_map[k[0]]][k[1]] = counts_for_all[k]
     end
     
     # Create a vector of unique time keys. This is accomplished
