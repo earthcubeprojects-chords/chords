@@ -19,17 +19,20 @@
   </head>
 
   <div class="container-fluid" data-no-turbolink>
+  <div class="row">
     <!-- top banner -->
     <%= render 'layouts/bannerbar' %>
     
     <!-- top navbar -->
     <%= render 'layouts/topnav' %>
   </div>
+  </div>
   <div class="container" data-no-turbolink>
+  <div class="row">
   
     <!-- main area -->
     <%= render 'layouts/messages' %>
     <%= yield %>
-
+  </div>
   </div>     <!--/.container-->
 </html>
