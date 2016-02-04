@@ -18,19 +18,17 @@
 
   </head>
 
-  <div class="page-container" data-no-turbolink>
+  <div class="container" data-no-turbolink>
     <!-- top banner -->
     <%= render 'layouts/bannerbar' %>
     
     <!-- top navbar -->
     <%= render 'layouts/topnav' %>
     
-    <div class="container">
       <!-- main area -->
       <div class="col-xs-12 col-sm-9">
         <%= render 'layouts/messages' %>
         <%= yield %>
       </div> <!-- /.col-xs-12 main -->
     </div>     <!--/.container-->
-  </div>       <!--/.page-container-->
 </html>
