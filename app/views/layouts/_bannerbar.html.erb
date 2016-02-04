@@ -1,7 +1,14 @@
 <nav class="bannerbar">
 	<ul class="horizmenu">
     <li> <%= link_to image_tag('CHORDS_6.png', size:"200x50", :class => "img-responsive"), root_path  %></li>
-		<li> <h1 style="font-size: 350%;"><%= @profile.project %> </h1></li>
+		<li>
+		  <div style="text-align:center;">
+		  <h1 style="font-size: 350%;"><%= @profile.project %> </h1>
+      <% if user_signed_in? %>
+        <%= current_user.email %>
+      <% end %>
+      </div>
+		</li>
 		<li> 
   		<% if @logo_base64 != nil %>
   			<%= ("<img height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe %>
