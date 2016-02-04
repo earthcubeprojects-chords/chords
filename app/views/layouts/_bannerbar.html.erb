@@ -1,14 +1,13 @@
-<nav>
+<nav class="bannerbar">
 	<ul class="horizmenu">
-    	<li> <%= link_to image_tag('CHORDS_6.png', size:"200x50"), root_path  %></li>
+    <li> <%= link_to image_tag('CHORDS_6.png', size:"200x50", :class => "img-responsive"), root_path  %></li>
 		<li> <h1 style="font-size: 350%;"><%= @profile.project %> </h1></li>
-
 		<li> 
-		<% if @logo_base64 != nil %>
-			<%= ("<img height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe %>
-		<% else %>
-			<%= image_tag('CHORDS_QR.png', size:"100x100")%>
-		<% end %>
+  		<% if @logo_base64 != nil %>
+  			<%= ("<img height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe %>
+  		<% else %>
+  			<%= image_tag('CHORDS_QR.png', size:"100x100")%>
+  		<% end %>
 		</li>
 	</ul>
 </nav>

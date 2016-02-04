@@ -7,8 +7,10 @@ padding-bottom: 10px;
 float: left;
 }
 
-.appheader 
+.appheader, .bannerbar 
 {
+margin-top: 10px;
+padding-top: 10px;
 border: 1px solid black;
 background-color: darkorange;
 -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
