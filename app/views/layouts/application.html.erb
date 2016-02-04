@@ -17,22 +17,20 @@
 	</script>
 
   </head>
-  <body>
-  	<div class="wrapper"  data-no-turbolink>
-  		<header class="appheader">
-  			<%= render 'layouts/navigation' %>  		
-  		</header>
-  		<aside class="appsidebar">
-  			<%= render 'layouts/sidebar' %>    	
-  		</aside>
-  		<main class="main" role="main">
-  			<%= render 'layouts/messages' %>
-  			<%= yield %>
-  			<hr />
-  		</main>
-  		<footer class="footer">
-  			<%= render 'layouts/footer' %>  		
-  		</footer>
-    </div>
-  </body>
+
+  <div class="page-container" data-no-turbolink>
+    <!-- top banner -->
+    <%= render 'layouts/bannerbar' %>
+    
+    <!-- top navbar -->
+    <%= render 'layouts/topnav' %>
+    
+    <div class="container">
+      <!-- main area -->
+      <div class="col-xs-12 col-sm-9">
+        <%= render 'layouts/messages' %>
+        <%= yield %>
+      </div> <!-- /.col-xs-12 main -->
+    </div>     <!--/.container-->
+  </div>       <!--/.page-container-->
 </html>

@@ -21,3 +21,5 @@
 
 //= require best_in_place
 //= require autocomplete-rails
+
+//= require js/bootstrap
