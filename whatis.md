@@ -32,10 +32,12 @@ CHORDS consists of two components:
 
 * **web server and database** that accepts real-time data from distributed instruments, and serves 
 the measurements to anyone on the Internet. The data streams are pushed to and pulled from the Portal using 
-simple HTTP requests. 
+simple HTTP requests.
 * **management tool** that allows you to monitor your remote instruments, insure correct operation, and maximize data collection.
 * **rolling archive** from which scientists and analysts can easily fetch the data in
-real-time, delivered directly to browsers, programs and mobile apps.
+real-time, delivered directly to browsers, programs and mobile apps. It will only hold a
+certain amount of data, but usually enough to give you time to transfer to your own archive
+system. It is not meant to be a permanent archive.
 One click brings you a CSV file. A few lines of code brings data directly into your analysis programs.
 * **entry point** to sophisticated real-time web services that can convert your data streams to
 standardized formats such as OGC, and provide mapping, visualization, discovery, aggregation and 
