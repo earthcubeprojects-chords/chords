@@ -37,11 +37,12 @@ simple HTTP requests.
 * **rolling archive** from which scientists and analysts can easily fetch the data in
 real-time, delivered directly to browsers, programs and mobile apps. It will only hold a
 certain amount of data, but usually enough to give you plenty of time (e.g. months) to 
-transfer to your own archive system. **CHORDS is not meant to be a permanent archive**.
-One click brings you a CSV file. A few lines of code brings data directly into your analysis programs.
+transfer to your own archive system. One click brings you a CSV file. A few lines of code brings data directly into your analysis programs.
 * **entry point** to sophisticated real-time web services that can convert your data streams to
 standardized formats such as OGC, and provide mapping, visualization, discovery, aggregation and 
 many other web-enabled functions. 
+
+**Note that a CHORDS Portal is not meant to be a permanent archive**.
 
 ## Owning a Portal
 
