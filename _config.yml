@@ -21,7 +21,7 @@ organization: National Center for Atmospheric Research
 
 # Build settings
 markdown: kramdown
-highlighter: pygments
+highlighter: rouge
 
 sass:
    sass_dir: assets/stylesheets
