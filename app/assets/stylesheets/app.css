@@ -1,13 +1,5 @@
-.main {
-width: 86%;
-padding-left:2%;
-text-align: left;
-padding-top: 10px;
-padding-bottom: 10px;
-float: left;
-}
 
-.appheader, .bannerbar 
+.bannerbar 
 {
 margin-top: 10px;
 padding-top: 10px;
@@ -19,14 +11,6 @@ box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 color: cornsilk;
 }
 
-.appsidebar 
-{
-float: left; 
-width: 10%; 
-padding-right: 10px;
-text-align: left;
-}
-
 .horizmenu
 {
 display: inline;
@@ -36,27 +20,6 @@ justify-content: space-between;
 align-items: center;
 padding-left: 10px;
 padding-right: 10px;
-}
-
-.vertmenu
-{
-list-style: none;
-text-align: left;
-padding-left: 0;
-margin-top: 20px;
-text-align: left;
-}
-
-.sidebar_link {
-margin-top: 20px;
-margin-bottom: 20px;
-}
-
-.sidebar_icon
-{
-height: 18px;
-width:  18px;
-margin-right: 10px;
 }
 
 .last_post_table {
