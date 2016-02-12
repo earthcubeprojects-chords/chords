@@ -1,9 +1,9 @@
 <div class="row bannerbar">
-  <div class="col-md-4">
+  <div class="col-md-2">
     <%= link_to image_tag('CHORDS_6.png', :class => "img-responsive", :style=>"max-height:50px; margin-top:25px;"), root_path  %></li>
   </div>
   
-  <div class="col-md-4">
+  <div class="col-md-8">
     <div style="text-align:center;">
       <h1 style="font-size: 350%;"><%= @profile.project %> </h1>
       <% if user_signed_in? %>
@@ -12,7 +12,7 @@
     </div>
   </div>
   
-  <div class="col-md-4">
+  <div class="col-md-2">
   <span class="pull-right">
     <% if @logo_base64 != nil %>
       <%= ("<img height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe %>
