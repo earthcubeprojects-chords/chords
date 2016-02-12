@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title><%= content_for?(:title) ? yield(:title) : "CHORDS Portal" %></title>
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "CHORDS Portal" %>">
     <%= favicon_link_tag 'CHORDS_7.png' %>
@@ -17,22 +17,25 @@
 	</script>
 
   </head>
-  <body>
-  	<div class="wrapper"  data-no-turbolink>
-  		<header class="appheader">
-  			<%= render 'layouts/navigation' %>  		
-  		</header>
-  		<aside class="appsidebar">
-  			<%= render 'layouts/sidebar' %>    	
-  		</aside>
-  		<main class="main" role="main">
-  			<%= render 'layouts/messages' %>
-  			<%= yield %>
-  			<hr />
-  		</main>
-  		<footer class="footer">
-  			<%= render 'layouts/footer' %>  		
-  		</footer>
-    </div>
-  </body>
+
+  <div class="container-fluid" data-no-turbolink>
+    <!-- top banner -->
+    <%= render 'layouts/bannerbar' %>
+      
+    <!-- top navbar -->
+    <%= render 'layouts/topnav' %>
+  </div>
+  
+  <!-- main area -->
+  <div class="container" data-no-turbolink>
+    <%= render 'layouts/messages' %>
+    <%= yield %>
+  </div>
+        
+  <!-- footer -->
+  <div class="container-fluid" data-no-turbolink>
+    <br>
+    <%= render 'layouts/footer' %>
+  </div>
+  
 </html>

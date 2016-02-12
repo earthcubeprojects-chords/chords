@@ -1,42 +1,14 @@
-.main {
-width: 86%;
-padding-left:2%;
-text-align: left;
-padding-top: 10px;
-padding-bottom: 10px;
-float: left;
-}
 
-.appheader 
+.bannerbar 
 {
+margin-top: 0px;
+padding: 5px;
 border: 1px solid black;
 background-color: darkorange;
 -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 -moz-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 color: cornsilk;
-}
-
-.footer {
-float: left;
-width: 100%;
-}
-
-.footer_links 
-{
-list-style: none;
-display: flex;
-justify-content: space-around;
-align-items: center;
-}
-
-.appsidebar 
-{
-float: left; 
-width: 10%; 
-padding-right: 10px;
-text-align: left;
-max-width: 10%;
 }
 
 .horizmenu
@@ -48,27 +20,6 @@ justify-content: space-between;
 align-items: center;
 padding-left: 10px;
 padding-right: 10px;
-}
-
-.vertmenu
-{
-list-style: none;
-text-align: left;
-padding-left: 0;
-margin-top: 20px;
-text-align: left;
-}
-
-.sidebar_link {
-margin-top: 20px;
-margin-bottom: 20px;
-}
-
-.sidebar_icon
-{
-height: 18px;
-width:  18px;
-margin-right: 10px;
 }
 
 .last_post_table {
@@ -113,7 +64,7 @@ color: #b94a48;
 background-color: #dff0d8;
 }
 
-.badge {
+.statusbadge {
 display: inline-block;
 background-color: darkorange;
 font-size: 16px;
@@ -163,6 +114,7 @@ width: 100%;
 }
 
 .last_url {
+overflow:scroll;
 padding: 8px 35px 8px 14px;
 margin-bottom: 20px;
 text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);

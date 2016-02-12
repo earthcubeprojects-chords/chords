@@ -34,7 +34,7 @@
 
   <div class="field">    
     Variables
-    <table>
+    <table class="table table-striped">
     <% @instrument.vars.each do |v| %>
       <tr>
         <td> <%= link_to(v.name, var_url(:id => v.id) ) %></td>
