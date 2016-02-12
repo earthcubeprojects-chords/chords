@@ -19,26 +19,12 @@ box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
 color: cornsilk;
 }
 
-.footer {
-float: left;
-width: 100%;
-}
-
-.footer_links 
-{
-list-style: none;
-display: flex;
-justify-content: space-around;
-align-items: center;
-}
-
 .appsidebar 
 {
 float: left; 
 width: 10%; 
 padding-right: 10px;
 text-align: left;
-max-width: 10%;
 }
 
 .horizmenu
