@@ -23,25 +23,19 @@
     <%= render 'layouts/bannerbar' %>
       
     <!-- top navbar -->
-    <div class="row">
-      <%= render 'layouts/topnav' %>
-    </div>
+    <%= render 'layouts/topnav' %>
   </div>
   
   <!-- main area -->
   <div class="container" data-no-turbolink>
-    <div class="row">
-      <%= render 'layouts/messages' %>
-      <%= yield %>
-    </div>
-  </div>     <!--/.container-->
+    <%= render 'layouts/messages' %>
+    <%= yield %>
+  </div>
         
   <!-- footer -->
   <div class="container-fluid" data-no-turbolink>
     <br>
-    <div class="row">
-      <%= render 'layouts/footer' %>
-    </div>
+    <%= render 'layouts/footer' %>
   </div>
   
 </html>
