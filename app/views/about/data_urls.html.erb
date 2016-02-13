@@ -26,65 +26,69 @@ specifies the instrument. For putting data, there is a list of variable short na
 measurement value. All of the qualifiers (i.e. the fields following "?" and "&") are order independent.
 <br/>
 <br/>
-<table  class="table table-striped">
-  <tr>
-  <th>Action</th><th>URL format</th><th>Qualifiers</th><th>Example</th>
-  </tr>
-  <tr>
-  <td>Put data</td><td></td><td>at, key, test</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&at=2015-08-20T19:50:28&key=KeyValue&test
-  <% end %></td>
+<div class="table-responsive">
+  <table  class="table table-striped">
+    <tr>
+    <th>Action</th><th>URL format</th><th>Qualifiers</th><th>Example</th>
+    </tr>
+    <tr>
+    <td>Put data</td><td></td><td>at, key, test</td>
+    <td><% if @varnames.count > 0 %>
+      <%= url_for(:only_path => false,  :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id) %><%= vquery %>&at=2015-08-20T19:50:28&key=KeyValue&test
+    <% end %></td>
+     </tr>
+    
+    <tr>
+    <td>Fetch a CSV file</td><td>.csv</td><td>start, end, last</td>
+    <td><% if @varnames.count > 0 %>
+      <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
+    <% end %></td>
+    </tr>
+    
+    <tr>
+    <td>Fetch a JSON file</td><td>.jsf</td><td>start, end, last</td>
+    <td><% if @varnames.count > 0 %>
+      <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf
+    <% end %></td>
+    </tr>
+    
+    <tr>
+    <td>Fetch JSON</td><td>.json</td><td>start, end, last</td>
+    <td><% if @varnames.count > 0 %>
+      <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json?last
+    <% end %></td>
    </tr>
-  
-  <tr>
-  <td>Fetch a CSV file</td><td>.csv</td><td>start, end, last</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
-  <% end %></td>
-  </tr>
-  
-  <tr>
-  <td>Fetch a JSON file</td><td>.jsf</td><td>start, end, last</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.jsf
-  <% end %></td>
-  </tr>
-  
-  <tr>
-  <td>Fetch JSON</td><td>.json</td><td>start, end, last</td>
-  <td><% if @varnames.count > 0 %>
-    <%= url_for(:only_path => false,  :controller => 'instruments', :action => 'show', :id => @instrument.id) %>.json?last
-  <% end %></td>
- </tr>
-</table>
+  </table>
+</div>
 
-<table  class="table table-striped">
-<tr>
-<th>Optional<br/>Qualifiers</th><th>Meaning</th>
-</tr>
-<tr>
-<td>at=<i>time</i></td><td>A time to assign to the measurement. If not present, the measurement will 
-be time stamped with the time that it was received by the portal.</td>
-</tr>
-<tr>
-<td>key=<i>key</i></td><td>An optional validation key. It is required if "Require the security key in order to submit a measurement"
-is checked in the configuration. The key value is also specified in the configuration.</td>
-</tr>
-<tr>
-<td>test</td><td>If present, this measurement will be marked as a test value.
-Test values can be deleted from the database using the "Delete Test Button" on the instrument page.</td>
-</tr>
-<tr>
-<td>start=<i>time</i></td><td>A start time for the returned measurements.</td>
-</tr>
-<tr>
-<td>end=<i>time</i></td><td>An end time for the returned measurements.</td>
-</tr>
-<tr>
-<td>last</td><td>Return all measurements for the most recent measurement time stamp.</td>
-</tr>
-</table>
+<div class="table-responsive">
+  <table  class="table table-striped">
+  <tr>
+  <th>Optional<br/>Qualifiers</th><th>Meaning</th>
+  </tr>
+  <tr>
+  <td>at=<i>time</i></td><td>A time to assign to the measurement. If not present, the measurement will 
+  be time stamped with the time that it was received by the portal.</td>
+  </tr>
+  <tr>
+  <td>key=<i>key</i></td><td>An optional validation key. It is required if "Require the security key in order to submit a measurement"
+  is checked in the configuration. The key value is also specified in the configuration.</td>
+  </tr>
+  <tr>
+  <td>test</td><td>If present, this measurement will be marked as a test value.
+  Test values can be deleted from the database using the "Delete Test Button" on the instrument page.</td>
+  </tr>
+  <tr>
+  <td>start=<i>time</i></td><td>A start time for the returned measurements.</td>
+  </tr>
+  <tr>
+  <td>end=<i>time</i></td><td>An end time for the returned measurements.</td>
+  </tr>
+  <tr>
+  <td>last</td><td>Return all measurements for the most recent measurement time stamp.</td>
+  </tr>
+  </table>
+</div>
 <ul style="margin-top: 0">
 <li>The optional qualifier section begins with a "?", followed by one or more qualifiers. Each is separated by "&".
 Some qualifiers (e.g. at, start and end) have an associated value.

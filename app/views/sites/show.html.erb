@@ -1,17 +1,19 @@
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Lat</th>
-      <th>Lon</th>
-      <th>Elevation</th>
-      <th colspan="1"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <%= render partial: 'sites/bip_form', locals: {site: @site} %>
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Lat</th>
+        <th>Lon</th>
+        <th>Elevation</th>
+        <th colspan="1"></th>
+      </tr>
+    </thead>
+  
+    <tbody>
+      <%= render partial: 'sites/bip_form', locals: {site: @site} %>
+    </tbody>
+  </table>
+</div>
 
 <%= link_to 'Back', sites_path %>
