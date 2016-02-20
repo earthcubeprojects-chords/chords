@@ -42,3 +42,4 @@ bower.json
 
 /.pydevproject
 /passenger.*
+vendor/ruby
