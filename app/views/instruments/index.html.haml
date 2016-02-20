@@ -1,0 +1,57 @@
+%h1 Instruments
+.table-responsive
+  %table.table.table-striped
+    %thead
+      %tr
+        %th{:align => "center"} Status
+        %th{:align => "center"} Name
+        %th{:align => "center"} Id
+        %th{:align => "center"}
+          Interval
+          %br>/
+          (s)
+        %th{:align => "center"}
+          Last
+          %br>/
+          Measurement
+        %th{:align => "center"} Site
+        %th{:align => "center"}
+          \# of
+          = succeed "Variables" do
+            %br/
+        %th{:align => "center"}
+          \# of
+          = succeed "Measurements" do
+            %br/
+        %th{:align => "center"}
+          Fetch/Ingest
+          %br>/
+          Data
+        %th{:colspan => "1"}
+    %tbody
+      - @instruments.each do |instrument|
+        %tr
+          %td{:align => "center"}
+            - if instrument.is_receiving_data
+              = image_tag('glossy-green-icon-button-th.png', size:"16")
+            - else
+              = image_tag('glossy-red-icon-button-th.png', size:"16")
+          %td
+            = link_to(instrument.name, instrument_url(:id => instrument.id) )
+          %td
+            = instrument.id
+          %td{:align => "center"}= instrument.sample_rate_seconds
+          %td= instrument.last_age
+          %td= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id))
+          %td{:align => "center"}= instrument.vars.count
+          %td{:align => "center"}= instrument.measurements.count
+          %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
+          %td= button_to 'Clone', instruments_duplicate_path, method: :get, params: {instrument_id: instrument.id}
+          %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
+          %td= button_to 'Destroy', instrument, method: :delete,                                                                                                                                    |
+              data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTRUMENT AND ALL DATA WILL BE PERMANENTLY DELETED" } |
+%br/
+- if @sites.count > 0
+  = link_to 'New Instrument', new_instrument_path
+- else
+  %strong At least one site must be defined before creating a new instrument.

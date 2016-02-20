@@ -1,0 +1,23 @@
+= @params
+= link_to "CSV", measurements_path(format: "csv")
+%p
+  %strong Site:
+  = @measurement.instrument.site.name
+%p
+  %strong Instrument:
+  = @measurement.instrument.name
+%p
+  %strong Parameter:
+  = @measurement.parameter
+%p
+  %strong Value:
+  = @measurement.value
+%p
+  %strong Measured At:
+  = @measurement.measured_at
+%p
+  %strong Unit:
+  = @measurement.unit
+= link_to 'Edit', edit_measurement_path(@measurement)
+|
+= link_to 'Back', measurements_path

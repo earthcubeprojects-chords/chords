@@ -1,0 +1,42 @@
+!!! XML
+%physicalcomponent{"gml:id" => "MY_SENSOR", "xmlns:gml" => "http://www.opengis.net/gml/3.2", "xmlns:sml" => "http://www.opengis.net/sensorML/2.0", "xmlns:swe" => "http://www.opengis.net/swe/2.0", "xmlns:xlink" => "http://www.w3.org/1999/xlink", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemalocation" => "http://www.opengis.net/sensorML/2.0 http://schemas.opengis.net/sensorML/2.0/sensorML.xsd"}
+  / =================================================
+  / System Description
+  / =================================================
+  %description= @instrument.description
+  %identifier{:codespace => "uid"}= instrument_url(@instrument)
+  / metadata deleted for brevity sake
+  / =================================================
+  / Observed Property = Output
+  / =================================================
+  %outputs
+    %outputlist
+      %output{:name => "temp"}
+        %datainterface
+          / data description
+          %data
+            %datastream
+              %elementtype{:name => "temperatureStream"}
+                %datarecord{:definition => "http://sensorml.com/ont/swe/property/TimeSeries"}
+                  %label Temperature Measurement
+                  %field{:name => "time"}
+                    %time{:definition => "http://sensorml.com/ont/swe/property/SamplingTime"}
+                      %uom{"xlink:href" => "http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"}
+                  - @instrument.vars.each do |variable|
+                    %field{:name => "#{variable.name}"}
+                      %quantity{:definition => "#{variable.measured_property.url}"}
+                        %uom{:code => "#{variable.units}"}
+              / encoding description
+              %encoding
+                %textencoding{:blockseparator => " ", :tokenseparator => ","}
+              / reference the values at a RESTful resource
+              / e.g. returns latest measurement(s)
+              %values{"xlink:href" => "#{instrument_url(@instrument)}.xml?last"}
+  / =================================================
+  / Station Location
+  / =================================================
+  %position
+    %point{"gml:id" => "stationLocation", :srsname => "http://www.opengis.net/def/crs/EPSG/0/4326"}
+      %coordinates
+        = @instrument.site.lat
+        = @instrument.site.lon

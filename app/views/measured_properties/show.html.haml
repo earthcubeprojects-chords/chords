@@ -1,0 +1,16 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @measured_property.name
+%p
+  %strong Label:
+  = @measured_property.label
+%p
+  %strong Url:
+  = @measured_property.url
+%p
+  %strong Definition:
+  = @measured_property.definition
+= link_to 'Edit', edit_measured_property_path(@measured_property)
+|
+= link_to 'Back', measured_properties_path

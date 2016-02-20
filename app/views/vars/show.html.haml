@@ -1,0 +1,13 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @var.name
+%p
+  %strong Shortname:
+  = @var.shortname
+%p
+  %strong Instrument:
+  = @var.instrument
+= link_to 'Edit', edit_var_path(@var)
+|
+= link_to 'Back', vars_path

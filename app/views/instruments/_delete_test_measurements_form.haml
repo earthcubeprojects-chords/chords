@@ -1,0 +1,4 @@
+- if @profile.secure_administration == false ||  current_user  && can?(:manage, Measurement)
+  = form_tag(measurements_delete_test_path, :method => 'post') do
+    = hidden_field_tag('instrument_id', instrument.id )
+    = submit_tag("Delete Test Data", data: { confirm: "Are you sure you want to delete the test data for \n#{instrument.name}}?\n\nALL TEST DATA WILL BE LOST" })

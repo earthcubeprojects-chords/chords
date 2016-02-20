@@ -1,0 +1,15 @@
+.row.bannerbar
+  .hidden-xs.col-sm-2
+    = link_to image_tag('CHORDS_6.png', :class => "img-responsive", :style=>"max-height:50px; margin-top:25px;"), root_path
+  .col-xs-12.col-sm-8
+    %div{:style => "text-align:center;"}
+      %h1{:style => "font-size: 350%;"}
+        = @profile.project
+      - if user_signed_in?
+        = current_user.email
+  .hidden-xs.col-sm-2
+    %span.pull-right
+      - if @logo_base64 != nil
+        = ("<img height='100' src='data:image/jpg;base64,%s'>" % Base64.encode64(@profile.logo)).html_safe
+      - else
+        = image_tag('CHORDS_QR.png', size:"100x100")

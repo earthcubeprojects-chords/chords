@@ -1,0 +1,21 @@
+%p#notice= notice
+%h1 Listing Vars
+.table-responsive
+  %table
+    %thead
+      %tr
+        %th Name
+        %th Shortname
+        %th Instrument
+        %th{:colspan => "3"}
+    %tbody
+      - @vars.each do |var|
+        %tr
+          %td= var.name
+          %td= var.shortname
+          %td= var.instrument
+          %td= link_to 'Show', var
+          %td= link_to 'Edit', edit_var_path(var)
+          %td= link_to 'Destroy', var, method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to 'New Var', new_var_path

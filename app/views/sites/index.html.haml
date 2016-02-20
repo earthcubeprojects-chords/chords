@@ -1,0 +1,20 @@
+%h1 Sites
+.table-responsive
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Name
+        %th Lat
+        %th Lon
+        %th Elevation
+        %th{:colspan => "1"}
+    %tbody
+      - @sites.each do |site|
+        = render partial: 'sites/bip_form', locals: {site: site}
+%br/
+= form_for :site, url: sites_path, :remote => false, :format => :js do |f|
+  = f.hidden_field :name,      :value => 'site name'
+  = f.hidden_field :lat,       :value => 'lat'
+  = f.hidden_field :lon,       :value => 'lon'
+  = f.hidden_field :elevation, :value => 'elevation'
+  = f.submit :value	 => 'Add a New Site'

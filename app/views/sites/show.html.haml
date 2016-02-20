@@ -1,0 +1,12 @@
+.table-responsive
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Name
+        %th Lat
+        %th Lon
+        %th Elevation
+        %th{:colspan => "1"}
+    %tbody
+      = render partial: 'sites/bip_form', locals: {site: @site}
+= link_to 'Back', sites_path

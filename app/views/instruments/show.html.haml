@@ -1,0 +1,104 @@
+.last_url
+  = @last_url
+
+%div
+  Download current day as
+  \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
+  \#{link_to("XML",  instrument_url( :format => 'xml')  )},
+  \#{link_to("JSON", instrument_url( :format => 'jsf') )}
+%div
+  Download instrument description #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
+%br/
+.instrument_details_and_variables
+  .instrument_details
+    %table.table.table-striped
+      %tr
+        %td
+          %strong Instrument
+        %td
+          - if @instrument.is_receiving_data
+            = image_tag('glossy-green-icon-button-th.png', size:"16")
+          - else
+            = image_tag('glossy-red-icon-button-th.png', size:"16")
+          = best_in_place @instrument, :name, :as => :input
+      %tr
+        %td
+          %strong Site
+        %td= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+      %tr
+        %td
+          %strong Description
+        %td= best_in_place @instrument,                              |
+            :description,                                           |
+            :as => :input,                                          |
+            :type => :textarea,                                     |
+            :html_attrs => {:style => 'width:500px; height:100px;'} |
+      %tr
+        %td
+          %strong Data ingest/fetch
+        %td= link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)
+      %tr
+        %td
+          %strong Instrument ID
+        %td= @instrument.id
+      %tr
+        %td
+          %strong Last Measurement
+        %td= @instrument.last_age
+      %tr
+        %td
+          %strong All Measurements
+        %td
+          = @instrument.measurements.count
+      %tr
+        %td
+          %strong Test Measurements
+        %td
+          = @instrument.measurements.where(test: 1).count
+        %td= render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
+      %tr
+        %td
+          %strong Display points
+        %td= best_in_place @instrument, :display_points, :as => :input
+      %tr
+        %td
+          %strong
+            Measurement
+            %br>/
+            interval (s)
+        %td= best_in_place @instrument, :sample_rate_seconds, :as => :input
+  .instrument_variables
+    %table.table.table-striped
+      %tr
+        %td{:style => "vertical-align:top"}
+          %strong Variables
+      %tr
+        %td
+          %table#variables_list.table.table-striped
+            %tr
+              %td{:style => "vertical-align:top"}
+                %em Short Name
+              %td
+              %td{:style => "vertical-align:top"}
+                %em Name
+              %td{:style => "vertical-align:top"}
+                %em Units
+              %td{:style => "vertical-align:top"}
+                %em Measured Property
+            - @instrument.vars.each do |variable|
+              %tr
+                = render partial: 'vars/bip_form', locals: {variable: variable}
+      %tr
+        %td
+          = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
+            = f.hidden_field :name, :value => 'name'
+            = f.hidden_field :shortname, :value => 'shortname'
+            = f.hidden_field :instrument_id, :value => @instrument.id
+            - if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)
+              = f.submit :value	 => 'Add a New Variable'
+.instrumentstrip
+  Graph:
+  - @varnames.each do |v|
+    = link_to v[1], instrument_path(@instrument, var: v[0])
+= render 'graph'
+= link_to 'Back', instruments_path

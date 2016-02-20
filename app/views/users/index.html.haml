@@ -1,0 +1,20 @@
+%h3 Users
+.table-responsive
+  %table.table.table-striped
+    %tbody
+      %tr
+        %th Email/Username
+        %th Is Admin?
+        %th May view data?
+        %th May Download Data?
+      - @users.each do |user|
+        - if can? :view, user
+          %tr
+            %td
+              = best_in_place_if (can? :manage, user), user, :email, :as => :input
+            %td{:align => "center"}
+              = best_in_place_if (can? :manage, user), user, :is_administrator, as: :checkbox, collection: {false: "No", true: "Yes"}
+            %td{:align => "center"}
+              = best_in_place_if (can? :manage, user), user, :is_data_viewer, as: :checkbox, collection: {false: "No", true: "Yes"}
+            %td{:align => "center"}
+              = best_in_place_if (can? :manage, user), user, :is_data_downloader, as: :checkbox, collection: {false: "No", true: "Yes"}

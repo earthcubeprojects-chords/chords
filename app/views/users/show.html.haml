@@ -1,0 +1,24 @@
+%h3 User
+%p
+  Email: #{@user.email if @user.email}
+.table-responsive
+  %table{:align => "center"}
+    %tr
+      %td
+        %strong Email
+      %td= best_in_place @user, :email, :as => :input
+    %tr
+      %td
+        %strong Is site administrator?
+      %td
+        = best_in_place @user, :is_administrator, as: :checkbox, collection: {false: "No", true: "Yes"}
+    %tr
+      %td
+        %strong May view data?
+      %td
+        = best_in_place @user, :is_data_viewer, as: :checkbox, collection: {false: "No", true: "Yes"}
+    %tr
+      %td
+        %strong May download data?
+      %td
+        = best_in_place @user, :is_data_downloader, as: :checkbox, collection: {false: "No", true: "Yes"}

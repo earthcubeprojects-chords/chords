@@ -1,0 +1,15 @@
+= form_for(@user, html: {class: "new_or_edit_form" }) do |f|
+  - if @user.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@user.errors.count, "error")
+        prohibited this site from being saved:
+      %ul
+        - @user.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :email
+    %br/
+    = f.text_field :email
+  .actions
+    = f.submit

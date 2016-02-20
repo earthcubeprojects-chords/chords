@@ -1,0 +1,39 @@
+= form_for(@instrument, html: {class: "new_or_edit_form" }) do |f|
+  - if @instrument.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@instrument.errors.count, "error")
+        prohibited this instrument from being saved:
+      %ul
+        - @instrument.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name
+  .field
+    = f.label :site
+    %br/
+    = f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false
+  .field
+    = f.label :display_points
+    %br/
+    = f.text_field :display_points
+  .field
+    = f.label :sample_rate_seconds
+    %br/
+    = f.text_field :sample_rate_seconds
+  .field
+    Variables
+    %table.table.table-striped
+      - @instrument.vars.each do |v|
+        %tr
+          %td
+            = link_to(v.name, var_url(:id => v.id) )
+          %td
+            = v.shortname
+          %td
+            = button_to 'Edit', edit_var_path(v), method: :edit
+          %td= button_to 'Destroy', v, method: :delete, data: { confirm: 'Are you sure?' }
+  .actions
+    = f.submit

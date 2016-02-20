@@ -1,0 +1,30 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}/
+    %title= content_for?(:title) ? yield(:title) : "CHORDS Portal"
+    %meta{:content => "#{content_for?(:description) ? yield(:description) : "CHORDS Portal"}", :name => "description"}/
+    = favicon_link_tag 'CHORDS_7.png'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    :javascript
+      $(document).ready(function() {
+        $('.best_in_place').best_in_place();
+      })
+  %body
+    .container-fluid{"data-no-turbolink" => ""}
+      / top banner
+      = render 'layouts/bannerbar'
+      / top navbar
+      = render 'layouts/topnav'
+    / main area
+    .container{"data-no-turbolink" => ""}
+      = render 'layouts/messages'
+      = yield
+    / footer
+    .container-fluid{"data-no-turbolink" => ""}
+      %br/
+      = render 'layouts/footer'

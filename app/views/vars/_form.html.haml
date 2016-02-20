@@ -1,0 +1,31 @@
+= form_for(@var) do |f|
+  - if @var.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@var.errors.count, "error")
+        prohibited this var from being saved:
+      %ul
+        - @var.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name
+  .field
+    = f.label :shortname
+    %br/
+    = f.text_field :shortname
+  .field
+    = f.label :instrument_id
+    %br/
+    = f.text_field :instrument_id
+  .field
+    = f.label :units
+    %br/
+    = f.text_field :units
+  .field
+    = f.label :measured_property_id
+    %br/
+    = f.collection_select :measured_property_id, MeasuredProperty.order(:label),:id,:label, include_blank: false
+  .actions
+    = f.submit

@@ -1,0 +1,30 @@
+.row
+  %nav.navbar.navbar-default
+    .container-fluid
+      .navbar-header
+        %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+      #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        %ul.nav.navbar-nav.navbar-left
+          - if user_signed_in?
+            / li><haml_loud> current_user.email </haml_loud></li
+          %li= link_to 'About', '/about'
+          %li= link_to 'Help', 'http://chordsrt.com', :target => "_blank"
+          %li= link_to 'Dashboard', '/dashboard'
+          %li= link_to 'Data', '/data'
+          %li= link_to 'Sites', sites_path
+          %li= link_to 'Instruments', instruments_path
+          %li= link_to 'Geo', sites_geo_path
+        %ul.nav.navbar-nav.navbar-right
+          - if (@profile.secure_administration == false) || user_signed_in?
+            %li= link_to 'Simulator', '/instruments/simulator'
+            - if ( (@profile.secure_administration) && (can? :manage, Profile) || (! @profile.secure_administration))
+              %li= link_to 'Configure', '/profiles'
+            %li= link_to 'Users', '/users'
+          - if user_signed_in?
+            %li= link_to 'Sign Out', '/users/sign_out'
+          - else
+            %li= link_to 'Sign In', '/users/sign_in'
