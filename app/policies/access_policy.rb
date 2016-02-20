@@ -1,7 +1,7 @@
 class AccessPolicy
   include AccessGranted::Policy
 
-  def configure(user)
+  def configure
 
     # The most important admin role, gets checked first
 
