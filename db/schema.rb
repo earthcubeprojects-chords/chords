@@ -54,10 +54,10 @@ ActiveRecord::Schema.define(version: 20151230210846) do
     t.string   "affiliation",           limit: 255
     t.string   "description",           limit: 1000
     t.binary   "logo",                  limit: 16777215
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.string   "timezone",              limit: 255
-    t.boolean  "secure_administration", limit: 1,        default: true
+    t.boolean  "secure_administration", limit: 1,        default: false
     t.boolean  "secure_data_viewing",   limit: 1,        default: true
     t.boolean  "secure_data_download",  limit: 1,        default: true
     t.boolean  "secure_data_entry",     limit: 1,        default: true
