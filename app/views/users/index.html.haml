@@ -12,9 +12,14 @@
           %tr
             %td
               = best_in_place_if (can? :manage, user), user, :email, :as => :input
+              - if user == current_user
+                %br/
+                = link_to "Change your password", edit_user_registration_path
             %td{:align => "center"}
               = best_in_place_if (can? :manage, user), user, :is_administrator, as: :checkbox, collection: {false: "No", true: "Yes"}
             %td{:align => "center"}
               = best_in_place_if (can? :manage, user), user, :is_data_viewer, as: :checkbox, collection: {false: "No", true: "Yes"}
             %td{:align => "center"}
               = best_in_place_if (can? :manage, user), user, :is_data_downloader, as: :checkbox, collection: {false: "No", true: "Yes"}
+
+              
