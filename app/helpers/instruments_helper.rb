@@ -92,12 +92,17 @@ module InstrumentsHelper
   end
   
 
-  def create_security_key_js
-    #   // add the security key
-    # <haml_silent>   if @profile.secure_data_entry == true 
-    # </haml_silent><haml_block>    url += "&key=" + "#{@profile.data_entry_key}";
-    # </haml_block>
+  def get_security_key_url_fragment
+    url_fragment = ''
     
+    logger.debug("**************************")
+    logger.debug(@profile.secure_data_entry)
+    # add the security key
+    if @profile.secure_data_entry == true 
+      url_fragment = "&key=" + @profile.data_entry_key
+    end
+
+    return url_fragment
   end
 
 end
