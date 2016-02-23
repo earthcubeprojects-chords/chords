@@ -74,4 +74,30 @@ module InstrumentsHelper
     return url
   end
   
+  # =>  return js for use in simulator
+  def create_instrument_variables_js(instruments)
+    js_lines = Array.new
+    
+    instruments.each do |instrument| 
+      js_lines.push("var instrument_#{instrument.id}_run_status = false;")
+      js_lines.push("var instrument_#{instrument.id}_shortnames = [];")
+
+      instrument.vars.each do |var|
+        js_lines.push("instrument_#{instrument.id}_shortnames.push(\"#{var.shortname}\");")
+      end
+    end
+
+    
+    return js_lines.join("\n")
+  end
+  
+
+  def create_security_key_js
+    #   // add the security key
+    # <haml_silent>   if @profile.secure_data_entry == true 
+    # </haml_silent><haml_block>    url += "&key=" + "#{@profile.data_entry_key}";
+    # </haml_block>
+    
+  end
+
 end

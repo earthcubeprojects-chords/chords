@@ -1,12 +1,9 @@
+#{create_instrument_variables_js(@instruments)}
+
 :javascript
   // run status and variable shortnames for each instrument.
-  <haml_silent> @instruments.each do |instrument| 
-  </haml_silent><haml_block>var instrument_#{instrument.id}_run_status = false;
-  var instrument_#{instrument.id}_shortnames = [];
-  <haml_silent> instrument.vars.each do |var| 
-  </haml_silent><haml_block>instrument_#{instrument.id}_shortnames.push("#{var.shortname}");
-  </haml_block>
-  </haml_block>
+  #{create_instrument_variables_js(@instruments)}
+
   function shortnames(id) {
     var command = "var names = instrument_" + id + "_shortnames";
     eval(command);
@@ -65,11 +62,8 @@
     
     // add test data flag
     url += "&test";
-  
-    // add the security key
-  <haml_silent>   if @profile.secure_data_entry == true 
-  </haml_silent><haml_block>    url += "&key=" + "#{@profile.data_entry_key}";
-  </haml_block>
+
+  	// add the security key js if needed
     return(url);
   }
   
