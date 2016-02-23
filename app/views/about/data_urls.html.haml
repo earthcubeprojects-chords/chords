@@ -1,16 +1,3 @@
-- # Create the query string for submitting measurements for all variables
-- vquery = ''
-- i = 0
-- vquery = '&'
-- @varnames.each do |v|
-- vquery += v[0]
-- vquery += '='
-- vquery += v[1].gsub(/\s+/, "")
-- if i < @varnames.count-1
-- vquery += '&'
-- end
-- i = i + 1
-- end
 %h1 CHORDS Data URLs
 %div
   %strong URLs for data ingest and download
@@ -36,34 +23,32 @@
         %td
         %td at, key, test
         %td
-          - if @varnames.count  0
-            = url_for(:only_path = false,  :controller = 'measurements', :action = 'url_create', :instrument_id = @instrument.id)
-            = vquery
-            \=2015-08-20T19:50:28=KeyValue
+          = put_data_url
       %tr
         %td Fetch a CSV file
         %td .csv
         %td start, end, last
         %td
-          - if @varnames.count  0
-            = url_for(:only_path = false,  :controller = 'instruments', :action = 'show', :id = @instrument.id)
-            \.csv?start=2015-08-01T00:30=2015-08-20T12:30
+          = data_file_download_url("csv", 'start_end')
+          %br/
+          = data_file_download_url("csv", 'last')
       %tr
         %td Fetch a JSON file
         %td .jsf
         %td start, end, last
         %td
-          - if @varnames.count  0
-            = url_for(:only_path = false,  :controller = 'instruments', :action = 'show', :id = @instrument.id)
-            \.jsf
+          = data_file_download_url("jsf")
+          %br/
+          = data_file_download_url("jsf", 'start_end')
+          %br/
+          = data_file_download_url("jsf", 'last')
+			
       %tr
         %td Fetch JSON
         %td .json
         %td start, end, last
         %td
-          - if @varnames.count  0
-            = url_for(:only_path = false,  :controller = 'instruments', :action = 'show', :id = @instrument.id)
-            \.json?last
+          = data_file_download_url("jsf", 'last') + "?last"
   .table-responsive
     %table.table.table-striped
       %tr

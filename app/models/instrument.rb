@@ -1,8 +1,13 @@
 class Instrument < ActiveRecord::Base
+
+  include Rails.application.routes.url_helpers
+  
   belongs_to :site
   has_many :measurements, :dependent => :destroy
   has_many :vars, :dependent => :destroy
   accepts_nested_attributes_for :vars
+
+
   
   def self.initialize
   end
@@ -68,5 +73,5 @@ class Instrument < ActiveRecord::Base
     return data.join(', ')
     
   end
-      
+        
 end

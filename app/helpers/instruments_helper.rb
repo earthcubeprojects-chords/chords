@@ -42,4 +42,36 @@ module InstrumentsHelper
     return newurl
 
   end
+  
+  
+  def put_data_url
+    url = url_for(:only_path => false, :host => request.host, :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id)
+
+    @instrument.vars.each do |var| 
+      url +=  "&#{var.shortname}=#{var.name}"
+    end
+
+    url += "&at=2015-08-20T19:50:28"
+    url += "&key=KeyValue"
+    url += "&test"
+    return url
+  end
+  
+  def data_file_download_url(file_extension, range = nil)
+    url = url_for(:only_path => false, :host => request.host, :controller => 'instruments', :action => 'show', :id => @instrument.id)
+    url += ".#{file_extension}"
+
+    if range
+      url += "?"
+    end
+
+    if range == 'last'
+      url += "last"
+    elsif range == 'start_end'
+      url += "start=2015-08-01T00:30&end=2015-08-20T12:30"
+    end
+
+    return url
+  end
+  
 end
