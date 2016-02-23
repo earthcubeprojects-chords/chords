@@ -45,10 +45,15 @@
           %td= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id))
           %td{:align => "center"}= instrument.vars.count
           %td{:align => "center"}= instrument.measurements.count
+
           %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
-          %td= button_to 'Clone', instruments_duplicate_path, method: :get, params: {instrument_id: instrument.id}
+          - if @profile.secure_administration == false ||  current_user  && can?(:manage, Instrument)
+            %td= button_to 'Clone', instruments_duplicate_path, method: :get, params: {instrument_id: instrument.id}
+
           %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
-          %td= button_to 'Destroy', instrument, method: :delete,                                                                                                                                    |
+
+          - if @profile.secure_administration == false ||  current_user  && can?(:manage, Instrument)
+            %td= button_to 'Destroy', instrument, method: :delete,                                                                                                                                    |
               data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTRUMENT AND ALL DATA WILL BE PERMANENTLY DELETED" } |
 %br/
 - if @sites.count > 0
