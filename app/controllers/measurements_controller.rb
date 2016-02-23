@@ -133,8 +133,8 @@ class MeasurementsController < ApplicationController
 
     respond_to do |format|
       if @measurement.save
-        format.html { render text: "OK"  }
-        format.json { render :show, status: :created, location: @measurement }
+        format.json { render text: "OK"  }
+        format.html { render :show, status: :created, location: @measurement, message: "Measurement created" }
       else
         format.html { render :new }
         format.json { render json: @measurement.errors, status: :unprocessable_entity }
