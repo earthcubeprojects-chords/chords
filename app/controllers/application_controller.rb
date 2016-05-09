@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
       Instrument.initialize
     end
     
+    # ALWAYS require a user to be logged in and be an administrator in order to 
+    # edit anything
+    # 'secure administration' should evetually be removed from the profile model entirely
+    @profile.secure_administration = true
   end
 
 

@@ -22,7 +22,7 @@ class Profile < ActiveRecord::Base
     </ul>
     ', 
     logo: nil,
-    secure_administration: false,
+    secure_administration: true,
     data_entry_key: 'key'
     
     }])      
