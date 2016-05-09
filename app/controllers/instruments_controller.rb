@@ -103,10 +103,11 @@ class InstrumentsController < ApplicationController
   # GET /instruments
   # GET /instruments.json
   def index
+    authorize! :view, Instrument
+
     @instruments = Instrument.all
     @sites = Site.all
 
-    authorize! :view, Instrument
 
   end
 
@@ -124,7 +125,7 @@ class InstrumentsController < ApplicationController
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
 
-    authorize! :view, @instrument
+    authorize! :view, Instrument
 
     
     # Determine and sanitize the last_url

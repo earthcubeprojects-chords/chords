@@ -5,6 +5,8 @@ class SitesController < ApplicationController
   # GET /sites
   # GET /sites.json
   def index
+    authorize! :view, Site
+
     @sites = Site.all
     @instruments = Instrument.all
   end
@@ -12,6 +14,8 @@ class SitesController < ApplicationController
   # GET /sites/1
   # GET /sites/1.json
   def show
+    authorize! :view, Site
+
     @instruments = Instrument.all.where("site_id = ?", params[:id])
     @site = Site.find(params[:id])
   end
