@@ -3,7 +3,7 @@
 %td= best_in_place variable, :name, :as => :input
 %td= best_in_place variable, :units, :as => :input
 %td
-  - if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)
+  - if can?(:manage, Var)
     - form_tag_id = "mp_for_tag_#{variable.id}"
     = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
     :javascript
@@ -39,6 +39,6 @@
   - else
     = variable.measured_property.label
 %td
-  - if @profile.secure_administration == true && current_user  && can?(:manage, Var)
+  - if can?(:manage, Var)
     = link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
       Destroy

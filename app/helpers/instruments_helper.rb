@@ -95,8 +95,6 @@ module InstrumentsHelper
   def get_security_key_url_fragment
     url_fragment = ''
     
-    logger.debug("**************************")
-    logger.debug(@profile.secure_data_entry)
     # add the security key
     if @profile.secure_data_entry == true 
       url_fragment = "&key=" + @profile.data_entry_key

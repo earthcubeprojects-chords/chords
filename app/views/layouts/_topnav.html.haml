@@ -19,9 +19,9 @@
           %li= link_to 'Instruments', instruments_path
           %li= link_to 'Geo', sites_geo_path
         %ul.nav.navbar-nav.navbar-right
-          - if (@profile.secure_administration == false) || user_signed_in?
+          - if can? :manage, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
-            - if ( (@profile.secure_administration) && (can? :manage, Profile) || (! @profile.secure_administration))
+            - if can? :manage, Profile
               %li= link_to 'Configure', '/profiles'
             %li= link_to 'Users', '/users'
           - if user_signed_in?

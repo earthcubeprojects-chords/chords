@@ -36,4 +36,12 @@ module ApplicationHelper
     time_ago_in_words(Uptime.boot_time)
   end
 
+  def user_signed_in? 
+    if current_user.id?
+      super
+    else
+      false
+    end
+  end
+  
 end
