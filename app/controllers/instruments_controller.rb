@@ -260,7 +260,7 @@ class InstrumentsController < ApplicationController
            filename: file_root+'.json'
       }
       format.sensorml {
-        render :file => "app/views/instruments/sensorml.xml.erb", :layout => false
+        render :file => "app/views/instruments/sensorml.xml.haml", :layout => false
       }
       
     end
