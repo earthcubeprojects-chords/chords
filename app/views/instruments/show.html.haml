@@ -98,7 +98,7 @@
             = f.hidden_field :name, :value => 'name'
             = f.hidden_field :shortname, :value => 'shortname'
             = f.hidden_field :instrument_id, :value => @instrument.id
-            - if @profile.secure_administration == false ||  current_user  && can?(:manage, Var)
+            - if can?(:manage, Var)
               = f.submit :value	 => 'Add a New Variable'
 .instrumentstrip
   Graph:

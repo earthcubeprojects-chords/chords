@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   before_filter :set_profile
+
+  before_action :authenticate_user!
   
   def set_profile
     ActionMailer::Base.default_url_options = {:host => request.host_with_port}
@@ -27,8 +29,35 @@ class ApplicationController < ActionController::Base
       Instrument.initialize
     end
     
+    # ALWAYS require a user to be logged in and be an administrator in order to 
+    # edit anything
+    # 'secure administration' should evetually be removed from the profile model entirely
+    @profile.secure_administration = true
   end
 
+
+  def authenticate_user!(*args)
+    current_user.present? || super(*args)
+  end
+
+  def current_user
+    if super
+      user = super
+    else
+      user = User.new
+      user.is_administrator = false
+
+      # If data viewing / downloading is secured, set the anonymous user permissions so they can't access
+      # secured functionality
+      user.is_data_viewer = !(@profile.secure_data_viewing)
+      user.is_data_downloader = !(@profile.secure_data_download)
+# Rails.logger.debug user.is_data_downloader
+    end
+
+    user
+  end
+  
+  
   # Access denied redirect
   rescue_from "AccessGranted::AccessDenied" do |exception|
     redirect_to '/about', alert: "You don't have permissions to access this page."

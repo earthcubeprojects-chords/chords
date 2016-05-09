@@ -1,17 +1,11 @@
 class DashboardController < ApplicationController
 
-  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
-    
   def index
+
+    authorize! :view, Instrument
 
     # Get all of the instruments.
     @instruments = Instrument.all
-
-    if @profile.secure_data_viewing
-      if @instruments.count > 0
-        authorize! :view, @instruments[0]
-      end
-    end
 
     # Collect some summary metrics
     @metrics = {}

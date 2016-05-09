@@ -1,13 +1,12 @@
-class InstrumentsController < ApplicationController
-
-  before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
-  
+class InstrumentsController < ApplicationController  
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
 
  # GET /instruments/1/live?var=varshortname&after=time
  # Return measurements and metadata for a given instrument, var and time period.
  # Limit the number of points returned to the instrument's display_points value.
   def live
+    # Authorize access to the measurements
+    authorize! :view, Measurement
  
     # Initialze the return value
     livedata = {
@@ -38,11 +37,6 @@ class InstrumentsController < ApplicationController
         our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
         if our_measurements
 
-          # Authorize access to the measurements
-          if @profile.secure_data_viewing
-            authorize! :view, our_measurements[0]
-          end
-
           # Collect the times and values for the measurements
           points = []
           our_measurements.each {|x| points.append(x.mstime_and_value)}
@@ -61,6 +55,7 @@ class InstrumentsController < ApplicationController
   
   # GET instruments/simulator
   def simulator
+    authorize! :manage, Instrument
   
     # Returns:
     #  @instruments
@@ -68,14 +63,6 @@ class InstrumentsController < ApplicationController
 
     @instruments = Instrument.all
     @sites       = Site.all
-
-    # Authenitcate
-    if @profile.secure_administration
-      authenticate_user!
-      if @instruments.count > 0
-        authorize! :manage, @instruments[0]
-      end
-    end
   end
   
   # GET /instruments/duplicate?instrument_id=1
@@ -86,16 +73,8 @@ class InstrumentsController < ApplicationController
 
       old_instrument = Instrument.find(params[:instrument_id])
 
-      if @profile.secure_administration
-        authenticate_user!
-        authorize! :manage, old_instrument
-      end
-      
-      if @profile.secure_administration
-        authenticate_user!
-        authorize! :manage, old_instrument
-      end
-      
+      authorize! :manage, old_instrument
+            
       # Make a copy
       new_instrument = old_instrument.dup
       
@@ -124,14 +103,11 @@ class InstrumentsController < ApplicationController
   # GET /instruments
   # GET /instruments.json
   def index
+    authorize! :view, Instrument
+
     @instruments = Instrument.all
     @sites = Site.all
 
-   if @profile.secure_data_viewing
-     if @instruments.count > 0
-       authorize! :view, @instruments[0]
-     end
-   end
 
   end
 
@@ -149,10 +125,9 @@ class InstrumentsController < ApplicationController
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
 
-    if @profile.secure_data_viewing
-      authorize! :view, @instrument
-    end
+    authorize! :view, Instrument
 
+    
     # Determine and sanitize the last_url
     @last_url = ''
     if @instrument.last_url
@@ -235,14 +210,25 @@ class InstrumentsController < ApplicationController
     
     respond_to do |format|
       format.html
+
+      format.sensorml {
+        render :file => "app/views/instruments/sensorml.xml.haml", :layout => false
+      }
+
       format.csv { 
+        authorize! :download, @instrument
+        
         send_data measurements.to_csv(metadata, @varnames),
           filename: file_root+'.csv' 
       }
       format.xml { 
+        authorize! :download, @instrument
+
         send_data measurements.to_xml, filename: file_root+'.xml'
       }    
       format.json { 
+        authorize! :download, @instrument
+
         # Convert metadata to a hash
         mdata = {}
         metadata.each do |m|
@@ -251,6 +237,8 @@ class InstrumentsController < ApplicationController
         render json: measurements.columns_with_metadata(@varnames, mdata)
       }
       format.jsf { 
+        authorize! :download, @instrument
+
         # Convert metadata to a hash
         mdata = {}
         metadata.each do |m|
@@ -259,22 +247,15 @@ class InstrumentsController < ApplicationController
         send_data measurements.columns_with_metadata(@varnames, mdata),
            filename: file_root+'.json'
       }
-      format.sensorml {
-        render :file => "app/views/instruments/sensorml.xml.haml", :layout => false
-      }
       
     end
   end
     
   # GET /instruments/new
   def new
-    @instrument = Instrument.new
+    authorize! :manage, Instrument
 
-    if @profile.secure_administration
-      authenticate_user!
-      authorize! :manage, @instrument
-    end
-    
+    @instrument = Instrument.new
   end
 
   # GET /instruments/1/edit
@@ -284,12 +265,9 @@ class InstrumentsController < ApplicationController
   # POST /instruments
   # POST /instruments.json
   def create
-    @instrument = Instrument.new(instrument_params)
+    authorize! :manage, Instrument
 
-    if @profile.secure_administration
-      authenticate_user!
-      authorize! :manage, @instrument
-    end
+    @instrument = Instrument.new(instrument_params)
 
     respond_to do |format|
       if @instrument.save
@@ -305,11 +283,7 @@ class InstrumentsController < ApplicationController
   # PATCH/PUT /instruments/1
   # PATCH/PUT /instruments/1.json
   def update
-
-    if @profile.secure_administration
-      authenticate_user!
-      authorize! :manage, @instrument
-    end
+    authorize! :manage, Instrument
         
     respond_to do |format|
       if @instrument.update(instrument_params)
@@ -325,11 +299,7 @@ class InstrumentsController < ApplicationController
   # DELETE /instruments/1
   # DELETE /instruments/1.json
   def destroy
-
-    if @profile.secure_administration
-      authenticate_user!
-      authorize! :manage, @instrument
-    end
+    authorize! :manage, Instrument
     
     Measurement.delete_all "instrument_id = #{@instrument.id}"
     @instrument.destroy

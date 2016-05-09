@@ -1,14 +1,10 @@
 class ProfilesController < ApplicationController
   # There will only be one record in the Profiles table
 
-  before_action :authenticate_user!, :if => proc {|c| @profile.secure_administration}
-
 
   # GET /profiles
   def index
-    if (@profile.secure_administration == true) 
-      authorize! :manage, @profile
-    end
+    authorize! :manage, Profile
     
     if @profile == nil
       Profile.initialize
@@ -21,10 +17,7 @@ class ProfilesController < ApplicationController
 # POST /profile
 
   def create
-    
-    if (@profile.secure_administration == true) 
-      authorize! :manage, @profile
-    end
+    authorize! :manage, Profile
   
     # update attributes
     @profile.update(profile_params)      

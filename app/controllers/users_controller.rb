@@ -4,9 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update]
   
   def index
-    # if @profile.secure_administration
-      authorize! :manage, current_user
-    # end
+    authorize! :manage, current_user
 
     @users = User.all
   end
@@ -23,9 +21,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    # if @profile.secure_administration
-      authorize! :view, @user
-    # end
+    authorize! :view, @user
   end
   
   
@@ -34,12 +30,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
 
-    # if @profile.secure_administration
-      # authenticate_user!
-      authorize! :manage, @user
-    # end
-    
-    
+    authorize! :manage, @user
         
     respond_to do |format|
 

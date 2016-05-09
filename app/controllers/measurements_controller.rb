@@ -1,20 +1,13 @@
 class MeasurementsController < ApplicationController
 
-  #before_action :authenticate_user!, :if => proc {|c| @profile.secure_data_viewing}
-
   before_action :set_measurement, only: [:show, :edit, :update, :destroy]
 
   # GET /measurements
   # GET /measurements.json
   def index
+    authorize! :view, Measurement
 
     @measurements = Measurement.all
-
-    if @profile.secure_data_viewing
-      if @measurements.count > 0
-        authorize! :view, @measurements[0]
-      end
-    end
 
     @sites = Site.all
     @instruments = Instrument.all
@@ -28,39 +21,27 @@ class MeasurementsController < ApplicationController
   # GET /measurements/1
   # GET /measurements/1.json
   def show
-    
-    if @profile.secure_data_viewing
-      authorize! :view, @measurement
-    end
-
+    authorize! :view, Measurement
   end
 
   # GET /measurements/new
   def new
-    @measurement = Measurement.new
+    authorize! :manage, Measurement
 
-    if @profile.secure_administration
-      authorize! :view, @measurement
-    end
-    
+    @measurement = Measurement.new
   end
 
   # GET /measurements/1/edit
   def edit
-    if @profile.secure_administration
-      authorize! :view, @measurement
-    end
+    authorize! :manage, Measurement
   end
 
   # POST /measurements
   # POST /measurements.json
   def create
+    authorize! :view, Measurement
+
     @measurement = Measurement.new(measurement_params)
-
-    if @profile.secure_data_entry
-      authorize! :view, @measurement
-    end
-
 
     respond_to do |format|
       if @measurement.save
@@ -144,11 +125,7 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/delete_test?instrument_id=1
   def delete_test
-
-    if @profile.secure_administration
-      authorize! :manage, Measurement
-    end
-
+    authorize! :manage, Measurement
 
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
@@ -166,10 +143,7 @@ class MeasurementsController < ApplicationController
 
   # GET 'measurements/trim?end=date
   def trim
-
-    if @profile.secure_administration
-      authorize! :manage, Measurement
-    end
+    authorize! :manage, Measurement
     
     notice_text = nil
     if params.key?(:end) and params.key?(:trim_id)
@@ -192,10 +166,7 @@ class MeasurementsController < ApplicationController
   # PATCH/PUT /measurements/1
   # PATCH/PUT /measurements/1.json
   def update
-
-    if @profile.secure_administration
-      authorize! :view, @measurement
-    end
+    authorize! :manage, Measurement
     
     respond_to do |format|
       if @measurement.update(measurement_params)
@@ -211,10 +182,7 @@ class MeasurementsController < ApplicationController
   # DELETE /measurements/1
   # DELETE /measurements/1.json
   def destroy
-
-    if @profile.secure_administration
-      authorize! :view, @measurement
-    end
+    authorize! :manage, Measurement
     
     @measurement.destroy
     respond_to do |format|
