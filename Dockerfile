@@ -7,7 +7,8 @@ MAINTAINER martinc@ucar.edu
 RUN apt-get update && apt-get install -y \ 
   build-essential \ 
   nodejs \
-  mysql-client
+  mysql-client \
+  dos2unix
 
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
