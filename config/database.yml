@@ -13,6 +13,8 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
+  username: chords_demo_user
+  password: chords_ec_demo
   host: mysql
   port: 3306
 

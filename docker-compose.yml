@@ -1,11 +1,8 @@
 app:
   build: .
   command: ./chords_start.sh
-  volumes:
-    - .:/app
-    - ./chords_log/:/chords_log
   ports:
-    - "3000:3000"
+    - "80:80"
   links:
     - mysql
 
@@ -13,6 +10,8 @@ mysql:
   image: mysql
   environment:
     - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    - MYSQL_USER=chords_demo_user
+    - MYSQL_PASSWORD=chords_ec_demo
   ports:
     - "3306"
 

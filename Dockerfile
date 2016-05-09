@@ -6,7 +6,8 @@ MAINTAINER martinc@ucar.edu
 # Debian image, we use apt-get to install those.
 RUN apt-get update && apt-get install -y \ 
   build-essential \ 
-  nodejs
+  nodejs \
+  mysql-client
 
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
@@ -33,4 +34,4 @@ EXPOSE 3000
 ENTRYPOINT ["bundle", "exec"]
 
 # Start Passenger
-CMD ["passenger", "start", "--port", "3000"]
+CMD ["passenger", "start", "--port", "80"]
