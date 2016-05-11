@@ -1,0 +1,17 @@
+app:
+  build: .
+  command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
+  ports:
+    - "80:80"
+  links:
+    - mysql
+
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    - MYSQL_USER=chords_demo_user
+    - MYSQL_PASSWORD=chords_ec_demo
+  ports:
+    - "3306"
+
