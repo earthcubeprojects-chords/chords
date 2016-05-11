@@ -1,5 +1,5 @@
 app:
-  build: .
+  image: mistermartin/chordsportal_app
   command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
   ports:
     - "80:80"
