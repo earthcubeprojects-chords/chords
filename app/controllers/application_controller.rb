@@ -60,6 +60,6 @@ class ApplicationController < ActionController::Base
   
   # Access denied redirect
   rescue_from "AccessGranted::AccessDenied" do |exception|
-    redirect_to '/about', alert: "You don't have permissions to access this page."
+    redirect_to '/about', alert: "You don't have permission to access this page. Do you need to sign in?"
   end  
 end
