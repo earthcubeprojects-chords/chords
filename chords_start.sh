@@ -13,7 +13,7 @@ echo "Migrating rails database."
 bundle exec rake db:migrate
 
 if [ !  -e "/chords_log/SEEDED" ]; then
-  echo "/choirds_log/SEEDED not found. Seeding rails database."
+  echo "/chords_log/SEEDED not found. Seeding rails database."
   bundle exec rake db:seed
   touch chords_log/SEEDED
 fi
