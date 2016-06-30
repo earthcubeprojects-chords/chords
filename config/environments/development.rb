@@ -52,5 +52,9 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
+
+
+  # Rotate log files 
+  config.logger = Logger.new(config.paths['log'].first, 10, 5242880)
   
 end
