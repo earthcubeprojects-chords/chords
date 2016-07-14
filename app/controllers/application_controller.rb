@@ -40,6 +40,27 @@ class ApplicationController < ActionController::Base
     current_user.present? || super(*args)
   end
 
+
+  def authorize!(*args)
+
+    @data_download_actions = ['show']
+
+    logger.debug 
+    
+    if @data_download_actions.include?(action_name) && params.key?(:key) && params[:key] == @profile.data_entry_key
+      # skip the authorization if the security key is provided
+      logger.debug "KEY WORKED, SKIPPING AUTH"
+
+    else
+      super(*args)
+            # authorize! :download, @instrument
+    end
+
+  end
+
+
+    
+    
   def current_user
     if super
       user = super
