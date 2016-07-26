@@ -3,9 +3,14 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
-  before_filter :set_profile
+  before_filter :set_profile, :set_access_control_header
 
   before_action :authenticate_user!
+  
+  def set_access_control_header
+    headers['Access-Control-Allow-Origin'] = '*'
+  end
+  
   
   def set_profile
     ActionMailer::Base.default_url_options = {:host => request.host_with_port}
