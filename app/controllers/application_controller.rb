@@ -3,9 +3,14 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
-  before_filter :set_profile
+  before_filter :set_profile, :set_access_control_header
 
   before_action :authenticate_user!
+  
+  def set_access_control_header
+    headers['Access-Control-Allow-Origin'] = '*'
+  end
+  
   
   def set_profile
     ActionMailer::Base.default_url_options = {:host => request.host_with_port}
@@ -40,6 +45,27 @@ class ApplicationController < ActionController::Base
     current_user.present? || super(*args)
   end
 
+
+  def authorize!(*args)
+
+    @data_download_actions = ['show']
+
+    logger.debug 
+    
+    if @data_download_actions.include?(action_name) && params.key?(:key) && params[:key] == @profile.data_entry_key
+      # skip the authorization if the security key is provided
+      logger.debug "KEY WORKED, SKIPPING AUTH"
+
+    else
+      super(*args)
+            # authorize! :download, @instrument
+    end
+
+  end
+
+
+    
+    
   def current_user
     if super
       user = super
