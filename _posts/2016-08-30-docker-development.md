@@ -4,6 +4,7 @@ title: CHORDS is being adapted to run under Docker
 ---
 
 We are working on making a CHORDS portal available using [Docker](https://www.docker.com/). 
+
 This means that you will be able to run a CHORDS portal locally, on your own 
 Mac, Windows or Linux system. We will also upgrade the CHORDS cloud creation
 processs so that the Docker images are used on AWS and other cloud services.
