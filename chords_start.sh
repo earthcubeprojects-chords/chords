@@ -1,7 +1,7 @@
 #!/bin/bash
 
 server="mysql"
-seeded_flag="/chords_log/SEEDED"
+seeded_flag="/var/lib/mysql/CHORDS_SEEDED"
 
 # Make sure that the log directory exists
 mkdir -p log
@@ -9,7 +9,7 @@ mkdir -p log
 # See if there is an existing database
 if [ ! -e $seeded_flag ] 
 then
-  echo "/chords_log/SEEDED not found. We will attempt to create the database."
+  echo "**** $seeded_flag not found. We will attempt to create the database."
 
   for count in {1..60}; do
     echo -n "..$count"
@@ -33,18 +33,23 @@ then
 
   echo "Creating rails database."
   bundle exec rake db:create
+else
+  echo "**** $seeded_flag was found. Database will not be created."
 fi
 
 echo "Migrating rails database."
 bundle exec rake db:migrate
 
 if [ !  -e $seeded_flag ]; then
-  echo "/chords_log/SEEDED not found. Seeding rails database."
+  echo "**** $seeded_flag not found. Seeding rails database."
   bundle exec rake db:seed
+else
+  echo "**** $seeded_flag was found. Database will not be seeded."
 fi
 
 # Database ready. Set the SEEDED flag.
-touch chords_log/SEEDED
+touch $seeded_flag
 
 echo "Starting passsenger."
 passenger start --port 80
+
