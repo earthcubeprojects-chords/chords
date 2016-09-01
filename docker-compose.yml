@@ -3,10 +3,11 @@ version: '2'
   
 services:
   app:
+    container_name: chords_app
     build: .
     image: mistermartin/chords_app
     volumes:
-      - chords-mysql:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
@@ -14,9 +15,10 @@ services:
       - mysql
   
   mysql:
+    container_name: chords_mysql
     image: mysql
     volumes:
-      - chords-mysql:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
@@ -25,6 +27,6 @@ services:
       - "3306"
 
 volumes:
-  chords-mysql:
+  mysql-data: 
   
  
