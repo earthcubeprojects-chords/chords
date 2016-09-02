@@ -24,7 +24,7 @@ services:
   app:
     container_name: chords_app
     build: .
-    image: mistermartin/chords_app
+    image: ncareol/chords_app
     volumes:
       - mysql-data:/var/lib/mysql
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
