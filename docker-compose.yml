@@ -3,7 +3,7 @@ version: '2'
 # The CHORDS configuration for docker-compose. 
 #
 # It defines a MyQSL database service (chords_mysql), a CHORDS
-# Ruby on Rails web server (app), and a persistent 
+# Ruby on Rails web server (chords_app), and a persistent 
 # database volume (mysql-data).
 #
 # This configuration is used to both build the chords_app image,
@@ -15,9 +15,10 @@ version: '2'
 #   docker-compose build
 #   docker push mistermartin/chords_app
 #
-# To deploy CHORDS:
+# To deploy/start/stop CHORDS:
 #   docker-compose pull
 #   docker-compose -p chords up -d
+#   docker-compose -p chords down
 
 services:
   app:
