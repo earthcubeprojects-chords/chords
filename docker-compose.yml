@@ -32,7 +32,7 @@ services:
         - "80:80"
     links:
       - mysql
-  
+
   mysql:
     container_name: chords_mysql
     image: mysql
@@ -42,8 +42,6 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=chords_ec_demo
-    ports:
-      - "3306"
 
 volumes:
   mysql-data: 
