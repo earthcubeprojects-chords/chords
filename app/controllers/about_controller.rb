@@ -3,7 +3,10 @@ class AboutController < ApplicationController
   
   def index
     @profile = Profile.first
-    @source_revision = `git rev-parse HEAD`.chomp
+    #    @source_revision = `git rev-parse HEAD`.chomp
+    @source_revision = ENV['CHORDS_GIT_SHA']
+    @source_branch   = ENV['CHORDS_GIT_BRANCH']
+          
   end
   
   # GET about/data_urls

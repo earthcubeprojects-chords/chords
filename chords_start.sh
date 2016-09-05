@@ -2,9 +2,17 @@
 
 server="mysql"
 seeded_flag="/var/lib/mysql/CHORDS_SEEDED"
+chords_env="./chords_env.sh"
 
 # Make sure that the log directory exists
 mkdir -p log
+
+# Source the environment script, if it exists
+if [ -e $chords_env ]
+then
+  . $chords_env
+  env
+fi
 
 # See if there is an existing database
 if [ ! -e $seeded_flag ] 

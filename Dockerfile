@@ -26,6 +26,11 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 # Copy the main application.
 COPY . ./
 
+# Create the CHORDS environment value setting script chords_env.sh.
+# This script will be copied along with the rest of the app, where
+# it will be avaiable during container startup.
+RUN ["/bin/bash", "-f", "create_chords_env_script.sh"]
+
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.
 EXPOSE 80
