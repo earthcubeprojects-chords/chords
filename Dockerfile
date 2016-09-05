@@ -31,6 +31,10 @@ COPY . ./
 # it will be avaiable during container startup.
 RUN ["/bin/bash", "-f", "create_chords_env_script.sh"]
 
+# Now that git activity is finished, get rid of the repository
+# so that it is not carried along.
+RUN rm -rf .git
+
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.
 EXPOSE 80
