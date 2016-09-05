@@ -9,6 +9,7 @@ class SitesController < ApplicationController
 
     @sites = Site.all
     @instruments = Instrument.all
+    @google_maps_key = Profile.first.google_maps_key
   end
 
   # GET /sites/1

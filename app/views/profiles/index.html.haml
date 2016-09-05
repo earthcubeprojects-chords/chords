@@ -19,6 +19,12 @@
   %br/
   %div
     .section
+      %strong Google      
+    %div
+      Google Maps JavaScript API Key: #{f.text_field('google_maps_key', size: 50)}
+  %br/
+  %div
+    .section
       %strong Security Options
     %div
       = f.check_box :secure_data_viewing

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230210846) do
+ActiveRecord::Schema.define(version: 20160905145321) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -54,14 +54,15 @@ ActiveRecord::Schema.define(version: 20151230210846) do
     t.string   "affiliation",           limit: 255
     t.string   "description",           limit: 1000
     t.binary   "logo",                  limit: 16777215
-    t.datetime "created_at",                                             null: false
-    t.datetime "updated_at",                                             null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.string   "timezone",              limit: 255
-    t.boolean  "secure_administration", limit: 1,        default: false
+    t.boolean  "secure_administration", limit: 1,        default: true
     t.boolean  "secure_data_viewing",   limit: 1,        default: true
     t.boolean  "secure_data_download",  limit: 1,        default: true
     t.boolean  "secure_data_entry",     limit: 1,        default: true
     t.string   "data_entry_key",        limit: 255
+    t.string   "google_maps_key",       limit: 255,      default: "none"
   end
 
   create_table "sites", force: :cascade do |t|
