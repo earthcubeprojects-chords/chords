@@ -43,4 +43,4 @@ bower.json
 /.pydevproject
 /passenger.*
 vendor/ruby
-/chords_env.sh
+chords_env.sh
