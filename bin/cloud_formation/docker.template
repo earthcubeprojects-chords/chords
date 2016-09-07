@@ -115,17 +115,18 @@
     "ChordsEIP" : {
       "Type" : "AWS::EC2::EIP",
       "Properties" : {
-        "InstanceId" : { "Ref" : "WebServer" }
+        "InstanceId" : { "Ref" : "ChordsServer" }
       }
     },
     
-    "WebServer": {  
+    "ChordsServer": {  
       "Type": "AWS::EC2::Instance",
       "Metadata" : {
         "AWS::CloudFormation::Init" : {
           "configSets" : {
             "full_install" : [ "install_cfn", 
-                               "docker", 
+                               "docker_service",
+                               "docker_compose", 
                                "chords_up" ]
           },
 
@@ -146,10 +147,10 @@
                 "content": { "Fn::Join" : ["", [
                   "[cfn-auto-reloader-hook]\n",
                   "triggers=post.update\n",
-                  "path=Resources.WebServer.Metadata.AWS::CloudFormation::Init\n",
+                  "path=Resources.ChordsServer.Metadata.AWS::CloudFormation::Init\n",
                   "action=/opt/aws/bin/cfn-init -v ",
                   "         --stack ", { "Ref" : "AWS::StackName" },
-                  "         --resource WebServer ",
+                  "         --resource ChordsServer ",
                   "         --configsets full_install ",
                   "         --region ", { "Ref" : "AWS::Region" }, "\n",
                   "runas=root\n"
@@ -165,25 +166,29 @@
             }
           },
 
-          "docker" : {
+          "docker_service" : {
             "packages" : {
               "yum" : {
                 "docker" : []
               }
             },
+            "services" : {
+              "sysvinit" : {  
+                "docker" : { "enabled" : "true", "ensureRunning" : "true" }
+              }
+            }
+          },
+
+          "docker_compose" : {
             "commands" : {
               "01_get_docker_compose" : {
-                "command" : { 
-                  "curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"}
+                "command" : "curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose"
               },
               "02_docker_compose_yml" : {
-                "command" : { 
-                  "curl -L https://github.com/NCAR/chords_portal/raw/docker/docker-compose.yml > docker-compose.yml"
+                "command" : "curl -L https://github.com/NCAR/chords_portal/raw/docker/docker-compose.yml > docker-compose.yml"
               },
               "03_docker_pull" : {
-                "command" : {
-                  "/usr/local/bin/docker-compose pull"
-                }
+                "command" : "/usr/local/bin/docker-compose pull"
               }
             }
           },
@@ -191,9 +196,7 @@
           "chords_up" : {
             "commands" : {
               "01_docker_up" : {
-                "command" : {
-                  "/usr/local/bin/docker-compose -p chords up -d"
-                }
+                "command" : "/usr/local/bin/docker-compose -p chords up -d"
               }
             }
           }
@@ -201,10 +204,10 @@
       },
 
       "Properties": {
-        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
-                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
+        "ImageId"        : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                           { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] },
         "InstanceType"   : { "Ref" : "InstanceType" },
-        "SecurityGroups" : [ {"Ref" : "WebServerSecurityGroup"} ],
+        "SecurityGroups" : [ {"Ref" : "ChordsServerSecurityGroup"} ],
         "KeyName"        : { "Ref" : "KeyName" },
         "Tags"           : [
           {"Key"         : "Name",       "Value" : { "Ref": "AWS::StackName" }},
@@ -216,24 +219,24 @@
 
           "/opt/aws/bin/cfn-init -v ",
           "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource WebServer ",
+          "         --resource ChordsServer ",
           "         --configsets full_install ",
           "         --region ", { "Ref" : "AWS::Region" }, "\n",
 
           "/opt/aws/bin/cfn-signal -e $? ",
           "         --stack ", { "Ref" : "AWS::StackId" },
-          "         --resource WebServer ",
+          "         --resource ChordsServer ",
           "         --region ", { "Ref" : "AWS::Region" }, "\n"
         ]]}}        
       },
       "CreationPolicy" : {
         "ResourceSignal" : {
-          "Timeout" : "PT30M"
+          "Timeout" : "PT10M"
         }
       }
     },
     
-    "WebServerSecurityGroup" : {
+    "ChordsServerSecurityGroup" : {
       "Type" : "AWS::EC2::SecurityGroup",
       "Properties" : {
         "GroupDescription" : "Enable HTTP and SSH access",
@@ -247,7 +250,7 @@
   
   "Outputs" : {
     "WebsiteURL" : {
-      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "WebServer", "PublicDnsName" ]}, "" ]] },
+      "Value" : { "Fn::Join" : ["", ["http://", { "Fn::GetAtt" : [ "ChordsServer", "PublicDnsName" ]}, "" ]] },
       "Description" : "URL for newly created CHORDS Portal"
     }
   }
