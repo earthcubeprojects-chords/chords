@@ -27,13 +27,9 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 COPY . ./
 
 # Create the CHORDS environment value setting script chords_env.sh.
-# This script will be copied along with the rest of the app, where
-# it will be avaiable during container startup.
-RUN ["/bin/bash", "-f", "create_chords_env_script.sh"]
-
-# Now that git activity is finished, get rid of the repository
-# so that it is not carried along.
-RUN rm -rf .git
+# Use this bit of magic to invalidate the cache so that the command is run.
+ADD http://www.random.org/strings/?num=10&len=8&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new cache_invalidator
+RUN /bin/bash -f create_chords_env_script.sh > chords_env.sh && chmod a+x chords_env.sh
 
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.

@@ -6,6 +6,7 @@ class AboutController < ApplicationController
     #    @source_revision = `git rev-parse HEAD`.chomp
     @source_revision = ENV['CHORDS_GIT_SHA']
     @source_branch   = ENV['CHORDS_GIT_BRANCH']
+    @build_time      = ENV['CHORDS_BUILD_TIME']
           
   end
   
