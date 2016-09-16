@@ -4,7 +4,9 @@ title: Docker Advances
 ---
 
 The [Docker](https://www.docker.com/) version 
-of CHORDS now has a persistent database. This means that you can start and stop your docker
+of CHORDS now has a persistent database. 
+
+This means that you can start and stop your docker
 engine, your CHORDS docker containers, or restart the server, and
 the database will survive. It's also very easy to update
 to new releases of CHORDS without loosing any data.
