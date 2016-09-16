@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Active CHORDS Poratls?
+title: Active CHORDS Portals?
 ---
 
 ## Currently Deployed CHORDS Portals
