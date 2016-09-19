@@ -23,7 +23,9 @@ version: '2'
 services:
   app:
     container_name: chords_app
-    build: .
+    build:
+      context: ./
+      dockerfile: Dockerfile-rpi
     image: ncareol/chords_app_rpi
     volumes:
       - mysql-data:/var/lib/mysql
