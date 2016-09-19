@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
   build-essential \ 
   nodejs \
   mysql-client \
+  libmysqlclient-dev \
   dos2unix
 
 # Configure the main working directory. This is the base 
@@ -28,6 +29,7 @@ COPY . ./
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the cache so that the command is run.
+RUN apt-get install libcurl4-openssl-dev git
 ADD http://www.random.org/strings/?num=10&len=8&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new cache_invalidator
 RUN /bin/bash -f create_chords_env_script.sh > chords_env.sh && chmod a+x chords_env.sh
 
