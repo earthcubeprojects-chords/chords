@@ -13,7 +13,7 @@ version: '2'
 # To build and upload the chords_app image:
 #   cd <directory containing the CHORDS project>
 #   docker-compose build
-#   docker push ncareol/chords_app
+#   docker push ncareol/chords
 #
 # To deploy/start/stop CHORDS:
 #   docker-compose pull
