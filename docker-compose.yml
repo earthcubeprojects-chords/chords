@@ -23,8 +23,10 @@ version: '2'
 services:
   app:
     container_name: chords_app
-    build: .
-    image: ncareol/chords_app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: ncareol/chords
     volumes:
       - mysql-data:/var/lib/mysql
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
