@@ -6,27 +6,27 @@ version: '2'
 # Ruby on Rails web server (chords_app), and a persistent 
 # database volume (mysql-data).
 #
-# This configuration is used to both build the chords_app image,
+# This configuration is used to both build the chords image,
 # and to deploy the CHORDS system. Dockerfile provides the recipe
-# for chords_app.
+# for the chords image.
 #
-# To build and upload the chords_app image:
+# To build and upload the chords image:
 #   cd <directory containing the CHORDS project>
 #   docker-compose -f docker-compose-rpi.yml build
-#   docker push ncareol/chords_app_rpi
+#   docker push ncareol/rpi-chords
 #
 # To deploy/start/stop CHORDS:
-#   docker-compose -f docker-compose-rpi.yml pull
-#   docker-compose -f docker-compose-rpi.yml -p chords up -d
-#   docker-compose -f docker-compose-rpi.yml -p chords down
+#   docker-compose -f rpi-docker-compose.yml pull
+#   docker-compose -f rpi-docker-compose.yml -p chords up -d
+#   docker-compose -f rpi-docker-compose.yml -p chords down
 
 services:
   app:
     container_name: chords_app
     build:
       context: ./
-      dockerfile: Dockerfile-rpi
-    image: ncareol/chords_app_rpi
+      dockerfile: rpi-Dockerfile
+    image: ncareol/rpi-chords
     volumes:
       - mysql-data:/var/lib/mysql
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
