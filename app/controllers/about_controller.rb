@@ -3,8 +3,7 @@ class AboutController < ApplicationController
   
   def index
     @profile = Profile.first
-    #    @source_revision = `git rev-parse HEAD`.chomp
-    @source_revision = ENV['CHORDS_GIT_SHA']
+    @source_revision = ENV['CHORDS_GIT_SHA'][0..6]
     @source_branch   = ENV['CHORDS_GIT_BRANCH']
     @build_time      = ENV['CHORDS_BUILD_TIME']
           
