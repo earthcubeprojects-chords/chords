@@ -30,11 +30,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Passenger as the app server
-gem 'passenger'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# Use Unicorn as the app server
+gem 'unicorn-rails'
 
 # best_im_place
 gem "best_in_place"

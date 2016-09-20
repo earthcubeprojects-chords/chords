@@ -58,6 +58,7 @@ fi
 # Database ready. Set the SEEDED flag.
 touch $seeded_flag
 
-echo "Starting passsenger."
-passenger start --port 80
+echo "Starting web server."
+mkdir -p tmp/pids/
+unicorn -p 80 -c ./config/unicorn.rb
 
