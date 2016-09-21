@@ -8,6 +8,7 @@ RUN apt-get update\
   nodejs\
   git\
   dos2unix\
+  ntp\
   mysql-client\
   libmysqlclient-dev\
   libcurl4-openssl-dev\
