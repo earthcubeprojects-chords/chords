@@ -1,24 +1,27 @@
 version: '2'
 
-# The CHORDS configuration for docker-compose. 
+# The CHORDS configuration (x86) for docker-compose. 
 #
 # It defines a MyQSL database service (chords_mysql), a CHORDS
 # Ruby on Rails web server (chords_app), and a persistent 
 # database volume (mysql-data).
 #
-# This configuration is used to both build the chords_app image,
+# This configuration is used to both build the chords image,
 # and to deploy the CHORDS system. Dockerfile provides the recipe
-# for chords_app.
+# for the chords image.
 #
-# To build and upload the chords_app image:
+# To build and upload the chords image:
 #   cd <directory containing the CHORDS project>
 #   docker-compose build
 #   docker push ncareol/chords
 #
 # To deploy/start/stop CHORDS:
-#   docker-compose pull
+#   curl -kL https://github.com/NCAR/chords_portal/raw/docker/docker-compose.yml > docker-compose.yml
+#   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
+#
+# To update a running system, do: down, pull, and up.
 
 services:
   app:
