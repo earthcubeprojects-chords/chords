@@ -21,7 +21,9 @@ version: '2'
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
 #
-# To update a running system, do: down, pull, and up.
+# To update a running system:
+#  docker-compose pull
+#  docker-compose -p chords restart
 
 services:
   app:
