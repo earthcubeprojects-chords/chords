@@ -2,10 +2,13 @@ class AboutController < ApplicationController
   helper :all
   
   def index
-    @profile = Profile.first
+    @profile         = Profile.first
     @source_revision = ENV['CHORDS_GIT_SHA'][0..6]
     @source_branch   = ENV['CHORDS_GIT_BRANCH']
     @build_time      = ENV['CHORDS_BUILD_TIME']
+    @kernel_release  = ENV['CHORDS_KERNEL_RELEASE']
+    @kernel_version  = ENV['CHORDS_KERNEL_VERSION']
+    @machine         = ENV['CHORDS_MACHINE']
           
   end
   

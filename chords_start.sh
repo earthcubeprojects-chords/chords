@@ -7,12 +7,22 @@ chords_env="./chords_env.sh"
 # Make sure that the log directory exists
 mkdir -p log
 
-# Source the environment script, if it exists
+# Source the build environment script, if it exists
 if [ -e $chords_env ]
 then
   . $chords_env
   env
 fi
+
+# Set some other interesting environment variables
+export CHORDS_KERNEL_NAME=`uname --kernel-name`
+export CHORDS_NODENAME=`uname --nodename`
+export CHORDS_KERNEL_RELEASE=`uname --kernel-release`
+export CHORDS_KERNEL_VERSION=`uname --kernel-version`
+export CHORDS_MACHINE=`uname --machine`
+export CHORDS_PROCESSOR=`uname --processor`
+export CHORDS_HARDWARE_PLATFORM=`uname --hardware-platform`
+export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 
 # See if there is an existing database
 if [ ! -e $seeded_flag ] 
