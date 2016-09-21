@@ -60,5 +60,6 @@ touch $seeded_flag
 
 echo "Starting web server."
 mkdir -p tmp/pids/
+rm -f tmp/pids/unicorn.pid
 unicorn -p 80 -c ./config/unicorn.rb
 
