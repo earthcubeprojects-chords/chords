@@ -35,7 +35,7 @@ Log onto your AWS account to begin.
 ## 3. Specify a portal template 
 
 * Paste the following link into _Specify an S3 template URL_: <br/>
-**https://s3-us-west-2.amazonaws.com/chords-template/chords.template**
+**https://s3-us-west-2.amazonaws.com/chords-template/docker.template**
 * Hit **Next**
 
 <img class="img-responsive" src="images/AWS_CF1.png" alt="Cloud Formation Template">
