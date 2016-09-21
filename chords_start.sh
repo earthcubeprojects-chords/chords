@@ -24,6 +24,9 @@ export CHORDS_PROCESSOR=`uname --processor`
 export CHORDS_HARDWARE_PLATFORM=`uname --hardware-platform`
 export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 
+# Number of Unicorn workers
+export WORKERS=4
+
 # See if there is an existing database
 if [ ! -e $seeded_flag ] 
 then
