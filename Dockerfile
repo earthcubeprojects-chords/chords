@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
   build-essential \ 
   nodejs \
   mysql-client \
-  dos2unix
+  dos2unix \
+  nginx
 
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
@@ -25,6 +26,7 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 # Copy the main application.
 COPY . ./
+COPY ./nginx_default.conf /etc/nginx/conf.d/default.conf
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the cache so that the command is run.
@@ -39,5 +41,5 @@ EXPOSE 80
 # "bundle exec" for each of our commands.
 ENTRYPOINT ["bundle", "exec"]
 
-# Start Passenger
-CMD ["passenger", "start", "--port", "80"]
+# Start CHORDS
+CMD ["/bin/bash", "-f", "chords_start.sh"]

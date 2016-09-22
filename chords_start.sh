@@ -4,6 +4,9 @@ server="mysql"
 seeded_flag="/var/lib/mysql/CHORDS_SEEDED"
 chords_env="./chords_env.sh"
 
+# (Re)start nginx
+service nginx restart
+
 # Make sure that the log directory exists
 mkdir -p log
 
@@ -74,5 +77,5 @@ touch $seeded_flag
 echo "Starting web server."
 mkdir -p tmp/pids/
 rm -f tmp/pids/unicorn.pid
-unicorn -p 80 -c ./config/unicorn.rb
+unicorn -p 8080 -c ./config/unicorn.rb
 
