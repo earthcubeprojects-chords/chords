@@ -26,7 +26,9 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 # Copy the main application.
 COPY . ./
-COPY ./nginx_default.conf /etc/nginx/conf.d/default.conf
+
+# Customize the nginx configuration
+COPY ./nginx_default.conf /etc/nginx/sites-available/default
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the cache so that the command is run.

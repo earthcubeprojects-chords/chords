@@ -12,7 +12,7 @@ RUN apt-get update\
   mysql-client\
   libmysqlclient-dev\
   libcurl4-openssl-dev\
-  nginx-extras
+  nginx
 
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
@@ -29,6 +29,9 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 
 # Copy the main application.
 COPY . ./
+
+# Customize the nginx configuration
+COPY ./nginx_default.conf /etc/nginx/sites-available/default
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the cache, so that the command is run.
