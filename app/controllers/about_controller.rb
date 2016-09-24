@@ -9,6 +9,8 @@ class AboutController < ApplicationController
     @kernel_release  = ENV['CHORDS_KERNEL_RELEASE']
     @kernel_version  = ENV['CHORDS_KERNEL_VERSION']
     @machine         = ENV['CHORDS_MACHINE']
+    @rails_env       = Rails.env
+    @rails_version   = Rails::VERSION::STRING
           
   end
   

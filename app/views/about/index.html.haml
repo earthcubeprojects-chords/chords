@@ -47,11 +47,14 @@
 .table-responsive
   %table.table.table-striped
     %tr
-      %td Source Revision:
-      %td= @source_branch + ':'  + @source_revision
+      %td Code
+      %td= 'Branch:' + @source_branch + ', Revision:'  + @source_revision
     %tr
-      %td Docker Build Time:
-      %td= @build_time
+      %td Docker
+      %td= 'Build time:' + @build_time
     %tr
-      %td System:
+      %td System
       %td= @kernel_release + ' ' + @kernel_version + ' ' + @machine
+    %tr
+      %td Rails
+      %td= 'Version:' + @rails_version + ', Mode:' + @rails_env
