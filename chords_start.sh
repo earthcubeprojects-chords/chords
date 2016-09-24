@@ -1,7 +1,36 @@
 #!/bin/bash
 
+# Get the CHORDS server running.
+#
+# Set RAILS_ENV to development or productioon. If not set,
+# it will default to development.
+#
+# Set CHORDS_DB_PW to the database password.
+#
+# If RAILS_ENV=production, SECRET_KEY_BASE must be set.
+#
+
+# default to development mode
+if [ -z "$RAILS_ENV" ]; then
+  export RAILS_ENV="development"
+fi
+
+# A database password is required.
+if [ -z "$CHORDS_DB_PW" ]; then
+  echo "CHORDS_DB_PW is required."
+  exit 1
+fi
+
+# The secret key base is required in production mode
+if [ $RAILS_ENV == "production" ]; then
+  if [ -z "$SECRET_KEY_BASE" ]; then
+    echo "SECRET_KEY_BASE is required in production mode."
+    exit 1
+  fi
+fi
+
 server="mysql"
-seeded_flag="/var/lib/mysql/CHORDS_SEEDED"
+seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
 chords_env="./chords_env.sh"
 
 # (Re)start nginx
@@ -74,8 +103,13 @@ fi
 # Database ready. Set the SEEDED flag.
 touch $seeded_flag
 
+if [ $RAILS_ENV == "production" ]; then
+  echo "Precompiling assets"
+  bundle exec rake assets:precompile
+fi
+
 echo "Starting web server."
 mkdir -p tmp/pids/
 rm -f tmp/pids/unicorn.pid
-unicorn -p 8080 -c ./config/unicorn.rb
+unicorn -p 8080 -c ./config/unicorn.rb -E $RAILS_ENV
 

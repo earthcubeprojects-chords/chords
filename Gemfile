@@ -63,6 +63,7 @@ group :development, :test do
   
   # layout 
   gem 'rails_layout'
-  
 end
 
+group :production do
+end

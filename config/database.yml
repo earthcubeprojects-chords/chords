@@ -14,7 +14,7 @@ default: &default
   encoding: utf8
   pool: 5
   username: chords_demo_user
-  password: chords_ec_demo
+  password: <%= ENV['CHORDS_DB_PW'] %>
   host: mysql
   port: 3306
 
@@ -51,5 +51,3 @@ test:
 production:
   <<: *default
   database: chords_demo_production
-  username: chords_demo_user
-  password: <%= ENV['CHORDS_DEMO_DATABASE_PASSWORD'] %>

@@ -27,6 +27,6 @@ module ChordTestbed
     config.assets.paths << Rails.root.join("vendor/bootstrap-3.3.6-dist")
 
     # To get rid of console complaints in docker deployment
-    config.web_console.whitelisted_ips = '192.168.0.0/16'
+    #config.web_console.whitelisted_ips = '192.168.0.0/16'
   end
 end
