@@ -12,7 +12,7 @@
 
 # default to development mode
 if [ -z "$RAILS_ENV" ]; then
-  export RAILS_ENV="development"
+  export RAILS_ENV="production"
 fi
 
 # A database password is required.
