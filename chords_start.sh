@@ -17,15 +17,13 @@ fi
 
 # A database password is required.
 if [ -z "$CHORDS_DB_PW" ]; then
-  echo "CHORDS_DB_PW is required."
-  exit 1
+  export CHORDS_DB_PW="chords_ec_demo"
 fi
 
 # The secret key base is required in production mode
 if [ $RAILS_ENV == "production" ]; then
   if [ -z "$SECRET_KEY_BASE" ]; then
-    echo "SECRET_KEY_BASE is required in production mode."
-    exit 1
+    export SECRET_KEY_BASE="aaaaaaaaaaa"
   fi
 fi
 
