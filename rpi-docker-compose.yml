@@ -23,7 +23,8 @@ version: '2'
 #
 # To update a running system:
 #  docker-compose pull
-#  docker-compose -p chords restart
+#  docker-compose -p chords down
+#  docker-compose -p chords up -d
 
 services:
   app:
@@ -34,6 +35,10 @@ services:
     image: ncareol/rpi-chords
     volumes:
       - mysql-data:/var/lib/mysql
+    environment:
+      RAILS_ENV:
+      CHORDS_DB_PW:
+      SECRET_KEY_BASE:
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
@@ -48,7 +53,7 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
-      - MYSQL_PASSWORD=chords_ec_demo
+      - MYSQL_PASSWORD=${CHORDS_DB_PW}
 
 volumes:
   mysql-data: 

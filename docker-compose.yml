@@ -23,7 +23,8 @@ version: '2'
 #
 # To update a running system:
 #  docker-compose pull
-#  docker-compose -p chords restart
+#  docker-compose -p chords down
+#  docker-compose -p chords up -d
 
 services:
   app:
