@@ -33,8 +33,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Unicorn as the app server
 gem 'unicorn-rails'
 
-# best_im_place
+# best_in_place
 gem "best_in_place"
+
+# highcharts
+gem "highcharts-rails"
 
 #autocomplete
 gem 'rails4-autocomplete'

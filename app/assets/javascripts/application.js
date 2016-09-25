@@ -17,9 +17,12 @@
 //= require underscore
 //= require gmaps/google
 //= require turbolinks
-//= require_tree .
 
 //= require best_in_place
 //= require autocomplete-rails
 
 //= require js/bootstrap
+//= require highcharts
+//= require highcharts-more
+
+//= require_tree .
