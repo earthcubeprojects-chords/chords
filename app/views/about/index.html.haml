@@ -47,6 +47,9 @@
 .table-responsive
   %table.table.table-striped
     %tr
+      %td Uptime
+      %td= 'Server:' + time_ago_in_words(@server_uptime) + ', System:' + time_ago_in_words(@system_uptime)
+    %tr
       %td Code
       %td= 'Branch:' + @source_branch + ', Revision:'  + @source_revision
     %tr

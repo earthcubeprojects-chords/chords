@@ -11,6 +11,8 @@ class AboutController < ApplicationController
     @machine         = ENV['CHORDS_MACHINE']
     @rails_env       = Rails.env
     @rails_version   = Rails::VERSION::STRING
+    @system_uptime   = ApplicationHelper.system_uptime
+    @server_uptime   = ApplicationHelper.server_uptime
           
   end
   

@@ -1,6 +1,6 @@
 module ApplicationHelper
   include Sys
-
+   
   # return the database size in MB.
   def self.total_db_size_mb
     # Create a query to determine the database size. Use the information_schema
@@ -32,8 +32,12 @@ module ApplicationHelper
   end
   
   # Return the uptime, in words
-  def self.uptime
-    time_ago_in_words(Uptime.boot_time)
+  def self.system_uptime
+    Uptime.boot_time
+  end
+
+  def self.server_uptime 
+    Rails.configuration.server_started_at
   end
 
   def user_signed_in? 

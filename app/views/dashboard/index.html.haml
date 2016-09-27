@@ -21,7 +21,7 @@
   .statusbadge
     %span.badgetitle Uptime
     %br/
-    %span.badgevalue= @metrics["uptime"]
+    %span.badgevalue= time_ago_in_words(@metrics["uptime"])
 .instrumentstrip
   - @instruments.each do |instrument|
     .instrumentstatus
