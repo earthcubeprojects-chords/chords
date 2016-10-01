@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
   nodejs \
   mysql-client \
   dos2unix \
-  nginx
+  nginx \
+  sendmail
 
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
