@@ -6,9 +6,11 @@ title: Active CHORDS Portals?
 ## Currently Deployed CHORDS Portals
 
 ### Actively Collecting Data for Scientific Deployments
-[3d](http://3d.chordsrt.com)
+[3D](http://3d.chordsrt.com)
 
-[3d-zambia](http://3d-zambia.chordsrt.com)
+[3D Zambia](http://3d-zambia.chordsrt.com)
+
+[3D Kenya](http://3d-kenya.chordsrt.com)
 
 [Tanzania Volcano](http://tzvolcano.chordsrt.com)
 
@@ -24,12 +26,12 @@ title: Active CHORDS Portals?
 
 
 ### Under Configuration
-[cuashi](http://cuashi.chordsrt.com)
-
-[gmu](http://gmu.chordsrt.com)
-
 [yellowstone](http://yellowstone.chordsrt.com)
 
 
+### In the works
 
+drone-prequel.chordsrt.com
+
+csu-chill.chordsrt.com
 
