@@ -30,7 +30,6 @@ title: Active CHORDS Portals?
 
 
 ### In the works
-
 drone-prequel.chordsrt.com
 
 csu-chill.chordsrt.com
