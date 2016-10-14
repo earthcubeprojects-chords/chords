@@ -102,11 +102,11 @@ fi
 touch $seeded_flag
 
 if [ $RAILS_ENV == "production" ]; then
-  echo "Precompiling assets"
+  echo "**** Precompiling assets"
   bundle exec rake assets:precompile
 fi
 
-echo "Starting web server."
+echo "**** Starting web server."
 mkdir -p tmp/pids/
 rm -f tmp/pids/unicorn.pid
 unicorn -p 8080 -c ./config/unicorn.rb -E $RAILS_ENV
