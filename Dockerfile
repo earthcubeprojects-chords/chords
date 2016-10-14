@@ -28,6 +28,9 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 # Copy the main application.
 COPY . ./
 
+# Bake the assets (for production mode) into the image
+RUN mkdir -p /app/log && RAILS_ENV=production bundle exec rake assets:precompile
+
 # Customize the nginx configuration
 COPY ./nginx_default.conf /etc/nginx/sites-available/default
 
