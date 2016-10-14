@@ -24,5 +24,3 @@
 //= require js/bootstrap
 //= require highcharts
 //= require highcharts-more
-
-//= require_tree .
