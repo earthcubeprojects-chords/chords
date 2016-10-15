@@ -24,3 +24,4 @@
 //= require js/bootstrap
 //= require highcharts
 //= require highcharts-more
+//= require markerclusterer
