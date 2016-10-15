@@ -101,11 +101,6 @@ fi
 # Database ready. Set the SEEDED flag.
 touch $seeded_flag
 
-if [ $RAILS_ENV == "production" ]; then
-  echo "**** Precompiling assets"
-  bundle exec rake assets:precompile
-fi
-
 echo "**** Starting web server."
 mkdir -p tmp/pids/
 rm -f tmp/pids/unicorn.pid
