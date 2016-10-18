@@ -54,7 +54,7 @@ class ProfilesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def profile_params
       params.require(:profile).permit(
-        :project, :affiliation, :description, :logo, :created_at, :updated_at, :timezone, 
+        :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
         :secure_data_entry, :data_entry_key, :google_maps_key
         )

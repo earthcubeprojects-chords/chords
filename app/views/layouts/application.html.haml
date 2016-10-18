@@ -4,7 +4,7 @@
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
     %meta{:charset => "utf-8"}/
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}/
-    %title= content_for?(:title) ? yield(:title) : "CHORDS Portal"
+    %title= @profile.page_title
     %meta{:content => "#{content_for?(:description) ? yield(:description) : "CHORDS Portal"}", :name => "description"}/
     = favicon_link_tag 'CHORDS_7.png'
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true

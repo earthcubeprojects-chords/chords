@@ -6,6 +6,9 @@
   Affiliation: #{f.text_field('affiliation', size: 60)}
   %br/
   %br/
+  Page Title (will appear in tab titles): #{f.text_field('page_title', size: 60)}
+  %br/
+  %br/
   Time Zone For Plotting: #{f.collection_select('timezone', ActiveSupport::TimeZone.all, :name, :name)}
   %br/
   %br/
