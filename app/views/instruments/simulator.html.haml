@@ -98,14 +98,14 @@
       // set the run status to true
       eval("instrument_" + id + "_run_status = true;");
       // set the indicator to on
-      eval("$('#instrument_" + id + "_simulator_icon').attr('src', '/assets/toggle-switch-on.png')");
+      eval("$('#instrument_" + id + "_simulator_icon').attr('src', chords.toggleOnSwitch)");
       // start a repeating measurement
       repeat_measurement(id, refresh_ms);
     } else {
       // set the run status to false
       eval("instrument_" + id + "_run_status = false;");
       // set the indicator to off
-      eval("$('#instrument_" + id + "_simulator_icon').attr('src', '/assets/toggle-switch-off.png')");
+      eval("$('#instrument_" + id + "_simulator_icon').attr('src', chords.toggleOffSwitch)");
     }
   }
 %h1 Simulator
@@ -141,7 +141,7 @@
         %td= @sites.find(instrument.site_id).name
         %td{:align => "center"}= instrument.sample_rate_seconds
         %td{:align => "center"}
-          = image_tag('toggle-switch-off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", |
+          = image_tag('toggle_switch_off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", |
             onclick:"toggle_run_state(#{instrument.id}, #{instrument.sample_rate_seconds}*1000);")            |
 %br/
 #instrument_simulator_requests{:style => "background-color: black; color: white;"}

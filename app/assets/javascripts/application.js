@@ -25,3 +25,6 @@
 //= require highcharts
 //= require highcharts-more
 //= require markerclusterer
+
+//= require asset_paths
+
