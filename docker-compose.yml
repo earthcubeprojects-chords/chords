@@ -56,11 +56,11 @@ services:
       - MYSQL_PASSWORD=${CHORDS_DB_PW}
       
   influxdb:
-    container_name: chords_influx
+    container_name: chords_influxdb
     image: influxdb
     volumes:
-      - influx-data:/var/lib/influxdb/
+      - influxdb-data:/var/lib/influxdb/
 
 volumes:
   mysql-data: 
-  influx-data:
+  influxdb-data:
