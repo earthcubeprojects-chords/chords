@@ -54,8 +54,13 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=${CHORDS_DB_PW}
+      
+  influxdb:
+    container_name: chords_influx
+    image: influxdb
+    volumes:
+      - influx-data:/var/lib/influxdb/
 
 volumes:
   mysql-data: 
-  
- 
+  influx-data:
