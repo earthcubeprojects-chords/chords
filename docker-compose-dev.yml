@@ -12,3 +12,10 @@ services:
   app:
     volumes:
       - ./:/app
+  mysql:
+    volumes:
+      - ./:/app
+  influxdb:
+    volumes:
+      - ./:/app
+      
