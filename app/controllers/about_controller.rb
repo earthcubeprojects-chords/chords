@@ -2,13 +2,15 @@ class AboutController < ApplicationController
   helper :all
   
   def index
+    notavailmsg = "unknown"
+    
     @profile         = Profile.first
-    @source_revision = ENV['CHORDS_GIT_SHA'][0..6]
-    @source_branch   = ENV['CHORDS_GIT_BRANCH']
-    @build_time      = ENV['CHORDS_BUILD_TIME']
-    @kernel_release  = ENV['CHORDS_KERNEL_RELEASE']
-    @kernel_version  = ENV['CHORDS_KERNEL_VERSION']
-    @machine         = ENV['CHORDS_MACHINE']
+    @source_revision = ENV.fetch('CHORDS_GIT_SHA'       ,notavailmsg) [0..6]
+    @source_branch   = ENV.fetch('CHORDS_GIT_BRANCH'    , notavailmsg)
+    @build_time      = ENV.fetch('CHORDS_BUILD_TIME'    , notavailmsg)
+    @kernel_release  = ENV.fetch('CHORDS_KERNEL_RELEASE', notavailmsg)
+    @kernel_version  = ENV.fetch('CHORDS_KERNEL_VERSION', notavailmsg)
+    @machine         = ENV.fetch('CHORDS_MACHINE'       , notavailmsg)
     @rails_env       = Rails.env
     @rails_version   = Rails::VERSION::STRING
     @system_uptime   = ApplicationHelper.system_uptime
