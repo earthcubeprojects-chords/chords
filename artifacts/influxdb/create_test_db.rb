@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative 'TSDB'
+require_relative 'TSDBClient'
 require 'json'
 require 'time'
 require 'optparse'
@@ -107,7 +107,8 @@ sites       = (1..nsites).map      { |i| "#{i}" }
 instruments = (1..ninstruments).map{ |i| "#{i}" }
 snames      = (1..nsnames).map     { |i| "#{i}" }
 
-db = TSDB.new options[:database], options[:host]
+db_options = {database: options[:database], host: options[:host]}
+db = TSDBClient.new(db_options)
 
 # Start at the earlies existing value
 q = "select first(\"value\") from \"#{table}\""
