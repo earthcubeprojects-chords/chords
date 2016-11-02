@@ -60,6 +60,8 @@ services:
     image: influxdb
     volumes:
       - influxdb-data:/var/lib/influxdb/
+    ports:
+      - 8086:8086
 
 volumes:
   mysql-data: 
