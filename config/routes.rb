@@ -1,48 +1,47 @@
 Rails.application.routes.draw do
 
-  resources :measured_properties
+  root      'dashboard#index'
 
-  resources :vars do
-    get :autocomplete_measured_property_label, :on => :collection
-  end
-
-  # devise_for :users
-  devise_for :users, controllers: {
-          sessions: 'users/sessions'
-        }
-
-  resources :users
-  
-  resources :vars
-
-  get 'about/data_urls'          => 'about#data_urls'
-  get 'sites/geo'                => 'sites#geo'
-  get 'monitor/live'             => 'monitor#live'
-
-  get 'instruments/live'         => 'instruments#live'
-  get 'instruments/simulator'    => 'instruments#simulator'
-  get 'instruments/duplicate'    => 'instruments#duplicate'
-
-  get 'measurements/url_create'  => 'measurements#url_create'
-  post 'measurements/delete_test' => 'measurements#delete_test'
-  post 'measurements/trim'        => 'measurements#trim'
-
-  resources :profiles, only: [:index, :create]
   resources :about
   resources :dashboard
-  resources :urlbuilder
   resources :data
-  resources :monitor
-  resources :measurements
   resources :instruments
+  resources :measurements
+  resources :measured_properties
+  resources :monitor
+  resources :profiles, only: [:index, :create]
   resources :sites
-  root 'dashboard#index'
+  resources :users
+  resources :urlbuilder
+  resources :vars
 
   resources :instruments do
     member do
       get 'live'
     end
   end
+
+  resources :vars do
+    get :autocomplete_measured_property_label, :on => :collection
+  end
+
+  get 'about/data_urls'          => 'about#data_urls'
+  get 'sites/geo'                => 'sites#geo'
+
+  get 'instruments/duplicate'    => 'instruments#duplicate'
+  get 'instruments/live'         => 'instruments#live'
+  get 'instruments/simulator'    => 'instruments#simulator'
+
+  get  'measurements/url_create'  => 'measurements#url_create'
+  post 'measurements/delete_test' => 'measurements#delete_test'
+  post 'measurements/trim'        => 'measurements#trim'
+
+  get 'monitor/live'              => 'monitor#live'
+
+  # devise_for :users
+  devise_for :users, controllers: {
+     sessions: 'users/sessions'
+  }
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
