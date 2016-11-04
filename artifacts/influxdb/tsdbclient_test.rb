@@ -6,7 +6,7 @@ require 'time'
 require 'optparse'
 
 ############################################################
-# Parse the command line arguments, and process the configuration file. 
+# Parse the command line arguments
 
 def parse_options(program_name, options)
   error = false

@@ -6,7 +6,7 @@ require 'time'
 require 'optparse'
 
 ############################################################
-# Parse the command line arguments, and process the configuration file. 
+# Parse the command line arguments
 
 def parse_options(program_name, options)
   error = false
@@ -107,7 +107,7 @@ sites       = (1..nsites).map      { |i| "#{i}" }
 instruments = (1..ninstruments).map{ |i| "#{i}" }
 snames      = (1..nsnames).map     { |i| "#{i}" }
 
-db_options = {database: options[:database], host: options[:host]}
+db_options = {database: options[:database], host: options[:host], time_precision: 'ms'}
 db = TSDBClient.new(db_options)
 
 # Start at the earlies existing value
@@ -140,7 +140,7 @@ loop do
           timestamp: ts
         }
       end
-      # puts JSON.pretty_generate(data)
+      #puts JSON.pretty_generate(data)
       # Write to DB
       db.write_points(data)
       

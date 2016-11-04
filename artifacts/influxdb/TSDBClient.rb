@@ -9,7 +9,7 @@ class TSDBClient
     #   or
     # new({InfluxDB options})  # Connect without a specific database identified (unless database: is specified)
     #
-    # See influxdb-ruby client.rb for valid hash keys in the options.
+    # See influxdb-ruby config.rb for valid hash keys in the options.
     
     # Set default options.
     options = {host: 'influxdb', time_precision: 'ms', retry: 3}
@@ -23,20 +23,12 @@ class TSDBClient
     @db = InfluxDB::Client.new(options)
     
     # Try to contact the database. An exception will be raised on failure
+    # (unless retry == -1 || true)
     @db.ping
     
     # If the named database does not exist, create it
     if options.key?(:database) then
-      exists = false
-      databases = list_databases
-      databases.each do |d|
-        if d["name"] == config.database then
-          exists = true
-        end
-      end    
-      if !exists then
-        self.create_database
-      end
+      create_database if !list_databases.find { |d| d["name"] == config.database }
     end
     
   end
