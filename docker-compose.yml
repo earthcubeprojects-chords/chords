@@ -62,6 +62,7 @@ services:
       - influxdb-data:/var/lib/influxdb/
     ports:
       - 8086:8086
+      - 8083:8083
 
 volumes:
   mysql-data: 
