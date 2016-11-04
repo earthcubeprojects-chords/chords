@@ -3,7 +3,7 @@
 require_relative 'TSDBClient'
 require 'json'
 
-db = TSDBClient.new(database: 'chords', host: 'influxdb')
+db = TSDBClient.new(database: 'chords', host: ARGV[0])
   
 q_result = db.query 'select last("value") from tsdata'
 last_time = q_result[0]["values"][0]["time"]
