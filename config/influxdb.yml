@@ -1,0 +1,17 @@
+default: &default
+  host:           'influxdb'
+  port:           8086
+  time_precision: 'ms'
+  
+development:
+  <<: *default
+  database: 'chords_ts_development'
+  
+test:
+  <<: *default
+  database: chords_ts_test
+  
+production:
+  <<: *default
+  database: chords_ts_production
+  
