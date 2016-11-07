@@ -101,6 +101,16 @@ class MeasurementsController < ApplicationController
         else           
           measured_at = Time.now  
         end
+
+        point = TsPoint.new( 
+          site:       Instrument.find(params[:instrument_id]).site_id, 
+          inst:       params[:instrument_id], 
+          var:        var.id,
+          test:       params.has_key?(:test),
+          value:      params[var.shortname]
+        )
+        point.write
+        
         # Create a new measurement
         @measurement = Measurement.new(
           :measured_at   => measured_at,
