@@ -2,29 +2,6 @@ Rails.application.routes.draw do
 
   root      'dashboard#index'
 
-  resources :about
-  resources :dashboard
-  resources :data
-  resources :instruments
-  resources :measurements
-  resources :measured_properties
-  resources :monitor
-  resources :profiles, only: [:index, :create]
-  resources :sites
-  resources :users
-  resources :urlbuilder
-  resources :vars
-
-  resources :instruments do
-    member do
-      get 'live'
-    end
-  end
-
-  resources :vars do
-    get :autocomplete_measured_property_label, :on => :collection
-  end
-
   get 'about/data_urls'          => 'about#data_urls'
   get 'sites/geo'                => 'sites#geo'
 
@@ -42,6 +19,29 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
      sessions: 'users/sessions'
   }
+
+  resources :instruments do
+    member do
+      get 'live'
+    end
+  end
+
+  resources :vars do
+    get :autocomplete_measured_property_label, :on => :collection
+  end
+
+  resources :about
+  resources :dashboard
+  resources :data
+  resources :instruments
+  resources :measurements
+  resources :measured_properties
+  resources :monitor
+  resources :profiles, only: [:index, :create]
+  resources :sites
+  resources :users
+  resources :urlbuilder
+  resources :vars
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
