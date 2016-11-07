@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Get the CHORDS server running.
+# Get the CHORDS rails application server running.
 #
 # Set RAILS_ENV to development or productioon. If not set,
 # it will default to development.
@@ -27,8 +27,12 @@ if [ $RAILS_ENV == "production" ]; then
   fi
 fi
 
-server="mysql"
-seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
+mysql_host="mysql"
+mysql_seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
+
+influxdb_host="influxdb"
+influxdb_dbname="chords_ts_$RAILS_ENV"
+
 chords_env="./chords_env.sh"
 
 # (Re)start nginx
@@ -57,14 +61,14 @@ export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 # Number of Unicorn workers
 export WORKERS=4
 
-# See if there is an existing database
-if [ ! -e $seeded_flag ] 
+# See if there is an existing mysql database
+if [ ! -e $mysql_seeded_flag ] 
 then
-  echo "**** $seeded_flag not found. We will attempt to create the database."
+  echo "**** $mysql_seeded_flag not found. We will attempt to create the database."
 
   for count in {1..60}; do
     echo -n "..$count"
-    mysql -h $server -e "show databases;" >& /dev/null
+    mysql -h $mysql_host -e "show databases;" >& /dev/null
     if [ $? -eq 0 ]; then
       echo
       break
@@ -72,7 +76,7 @@ then
     
     if [ $count -eq 60 ]; then
       echo
-      echo "Could not contact the database server $server, aborting CHORDS app startup."
+      echo "Could not contact the database server $mysql_host, aborting CHORDS app startup."
       exit 1
     fi
     
@@ -85,21 +89,25 @@ then
   echo "Creating rails database."
   bundle exec rake db:create
 else
-  echo "**** $seeded_flag was found. Database will not be created."
+  echo "**** $mysql_seeded_flag was found. Database will not be created."
 fi
 
 echo "Migrating rails database."
 bundle exec rake db:migrate
 
-if [ !  -e $seeded_flag ]; then
-  echo "**** $seeded_flag not found. Seeding rails database."
+if [ !  -e $mysql_seeded_flag ]; then
+  echo "**** $mysql_seeded_flag not found. Seeding rails database."
   bundle exec rake db:seed
 else
-  echo "**** $seeded_flag was found. Database will not be seeded."
+  echo "**** $mysql_seeded_flag was found. Database will not be seeded."
 fi
 
 # Database ready. Set the SEEDED flag.
-touch $seeded_flag
+touch $mysql_seeded_flag
+
+# Make sure that the influxdb database exists. It doesn't
+# hurt to do this even if it is already there.
+curl -POST http://$influxdb_host:8086/query?pretty=true --data-urlencode "q=create database $influxdb_dbname"
 
 echo "**** Starting web server."
 mkdir -p tmp/pids/

@@ -36,9 +36,9 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
-      - RAILS_ENV=production
+      - RAILS_ENV
       - CHORDS_DB_PW
-      - SECRET_KEY_BASE=aaaaaaaaaaa
+      - SECRET_KEY_BASE
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"

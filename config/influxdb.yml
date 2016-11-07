@@ -1,7 +1,9 @@
 default: &default
   host:           'influxdb'
   port:           8086
-  time_precision: 'ms'
+  # time_precision ns causes influxer to parse a date/time string before
+  # writing the point.
+  time_precision: 'ns'
   
 development:
   <<: *default
