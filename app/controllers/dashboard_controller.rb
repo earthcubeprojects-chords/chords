@@ -8,9 +8,15 @@ class DashboardController < ApplicationController
     @instruments = Instrument.all
 
     # Collect some summary metrics
+    counts = TsPoint.select("count(value)")
+    big_count = 0
+    counts.each do |c|
+      big_count = c["count"]
+    end
+
     @metrics = {}
     @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
-    @metrics["measurement_count"] = Measurement.count
+    @metrics["measurement_count"] = big_count
     @metrics["site_count"]        = Site.count
     @metrics["instrument_count"]  = Instrument.count
     @metrics["uptime"]            = ApplicationHelper.server_uptime
@@ -41,15 +47,15 @@ class DashboardController < ApplicationController
     
     # Create a table of number of measurements by minute
     @start_time_by_minute = Time.now - 2.hour
-    @samples_by_minute    =  DashboardHelper.highcharts_series(:minute, @start_time_by_minute, by_inst=true)
+    @samples_by_minute    =  DashboardHelper.highcharts_series(:minute, Time.now)
     
     # Create a table of number of measurements by hour
     @start_time_by_hour = Time.now - 7.day
-    @samples_by_hour    =  DashboardHelper.highcharts_series(:hour, @start_time_by_hour, by_inst=true)
+    @samples_by_hour    =  DashboardHelper.highcharts_series(:hour, Time.now)
 
     # Create a table of number of measurements by day.
     @start_time_by_day = Time.now - 60.day
-    @samples_by_day    =  DashboardHelper.highcharts_series(:day, @start_time_by_day, by_inst=true)
+    @samples_by_day    =  DashboardHelper.highcharts_series(:day, Time.now)
     
     @end_time = Time.now
 
