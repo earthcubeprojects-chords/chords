@@ -43,12 +43,8 @@ class Instrument < ActiveRecord::Base
     return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
   end
   
-  def last_age
-    measurement = measurements.last
-    if measurement
-      return measurement.age
-    end
-    return 'never'
+  def last_age  
+    return GetLastTsAge.call(TsPoint, "value", self.id)
   end
 
   def data(count, parameter)
