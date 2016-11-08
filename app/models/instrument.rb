@@ -40,13 +40,7 @@ class Instrument < ActiveRecord::Base
 
   
   def is_receiving_data
-    measurement = Measurement.where("(instrument_id = ?) AND (measured_at > ?)", self.id, self.sample_rate_seconds.seconds.ago-5).order(:measured_at).last
-    if measurement
-      return TRUE
-    else
-      return FALSE
-    end
-    
+    return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
   end
   
   def last_age

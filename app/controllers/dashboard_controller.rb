@@ -46,19 +46,18 @@ class DashboardController < ApplicationController
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
     
     # Create a table of number of measurements by minute
+    @end_time = Time.now
     @start_time_by_minute = Time.now - 2.hour
-    @samples_by_minute    =  DashboardHelper.highcharts_series(:minute, Time.now)
+    @samples_by_minute    =  DashboardHelper.highcharts_series(:minute, @end_time)
     
     # Create a table of number of measurements by hour
     @start_time_by_hour = Time.now - 7.day
-    @samples_by_hour    =  DashboardHelper.highcharts_series(:hour, Time.now)
+    @samples_by_hour    =  DashboardHelper.highcharts_series(:hour, @end_time)
 
     # Create a table of number of measurements by day.
     @start_time_by_day = Time.now - 60.day
-    @samples_by_day    =  DashboardHelper.highcharts_series(:day, Time.now)
+    @samples_by_day    =  DashboardHelper.highcharts_series(:day, @end_time)
     
-    @end_time = Time.now
-
   end
   
 end
