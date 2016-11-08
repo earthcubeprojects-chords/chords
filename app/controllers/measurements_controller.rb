@@ -28,7 +28,7 @@ class MeasurementsController < ApplicationController
   def new
     authorize! :manage, Measurement
 
-    @measurement = Measurement.new
+   @measurement = Measurement.new
   end
 
   # GET /measurements/1/edit
@@ -38,21 +38,19 @@ class MeasurementsController < ApplicationController
 
   # POST /measurements
   # POST /measurements.json
-  def create
-    authorize! :view, Measurement
-
+ def create
+   authorize! :view, Measurement
     @measurement = Measurement.new(measurement_params)
 
     respond_to do |format|
-      if @measurement.save
-        format.html { redirect_to @measurement, notice: 'Measurement was successfully created.' }
-        format.json { render :show, status: :created, location: @measurement }
-      else
-        format.html { render :new }
-        format.json { render json: @measurement.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+    if @measurement.save
+      format.html { redirect_to @measurement, notice: 'Measurement was successfully created.' }
+      format.json { render :show, status: :created, location: @measurement }
+    else
+      format.html { render :new }
+      format.json { render json: @measurement.errors, status: :unprocessable_entity }     end
+   end
+ end
   
   # GET 'measurements/url_create?<many params>
   # Params:
@@ -102,10 +100,10 @@ class MeasurementsController < ApplicationController
           measured_at = Time.now  
         end
        
-         SaveTsPoint.call(
+        SaveTsPoint.call(
           TsPoint,
           { 
-            timestamp:  measured_at,
+            timestamp:  ConvertIsoToMs.call(measured_at),
             site:       Instrument.find(params[:instrument_id]).site_id, 
             inst:       params[:instrument_id], 
             var:        var.id,
@@ -115,23 +113,27 @@ class MeasurementsController < ApplicationController
         )
         
         # Create a new measurement
-        @measurement = Measurement.new(
-          :measured_at   => measured_at,
-          :instrument_id => params[:instrument_id], 
-          :test          => is_test_value,
-          :parameter     => var.shortname, 
-          :value         => params[var.shortname])
-        @measurement.save
+        # @measurement = Measurement.new(
+        #   :measured_at   => measured_at,
+        #   :instrument_id => params[:instrument_id], 
+        #   :test          => is_test_value,
+        #   :parameter     => var.shortname, 
+        #   :value         => params[var.shortname])
+        # @measurement.save
       end
     end
-
+    save_ok = true
+    
     respond_to do |format|
-      if @measurement.save
+#      if @measurement.save
+      if save_ok
         format.json { render text: "OK"  }
-        format.html { render :show, status: :created, location: @measurement, message: "Measurement created" }
+#        format.html { render :show, status: :created, location: @measurement, message: "Measurement created" }
+        format.html { render text: "Measurement created" }
       else
         format.html { render :new }
-        format.json { render json: @measurement.errors, status: :unprocessable_entity }
+ #       format.json { render json: @measurement.errors, status: :unprocessable_entity }
+       format.html { render text: "Measurement could not be created" }
       end
     end
   end  
