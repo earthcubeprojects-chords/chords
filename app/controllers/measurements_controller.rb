@@ -111,29 +111,17 @@ class MeasurementsController < ApplicationController
             value:      params[var.shortname]
           }
         )
-        
-        # Create a new measurement
-        # @measurement = Measurement.new(
-        #   :measured_at   => measured_at,
-        #   :instrument_id => params[:instrument_id], 
-        #   :test          => is_test_value,
-        #   :parameter     => var.shortname, 
-        #   :value         => params[var.shortname])
-        # @measurement.save
       end
     end
     save_ok = true
     
     respond_to do |format|
-#      if @measurement.save
       if save_ok
         format.json { render text: "OK"  }
-#        format.html { render :show, status: :created, location: @measurement, message: "Measurement created" }
         format.html { render text: "Measurement created" }
       else
         format.html { render :new }
- #       format.json { render json: @measurement.errors, status: :unprocessable_entity }
-       format.html { render text: "Measurement could not be created" }
+        format.html { render text: "Measurement could not be created" }
       end
     end
   end  

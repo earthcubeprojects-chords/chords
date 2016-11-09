@@ -44,7 +44,7 @@
           %td= instrument.last_age
           %td= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id))
           %td{:align => "center"}= instrument.vars.count
-          %td{:align => "center"}= instrument.measurements.count
+          %td{:align => "center"}= instrument.sample_count
 
           %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
           - if can?(:manage, Instrument)

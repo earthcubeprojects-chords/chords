@@ -51,14 +51,14 @@
         %td= @instrument.last_age
       %tr
         %td
-          %strong All Measurements
+          %strong Measurements
         %td
-          = @instrument.measurements.count
+          = @instrument.sample_count
       %tr
         %td
           %strong Test Measurements
         %td
-          = @instrument.measurements.where(test: 1).count
+          = @instrument.sample_test_count
         %td= render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
       %tr
         %td

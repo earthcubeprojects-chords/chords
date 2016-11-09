@@ -47,6 +47,14 @@ class Instrument < ActiveRecord::Base
     return GetLastTsAge.call(TsPoint, "value", self.id)
   end
 
+  def sample_count
+    return GetTsCount.call(TsPoint, "value", self.id, false)
+  end
+  
+  def sample_test_count
+    return GetTsCount.call(TsPoint, "value", self.id, true)
+  end
+  
   def data(count, parameter)
 
     measurements = Measurement.where("instrument_id = ? and parameter = ?", self.id, parameter).last(self.display_points)
