@@ -1,10 +1,14 @@
 class GetTsCount
   
-  def self.call(time_series_db, field, inst_id, find_test=false)
-    if !find_test
+  # find_test: :test, :not_test, :either
+  def self.call(time_series_db, field, inst_id, find_test=:either)
+    case find_test
+    when :not_test
       counts = time_series_db.select("count(#{field})").where("inst = '#{inst_id}' and test  = 'false'")
-    else
+    when :test
       counts = time_series_db.select("count(#{field})").where("inst = '#{inst_id}' and test  = 'true'")
+    else
+      counts = time_series_db.select("count(#{field})").where("inst = '#{inst_id}'")
     end
     Rails.logger.debug counts
     if counts.length > 0

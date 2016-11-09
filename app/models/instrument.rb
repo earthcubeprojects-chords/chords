@@ -47,12 +47,8 @@ class Instrument < ActiveRecord::Base
     return GetLastTsAge.call(TsPoint, "value", self.id)
   end
 
-  def sample_count
-    return GetTsCount.call(TsPoint, "value", self.id, false)
-  end
-  
-  def sample_test_count
-    return GetTsCount.call(TsPoint, "value", self.id, true)
+  def sample_count(sample_type)
+    return GetTsCount.call(TsPoint, "value", self.id, sample_type)
   end
   
   def data(count, parameter)

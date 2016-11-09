@@ -53,12 +53,12 @@
         %td
           %strong Measurements
         %td
-          = @instrument.sample_count
+          = @instrument.sample_count(:either)
       %tr
         %td
           %strong Test Measurements
         %td
-          = @instrument.sample_test_count
+          = @instrument.sample_count(:test)
         %td= render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
       %tr
         %td
