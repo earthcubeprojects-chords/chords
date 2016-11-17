@@ -11,7 +11,9 @@ class GetTsCount
       counts = time_series_db.select("count(#{field})").where("inst = '#{inst_id}'")
     end
     if counts.length > 0
-      counts.first["count"]
+      counts.each do |c|
+        return c["count"]
+      end
     end
     
     return 0
