@@ -10,11 +10,8 @@ class GetTsCount
     else
       counts = time_series_db.select("count(#{field})").where("inst = '#{inst_id}'")
     end
-    Rails.logger.debug counts
     if counts.length > 0
-      counts.each do |c|
-        return c["count"]
-      end
+      counts.first["count"]
     end
     
     return 0
