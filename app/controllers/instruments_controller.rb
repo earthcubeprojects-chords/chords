@@ -186,9 +186,15 @@ class InstrumentsController < ApplicationController
     endtime   = Time.now
     starttime = endtime - 1.day
     if params.key?(:last)
-      m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
-      starttime = m.measured_at
-      endtime   = starttime
+      #m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
+      last_ts_point = GetLastTsPoint.call(TsPoint, "value", @instrument.id)
+      if (last_ts_point)
+        last_ts_point.each {|p| starttime = p["time"]}
+        endtime   = starttime
+      else
+        starttime = Time.now
+        endtime   = startime
+      end
     else
       # if we have the start and end parameters
       if params.key?(:start)
