@@ -3,7 +3,6 @@ class GetLastTsAge
     age = "never"
  
     last_data = time_series_db.select("#{field}").where("inst = '#{inst_id}'").order("desc").limit(1)
-    Rails.logger.debug last_data
     if last_data.length > 0
       last_data.each do |l|
         last_data_time = Time.parse(l["time"])

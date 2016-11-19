@@ -200,6 +200,7 @@ class InstrumentsController < ApplicationController
     end
     
     # get the measurements
+
     if params.key?(:last)
       # if 'last' was specified, use the exact time.
       measurements =  @instrument.measurements.where("measured_at = ?", starttime)
@@ -208,6 +209,15 @@ class InstrumentsController < ApplicationController
       measurements =  @instrument.measurements.where("measured_at >= ? and measured_at < ?", starttime, endtime)
     end
     
+    # Get the time series points from the database
+    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, starttime, endtime)
+    
+    # Create a hash {var id => varname}
+    varnames_by_id = {}
+    Var.all.where("instrument_id = #{@instrument.id}").each do |v|
+      varnames_by_id[v[:id]] = v[:name]
+    end
+
     respond_to do |format|
       format.html
 
@@ -217,10 +227,13 @@ class InstrumentsController < ApplicationController
 
       format.csv { 
         authorize! :download, @instrument
-        
-        send_data measurements.to_csv(metadata, @varnames),
-          filename: file_root+'.csv' 
+        # Create column arrays of data points
+        ts_columns = MakeColumnsFromTsPoints.call(ts_points, "value", @instrument.vars.ids)
+        # Create a CSV representation
+        ts_csv = MakeCsvFromTsColumns.call(ts_columns, metadata, varnames_by_id)
+        send_data ts_csv, filename: file_root+'_influxdb.csv' 
       }
+
       format.xml { 
         authorize! :download, @instrument
 
