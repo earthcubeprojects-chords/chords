@@ -127,7 +127,6 @@ class InstrumentsController < ApplicationController
 
     authorize! :view, Instrument
 
-    
     # Determine and sanitize the last_url
     @last_url = ''
     if @instrument.last_url
@@ -140,22 +139,22 @@ class InstrumentsController < ApplicationController
 
     @params = params.slice(:start, :end)
 
-    # Get the instrument and variable identifiers.
+    # Get useful details.
     instrument_name = @instrument.name
+    instrument_id   = @instrument.id
     site_name       = @instrument.site.name
     varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
     project         = Profile.first.project
     affiliation     = Profile.first.affiliation
-    metadata = [
-      ["Project", project], 
-      ["Site", site_name], 
-      ["Affiliation", affiliation], 
-      ["Instrument", instrument_name]
-    ]
-    # Create a hashed version of the metadata
-    metadata_h = {}
-    metadata.each {|m| metadata_h[m[0]] = m[1]}
-
+    varnames_by_id = {}
+    Var.all.where("instrument_id = #{instrument_id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+    metadata = {
+      "Project"     => project, 
+      "Site"        => site_name, 
+      "Affiliation" => affiliation, 
+      "Instrument"  => instrument_name
+    }
+    
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
     
@@ -166,7 +165,7 @@ class InstrumentsController < ApplicationController
     # Create a hash, with shortname => name
     @varnames = {}
     varshortnames.each do |vshort|
-      @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", @instrument.id, vshort).pluck(:name)[0]
+      @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, vshort).pluck(:name)[0]
     end
 
     # Specify the selected variable shortname
@@ -182,14 +181,14 @@ class InstrumentsController < ApplicationController
     end
 
     # get the units
-    @units = Var.all.where("instrument_id = ? and shortname = ?", @instrument.id, @varshortname).pluck(:units)[0]
+    @units = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, @varshortname).pluck(:units)[0]
         
     # Determine the time range
     # Default to the most recent day
     endtime   = Time.now
     starttime = endtime - 1.day
     if params.key?(:last)
-     last_ts_point = GetLastTsPoint.call(TsPoint, "value", @instrument.id)
+     last_ts_point = GetLastTsPoint.call(TsPoint, "value", instrument_id)
       if (last_ts_point)
         last_ts_point.each {|p| starttime = p["time"]}
         endtime   = starttime
@@ -208,14 +207,8 @@ class InstrumentsController < ApplicationController
     end
     
     # Get the time series points from the database
-    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, starttime, endtime)
+    ts_points  = GetTsPoints.call(TsPoint, "value", instrument_id, starttime, endtime)
     
-    # Create a hash {var id => varname}
-    varnames_by_id = {}
-    Var.all.where("instrument_id = #{@instrument.id}").each do |v|
-      varnames_by_id[v[:id]] = v[:name]
-    end
-
     respond_to do |format|
       format.html
 
@@ -225,25 +218,21 @@ class InstrumentsController < ApplicationController
 
       format.csv { 
         authorize! :download, @instrument
-
         ts_csv = MakeCsvFromTsColumns.call(ts_points, metadata, varnames_by_id)
         send_data ts_csv, filename: file_root+'_influxdb.csv' 
       }
 
       format.xml { 
         authorize! :download, @instrument
-
         send_data measurements.to_xml, filename: file_root+'.xml'
       }    
       format.json { 
         authorize! :download, @instrument
-
-        MakeJsonFromTsPoints.call(ts_points, metadata_h)
-        render text: MakeJsonFromTsPoints.call(ts_points, metadata_h)
+        render text: MakeJsonFromTsPoints.call(ts_points, metadata)
       }
       format.jsf { 
         authorize! :download, @instrument
-        send_data  MakeJsonFromTsPoints.call(ts_points, metadata_h), filename: file_root+'.json'
+        send_data  MakeJsonFromTsPoints.call(ts_points, metadata), filename: file_root+'.json'
       }
       
     end
