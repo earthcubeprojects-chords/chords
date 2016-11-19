@@ -225,10 +225,8 @@ class InstrumentsController < ApplicationController
 
       format.csv { 
         authorize! :download, @instrument
-        # Create column arrays of data points
-        ts_columns = MakeColumnsFromTsPoints.call(ts_points, "value", @instrument.vars.ids)
-        # Create a CSV representation
-        ts_csv = MakeCsvFromTsColumns.call(ts_columns, metadata, varnames_by_id)
+
+        ts_csv = MakeCsvFromTsColumns.call(ts_points, metadata, varnames_by_id)
         send_data ts_csv, filename: file_root+'_influxdb.csv' 
       }
 
