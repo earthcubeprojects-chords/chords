@@ -189,8 +189,7 @@ class InstrumentsController < ApplicationController
     endtime   = Time.now
     starttime = endtime - 1.day
     if params.key?(:last)
-      #m = Measurement.where("instrument_id=?", params[:id]).order(measured_at: :desc).first
-      last_ts_point = GetLastTsPoint.call(TsPoint, "value", @instrument.id)
+     last_ts_point = GetLastTsPoint.call(TsPoint, "value", @instrument.id)
       if (last_ts_point)
         last_ts_point.each {|p| starttime = p["time"]}
         endtime   = starttime
@@ -206,16 +205,6 @@ class InstrumentsController < ApplicationController
       if params.key?(:end)
         endtime = Time.parse(params[:end])
       end
-    end
-    
-    # get the measurements
-
-    if params.key?(:last)
-      # if 'last' was specified, use the exact time.
-      measurements =  @instrument.measurements.where("measured_at = ?", starttime)
-    else
-      # otherwise, everything from the start time to less than the endtime.
-      measurements =  @instrument.measurements.where("measured_at >= ? and measured_at < ?", starttime, endtime)
     end
     
     # Get the time series points from the database
