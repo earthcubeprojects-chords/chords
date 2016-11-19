@@ -126,6 +126,7 @@ class InstrumentsController < ApplicationController
     #  @last_url       - the last url
 
     authorize! :view, Instrument
+    authorize! :download, @instrument if ["csv", "xml", "json", "jsf"].include?(params[:format])
 
     # Determine and sanitize the last_url
     @last_url = ''
@@ -183,8 +184,7 @@ class InstrumentsController < ApplicationController
     # get the units
     @units = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, @varshortname).pluck(:units)[0]
         
-    # Determine the time range
-    # Default to the most recent day
+    # Determine the time range. Default to the most recent day
     endtime   = Time.now
     starttime = endtime - 1.day
     if params.key?(:last)
@@ -197,7 +197,7 @@ class InstrumentsController < ApplicationController
         endtime   = startime
       end
     else
-      # if we have the start and end parameters
+      # See if we have the start and end parameters
       if params.key?(:start)
         starttime = Time.parse(params[:start])
       end
@@ -208,33 +208,32 @@ class InstrumentsController < ApplicationController
     
     # Get the time series points from the database
     ts_points  = GetTsPoints.call(TsPoint, "value", instrument_id, starttime, endtime)
-    
+
+    # Prepare result
     respond_to do |format|
+      
       format.html
 
       format.sensorml {
         render :file => "app/views/instruments/sensorml.xml.haml", :layout => false
       }
-
+      
       format.csv { 
-        authorize! :download, @instrument
         ts_csv = MakeCsvFromTsColumns.call(ts_points, metadata, varnames_by_id)
         send_data ts_csv, filename: file_root+'_influxdb.csv' 
       }
-
+      
       format.xml { 
-        authorize! :download, @instrument
-        send_data measurements.to_xml, filename: file_root+'.xml'
-      }    
+        send_data MakeXmlFromTsPoints.call(ts_points, metadata), filename: file_root+'.xml'
+      } 
+         
       format.json { 
-        authorize! :download, @instrument
         render text: MakeJsonFromTsPoints.call(ts_points, metadata)
       }
+      
       format.jsf { 
-        authorize! :download, @instrument
         send_data  MakeJsonFromTsPoints.call(ts_points, metadata), filename: file_root+'.json'
       }
-      
     end
   end
     
