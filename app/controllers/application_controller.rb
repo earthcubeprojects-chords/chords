@@ -49,8 +49,6 @@ class ApplicationController < ActionController::Base
   def authorize!(*args)
 
     @data_download_actions = ['show']
-
-    logger.debug 
     
     if @data_download_actions.include?(action_name) && params.key?(:key) && params[:key] == @profile.data_entry_key
       # skip the authorization if the security key is provided
