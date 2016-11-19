@@ -152,6 +152,9 @@ class InstrumentsController < ApplicationController
       ["Affiliation", affiliation], 
       ["Instrument", instrument_name]
     ]
+    # Create a hashed version of the metadata
+    metadata_h = {}
+    metadata.each {|m| metadata_h[m[0]] = m[1]}
 
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
@@ -248,23 +251,12 @@ class InstrumentsController < ApplicationController
       format.json { 
         authorize! :download, @instrument
 
-        # Convert metadata to a hash
-        mdata = {}
-        metadata.each do |m|
-          mdata[m[0]] = m[1]
-        end
-        render json: measurements.columns_with_metadata(@varnames, mdata)
+        MakeJsonFromTsPoints.call(ts_points, metadata_h)
+        render text: MakeJsonFromTsPoints.call(ts_points, metadata_h)
       }
       format.jsf { 
         authorize! :download, @instrument
-
-        # Convert metadata to a hash
-        mdata = {}
-        metadata.each do |m|
-          mdata[m[0]] = m[1]
-        end
-        send_data measurements.columns_with_metadata(@varnames, mdata),
-           filename: file_root+'.json'
+        send_data  MakeJsonFromTsPoints.call(ts_points, metadata_h), filename: file_root+'.json'
       }
       
     end
