@@ -19,7 +19,6 @@ class GetTsPoints
       time_query = "time = #{start_time_ns}"
     end
     
-    Rails.logger.debug "Fetch ts data from " + start_time.to_s + " to " + end_time.to_s
     ts_points = time_series_db \
       .select("*") \
       .where("inst = '#{inst_id}'") \
