@@ -12,10 +12,18 @@ class GetTsPoints
     start_time_ns = (start_time.to_f*1000000000).to_i
     end_time_ns   = (end_time.to_f*1000000000).to_i
     
+    # See if a single timestamp has been requested.
+    if start_time_ns != end_time_ns
+      time_query = "time >= #{start_time_ns} and time < #{end_time_ns}"
+    else
+      time_query = "time = #{start_time_ns}"
+    end
+    
+    Rails.logger.debug "Fetch ts data from " + start_time.to_s + " to " + end_time.to_s
     ts_points = time_series_db \
       .select("*") \
       .where("inst = '#{inst_id}'") \
-      .where("time >= #{start_time_ns} and time < #{end_time_ns}")
+      .where(time_query)
     
     return ts_points
     
