@@ -4,19 +4,7 @@
   "Description" : "AWS CloudFormation Template for a CHORDS Portal.",
   
   "Parameters" : {
-
-    "ChordsDbPw": {
-      "Description" : "CHORDS database password",
-      "Type" : "String",
-      "Default" : "chords_ec_demo"
-    },
-    
-    "SecretKeyBase": {
-      "Description" : "CHORDS secret key base",
-      "Type" : "String",
-      "Default" : "aaaaaaaaaaa"
-    },
-  
+      
     "KeyName": {
       "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instances",
       "Type": "AWS::EC2::KeyPair::KeyName",
@@ -208,11 +196,7 @@
           "chords_up" : {
             "commands" : {
               "01_docker_up" : {
-                "command" : { "Fn::Join" : ["", [
-                  "SECRET_KEY_BASE=", {"Ref" : "SecretKeyBase"}, " ",
-                  "CHORDS_DB_PW=",    {"Ref" : "ChordsDbPw"},    " ",
-                  "/usr/local/bin/docker-compose -p chords up -d", "\n"
-                ]]}
+                "command" : "/usr/local/bin/docker-compose -p chords up -d"
               }
             }
           }
