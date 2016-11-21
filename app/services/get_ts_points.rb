@@ -24,7 +24,7 @@ class GetTsPoints
       .where("inst = '#{inst_id}'") \
       .where(time_query)
     
-    return ts_points
+    return ts_points.to_a
     
   end
 end
