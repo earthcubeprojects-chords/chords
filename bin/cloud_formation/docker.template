@@ -211,7 +211,6 @@
                 "command" : { "Fn::Join" : ["", [
                   "SECRET_KEY_BASE=", {"Ref" : "SecretKeyBase"}, " ",
                   "CHORDS_DB_PW=",    {"Ref" : "ChordsDbPw"},    " ",
-                  "RAILS_ENV=",        "production",             " ",
                   "/usr/local/bin/docker-compose -p chords up -d", "\n"
                 ]]}
               }
