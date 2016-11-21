@@ -22,7 +22,8 @@ class GetTsPoints
     ts_points = time_series_db \
       .select("*") \
       .where("inst = '#{inst_id}'") \
-      .where(time_query)
+      .where(time_query) \
+      .group("var")
     
     return ts_points.to_a
     
