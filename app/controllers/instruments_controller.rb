@@ -37,22 +37,23 @@ class InstrumentsController < ApplicationController
           Var.all.where("instrument_id='#{params[:id]}' and shortname='#{params[:var]}'").pluck(:id)[0]
         
         # Get the measurements
+        # TODO: use the :after parameter. It did ot interact correctly with
+        # the highchart during prototyping. The problem may be on the javascript side.
         ts_points = TsPoint \
           .where("inst = '#{params[:id]}'") \
-          .where("var = '#{var_id}'") \
+          .where("var  = '#{var_id}'") \
           .order("desc") \
           .limit(display_points).to_a
 
         if ts_points
           # Collect the times and values for the measurements
           live_points = []
-          ts_points.reverse_each {|p| live_points  << [Time.parse(p["time"]).to_f*1000, p["value"].to_f]}
+          ts_points.reverse_each {|p| live_points  << [ConvertIsoToMs.call(p["time"]), p["value"].to_f]}
           livedata[:points] = live_points
         end
       end
     end
-    
-    
+
     # Convert to JSON
     livedata_json = ActiveSupport::JSON.encode(livedata)
     
