@@ -32,16 +32,23 @@ class InstrumentsController < ApplicationController
           refresh_rate_ms = 1000
         end
         livedata[:refresh_msecs]  = refresh_rate_ms
+          
+        var_id = 
+          Var.all.where("instrument_id='#{params[:id]}' and shortname='#{params[:var]}'").pluck(:id)[0]
         
         # Get the measurements
         #        our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
-                our_measurements = TsPoint.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
-        if our_measurements
-
+        ts_points = TsPoint \
+          .where("inst = '#{params[:id]}'") \
+          .where("var = '#{var_id}'") \
+          .order("desc") \
+          .limit(display_points)
+          
+        if ts_points
           # Collect the times and values for the measurements
-          points = []
-          our_measurements.each {|x| points.append(x.mstime_and_value)}
-          livedata[:points] = points
+          live_points = []
+          ts_points.each {|p| live_points  << [Time.parse(p["time"]).to_f*1000, p["value"].to_f]}
+          livedata[:points] = live_points
         end
       end
     end
