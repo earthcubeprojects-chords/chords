@@ -34,7 +34,8 @@ class InstrumentsController < ApplicationController
         livedata[:refresh_msecs]  = refresh_rate_ms
         
         # Get the measurements
-        our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
+        #        our_measurements = Measurement.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
+                our_measurements = TsPoint.where("instrument_id = ? and parameter = ?", params[:id], params[:var]).last(display_points)
         if our_measurements
 
           # Collect the times and values for the measurements
@@ -220,7 +221,7 @@ class InstrumentsController < ApplicationController
       
       format.csv { 
         ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
-        send_data ts_csv, filename: file_root+'_influxdb.csv' 
+        send_data ts_csv, filename: file_root+'.csv' 
       }
       
       format.xml { 
