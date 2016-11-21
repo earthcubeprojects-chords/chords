@@ -219,7 +219,7 @@ class InstrumentsController < ApplicationController
       }
       
       format.csv { 
-        ts_csv = MakeCsvFromTsColumns.call(ts_points, metadata, varnames_by_id)
+        ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
         send_data ts_csv, filename: file_root+'_influxdb.csv' 
       }
       

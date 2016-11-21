@@ -1,4 +1,4 @@
-class MakeCsvFromTsColumns
+class MakeCsvFromTsPoints
   # Create a CSV object from columnized data
   #
   # ts_columns     - a hash containing arrays of ts data. 
