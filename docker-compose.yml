@@ -32,7 +32,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: ncareol/chords
+    image: ncareol/chords:influxdb
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
