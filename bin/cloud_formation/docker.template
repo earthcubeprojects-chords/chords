@@ -204,7 +204,7 @@
                 "command" : "curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose"
               },
               "02_docker_compose_yml" : {
-                "command" : { "Fn::Join" : ["", ["curl -L https://github.com/NCAR/chords_portal/", { "Ref" : "ChordsGitBranch"}, "/docker-compose.yml > docker-compose.yml"]] }
+                "command" : { "Fn::Join" : ["", ["curl -L https://raw.github.com/NCAR/chords_portal/", { "Ref" : "ChordsGitBranch"}, "/docker-compose.yml > docker-compose.yml"]] }
               },
               "03_docker_pull" : {
                 "command" : "/usr/local/bin/docker-compose pull"
