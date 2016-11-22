@@ -32,7 +32,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: ncareol/chords:docker
+    image: ncareol/chords:mysql
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
