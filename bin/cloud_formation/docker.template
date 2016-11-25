@@ -33,7 +33,7 @@
     "InstanceType" : {
       "Description" : "CHORDS EC2 instance type",
       "Type" : "String",
-      "Default" : "t2.micro",
+      "Default" : "t2.small",
       "AllowedValues" : [ "t1.micro", 
                           "t2.micro",  "t2.small",   "t2.medium", 
                           "m1.small",  "m1.medium",  "m1.large",   "m1.xlarge", 
@@ -144,6 +144,7 @@
         "AWS::CloudFormation::Init" : {
           "configSets" : {
             "full_install" : [ "install_cfn", 
+                               "yum_extras",
                                "docker_service",
                                "docker_compose", 
                                "chords_up" ]
@@ -181,6 +182,15 @@
               "sysvinit" : {  
                 "cfn-hup" : { "enabled" : "true", "ensureRunning" : "true",
                               "files" : ["/etc/cfn/cfn-hup.conf", "/etc/cfn/hooks.d/cfn-auto-reloader.conf"]}
+              }
+            }
+          },
+
+          "yum_extras" : {
+            "packages" : {
+              "yum" : {
+                "sysstat" : [],
+                "emacs"   : []
               }
             }
           },
