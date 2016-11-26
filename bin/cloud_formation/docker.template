@@ -144,6 +144,7 @@
         "AWS::CloudFormation::Init" : {
           "configSets" : {
             "full_install" : [ "install_cfn", 
+                               "sys_update",
                                "yum_extras",
                                "docker_service",
                                "docker_compose", 
@@ -186,6 +187,14 @@
             }
           },
 
+          "sys_update" : {
+            "commands" : {
+              "01_update" : {
+                "command" : "yum update -y"
+              }
+            }
+          },
+          
           "yum_extras" : {
             "packages" : {
               "yum" : {
