@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 
 # The CHORDS configuration (x86) for docker-compose. 
 #
@@ -36,9 +36,9 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
-      - RAILS_ENV=production
-      - CHORDS_DB_PW
-      - SECRET_KEY_BASE=aaaaaaaaaaa
+      - RAILS_ENV=${RAILS_ENV:-production}
+      - CHORDS_DB_PW=${CHORDS_DB_PW:-chords_ec_demo}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE:-aaaaaaaaaaa}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
@@ -53,7 +53,7 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
-      - MYSQL_PASSWORD=${CHORDS_DB_PW}
+      - MYSQL_PASSWORD=${CHORDS_DB_PW:-chords_ec_demo}
 
 volumes:
   mysql-data: 
