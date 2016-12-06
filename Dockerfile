@@ -15,8 +15,8 @@ RUN apt-get update && apt-get install -y \
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
 # commands.
-RUN mkdir -p /app 
-WORKDIR /app
+RUN mkdir -p /chords 
+WORKDIR /chords
 
 # Copy the Gemfile as well as the Gemfile.lock and install 
 # the RubyGems. This is a separate step so the dependencies 
@@ -29,7 +29,7 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 COPY . ./
 
 # Bake the assets (for production mode) into the image
-RUN mkdir -p /app/log && RAILS_ENV=production bundle exec rake assets:precompile
+RUN mkdir -p /chords/log && RAILS_ENV=production bundle exec rake assets:precompile
 
 # Customize the nginx configuration
 COPY ./nginx_default.conf /etc/nginx/sites-available/default
