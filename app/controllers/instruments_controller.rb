@@ -136,16 +136,11 @@ class InstrumentsController < ApplicationController
     authorize! :view, Instrument
     authorize! :download, @instrument if ["csv", "xml", "json", "jsf"].include?(params[:format])
 
-    # Determine and sanitize the last_url
-    @last_url = ''
-    if @instrument.last_url
-      @last_url = InstrumentsHelper.sanitize_url(
+    # Get and sanitize the last_url
+    @last_url = InstrumentsHelper.sanitize_url(
         !@profile.secure_administration, 
         !(current_user && (can? :manage, Measurement)), 
-        GetLastUrl.call(TsPoint, @instrument.id)
-        )
-    end
-
+        GetLastUrl.call(TsPoint, @instrument.id))
     @params = params.slice(:start, :end)
 
     # Get useful details.
