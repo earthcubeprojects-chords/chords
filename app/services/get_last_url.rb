@@ -1,7 +1,11 @@
 class GetLastUrl
-  def self.call(time_series_db, inst_id=nil)
 
-    Rails.logger.debug 'GetLastUrl'
+  # Return the last create url for the instrument. If 
+  # no instrument is specified, search all instruments.
+  # nil is a possible return value.
+  #
+  # Note that this class references the Rails Instrument model. 
+  def self.call(time_series_db, inst_id=nil)
 
     last_id = inst_id
 
