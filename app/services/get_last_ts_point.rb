@@ -9,7 +9,7 @@ class GetLastTsPoint
     ts_point = time_series_db \
       .select("*") \
       .where("inst = '#{inst_id}'") \
-      .order(:desc) \
+      .order("desc") \
       .limit(1)
     
     return ts_point

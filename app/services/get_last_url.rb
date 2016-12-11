@@ -1,19 +1,34 @@
 class GetLastUrl
-  
   def self.call(time_series_db, inst_id=nil)
-    
-    Rails.logger.debug 'GetLastUrl' 
 
-    if inst_id 
-      return Instrument.find(inst_id).last_url
+    Rails.logger.debug 'GetLastUrl'
+
+    last_id = inst_id
+
+    if !last_id
+      # Find the instrument with the most recent timetag.
+
+      # get the last points
+      last_points = []
+      Instrument.all.each do |inst| 
+        last_point = GetLastTsPoint.call(time_series_db, 'value', inst.id).to_a
+        last_points.push(last_point[0]) if last_point.length
+      end
+      
+      # sort by time
+      last_points.sort_by! {|p| p["time"]}
+
+      # Extract the most recent id
+      if last_points.length
+        last_id = last_points.last["inst"]
+      end
     end
-    
-    Instrument.all.each do |inst|
-      id = inst.id
-      last_point = GetLastTsPoint.call(time_series_db, 'value', id)
-      Rails.logger.debug 'GetLastUrl: instrument ' + inst.id.to_s + " " + last_point.to_a.to_s
+
+    if last_id
+      return Instrument.find(last_id).last_url
     end
-    
+
     return nil
+
   end
 end
