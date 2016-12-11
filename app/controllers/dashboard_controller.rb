@@ -20,15 +20,10 @@ class DashboardController < ApplicationController
     @metrics["site_count"]        = Site.count
     @metrics["instrument_count"]  = Instrument.count
     @metrics["uptime"]            = ApplicationHelper.server_uptime
-    if Measurement.last
-      @metrics["last_url"]          = InstrumentsHelper.sanitize_url(
+    @metrics["last_url"]          = InstrumentsHelper.sanitize_url(
         !@profile.secure_administration, 
         !(current_user && (can? :manage, Measurement)), 
-        Instrument.find(Measurement.last.instrument_id).last_url
-        )
-    else
-      @metrics["last_url"]          = ''
-    end
+        GetLastUrl.call(TsPoint))
 
     # Create data series with the count of samples (measurements) made within regular time
     # intervals. The data series are structured like the elements that provide

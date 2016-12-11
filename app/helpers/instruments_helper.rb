@@ -16,7 +16,11 @@ module InstrumentsHelper
     #    otherwise
     #       sanitize
     #      
-    if always_allow 
+    if !url   
+      return ""
+    end
+    
+    if always_allow
         return url
     else
       if !sanitize

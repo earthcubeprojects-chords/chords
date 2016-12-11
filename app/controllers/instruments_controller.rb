@@ -142,7 +142,7 @@ class InstrumentsController < ApplicationController
       @last_url = InstrumentsHelper.sanitize_url(
         !@profile.secure_administration, 
         !(current_user && (can? :manage, Measurement)), 
-        @instrument.last_url
+        GetLastUrl.call(TsPoint, @instrument.id)
         )
     end
 
