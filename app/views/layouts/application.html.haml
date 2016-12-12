@@ -7,24 +7,22 @@
     %title= @profile.page_title
     %meta{:content => "#{content_for?(:description) ? yield(:description) : "CHORDS Portal"}", :name => "description"}/
     = favicon_link_tag 'CHORDS_7.png'
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
     :javascript
       $(document).ready(function() {
         $('.best_in_place').best_in_place();
       })
   %body
-    .container-fluid{"data-no-turbolink" => ""}
+    .container-fluid
       / top banner
       = render 'layouts/bannerbar'
       / top navbar
       = render 'layouts/topnav'
     / main area
-    .container{"data-no-turbolink" => ""}
+    .container
       = render 'layouts/messages'
       = yield
     / footer
-    .container-fluid{"data-no-turbolink" => ""}
+    .container-fluid
       %br/
       = render 'layouts/footer'
