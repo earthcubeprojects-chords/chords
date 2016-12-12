@@ -6,6 +6,8 @@
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}/
     %title= @profile.page_title
     %meta{:content => "#{content_for?(:description) ? yield(:description) : "CHORDS Portal"}", :name => "description"}/
+    = stylesheet_link_tag    'application', media: 'all'
+    = javascript_include_tag 'application'
     = favicon_link_tag 'CHORDS_7.png'
     = csrf_meta_tags
     :javascript
