@@ -11,4 +11,4 @@ version: '2.1'
 services:
   app:
     volumes:
-      - ./:/app
+      - .:/chords
