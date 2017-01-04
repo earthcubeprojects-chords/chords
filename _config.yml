@@ -11,7 +11,7 @@ title: "Cloud Hosted Real-Time Data Services for the Geosciences"
 description: "CHORDS Portal User Documentation"
   
 url: "http://ncar.github.io/chords_portal"
-baseurl: "/chords_portal"
+baseurl: "/chords"
 
 github_username:  ncar/chords_portal
 
