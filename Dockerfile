@@ -39,6 +39,10 @@ COPY ./nginx_default.conf /etc/nginx/sites-available/default
 ADD http://www.random.org/strings/?num=10&len=8&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new cache_invalidator
 RUN /bin/bash -f create_chords_env_script.sh > chords_env.sh && chmod a+x chords_env.sh
 
+# Remove artifacts that are not needed. The docker image will only shrink
+# however if the docker build command is run with the --squash option
+RUN rm -rf .git log/* tmp/*
+
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.
 EXPOSE 80
