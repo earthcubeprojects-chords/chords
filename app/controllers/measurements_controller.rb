@@ -108,7 +108,7 @@ class MeasurementsController < ApplicationController
             inst:       params[:instrument_id], 
             var:        var.id,
             test:       params.has_key?(:test),
-            value:      params[var.shortname]
+            value:      params[var.shortname].to_f
           }
         )
       end
