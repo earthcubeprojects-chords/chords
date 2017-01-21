@@ -23,7 +23,7 @@ class GetLastUrl
       last_points.sort_by! {|p| p["time"]}
 
       # Extract the most recent id
-      if last_points.length
+      if last_points.length > 0
         last_id = last_points.last["inst"]
       end
     end
