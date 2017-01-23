@@ -59,8 +59,9 @@ export CHORDS_HARDWARE_PLATFORM=`uname --hardware-platform`
 export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 
 # Number of Unicorn workers
-export WORKERS=4
-
+if [ -z "$WORKERS" ]; then
+  export WORKERS=4
+fi
 # See if there is an existing mysql database
 if [ ! -e $mysql_seeded_flag ] 
 then
