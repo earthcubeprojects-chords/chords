@@ -1,0 +1,423 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation Template for a CHORDS Portal.
+Mappings:
+  AWSInstanceType2Arch:
+    c1.medium:
+      Arch: PV64
+    c1.xlarge:
+      Arch: PV64
+    c3.2xlarge:
+      Arch: HVM64
+    c3.4xlarge:
+      Arch: HVM64
+    c3.8xlarge:
+      Arch: HVM64
+    c3.large:
+      Arch: HVM64
+    c3.xlarge:
+      Arch: HVM64
+    c4.2xlarge:
+      Arch: HVM64
+    c4.4xlarge:
+      Arch: HVM64
+    c4.8xlarge:
+      Arch: HVM64
+    c4.large:
+      Arch: HVM64
+    c4.xlarge:
+      Arch: HVM64
+    cc2.8xlarge:
+      Arch: HVM64
+    cr1.8xlarge:
+      Arch: HVM64
+    d2.2xlarge:
+      Arch: HVM64
+    d2.4xlarge:
+      Arch: HVM64
+    d2.8xlarge:
+      Arch: HVM64
+    d2.xlarge:
+      Arch: HVM64
+    g2.2xlarge:
+      Arch: HVMG2
+    hi1.4xlarge:
+      Arch: HVM64
+    hs1.8xlarge:
+      Arch: HVM64
+    i2.2xlarge:
+      Arch: HVM64
+    i2.4xlarge:
+      Arch: HVM64
+    i2.8xlarge:
+      Arch: HVM64
+    i2.xlarge:
+      Arch: HVM64
+    m1.large:
+      Arch: PV64
+    m1.medium:
+      Arch: PV64
+    m1.small:
+      Arch: PV64
+    m1.xlarge:
+      Arch: PV64
+    m2.2xlarge:
+      Arch: PV64
+    m2.4xlarge:
+      Arch: PV64
+    m2.xlarge:
+      Arch: PV64
+    m3.2xlarge:
+      Arch: HVM64
+    m3.large:
+      Arch: HVM64
+    m3.medium:
+      Arch: HVM64
+    m3.xlarge:
+      Arch: HVM64
+    r3.2xlarge:
+      Arch: HVM64
+    r3.4xlarge:
+      Arch: HVM64
+    r3.8xlarge:
+      Arch: HVM64
+    r3.large:
+      Arch: HVM64
+    r3.xlarge:
+      Arch: HVM64
+    t1.micro:
+      Arch: PV64
+    t2.medium:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+  AWSRegionArch2AMI:
+    ap-northeast-1:
+      HVM64: ami-cbf90ecb
+      HVMG2: ami-6318e863
+      PV64: ami-27f90e27
+    ap-southeast-1:
+      HVM64: ami-68d8e93a
+      HVMG2: ami-3807376a
+      PV64: ami-acd9e8fe
+    ap-southeast-2:
+      HVM64: ami-fd9cecc7
+      HVMG2: ami-89790ab3
+      PV64: ami-ff9cecc5
+    cn-north-1:
+      HVM64: ami-f239abcb
+      HVMG2: NOT_SUPPORTED
+      PV64: ami-fa39abc3
+    eu-central-1:
+      HVM64: ami-a8221fb5
+      HVMG2: ami-7cd2ef61
+      PV64: ami-ac221fb1
+    eu-west-1:
+      HVM64: ami-a10897d6
+      HVMG2: ami-d5bc24a2
+      PV64: ami-bf0897c8
+    sa-east-1:
+      HVM64: ami-b52890a8
+      HVMG2: NOT_SUPPORTED
+      PV64: ami-bb2890a6
+    us-east-1:
+      HVM64: ami-1ecae776
+      HVMG2: ami-8c6b40e4
+      PV64: ami-1ccae774
+    us-west-1:
+      HVM64: ami-d114f295
+      HVMG2: ami-f31ffeb7
+      PV64: ami-d514f291
+    us-west-2:
+      HVM64: ami-e7527ed7
+      HVMG2: ami-abbe919b
+      PV64: ami-ff527ecf
+Outputs:
+  WebsiteURL:
+    Description: URL for newly created CHORDS Portal
+    Value:
+      Fn::Join:
+      - ''
+      - - http://
+        - Fn::GetAtt:
+          - ChordsServer
+          - PublicDnsName
+        - ''
+Parameters:
+  ChordsDbPw:
+    Default: chords_ec_demo
+    Description: CHORDS database password
+    Type: String
+  ChordsGitBranch:
+    AllowedValues:
+    - master
+    - development
+    Default: master
+    Description: CHORDS git repository source branch
+    Type: String
+  InstanceType:
+    AllowedValues:
+    - t1.micro
+    - t2.micro
+    - t2.small
+    - t2.medium
+    - m1.small
+    - m1.medium
+    - m1.large
+    - m1.xlarge
+    - m2.xlarge
+    - m2.2xlarge
+    - m2.4xlarge
+    - m3.medium
+    - m3.large
+    - m3.xlarge
+    - m3.2xlarge
+    - c1.medium
+    - c1.xlarge
+    - c3.large
+    - c3.xlarge
+    - c3.2xlarge
+    - c3.4xlarge
+    - c3.8xlarge
+    - c4.large
+    - c4.xlarge
+    - c4.2xlarge
+    - c4.4xlarge
+    - c4.8xlarge
+    - g2.2xlarge
+    - r3.large
+    - r3.xlarge
+    - r3.2xlarge
+    - r3.4xlarge
+    - r3.8xlarge
+    - i2.xlarge
+    - i2.2xlarge
+    - i2.4xlarge
+    - i2.8xlarge
+    - d2.xlarge
+    - d2.2xlarge
+    - d2.4xlarge
+    - d2.8xlarge
+    - hi1.4xlarge
+    - hs1.8xlarge
+    - cr1.8xlarge
+    - cc2.8xlarge
+    - cg1.4xlarge
+    ConstraintDescription: Must be a valid EC2 instance type.
+    Default: t2.small
+    Description: CHORDS EC2 instance type
+    Type: String
+  KeyName:
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+  SSHLocation:
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+    Default: 0.0.0.0/0
+    Description: ' The IP address range that can be used to SSH to the EC2 instances'
+    MaxLength: '18'
+    MinLength: '9'
+    Type: String
+  SecretKeyBase:
+    Default: aaaaaaaaaaa
+    Description: CHORDS secret key base
+    Type: String
+Resources:
+  ChordsEIP:
+    Properties:
+      InstanceId:
+        Ref: ChordsServer
+    Type: AWS::EC2::EIP
+  ChordsServer:
+    CreationPolicy:
+      ResourceSignal:
+        Timeout: PT10M
+    Metadata:
+      AWS::CloudFormation::Init:
+        chords_up:
+          commands:
+            01_docker_up:
+              command:
+                Fn::Join:
+                - ''
+                - - SECRET_KEY_BASE=
+                  - Ref: SecretKeyBase
+                  - ' '
+                  - CHORDS_DB_PW=
+                  - Ref: ChordsDbPw
+                  - ' '
+                  - /usr/local/bin/docker-compose -p chords up -d
+                  - '
+
+                    '
+        configSets:
+          full_install:
+          - install_cfn
+          - sys_update
+          - yum_extras
+          - docker_service
+          - docker_compose
+          - chords_up
+        docker_compose:
+          commands:
+            01_get_docker_compose:
+              command: curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname
+                -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose
+            02_docker_compose_yml:
+              command:
+                Fn::Join:
+                - ''
+                - - curl -L https://raw.github.com/NCAR/chords_portal/
+                  - Ref: ChordsGitBranch
+                  - /docker-compose.yml > docker-compose.yml
+            03_docker_pull:
+              command: /usr/local/bin/docker-compose pull
+        docker_service:
+          packages:
+            yum:
+              docker: []
+          services:
+            sysvinit:
+              docker:
+                enabled: 'true'
+                ensureRunning: 'true'
+        install_cfn:
+          files:
+            /etc/cfn/cfn-hup.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - '[main]
+
+                    '
+                  - stack=
+                  - Ref: AWS::StackId
+                  - '
+
+                    '
+                  - region=
+                  - Ref: AWS::Region
+                  - '
+
+                    '
+              group: root
+              mode: '000400'
+              owner: root
+            /etc/cfn/hooks.d/cfn-auto-reloader.conf:
+              content:
+                Fn::Join:
+                - ''
+                - - '[cfn-auto-reloader-hook]
+
+                    '
+                  - 'triggers=post.update
+
+                    '
+                  - 'path=Resources.ChordsServer.Metadata.AWS::CloudFormation::Init
+
+                    '
+                  - 'action=/opt/aws/bin/cfn-init -v '
+                  - '         --stack '
+                  - Ref: AWS::StackName
+                  - '         --resource ChordsServer '
+                  - '         --configsets full_install '
+                  - '         --region '
+                  - Ref: AWS::Region
+                  - '
+
+                    '
+                  - 'runas=root
+
+                    '
+          services:
+            sysvinit:
+              cfn-hup:
+                enabled: 'true'
+                ensureRunning: 'true'
+                files:
+                - /etc/cfn/cfn-hup.conf
+                - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+        sys_update:
+          commands:
+            01_update:
+              command: yum update -y
+        yum_extras:
+          packages:
+            yum:
+              emacs: []
+              sysstat: []
+    Properties:
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      SecurityGroups:
+      - Ref: ChordsServerSecurityGroup
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+      - Key: ChordsType
+        Value: Portal
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - '#!/bin/bash -xe
+
+              '
+            - 'yum update -y aws-cfn-bootstrap
+
+              '
+            - '/opt/aws/bin/cfn-init -v '
+            - '         --stack '
+            - Ref: AWS::StackId
+            - '         --resource ChordsServer '
+            - '         --configsets full_install '
+            - '         --region '
+            - Ref: AWS::Region
+            - '
+
+              '
+            - '/opt/aws/bin/cfn-signal -e $? '
+            - '         --stack '
+            - Ref: AWS::StackId
+            - '         --resource ChordsServer '
+            - '         --region '
+            - Ref: AWS::Region
+            - '
+
+              '
+    Type: AWS::EC2::Instance
+  ChordsServerSecurityGroup:
+    Properties:
+      GroupDescription: Enable HTTP and SSH access
+      SecurityGroupIngress:
+      - CidrIp: 0.0.0.0/0
+        FromPort: '80'
+        IpProtocol: tcp
+        ToPort: '80'
+      - CidrIp:
+          Ref: SSHLocation
+        FromPort: '22'
+        IpProtocol: tcp
+        ToPort: '22'
+      - CidrIp: 0.0.0.0/0
+        FromPort: '3000'
+        IpProtocol: tcp
+        ToPort: '3000'
+      - CidrIp: 0.0.0.0/0
+        FromPort: '3000'
+        IpProtocol: tcp
+        ToPort: '8086'
+    Type: AWS::EC2::SecurityGroup
