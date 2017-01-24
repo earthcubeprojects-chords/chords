@@ -236,22 +236,6 @@ Resources:
         Timeout: PT10M
     Metadata:
       AWS::CloudFormation::Init:
-        chords_up:
-          commands:
-            01_docker_up:
-              command:
-                Fn::Join:
-                - ''
-                - - SECRET_KEY_BASE=
-                  - Ref: SecretKeyBase
-                  - ' '
-                  - CHORDS_DB_PW=
-                  - Ref: ChordsDbPw
-                  - ' '
-                  - /usr/local/bin/docker-compose -p chords up -d
-                  - '
-
-                    '
         configSets:
           full_install:
           - install_cfn
@@ -260,29 +244,6 @@ Resources:
           - docker_service
           - docker_compose
           - chords_up
-        docker_compose:
-          commands:
-            01_get_docker_compose:
-              command: curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname
-                -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose
-            02_docker_compose_yml:
-              command:
-                Fn::Join:
-                - ''
-                - - curl -L https://raw.github.com/NCAR/chords_portal/
-                  - Ref: ChordsGitBranch
-                  - /docker-compose.yml > docker-compose.yml
-            03_docker_pull:
-              command: /usr/local/bin/docker-compose pull
-        docker_service:
-          packages:
-            yum:
-              docker: []
-          services:
-            sysvinit:
-              docker:
-                enabled: 'true'
-                ensureRunning: 'true'
         install_cfn:
           files:
             /etc/cfn/cfn-hup.conf:
@@ -348,6 +309,45 @@ Resources:
             yum:
               emacs: []
               sysstat: []
+        docker_service:
+          packages:
+            yum:
+              docker: []
+          services:
+            sysvinit:
+              docker:
+                enabled: 'true'
+                ensureRunning: 'true'
+        docker_compose:
+          commands:
+            01_get_docker_compose:
+              command: curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname
+                -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose
+            02_docker_compose_yml:
+              command:
+                Fn::Join:
+                - ''
+                - - curl -L https://raw.github.com/NCAR/chords_portal/
+                  - Ref: ChordsGitBranch
+                  - /docker-compose.yml > docker-compose.yml
+            03_docker_pull:
+              command: /usr/local/bin/docker-compose pull
+        chords_up:
+          commands:
+            01_docker_up:
+              command:
+                Fn::Join:
+                - ''
+                - - SECRET_KEY_BASE=
+                  - Ref: SecretKeyBase
+                  - ' '
+                  - CHORDS_DB_PW=
+                  - Ref: ChordsDbPw
+                  - ' '
+                  - /usr/local/bin/docker-compose -p chords up -d
+                  - '
+
+                    '
     Properties:
       ImageId:
         Fn::FindInMap:
