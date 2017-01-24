@@ -387,7 +387,7 @@ Resources:
             # Install docker-compose.
             01_get_docker_compose:
               command: curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname
-                -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose
+                -s`-`uname -m` > /bin/docker-compose && chmod a+x /bin/docker-compose
             # Fetch the CHORDS docker-compose.yml.
             02_docker_compose_yml:
               command:
