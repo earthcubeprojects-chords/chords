@@ -8,12 +8,12 @@ Parameters:
     Default: chords_ec_demo
     Description: CHORDS database password
     Type: String
-  ChordsGitBranch:
+  GitBranchAndDockerTag:
     AllowedValues:
     - master
     - development
     Default: master
-    Description: CHORDS git repository source branch
+    Description: CHORDS git branch/docker image tag
     Type: String
   InstanceType:
     AllowedValues:
@@ -394,7 +394,7 @@ Resources:
                 Fn::Join:
                 - ''
                 - - curl -L https://raw.github.com/NCAR/chords_portal/
-                  - Ref: ChordsGitBranch
+                  - Ref: GitBranchAndDockerTag
                   - /docker-compose.yml > docker-compose.yml
             # Pull the CHOIRDS images.
             03_docker_pull:
@@ -414,7 +414,7 @@ Resources:
                   - Ref: ChordsDbPw
                   - ' '
                   - DOCKER_TAG=
-                  - Ref: ChordsGitBranch
+                  - Ref: GitBranchAndDockerTag
                   - ' '
                   - /usr/local/bin/docker-compose -p chords up -d
                   - '
