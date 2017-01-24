@@ -2,8 +2,17 @@ version: '2'
 
 # The CHORDS configuration (x86) for docker-compose. 
 #
-# It defines a MyQSL database service (chords_mysql), a CHORDS
-# Ruby on Rails web server (chords_app), and a persistent 
+# It defines these services:
+#   1. chords_mysql:    A MyQSL database for CHORDS metadata.
+#   2. chords_influxdb: An InfluxDB database for real-time time series data.
+#   3. chords_grafana:  A Grafana dashboard server
+#   4. chords_app:   The CHORDS Ruby on Rails server
+# The following docker volumes provide data persistance:
+#   1. mysql-data:     (/var/lib/mysql)
+#   2. influxdb-data:  (/var/lib/influxdb)
+#   3. grafana-data:   (/var/lib/grafana)
+
+
 # database volume (mysql-data).
 #
 # This configuration is used to both build the chords image,
@@ -12,11 +21,20 @@ version: '2'
 #
 # To build and upload the chords image:
 #   cd <directory containing the CHORDS project>
-#   docker-compose build
-#   docker push ncareol/chords
+#   docker build --squash --tag ncareol/chords:<branch>
+#   docker push ncareol/chords:<branch>
 #
+# Add at least the following to a .env file, in order to set
+# environment variables that docker needs.
+# CHORDS_DB_PW=<password>       # For testing, we use chords_ec_demo. Use something secure for real deployments.
+# DOCKER_TAG=<git branch>       # Convention is to use the git branch used to generate the image as the tag.
+#
+# These environment variables may also be provided in .env:
+# SECRET_KEY_BASE=<strong key, generated as suggested by rake.>
+# RAILS_ENV=production|development
+# 
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/docker/docker-compose.yml > docker-compose.yml
+#   curl -kL https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
 #   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
@@ -32,7 +50,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: ncareol/chords:influxdb
+    image: ncareol/chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
