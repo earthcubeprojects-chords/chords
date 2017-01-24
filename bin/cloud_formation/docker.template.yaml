@@ -2,6 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 
 Description: AWS CloudFormation Template for a CHORDS Portal.
 
+#####################################################################
 Parameters:
   ChordsDbPw:
     Default: chords_ec_demo
@@ -83,6 +84,7 @@ Parameters:
     Description: CHORDS secret key base
     Type: String
 
+#####################################################################
 Mappings:
   AWSInstanceType2Arch:
     c1.medium:
@@ -217,18 +219,76 @@ Mappings:
       HVMG2: ami-abbe919b
       PV64: ami-ff527ecf
 
+#####################################################################
 Resources:
+
   ChordsEIP:
     Properties:
       InstanceId:
         Ref: ChordsServer
     Type: AWS::EC2::EIP
+
   ChordsServer:
+    Type: AWS::EC2::Instance
     CreationPolicy:
       ResourceSignal:
         Timeout: PT10M
+    Properties:
+      ImageId:
+        Fn::FindInMap:
+        - AWSRegionArch2AMI
+        - Ref: AWS::Region
+        - Fn::FindInMap:
+          - AWSInstanceType2Arch
+          - Ref: InstanceType
+          - Arch
+      InstanceType:
+        Ref: InstanceType
+      KeyName:
+        Ref: KeyName
+      SecurityGroups:
+      - Ref: ChordsServerSecurityGroup
+      Tags:
+      - Key: Name
+        Value:
+          Ref: AWS::StackName
+      - Key: ChordsType
+        Value: Portal
+      # ChordsServer::Properties::UserData instructs cfn to install and 
+      # run CHORDS via full_install.
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+          - ''
+          - - '#!/bin/bash -xe
+
+              '
+            - 'yum update -y aws-cfn-bootstrap
+
+              '
+            - '/opt/aws/bin/cfn-init -v '
+            - '         --stack '
+            - Ref: AWS::StackId
+            - '         --resource ChordsServer '
+            - '         --configsets full_install '
+            - '         --region '
+            - Ref: AWS::Region
+            - '
+
+              '
+            - '/opt/aws/bin/cfn-signal -e $? '
+            - '         --stack '
+            - Ref: AWS::StackId
+            - '         --resource ChordsServer '
+            - '         --region '
+            - Ref: AWS::Region
+            - '
+
+              '
     Metadata:
       AWS::CloudFormation::Init:
+        # configSets specifies the order that cfn_init runs 
+        # the other AWS::CloudFormation::Init: types.
         configSets:
           full_install:
           - install_cfn
@@ -237,6 +297,8 @@ Resources:
           - docker_service
           - docker_compose
           - chords_up
+
+        # configure cfn.
         install_cfn:
           files:
             /etc/cfn/cfn-hup.conf:
@@ -293,15 +355,22 @@ Resources:
                 files:
                 - /etc/cfn/cfn-hup.conf
                 - /etc/cfn/hooks.d/cfn-auto-reloader.conf
+        
+        # Perform a yum update for the system.
         sys_update:
           commands:
             01_update:
               command: yum update -y
+        
+        # Install some useful packages.
         yum_extras:
           packages:
             yum:
               emacs: []
               sysstat: []
+              
+        
+        # Install docker as a service.
         docker_service:
           packages:
             yum:
@@ -311,11 +380,15 @@ Resources:
               docker:
                 enabled: 'true'
                 ensureRunning: 'true'
+                
+        # Install docker-compose and get the CHORDS images.
         docker_compose:
           commands:
+            # Install docker-compose.
             01_get_docker_compose:
               command: curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname
                 -s`-`uname -m` > /usr/local/bin/docker-compose && chmod a+x /usr/local/bin/docker-compose
+            # Fetch the CHORDS docker-compose.yml.
             02_docker_compose_yml:
               command:
                 Fn::Join:
@@ -323,8 +396,11 @@ Resources:
                 - - curl -L https://raw.github.com/NCAR/chords_portal/
                   - Ref: ChordsGitBranch
                   - /docker-compose.yml > docker-compose.yml
+            # Pull the CHOIRDS images.
             03_docker_pull:
               command: /usr/local/bin/docker-compose pull
+              
+        # Start the CHORDS services, via docker.
         chords_up:
           commands:
             01_docker_up:
@@ -337,61 +413,14 @@ Resources:
                   - CHORDS_DB_PW=
                   - Ref: ChordsDbPw
                   - ' '
+                  - DOCKER_TAG=
+                  - Ref: ChordsGitBranch
+                  - ' '
                   - /usr/local/bin/docker-compose -p chords up -d
                   - '
 
                     '
-    Properties:
-      ImageId:
-        Fn::FindInMap:
-        - AWSRegionArch2AMI
-        - Ref: AWS::Region
-        - Fn::FindInMap:
-          - AWSInstanceType2Arch
-          - Ref: InstanceType
-          - Arch
-      InstanceType:
-        Ref: InstanceType
-      KeyName:
-        Ref: KeyName
-      SecurityGroups:
-      - Ref: ChordsServerSecurityGroup
-      Tags:
-      - Key: Name
-        Value:
-          Ref: AWS::StackName
-      - Key: ChordsType
-        Value: Portal
-      UserData:
-        Fn::Base64:
-          Fn::Join:
-          - ''
-          - - '#!/bin/bash -xe
 
-              '
-            - 'yum update -y aws-cfn-bootstrap
-
-              '
-            - '/opt/aws/bin/cfn-init -v '
-            - '         --stack '
-            - Ref: AWS::StackId
-            - '         --resource ChordsServer '
-            - '         --configsets full_install '
-            - '         --region '
-            - Ref: AWS::Region
-            - '
-
-              '
-            - '/opt/aws/bin/cfn-signal -e $? '
-            - '         --stack '
-            - Ref: AWS::StackId
-            - '         --resource ChordsServer '
-            - '         --region '
-            - Ref: AWS::Region
-            - '
-
-              '
-    Type: AWS::EC2::Instance
   ChordsServerSecurityGroup:
     Properties:
       GroupDescription: Enable HTTP and SSH access
@@ -415,6 +444,7 @@ Resources:
         ToPort: '8086'
     Type: AWS::EC2::SecurityGroup
     
+#####################################################################
 Outputs:
   WebsiteURL:
     Description: URL for newly created CHORDS Portal
