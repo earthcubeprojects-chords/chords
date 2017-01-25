@@ -398,7 +398,7 @@ Resources:
                   - /docker-compose.yml > docker-compose.yml
             # Pull the CHOIRDS images.
             03_docker_pull:
-              command: /usr/local/bin/docker-compose pull
+              command: /bin/docker-compose pull
               
         # Start the CHORDS services, via docker.
         chords_up:
@@ -416,7 +416,7 @@ Resources:
                   - DOCKER_TAG=
                   - Ref: GitBranchAndDockerTag
                   - ' '
-                  - /usr/local/bin/docker-compose -p chords up -d
+                  - /bin/docker-compose -p chords up -d
                   - '
 
                     '
@@ -439,7 +439,7 @@ Resources:
         IpProtocol: tcp
         ToPort: '3000'
       - CidrIp: 0.0.0.0/0
-        FromPort: '8086'
+        FromPort: '3000'
         IpProtocol: tcp
         ToPort: '8086'
     Type: AWS::EC2::SecurityGroup
