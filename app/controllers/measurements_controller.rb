@@ -1,3 +1,4 @@
+require 'time'
 class MeasurementsController < ApplicationController
 
   before_action :set_measurement, only: [:show, :edit, :update, :destroy]
@@ -97,7 +98,7 @@ class MeasurementsController < ApplicationController
         elsif params[:at]
           measured_at = params[:at]
         else           
-          measured_at = Time.now  
+          measured_at = Time.now.iso8601
         end
        
         SaveTsPoint.call(
