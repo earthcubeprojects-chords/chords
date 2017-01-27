@@ -30,7 +30,7 @@
   # Note: If using the backslash character (likely), it must be escaped so that it can pass 
   # through the json parsing.
   
-  "chords_host": "portal.chordsrt.com",
+  "chords_host": "52.11.105.27",
   
   "interface":   "chords.fl-ext.ucar.edu",
 
@@ -45,7 +45,7 @@
    "FL": { 
        "enabled":    true,
        "port":       29110,
-       "id":         25,
+       "id":         1,
        "sample":     "1R0,Dm=077D,Sm=1.2M,Sx=2.4M,Ta=29.0C,Ua=27.5P,Pa=838.2H,Rc=317.20M,Vs=18.2V",
        "template":   "1R0,Dm=(_fp_)[D#],Sm=(_fp_)[M#],Sx=(_fp_)[M#],Ta=(_fp_)C,Ua=(_fp_)P,Pa=(_fp_)H,Rc=(_fp_)M,Vs=(_fp_)V",
        "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batv"]
@@ -54,7 +54,7 @@
    "ML": { 
        "enabled":    true,
        "port":       29111,
-       "id":         26,
+       "id":         2,
        "sample":     "1R0,Dm=358D,Sm=3.1M,Sx=7.0M,Ta=26.5C,Ua=27.0P,Pa=813.5H,Rc=453.20M,Vs=13.9V",
        "template":   "1R0,Dm=(_fp_)[D#],Sm=(_fp_)[M#],Sx=(_fp_)[M#],Ta=(_fp_)C,Ua=(_fp_)P,Pa=(_fp_)H,Rc=(_fp_)M,Vs=(_fp_)V",
        "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batv"]
@@ -63,7 +63,7 @@
    "NWSC": { 
        "enabled":    true,
        "port":       29113,
-       "id":         27,
+       "id":         3,
        "sample":     "1r0,Dm=001D,Sm=5.0M,Sx=6.8M,Ta=21.6C,Ua=42.3P,Pa=806.3H,Rc=420.80M,Vs=12.4VMXu",
        "template":   "1r0,Dm=(_fp_)[D#],Sm=(_fp_)[M#],Sx=(_fp_)[M#],Ta=(_fp_)C,Ua=(_fp_)P,Pa=(_fp_)H,Rc=(_fp_)M,Vs=(_fp_)V",
        "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batv"]
