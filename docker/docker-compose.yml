@@ -58,6 +58,7 @@ services:
       - MYSQL_PASSWORD=${CHORDS_DB_PW}
 
   web:
+    container_name: chords_web
     image: nginx:alpine
     volumes:
       - ./docker/web/nginx_default.conf:/etc/nginx/conf.d/default.conf
