@@ -60,9 +60,13 @@
   = link_to 'New Instrument', new_instrument_path
 - else
   %strong At least one site must be defined before creating a new instrument.
-  
-%br
-.table-responsive
+ 
+%h2 Identifiers
+
+%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", :type => "button"} 
+  Toggle Details
+
+#summarytable.table-responsive.collapse
   %table.table.table-striped
     %thead
       %tr
@@ -72,6 +76,10 @@
           Name
         %th
           Instrument
+          %br>/
+          Name
+        %th
+          Variable
           %br>/
           Name
         %th
@@ -100,7 +108,7 @@
                 %td=site.name
                 %td=instrument.name
                 %td=var.name
+                %td=var.shortname
                 %td=site.id
                 %td=instrument.id
                 %td=var.id
-                  
