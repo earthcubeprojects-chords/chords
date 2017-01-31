@@ -78,6 +78,8 @@ services:
     image: influxdb:1.2
     volumes:
       - influxdb-data:/var/lib/influxdb/
+    environment:
+      - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
     ports:
       - 8086:8086
       - 8083:8083
