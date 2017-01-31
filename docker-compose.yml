@@ -65,7 +65,7 @@ services:
 
   mysql:
     container_name: chords_mysql
-    image: mysql
+    image: mysql:5.7
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
@@ -75,7 +75,7 @@ services:
       
   influxdb:
     container_name: chords_influxdb
-    image: influxdb
+    image: influxdb:1.2
     volumes:
       - influxdb-data:/var/lib/influxdb/
     ports:
@@ -84,7 +84,7 @@ services:
       
   grafana:
     container_name: chords_grafana
-    image: grafana/grafana
+    image: grafana/grafana:4.1.1
     volumes:
       - grafana-data:/var/lib/grafana/
     ports:
