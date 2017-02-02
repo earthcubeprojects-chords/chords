@@ -19,6 +19,10 @@ class GetLastUrl
         last_points.push(last_point[0]) if last_point.length
       end
       
+      if last_points.length == 0
+        return nil
+      end
+      
       # sort by time
       last_points.sort_by! {|p| p["time"]}
 
