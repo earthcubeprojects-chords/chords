@@ -134,7 +134,8 @@ class MeasurementsController < ApplicationController
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
       if Instrument.exists?(inst_id)
-        Measurement.where(instrument_id: inst_id, test: '1').delete_all
+        # Delete from the time series database
+        DeleteTestTsPoints.call(TsPoint, inst_id)
       end
     end
     
