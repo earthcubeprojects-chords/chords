@@ -4,9 +4,12 @@ class DeleteTestTsPoints
   # db      - the database.
   # inst_id - the instrument id
   def self.call(db, inst_id)
-    
-    dropQuery = "drop series FROM \"tsdata\" WHERE inst=\'#{inst_id}\' AND test=\'true\'"
-    queryresult = Influxer.client.query(dropQuery) 
+
+    # db.series returns a symbol. Convert to a string
+    series = db.series.map {|x| x.to_s}[0]
+      
+    dropQuery = "drop series FROM \"#{series}\" WHERE inst=\'#{inst_id}\' AND test=\'true\'"
+    queryresult = Influxer.client.query(dropQuery)
 
   end
 end
