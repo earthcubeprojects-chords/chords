@@ -63,6 +63,7 @@ services:
     links:
       - mysql
 
+
   mysql:
     container_name: chords_mysql
     image: mysql
@@ -90,8 +91,18 @@ services:
     ports:
       - 3000:3000
 
+  mta:
+    container_name: chords_mta
+    image: tozd/postfix
+    volumes:
+      - postfix-spool:/var/spool/postfix
+    ports:
+      - 25:25
+
+
 volumes:
   mysql-data: 
   influxdb-data:
   grafana-data:
+  postfix-spool:
   
