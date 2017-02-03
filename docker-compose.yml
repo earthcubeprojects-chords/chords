@@ -24,10 +24,10 @@ version: '2'
 #   docker build --squash --tag ncareol/chords:<branch>
 #   docker push ncareol/chords:<branch>
 #
-# Add at least the following to a .env file, in order to set
-# environment variables that docker needs.
-# CHORDS_DB_PW=<password>       # For testing, we use chords_ec_demo. Use something secure for real deployments.
-# DOCKER_TAG=<git branch>       # Convention is to use the git branch used to generate the image as the tag.
+# Create a .env (in the directory that you run docker-compose from) containing:
+# CHORDS_ADMIN_PW=<password>       # The password for r/w and admin access to CHORDS, mysql and influxdb.
+# CHORDS_ADMIN_PW=<password>       # The password for ro access to influxdb.
+# DOCKER_TAG=<git branch>          # Convention is to use the git branch used to generate the image as the tag.
 #
 # These environment variables may also be provided in .env:
 # SECRET_KEY_BASE=<strong key, generated as suggested by rake.>
@@ -55,8 +55,11 @@ services:
       - mysql-data:/var/lib/mysql
     environment:
       - RAILS_ENV=production
-      - CHORDS_DB_PW
+      - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
+      - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
       - SECRET_KEY_BASE=aaaaaaaaaaa
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
@@ -71,7 +74,7 @@ services:
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
-      - MYSQL_PASSWORD=${CHORDS_DB_PW}
+      - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
       
   influxdb:
     container_name: chords_influxdb
@@ -80,6 +83,7 @@ services:
       - influxdb-data:/var/lib/influxdb/
     environment:
       - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
     ports:
       - 8086:8086
       - 8083:8083

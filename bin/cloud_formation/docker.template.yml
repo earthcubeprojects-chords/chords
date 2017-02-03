@@ -4,9 +4,14 @@ Description: AWS CloudFormation Template for a CHORDS Portal.
 
 #####################################################################
 Parameters:
-  ChordsDbPw:
+  ChordsAdminPw:
     Default: chords_ec_demo
-    Description: CHORDS database password
+    Description: CHORDS database admin password. Choose carefully.
+    Type: String
+
+  ChordsGuestPw:
+    Default: guest
+    Description: CHORDS database guest password. Choose carefully.
     Type: String
 
   GitBranchAndDockerTag:
@@ -406,8 +411,11 @@ Resources:
               command: 
                 Fn::Join:
                 - ''
-                - - CHORDS_DB_PW=
-                  - Ref: ChordsDbPw
+                - - CHORDS_ADMIN_PW=
+                  - Ref: ChordsAdminPw
+                  - ' '
+                  - CHORDS_GUEST_PW=
+                  - Ref: ChordsGuestPw
                   - ' '
                   - DOCKER_TAG=
                   - Ref: GitBranchAndDockerTag
@@ -428,7 +436,7 @@ Resources:
                   - Ref: SecretKeyBase
                   - ' '
                   - CHORDS_DB_PW=
-                  - Ref: ChordsDbPw
+                  - Ref: ChordsAdminPw
                   - ' '
                   - DOCKER_TAG=
                   - Ref: GitBranchAndDockerTag
