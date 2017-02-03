@@ -30,7 +30,7 @@
   # Note: If using the backslash character (likely), it must be escaped so that it can pass 
   # through the json parsing.
   
-  "chords_host": "52.11.105.27",
+  "chords_host": "portal.chordsrt.com",
   
   "interface":   "chords.fl-ext.ucar.edu",
 
