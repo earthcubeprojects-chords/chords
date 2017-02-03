@@ -435,8 +435,11 @@ Resources:
                 - - SECRET_KEY_BASE=
                   - Ref: SecretKeyBase
                   - ' '
-                  - CHORDS_DB_PW=
+                  - CHORDS_ADMIN_PW=
                   - Ref: ChordsAdminPw
+                  - ' '
+                  - CHORDS_GUEST_PW=
+                  - Ref: ChordsGuestPw
                   - ' '
                   - DOCKER_TAG=
                   - Ref: GitBranchAndDockerTag
