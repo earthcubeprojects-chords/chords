@@ -18,7 +18,7 @@ Parameters:
     AllowedValues:
     - master
     - development
-    Default: master
+    Default: development
     Description: CHORDS git branch/docker image tag
     Type: String
 
@@ -306,6 +306,7 @@ Resources:
           - sys_update
           - yum_extras
           - docker_service
+          - docker_config
           - docker_compose
           - chords_up
 
@@ -392,62 +393,31 @@ Resources:
                 enabled: 'true'
                 ensureRunning: 'true'
                 
-        # Install docker-compose and get the CHORDS images.
+        docker_config:
+          files:
+            /.env:
+              content: !Sub |     
+                CHORDS_ADMIN_PW=${ChordsAdminPw}
+                CHORDS_GUEST_PW=${ChordsGuestPw}
+                DOCKER_TAG=${GitBranchAndDockerTag}
+                RAILS_ENV=production
+        # Create the docker configuration, install docker-compose, and get the CHORDS images.
         docker_compose:
           commands:
             # Install docker-compose.
             01_get_docker_compose:
-              command: curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose
+              command: "curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
             # Fetch the CHORDS docker-compose.yml.
             02_docker_compose_yml:
-              command:
-                Fn::Join:
-                - ''
-                - - curl -L https://raw.github.com/NCAR/chords_portal/
-                  - Ref: GitBranchAndDockerTag
-                  - /docker-compose.yml > docker-compose.yml
-            # Pull the CHOIRDS images.
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranchAndDockerTag}/docker-compose.yml > docker-compose.yml"
+            # Pull the CHORDS images.
             03_docker_pull:
-              command: 
-                Fn::Join:
-                - ''
-                - - CHORDS_ADMIN_PW=
-                  - Ref: ChordsAdminPw
-                  - ' '
-                  - CHORDS_GUEST_PW=
-                  - Ref: ChordsGuestPw
-                  - ' '
-                  - DOCKER_TAG=
-                  - Ref: GitBranchAndDockerTag
-                  - ' '
-                  - /bin/docker-compose pull
-                  - '
-
-                    '
-              
+              command: "/bin/docker-compose pull"
         # Start the CHORDS services, via docker.
         chords_up:
           commands:
             01_docker_up:
-              command:
-                Fn::Join:
-                - ''
-                - - SECRET_KEY_BASE=
-                  - Ref: SecretKeyBase
-                  - ' '
-                  - CHORDS_ADMIN_PW=
-                  - Ref: ChordsAdminPw
-                  - ' '
-                  - CHORDS_GUEST_PW=
-                  - Ref: ChordsGuestPw
-                  - ' '
-                  - DOCKER_TAG=
-                  - Ref: GitBranchAndDockerTag
-                  - ' '
-                  - /bin/docker-compose -p chords up -d
-                  - '
-
-                    '
+              command: "/bin/docker-compose -p chords up -d"
 
   ChordsServerSecurityGroup:
     Properties:
