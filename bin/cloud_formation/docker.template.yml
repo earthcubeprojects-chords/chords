@@ -393,6 +393,7 @@ Resources:
                 enabled: 'true'
                 ensureRunning: 'true'
                 
+        # Create the docker-compose configuration file.
         docker_config:
           files:
             /.env:
@@ -401,7 +402,7 @@ Resources:
                 CHORDS_GUEST_PW=${ChordsGuestPw}
                 DOCKER_TAG=${GitBranchAndDockerTag}
                 RAILS_ENV=production
-        # Create the docker configuration, install docker-compose, and get the CHORDS images.
+        # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
             # Install docker-compose.
