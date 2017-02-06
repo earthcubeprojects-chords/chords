@@ -42,7 +42,8 @@ transfer to your own archive system. One click brings you a CSV file. A few line
 standardized formats such as OGC, and provide mapping, visualization, discovery, aggregation and 
 many other web-enabled functions. 
 
-**Note that a CHORDS Portal is not meant to be a permanent archive**.
+**Note that a CHORDS Portal is not meant to be a permanent archive. Users should plan to download and save data that they
+want to keep perminently**.
 
 ## Owning a Portal
 
