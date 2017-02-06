@@ -29,9 +29,6 @@ version: '2'
 services:
   app:
     container_name: chords_app
-    build:
-      context: ./
-      dockerfile: docker/app/Dockerfile
     image: ncareol/chords:mysql
     volumes:
       - mysql-data:/var/lib/mysql
