@@ -16,7 +16,7 @@ version: '2'
 #   docker push ncareol/chords
 #
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/docker/docker-compose.yml > docker-compose.yml
+#   curl -kL https://github.com/NCAR/chords/raw/master/docker-compose.yml > docker-compose.yml
 #   docker-compose pull
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
