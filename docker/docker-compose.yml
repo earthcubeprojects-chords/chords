@@ -31,7 +31,7 @@ services:
     container_name: chords_app
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: docker/app/Dockerfile
     image: ncareol/chords:mysql
     volumes:
       - mysql-data:/var/lib/mysql
