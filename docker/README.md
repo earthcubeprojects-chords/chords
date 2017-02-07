@@ -11,7 +11,7 @@ Service-specific resource files go into `docker/<service>`. *E.g.* **nginx** con
 Link appropriate `Dockerfile` to `Dockerfile` in root directory, and then build from root, *e.g.*
 
 ```sh
-ln -s docker/rpi-Dockerfile Dockerfile
+ln -s docker/app/rpi-Dockerfile Dockerfile
 docker build .
 ```
 
