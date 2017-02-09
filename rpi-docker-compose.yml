@@ -68,7 +68,7 @@ services:
 
   mysql:
     container_name: chords_mysql
-    image: hypriot/rpi-mysql:5.7
+    image: hypriot/rpi-mysql:5.5
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
