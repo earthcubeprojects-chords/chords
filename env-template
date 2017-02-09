@@ -3,6 +3,7 @@
 #
 # Replace this with a strong password:
 CHORDS_ADMIN_PW=use_a_strong_password
+#
 # Choose a reasonable password for guest access to data and graphics:
 CHORDS_GUEST_PW=guest
 # 
