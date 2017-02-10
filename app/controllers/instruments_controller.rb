@@ -126,9 +126,8 @@ class InstrumentsController < ApplicationController
   def show
     # This method sets the following instance variables:
     #  @params
-    #  @varnames       - A hash of variable names for the instrument, keyed by the shortname
-    #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
-    #  @units          - the units of the selected variable
+    #  @var_id_to_plot - The id of the variable currently being plotted
+    #  @var_to_plot    - The variable currently being plotted
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
@@ -172,7 +171,6 @@ class InstrumentsController < ApplicationController
       @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, vshort).pluck(:name)[0]
     end
 
-    # Specify the selected variable shortname
 
     # Set the variable id to plot
     if params[:var_id]
@@ -182,20 +180,6 @@ class InstrumentsController < ApplicationController
     end
     
     @var_to_plot = Var.find(@var_id_to_plot)
-
-    if params[:var]
-      if varshortnames.include? params[:var]
-        @varshortname  = params[:var]
-      end
-    else
-      # the var parameter was not supplied, so select the first variable
-      if @varnames.count > 0
-        @varshortname = @varnames.first[0]
-      end
-    end
-
-    # get the units
-    @units = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, @varshortname).pluck(:units)[0]
         
     # Determine the time range. Default to the most recent day
     endtime   = Time.now

@@ -1,5 +1,3 @@
-- if @varshortname != nil
-
 - # Easier to read double quote
 - quote = "\""
 
@@ -13,6 +11,5 @@
 - title = quote + "#{@instrument.name}: #{@var_to_plot.name} - Live Data" + quote
 - title  = title.as_json.html_safe
 
-- units = @units
-  #instrument_live_chart.instrument_highchart{:style => "min-width: 310px; height: 400px; margin: 0 auto"}
-    = render 'graph_chart', series: series, title: title
+#instrument_live_chart.instrument_highchart{:style => "min-width: 310px; height: 400px; margin: 0 auto"}
+  = render 'graph_chart', series: series, title: title
