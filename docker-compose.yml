@@ -62,6 +62,7 @@ services:
         - "80:80"
     links:
       - mysql
+      - mta
 
 
   mysql:
@@ -91,11 +92,17 @@ services:
     ports:
       - 3000:3000
 
+# https://hub.docker.com/r/tozd/postfix/~/dockerfile/
   mta:
     container_name: chords_mta
     image: tozd/postfix
     volumes:
       - postfix-spool:/var/spool/postfix
+    build:
+      context: ./postfix/.
+      dockerfile: Dockerfile
+    environment:
+      - MY_NETWORKS='172.18.0.0/16 127.0.0.0/8'
     ports:
       - 25:25
 
