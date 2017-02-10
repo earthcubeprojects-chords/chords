@@ -6,7 +6,7 @@ version: '2'
 #
 # To use, both docker-compose files must be specified: 
 #
-# CHORDS_DB_PW=chords_ec_demo  docker-compose -f docker-compose.yml -f docker-compose-dev.yml -p chords up -d
+# docker-compose -f docker-compose.yml -f docker-compose-dev.yml -p chords up -d
 
 services:
   app:

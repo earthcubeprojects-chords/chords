@@ -16,13 +16,13 @@
     return run_status;
   }
   
-  function random_value() {
+  function random_value(offset) {
     // these values to be replaced later by configuration values:
     var measure_min   = 5.0;
-    var measure_max   = 25.0;
-    var measure_sigma = 10.0;
+    var measure_max   = -5.0;
+    var measure_sigma = 2.0;
     var avg   = (measure_max + measure_min)/2.0;
-    var value = avg + (Math.random()-0.5) * 2 * measure_sigma;
+    var value = avg + (Math.random()-0.5) * 2 * measure_sigma + offset;
     value = value.toPrecision(4);
     return value;
   }
@@ -51,18 +51,17 @@
     // add variable values
     var s = shortnames(id);
     for (var i = 0; i < s.length; i++) {
-      url += "&" + s[i] + "=" + random_value(); 
+      url += "&" + s[i] + "=" + random_value(10.0*i + 100*parseInt(id)); 
     }
   
     // add the measurement time
     var utc_time = new Date();
     url += "&at=" + utc_time.toISOString(); 
-    
 
-    // add test data flag
+    // add the security key js if needed
     url += "#{get_security_key_url_fragment}";
 
-  	// add the security key js if needed
+    // add test data flag
     url += "&test";
 
     return(url);

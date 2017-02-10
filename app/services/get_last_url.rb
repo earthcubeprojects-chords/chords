@@ -16,9 +16,15 @@ class GetLastUrl
       last_points = []
       Instrument.all.each do |inst| 
         last_point = GetLastTsPoint.call(time_series_db, 'value', inst.id).to_a
-        last_points.push(last_point[0]) if last_point.length
+        if last_point[0]
+          last_points.push(last_point[0])
+        end
       end
       
+      if last_points.length == 0
+        return nil
+      end
+
       # sort by time
       last_points.sort_by! {|p| p["time"]}
 

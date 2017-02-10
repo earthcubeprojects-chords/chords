@@ -41,7 +41,7 @@ class GetTsCountsByInterval
       .where("time > #{begin_time_ns} and time <= #{end_time_ns}") \
       .group(:inst).time("#{resolution}")
     #
-    # Returned values from time)series_db are structured as folows:
+    # Returned values from time_series_db are structured as folows:
     # [
     #   {"time"=>"2016-09-09T00:00:00Z", "count"=>567, "inst"=>"1"}, 
     #   {"time"=>"2016-09-10T00:00:00Z", "count"=>0,   "inst"=>"1"},
@@ -56,14 +56,18 @@ class GetTsCountsByInterval
     inst_ids.each do |id| 
       count_series[id.to_i] = []
     end
-    
+
     # Assign each data record to a count array
     counts.each do |count_record|
       c = count_record["count"]
       if c != 0 
-        t = ConvertIsoToMs.call(count_record["time"])
-        value = [t, c]
-        count_series[count_record["inst"].to_i].append(value)
+        inst_id = count_record["inst"].to_i
+        # The database can contain instrument ids that were not in inst_ids.
+        if count_series.key?(inst_id)
+          t = ConvertIsoToMs.call(count_record["time"])
+          value = [t, c]
+          count_series[inst_id].append(value)
+        end
       end
     end
     

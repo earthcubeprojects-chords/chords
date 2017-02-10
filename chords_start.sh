@@ -5,7 +5,7 @@
 # Set RAILS_ENV to development or productioon. If not set,
 # it will default to development.
 #
-# Set CHORDS_DB_PW to the database password.
+# Set CHORDS_ADMIN_PW to the database password.
 #
 # If RAILS_ENV=production, SECRET_KEY_BASE must be set.
 #
@@ -16,8 +16,8 @@ if [ -z "$RAILS_ENV" ]; then
 fi
 
 # A database password is required.
-if [ -z "$CHORDS_DB_PW" ]; then
-  export CHORDS_DB_PW="chords_ec_demo"
+if [ -z "$CHORDS_ADMIN_PW" ]; then
+  export CHORDS_ADMIN_PW="chords_ec_demo"
 fi
 
 # The secret key base is required in production mode
@@ -32,6 +32,10 @@ mysql_seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
 
 influxdb_host="influxdb"
 influxdb_dbname="chords_ts_$RAILS_ENV"
+influxdb_admin_user="admin"
+influxdb_admin_pw=$CHORDS_ADMIN_PW
+influxdb_guest_user="guest"
+influxdb_guest_pw=$CHORDS_GUEST_PW
 
 chords_env="./chords_env.sh"
 
@@ -106,9 +110,17 @@ fi
 # Database ready. Set the SEEDED flag.
 touch $mysql_seeded_flag
 
-# Make sure that the influxdb database exists. It doesn't
-# hurt to do this even if it is already there.
-curl -POST http://$influxdb_host:8086/query?pretty=true --data-urlencode "q=create database $influxdb_dbname"
+set -x
+# Create the influxdb admin account, used for database writes etc.
+curl -s http://$influxdb_host:8086/query --data-urlencode "q=create user $influxdb_admin_user with password '$influxdb_admin_pw' with all privileges"
+
+# Make sure that the influxdb database exists. 
+curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create database $influxdb_dbname"
+
+# Create the influxdb guest account, used for anonymous reads.
+curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create user $influxdb_guest_user with password '$influxdb_guest_pw'"
+curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=grant read on $influxdb_dbname to $influxdb_guest_user"
+set +x
 
 echo "**** Starting web server."
 mkdir -p tmp/pids/
