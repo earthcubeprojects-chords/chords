@@ -173,6 +173,16 @@ class InstrumentsController < ApplicationController
     end
 
     # Specify the selected variable shortname
+
+    # Set the variable id to plot
+    if params[:var_id]
+      @var_id_to_plot = params[:var_id]
+    else
+      @var_id_to_plot = @instrument.vars[0].id
+    end
+    
+    @var_to_plot = Var.find(@var_id_to_plot)
+
     if params[:var]
       if varshortnames.include? params[:var]
         @varshortname  = params[:var]
