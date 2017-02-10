@@ -102,7 +102,8 @@
               = f.submit :value	 => 'Add a New Variable'
 .instrumentstrip
   Graph:
-  - @varnames.each do |v|
-    = link_to v[1], instrument_path(@instrument, var: v[0])
+  - @instrument.vars.each do |v|
+    = link_to v.name, instrument_path(@instrument, var: v.shortname, var_id: v.id)
+
 = render 'graph'
 = link_to 'Back', instruments_path
