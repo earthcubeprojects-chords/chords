@@ -59,7 +59,7 @@
           %strong Test Measurements
         %td
           = @instrument.sample_count(:test)
-        %td= render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
+          = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
       %tr
         %td
           %strong Display points
