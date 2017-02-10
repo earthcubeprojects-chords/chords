@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161018172910) do
+ActiveRecord::Schema.define(version: 20170210035633) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20161018172910) do
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
     t.datetime "measured_at"
-    t.boolean  "test",          limit: 1,   default: false, null: false
+    t.boolean  "test",                      default: false, null: false
   end
 
   add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
@@ -57,10 +57,10 @@ ActiveRecord::Schema.define(version: 20161018172910) do
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
     t.string   "timezone",              limit: 255
-    t.boolean  "secure_administration", limit: 1,        default: false
-    t.boolean  "secure_data_viewing",   limit: 1,        default: true
-    t.boolean  "secure_data_download",  limit: 1,        default: true
-    t.boolean  "secure_data_entry",     limit: 1,        default: true
+    t.boolean  "secure_administration",                  default: false
+    t.boolean  "secure_data_viewing",                    default: true
+    t.boolean  "secure_data_download",                   default: true
+    t.boolean  "secure_data_entry",                      default: true
     t.string   "data_entry_key",        limit: 255
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
@@ -89,9 +89,9 @@ ActiveRecord::Schema.define(version: 20161018172910) do
     t.string   "last_sign_in_ip",        limit: 255
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
-    t.boolean  "is_administrator",       limit: 1,   default: false
-    t.boolean  "is_data_viewer",         limit: 1,   default: true
-    t.boolean  "is_data_downloader",     limit: 1,   default: true
+    t.boolean  "is_administrator",                   default: false
+    t.boolean  "is_data_viewer",                     default: true
+    t.boolean  "is_data_downloader",                 default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -105,6 +105,8 @@ ActiveRecord::Schema.define(version: 20161018172910) do
     t.string   "shortname",            limit: 255
     t.string   "units",                limit: 255, default: "C", null: false
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
+    t.float    "minimum_plot_value",   limit: 24
+    t.float    "maximum_plot_value",   limit: 24
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree

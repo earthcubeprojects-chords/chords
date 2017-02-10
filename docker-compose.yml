@@ -54,7 +54,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
-      - RAILS_ENV=production
+      - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
       - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
       - SECRET_KEY_BASE=aaaaaaaaaaa

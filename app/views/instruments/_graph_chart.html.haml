@@ -1,3 +1,14 @@
+- if @var_to_plot.minimum_plot_value
+  - min_y_axis_json = "min: #{@var_to_plot.minimum_plot_value},"
+- else
+  - min_y_axis_json = ""
+
+- if @var_to_plot.maximum_plot_value
+  - max_y_axis_json = "max: #{@var_to_plot.maximum_plot_value},"
+- else
+  - max_y_axis_json = ""
+
+
 :javascript
   var live_chart; 
   var last_time = 0;
@@ -5,7 +16,7 @@
   function requestData() 
   {
     $.getJSON(
-    '/instruments/#{@instrument.id}/live?var=#{varshortname}&after='+last_time,
+    '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
     function(live_data) 
       {
         var points         = live_data["points"]
@@ -57,7 +68,9 @@
         tickPixelInterval: 150 
       },
       yAxis: { 
-        title: { text: '#{varname} (#{units})' },
+        #{min_y_axis_json}
+        #{max_y_axis_json}
+        title: { text: '#{@var_to_plot.name} (#{@var_to_plot.units})' },
         plotLines: [{
           value: 0,
           width: 1,
