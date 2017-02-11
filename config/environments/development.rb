@@ -52,7 +52,6 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'mta',
     port:    25,
-    # domain:  'info.example.com',
     :openssl_verify_mode => 'none'
   }
 
