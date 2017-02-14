@@ -60,6 +60,7 @@ services:
       - SECRET_KEY_BASE=aaaaaaaaaaa
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
+      - INFLUXDB_RETENTION=${INFLUXDB_RETENTION}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
