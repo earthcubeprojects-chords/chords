@@ -16,6 +16,7 @@ class DashboardController < ApplicationController
 
     @metrics = {}
     @metrics["db_size_mb"]        = ApplicationHelper.total_db_size_mb
+    @metrics["db_expiry_time"]    = ApplicationHelper.db_expiry_time
     @metrics["measurement_count"] = big_count
     @metrics["site_count"]        = Site.count
     @metrics["instrument_count"]  = Instrument.count

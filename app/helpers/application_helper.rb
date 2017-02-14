@@ -6,6 +6,12 @@ module ApplicationHelper
     usedMB = InfluxdbDiskUsed.call
     return usedMB
   end
+  
+  # return the database expiry time.
+  def self.db_expiry_time
+    expiryTime = InfluxdbExpiryTime.call("autogen")
+    return expiryTime
+  end
 
   # Return the name of the database that rails is currently using
   def self.get_current_db_name    
