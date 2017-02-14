@@ -36,6 +36,7 @@ influxdb_admin_user="admin"
 influxdb_admin_pw=$CHORDS_ADMIN_PW
 influxdb_guest_user="guest"
 influxdb_guest_pw=$CHORDS_GUEST_PW
+influxdb_retention=$INFLUXDB_RETENTION
 
 chords_env="./chords_env.sh"
 
