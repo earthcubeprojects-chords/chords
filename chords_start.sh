@@ -118,8 +118,8 @@ curl -s http://$influxdb_host:8086/query --data-urlencode "q=create user $influx
 # Make sure that the influxdb database exists. 
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create database $influxdb_dbname"
 
-# Set the retention policy to 1 year
-curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=alter retention policy autogen on $influxdb_dbname duration 52w"
+# Set the retention policy
+curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=alter retention policy autogen on $influxdb_dbname duration $influxdb_retention"
 
 # Create the influxdb guest account, used for anonymous reads.
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create user $influxdb_guest_user with password '$influxdb_guest_pw'"
