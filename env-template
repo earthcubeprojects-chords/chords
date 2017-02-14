@@ -11,4 +11,4 @@ DOCKER_TAG=development
 #
 RAILS_ENV=production
 #
-INFLUXDB_RETENTION=52w
+DB_RETENTION=52w
