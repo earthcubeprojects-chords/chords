@@ -13,11 +13,12 @@ class InfluxdbExpiryTime
 
         # look for the desired policy
         if v["name"] == policyName
+          # duration has the form "12h35m21s"
           duration = v["duration"]
           
           # split the duration into array [s, m, h]. It might only
           # contain seconds, or seconds and minutes.
-          time_parts = duration.split(/[hms]/).reverse.map{ |d| d = d.to_i }
+          time_parts = duration.split(/[hms]/).reverse.map{ |d| d.to_i }
 
           # convert the duration to seconds
           if time_parts.length > 0
@@ -33,7 +34,9 @@ class InfluxdbExpiryTime
               result = "never"
             else 
               # Calulate the date that preceeds now.
-              result = seconds.seconds.ago.to_s
+              result_date = seconds.seconds.ago
+              # format it
+              result = result_date.strftime("%Y-%m-%d %H %Z")
             end
           end
         end
