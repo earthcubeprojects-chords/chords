@@ -22,6 +22,18 @@ Parameters:
     Description: CHORDS git branch/docker image tag
     Type: String
 
+  DbRetention:
+    AllowedValues:
+    - INF
+    - 4w
+    - 12w
+    - 24w
+    - 52w
+    - 104w
+    Default: 52w
+    Description: Database retention duration (weeks, INF=forever)
+    Type: String
+
   InstanceType:
     AllowedValues:
     - t1.micro
@@ -402,6 +414,7 @@ Resources:
                 CHORDS_GUEST_PW=${ChordsGuestPw}
                 DOCKER_TAG=${GitBranchAndDockerTag}
                 RAILS_ENV=production
+                DB_RETENTION=${DbRetention}
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
