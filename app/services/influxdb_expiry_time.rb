@@ -36,7 +36,7 @@ class InfluxdbExpiryTime
               # Calulate the date that preceeds now.
               result_date = seconds.seconds.ago
               # format it
-              result = result_date.strftime("%Y-%m-%d %H %Z")
+              result = result_date.strftime("%Y-%m-%d")
             end
           end
         end
