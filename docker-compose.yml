@@ -11,9 +11,6 @@ version: '2'
 #   1. mysql-data:     (/var/lib/mysql)
 #   2. influxdb-data:  (/var/lib/influxdb)
 #   3. grafana-data:   (/var/lib/grafana)
-
-
-# database volume (mysql-data).
 #
 # This configuration is used to both build the chords image,
 # and to deploy the CHORDS system. Dockerfile provides the recipe
@@ -26,15 +23,16 @@ version: '2'
 #
 # Create a .env (in the directory that you run docker-compose from) containing:
 # CHORDS_ADMIN_PW=<password>       # The password for r/w and admin access to CHORDS, mysql and influxdb.
-# CHORDS_ADMIN_PW=<password>       # The password for ro access to influxdb.
+# CHORDS_GUEST_PW=<password>       # The password for ro access to influxdb.
 # DOCKER_TAG=<git branch>          # Convention is to use the git branch used to generate the image as the tag.
+# DB_RETENTION=<duration>          # Time series database retention duration, e.g. 168h or 52w. Use "INF" for permanent.
 #
-# These environment variables may also be provided in .env:
+# These environment variables may also be provided in .env, but have default values otherwise:
 # SECRET_KEY_BASE=<strong key, generated as suggested by rake.>
 # RAILS_ENV=production|development
 # 
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
+#   curl -L https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
 #   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
@@ -58,6 +56,8 @@ services:
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
       - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
       - SECRET_KEY_BASE=aaaaaaaaaaa
+      - DB_RETENTION=${DB_RETENTION}
+      #  Note: INFLUXDB_ variables are used by the Influxer gem.
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"

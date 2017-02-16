@@ -58,6 +58,8 @@ services:
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
       - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
       - SECRET_KEY_BASE=aaaaaaaaaaa
+      - DB_RETENTION=${DB_RETENTION}
+      #  Note: INFLUXDB_ variables are used by the Influxer gem.
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
