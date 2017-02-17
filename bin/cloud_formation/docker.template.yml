@@ -526,6 +526,10 @@ Resources:
         IpProtocol: tcp
         ToPort: '22'
       - CidrIp: 0.0.0.0/0
+        FromPort: '25'
+        IpProtocol: tcp
+        ToPort: '25'
+      - CidrIp: 0.0.0.0/0
         FromPort: '3000'
         IpProtocol: tcp
         ToPort: '3000'
