@@ -172,14 +172,19 @@ class InstrumentsController < ApplicationController
     end
 
 
-    # Set the variable id to plot
+    # Set the variable to plot
     if params[:var_id]
-      @var_id_to_plot = params[:var_id]
+      var_id_to_plot = params[:var_id]
+      @var_to_plot = Var.find(@var_id_to_plot)
     else
-      @var_id_to_plot = @instrument.vars[0].id
+      if ( defined? @instrument.vars.first.id)
+        var_id_to_plot = @instrument.vars.first.id
+        @var_to_plot = Var.find(@var_id_to_plot)
+      else 
+        # No variable defined
+      end      
     end
     
-    @var_to_plot = Var.find(@var_id_to_plot)
         
     # Determine the time range. Default to the most recent day
     endtime   = Time.now

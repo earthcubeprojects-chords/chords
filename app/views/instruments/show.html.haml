@@ -104,10 +104,6 @@
             = f.hidden_field :instrument_id, :value => @instrument.id
             - if can?(:manage, Var)
               = f.submit :value	 => 'Add a New Variable'
-.instrumentstrip
-  Graph:
-  - @instrument.vars.each do |v|
-    = link_to v.name, instrument_path(@instrument, var: v.shortname, var_id: v.id)
 
 = render 'graph'
 = link_to 'Back', instruments_path
