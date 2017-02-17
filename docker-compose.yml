@@ -104,9 +104,6 @@ services:
     image: tozd/postfix
     volumes:
       - postfix-spool:/var/spool/postfix
-    build:
-      context: ./postfix/.
-      dockerfile: Dockerfile
     environment:
       - MY_NETWORKS=172.18.0.0/16 127.0.0.0/8
     ports:
