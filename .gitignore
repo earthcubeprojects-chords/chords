@@ -44,4 +44,6 @@ bower.json
 /passenger.*
 vendor/ruby
 chords_env.sh
+
+# Docker .env environment variable file
 .env
