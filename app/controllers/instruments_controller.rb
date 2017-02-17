@@ -174,14 +174,15 @@ class InstrumentsController < ApplicationController
 
     # Set the variable to plot
     if params[:var_id]
-      var_id_to_plot = params[:var_id]
+      @var_id_to_plot = params[:var_id]
       @var_to_plot = Var.find(@var_id_to_plot)
     else
       if ( defined? @instrument.vars.first.id)
-        var_id_to_plot = @instrument.vars.first.id
+        @var_id_to_plot = @instrument.vars.first.id
         @var_to_plot = Var.find(@var_id_to_plot)
       else 
-        # No variable defined
+        # No variable defined.
+        # This leaves @var_id_to_plot and @var_to_plot undefined. 
       end      
     end
     
