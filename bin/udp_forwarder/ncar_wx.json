@@ -32,7 +32,7 @@
   
   "chords_host": "portal.chordsrt.com",
   
-  "interface":   "chords.fl-ext.ucar.edu",
+  "interface":   "localhost",
 
   "skey": "123456",
   
@@ -68,5 +68,15 @@
        "template":   "1r0,Dm=(_fp_)[D#],Sm=(_fp_)[M#],Sx=(_fp_)[M#],Ta=(_fp_)C,Ua=(_fp_)P,Pa=(_fp_)H,Rc=(_fp_)M,Vs=(_fp_)V",
        "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batv"]
     }
+
+   "RAF": { 
+       "enabled":    true,
+       "port":       29112,
+       "id":         5,
+       "sample":     "1R0,Dm=358D,Sm=3.1M,Sx=7.0M,Ta=26.5C,Ua=27.0P,Pa=813.5H,Rc=453.20M,Vs=13.9V",
+       "template":   "1R0,Dm=(_fp_)[D#],Sm=(_fp_)[M#],Sx=(_fp_)[M#],Ta=(_fp_)C,Ua=(_fp_)P,Pa=(_fp_)H,Rc=(_fp_)M,Vs=(_fp_)V",
+       "short_names": ["wdir", "wspd", "wmax","tdry","rh","pres","raintot", "batv"]
+    },
+    
   }
 }
