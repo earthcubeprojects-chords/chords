@@ -1,17 +1,15 @@
 #!/bin/sh
 
-docker stop $(docker ps -q)
-docker rm $(docker ps -qa)
+# *********************************************
+# WARNING: This script removes all containers and volumes!
+# *********************************************
 
-docker rmi $(docker images -q)
-docker rmi $(docker images -q)
+#docker stop $(docker ps -q)
+#docker rm $(docker ps -qa)
 
+# docker rmi $(docker images -q)
+# docker rmi $(docker images -q)
 
-docker images
+#docker volume rm $(docker volume ls -q)
 
-
-
-
-
-
-# docker run -i -t 66dc510059c7 /bin/bash
+# docker images
