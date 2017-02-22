@@ -40,15 +40,28 @@ class Instrument < ActiveRecord::Base
 
   
   def is_receiving_data
-    return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
+    if defined? TsPoint
+      return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
+    else
+      return false
+    end
   end
   
   def last_age  
-    return GetLastTsAge.call(TsPoint, "value", self.id)
+    if defined? TsPoint
+      return GetLastTsAge.call(TsPoint, "value", self.id)
+    else
+      return false
+    end
   end
 
   def sample_count(sample_type)
-    return GetTsCount.call(TsPoint, "value", self.id, sample_type)
+    if defined? TsPoint
+      return GetTsCount.call(TsPoint, "value", self.id, sample_type)
+    else
+      return false
+    end
+
   end
   
   def data(count, parameter)
