@@ -59,7 +59,7 @@ class Instrument < ActiveRecord::Base
     if defined? TsPoint
       return GetTsCount.call(TsPoint, "value", self.id, sample_type)
     else
-      return false
+      return 0
     end
 
   end
