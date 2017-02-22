@@ -6,6 +6,8 @@
     %br/
     = f.email_field :email, autofocus: true
   .field
+    = render 'devise/passwords/unencrypted_password_warning'
+
     = f.label :password
     - if @minimum_password_length
       %em
