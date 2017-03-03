@@ -50,10 +50,11 @@
   
         // Don't redraw the chart if live updating is paused
         if (pause == false) {
-          live_chart.redraw();
-
-          setTimeout(requestData, refresh_msecs);    
+          live_chart.redraw();        
         }
+        
+        // retrieve new data points after a pause
+        setTimeout(requestData, refresh_msecs);
       }
     );
   }
