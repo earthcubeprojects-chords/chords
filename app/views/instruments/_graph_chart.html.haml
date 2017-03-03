@@ -12,7 +12,6 @@
 :javascript
   var live_chart; 
   var last_time = 0;
-  
   function requestData() 
   {
     $.getJSON(
@@ -22,6 +21,9 @@
         var points         = live_data["points"]
         var display_points = live_data["display_points"]
         var refresh_msecs  = live_data["refresh_msecs"];
+        
+        //console.log(points);
+        //console.log(points[0]);
   
         // Trim the graph if the display width is decreased
         while (live_chart.series[0].data.length > display_points) {
@@ -33,11 +35,20 @@
           if (points[i][0] > last_time) {
             var shift = live_chart.series[0].data.length >= display_points;
             live_chart.series[0].addPoint(points[i], false, shift);
-            last_time = points[i][0]
+            last_time = points[i][0];
           }
         }
   
+  
+        // console.log(live_chart.series);
+        //console.log(live_chart.series[0].name);
+        //console.log(live_chart.series[0].data);
+        //console.log(live_chart.series[0].data[1]);
+  
+        
         live_chart.redraw();
+
+
         setTimeout(requestData, refresh_msecs);    
       }
     );
@@ -84,7 +95,7 @@
       },
       tooltip: {
         formatter: function () {
-          return '<b>' + this.series.name + '</b><br/>' +
+          return '<b>#{@var_to_plot.name}</b><br/>' +
             Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
             Highcharts.numberFormat(this.y, 2);
           }
@@ -96,5 +107,8 @@
       
     // Make first data request
     requestData();
+    
+    console.log(JSON.stringify(live_chart));
+    
     }
   );
