@@ -13,18 +13,18 @@
   var live_chart; 
   var last_time = 0;
   var pause = false;
-  //var start_ms = 0;
-  //var end_ms = 0;
   
   function requestData() 
   {
   
+    // If the manual datetime input fields are meing modified (in focus) then don't don't redraw the chart
     if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
       pause = true;
     } else {
       pause = false;
     }
     
+    // Retrieve the latest points to plot and plot them
     $.getJSON(
     '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
     function(live_data) 
@@ -38,6 +38,7 @@
           live_chart.series[0].removePoint(0, false);
         }
   
+        // add the new points
         var i;
         for (i = 0; i < points.length; i++) {
           if (points[i][0] > last_time) {
@@ -47,22 +48,19 @@
           }
         }
   
+        // Don't redraw the chart if live updating is paused
         if (pause == false) {
-          //start_ms = points[0][0];
-          //end_ms = points[points.length-1][0];
-          //console.log(start_ms);
-          //console.log(end_ms);
           live_chart.redraw();
 
           setTimeout(requestData, refresh_msecs);    
-
         }
-
       }
     );
   }
   
   $(document).ready(function () {
+
+    // Adjust the global timezone offset
     Highcharts.setOptions({
       global: { 
         timezoneOffset: #{@tz_offset_mins}
@@ -86,18 +84,10 @@
           inputDateFormat: '%b %e, %Y %H:%M:%S',
           inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
           inputDateParser: function (value) {
-            //pause = true;
-            //console.log(value);
-
-            //live_chart.redraw();
-
             [date, time] = value.split(/[\s]/);
             [year, month, day] = date.split(/[\-]/);
             [hours, minutes, seconds] = time.split(/[\:]/);
 
-            //console.log(#{@tz_offset_mins});
-            //console.log([year, month-1, day], [hours, minutes, seconds]);
-            //console.log(.log.timezoneOffset);
             ms =  Date.UTC(
                 parseInt(year, 10),
                 parseInt(month-1, 10),
@@ -111,8 +101,6 @@
             // This is NOT taken in to account by highcharts and is likely a bug in their code
             tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
             ms = ms + tz_offset_ms;
-            
-            //console.log(ms);
             
             return(ms);
           },
