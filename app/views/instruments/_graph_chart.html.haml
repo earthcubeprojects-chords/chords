@@ -13,46 +13,48 @@
   var live_chart; 
   var last_time = 0;
   var pause = false;
-  var start_ms = 0;
-  var end_ms = 0;
+
+
+
+
+  function requestData() {
   
-  function requestData() 
-  {
-    $.getJSON(
-    '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
-    function(live_data) 
-      {
-        var points         = live_data["points"]
-        var display_points = live_data["display_points"]
-        var refresh_msecs  = live_data["refresh_msecs"];
-        
-        // Trim the graph if the display width is decreased
-        while (live_chart.series[0].data.length > display_points) {
-          live_chart.series[0].removePoint(0, false);
-        }
-  
-        var i;
-        for (i = 0; i < points.length; i++) {
-          if (points[i][0] > last_time) {
-            var shift = live_chart.series[0].data.length >= display_points;
-            live_chart.series[0].addPoint(points[i], false, shift);
-            last_time = points[i][0];
+    if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
+      // the date selectors are in focus and the date is being changes
+      // don't update!
+      //console.log('paused');
+      setTimeout(requestData, 1000);   
+    } else {
+
+      $.getJSON(
+        '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
+        function(live_data) {
+          var display_points = live_data["display_points"]
+          var refresh_msecs  = live_data["refresh_msecs"];
+
+          var points         = live_data["points"]
+
+          // Trim the graph if the display width is decreased
+          while (live_chart.series[0].data.length > display_points) {
+            live_chart.series[0].removePoint(0, false);
           }
-        }
-  
-        if (pause == false) {
-          start_ms = points[0][0];
-          end_ms = points[points.length-1][0];
-          console.log(start_ms);
-          console.log(end_ms);
+
+          var i;
+          for (i = 0; i < points.length; i++) {
+            if (points[i][0] > last_time) {
+              var shift = live_chart.series[0].data.length >= display_points;
+              live_chart.series[0].addPoint(points[i], false, shift);
+              last_time = points[i][0];
+            }
+          }
+
           live_chart.redraw();
 
           setTimeout(requestData, refresh_msecs);    
 
         }
-
-      }
-    );
+      );
+    }
   }
   
   $(document).ready(function () {
@@ -79,10 +81,8 @@
           inputDateFormat: '%b %e, %Y %H:%M:%S',
           inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
           inputDateParser: function (value) {
-            pause = true;
             //console.log(value);
 
-            //live_chart.redraw();
 
             [date, time] = value.split(/[\s]/);
             [year, month, day] = date.split(/[\-]/);
@@ -96,7 +96,8 @@
                 day,
                 hours,
                 minutes,
-                seconds
+                seconds,
+                0
             );
             
             //console.log(ms);
@@ -136,9 +137,11 @@
       exporting: { enabled: false },
       series: #{series},
     });
+    
+    
       
     // Make first data request
     requestData();
-    
     }
   );
+  
