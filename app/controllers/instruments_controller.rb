@@ -25,26 +25,17 @@ class InstrumentsController < ApplicationController
       if our_instrument
       
         livedata[:display_points] = our_instrument.display_points
-        livedata[:refresh_msecs]  = our_instrument.refresh_rate_ms
-          
-        var_id = 
-          Var.all.where("instrument_id='#{params[:id]}' and shortname='#{params[:var]}'").pluck(:id)[0]
-        
-        # Get the measurements
-        # TODO: use the :after parameter. It did ot interact correctly with
-        # the highchart during prototyping. The problem may be on the javascript side.
-        ts_points = TsPoint \
-          .where("inst = '#{params[:id]}'") \
-          .where("var  = '#{var_id}'") \
-          .order("desc") \
-          .limit(our_instrument.display_points).to_a
+        livedata[:refresh_msecs]  = our_instrument.refresh_rate_ms          
 
-        if ts_points
-          # Collect the times and values for the measurements
-          live_points = []
-          ts_points.reverse_each {|p| live_points  << [ConvertIsoToMs.call(p["time"]), p["value"].to_f]}
+        variable = our_instrument.find_var_by_shortname(params[:var])
+
+        live_points = variable.get_tspoints
+        
+        if live_points
           livedata[:points] = live_points
         end
+        
+
       end
     end
 

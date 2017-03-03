@@ -12,6 +12,11 @@ class Instrument < ActiveRecord::Base
   def self.initialize
   end
 
+  def find_var_by_shortname (shortname)
+    var_id = Var.all.where("instrument_id='#{self.id}' and shortname='#{shortname}'").pluck(:id)[0]
+
+    return Var.find(var_id)
+  end
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
