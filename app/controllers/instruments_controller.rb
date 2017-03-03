@@ -24,14 +24,8 @@ class InstrumentsController < ApplicationController
       # Fetch the data
       if our_instrument
       
-        display_points            = our_instrument.display_points
-        livedata[:display_points] = display_points
-        refresh_rate_ms           = our_instrument.sample_rate_seconds*1000
-        # Limit the chart refresh rate
-        if (refresh_rate_ms < 1000) 
-          refresh_rate_ms = 1000
-        end
-        livedata[:refresh_msecs]  = refresh_rate_ms
+        livedata[:display_points] = our_instrument.display_points
+        livedata[:refresh_msecs]  = our_instrument.refresh_rate_ms
           
         var_id = 
           Var.all.where("instrument_id='#{params[:id]}' and shortname='#{params[:var]}'").pluck(:id)[0]
@@ -43,7 +37,7 @@ class InstrumentsController < ApplicationController
           .where("inst = '#{params[:id]}'") \
           .where("var  = '#{var_id}'") \
           .order("desc") \
-          .limit(display_points).to_a
+          .limit(our_instrument.display_points).to_a
 
         if ts_points
           # Collect the times and values for the measurements

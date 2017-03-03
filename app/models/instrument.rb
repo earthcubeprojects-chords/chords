@@ -64,6 +64,18 @@ class Instrument < ActiveRecord::Base
 
   end
   
+
+  def refresh_rate_ms
+    # Limit the chart refresh rate
+    if (self.sample_rate_seconds >= 1) 
+      refresh_rate_ms           = self.sample_rate_seconds*1000
+    else
+      refresh_rate_ms = 1000
+    end
+
+    return refresh_rate_ms
+  end
+  
   def data(count, parameter)
 
     measurements = Measurement.where("instrument_id = ? and parameter = ?", self.id, parameter).last(self.display_points)
