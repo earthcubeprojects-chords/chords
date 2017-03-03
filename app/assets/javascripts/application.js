@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery2
+//= require jquery-ui
 //= require jquery_ujs
 //= require underscore
 //= require gmaps/google
