@@ -12,6 +12,10 @@
 :javascript
   var live_chart; 
   var last_time = 0;
+  var pause = false;
+  var start_ms = 0;
+  var end_ms = 0;
+  
   function requestData() 
   {
     $.getJSON(
@@ -22,9 +26,6 @@
         var display_points = live_data["display_points"]
         var refresh_msecs  = live_data["refresh_msecs"];
         
-        //console.log(points);
-        //console.log(points[0]);
-  
         // Trim the graph if the display width is decreased
         while (live_chart.series[0].data.length > display_points) {
           live_chart.series[0].removePoint(0, false);
@@ -39,17 +40,17 @@
           }
         }
   
-  
-        // console.log(live_chart.series);
-        //console.log(live_chart.series[0].name);
-        //console.log(live_chart.series[0].data);
-        //console.log(live_chart.series[0].data[1]);
-  
-        
-        live_chart.redraw();
+        if (pause == false) {
+          start_ms = points[0][0];
+          end_ms = points[points.length-1][0];
+          console.log(start_ms);
+          console.log(end_ms);
+          live_chart.redraw();
 
+          setTimeout(requestData, refresh_msecs);    
 
-        setTimeout(requestData, refresh_msecs);    
+        }
+
       }
     );
   }
@@ -73,11 +74,36 @@
       rangeSelector: {
           buttons: [],
           inputBoxWidth: 180,
-          inputDateFormat: '%b %e, %Y %H:%M:%S.%L',
-          inputEditDateFormat: '%Y-%m-%d %H:%M:%S.%L',
+          enabled: true,
+          inputEnabled: true,
+          inputDateFormat: '%b %e, %Y %H:%M:%S',
+          inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
+          inputDateParser: function (value) {
+            pause = true;
+            //console.log(value);
 
-          allButtonsEnabled: true,
-          selected: 2
+            //live_chart.redraw();
+
+            [date, time] = value.split(/[\s]/);
+            [year, month, day] = date.split(/[\-]/);
+            [hours, minutes, seconds] = time.split(/[\:]/);
+
+            //console.log([year, month, day], [hours, minutes, seconds]);
+
+            ms =  Date.UTC(
+                year,
+                month-1,
+                day,
+                hours,
+                minutes,
+                seconds
+            );
+            
+            //console.log(ms);
+            
+            return(ms);
+          },
+          allButtonsEnabled: false
       },      
       credits: { enabled: false, }, 
       title: { text: #{title} },
@@ -113,8 +139,6 @@
       
     // Make first data request
     requestData();
-    
-    console.log(JSON.stringify(live_chart));
     
     }
   );
