@@ -13,11 +13,18 @@
   var live_chart; 
   var last_time = 0;
   var pause = false;
-  var start_ms = 0;
-  var end_ms = 0;
+  //var start_ms = 0;
+  //var end_ms = 0;
   
   function requestData() 
   {
+  
+    if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
+      pause = true;
+    } else {
+      pause = false;
+    }
+    
     $.getJSON(
     '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
     function(live_data) 
@@ -41,8 +48,8 @@
         }
   
         if (pause == false) {
-          start_ms = points[0][0];
-          end_ms = points[points.length-1][0];
+          //start_ms = points[0][0];
+          //end_ms = points[points.length-1][0];
           //console.log(start_ms);
           //console.log(end_ms);
           live_chart.redraw();
@@ -79,7 +86,7 @@
           inputDateFormat: '%b %e, %Y %H:%M:%S',
           inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
           inputDateParser: function (value) {
-            pause = true;
+            //pause = true;
             //console.log(value);
 
             //live_chart.redraw();
@@ -105,7 +112,7 @@
             tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
             ms = ms + tz_offset_ms;
             
-            console.log(ms);
+            //console.log(ms);
             
             return(ms);
           },
