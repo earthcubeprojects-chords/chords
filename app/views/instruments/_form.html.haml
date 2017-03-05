@@ -19,6 +19,15 @@
     = f.label :display_points
     %br/
     = f.text_field :display_points
+    %br/
+  .field
+    = f.label :plot_offset
+    %br/
+    = f.text_field :plot_offset_value, :default => '1'
+    = f.select(:plot_offset_units, [:years, :months, :weeks, :days, :hours, :minutes, :seconds], :selected => :weeks)
+    
+     
+    %br/
   .field
     = f.label :sample_rate_seconds
     %br/

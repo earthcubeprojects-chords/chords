@@ -65,6 +65,13 @@
           %strong Display points
         %td= best_in_place @instrument, :display_points, :as => :input
       %tr
+      %tr
+        %td
+          %strong Plot Offset
+        %td
+          = best_in_place @instrument, :plot_offset_value, :as => :input
+          = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => [:years, :months, :weeks, :days, :hours, :minutes, :seconds]
+      %tr
         %td
           %strong
             Measurement
