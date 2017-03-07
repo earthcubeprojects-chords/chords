@@ -10,16 +10,17 @@ class Var < ActiveRecord::Base
     return self.shortname + '_at'
   end
 
-  def get_tspoints (display_points = self.instrument.display_points)
+  def get_tspoints (since, display_points = self.instrument.display_points)
     # Get the measurements
-    # TODO: use the :after parameter. It did ot interact correctly with
+    # TODO: use the :after parameter. It did not interact correctly with
     # the highchart during prototyping. The problem may be on the javascript side.
     ts_points = TsPoint \
       .where("inst = '#{self.instrument.id}'") \
       .where("var  = '#{self.id}'") \
       .order("desc") \
-      .limit(display_points).to_a
-
+      .since(since) 
+      
+    ts_points = ts_points.to_a
     live_points = []
     if ts_points
       # Collect the times and values for the measurements

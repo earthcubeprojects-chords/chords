@@ -17,6 +17,9 @@ class InstrumentsController < ApplicationController
 
     # Verify the parameters
     if params[:id] && params[:var] && params[:after]
+
+      # conver the millisecond input to seconds since epoch
+      since_seconds = Time.strptime(params[:after], '%Q')
     
       # Get the instrument
       our_instrument = Instrument.find(params[:id])
@@ -29,13 +32,11 @@ class InstrumentsController < ApplicationController
 
         variable = our_instrument.find_var_by_shortname(params[:var])
 
-        live_points = variable.get_tspoints
+        live_points = variable.get_tspoints(since_time_seconds)
         
         if live_points
           livedata[:points] = live_points
         end
-        
-
       end
     end
 
@@ -269,6 +270,7 @@ class InstrumentsController < ApplicationController
       end
     end
   end
+  
 
   # DELETE /instruments/1
   # DELETE /instruments/1.json
