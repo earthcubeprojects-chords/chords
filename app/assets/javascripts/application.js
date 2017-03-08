@@ -10,7 +10,7 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery2
 //= require jquery-ui
 //= require jquery_ujs
 //= require underscore
@@ -20,8 +20,10 @@
 //= require autocomplete-rails
 
 //= require js/bootstrap
-//= require highcharts
+//= require highstock
 //= require highcharts-more
+//= require modules/exporting
+
 //= require markerclusterer
 
 //= require asset_paths

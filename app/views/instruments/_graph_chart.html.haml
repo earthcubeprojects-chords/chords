@@ -1,52 +1,112 @@
+- if @var_to_plot.minimum_plot_value
+  - min_y_axis_json = "min: #{@var_to_plot.minimum_plot_value},"
+- else
+  - min_y_axis_json = ""
+
+- if @var_to_plot.maximum_plot_value
+  - max_y_axis_json = "max: #{@var_to_plot.maximum_plot_value},"
+- else
+  - max_y_axis_json = ""
+
+
 :javascript
   var live_chart; 
   var last_time = 0;
+  var pause = false;
   
   function requestData() 
   {
+  
+    // If the manual datetime input fields are meing modified (in focus) then don't don't redraw the chart
+    if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
+      pause = true;
+    } else {
+      pause = false;
+    }
+    
+    // Retrieve the latest points to plot and plot them
     $.getJSON(
-    '/instruments/#{@instrument.id}/live?var=#{varshortname}&after='+last_time,
+    '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
     function(live_data) 
       {
         var points         = live_data["points"]
         var display_points = live_data["display_points"]
         var refresh_msecs  = live_data["refresh_msecs"];
-  
+        
         // Trim the graph if the display width is decreased
         while (live_chart.series[0].data.length > display_points) {
           live_chart.series[0].removePoint(0, false);
         }
   
+        // add the new points
         var i;
         for (i = 0; i < points.length; i++) {
           if (points[i][0] > last_time) {
             var shift = live_chart.series[0].data.length >= display_points;
             live_chart.series[0].addPoint(points[i], false, shift);
-            last_time = points[i][0]
+            last_time = points[i][0];
           }
         }
   
-        live_chart.redraw();
-        setTimeout(requestData, refresh_msecs);    
+        // Don't redraw the chart if live updating is paused
+        if (pause == false) {
+          live_chart.redraw();        
+        }
+        
+        // retrieve new data points after a pause
+        setTimeout(requestData, refresh_msecs);
       }
     );
   }
   
   $(document).ready(function () {
+
+    // Adjust the global timezone offset
     Highcharts.setOptions({
       global: { 
         timezoneOffset: #{@tz_offset_mins}
       },
     });
   
-    live_chart = new Highcharts.Chart(
+    live_chart = new Highcharts.stockChart(
     {
       chart: {
         renderTo: 'instrument_live_chart',
         type: 'line',
+        zoomType: 'x',
         animation: Highcharts.svg, // don't animate in old IE
         marginRight: 10
       },
+      rangeSelector: {
+          buttons: [],
+          inputBoxWidth: 180,
+          enabled: true,
+          inputEnabled: true,
+          inputDateFormat: '%b %e, %Y %H:%M:%S',
+          inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
+          inputDateParser: function (value) {
+            [date, time] = value.split(/[\s]/);
+            [year, month, day] = date.split(/[\-]/);
+            [hours, minutes, seconds] = time.split(/[\:]/);
+
+            ms =  Date.UTC(
+                parseInt(year, 10),
+                parseInt(month-1, 10),
+                parseInt(day, 10),
+                parseInt(hours, 10),
+                parseInt(minutes, 10),
+                parseInt(seconds, 10)
+            );
+            
+            // Compensate for the timezone offset
+            // This is NOT taken in to account by highcharts and is likely a bug in their code
+            tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
+            ms = ms + tz_offset_ms;
+            
+            return(ms);
+          },
+          allButtonsEnabled: false
+      },      
       credits: { enabled: false, }, 
       title: { text: #{title} },
       xAxis: {             
@@ -57,7 +117,10 @@
         tickPixelInterval: 150 
       },
       yAxis: { 
-        title: { text: '#{varname} (#{units})' },
+        #{min_y_axis_json}
+        #{max_y_axis_json}
+        title: { text: '#{@var_to_plot.name} (#{@var_to_plot.units})' },
+        opposite: false,
         plotLines: [{
           value: 0,
           width: 1,
@@ -66,7 +129,7 @@
       },
       tooltip: {
         formatter: function () {
-          return '<b>' + this.series.name + '</b><br/>' +
+          return '<b>#{@var_to_plot.name}</b><br/>' +
             Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
             Highcharts.numberFormat(this.y, 2);
           }
@@ -78,5 +141,6 @@
       
     // Make first data request
     requestData();
+    
     }
   );

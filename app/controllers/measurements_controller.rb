@@ -70,58 +70,65 @@ class MeasurementsController < ApplicationController
     end
     
 
-    # Are the data submitted in this query a test?
-    is_test_value = false
-    if params.key?(:test)
-      is_test_value = true
-    end
+    save_ok = false
     
-    # Save the url that invoked us
-    Instrument.update(params[:instrument_id], :last_url => request.original_url)
-
-    # Create an array containing the names of legitimate variable names
-    measured_at_parameters = Array.new
-    variable_shortnames = Array.new
-    
-    Instrument.find(params[:instrument_id]).vars.each do |var|
-      measured_at_parameters.push(var.measured_at_parameter)
-      variable_shortnames.push(var.shortname)
-      
-      # see if the parameter was submitted
-      
-      if params.include? var.shortname
-
-        if params.key?(var.measured_at_parameter)
-          measured_at = params[var.measured_at_parameter]
-        elsif params.key?(var.at_parameter)
-          measured_at = params[var.at_parameter]
-        elsif params[:at]
-          measured_at = params[:at]
-        else           
-          measured_at = Time.now.iso8601
-        end
-       
-        SaveTsPoint.call(
-          TsPoint,
-          { 
-            timestamp:  ConvertIsoToMs.call(measured_at),
-            site:       Instrument.find(params[:instrument_id]).site_id, 
-            inst:       params[:instrument_id], 
-            var:        var.id,
-            test:       params.has_key?(:test),
-            value:      params[var.shortname].to_f
-          }
-        )
+    if Instrument.exists?(id: params[:instrument_id])
+        
+      # Are the data submitted in this query a test?
+      is_test_value = false
+      if params.key?(:test)
+        is_test_value = true
       end
-    end
-    save_ok = true
+      
+      # Save the url that invoked us
+      Instrument.update(params[:instrument_id], :last_url => request.original_url)
+  
+      # Create an array containing the names of legitimate variable names
+      measured_at_parameters = Array.new
+      variable_shortnames = Array.new
+      
+      Instrument.find(params[:instrument_id]).vars.each do |var|
+        measured_at_parameters.push(var.measured_at_parameter)
+        variable_shortnames.push(var.shortname)
+        
+        # see if the parameter was submitted
+        
+        if params.include? var.shortname
+  
+          if params.key?(var.measured_at_parameter)
+            measured_at = params[var.measured_at_parameter]
+          elsif params.key?(var.at_parameter)
+            measured_at = params[var.at_parameter]
+          elsif params[:at]
+            measured_at = params[:at]
+          else           
+            measured_at = Time.now.iso8601
+          end
+         
+          SaveTsPoint.call(
+            TsPoint,
+            { 
+              timestamp:  ConvertIsoToMs.call(measured_at),
+              site:       Instrument.find(params[:instrument_id]).site_id, 
+              inst:       params[:instrument_id], 
+              var:        var.id,
+              test:       params.has_key?(:test),
+              value:      params[var.shortname].to_f
+            }
+          )
+        end
+      end
+      
+      save_ok = true
+      
+    end 
     
     respond_to do |format|
       if save_ok
         format.json { render text: "OK"  }
         format.html { render text: "Measurement created" }
       else
-        format.html { render :new }
+        format.json { render text: "FAIL" }
         format.html { render text: "Measurement could not be created" }
       end
     end

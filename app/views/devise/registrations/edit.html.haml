@@ -10,6 +10,7 @@
     %div
       Currently waiting confirmation for: #{resource.unconfirmed_email}
   .field
+    = render 'devise/passwords/unencrypted_password_warning'
     = f.label :password
     %i (leave blank if you don't want to change it)
     %br/

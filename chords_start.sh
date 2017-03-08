@@ -36,6 +36,7 @@ influxdb_admin_user="admin"
 influxdb_admin_pw=$CHORDS_ADMIN_PW
 influxdb_guest_user="guest"
 influxdb_guest_pw=$CHORDS_GUEST_PW
+influxdb_retention=$DB_RETENTION
 
 chords_env="./chords_env.sh"
 
@@ -64,7 +65,7 @@ export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 
 # Number of Unicorn workers
 if [ -z "$WORKERS" ]; then
-  export WORKERS=4
+  export WORKERS=1
 fi
 # See if there is an existing mysql database
 if [ ! -e $mysql_seeded_flag ] 
@@ -116,6 +117,9 @@ curl -s http://$influxdb_host:8086/query --data-urlencode "q=create user $influx
 
 # Make sure that the influxdb database exists. 
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create database $influxdb_dbname"
+
+# Set the retention policy
+curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=alter retention policy autogen on $influxdb_dbname duration $influxdb_retention"
 
 # Create the influxdb guest account, used for anonymous reads.
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create user $influxdb_guest_user with password '$influxdb_guest_pw'"

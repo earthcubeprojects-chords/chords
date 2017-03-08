@@ -59,7 +59,7 @@
           %strong Test Measurements
         %td
           = @instrument.sample_count(:test)
-        %td= render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
+          = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
       %tr
         %td
           %strong Display points
@@ -88,6 +88,10 @@
               %td{:style => "vertical-align:top"}
                 %em Units
               %td{:style => "vertical-align:top"}
+                %em Min (Plot)
+              %td{:style => "vertical-align:top"}
+                %em Max (Plot)
+              %td{:style => "vertical-align:top"}
                 %em Measured Property
             - @instrument.vars.each do |variable|
               %tr
@@ -100,9 +104,6 @@
             = f.hidden_field :instrument_id, :value => @instrument.id
             - if can?(:manage, Var)
               = f.submit :value	 => 'Add a New Variable'
-.instrumentstrip
-  Graph:
-  - @varnames.each do |v|
-    = link_to v[1], instrument_path(@instrument, var: v[0])
+
 = render 'graph'
 = link_to 'Back', instruments_path

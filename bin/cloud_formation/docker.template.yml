@@ -22,6 +22,18 @@ Parameters:
     Description: CHORDS git branch/docker image tag
     Type: String
 
+  DbRetention:
+    AllowedValues:
+    - INF
+    - 4w
+    - 12w
+    - 24w
+    - 52w
+    - 104w
+    Default: 52w
+    Description: Database retention duration (weeks, INF=forever)
+    Type: String
+
   InstanceType:
     AllowedValues:
     - t1.micro
@@ -308,7 +320,7 @@ Resources:
           - docker_service
           - docker_config
           - docker_compose
-          - chords_up
+          - chords_service
 
         # configure cfn.
         install_cfn:
@@ -396,12 +408,13 @@ Resources:
         # Create the docker-compose configuration file.
         docker_config:
           files:
-            /.env:
+            /root/.env:
               content: !Sub |     
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
                 CHORDS_GUEST_PW=${ChordsGuestPw}
                 DOCKER_TAG=${GitBranchAndDockerTag}
                 RAILS_ENV=production
+                DB_RETENTION=${DbRetention}
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
@@ -410,15 +423,94 @@ Resources:
               command: "curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
             # Fetch the CHORDS docker-compose.yml.
             02_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranchAndDockerTag}/docker-compose.yml > docker-compose.yml"
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranchAndDockerTag}/docker-compose.yml > /root/docker-compose.yml"
             # Pull the CHORDS images.
             03_docker_pull:
-              command: "/bin/docker-compose pull"
-        # Start the CHORDS services, via docker.
-        chords_up:
+              command: "cd /root && /bin/docker-compose pull"
+
+        # Install and enable the chords service
+        chords_service:
+          files:
+            /etc/init.d/docker-compose-chords:
+              content: |
+                #!/bin/sh
+                #
+                # chkconfig:   2345 96 20
+                # description: Daemon for docker-compose-chords
+                #
+                # based on https://gist.github.com/samalba/8bc1f848b4fa2db6f12e
+                #
+                ### BEGIN INIT INFO
+                # Provides:   docker-compose-chords
+                # Required-Start: docker
+                # Required-Stop:  docker
+                # Default-Start:  2 3 4 5
+                # Default-Stop:   0 1 6
+                # Short-Description: Docker Compose for CHORDS
+                # Description: Docker Compose for CHORDS
+                ### END INIT INFO
+                #
+                set -e
+                #
+                DOCKER_COMPOSE_PROJECT_NAME=chords
+                DOCKER_COMPOSE_YAMLFILE=/root/docker-compose.yml
+                #
+                OPTS="-f $DOCKER_COMPOSE_YAMLFILE -p $DOCKER_COMPOSE_PROJECT_NAME"
+                # UPOPTS="-d --no-recreate --no-build --no-deps"
+                UPOPTS="-d"
+                LABEL="docker-compose for CHORDS"
+                DC=/bin/docker-compose
+                #
+                #. /etc/rc.d/init.d/functions
+                #
+                #
+                cd /root
+                #
+                start () {
+                  echo "Starting $LABEL"
+                  $DC $OPTS up $UPOPTS
+                }
+                #
+                stop () {
+                  echo "Stopping $LABEL"
+                  $DC $OPTS stop
+                }
+                #
+                case "$1" in
+                  up|start)
+                    start
+                    ;;
+                #
+                  stop)
+                    stop
+                    ;;
+                #
+                  status)
+                    $DC $OPTS ps
+                    ;;
+                #
+                  restart)
+                    stop
+                    start
+                    ;;
+                #
+                  *)
+                    echo "Usage: /etc/init.d/docker-compose-chords {up/start|stop|status|reload}" || true
+                    exit 1
+                    ;;
+                esac
+                #
+                exit 0                                
+              group: root
+              mode: '000755'
+              owner: root
+            
           commands:
-            01_docker_up:
-              command: "/bin/docker-compose -p chords up -d"
+            # Enable the docker-compose-chords service
+            01_chkconfig:
+              command: "chkconfig docker-compose-chords --add && chkconfig docker-compose-chords on"  
+            02_startchords:
+              command: "service docker-compose-chords up"
 
   ChordsServerSecurityGroup:
     Properties:
@@ -433,6 +525,10 @@ Resources:
         FromPort: '22'
         IpProtocol: tcp
         ToPort: '22'
+      - CidrIp: 0.0.0.0/0
+        FromPort: '25'
+        IpProtocol: tcp
+        ToPort: '25'
       - CidrIp: 0.0.0.0/0
         FromPort: '3000'
         IpProtocol: tcp

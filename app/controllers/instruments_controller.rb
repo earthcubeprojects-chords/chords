@@ -24,33 +24,18 @@ class InstrumentsController < ApplicationController
       # Fetch the data
       if our_instrument
       
-        display_points            = our_instrument.display_points
-        livedata[:display_points] = display_points
-        refresh_rate_ms           = our_instrument.sample_rate_seconds*1000
-        # Limit the chart refresh rate
-        if (refresh_rate_ms < 1000) 
-          refresh_rate_ms = 1000
-        end
-        livedata[:refresh_msecs]  = refresh_rate_ms
-          
-        var_id = 
-          Var.all.where("instrument_id='#{params[:id]}' and shortname='#{params[:var]}'").pluck(:id)[0]
-        
-        # Get the measurements
-        # TODO: use the :after parameter. It did ot interact correctly with
-        # the highchart during prototyping. The problem may be on the javascript side.
-        ts_points = TsPoint \
-          .where("inst = '#{params[:id]}'") \
-          .where("var  = '#{var_id}'") \
-          .order("desc") \
-          .limit(display_points).to_a
+        livedata[:display_points] = our_instrument.display_points
+        livedata[:refresh_msecs]  = our_instrument.refresh_rate_ms          
 
-        if ts_points
-          # Collect the times and values for the measurements
-          live_points = []
-          ts_points.reverse_each {|p| live_points  << [ConvertIsoToMs.call(p["time"]), p["value"].to_f]}
+        variable = our_instrument.find_var_by_shortname(params[:var])
+
+        live_points = variable.get_tspoints
+        
+        if live_points
           livedata[:points] = live_points
         end
+        
+
       end
     end
 
@@ -126,9 +111,8 @@ class InstrumentsController < ApplicationController
   def show
     # This method sets the following instance variables:
     #  @params
-    #  @varnames       - A hash of variable names for the instrument, keyed by the shortname
-    #  @varshortname   - the shortname of the selected variable. Use it to get the full variable name from @varnames
-    #  @units          - the units of the selected variable
+    #  @var_id_to_plot - The id of the variable currently being plotted
+    #  @var_to_plot    - The variable currently being plotted
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
@@ -172,20 +156,21 @@ class InstrumentsController < ApplicationController
       @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, vshort).pluck(:name)[0]
     end
 
-    # Specify the selected variable shortname
-    if params[:var]
-      if varshortnames.include? params[:var]
-        @varshortname  = params[:var]
-      end
-    else
-      # the var parameter was not supplied, so select the first variable
-      if @varnames.count > 0
-        @varshortname = @varnames.first[0]
-      end
-    end
 
-    # get the units
-    @units = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, @varshortname).pluck(:units)[0]
+    # Set the variable to plot
+    if params[:var_id]
+      @var_id_to_plot = params[:var_id]
+      @var_to_plot = Var.find(@var_id_to_plot)
+    else
+      if ( defined? @instrument.vars.first.id)
+        @var_id_to_plot = @instrument.vars.first.id
+        @var_to_plot = Var.find(@var_id_to_plot)
+      else 
+        # No variable defined.
+        # This leaves @var_id_to_plot and @var_to_plot undefined. 
+      end      
+    end
+    
         
     # Determine the time range. Default to the most recent day
     endtime   = Time.now

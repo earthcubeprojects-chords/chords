@@ -3,6 +3,7 @@
   = devise_error_messages!
   = f.hidden_field :reset_password_token
   .field
+    = render 'devise/passwords/unencrypted_password_warning'
     = f.label :password, "New password"
     %br/
     - if @minimum_password_length

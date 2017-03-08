@@ -1,22 +1,40 @@
 version: '2'
 
-# The CHORDS configuration (arm) for docker-compose. 
+# The CHORDS configuration (x86) for docker-compose. 
 #
-# It defines a MyQSL database service (chords_mysql), a CHORDS
-# Ruby on Rails web server (chords_app), and a persistent 
+# It defines these services:
+#   1. chords_mysql:    A MyQSL database for CHORDS metadata.
+#   2. chords_influxdb: An InfluxDB database for real-time time series data.
+#   3. chords_grafana:  A Grafana dashboard server
+#   4. chords_app:   The CHORDS Ruby on Rails server
+# The following docker volumes provide data persistance:
+#   1. mysql-data:     (/var/lib/mysql)
+#   2. influxdb-data:  (/var/lib/influxdb)
+#   3. grafana-data:   (/var/lib/grafana)
+
+
 # database volume (mysql-data).
 #
 # This configuration is used to both build the chords image,
-# and to deploy the CHORDS system. rpi-Dockerfile provides the recipe
+# and to deploy the CHORDS system. Dockerfile provides the recipe
 # for the chords image.
 #
 # To build and upload the chords image:
 #   cd <directory containing the CHORDS project>
-#   docker-compose -f docker-compose-rpi.yml build
-#   docker push ncareol/rpi-chords
+#   docker build --squash --tag ncareol/chords:<branch>
+#   docker push ncareol/chords:<branch>
 #
+# Create a .env (in the directory that you run docker-compose from) containing:
+# CHORDS_ADMIN_PW=<password>       # The password for r/w and admin access to CHORDS, mysql and influxdb.
+# CHORDS_ADMIN_PW=<password>       # The password for ro access to influxdb.
+# DOCKER_TAG=<git branch>          # Convention is to use the git branch used to generate the image as the tag.
+#
+# These environment variables may also be provided in .env:
+# SECRET_KEY_BASE=<strong key, generated as suggested by rake.>
+# RAILS_ENV=production|development
+# 
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/docker/rpi-docker-compose.yml > docker-compose.yml
+#   curl -kL https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
 #   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
@@ -32,13 +50,18 @@ services:
     build:
       context: ./
       dockerfile: rpi-Dockerfile
-    image: ncareol/rpi-chords
+    image: ncareol/rpi-chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
       - RAILS_ENV=production
-      - CHORDS_DB_PW
+      - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
+      - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
       - SECRET_KEY_BASE=aaaaaaaaaaa
+      - DB_RETENTION=${DB_RETENTION}
+      #  Note: INFLUXDB_ variables are used by the Influxer gem.
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     ports:
         - "80:80"
@@ -47,15 +70,36 @@ services:
 
   mysql:
     container_name: chords_mysql
-    image: hypriot/rpi-mysql
+    image: hypriot/rpi-mysql:5.5
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
-      - MYSQL_PASSWORD=${CHORDS_DB_PW}
+      - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
+      
+  influxdb:
+    container_name: chords_influxdb
+    image: fgabriel/rpi-influxdb:1.1.1
+    volumes:
+      - influxdb-data:/var/lib/influxdb/
+    environment:
+      - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+    ports:
+      - 8086:8086
+      - 8083:8083
+      
+  grafana:
+    container_name: chords_grafana
+    image: yangxuan8282/rpi-alpine-grafana:4.1.1
+    volumes:
+      - grafana-data:/var/lib/grafana/
+    ports:
+      - 3000:3000
 
 volumes:
   mysql-data: 
+  influxdb-data:
+  grafana-data:
   
- 

@@ -19,6 +19,11 @@
       = @metrics["db_size_mb"]
       MB
   .statusbadge
+    %span.badgetitle DB Expires
+    %br
+    %span.badgevalue
+      = @metrics["db_expiry_time"]
+  .statusbadge
     %span.badgetitle Uptime
     %br/
     %span.badgevalue= time_ago_in_words(@metrics["uptime"])

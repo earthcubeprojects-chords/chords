@@ -12,6 +12,11 @@ class Instrument < ActiveRecord::Base
   def self.initialize
   end
 
+  def find_var_by_shortname (shortname)
+    var_id = Var.all.where("instrument_id='#{self.id}' and shortname='#{shortname}'").pluck(:id)[0]
+
+    return Var.find(var_id)
+  end
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
@@ -40,15 +45,40 @@ class Instrument < ActiveRecord::Base
 
   
   def is_receiving_data
-    return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
+    if defined? TsPoint
+      return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
+    else
+      return false
+    end
   end
   
   def last_age  
-    return GetLastTsAge.call(TsPoint, "value", self.id)
+    if defined? TsPoint
+      return GetLastTsAge.call(TsPoint, "value", self.id)
+    else
+      return false
+    end
   end
 
   def sample_count(sample_type)
-    return GetTsCount.call(TsPoint, "value", self.id, sample_type)
+    if defined? TsPoint
+      return GetTsCount.call(TsPoint, "value", self.id, sample_type)
+    else
+      return 0
+    end
+
+  end
+  
+
+  def refresh_rate_ms
+    # Limit the chart refresh rate
+    if (self.sample_rate_seconds >= 1) 
+      refresh_rate_ms           = self.sample_rate_seconds*1000
+    else
+      refresh_rate_ms = 1000
+    end
+
+    return refresh_rate_ms
   end
   
   def data(count, parameter)
