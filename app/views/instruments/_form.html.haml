@@ -24,7 +24,7 @@
     = f.label :plot_offset
     %br/
     = f.text_field :plot_offset_value, :default => '1'
-    = f.select(:plot_offset_units, [:years, :months, :weeks, :days, :hours, :minutes, :seconds], :selected => :weeks)
+    = f.select(:plot_offset_units,  { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :selected => :weeks)
     
      
     %br/
