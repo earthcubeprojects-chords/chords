@@ -23,12 +23,23 @@ class InstrumentsController < ApplicationController
 
 
       # conver the millisecond input to seconds since epoch
-      if ((defined? params[:after]) && (params[:after]))
+      if ((defined? params[:after]) && (params[:after].to_i != 0))
         since_seconds = Time.strptime(params[:after], '%Q')
       else
+        latest_point = GetLastTsPoint.call(TsPoint, 'value', instrument.id)
+
+        if(defined? latest_point.to_a.first)
+          latest_time = Time.parse(latest_point.to_a.first['time'])
+        else
+          latest_time = Time.now
+        end          
+
         date_string = "#{instrument.plot_offset_value}.#{instrument.plot_offset_units}"
+
         livedata[:date_string] = date_string
-        since_seconds = Time.now - eval(date_string)
+        livedata[:last_tspoint] = latest_time
+
+        since_seconds = latest_time - eval(date_string)
       end
 
       
