@@ -16,27 +16,40 @@ class InstrumentsController < ApplicationController
       }
 
     # Verify the parameters
-    if params[:id] && params[:var] && params[:after]
+    if params[:id]
+
+      # Get the instrument
+      instrument = Instrument.find(params[:id])
+
 
       # conver the millisecond input to seconds since epoch
-      since_seconds = Time.strptime(params[:after], '%Q')
-    
-      # Get the instrument
-      our_instrument = Instrument.find(params[:id])
+      if ((defined? params[:after]) && (params[:after]))
+        since_seconds = Time.strptime(params[:after], '%Q')
+      else
+        date_string = "#{instrument.plot_offset_value}.#{instrument.plot_offset_units}"
+        livedata[:date_string] = date_string
+        since_seconds = Time.now - eval(date_string)
+      end
+
       
       # Fetch the data
-      if our_instrument
-      
-        livedata[:display_points] = our_instrument.display_points
-        livedata[:refresh_msecs]  = our_instrument.refresh_rate_ms          
+      if instrument
+        livedata[:instrument_id] = params[:id]
+        livedata[:display_points] = instrument.display_points
+        livedata[:refresh_msecs]  = instrument.refresh_rate_ms          
+        livedata[:since_seconds] = since_seconds
 
-        variable = our_instrument.find_var_by_shortname(params[:var])
+        if (params[:var]) 
+          variable = instrument.find_var_by_shortname(params[:var])
+          live_points = variable.get_tspoints(since_seconds)
 
-        live_points = variable.get_tspoints(since_time_seconds)
-        
-        if live_points
-          livedata[:points] = live_points
+          if live_points
+            livedata[:points] = live_points
+          end
+        else
+          
         end
+      
       end
     end
 
