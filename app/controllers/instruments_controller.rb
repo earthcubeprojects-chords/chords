@@ -87,32 +87,36 @@ class InstrumentsController < ApplicationController
   def duplicate
 
     # Does it exist?
-    if Instrument.exists?(params[:instrument_id])
+    if (Instrument.exists?(params[:instrument_id]) && defined? params[:number_of_duplicates])   
+      (1..params[:number_of_duplicates].to_i).each do
 
-      old_instrument = Instrument.find(params[:instrument_id])
+        old_instrument = Instrument.find(params[:instrument_id])
 
-      authorize! :manage, old_instrument
-            
-      # Make a copy
-      new_instrument = old_instrument.dup
-      
-      # Add"clone" to the name
-      if !new_instrument.name.include? "clone" 
-        new_instrument.name = new_instrument.name + " clone"
+        authorize! :manage, old_instrument
+
+        # Make a copy
+        new_instrument = old_instrument.dup
+
+        # Add"clone" to the name
+        if !new_instrument.name.include? "clone" 
+          new_instrument.name = new_instrument.name + " clone"
+        end
+
+        # Zero out the last url
+        new_instrument.last_url = nil
+
+        # Create duplicates of the vars
+        old_instrument.vars.each do |v|
+          new_var = v.dup
+          new_var.save
+          new_instrument.vars << new_var
+        end
+
+        # Save the new instrument
+        new_instrument.save
+
       end
-      
-      # Zero out the last url
-      new_instrument.last_url = nil
-  
-      # Create duplicates of the vars
-      old_instrument.vars.each do |v|
-        new_var = v.dup
-        new_var.save
-        new_instrument.vars << new_var
-      end
-      
-      # Save the new instrument
-      new_instrument.save
+
     end
     
     redirect_to instruments_path
