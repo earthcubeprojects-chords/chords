@@ -14,16 +14,13 @@ title: Active CHORDS Portals?
 
 [Tanzania Volcano](http://tzvolcano.chordsrt.com)
 
-[arpa](http://arpa.chordsrt.com)
+[ARPA](http://arpa.chordsrt.com)
 
 
 ### Collecting Data
-[orcas](http://orcas.chordsrt.com)
-
-[NCAR portal](http://portal.chordsrt.com)
+[NCAR](http://portal.chordsrt.com)
 
 [STORM](http://storm.chordsrt.com)
-
 
 ### Under Configuration
 [yellowstone](http://yellowstone.chordsrt.com)
