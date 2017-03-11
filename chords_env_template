@@ -1,10 +1,10 @@
-# 1. Copy this into chords_env, in the directory where docker-compose.yml is located.
+# 1. Copy this into .env, in the directory where docker-compose.yml is located.
 # 2. Edit
 # 3. Once a portal is created with these values, they should not be
 #    changed. Otherwise you will not be able to access your existing
 #    databases and Rails app.
 #
-# Time series database retention duration, e.g. 168h or 52w. Use "never" for permanent.
+# Time series database retention duration, e.g. 168h or 52w. Use "inf" for permanent retention.
 # This value can be changed on successive restarts of a portal. Note: making it shorter 
 # will trim the existing time series database.
 DB_RETENTION=104w
