@@ -127,56 +127,37 @@ class InstrumentsController < ApplicationController
     authorize! :view, Instrument
     authorize! :download, @instrument if ["csv", "xml", "json", "jsf"].include?(params[:format])
 
+    
     # Get and sanitize the last_url
     @last_url = InstrumentsHelper.sanitize_url(
         !@profile.secure_administration, 
         !(current_user && (can? :manage, Measurement)), 
         GetLastUrl.call(TsPoint, @instrument.id))
+        
     @params = params.slice(:start, :end)
 
     # Get useful details.
-    instrument_name = @instrument.name
-    instrument_id   = @instrument.id
-    site_name       = @instrument.site.name
-    varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
-    project         = Profile.first.project
-    affiliation     = Profile.first.affiliation
-    varnames_by_id = {}
-
-    Var.all.where("instrument_id = #{instrument_id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-
     metadata = {
-      "Project"     => project, 
-      "Site"        => site_name, 
-      "Affiliation" => affiliation, 
-      "Instrument"  => instrument_name
+      "Project"     => @profile.project, 
+      "Site"        => @instrument.site.name, 
+      "Affiliation" => @profile.affiliation, 
+      "Instrument"  => @instrument.name
     }
     
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
     
-    # File name root
-    file_root = "#{project}_#{site_name}_#{instrument_name}"
-    file_root = file_root.split.join
-     
-    # Create a hash, with shortname => name
-    @varnames = {}
-    varshortnames.each do |vshort|
-      @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, vshort).pluck(:name)[0]
-    end
 
 
     # Set the variable to plot
     if params[:var_id]
-      @var_id_to_plot = params[:var_id]
-      @var_to_plot = Var.find(@var_id_to_plot)
+      @var_to_plot = Var.find(params[:var_id])
     else
       if ( defined? @instrument.vars.first.id)
-        @var_id_to_plot = @instrument.vars.first.id
-        @var_to_plot = Var.find(@var_id_to_plot)
+        @var_to_plot = Var.find(@instrument.vars.first.id)
       else 
-        # No variable defined.
-        # This leaves @var_id_to_plot and @var_to_plot undefined. 
+        # No variable defined were found for this instrument.
+        # This leaves and @var_to_plot undefined. 
       end      
     end
     
@@ -184,8 +165,9 @@ class InstrumentsController < ApplicationController
     # Determine the time range. Default to the most recent day
     endtime   = Time.now
     starttime = endtime - 1.day
+
     if params.key?(:last)
-     last_ts_point = GetLastTsPoint.call(TsPoint, "value", instrument_id)
+     last_ts_point = GetLastTsPoint.call(TsPoint, "value", @instrument.id)
       if (last_ts_point)
         last_ts_point.each {|p| starttime = p["time"]}
         endtime   = starttime
@@ -202,9 +184,17 @@ class InstrumentsController < ApplicationController
         endtime = Time.parse(params[:end])
       end
     end
-    
+
+
+
     # Get the time series points from the database
-    ts_points  = GetTsPoints.call(TsPoint, "value", instrument_id, starttime, endtime)
+    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, starttime, endtime)
+
+
+    # File name root
+    file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
+    file_root = file_root.split.join
+    
 
     # Prepare result
     respond_to do |format|
@@ -216,6 +206,10 @@ class InstrumentsController < ApplicationController
       }
       
       format.csv { 
+        varnames_by_id = {}
+
+        Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+        
         ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
         send_data ts_csv, filename: file_root+'.csv' 
       }
