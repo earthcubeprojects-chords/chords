@@ -22,64 +22,67 @@ Log onto your AWS account to begin.
 
 ## 1. Run CloudFormation
 
-* Choose ![](images/cf.png) from the AWS Services dropdown.
+* First click on <em>“Services”</em> and then click on <em>“Cloud Formation”</em> 
 
-<img class="img-responsive" src="images/aws_services.png" alt="Cloud Formation">
+<img class="img-responsive" src="images/Portal_Step1_pt1.PNG" alt="Services">
+
+<img class="img-responsive" src="images/Portal_Step1_pt2.PNG" alt="Cloud Formation">
       
-## 2. Start stack creation
+## 2. Start stack creation and Specify template 
 
-* AWS refers to a program as a *stack*. Mash **Create Stack** to start the CloudFormation wizard.
+* Click **"Create Stack**
 
-<img class="img-responsive" src="images/AWS_CF0.png" alt="Create Stack">
-
-## 3. Specify a portal template 
+<img class="img-responsive" src="images/Portal_Step2_pt1.PNG" alt="Create Stack">
 
 * Copy and Paste the following link into _Specify an S3 template URL_: <br/>
-**https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml**
+````
+https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
+````
 * Hit **Next**
 
-<img class="img-responsive" src="images/AWS_CF1.png" alt="Cloud Formation Template">
+<img class="img-responsive" src="images/Portal_Step2_pt2.PNG" alt="Cloud Formation Template">
 
-## 4. Specify the portal name and key
+## 3. Specify the portal name and key
 
 * Give the stack a name. The convention is _CHORDS-_ suffixed with your project or organization name, e.g. _CHORDS-CSURadar_.
 * If you created a key for your Amazon account, select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, 
   if ever needed.
 * Hit **Next**
 
-<img class="img-responsive" src="images/AWS_CF2.png" alt="Portal Name">
+<img class="img-responsive" src="images/Portal_Step3.PNG" alt="Specify">
 
-## 5. Options
 
+## 4. Options
 * Hit **Next**.
 
-<img class="img-responsive" src="images/AWS_CF3.png" alt="Options">
+<img class="img-responsive" src="images/Portal_Step4.PNG" alt="Options">
 
-## 6. Review
+## 5. Review
 
-* Verify that everything looks good.
-* Mash the **Create** button.
+* Verify that everything looks good and then click **Create**
 
-<img class="img-responsive" src="images/AWS_CF4.png" alt="Review">
+<img class="img-responsive" src="images/Portal_Step5.PNG" alt="Review">
 
-## 7. Wait for the portal to be created
-
+## 6. Wait for the portal to be created
 * After the creation has started, you will be taken 
 to the stack summary page. Go to the *Events* tab to watch the progress 
 of the stack creation. It usually takes about 6 minutes to complete, but it can take 
 much longer (even 30 minutes), depending upon AWS performance.
 
-<img class="img-responsive" src="images/AWS_CF5.png" alt="Create">
 
-## 8. Access the new Portal
+<img class="img-responsive" src="images/Portal_Step6.PNG" alt="Creation">
 
-* Once the portal is created and running, the *Outputs* tab will show a *WebsiteURL* for the new 
-CHORDS Portal. 
-* **Click** on the link to access the Portal.
+## 7. Accessing the new portal
 
-<img class="img-responsive" src="images/AWS_CF6.png" alt="Portal URL">
+Once your portal is created click on the **“Outputs”** tab. Below it will show a URL for the new portal, **click** on the URL to access your new portal.
 
-## 9. Log Into to Your CHORDS Portal
+<img class="img-responsive" src="images/Portal_Step7.PNG" alt="Accessing">
+
+## 8. Log Into to Your CHORDS Portal
+* Click on the **“Sign in”** 
+
+
+<img class="img-responsive" src="images/Portal_Step8.PNG" alt="Portal URL">
 
 Once the Portal is running, you will want to immediately change the admin acount and password to your
 own email and password.
@@ -91,9 +94,6 @@ own email and password.
 * Select **Forgot your password?**
 * Enter your email and punch **send me reset password instructions**. 
 * An email will be sent, containing a link that you can use to change the password on your account. **It's very likely that this email will go into your spam folder. Use the link to change your password to something secure.**
-
-<img class="img-responsive" src="images/AWS_CF7.png" alt="Login">
-
 
 # If something breaks
 * If the provisioning fails, the instance will be stopped, and you won\'t know why. You can redo the process, 
