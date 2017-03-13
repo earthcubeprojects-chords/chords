@@ -161,34 +161,29 @@ class InstrumentsController < ApplicationController
       end      
     end
     
-        
+        @instrument.latest_time_in_ms
     # Determine the time range. Default to the most recent day
-    endtime   = Time.now
-    starttime = endtime - 1.day
+    end_time   = Time.now
+    start_time = end_time - 1.day
 
     if params.key?(:last)
-     last_ts_point = GetLastTsPoint.call(TsPoint, "value", @instrument.id)
-      if (last_ts_point)
-        last_ts_point.each {|p| starttime = p["time"]}
-        endtime   = starttime
-      else
-        starttime = Time.now
-        endtime   = startime
-      end
+      start_time = @instrument.last_time_in_ms
+
+      end_time   = start_time
     else
       # See if we have the start and end parameters
       if params.key?(:start)
-        starttime = Time.parse(params[:start])
+        start_time = Time.parse(params[:start])
       end
       if params.key?(:end)
-        endtime = Time.parse(params[:end])
+        end_time = Time.parse(params[:end])
       end
     end
 
 
 
     # Get the time series points from the database
-    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, starttime, endtime)
+    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, start_time, end_time)
 
 
     # File name root
