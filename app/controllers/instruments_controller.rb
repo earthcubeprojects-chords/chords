@@ -8,12 +8,6 @@ class InstrumentsController < ApplicationController
     # Authorize access to the measurements
     authorize! :view, Measurement
  
-    # Initialze the return value
-    livedata = {
-      :points         => [], 
-      :display_points => 0,
-      :refresh_msecs  => 1000
-      }
 
     # Verify the parameters
 
@@ -25,14 +19,21 @@ class InstrumentsController < ApplicationController
       start_time_ms = @instrument.latest_time_in_ms - eval(time_offset)
     end
 
-    # Fetch the data
+    # Initialze the return value
+    livedata = {
+      :points         => [], 
+      :display_points => 0,
+      :refresh_msecs  => 1000
+      }
+
+
     livedata[:display_points] = @instrument.maximum_plot_points
     livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
-    livedata[:start_time_ms] = start_time_ms
 
     if (params[:var]) 
       variable = @instrument.find_var_by_shortname(params[:var])
 
+      # Fetch the data
       live_points = variable.get_tspoints(start_time_ms)
 
       if live_points
