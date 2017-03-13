@@ -22,7 +22,7 @@ class Instrument < ActiveRecord::Base
     end
   end
   
-  def latest_time_in_ms
+  def last_time_in_ms
     latest_point = GetLastTsPoint.call(TsPoint, 'value', self.id)
 
     if(defined? latest_point.to_a.first)
