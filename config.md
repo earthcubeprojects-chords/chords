@@ -5,7 +5,7 @@ title: Portal Configuration
 
 #How to Configure your Portal
 
-##Step 1
+## Step 1
 * Log into your portal using 
 `````
 User: admin@chordsrt.com
@@ -17,7 +17,7 @@ Password: realtimedata
 <hr>
 
 
-##Step 2
+## Step 2
 
 * Click on the "**Configure**" button in the upper right part of the screen
 
