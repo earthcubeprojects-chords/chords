@@ -1,3 +1,29 @@
+
+- # Define a few global variables
+
+:javascript
+  var series = [];
+
+  var live_chart; 
+  var last_time = 0;
+  var last_times = [];
+  var pause = false;
+
+- @instrument.vars.each do |v|
+  :javascript 
+    var temp_hash = {name:"#{v.name}", data: []};
+    series.push(temp_hash);
+    last_times.push(0);
+
+
+   
+
+- # Craft a title for the chart
+- title = "\"#{@instrument.name}: #{@var_to_plot.name} - Live Data\""
+- title  = title.as_json.html_safe
+
+
+
 - if @var_to_plot.minimum_plot_value
   - min_y_axis_json = "min: #{@var_to_plot.minimum_plot_value},"
 - else
@@ -10,9 +36,7 @@
 
 
 :javascript
-  var live_chart; 
-  var last_time = 0;
-  var pause = false;
+
   
   function requestData() 
   {
@@ -26,28 +50,50 @@
     
     // Retrieve the latest points to plot and plot them
     $.getJSON(
-    '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
+    '/instruments/#{@instrument.id}/live?after='+last_time,
     function(live_data) 
       {
-        var points         = live_data["points"]
-        var display_points = live_data["display_points"]
+        
+        var display_points = live_data["display_points"];
+        var multivariable_points = live_data["multivariable_points"];
+        var multivariable_names = live_data["multivariable_names"];
+
         var refresh_msecs  = live_data["refresh_msecs"];
         
-        // Trim the graph if the display width is decreased
-        while (live_chart.series[0].data.length > display_points) {
-          live_chart.series[0].removePoint(0, false);
-        }
-  
-        // add the new points
-        var i;
-        for (i = 0; i < points.length; i++) {
-          if (points[i][0] > last_time) {
-            var shift = live_chart.series[0].data.length >= display_points;
-            live_chart.series[0].addPoint(points[i], false, shift);
-            last_time = points[i][0];
+        
+        
+        for (i = 0; i < multivariable_names.length; i++) {
+
+          // console.log(multivariable_names[i]);
+          // console.log(multivariable_points[multivariable_names[i]].length);
+
+          var points         = multivariable_points[multivariable_names[i]];
+          
+          //console.log(points);
+
+          // Trim the graph if the display width is decreased
+          while (live_chart.series[i].data.length > display_points) {
+            live_chart.series[i].removePoint(0, false);
+            console.log('Removing point in series index ' + i );
           }
+
+          // add the new points
+          var point_index;
+          
+          for (point_index = 0; point_index < points.length; point_index++) {
+            //if (points[point_index][0] > last_times[i]) {
+              var shift = live_chart.series[0].data.length >= display_points;
+              live_chart.series[i].addPoint(points[point_index], false, shift);
+              last_time = points[point_index][0];
+              last_times[i] = points[point_index][0];
+            //}
+          }
+
+
         }
-  
+        
+        
+
         // Don't redraw the chart if live updating is paused
         if (pause == false) {
           live_chart.redraw();        
@@ -136,7 +182,7 @@
         },
       legend: { enabled: true },
       exporting: { enabled: false },
-      series: #{series},
+      series: series,
     });
       
     // Make first data request

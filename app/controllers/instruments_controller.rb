@@ -22,6 +22,8 @@ class InstrumentsController < ApplicationController
     # Initialze the return value
     livedata = {
       :points         => [], 
+      :multivariable_points         => {}, 
+      :multivariable_names         => [], 
       :display_points => 0,
       :refresh_msecs  => 1000
       }
@@ -30,6 +32,7 @@ class InstrumentsController < ApplicationController
     livedata[:display_points] = @instrument.maximum_plot_points
     livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
 
+    # If the var parameter is set, then we build and return data for only this variable.
     if (params[:var]) 
       variable = @instrument.find_var_by_shortname(params[:var])
 
@@ -38,6 +41,22 @@ class InstrumentsController < ApplicationController
 
       if live_points
       livedata[:points] = live_points
+      end
+      
+    # otherwise we return data for all variables
+    else
+      @instrument.vars.each do |variable|
+        livedata[:multivariable_names].push  variable.shortname
+        livedata[:multivariable_points][variable.shortname] = []
+
+        # Fetch the data
+        live_points = variable.get_tspoints(start_time_ms)
+
+        if live_points
+          livedata[:multivariable_points][variable.shortname] = live_points
+        end
+        
+        
       end
     end
 
