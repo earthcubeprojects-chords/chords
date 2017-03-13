@@ -117,7 +117,6 @@ class InstrumentsController < ApplicationController
   # GET /instruments/1.json
   def show
     # This method sets the following instance variables:
-    #  @params
     #  @var_id_to_plot - The id of the variable currently being plotted
     #  @var_to_plot    - The variable currently being plotted
     #  @tz_name        - the timezone name
@@ -134,8 +133,6 @@ class InstrumentsController < ApplicationController
         !(current_user && (can? :manage, Measurement)), 
         GetLastUrl.call(TsPoint, @instrument.id))
         
-    @params = params.slice(:start, :end)
-
     # Get useful details.
     metadata = {
       "Project"     => @profile.project, 
