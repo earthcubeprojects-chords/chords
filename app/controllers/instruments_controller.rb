@@ -16,34 +16,27 @@ class InstrumentsController < ApplicationController
       }
 
     # Verify the parameters
-    if params[:id]
 
-      # conver the millisecond input to seconds since epoch
-      if ((defined? params[:after]) && (params[:after].to_i != 0))
-        start_time_ms = Time.strptime(params[:after], '%Q')
-      else
+    # convert the millisecond input to seconds since epoch
+    if ((defined? params[:after]) && (params[:after].to_i != 0))
+      start_time_ms = Time.strptime(params[:after], '%Q')
+    else
+      time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
+      start_time_ms = @instrument.latest_time_in_ms - eval(time_offset)
+    end
 
-        time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
-        start_time_ms = @instrument.latest_time_in_ms - eval(time_offset)
-      end
+    # Fetch the data
+    livedata[:display_points] = @instrument.maximum_plot_points
+    livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
+    livedata[:start_time_ms] = start_time_ms
 
-      # Fetch the data
-      if @instrument
-        livedata[:display_points] = @instrument.display_points
-        livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
-        livedata[:start_time_ms] = start_time_ms
+    if (params[:var]) 
+      variable = @instrument.find_var_by_shortname(params[:var])
 
-        if (params[:var]) 
-          variable = @instrument.find_var_by_shortname(params[:var])
-          live_points = variable.get_tspoints(start_time_ms)
+      live_points = variable.get_tspoints(start_time_ms)
 
-          if live_points
-            livedata[:points] = live_points
-          end
-        else
-          
-        end
-      
+      if live_points
+      livedata[:points] = live_points
       end
     end
 
@@ -148,7 +141,9 @@ class InstrumentsController < ApplicationController
     project         = Profile.first.project
     affiliation     = Profile.first.affiliation
     varnames_by_id = {}
+
     Var.all.where("instrument_id = #{instrument_id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+
     metadata = {
       "Project"     => project, 
       "Site"        => site_name, 

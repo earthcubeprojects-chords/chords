@@ -33,6 +33,15 @@ class Instrument < ActiveRecord::Base
     
     return latest_time_ms
   end
+  
+  def maximum_plot_points
+    
+    time_offset_seconds = eval("#{self.plot_offset_value}.#{self.plot_offset_units}")
+
+    points_to_plot = time_offset_seconds / self.sample_rate_seconds
+
+    return points_to_plot.to_i
+  end
 
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
