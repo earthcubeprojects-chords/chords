@@ -38,7 +38,7 @@ Once you've entered all of that click **Save**.
 <br>
 <hr>
 
-##Step 3
+## Step 3
 
 * Click on the **instruments** button in the middle left part of the screen.
 <img class="img-responsive" src="images/Config_Step3_pt1.PNG" alt="Instruments" />
@@ -87,7 +87,7 @@ http://localhost:8080/measurements/url_create?instrument_id=2&**temp**=202.0&bv=
 <br>
 <hr>
 
-##Step 4
+## Step 4
  Now you’ve gotten logged into your portal and set up your instrument. You’ll notice that there is a URL that is generated when you created your instrument. 
 <img class="img-responsive" src="images/Config_Step4.PNG" alt="Data In" />
 
@@ -96,7 +96,7 @@ Your data can be submitted to a portal by just copying and pasting the URL into 
 
 <br>
 <hr>
-##Step 5
+## Step 5
 Now that you’ve learned how to put Data In, how about taking Data Out? You can do this from the Portal by clicking on <em>**“Data”**</em>
 <img class="img-responsive" src="images/Config_Step5_pt1.PNG" alt="Data out" />
 
@@ -134,7 +134,7 @@ If you’d like to see more about this, the “Data out” tab from chordsrt.com
 <img class="img-responsive" src="images/Config_Step6_pt4.PNG" alt="Sites Configure" />
 <br>
 <hr>
-##Step 7
+## Step 7
 Now your portal is up and running and you’re ready to add your team in. But how on earth do we do that? 
 * First your users will have to create an account of their own. They can do this by clicking on the “<em>**Sign In**</em>” Button at the top right hand corner of your chords site. 
 
@@ -159,7 +159,7 @@ Now your portal is up and running and you’re ready to add your team in. But ho
 <img class="img-responsive" src="images/Config_Step7_pt5.PNG" alt="Users" />
 <br>
 <hr>
-#Geo Button
+# Geo Button
 When you click on the geo button you will see one of two things. 
 
 <img class="img-responsive" src="images/Config_Geo.PNG" alt="Geo Button" />
