@@ -15,7 +15,23 @@ class Instrument < ActiveRecord::Base
   def find_var_by_shortname (shortname)
     var_id = Var.all.where("instrument_id='#{self.id}' and shortname='#{shortname}'").pluck(:id)[0]
 
-    return Var.find(var_id)
+    if var_id
+      return Var.find(var_id)
+    else
+      return nil
+    end
+  end
+  
+  def latest_time_in_ms
+    latest_point = GetLastTsPoint.call(TsPoint, 'value', self.id)
+
+    if(defined? latest_point.to_a.first)
+      latest_time_ms = Time.parse(latest_point.to_a.first['time'])
+    else
+      latest_time_ms = Time.now
+    end          
+    
+    return latest_time_ms
   end
 
   def self.to_csv(options = {})

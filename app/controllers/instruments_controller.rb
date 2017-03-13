@@ -1,5 +1,5 @@
 class InstrumentsController < ApplicationController  
-  before_action :set_instrument, only: [:show, :edit, :update, :destroy]
+  before_action :set_instrument, only: [:show, :edit, :update, :destroy, :live]
 
  # GET /instruments/1/live?var=varshortname&after=time
  # Return measurements and metadata for a given instrument, var and time period.
@@ -18,41 +18,24 @@ class InstrumentsController < ApplicationController
     # Verify the parameters
     if params[:id]
 
-      # Get the instrument
-      instrument = Instrument.find(params[:id])
-
-
       # conver the millisecond input to seconds since epoch
       if ((defined? params[:after]) && (params[:after].to_i != 0))
-        since_seconds = Time.strptime(params[:after], '%Q')
+        start_time_ms = Time.strptime(params[:after], '%Q')
       else
-        latest_point = GetLastTsPoint.call(TsPoint, 'value', instrument.id)
 
-        if(defined? latest_point.to_a.first)
-          latest_time = Time.parse(latest_point.to_a.first['time'])
-        else
-          latest_time = Time.now
-        end          
-
-        date_string = "#{instrument.plot_offset_value}.#{instrument.plot_offset_units}"
-
-        livedata[:date_string] = date_string
-        livedata[:last_tspoint] = latest_time
-
-        since_seconds = latest_time - eval(date_string)
+        time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
+        start_time_ms = @instrument.latest_time_in_ms - eval(time_offset)
       end
 
-      
       # Fetch the data
-      if instrument
-        livedata[:instrument_id] = params[:id]
-        livedata[:display_points] = instrument.display_points
-        livedata[:refresh_msecs]  = instrument.refresh_rate_ms          
-        livedata[:since_seconds] = since_seconds
+      if @instrument
+        livedata[:display_points] = @instrument.display_points
+        livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
+        livedata[:start_time_ms] = start_time_ms
 
         if (params[:var]) 
-          variable = instrument.find_var_by_shortname(params[:var])
-          live_points = variable.get_tspoints(since_seconds)
+          variable = @instrument.find_var_by_shortname(params[:var])
+          live_points = variable.get_tspoints(start_time_ms)
 
           if live_points
             livedata[:points] = live_points
@@ -70,6 +53,7 @@ class InstrumentsController < ApplicationController
     # Return result
     render :json => livedata_json
   end
+
   
   # GET instruments/simulator
   def simulator
