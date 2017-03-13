@@ -72,27 +72,24 @@
           //console.log(points);
 
           // Trim the graph if the display width is decreased
-          while (live_chart.series[i].data.length > display_points) {
-            live_chart.series[i].removePoint(0, false);
-            console.log('Removing point in series index ' + i );
-          }
+//          while (live_chart.series[i].data.length > display_points) {
+//            live_chart.series[i].removePoint(0, false);
+//            console.log('Removing point in series index ' + i );
+//          }
 
           // add the new points
           var point_index;
           
           for (point_index = 0; point_index < points.length; point_index++) {
-            //if (points[point_index][0] > last_times[i]) {
+            if (points[point_index][0] > last_times[i]) {
               var shift = live_chart.series[0].data.length >= display_points;
               live_chart.series[i].addPoint(points[point_index], false, shift);
               last_time = points[point_index][0];
               last_times[i] = points[point_index][0];
-            //}
+            }
           }
 
-
         }
-        
-        
 
         // Don't redraw the chart if live updating is paused
         if (pause == false) {
