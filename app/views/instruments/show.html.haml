@@ -61,10 +61,6 @@
           = @instrument.sample_count(:test)
           = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
       %tr
-        %td
-          %strong Display points
-        %td= best_in_place @instrument, :display_points, :as => :input
-      %tr
       %tr
         %td
           %strong Plot Time Span
