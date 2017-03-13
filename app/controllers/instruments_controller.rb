@@ -117,7 +117,6 @@ class InstrumentsController < ApplicationController
   # GET /instruments/1.json
   def show
     # This method sets the following instance variables:
-    #  @var_id_to_plot - The id of the variable currently being plotted
     #  @var_to_plot    - The variable currently being plotted
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
