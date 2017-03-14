@@ -9,7 +9,7 @@
   var last_times = [];
   var pause = false;
 
-- variable_index = 0
+
 
 
 
@@ -35,13 +35,31 @@
 - y_axis_js_parts = Array.new
 
 
+- variable_index = 0
 - @instrument.vars.each do |v|
   - y_axis_js_part = ""
   - y_axis_js_part += "{  "
-  - y_axis_js_part += "  title: { text: '#{v.name} (#{v.units})'},\n "
+  - y_axis_js_part += "  labels: {\n"
+  - y_axis_js_part += "      format: '{value}#{v.units}',\n"
+  - y_axis_js_part += "       style: {color: Highcharts.getOptions().colors[#{variable_index}]},\n"
+  - y_axis_js_part += "  },\n"
+
+
+  - y_axis_js_part += "  title: { \n "
+  - y_axis_js_part += "   text: '#{v.name} (#{v.units})',\n"
+  - y_axis_js_part += "       style: {color: Highcharts.getOptions().colors[#{variable_index}]},\n"
+  
+  - y_axis_js_part += "  },\n"
+  
   - y_axis_js_part += "  opposite: false,\n"
   - y_axis_js_part += "  #{max_y_axis_json}\n"
   - y_axis_js_part += "  #{min_y_axis_json}\n"
+  - y_axis_js_part += "  plotLines: [{\n"
+  - y_axis_js_part += "   value: 0,\n"
+  - y_axis_js_part += "   width: 0,\n"
+  - y_axis_js_part += "   color: Highcharts.getOptions().colors[0]\n"
+  - y_axis_js_part += "  }]\n"
+
   - y_axis_js_part += "}"
   - y_axis_js_parts.push(y_axis_js_part)
   :javascript 
