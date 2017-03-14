@@ -9,11 +9,8 @@
   var last_times = [];
   var pause = false;
 
-- @instrument.vars.each do |v|
-  :javascript 
-    var temp_hash = {name:"#{v.name}", data: []};
-    series.push(temp_hash);
-    last_times.push(0);
+- variable_index = 0
+
 
 
    
@@ -35,8 +32,29 @@
   - max_y_axis_json = ""
 
 
-:javascript
 
+
+  - y_axis_js_parts = Array.new
+
+
+  - @instrument.vars.each do |v|
+    - y_axis_js_part = ""
+    - y_axis_js_part += "{  "
+    - y_axis_js_part += "  title: { text: '#{v.name} (#{v.units})'},\n "
+    - y_axis_js_part += "  opposite: false,\n"
+    - y_axis_js_part += "}"
+    - y_axis_js_parts.push(y_axis_js_part)
+    :javascript 
+      var temp_hash = {name:"#{v.name}", data: [], yAxis: #{variable_index}};
+      series.push(temp_hash);
+      last_times.push(0);
+    - variable_index += 1
+
+  - y_axis_js = y_axis_js_parts.join(", \n")
+
+
+
+:javascript
   
   function requestData() 
   {
@@ -90,6 +108,8 @@
           }
 
         }
+        
+        
 
         // Don't redraw the chart if live updating is paused
         if (pause == false) {
@@ -103,7 +123,7 @@
   }
   
   $(document).ready(function () {
-
+    
     // Adjust the global timezone offset
     Highcharts.setOptions({
       global: { 
@@ -159,17 +179,11 @@
         type: 'datetime', 
         tickPixelInterval: 150 
       },
-      yAxis: { 
-        #{min_y_axis_json}
-        #{max_y_axis_json}
-        title: { text: '#{@var_to_plot.name} (#{@var_to_plot.units})' },
-        opposite: false,
-        plotLines: [{
-          value: 0,
-          width: 1,
-          color: '#808080'
-        }]
-      },
+      yAxis: [
+        #{y_axis_js}
+
+        
+      ],
       tooltip: {
         formatter: function () {
           return '<b>#{@var_to_plot.name}</b><br/>' +
