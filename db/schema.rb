@@ -11,17 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170210035633) do
+ActiveRecord::Schema.define(version: 20170305030016) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
     t.integer  "site_id",             limit: 4
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.integer  "display_points",      limit: 4,     default: 20
     t.integer  "sample_rate_seconds", limit: 4,     default: 5
     t.text     "last_url",            limit: 65535
     t.text     "description",         limit: 65535
+    t.integer  "plot_offset_value",   limit: 4,     default: 1
+    t.string   "plot_offset_units",   limit: 255,   default: "weeks"
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree

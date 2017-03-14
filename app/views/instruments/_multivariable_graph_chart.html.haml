@@ -32,27 +32,25 @@
   - max_y_axis_json = ""
 
 
+- y_axis_js_parts = Array.new
 
 
-  - y_axis_js_parts = Array.new
+- @instrument.vars.each do |v|
+  - y_axis_js_part = ""
+  - y_axis_js_part += "{  "
+  - y_axis_js_part += "  title: { text: '#{v.name} (#{v.units})'},\n "
+  - y_axis_js_part += "  opposite: false,\n"
+  - y_axis_js_part += "  #{max_y_axis_json}\n"
+  - y_axis_js_part += "  #{min_y_axis_json}\n"
+  - y_axis_js_part += "}"
+  - y_axis_js_parts.push(y_axis_js_part)
+  :javascript 
+    var temp_hash = {name:"#{v.name}", data: [], yAxis: #{variable_index}};
+    series.push(temp_hash);
+    last_times.push(0);
+  - variable_index += 1
 
-
-  - @instrument.vars.each do |v|
-    - y_axis_js_part = ""
-    - y_axis_js_part += "{  "
-    - y_axis_js_part += "  title: { text: '#{v.name} (#{v.units})'},\n "
-    - y_axis_js_part += "  opposite: false,\n"
-    - y_axis_js_part += "}"
-    - y_axis_js_parts.push(y_axis_js_part)
-    :javascript 
-      var temp_hash = {name:"#{v.name}", data: [], yAxis: #{variable_index}};
-      series.push(temp_hash);
-      last_times.push(0);
-    - variable_index += 1
-
-  - y_axis_js = y_axis_js_parts.join(", \n")
-
-
+- y_axis_js = y_axis_js_parts.join(", \n")
 
 :javascript
   
