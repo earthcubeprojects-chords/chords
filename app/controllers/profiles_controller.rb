@@ -52,6 +52,15 @@ class ProfilesController < ApplicationController
 
     send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, users: @users, measured_properties: @measured_properties].to_json  , :filename => file_name
   end
+  
+  def restore
+    flash[:notice] = params[:backup_file]
+
+    # uploaded_file = params[:backup_file]
+    # file_content = uploaded_file.read
+    # 
+    # flash[:notice] = file_content
+  end
 
   # def conditionally_authenticate_user!
   #   before_action :authenticate_user   
@@ -68,7 +77,7 @@ class ProfilesController < ApplicationController
       params.require(:profile).permit(
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
-        :secure_data_entry, :data_entry_key, :google_maps_key
+        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file
         )
     end
 

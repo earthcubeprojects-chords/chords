@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   get 'profiles/backup'              => 'profiles#backup'
   get 'profiles/restore'              => 'profiles#restore'
+  post 'profiles/restore'              => 'profiles#restore'
 
   # devise_for :users
   devise_for :users, controllers: {
