@@ -40,6 +40,18 @@ class ProfilesController < ApplicationController
     redirect_to profiles_path
   end
   
+  def backup
+    @profiles = Profile.all
+    @sites = Site.all
+    @instruments = Instrument.all
+    @users = User.all
+    @vars = Var.all
+    @measured_properties = MeasuredProperty.all
+    
+    file_name = "configuration_backup_of_" + @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + ".json"
+
+    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, users: @users, measured_properties: @measured_properties].to_json  , :filename => file_name
+  end
 
   # def conditionally_authenticate_user!
   #   before_action :authenticate_user   

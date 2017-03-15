@@ -1,4 +1,11 @@
 %h1 Configuration
+%div
+  %span 
+    = link_to "Backup Configuration", controller: "profiles", action: "backup"
+  %span 
+    = link_to "Restore Configuration from Backup", controller: "profiles", action: "restore"
+
+
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
   Project Name: #{f.text_field('project', size: 60)}
   %br/
@@ -44,3 +51,4 @@
       The key required to submit measurements
   %br/
   = f.submit('Save')
+  %br/

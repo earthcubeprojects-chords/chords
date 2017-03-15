@@ -15,6 +15,9 @@ Rails.application.routes.draw do
 
   get 'monitor/live'              => 'monitor#live'
 
+  get 'profiles/backup'              => 'profiles#backup'
+  get 'profiles/restore'              => 'profiles#restore'
+
   # devise_for :users
   devise_for :users, controllers: {
      sessions: 'users/sessions'
@@ -37,7 +40,7 @@ Rails.application.routes.draw do
   resources :measurements
   resources :measured_properties
   resources :monitor
-  resources :profiles, only: [:index, :create]
+  resources :profiles, only: [:index, :create, :backup, :restore]
   resources :sites
   resources :users
   resources :urlbuilder
