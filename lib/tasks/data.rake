@@ -4,7 +4,7 @@ require 'net/http'
 
 $i= 0
 
-task :data do
+task :data => :environment  do
 	while $i < 500 do
 		y = Random.new
 		x = y.rand(1...200)
