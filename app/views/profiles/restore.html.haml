@@ -3,7 +3,7 @@
 %h2 This will completely overwrite your current configuration
 %h2 ALL DATA WILL BE DELETED
 - if can?(:manage, Measurement)
-  = form_tag(profiles_restore_path, :method => 'post') do
+  = form_tag(profiles_restore_path, :method => 'post', :enctype =>"multipart/form-data") do
     %div
       = file_field_tag 'backup_file', :accept => 'text/json', :multiple => false
       %br/
@@ -11,3 +11,4 @@
       = submit_tag("Restore From Backup")
     = #submit_tag("Restore From Backup", data: { confirm: "Are you sure you want to overwrite the portal configuration?\n\nALL DATA WILL BE LOST" })
 
+= @output

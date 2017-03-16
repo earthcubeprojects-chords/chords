@@ -54,12 +54,35 @@ class ProfilesController < ApplicationController
   end
   
   def restore
-    flash[:notice] = params[:backup_file]
+    if (params[:backup_file])
+      file = params[:backup_file]
 
-    # uploaded_file = params[:backup_file]
-    # file_content = uploaded_file.read
-    # 
-    # flash[:notice] = file_content
+      file_content = file.read      
+      backup_hash = JSON.parse(file_content)
+
+      profiles = backup_hash[0]['profiles']
+      sites = backup_hash[0]['sites']
+      instruments = backup_hash[0]['instruments']
+      users = backup_hash[0]['users']
+      vars = backup_hash[0]['vars']
+      measured_properties = backup_hash[0]['measured_properties']
+
+      Var.all.destroy_all
+      Instrument.all.destroy_all
+      Site.all.destroy_all
+      MeasuredProperty.all.destroy_all
+      # User.all.destroy_all
+      Profile.all.destroy_all
+      
+      ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
+      ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
+      #ProfileHelper::replace_model_instances_from_JSON('User', users)
+      ProfileHelper::replace_model_instances_from_JSON('Site', sites)
+      ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
+      ProfileHelper::replace_model_instances_from_JSON('Var', vars)
+      
+      return true
+    end
   end
 
   # def conditionally_authenticate_user!
