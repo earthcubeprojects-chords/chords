@@ -25,7 +25,7 @@ class Instrument < ActiveRecord::Base
   def last_time_in_ms
     latest_point = GetLastTsPoint.call(TsPoint, 'value', self.id)
 
-    if(defined? latest_point.to_a.first)
+    if(defined? latest_point.to_a.first['time'])
       latest_time_ms = Time.parse(latest_point.to_a.first['time'])
     else
       latest_time_ms = Time.now
