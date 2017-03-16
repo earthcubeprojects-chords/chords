@@ -55,10 +55,14 @@ class ProfilesController < ApplicationController
   
   def restore
     if (params[:backup_file])
+
+      # read and parse the JSON file
       file = params[:backup_file]
 
       file_content = file.read      
+
       backup_hash = JSON.parse(file_content)
+
 
       profiles = backup_hash[0]['profiles']
       sites = backup_hash[0]['sites']
@@ -67,23 +71,23 @@ class ProfilesController < ApplicationController
       vars = backup_hash[0]['vars']
       measured_properties = backup_hash[0]['measured_properties']
 
+      # Delete all records from the database
+      # Thor order is important here, as there are foreign keys in place
       Var.all.destroy_all
       Instrument.all.destroy_all
       Site.all.destroy_all
       MeasuredProperty.all.destroy_all
-      # User.all.destroy_all
       Profile.all.destroy_all
       
+      # Rebuild the configuration based on the uploaded JSON
       ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
       ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
-      #ProfileHelper::replace_model_instances_from_JSON('User', users)
       ProfileHelper::replace_model_instances_from_JSON('Site', sites)
       ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
       ProfileHelper::replace_model_instances_from_JSON('Var', vars)
+
       
-      
-          flash[:notice] = 'The portal configuration has been sucessfully restored.'
-      return true
+      flash[:notice] = 'The portal configuration has been sucessfully restored.'
     end
   end
 
