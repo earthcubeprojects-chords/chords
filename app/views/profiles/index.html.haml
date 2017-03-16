@@ -1,10 +1,8 @@
 %h1 Configuration
 
 .center
-  %span 
-    = link_to "Backup Configuration", controller: "profiles", action: "backup"
-  %span 
-    = link_to "Restore Configuration from Backup", controller: "profiles", action: "restore"
+  = link_to "Backup Configuration", {controller: "profiles", action: "backup"}, class: "button"
+  = link_to "Restore Configuration from Backup", {controller: "profiles", action: "restore"}, class: "button"
 
 
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
@@ -81,12 +79,14 @@
             = f.text_area :data_entry_key
             %br/
             The key required to submit measurements
-          
 
-
+    .line
     .line
       .center
         = f.submit('Save')
+
+    .line
+      &nbsp;
 
 
 
