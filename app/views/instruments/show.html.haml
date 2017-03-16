@@ -24,19 +24,31 @@
             = image_tag('glossy-green-icon-button-th.png', size:"16")
           - else
             = image_tag('glossy-red-icon-button-th.png', size:"16")
-          = best_in_place @instrument, :name, :as => :input
+          - if can?(:manage, Instrument)
+            = best_in_place @instrument, :name, :as => :input
+          - else
+            = @instrument.name
       %tr
         %td
           %strong Site
-        %td= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+        %td
+          - if can?(:manage, Instrument)          
+            = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+          - else
+            = @instrument.site.name
       %tr
         %td
           %strong Description
-        %td= best_in_place @instrument,                              |
-            :description,                                           |
-            :as => :input,                                          |
-            :type => :textarea,                                     |
-            :html_attrs => {:style => 'width:500px; height:100px;'} |
+        %td
+          - if can?(:manage, Instrument)
+            = best_in_place @instrument,                              |
+              :description,                                           |
+              :as => :input,                                          |
+              :type => :textarea,                                     |
+              :html_attrs => {:style => 'width:500px; height:100px;'} |
+          - else
+            = @instrument.description
+              
       %tr
         %td
           %strong Data ingest/fetch
@@ -65,15 +77,23 @@
         %td
           %strong Plot Time Span
         %td
-          = best_in_place @instrument, :plot_offset_value, :as => :input
-          = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }
+          - if can?(:manage, Instrument)
+            = best_in_place @instrument, :plot_offset_value, :as => :input
+            = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }
+          - else
+            = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units
+
       %tr
         %td
           %strong
             Measurement
             %br>/
             interval (s)
-        %td= best_in_place @instrument, :sample_rate_seconds, :as => :input
+        %td
+          - if can?(:manage, Instrument)        
+            = best_in_place @instrument, :sample_rate_seconds, :as => :input
+          - else
+            = @instrument.sample_rate_seconds
   .instrument_variables
     %table.table.table-striped
       %tr
