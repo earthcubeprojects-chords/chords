@@ -8,7 +8,6 @@
       = file_field_tag 'backup_file', :accept => 'text/json', :multiple => false
       %br/
     %div
-      = submit_tag("Restore From Backup")
-    = #submit_tag("Restore From Backup", data: { confirm: "Are you sure you want to overwrite the portal configuration?\n\nALL DATA WILL BE LOST" })
+      = submit_tag("Restore From Backup", data: { confirm: "Are you sure you want to overwrite the portal configuration?\n\nALL DATA WILL BE LOST" })
 
 = @output

@@ -81,6 +81,8 @@ class ProfilesController < ApplicationController
       ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
       ProfileHelper::replace_model_instances_from_JSON('Var', vars)
       
+      
+          flash[:notice] = 'The portal configuration has been sucessfully restored.'
       return true
     end
   end
