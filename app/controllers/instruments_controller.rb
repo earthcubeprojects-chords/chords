@@ -227,12 +227,13 @@ class InstrumentsController < ApplicationController
       }
       
       format.geocsv { 
-        varnames_by_id = {}
 
+        varnames_by_id = {}
         Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
         
-        ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
-        send_data ts_csv, filename: file_root+'.csv' 
+        ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
+        
+        send_data ts_csv, filename: file_root+'.geocsv' 
       }
       
       format.xml { 
