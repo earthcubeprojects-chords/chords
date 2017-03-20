@@ -132,8 +132,10 @@ class InstrumentsController < ApplicationController
 
   # GET /instruments/1
   # GET /instruments/1.csv
+  # GET /instruments/1.geocsv
   # GET /instruments/1.jsf
   # GET /instruments/1.json
+  # GET /instruments/1.geojson
   def show
     # This method sets the following instance variables:
     #  @var_to_plot    - The variable currently being plotted
@@ -224,11 +226,24 @@ class InstrumentsController < ApplicationController
         send_data ts_csv, filename: file_root+'.csv' 
       }
       
+      format.geocsv { 
+        varnames_by_id = {}
+
+        Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+        
+        ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
+        send_data ts_csv, filename: file_root+'.csv' 
+      }
+      
       format.xml { 
         send_data MakeXmlFromTsPoints.call(ts_points, metadata), filename: file_root+'.xml'
       } 
          
       format.json { 
+        render text: MakeJsonFromTsPoints.call(ts_points, metadata)
+      }
+
+      format.geojson { 
         render text: MakeJsonFromTsPoints.call(ts_points, metadata)
       }
       
