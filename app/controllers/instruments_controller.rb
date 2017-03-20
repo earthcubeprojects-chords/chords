@@ -245,7 +245,8 @@ class InstrumentsController < ApplicationController
       }
 
       format.geojson { 
-        render text: MakeJsonFromTsPoints.call(ts_points, metadata)
+        
+        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
       }
       
       format.jsf { 
