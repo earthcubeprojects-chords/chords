@@ -40,7 +40,7 @@ class ProfilesController < ApplicationController
     redirect_to profiles_path
   end
   
-  def backup
+  def export_configuration
     @profiles = Profile.all
     @sites = Site.all
     @instruments = Instrument.all
@@ -53,7 +53,7 @@ class ProfilesController < ApplicationController
     send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, users: @users, measured_properties: @measured_properties].to_json  , :filename => file_name
   end
   
-  def restore
+  def import_configuration
     if (params[:backup_file])
 
       # read and parse the JSON file

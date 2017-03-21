@@ -3,7 +3,7 @@
 %h2 This will completely overwrite your current configuration
 %h2 ALL DATA WILL BE DELETED
 - if can?(:manage, Measurement)
-  = form_tag(profiles_restore_path, :method => 'post', :enctype =>"multipart/form-data") do
+  = form_tag(profiles_import_configuration_path, :method => 'post', :enctype =>"multipart/form-data") do
     %div
       = file_field_tag 'backup_file', :accept => 'text/json', :multiple => false
       %br/

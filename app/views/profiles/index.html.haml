@@ -1,8 +1,8 @@
 %h1 Configuration
 
 .center
-  = link_to "Backup Configuration", {controller: "profiles", action: "backup"}, class: "button"
-  = link_to "Restore Configuration from Backup", {controller: "profiles", action: "restore"}, class: "button"
+  = link_to "Export Configuration", {controller: "profiles", action: "export_configuration"}, class: "button"
+  = link_to "Import Configuration", {controller: "profiles", action: "import_configuration"}, class: "button"
 
 
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|

@@ -15,9 +15,9 @@ Rails.application.routes.draw do
 
   get 'monitor/live'              => 'monitor#live'
 
-  get 'profiles/backup'              => 'profiles#backup'
-  get 'profiles/restore'              => 'profiles#restore'
-  post 'profiles/restore'              => 'profiles#restore'
+  get 'profiles/export_configuration'              => 'profiles#export_configuration'
+  get 'profiles/import_configuration'              => 'profiles#import_configuration'
+  post 'profiles/import_configuration'              => 'profiles#import_configuration'
 
   # devise_for :users
   devise_for :users, controllers: {
