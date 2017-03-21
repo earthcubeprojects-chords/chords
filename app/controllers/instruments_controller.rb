@@ -306,7 +306,8 @@ class InstrumentsController < ApplicationController
   def destroy
     authorize! :manage, Instrument
     
-    Measurement.delete_all "instrument_id = #{@instrument.id}"
+    # Measurement.delete_all "instrument_id = #{@instrument.id}"
+
     @instrument.destroy
     respond_to do |format|
       format.html { redirect_to instruments_url, notice: 'Instrument was successfully destroyed.' }
