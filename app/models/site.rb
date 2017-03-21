@@ -9,13 +9,4 @@ class Site < ActiveRecord::Base
   end  
   
   
-  def destroy
-    
-    # Destroy instruments first
-    self.instruments.each do |instrument|
-      instrument.destroy
-    end
-    
-    super.destroy
-  end
 end
