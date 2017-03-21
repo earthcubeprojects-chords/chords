@@ -23,7 +23,7 @@ module ProfileHelper
       new_object.assign_attributes(json_object)
       output = new_object.to_json
 
-      new_object.save!
+      new_object.save(validate: false)
     end
   end
     

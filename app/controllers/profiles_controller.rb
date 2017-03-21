@@ -73,11 +73,11 @@ class ProfilesController < ApplicationController
 
       # Delete all records from the database
       # Thor order is important here, as there are foreign keys in place
-      Var.all.destroy_all
-      Instrument.all.destroy_all
-      Site.all.destroy_all
-      MeasuredProperty.all.destroy_all
-      Profile.all.destroy_all
+      Var.delete_all
+      Instrument.delete_all
+      Site.delete_all
+      MeasuredProperty.delete_all
+      Profile.delete_all
       
       # Rebuild the configuration based on the uploaded JSON
       ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
