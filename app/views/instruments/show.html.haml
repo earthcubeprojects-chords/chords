@@ -9,7 +9,10 @@
   Download current day as
   \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
   \#{link_to("XML",  instrument_url( :format => 'xml')  )},
-  \#{link_to("JSON", instrument_url( :format => 'jsf') )}
+  \#{link_to("JSON", instrument_url( :format => 'jsf') )},
+  \#{link_to("GEOJSON", instrument_url( :format => 'geojson') )},
+  \#{link_to("GEOCSV", instrument_url( :format => 'geocsv') )}
+  
 %div
   Download instrument description #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
 %br/
@@ -24,19 +27,31 @@
             = image_tag('glossy-green-icon-button-th.png', size:"16")
           - else
             = image_tag('glossy-red-icon-button-th.png', size:"16")
-          = best_in_place @instrument, :name, :as => :input
+          - if can?(:manage, Instrument)
+            = best_in_place @instrument, :name, :as => :input
+          - else
+            = @instrument.name
       %tr
         %td
           %strong Site
-        %td= best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+        %td
+          - if can?(:manage, Instrument)          
+            = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+          - else
+            = @instrument.site.name
       %tr
         %td
           %strong Description
-        %td= best_in_place @instrument,                              |
-            :description,                                           |
-            :as => :input,                                          |
-            :type => :textarea,                                     |
-            :html_attrs => {:style => 'width:500px; height:100px;'} |
+        %td
+          - if can?(:manage, Instrument)
+            = best_in_place @instrument,                              |
+              :description,                                           |
+              :as => :input,                                          |
+              :type => :textarea,                                     |
+              :html_attrs => {:style => 'width:500px; height:100px;'} |
+          - else
+            = @instrument.description
+              
       %tr
         %td
           %strong Data ingest/fetch
@@ -61,16 +76,27 @@
           = @instrument.sample_count(:test)
           = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
       %tr
+      %tr
         %td
-          %strong Display points
-        %td= best_in_place @instrument, :display_points, :as => :input
+          %strong Plot Time Span
+        %td
+          - if can?(:manage, Instrument)
+            = best_in_place @instrument, :plot_offset_value, :as => :input
+            = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }
+          - else
+            = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units
+
       %tr
         %td
           %strong
             Measurement
             %br>/
             interval (s)
-        %td= best_in_place @instrument, :sample_rate_seconds, :as => :input
+        %td
+          - if can?(:manage, Instrument)        
+            = best_in_place @instrument, :sample_rate_seconds, :as => :input
+          - else
+            = @instrument.sample_rate_seconds
   .instrument_variables
     %table.table.table-striped
       %tr
@@ -105,5 +131,6 @@
             - if can?(:manage, Var)
               = f.submit :value	 => 'Add a New Variable'
 
-= render 'graph'
+= render 'multivariable_graph'
+
 = link_to 'Back', instruments_path

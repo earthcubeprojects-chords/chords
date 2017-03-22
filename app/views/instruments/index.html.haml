@@ -48,8 +48,14 @@
 
           %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
           - if can?(:manage, Instrument)
-            %td= button_to 'Clone', instruments_duplicate_path, method: :get, params: {instrument_id: instrument.id}
+            %td
 
+              = form_tag(instruments_duplicate_path, :method => 'get') do
+                = select_tag "number_of_duplicates", options_for_select((1..100).to_a , "1") 
+                copies
+                = hidden_field_tag('instrument_id', instrument.id )
+                = submit_tag("Duplicate")
+              
           %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
 
           - if can?(:manage, Instrument)

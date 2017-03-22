@@ -1,46 +1,92 @@
 %h1 Configuration
+
+.center
+  = link_to "Export Configuration", {controller: "profiles", action: "export_configuration"}, class: "button"
+  = link_to "Import Configuration", {controller: "profiles", action: "import_configuration"}, class: "button"
+
+
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
-  Project Name: #{f.text_field('project', size: 60)}
-  %br/
-  %br/
-  Affiliation: #{f.text_field('affiliation', size: 60)}
-  %br/
-  %br/
-  Page Title (will appear in tab titles): #{f.text_field('page_title', size: 60)}
-  %br/
-  %br/
-  Time Zone For Plotting: #{f.collection_select('timezone', ActiveSupport::TimeZone.all, :name, :name)}
-  %br/
-  %br/
-  Project Description (HTML markup may be used):
-  %br/
-  = f.text_area('description', size: "60x20")
-  %br/
-  %br/
-  Site Logo File: #{f.file_field :logo} Reset: #{check_box_tag :reset_logo}
-  %br/
-  %br/
-  %div
-    .section
-      %strong Google      
-    %div
-      Google Maps JavaScript API Key: #{f.text_field('google_maps_key', size: 50)}
-  %br/
-  %div
-    .section
-      %strong Security Options
-    %div
-      = f.check_box :secure_data_viewing
-      Only allow users with the "view data" role to view data
-    %div
-      = f.check_box :secure_data_download
-      Only allow users with the "download data" role to download data
-    %br/
-    %div
-      = f.check_box :secure_data_entry
-      Require the security key in order to submit a measurement
-    %div
-      = f.text_area :data_entry_key
-      The key required to submit measurements
-  %br/
-  = f.submit('Save')
+
+  .configuration
+    .line
+      .title
+        Project Name: 
+      .field
+        #{f.text_field('project', size: 60)}
+      
+    .line
+      .title
+        Affiliation
+      .field
+        #{f.text_field('affiliation', size: 60)}
+
+    .line
+      .title
+        Page Title 
+        %br/        
+        (will appear in tab titles):    
+      .field
+        #{f.text_field('page_title', size: 60)}
+
+    .line
+      .title
+        Time Zone For Plotting
+      .field
+        #{f.collection_select('timezone', ActiveSupport::TimeZone.all, :name, :name)}
+
+    .line
+      .title
+        Project Description 
+        %br/        
+        (HTML markup may be used):
+        %br/        
+        = f.text_area('description', size: "60x20")
+
+    .line
+      .title
+        Site Logo File:
+      .field
+        %div      
+          #{f.file_field :logo} 
+          Reset: #{check_box_tag :reset_logo}
+    
+    .line
+      .title
+        Google Maps
+        %br/ 
+        %strong JavaScript API Key:
+      .field
+        #{f.text_field('google_maps_key', size: 50)}
+
+
+    .line
+    .line
+    .line
+      .title
+        Security Options
+      %div.field
+        %div 
+          %div
+            = f.check_box :secure_data_viewing
+            Restrict viewing of data
+          %div
+            = f.check_box :secure_data_download
+            Restrict downloading of data
+          %div
+          = f.check_box :secure_data_entry
+          Require the security key in order to submit a measurement
+          %div
+            = f.text_area :data_entry_key
+            %br/
+            The key required to submit measurements
+
+    .line
+    .line
+      .center
+        = f.submit('Save')
+
+    .line
+      &nbsp;
+
+
+

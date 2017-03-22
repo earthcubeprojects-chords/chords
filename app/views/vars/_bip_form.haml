@@ -1,9 +1,35 @@
-%td= best_in_place variable, :shortname, :as => :input
+%td
+  - if can?(:manage, Var)
+    = best_in_place variable, :shortname, :as => :input
+  - else
+    = variable.shortname
 %td =
-%td= best_in_place variable, :name, :as => :input
-%td= best_in_place variable, :units, :as => :input
-%td= best_in_place variable, :minimum_plot_value, :as => :input
-%td= best_in_place variable, :maximum_plot_value, :as => :input
+%td
+  - if can?(:manage, Var)
+    = best_in_place variable, :name, :as => :input
+  - else
+    = variable.name
+%td
+  - if can?(:manage, Var)
+    = best_in_place variable, :units, :as => :input
+  - else
+    = variable.units
+
+
+%td
+  - if can?(:manage, Var)
+    = best_in_place variable, :minimum_plot_value, :as => :input
+  - else
+    = variable.minimum_plot_value
+
+
+%td
+  - if can?(:manage, Var)
+    = best_in_place variable, :maximum_plot_value, :as => :input
+  - else
+    = variable.maximum_plot_value
+
+
 
 %td
   - if can?(:manage, Var)
