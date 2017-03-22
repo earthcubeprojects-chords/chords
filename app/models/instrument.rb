@@ -3,7 +3,7 @@ class Instrument < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   
   belongs_to :site
-  has_many :measurements, :dependent => :destroy
+  # has_many :measurements, :dependent => :destroy
   has_many :vars, :dependent => :destroy
   accepts_nested_attributes_for :vars
 
@@ -58,15 +58,15 @@ class Instrument < ActiveRecord::Base
   end
 
 
-  def last_measurement
-    measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
-
-    return measurement
-  end
-
-  def self.last_measurement_url
-    url = instrument_url()
-  end
+  # def last_measurement
+  #   measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
+  # 
+  #   return measurement
+  # end
+  # 
+  # def self.last_measurement_url
+  #   url = instrument_url()
+  # end
 
   
   def is_receiving_data
