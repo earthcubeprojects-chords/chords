@@ -1,5 +1,5 @@
 class InstrumentsController < ApplicationController  
-  before_action :set_instrument, only: [:show, :edit, :update, :destroy]
+  before_action :set_instrument, only: [:show, :edit, :update, :destroy, :live]
 
  # GET /instruments/1/live?var=varshortname&after=time
  # Return measurements and metadata for a given instrument, var and time period.
@@ -8,34 +8,55 @@ class InstrumentsController < ApplicationController
     # Authorize access to the measurements
     authorize! :view, Measurement
  
+
+    # Verify the parameters
+
+    # convert the millisecond input to seconds since epoch
+    if ((defined? params[:after]) && (params[:after].to_i != 0))
+      start_time_ms = Time.strptime(params[:after], '%Q')
+    else
+      time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
+      start_time_ms = @instrument.last_time_in_ms - eval(time_offset)
+    end
+
     # Initialze the return value
     livedata = {
       :points         => [], 
+      :multivariable_points         => {}, 
+      :multivariable_names         => [], 
       :display_points => 0,
       :refresh_msecs  => 1000
       }
 
-    # Verify the parameters
-    if params[:id] && params[:var] && params[:after]
-    
-      # Get the instrument
-      our_instrument = Instrument.find(params[:id])
-      
+
+    livedata[:display_points] = @instrument.maximum_plot_points
+    livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
+
+    # If the var parameter is set, then we build and return data for only this variable.
+    if (params[:var]) 
+      variable = @instrument.find_var_by_shortname(params[:var])
+
       # Fetch the data
-      if our_instrument
+      live_points = variable.get_tspoints(start_time_ms)
+
+      if live_points
+      livedata[:points] = live_points
+      end
       
-        livedata[:display_points] = our_instrument.display_points
-        livedata[:refresh_msecs]  = our_instrument.refresh_rate_ms          
+    # otherwise we return data for all variables
+    else
+      @instrument.vars.each do |variable|
+        livedata[:multivariable_names].push  variable.shortname
+        livedata[:multivariable_points][variable.shortname] = []
 
-        variable = our_instrument.find_var_by_shortname(params[:var])
+        # Fetch the data
+        live_points = variable.get_tspoints(start_time_ms)
 
-        live_points = variable.get_tspoints
-        
         if live_points
-          livedata[:points] = live_points
+          livedata[:multivariable_points][variable.shortname] = live_points
         end
         
-
+        
       end
     end
 
@@ -45,6 +66,7 @@ class InstrumentsController < ApplicationController
     # Return result
     render :json => livedata_json
   end
+
   
   # GET instruments/simulator
   def simulator
@@ -62,32 +84,36 @@ class InstrumentsController < ApplicationController
   def duplicate
 
     # Does it exist?
-    if Instrument.exists?(params[:instrument_id])
+    if (Instrument.exists?(params[:instrument_id]) && defined? params[:number_of_duplicates])   
+      (1..params[:number_of_duplicates].to_i).each do
 
-      old_instrument = Instrument.find(params[:instrument_id])
+        old_instrument = Instrument.find(params[:instrument_id])
 
-      authorize! :manage, old_instrument
-            
-      # Make a copy
-      new_instrument = old_instrument.dup
-      
-      # Add"clone" to the name
-      if !new_instrument.name.include? "clone" 
-        new_instrument.name = new_instrument.name + " clone"
+        authorize! :manage, old_instrument
+
+        # Make a copy
+        new_instrument = old_instrument.dup
+
+        # Add"clone" to the name
+        if !new_instrument.name.include? "clone" 
+          new_instrument.name = new_instrument.name + " clone"
+        end
+
+        # Zero out the last url
+        new_instrument.last_url = nil
+
+        # Create duplicates of the vars
+        old_instrument.vars.each do |v|
+          new_var = v.dup
+          new_var.save
+          new_instrument.vars << new_var
+        end
+
+        # Save the new instrument
+        new_instrument.save
+
       end
-      
-      # Zero out the last url
-      new_instrument.last_url = nil
-  
-      # Create duplicates of the vars
-      old_instrument.vars.each do |v|
-        new_var = v.dup
-        new_var.save
-        new_instrument.vars << new_var
-      end
-      
-      # Save the new instrument
-      new_instrument.save
+
     end
     
     redirect_to instruments_path
@@ -106,12 +132,12 @@ class InstrumentsController < ApplicationController
 
   # GET /instruments/1
   # GET /instruments/1.csv
+  # GET /instruments/1.geocsv
   # GET /instruments/1.jsf
   # GET /instruments/1.json
+  # GET /instruments/1.geojson
   def show
     # This method sets the following instance variables:
-    #  @params
-    #  @var_id_to_plot - The id of the variable currently being plotted
     #  @var_to_plot    - The variable currently being plotted
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
@@ -120,82 +146,67 @@ class InstrumentsController < ApplicationController
     authorize! :view, Instrument
     authorize! :download, @instrument if ["csv", "xml", "json", "jsf"].include?(params[:format])
 
+    
     # Get and sanitize the last_url
     @last_url = InstrumentsHelper.sanitize_url(
         !@profile.secure_administration, 
         !(current_user && (can? :manage, Measurement)), 
         GetLastUrl.call(TsPoint, @instrument.id))
-    @params = params.slice(:start, :end)
-
+        
     # Get useful details.
-    instrument_name = @instrument.name
-    instrument_id   = @instrument.id
-    site_name       = @instrument.site.name
-    varshortnames   = Var.all.where("instrument_id = ?", @instrument.id).pluck(:shortname)
-    project         = Profile.first.project
-    affiliation     = Profile.first.affiliation
-    varnames_by_id = {}
-    Var.all.where("instrument_id = #{instrument_id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
     metadata = {
-      "Project"     => project, 
-      "Site"        => site_name, 
-      "Affiliation" => affiliation, 
-      "Instrument"  => instrument_name
+      "Project"     => @profile.project, 
+      "Site"        => @instrument.site.name, 
+      "Affiliation" => @profile.affiliation, 
+      "Instrument"  => @instrument.name
     }
     
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
     
-    # File name root
-    file_root = "#{project}_#{site_name}_#{instrument_name}"
-    file_root = file_root.split.join
-     
-    # Create a hash, with shortname => name
-    @varnames = {}
-    varshortnames.each do |vshort|
-      @varnames[vshort] = Var.all.where("instrument_id = ? and shortname = ?", instrument_id, vshort).pluck(:name)[0]
-    end
 
 
     # Set the variable to plot
     if params[:var_id]
-      @var_id_to_plot = params[:var_id]
-      @var_to_plot = Var.find(@var_id_to_plot)
+      @var_to_plot = Var.find(params[:var_id])
     else
       if ( defined? @instrument.vars.first.id)
-        @var_id_to_plot = @instrument.vars.first.id
-        @var_to_plot = Var.find(@var_id_to_plot)
+        @var_to_plot = Var.find(@instrument.vars.first.id)
       else 
-        # No variable defined.
-        # This leaves @var_id_to_plot and @var_to_plot undefined. 
+        # No variable defined were found for this instrument.
+        # This leaves and @var_to_plot undefined. 
       end      
     end
     
-        
+        @instrument.last_time_in_ms
     # Determine the time range. Default to the most recent day
-    endtime   = Time.now
-    starttime = endtime - 1.day
+    end_time   = Time.now
+    start_time = end_time - 1.day
+
     if params.key?(:last)
-     last_ts_point = GetLastTsPoint.call(TsPoint, "value", instrument_id)
-      if (last_ts_point)
-        last_ts_point.each {|p| starttime = p["time"]}
-        endtime   = starttime
-      else
-        starttime = Time.now
-        endtime   = startime
-      end
+      start_time = @instrument.last_time_in_ms
+
+      end_time   = start_time
     else
       # See if we have the start and end parameters
       if params.key?(:start)
-        starttime = Time.parse(params[:start])
+        start_time = Time.parse(params[:start])
       end
       if params.key?(:end)
-        endtime = Time.parse(params[:end])
+        end_time = Time.parse(params[:end])
       end
     end
-    
+
+
+
     # Get the time series points from the database
-    ts_points  = GetTsPoints.call(TsPoint, "value", instrument_id, starttime, endtime)
+    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, start_time, end_time)
+
+
+    # File name root
+    file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
+    file_root = file_root.split.join
+    
 
     # Prepare result
     respond_to do |format|
@@ -207,8 +218,22 @@ class InstrumentsController < ApplicationController
       }
       
       format.csv { 
+        varnames_by_id = {}
+
+        Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+        
         ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
         send_data ts_csv, filename: file_root+'.csv' 
+      }
+      
+      format.geocsv { 
+
+        varnames_by_id = {}
+        Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+        
+        ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
+        
+        send_data ts_csv, filename: file_root+'.geocsv' 
       }
       
       format.xml { 
@@ -217,6 +242,11 @@ class InstrumentsController < ApplicationController
          
       format.json { 
         render text: MakeJsonFromTsPoints.call(ts_points, metadata)
+      }
+
+      format.geojson { 
+        
+        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
       }
       
       format.jsf { 
@@ -269,13 +299,15 @@ class InstrumentsController < ApplicationController
       end
     end
   end
+  
 
   # DELETE /instruments/1
   # DELETE /instruments/1.json
   def destroy
     authorize! :manage, Instrument
     
-    Measurement.delete_all "instrument_id = #{@instrument.id}"
+    # Measurement.delete_all "instrument_id = #{@instrument.id}"
+
     @instrument.destroy
     respond_to do |format|
       format.html { redirect_to instruments_url, notice: 'Instrument was successfully destroyed.' }
@@ -292,7 +324,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :sample_rate_seconds, :description, :instrument_id)
+        :name, :site_id, :display_points, :sample_rate_seconds, :description, :instrument_id, :plot_offset_value, :plot_offset_units)
     end
 
 end

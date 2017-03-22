@@ -40,6 +40,56 @@ class ProfilesController < ApplicationController
     redirect_to profiles_path
   end
   
+  def export_configuration
+    @profiles = Profile.all
+    @sites = Site.all
+    @instruments = Instrument.all
+    @users = User.all
+    @vars = Var.all
+    @measured_properties = MeasuredProperty.all
+    
+    file_name = "configuration_backup_of_" + @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + ".json"
+
+    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, users: @users, measured_properties: @measured_properties].to_json  , :filename => file_name
+  end
+  
+  def import_configuration
+    if (params[:backup_file])
+
+      # read and parse the JSON file
+      file = params[:backup_file]
+
+      file_content = file.read      
+
+      backup_hash = JSON.parse(file_content)
+
+
+      profiles = backup_hash[0]['profiles']
+      sites = backup_hash[0]['sites']
+      instruments = backup_hash[0]['instruments']
+      users = backup_hash[0]['users']
+      vars = backup_hash[0]['vars']
+      measured_properties = backup_hash[0]['measured_properties']
+
+      # Delete all records from the database
+      # Thor order is important here, as there are foreign keys in place
+      Var.delete_all
+      Instrument.delete_all
+      Site.delete_all
+      MeasuredProperty.delete_all
+      Profile.delete_all
+      
+      # Rebuild the configuration based on the uploaded JSON
+      ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
+      ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
+      ProfileHelper::replace_model_instances_from_JSON('Site', sites)
+      ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
+      ProfileHelper::replace_model_instances_from_JSON('Var', vars)
+
+      
+      flash[:notice] = 'The portal configuration has been sucessfully restored.'
+    end
+  end
 
   # def conditionally_authenticate_user!
   #   before_action :authenticate_user   
@@ -56,7 +106,7 @@ class ProfilesController < ApplicationController
       params.require(:profile).permit(
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
-        :secure_data_entry, :data_entry_key, :google_maps_key
+        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file
         )
     end
 

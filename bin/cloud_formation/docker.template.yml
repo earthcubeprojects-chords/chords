@@ -21,6 +21,11 @@ Parameters:
     Default: development
     Description: CHORDS git branch/docker image tag
     Type: String
+                
+  SecretKeyBase:
+    Default: aaaaaaaaaaa
+    Description: SECRET_KEY_BASE for Rails
+    Type: String
 
   DbRetention:
     AllowedValues:
@@ -415,6 +420,7 @@ Resources:
                 DOCKER_TAG=${GitBranchAndDockerTag}
                 RAILS_ENV=production
                 DB_RETENTION=${DbRetention}
+                SECRET_KEY_BASE=$(SecretKeyBase}
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:

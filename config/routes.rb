@@ -15,6 +15,10 @@ Rails.application.routes.draw do
 
   get 'monitor/live'              => 'monitor#live'
 
+  get 'profiles/export_configuration'              => 'profiles#export_configuration'
+  get 'profiles/import_configuration'              => 'profiles#import_configuration'
+  post 'profiles/import_configuration'              => 'profiles#import_configuration'
+
   # devise_for :users
   devise_for :users, controllers: {
      sessions: 'users/sessions'
@@ -37,7 +41,7 @@ Rails.application.routes.draw do
   resources :measurements
   resources :measured_properties
   resources :monitor
-  resources :profiles, only: [:index, :create]
+  resources :profiles, only: [:index, :create, :backup, :restore]
   resources :sites
   resources :users
   resources :urlbuilder

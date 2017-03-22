@@ -12,7 +12,7 @@ Rails.application.configure do
   # Rake tasks automatically ignore this option for performance.
   # Also needed for the CHORDS code that doesn't match the rails framework,
   # such as tspoint.rb
-  config.eager_load = true
+  config.eager_load = false
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true

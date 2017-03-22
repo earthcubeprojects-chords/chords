@@ -1,6 +1,5 @@
 class Site < ActiveRecord::Base
-  has_many :instruments
-  
+  has_many :instruments, :dependent => :destroy
   
   def self.initialize
   end
@@ -8,4 +7,6 @@ class Site < ActiveRecord::Base
   def self.list_site_options 
       Site.select("id, name").map {|site| [site.id, site.name] }
   end  
+  
+  
 end

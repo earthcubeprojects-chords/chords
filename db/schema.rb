@@ -11,17 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170210035633) do
+ActiveRecord::Schema.define(version: 20170322194954) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
     t.integer  "site_id",             limit: 4
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.integer  "display_points",      limit: 4,     default: 20
     t.integer  "sample_rate_seconds", limit: 4,     default: 5
     t.text     "last_url",            limit: 65535
     t.text     "description",         limit: 65535
+    t.integer  "plot_offset_value",   limit: 4,     default: 1
+    t.string   "plot_offset_units",   limit: 255,   default: "weeks"
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
@@ -52,7 +54,7 @@ ActiveRecord::Schema.define(version: 20170210035633) do
   create_table "profiles", force: :cascade do |t|
     t.string   "project",               limit: 255
     t.string   "affiliation",           limit: 255
-    t.string   "description",           limit: 1000
+    t.text     "description",           limit: 65535
     t.binary   "logo",                  limit: 16777215
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
@@ -68,12 +70,12 @@ ActiveRecord::Schema.define(version: 20170210035633) do
 
   create_table "sites", force: :cascade do |t|
     t.string   "name",        limit: 255
-    t.float    "lat",         limit: 24
-    t.float    "lon",         limit: 24
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.decimal  "lat",                       precision: 12, scale: 9
+    t.decimal  "lon",                       precision: 12, scale: 9
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
     t.text     "description", limit: 65535
-    t.float    "elevation",   limit: 24,    default: 0.0
+    t.decimal  "elevation",                 precision: 12, scale: 6, default: 0.0
   end
 
   create_table "users", force: :cascade do |t|

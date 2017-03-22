@@ -3,7 +3,7 @@ class Instrument < ActiveRecord::Base
   include Rails.application.routes.url_helpers
   
   belongs_to :site
-  has_many :measurements, :dependent => :destroy
+  # has_many :measurements, :dependent => :destroy
   has_many :vars, :dependent => :destroy
   accepts_nested_attributes_for :vars
 
@@ -15,7 +15,32 @@ class Instrument < ActiveRecord::Base
   def find_var_by_shortname (shortname)
     var_id = Var.all.where("instrument_id='#{self.id}' and shortname='#{shortname}'").pluck(:id)[0]
 
-    return Var.find(var_id)
+    if var_id
+      return Var.find(var_id)
+    else
+      return nil
+    end
+  end
+  
+  def last_time_in_ms
+    latest_point = GetLastTsPoint.call(TsPoint, 'value', self.id)
+
+    if(defined? latest_point.to_a.first['time'])
+      latest_time_ms = Time.parse(latest_point.to_a.first['time'])
+    else
+      latest_time_ms = Time.now
+    end          
+    
+    return latest_time_ms
+  end
+  
+  def maximum_plot_points
+    
+    time_offset_seconds = eval("#{self.plot_offset_value}.#{self.plot_offset_units}")
+
+    points_to_plot = time_offset_seconds / self.sample_rate_seconds
+
+    return points_to_plot.to_i
   end
 
   def self.to_csv(options = {})
@@ -33,15 +58,15 @@ class Instrument < ActiveRecord::Base
   end
 
 
-  def last_measurement
-    measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
-
-    return measurement
-  end
-
-  def self.last_measurement_url
-    url = instrument_url()
-  end
+  # def last_measurement
+  #   measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
+  # 
+  #   return measurement
+  # end
+  # 
+  # def self.last_measurement_url
+  #   url = instrument_url()
+  # end
 
   
   def is_receiving_data

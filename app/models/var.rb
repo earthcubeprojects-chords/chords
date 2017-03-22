@@ -2,6 +2,8 @@ class Var < ActiveRecord::Base
   belongs_to :instrument
   belongs_to :measured_property
 
+  before_destroy :delete_ts_points
+  
   def measured_at_parameter
     return self.shortname + '_measured_at'
   end
@@ -10,16 +12,19 @@ class Var < ActiveRecord::Base
     return self.shortname + '_at'
   end
 
-  def get_tspoints (display_points = self.instrument.display_points)
+
+  
+  def get_tspoints (since, display_points = self.instrument.display_points)
     # Get the measurements
-    # TODO: use the :after parameter. It did ot interact correctly with
+    # TODO: use the :after parameter. It did not interact correctly with
     # the highchart during prototyping. The problem may be on the javascript side.
     ts_points = TsPoint \
       .where("inst = '#{self.instrument.id}'") \
       .where("var  = '#{self.id}'") \
       .order("desc") \
-      .limit(display_points).to_a
-
+      .since(since) 
+      
+    ts_points = ts_points.to_a
     live_points = []
     if ts_points
       # Collect the times and values for the measurements
@@ -29,9 +34,14 @@ class Var < ActiveRecord::Base
       end
       
     end
-
+    
     return live_points
   end
 
+
+  def delete_ts_points
+
+    DeleteVariableTsPoints.call(TsPoint, self)
+  end
 
 end
