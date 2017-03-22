@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170316215056) do
+ActiveRecord::Schema.define(version: 20170322194954) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20170316215056) do
   create_table "profiles", force: :cascade do |t|
     t.string   "project",               limit: 255
     t.string   "affiliation",           limit: 255
-    t.string   "description",           limit: 1000
+    t.text     "description",           limit: 65535
     t.binary   "logo",                  limit: 16777215
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20170316215056) do
     t.datetime "created_at",                                                       null: false
     t.datetime "updated_at",                                                       null: false
     t.text     "description", limit: 65535
-    t.decimal  "elevation",                 precision: 9,  scale: 3, default: 0.0
+    t.decimal  "elevation",                 precision: 12, scale: 6, default: 0.0
   end
 
   create_table "users", force: :cascade do |t|
