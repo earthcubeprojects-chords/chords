@@ -233,7 +233,7 @@ class InstrumentsController < ApplicationController
         
         ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
         
-        send_data ts_csv, filename: file_root+'.geocsv' 
+        send_data ts_csv, filename: file_root+'.geocsv'
       }
       
       format.xml { 
@@ -246,7 +246,9 @@ class InstrumentsController < ApplicationController
 
       format.geojson { 
         
-        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
+        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
+                
+        send_data ts_json, filename: file_root+'.geojson'
       }
       
       format.jsf { 
