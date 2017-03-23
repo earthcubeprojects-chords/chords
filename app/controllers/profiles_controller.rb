@@ -48,7 +48,7 @@ class ProfilesController < ApplicationController
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
     
-    file_name = "configuration_backup_of_" + @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + ".json"
+    file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf"".json"
 
     send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, users: @users, measured_properties: @measured_properties].to_json  , :filename => file_name
   end
