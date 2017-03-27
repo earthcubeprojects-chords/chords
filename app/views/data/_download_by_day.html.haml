@@ -33,6 +33,10 @@
     $('.csvButton').click(function(){
       send_download_url(this.value, 'csv');
     });
+    $('.geoCsvButton').click(function(){
+      send_download_url(this.value, 'geocsv');
+    });
+  
   
     $('.xmlButton').click(function(){
       send_download_url(this.value, 'xml');
@@ -40,6 +44,10 @@
   
     $('.jsonButton').click(function(){
       send_download_url(this.value, 'jsf');
+    });
+  
+    $('.geoJsonButton').click(function(){
+      send_download_url(this.value, 'geojson');
     });
   
   
@@ -82,7 +90,9 @@
         %td{:align => "center"}
 
           %button.csvButton{:value => "#{instrument.id}"} CSV
+          %button.geoCsvButton{:value => "#{instrument.id}"} GeoCSV
           %button.jsonButton{:value => "#{instrument.id}"} JSON
+          %button.geoJsonButton{:value => "#{instrument.id}"} GeoJSON
           %button.xmlButton{:value => "#{instrument.id}"} XML
 
 %p
