@@ -23,6 +23,7 @@
       .field
         #{f.text_field('page_title', size: 60)}
     .line
+    .line
       .title
         Time Zone For Plotting
       .field
@@ -45,7 +46,7 @@
       .field
         %div      
           #{f.file_field :logo_file} 
-          Reset: #{check_box_tag :reset_logo}
+          Reset to default image: #{check_box_tag :reset_logo}
     .line
     .line
       .title
@@ -65,15 +66,14 @@
             = f.check_box :secure_data_viewing
             Restrict viewing of data
           %div
-            = f.check_box :secure_data_download
+            #{f.check_box :secure_data_download}
             Restrict downloading of data
           %div
-          = f.check_box :secure_data_entry
-          Require the security key in order to submit a measurement
+            #{f.check_box :secure_data_entry}
+            Require the security key in order to submit a measurement
           %div
-            = f.text_area :data_entry_key
-            %br/
-            The key required to submit measurements
+            Measurement security key
+            #{f.text_field(:data_entry_key, size: 30)}
     .line
     .line
       .center
