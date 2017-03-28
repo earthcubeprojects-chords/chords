@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
     end
 
     if @profile.logo != nil
-      @logo_base64 = Base64.encode64(@profile.logo)
+      @logo_base64 = @profile.logo
     else 
       @logo_base64 = nil
     end

@@ -4,61 +4,56 @@
   = link_to "Export Configuration", {controller: "profiles", action: "export_configuration"}, class: "button"
   = link_to "Import Configuration", {controller: "profiles", action: "import_configuration"}, class: "button"
 
-
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
-
   .configuration
     .line
       .title
-        Project Name: 
+        Project Name
       .field
         #{f.text_field('project', size: 60)}
-      
     .line
       .title
         Affiliation
       .field
         #{f.text_field('affiliation', size: 60)}
-
     .line
       .title
-        Page Title 
-        %br/        
-        (will appear in tab titles):    
+        Page Title        
+        (will appear in tab titles)   
       .field
         #{f.text_field('page_title', size: 60)}
-
     .line
       .title
         Time Zone For Plotting
       .field
         #{f.collection_select('timezone', ActiveSupport::TimeZone.all, :name, :name)}
-
     .line
       .title
-        Project Description 
-        %br/        
-        (HTML markup may be used):
-        %br/        
-        = f.text_area('description', size: "60x20")
-
+        Project Description
+        %br/   
+        (HTML markup may be used)
+        %br/
+      .field   
+        #{f.text_area('description', size: "60x20")}
     .line
       .title
-        Site Logo File:
+        Logo File
+        %br/
+        (100 pixels high is best,
+        %br/
+        but not mandatory)
       .field
         %div      
-          #{f.file_field :logo} 
+          #{f.file_field :logo_file} 
           Reset: #{check_box_tag :reset_logo}
-    
+    .line
     .line
       .title
         Google Maps
         %br/ 
-        %strong JavaScript API Key:
+        %strong JavaScript API Key
       .field
         #{f.text_field('google_maps_key', size: 50)}
-
-
     .line
     .line
     .line
@@ -79,7 +74,6 @@
             = f.text_area :data_entry_key
             %br/
             The key required to submit measurements
-
     .line
     .line
       .center
@@ -87,6 +81,3 @@
 
     .line
       &nbsp;
-
-
-
