@@ -65,7 +65,7 @@ export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 
 # Number of Unicorn workers
 if [ -z "$WORKERS" ]; then
-  export WORKERS=1
+  export WORKERS=4
 fi
 # See if there is an existing mysql database
 if [ ! -e $mysql_seeded_flag ] 

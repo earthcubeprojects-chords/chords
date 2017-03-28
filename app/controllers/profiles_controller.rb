@@ -22,13 +22,13 @@ class ProfilesController < ApplicationController
     # update attributes
     @profile.update(profile_params)      
 
-
     # Handle the logo stuff separately
     if params[:reset_logo].to_i == 1
       @profile.update_attribute(:logo, nil)
     else
-      if params[:profile][:logo] != nil
-        @profile.update_attribute(:logo, params[:profile][:logo].read)
+      if params[:profile][:logo_file] != nil
+        image_base64 = Base64.encode64(params[:profile][:logo_file].read)
+        @profile.update_attribute(:logo, image_base64)
       else
         @profile.update_attribute(:logo, @profile.logo)
       end
@@ -94,6 +94,13 @@ class ProfilesController < ApplicationController
   # def conditionally_authenticate_user!
   #   before_action :authenticate_user   
   # end
+
+  def upload_logo
+    authorize! :manage, Profile
+    
+    Rails.logger.debug 'Profiles:upload_logo!'
+  end
+  
 
   private
     # Use callbacks to share common setup or constraints between actions.
