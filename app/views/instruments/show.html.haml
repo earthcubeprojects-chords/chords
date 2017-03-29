@@ -4,17 +4,33 @@
 .last_url
   = @last_url
 
+%div.instrument_download
+  %h4
+    Data Access and Downloads
 
-%div
-  Download current day as
-  \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
-  \#{link_to("XML",  instrument_url( :format => 'xml')  )},
-  \#{link_to("JSON", instrument_url( :format => 'jsf') )},
-  \#{link_to("GEOJSON", instrument_url( :format => 'geojson') )},
-  \#{link_to("GEOCSV", instrument_url( :format => 'geocsv') )}
+  %div
+    %strong Data ingest/fetch
+    %br
+    = link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)  
+
+  %div
+    %strong
+      Download current day as
+    %br
+    \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
+    \#{link_to("XML",  instrument_url( :format => 'xml')  )},
+    \#{link_to("JSON", instrument_url( :format => 'jsf') )},
+    \#{link_to("GEOJSON", instrument_url( :format => 'geojson') )},
+    \#{link_to("GEOCSV", instrument_url( :format => 'geocsv') )}
   
-%div
-  Download instrument description #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
+  %div
+    %strong 
+      Instrument Description
+    %br
+    #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
+    
+
+
 %br/
 .instrument_details_and_variables
   .instrument_details
@@ -52,10 +68,7 @@
           - else
             = @instrument.description
               
-      %tr
-        %td
-          %strong Data ingest/fetch
-        %td= link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)
+
       %tr
         %td
           %strong Instrument ID

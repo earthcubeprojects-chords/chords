@@ -1,0 +1,26 @@
+.instrument_details_and_variables {
+overflow: hidden;
+}
+
+.instrument_details {
+float: left;
+}
+
+.instrument_variables {
+float: left;
+margin-left: 40px;
+}
+
+
+
+.instrument_download {
+	border-radius: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border: 2px solid black;
+	float: right;
+}
+
+.instrument_download div {
+	margin-bottom: 10px;
+}

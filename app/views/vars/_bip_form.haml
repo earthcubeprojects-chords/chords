@@ -1,6 +1,6 @@
 %td
   - if can?(:manage, Var)
-    = best_in_place variable, :shortname, :as => :input
+    = best_in_place variable, :shortname, :as => :input, :class => 'bip_short_name', :html_attrs => { size: 8 }
   - else
     = variable.shortname
 %td =
