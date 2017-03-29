@@ -65,7 +65,7 @@
   - y_axis_js_part += "}"
   - y_axis_js_parts.push(y_axis_js_part)
   :javascript 
-    var temp_hash = {name:"#{v.name}", visible: true, data: [], yAxis: #{variable_index}, lineWidth: 1.3};
+    var temp_hash = {name:"#{v.name}", visible: #{visible_by_default}, data: [], yAxis: #{variable_index}, lineWidth: 1.3};
 
     series.push(temp_hash);
     last_times.push(0);
