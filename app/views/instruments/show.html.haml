@@ -86,8 +86,8 @@
   .instrument_variables
     %h4
       Variables
-    .row
-      .col-md-2
+    .row-fluid
+      .col-sm-2
         Short Name
       .col-sm-2
         Name
@@ -103,7 +103,7 @@
     - @instrument.vars.each do |variable|
       = render partial: 'vars/bip_form', locals: {variable: variable}
 
-    .row
+    .row-fluid
       .col-sm-1
         = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
           = f.hidden_field :name, :value => 'name'
