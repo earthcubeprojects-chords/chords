@@ -1,3 +1,37 @@
+
+
+@media screen and (max-width:13660px){
+  .instrument_measurements {
+  	width: 60%;
+  }
+
+  .instrument_download {
+  	width: 35%;
+	
+  }
+
+  .instrument_variables {
+  	width: 97%;
+  }
+}
+
+
+@media screen and (max-width:1024px){
+  .instrument_measurements {
+  	width: 80%;
+  }
+
+  .instrument_download {
+  	width: 80%;
+	
+  }
+
+  .instrument_variables {
+  	width: 80%;
+  }
+}
+
+
 .instrument_information {
 	border-radius: 10px;
 	padding-left: 10px;
@@ -34,18 +68,7 @@ overflow: hidden;
 	
 }
 
-.instrument_measurements {
-	width: 60%;
-}
 
-.instrument_download {
-	width: 35%;
-	
-}
-
-.instrument_variables {
-	width: 97%;
-}
 
 .instrument_download div {
 	margin-bottom: 10px;
