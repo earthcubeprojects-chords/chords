@@ -86,7 +86,7 @@
   .instrument_variables
     %h4
       Variables
-    .row-fluid
+    .row-fluid.instruments_variables_header
       .col-sm-2
         Short Name
       .col-sm-2
@@ -102,6 +102,7 @@
  
     - @instrument.vars.each do |variable|
       = render partial: 'vars/bip_form', locals: {variable: variable}
+      .clear
 
     .row-fluid
       .col-sm-1

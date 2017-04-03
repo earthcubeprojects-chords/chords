@@ -1,15 +1,21 @@
-.row
+.row-fluid.variable
   .col-sm-2
+    .variable_header
+      Name:
     - if can?(:manage, Var)
       = best_in_place variable, :shortname, :as => :input, :class => 'bip_short_name', :html_attrs => { size: 8 }
     - else
       = variable.shortname
   .col-sm-2
+    .variable_header
+      Shortname:
     - if can?(:manage, Var)
       = best_in_place variable, :name, :as => :input, :html_attrs => { size: 12 }
     - else
       = variable.name
   .col-sm-2
+    .variable_header
+      Units:
     - if can?(:manage, Var)
       = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
     - else
@@ -17,6 +23,8 @@
 
 
   .col-sm-2
+    .variable_header
+      Min/Max (Plot):
     - if can?(:manage, Var)
       = best_in_place variable, :minimum_plot_value, :as => :input, :html_attrs => { size: 5 }
       \/
@@ -31,6 +39,8 @@
 
 
   .col-sm-2
+    .variable_header
+      Measured Property:
     - if can?(:manage, Var)
       - form_tag_id = "mp_for_tag_#{variable.id}"
       = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
@@ -66,7 +76,7 @@
         });
     - else
       = variable.measured_property.label
-  .col-sm-2
+  .col-sm-2.delete_variable_container
     - if can?(:manage, Var)
       = link_to variable, method: :copy, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
         = image_tag('trash.svg', :class=>"delete-icon", :style=>"height:16px;")

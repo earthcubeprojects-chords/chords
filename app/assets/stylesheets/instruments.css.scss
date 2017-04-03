@@ -1,3 +1,15 @@
+.variable_header {
+  display: none;
+  font-weight: bolder;
+
+}
+
+.delete_variable_container {
+  width: auto;
+  position: relative;
+  text-align: right;
+  top: 0px;
+}
 
 
 @media screen and (max-width:13660px){
@@ -31,6 +43,29 @@
   }
 }
 
+@media screen and (max-width:767px){
+  .instruments_variables_header {
+    display: none;
+  }
+
+  .variable_header {
+    display: inline;
+  }
+  
+  .variable {
+  	border-radius: 10px;
+  	border: 1px solid black;
+  	margin-bottom: 5px;
+  }
+  
+  .delete_variable_container {
+    height: 0px;
+    width: 100%;
+    position: relative;
+    top: -100px;
+  }
+  
+}
 
 .instrument_information {
 	border-radius: 10px;
@@ -96,3 +131,4 @@ overflow: hidden;
 .delete-icon {
 	margin-left: 10px;
 }
+
