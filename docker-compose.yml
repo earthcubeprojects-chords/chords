@@ -104,7 +104,7 @@ services:
   # Mail transfer agent
   mta:
     container_name: chords_mta
-    image: tozd/postfix
+    image: tozd/postfix:master
     volumes:
       - postfix-spool:/var/spool/postfix
     environment:
