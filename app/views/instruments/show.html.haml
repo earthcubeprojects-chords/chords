@@ -3,147 +3,137 @@
 
 .last_url
   = @last_url
+.instrument_name
+  - if @instrument.is_receiving_data
+    = image_tag('glossy-green-icon-button-th.png', size:"16")
+  - else
+    = image_tag('glossy-red-icon-button-th.png', size:"16")
+  - if can?(:manage, Instrument)
+    = best_in_place @instrument, :name, :as => :input
+  - else
+    = @instrument.name
+  = "(ID: #{@instrument.id})"
+  located at
+  - if can?(:manage, Instrument)          
+    = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+  - else
+    = @instrument.site.name
 
-%div.instrument_download
-  %h4
-    Data Access and Downloads
 
-  %div
-    %strong Data ingest/fetch
-    %br
-    = link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)  
+.instrument_description
+  - if can?(:manage, Instrument)
+    = best_in_place @instrument,                              |
+      :description,                                           |
+      :as => :input,                                          |
+      :type => :textarea,                                     |
+      :html_attrs => {:style => 'width:800px; height:100px;'} |
+  - else
+    = @instrument.description
 
-  %div
-    %strong
-      Download current day as
+
+
+
+
+.instrument_configuration
+  .instrument_measurements
+    %h4
+      Measurements 
+    = @instrument.sample_count(:either)
+    Measurements reported
+    - if @instrument.sample_count(:test) > 0
+      = "(#{@instrument.sample_count(:test)} of which are test measurements"
+      .delete_test_measurements_form
+        = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}      
+      )
     %br
-    \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
-    \#{link_to("XML",  instrument_url( :format => 'xml')  )},
-    \#{link_to("JSON", instrument_url( :format => 'jsf') )},
-    \#{link_to("GEOJSON", instrument_url( :format => 'geojson') )},
-    \#{link_to("GEOCSV", instrument_url( :format => 'geocsv') )}
-  
-  %div
-    %strong 
-      Instrument Description
+    This instrument is expected to report a measurement every
+    - if can?(:manage, Instrument)        
+      = best_in_place @instrument, :sample_rate_seconds, :as => :input
+    - else
+      = @instrument.sample_rate_seconds
+    seconds
     %br
-    #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
+    = "Last measurement received #{@instrument.last_age} seconds ago"
+
+  .instrument_download
+    %h4
+      Data Access and Downloads
+
+    %div
+      %strong Data ingest/fetch
+      %br
+      = link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)  
+
+    %div
+      %strong
+        Download current day as
+      %br
+      \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
+      \#{link_to("XML",  instrument_url( :format => 'xml')  )},
+      \#{link_to("JSON", instrument_url( :format => 'jsf') )},
+      \#{link_to("GEOJSON", instrument_url( :format => 'geojson') )},
+      \#{link_to("GEOCSV", instrument_url( :format => 'geocsv') )}
+
+    %div
+      %strong 
+        Instrument Description
+      %br
+      #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
+
+
+
     
-
-
-%br/
-.instrument_details_and_variables
-  .instrument_details
-    %table.table.table-striped
-      %tr
-        %td
-          %strong Instrument
-        %td
-          - if @instrument.is_receiving_data
-            = image_tag('glossy-green-icon-button-th.png', size:"16")
-          - else
-            = image_tag('glossy-red-icon-button-th.png', size:"16")
-          - if can?(:manage, Instrument)
-            = best_in_place @instrument, :name, :as => :input
-          - else
-            = @instrument.name
-      %tr
-        %td
-          %strong Site
-        %td
-          - if can?(:manage, Instrument)          
-            = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
-          - else
-            = @instrument.site.name
-      %tr
-        %td
-          %strong Description
-        %td
-          - if can?(:manage, Instrument)
-            = best_in_place @instrument,                              |
-              :description,                                           |
-              :as => :input,                                          |
-              :type => :textarea,                                     |
-              :html_attrs => {:style => 'width:500px; height:100px;'} |
-          - else
-            = @instrument.description
-              
-
-      %tr
-        %td
-          %strong Instrument ID
-        %td= @instrument.id
-      %tr
-        %td
-          %strong Last Measurement
-        %td= @instrument.last_age
-      %tr
-        %td
-          %strong Measurements
-        %td
-          = @instrument.sample_count(:either)
-      %tr
-        %td
-          %strong Test Measurements
-        %td
-          = @instrument.sample_count(:test)
-          = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
-      %tr
-      %tr
-        %td
-          %strong Plot Time Span
-        %td
-          - if can?(:manage, Instrument)
-            = best_in_place @instrument, :plot_offset_value, :as => :input
-            = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }
-          - else
-            = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units
-
-      %tr
-        %td
-          %strong
-            Measurement
-            %br>/
-            interval (s)
-        %td
-          - if can?(:manage, Instrument)        
-            = best_in_place @instrument, :sample_rate_seconds, :as => :input
-          - else
-            = @instrument.sample_rate_seconds
   .instrument_variables
-    %table.table.table-striped
-      %tr
-        %td{:style => "vertical-align:top"}
-          %strong Variables
-      %tr
-        %td
-          %table#variables_list.table.table-striped
-            %tr
-              %td{:style => "vertical-align:top"}
-                %em Short Name
-              %td
-              %td{:style => "vertical-align:top"}
-                %em Name
-              %td{:style => "vertical-align:top"}
-                %em Units
-              %td{:style => "vertical-align:top"}
-                %em Min (Plot)
-              %td{:style => "vertical-align:top"}
-                %em Max (Plot)
-              %td{:style => "vertical-align:top"}
-                %em Measured Property
-            - @instrument.vars.each do |variable|
-              %tr
-                = render partial: 'vars/bip_form', locals: {variable: variable}
-      %tr
-        %td
-          = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
-            = f.hidden_field :name, :value => 'name'
-            = f.hidden_field :shortname, :value => 'shortname'
-            = f.hidden_field :instrument_id, :value => @instrument.id
-            - if can?(:manage, Var)
-              = f.submit :value	 => 'Add a New Variable'
+    %h4
+      Variables
+    .row
+      .col-md-2
+        Short Name
+      .col-sm-2
+        Name
+      .col-sm-2
+        Units
+      .col-sm-2
+        Min/Max (Plot)
+      .com-sm-2
+        Measured Property
+      .com-sm-2
+        &nbsp;
+ 
+    - @instrument.vars.each do |variable|
+      = render partial: 'vars/bip_form', locals: {variable: variable}
 
+    .row
+      .col-sm-1
+        = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
+          = f.hidden_field :name, :value => 'name'
+          = f.hidden_field :shortname, :value => 'shortname'
+          = f.hidden_field :instrument_id, :value => @instrument.id
+          - if can?(:manage, Var)
+            = f.submit :value	 => 'Add a New Variable'
+
+.clear
+
+%br
+
+.instrument_plot_time_window
+  %strong Plot measurements for the last 
+  - if can?(:manage, Instrument)
+    = best_in_place @instrument, :plot_offset_value, :as => :input, :html_attrs => { size: 3 }, :classes => 'plot_offset_value'
+    = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :classes => 'plot_offset_units'
+  - else
+    = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units
+  
 = render 'multivariable_graph'
 
 = link_to 'Back', instruments_path
+
+
+:javascript
+  $('.best_in_place.plot_offset_value').bind("ajax:success", function(){ 
+    location.reload();
+  });
+  
+  $('.best_in_place.plot_offset_units').bind("ajax:success", function(){ 
+    location.reload();
+  });  
