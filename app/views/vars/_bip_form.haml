@@ -1,73 +1,72 @@
-%td
-  - if can?(:manage, Var)
-    = best_in_place variable, :shortname, :as => :input
-  - else
-    = variable.shortname
-%td =
-%td
-  - if can?(:manage, Var)
-    = best_in_place variable, :name, :as => :input
-  - else
-    = variable.name
-%td
-  - if can?(:manage, Var)
-    = best_in_place variable, :units, :as => :input
-  - else
-    = variable.units
+.row
+  .col-md-2
+    - if can?(:manage, Var)
+      = best_in_place variable, :shortname, :as => :input, :class => 'bip_short_name', :html_attrs => { size: 8 }
+    - else
+      = variable.shortname
+  .col-sm-2
+    - if can?(:manage, Var)
+      = best_in_place variable, :name, :as => :input, :html_attrs => { size: 12 }
+    - else
+      = variable.name
+  .col-sm-2
+    - if can?(:manage, Var)
+      = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
+    - else
+      = variable.units
 
 
-%td
-  - if can?(:manage, Var)
-    = best_in_place variable, :minimum_plot_value, :as => :input
-  - else
-    = variable.minimum_plot_value
+  .col-sm-2
+    - if can?(:manage, Var)
+      = best_in_place variable, :minimum_plot_value, :as => :input, :html_attrs => { size: 5 }
+      \/
+      = best_in_place variable, :maximum_plot_value, :as => :input, :html_attrs => { size: 5 }
+    - else
+      = variable.minimum_plot_value
+      /
+      = variable.maximum_plot_value
+    
+    
 
 
-%td
-  - if can?(:manage, Var)
-    = best_in_place variable, :maximum_plot_value, :as => :input
-  - else
-    = variable.maximum_plot_value
+
+  .col-sm-2
+    - if can?(:manage, Var)
+      - form_tag_id = "mp_for_tag_#{variable.id}"
+      = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      :javascript
+        $(document).ready(function(){
+        	$("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
+        		/* Submit the new value to update the DB */
 
 
+        		var url = "/vars/#{variable.id}";
 
-%td
-  - if can?(:manage, Var)
-    - form_tag_id = "mp_for_tag_#{variable.id}"
-    = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
-    :javascript
-      $(document).ready(function(){
-      	$("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
-      		/* Submit the new value to update the DB */
+        		// To prevent xss attacks, a csrf token must be defined as a meta attribute
+        		var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
+        		csrf_param = jQuery('meta[name=csrf-param]').attr('content');
 
+        		var submit_data = "_method=" + 'put';
+        		submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=' + data['item']['id'];
 
-      		var url = "/vars/#{variable.id}";
+        		if (csrf_param !== undefined && csrf_token !== undefined) {
+        			submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
+        		}
 
-      		// To prevent xss attacks, a csrf token must be defined as a meta attribute
-      		var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
-      		csrf_param = jQuery('meta[name=csrf-param]').attr('content');
-
-      		var submit_data = "_method=" + 'put';
-      		submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=' + data['item']['id'];
-
-      		if (csrf_param !== undefined && csrf_token !== undefined) {
-      			submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
-      		}
-
-      		$.ajax({
-      			type: "PUT",
-      			dataType: "script",
-      			url: url,
-      			contentType: 'application/json',
-      			data: JSON.stringify({ var:{measured_property_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
-      		}).done(function( msg ) {
-      			alert( "Data Saved: " + msg );
-      		});
-      	});
-      });
-  - else
-    = variable.measured_property.label
-%td
-  - if can?(:manage, Var)
-    = link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
-      Destroy
+        		$.ajax({
+        			type: "PUT",
+        			dataType: "script",
+        			url: url,
+        			contentType: 'application/json',
+        			data: JSON.stringify({ var:{measured_property_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
+        		}).done(function( msg ) {
+        			alert( "Data Saved: " + msg );
+        		});
+        	});
+        });
+    - else
+      = variable.measured_property.label
+  .col-sm-2
+    - if can?(:manage, Var)
+      = link_to variable, method: :copy, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
+        = image_tag('trash.svg', :class=>"delete-icon", :style=>"height:16px;")

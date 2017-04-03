@@ -134,15 +134,3 @@ color: #468847;
 background-color: #dff0d8;
 }
 
-.instrument_details_and_variables {
-overflow: hidden;
-}
-
-.instrument_details {
-float: left;
-}
-
-.instrument_variables {
-float: left;
-margin-left: 40px;
-}
