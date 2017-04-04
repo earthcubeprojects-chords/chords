@@ -19,7 +19,7 @@ Even so, this work has already produced a capable, stable and useful product. Th
 employed by many "friendly testers", and we encourage you to use it, appreciate the simplicity that it brings
 to real-time data distribution, and provide us with feedback on how it can be improved.*
 
-CHORDS consists of two components: 
+CCHORDS consists of two components: 
 
 * a real-time instrument data management server (_Portal_)
 * a collection of higher level web-services that provide advanced, standards based processing (_Services_).
@@ -29,7 +29,7 @@ CHORDS consists of two components:
 <img  class="img-responsive" src="images/overview.png" alt="CHORDS Portal Cartoon" >
 
 ## The CHORDS Portal is a
-
+ 
 * **web server and database** that accepts real-time data from distributed instruments, and serves 
 the measurements to anyone on the Internet. The data streams are pushed to and pulled from the Portal using 
 simple HTTP requests.
@@ -74,12 +74,14 @@ CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org
 
 We request that your cite its use in any relevant publication using this format:
 
-<div class="well" style="text-align: center;">
+<div class="well" style="text-align: left;">
   Cloud-Hosted Real-time Data Services for the Geosciences (Version 0.9) [Software]. (2017).
  Boulder, Colorado: UCAR/NCAR. http://dx.doi.org/10.5065/XXXXXXXX
 </div>
 
 Please see http://data.datacite.org/10.5065/XXXXXXXX to view the relevant DOI metadata fields.
+
+CHORDS was developed for the National Science Foundation’s EarthCube program under grants 1639750, 1639720, 1639640, 1639570 and 1639554.
 
 ## Current and Future
 
