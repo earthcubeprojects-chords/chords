@@ -68,8 +68,6 @@ translation from an instrument to the network. Chances are that since you deploy
 pretty handy in this area. In any event, we can offer advice on getting connected. And this web site already has
 code examples for accessing the portal from many languages.
 
-​
-71
 ## Citing CHORDS and Sponsor Acknowledgements
 
 CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org
