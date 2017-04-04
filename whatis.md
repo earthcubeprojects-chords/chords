@@ -7,7 +7,7 @@ title: What is CHORDS?
   You put data into CHORDS like this:<br/>http://myportal.org/measurements/url_create?instrument_id=25&wdir=038&wspd=3.2
 </div>
 
-<div class="well" style="text-align: center;">
+<div class="well">
   You get data out of CHORDS like this:<br/>http://myportal.org/instruments/25.csv
 </div>
 
