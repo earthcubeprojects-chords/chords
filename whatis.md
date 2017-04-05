@@ -18,7 +18,7 @@ and is not guarenteed to be bug free.
 Even so, this work has already produced a capable, stable and useful product. The Portal is productively 
 employed by many "friendly testers", and we encourage you to use it, appreciate the simplicity that it brings
 to real-time data distribution, and provide us with feedback on how it can be improved.*
-CCHORDS consists of two components: 
+CHORDS consists of two components: 
 
 * a real-time instrument data management server (_Portal_)
 * a collection of higher level web-services that provide advanced, standards based processing (_Services_).
