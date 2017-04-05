@@ -70,7 +70,7 @@ code examples for accessing the portal from many languages.
 
 CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org
 
-We request that researchers cite its use in any relevant publication using this format:
+We request that researchers cite its use in any relevant publication or other context using this format:
 
 <div class="well" style="text-align: left;">
   Cloud-Hosted Real-time Data Services for the Geosciences (Version 0.9) [Software]. (2017). Boulder, Colorado: UCAR/NCAR. http://dx.doi.org/10.5065/D6V1236Q
