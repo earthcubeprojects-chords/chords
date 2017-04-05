@@ -18,7 +18,6 @@ and is not guarenteed to be bug free.
 Even so, this work has already produced a capable, stable and useful product. The Portal is productively 
 employed by many "friendly testers", and we encourage you to use it, appreciate the simplicity that it brings
 to real-time data distribution, and provide us with feedback on how it can be improved.*
-
 CCHORDS consists of two components: 
 
 * a real-time instrument data management server (_Portal_)
@@ -71,7 +70,7 @@ code examples for accessing the portal from many languages.
 
 CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org
 
-We request that your cite its use in any relevant publication using this format:
+We request that researchers cite its use in any relevant publication using this format:
 
 <div class="well" style="text-align: left;">
   Cloud-Hosted Real-time Data Services for the Geosciences (Version 0.9) [Software]. (2017). Boulder, Colorado: UCAR/NCAR. http://dx.doi.org/10.5065/D6V1236Q
