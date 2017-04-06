@@ -30,7 +30,7 @@ CHORDS consists of two components:
  
 * **web server and database** that accepts real-time data from distributed instruments, and serves 
 the measurements to anyone on the Internet. The data streams are pushed to and pulled from the Portal using 
-simple HTTP requests.
+.simple HTTP requests.
 * **management tool** that allows you to monitor your remote instruments, insure correct operation, and maximize data collection.
 * **rolling archive** from which scientists and analysts can easily fetch the data in
 real-time, delivered directly to browsers, programs and mobile apps. It will only hold a
@@ -73,7 +73,7 @@ CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org
 We request that researchers cite its use in any relevant publication or other context using this format:
 
 <div class="well" style="text-align: left;">
-  Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS). 2017. Version 0.9 [Software]. Boulder, Colorado: UCAR/NCAR. http://dx.doi.org/10.5065/D6V1236Q
+  Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS). 2017. Version 0.9 [Software]. Boulder, Colorado: UCAR/NCAR. http://dx.doi.org/10.5065/D6V1236Q.
 </div>
 
 Please see [http://data.datacite.org/10.5065/D6V1236Q](http://data.datacite.org/10.5065/D6V1236Q) to view the relevant DOI metadata fields.
