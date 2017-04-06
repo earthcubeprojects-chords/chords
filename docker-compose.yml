@@ -93,6 +93,9 @@ services:
     image: grafana/grafana:4.1.1
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
     volumes:
       - grafana-data:/var/lib/grafana/
     ports:
