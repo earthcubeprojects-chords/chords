@@ -56,6 +56,11 @@ services:
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
     ports:
         - "80:80"
     links:
@@ -73,6 +78,11 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
       
   # Time series database
   influxdb:
@@ -83,6 +93,13 @@ services:
     environment:
       - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
       - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
+      - INFLUXDB_REPORTING_DISABLED=true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     ports:
       - 8086:8086
       - 8083:8083
@@ -98,6 +115,11 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
     volumes:
       - grafana-data:/var/lib/grafana/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     ports:
       - 3000:3000
     links:
@@ -112,6 +134,11 @@ services:
       - postfix-spool:/var/spool/postfix
     environment:
       - MY_NETWORKS=172.18.0.0/16 127.0.0.0/8
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
     ports:
       - 25:25
 
