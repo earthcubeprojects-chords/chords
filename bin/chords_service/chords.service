@@ -1,16 +1,24 @@
 #
 # Systemd unit description for managing the CHORDS portal as a service.
 #
-# Copy this file to /etc/systemd/system
-# 
+# Assume: Chords configuration is located in /var/lib/chords/
+#
+# To install:
+# Fetch the service definition
+#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/chords_service/chords.service > /var/lib/chords/chords.service
+# Enable the service. (You will get complaints about [Install] missing)
+#  sudo systemctl enable /var/lib/chords/chords.service
+#
 # When you make a change to a service file:
 #  sudo systemctl daemon-reload
 #
-# To enable and start:
-#  sudo systemctl enable chords
+# To start chords:
 #  sudo systemctl start  chords
 #
-# To restart:
+# To stop chords:
+#  sudo systemctl stop    chords
+#
+# To restart chords:
 #  sudo systemctl restart chords
 #
 # "sudo docker ps" is a good way to see if the portal is running.
