@@ -5,9 +5,9 @@
   = @last_url
 .instrument_name
   - if @instrument.is_receiving_data
-    = image_tag('glossy-green-icon-button-th.png', size:"16")
+    = image_tag('button_green_50.png', size:"16")
   - else
-    = image_tag('glossy-red-icon-button-th.png', size:"16")
+    = image_tag('button_red_50.png', size:"16")
   - if can?(:manage, Instrument)
     = best_in_place @instrument, :name, :as => :input
   - else
