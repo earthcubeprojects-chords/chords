@@ -39,21 +39,22 @@
     %h4
       Measurements 
     = @instrument.sample_count(:either)
-    Measurements reported
+    measurements were reported
     - if @instrument.sample_count(:test) > 0
-      = "(#{@instrument.sample_count(:test)} of which are test measurements"
+      = "(#{@instrument.sample_count(:test)} of which are test values"
       .delete_test_measurements_form
         = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}      
       )
+    .
     %br
     This instrument is expected to report a measurement every
     - if can?(:manage, Instrument)        
       = best_in_place @instrument, :sample_rate_seconds, :as => :input
     - else
       = @instrument.sample_rate_seconds
-    seconds
+    seconds.
     %br
-    = "Last measurement is #{@instrument.last_age} old"
+    = "The last measurement is #{@instrument.last_age} old."
 
   .instrument_download
     %h4
