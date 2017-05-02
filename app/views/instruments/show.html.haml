@@ -39,13 +39,11 @@
     %h4
       Measurements 
     = @instrument.sample_count(:either)
-    measurements were reported
+    measurements were reported.
     - if @instrument.sample_count(:test) > 0
-      = "(#{@instrument.sample_count(:test)} of which are test values"
+      = "#{@instrument.sample_count(:test)} of these are test values."
       .delete_test_measurements_form
         = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}      
-      )
-    .
     %br
     This instrument is expected to report a measurement every
     - if can?(:manage, Instrument)        
