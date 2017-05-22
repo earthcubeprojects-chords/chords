@@ -18,7 +18,7 @@ Parameters:
     AllowedValues:
     - master
     - development
-    Default: development
+    Default: master
     Description: CHORDS git branch/docker image tag
     Type: String
                 
