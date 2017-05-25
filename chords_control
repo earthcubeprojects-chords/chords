@@ -2,13 +2,14 @@
 
 import yaml
 import argparse
+import os
 from collections import OrderedDict
 
 #####################################################################
 """
 """
 class ChordsConfig(OrderedDict):
-    def __init__(self, configfile):
+    def __init__(self, options):
         OrderedDict.__init__(self)
         
         # Initialize the configuration item descriptions. These are 
@@ -16,50 +17,120 @@ class ChordsConfig(OrderedDict):
         self.initConfigItems()
         
         # Get the current configuration file
-        self.configfile = open(configfile)
+        if not os.path.isfile(options["file"]):
+            f = open(options["file"], 'w')
+            f.close()
+            print options["file"], 'has been created'
+        
+        self.configfile = open(options["file"])
         try:
             config = yaml.load(self.configfile.read())
+            if not config:
+                config = OrderedDict()
         except yaml.YAMLError, exc:
             print "Error in configuration file:", exc
         
         for key in config.keys():
             self[key] = config[key]
+                
+        # Reconcile the read configuration with the ConfigItems
+        self.reconcileConfig()
 
+    """
+    Create a collection of config items which must be in the final configuration.
+    These items define the default values which will be used if they haven't already been
+    set in a configuration.
+    """
     def initConfigItems(self):
         self.configItems  = OrderedDict()
         
-        
         self.configItems["CHORDS_ADMIN_PW"] = ConfigItem(description=
-"""The password for r/w and admin access to CHORDS, mysql and influxdb.
+"""
+The password for r/w and admin access to CHORDS, mysql and influxdb.
 Replace this with a strong password.""", 
         default="chords_ec_demo")
         
         self.configItems["CHORDS_GUEST_PW"] = ConfigItem(description=
-"""The password for read-only access to influxdb""", 
+"""
+The password for read-only access to influxdb""", 
         default="guest")
         
         self.configItems["SECRET_KEY_BASE"] = ConfigItem(description=
-"""A secret key base for Rails. Generate a secure value (*add link with instructions*).""", 
+"""
+A secret key base for Rails. Generate a secure value (*add link with instructions*).""", 
         default="aaaaaaaaaaa")
         
         self.configItems["DB_RETENTION"]    = ConfigItem(description=
-"""The time series database retention duration, e.g. 168h or 52w. Use "inf" for permanent.
+"""
+The time series database retention duration, e.g. 168h or 52w. Use "inf" for permanent.
 This value can be changed on successive restarts of a portal. Note: making it shorter
 will trim the existing time series database.""", 
         default="inf")
         
         self.configItems["DOCKER_TAG"]      = ConfigItem(description=
-"""The docker image tag of the desired CHORDS image.""", 
+"""
+The docker image tag of the desired CHORDS image.""", 
         default="latest")
         
         self.configItems["RAILS_ENV"]       = ConfigItem(description=
-"""The RAILS environment. Unlikely to to use anything other than "production".""", 
+"""
+The RAILS environment. Unlikely to to be anything other than "production".""", 
         default="production")
         
         self.configItems["WORKERS"]         = ConfigItem(description=
-"""The number of nginx workers.""", 
+"""
+The number of nginx workers.""", 
         default=4)
-        
+
+    """
+    Make sure that all configItems are in the configuration. If not, add them in
+    with their default values.
+    """
+    def reconcileConfig(self):
+        for key in self.configItems.keys():
+            if key not in self:
+                self[key] = self.configItems[key]['default']
+
+    """
+    Create the YML version of the configuration. Line terminators will be included.
+    """
+    def createYML(self):
+        yml = ''
+        for key in config.keys():
+            if key in config.configItems.keys():
+                descripts = config.configItems[key]['description'].split('\n')
+                for d in descripts:
+                    yml =  yml + '# ' + d + '\n'
+                yml = yml + key + ': ' + str(self[key]) + '\n'
+        yml = yml +  '#' + '\n' + '# Non-standard options.' + '\n'
+        for key in config.keys():
+            if key not in config.configItems.keys():
+                yml = yml + key + ': ' + str(self[key]) + '\n'
+        return yml
+    
+    """
+    Go through the configuration, asking the user if they want to 
+    change the values. The response can be a return, to accept the
+    value, a new value to replace the value, or a period to use the default value.
+    The items found in configItems are done first, followed by all other
+    items.
+    """
+    def queryValues(self, options):
+        for key in config.keys():
+            if key in config.configItems.keys():
+                pass
+        for key in config.keys():
+            if key not in config.configItems.keys():
+                pass
+    
+    """
+    Write the configuration to the file. The whole configuration is written,
+    starting with the elements listed in the configItems. Configuration items
+    are prefixed with the comments provided in the configItems.
+    """
+    def writeConfig(self, options):
+        pass
+
 #####################################################################
 """
 """
@@ -86,10 +157,10 @@ class CommandArgs:
     def __init__(self):
         
         description=("""
-        Control CHORDS configuration and operation.
+        CHORDS configuration and operation management.
         
         In configuration mode, you are prompted for configuration options. These will be
-        saved in th configuration file. The CHORDS environment file (".env") will also
+        saved in th configuration file. With -e, the CHORDS environment file (".env") will also
         be created from the configuration.
         """)
         
@@ -103,6 +174,8 @@ class CommandArgs:
         parser.add_argument("-r", "--run",         help="run",            default=False, action="store_true")
         parser.add_argument("-s", "--stop",        help="stop",           default=False, action="store_true")
         parser.add_argument("-u", "--update",      help="update",         default=False, action="store_true")
+        parser.add_argument("-y", "--yes",         help="automatically accept all defaults", default=False, action="store_true")
+        parser.add_argument("-e", "--env",         help="create .env",    default=False, action="store_true")
         parser.add_argument("-v", "--verbose",     help="verbose output", default=False, action="store_true")
         parser.add_argument("-d", "--dryrun",      help="dry run",        default=False, action="store_true")
 
@@ -125,17 +198,7 @@ class CommandArgs:
 
 # Get the command line options
 options = CommandArgs().get_options()
-print options
-print
 
-config = ChordsConfig(options['file'])
-print config
-print
+config = ChordsConfig(options=options)
 
-for c in config.configItems.keys():
-    print c, ":"
-    for i in config.configItems[c].keys():
-        print "  ", i, ": ", config.configItems[c][i]
-    
-
-
+print config.createYML()
