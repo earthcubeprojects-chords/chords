@@ -1,9 +1,51 @@
 #!/usr/local/bin/python
 
-import yaml
 import argparse
 import os
+import sys
 from collections import OrderedDict
+
+standardConfig = [
+    [
+        "The password for r/w and admin access to CHORDS, mysql and influxdb.\n"
+        "Replace this with a strong password.",
+        "CHORDS_ADMIN_PW",  
+        "chords_ec_demo"
+    ],
+    [
+        "The password for read-only access to influxdb.",
+        "CHORDS_GUEST_PW",
+        "guest"
+    ],
+    [
+        "A secret key base for Rails. Generate a secure value (*add link with instructions*).",
+        "SECRET_KEY_BASE",
+        "aaaaaaaaaaa"
+    ],
+    [
+        "The time series database retention duration, e.g. 168h or 52w. Use \"inf\" for permanent.\n"
+        "This value can be changed on successive restarts of a portal. Note: making it shorter\n"
+        "will trim the existing time series database.",
+        "DB_RETENTION",
+        "inf"
+    ],
+    [
+        "The docker image tag of the desired CHORDS image.",
+        "DOCKER_TAG",
+        "latest"
+    ],
+    [
+        "The RAILS environment. Unlikely to to be anything other than \"production\".",
+        "RAILS_ENV",
+        "production"
+    ],
+    [
+        "The number of nginx workers.",
+        "WORKERS",
+        4
+    ]
+]
+
 
 #####################################################################
 """
@@ -15,27 +57,49 @@ class ChordsConfig(OrderedDict):
         # Initialize the configuration item descriptions. These are 
         # used as comments in the output configuration file.
         self.initConfigItems()
+
+        self.getPairs(options)
+                
+    def getPairs(self, options):
         
+        items = dict()
         # Get the current configuration file
         if not os.path.isfile(options["file"]):
             f = open(options["file"], 'w')
             f.close()
             print options["file"], 'has been created'
         
-        self.configfile = open(options["file"])
-        try:
-            config = yaml.load(self.configfile.read())
-            if not config:
-                config = OrderedDict()
-        except yaml.YAMLError, exc:
-            print "Error in configuration file:", exc
-        
+        f = open(options["file"])
+        lines = f.readlines()
+        f.close()
+        i = 1
+        for l in lines:
+            l = l.strip()
+            if len(l):
+                if l[0] != "#":
+                    tokens = l.split(":")
+                    if len(tokens) != 2:
+                        print "Error at line", i, "<" + l + ">"
+                        sys.exit(1)
+                    items[tokens[0].strip()] = tokens[1].strip()
+            i = i + 1
+
+        config = OrderedDict()
+        # Collect all of the standard items. Add them if they
+        # weren't in the file
+        for key in self.configItems.keys():
+            if key in items.keys():
+                config[key] = items[key]
+                del items[key]
+            else:
+                config[key] = self.configItems[key]
+        for key in items.keys():
+            # Append any remaining items that aren't in the standard list
+            config[key] = items[key]
         for key in config.keys():
             self[key] = config[key]
-                
-        # Reconcile the read configuration with the ConfigItems
-        self.reconcileConfig()
-
+        
+        
     """
     Create a collection of config items which must be in the final configuration.
     These items define the default values which will be used if they haven't already been
@@ -44,67 +108,25 @@ class ChordsConfig(OrderedDict):
     def initConfigItems(self):
         self.configItems  = OrderedDict()
         
-        self.configItems["CHORDS_ADMIN_PW"] = ConfigItem(description=
-"""
-The password for r/w and admin access to CHORDS, mysql and influxdb.
-Replace this with a strong password.""", 
-        default="chords_ec_demo")
-        
-        self.configItems["CHORDS_GUEST_PW"] = ConfigItem(description=
-"""
-The password for read-only access to influxdb""", 
-        default="guest")
-        
-        self.configItems["SECRET_KEY_BASE"] = ConfigItem(description=
-"""
-A secret key base for Rails. Generate a secure value (*add link with instructions*).""", 
-        default="aaaaaaaaaaa")
-        
-        self.configItems["DB_RETENTION"]    = ConfigItem(description=
-"""
-The time series database retention duration, e.g. 168h or 52w. Use "inf" for permanent.
-This value can be changed on successive restarts of a portal. Note: making it shorter
-will trim the existing time series database.""", 
-        default="inf")
-        
-        self.configItems["DOCKER_TAG"]      = ConfigItem(description=
-"""
-The docker image tag of the desired CHORDS image.""", 
-        default="latest")
-        
-        self.configItems["RAILS_ENV"]       = ConfigItem(description=
-"""
-The RAILS environment. Unlikely to to be anything other than "production".""", 
-        default="production")
-        
-        self.configItems["WORKERS"]         = ConfigItem(description=
-"""
-The number of nginx workers.""", 
-        default=4)
-
-    """
-    Make sure that all configItems are in the configuration. If not, add them in
-    with their default values.
-    """
-    def reconcileConfig(self):
-        for key in self.configItems.keys():
-            if key not in self:
-                self[key] = self.configItems[key]['default']
+        for i in standardConfig:
+            print "adding " + i[1]
+            self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2])
 
     """
     Create the YML version of the configuration. Line terminators will be included.
+    The standard items are wrtten first, followed by the extras.
     """
-    def createYML(self):
+    def toYML(self):
         yml = ''
-        for key in config.keys():
-            if key in config.configItems.keys():
-                descripts = config.configItems[key]['description'].split('\n')
+        for key in self.keys():
+            if key in self.configItems.keys():
+                descripts = self.configItems[key]['description'].split('\n')
                 for d in descripts:
                     yml =  yml + '# ' + d + '\n'
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         yml = yml +  '#' + '\n' + '# Non-standard options.' + '\n'
-        for key in config.keys():
-            if key not in config.configItems.keys():
+        for key in self.keys():
+            if key not in self.configItems.keys():
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         return yml
     
@@ -116,20 +138,50 @@ The number of nginx workers.""",
     items.
     """
     def queryValues(self, options):
-        for key in config.keys():
-            if key in config.configItems.keys():
-                pass
-        for key in config.keys():
-            if key not in config.configItems.keys():
-                pass
+        for key in self.keys():
+            if key in self.configItems.keys():
+                self.queryValue(key=key, 
+                                options = options,
+                                description=self.configItems[key]['description'],
+                                default=self.configItems[key]['default'])
+        for key in self.keys():
+            if key not in self.configItems.keys():
+                self.queryValue(key=key, options = options)
+    """
+    Query the user for a replacement value.
+    """
+    def queryValue(self, key, options, description=None, default=None):
+        print
+        if description:
+            print description
+        print key,
+        if default:
+            print "(default: " + str(default) + ")" ,
+        print '[' + self[key] + ']? ',
+        if not options["default"]:
+            l = sys.stdin.readline().strip()
+        else:
+            l = "."
+            print ".",
+        # An empty line means retain value
+        if l != "":
+            # A period means use the default, if it is avaiable
+            if l == ".":
+                if default:
+                    self[key] = default
+            # Other replace with the user entered value
+            else:
+                self[key] = l
     
     """
     Write the configuration to the file. The whole configuration is written,
     starting with the elements listed in the configItems. Configuration items
     are prefixed with the comments provided in the configItems.
     """
-    def writeConfig(self, options):
-        pass
+    def writeYMLFile(self, options):
+        f = open(options["file"], "w")
+        f.write(self.toYML())
+        f.close()
 
 #####################################################################
 """
@@ -174,10 +226,9 @@ class CommandArgs:
         parser.add_argument("-r", "--run",         help="run",            default=False, action="store_true")
         parser.add_argument("-s", "--stop",        help="stop",           default=False, action="store_true")
         parser.add_argument("-u", "--update",      help="update",         default=False, action="store_true")
-        parser.add_argument("-y", "--yes",         help="automatically accept all defaults", default=False, action="store_true")
+        parser.add_argument("-d", "--default",     help="set all values to defaults", default=False, action="store_true")
         parser.add_argument("-e", "--env",         help="create .env",    default=False, action="store_true")
         parser.add_argument("-v", "--verbose",     help="verbose output", default=False, action="store_true")
-        parser.add_argument("-d", "--dryrun",      help="dry run",        default=False, action="store_true")
 
         # Parse the command line. 
         args = parser.parse_args()
@@ -201,4 +252,6 @@ options = CommandArgs().get_options()
 
 config = ChordsConfig(options=options)
 
-print config.createYML()
+config.queryValues(options)
+
+config.writeYMLFile(options)
