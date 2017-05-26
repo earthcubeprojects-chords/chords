@@ -109,7 +109,6 @@ class ChordsConfig(OrderedDict):
         self.configItems  = OrderedDict()
         
         for i in standardConfig:
-            print "adding " + i[1]
             self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2])
 
     """
@@ -138,6 +137,8 @@ class ChordsConfig(OrderedDict):
     items.
     """
     def queryValues(self, options):
+        print 'Enter a return to keep the current value, a period to set to the default, or a new value.'
+
         for key in self.keys():
             if key in self.configItems.keys():
                 self.queryValue(key=key, 
