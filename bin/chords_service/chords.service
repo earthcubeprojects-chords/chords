@@ -1,0 +1,48 @@
+#
+# Systemd unit description for managing the CHORDS portal as a service.
+#
+# Assume: Chords configuration is located in /var/lib/chords/
+#
+# To install:
+# Fetch the service definition
+#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/chords_service/chords.service > /var/lib/chords/chords.service
+# Enable the service. (You will get complaints about [Install] missing)
+#  sudo systemctl enable /var/lib/chords/chords.service
+#
+# When you make a change to a service file:
+#  sudo systemctl daemon-reload
+#
+# To start chords:
+#  sudo systemctl start  chords
+#
+# To stop chords:
+#  sudo systemctl stop    chords
+#
+# To restart chords:
+#  sudo systemctl restart chords
+#
+# "sudo docker ps" is a good way to see if the portal is running.
+#
+# Here's how to see your log files:
+#  since the last boot:
+#    sudo journalctl -b -u chords.service
+#  To "follow" the log messages add a -f  (like tail -f):
+#    sudo journalctl -f -u chords.service
+#
+[Unit]
+Description=CHORDS Portal
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/var/lib/chords
+ExecStartPre=/usr/local/bin/docker-compose -p chords down
+ExecStart=/usr/local/bin/docker-compose    -p chords up
+ExecStop=/usr/local/bin/docker-compose     -p chords down
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+
