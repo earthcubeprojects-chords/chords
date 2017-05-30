@@ -3,6 +3,8 @@
 import argparse
 import os
 import sys
+import subprocess
+import json
 from collections import OrderedDict
 
 standardConfig = [
@@ -183,7 +185,22 @@ class ChordsConfig(OrderedDict):
         f = open(options["file"], "w")
         f.write(self.toYML())
         f.close()
+        print 
+        print "*** " + options["file"] + " has been written with the new configuration."
 
+    """
+    Write the configuration to the .env file, in environment
+    notation.
+    """
+    def writeEnvFile(self):
+        f = open(".env", 'w')
+        for key in self.keys():
+            f.write(key + "=" + str(self[key])+"\n")
+        f.close()
+        print 
+        print "*** .env has been written with the new configuration."
+        
+    
 #####################################################################
 """
 """
@@ -192,13 +209,6 @@ class ConfigItem(OrderedDict):
         OrderedDict.__init__(self)
         self["default"] = default
         self["description"] = description
-    
-#####################################################################
-"""
-"""
-class ChordsEnv:
-    def __init__(self):
-        pass
     
 #####################################################################
 """
@@ -228,7 +238,7 @@ class CommandArgs:
         parser.add_argument("-s", "--stop",        help="stop",           default=False, action="store_true")
         parser.add_argument("-u", "--update",      help="update",         default=False, action="store_true")
         parser.add_argument("-d", "--default",     help="set all values to defaults", default=False, action="store_true")
-        parser.add_argument("-e", "--env",         help="create .env",    default=False, action="store_true")
+        parser.add_argument("-e", "--env",         help="create/update .env", default=False, action="store_true")
         parser.add_argument("-v", "--verbose",     help="verbose output", default=False, action="store_true")
 
         # Parse the command line. 
@@ -245,14 +255,68 @@ class CommandArgs:
         # return the dictionary of existing options.
         return self.options 
 
+class Docker:
+    def __init__(self):
+        pass
+    
+    """
+    Return an array containing a dictionary for each currently running container.
+    The dictionaries keys are a subset of the output columns from docker ps. They are:
+        name:
+        runningfor
+        status
+        createdat
+        image
+    """
+    def ps(self):
+        ps_cmd = ['docker',
+                  'ps', 
+                  '--format', 
+                  '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
+
+        ps_result = subprocess.check_output(ps_cmd).split('\n')
+
+        containers = []
+        for p in ps_result:
+            p = p.strip()
+            if p != '':
+                p = '{' + p + '}'
+                containers.append(json.loads(p))
+        
+        # Convert the json unicode to bytes
+        return byteify(containers)
+        
+"""
+Convert unicode to a byte strings
+"""
+def byteify(input):
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
+    
 #####################################################################
 #####################################################################
+
+docker = Docker()
+containers = docker.ps()
+#for c in containers:
+#    print c['name'] + ':' + str(c)
+
+print
 
 # Get the command line options
 options = CommandArgs().get_options()
 
-config = ChordsConfig(options=options)
+if options["config"] == True:
+    config = ChordsConfig(options=options)
+    config.queryValues(options)
+    config.writeYMLFile(options)
 
-config.queryValues(options)
-
-config.writeYMLFile(options)
+if options["env"] == True:
+    config.writeEnvFile()
