@@ -7,6 +7,50 @@ import subprocess
 import json
 from collections import OrderedDict
 
+#####################################################################
+# 
+# CHORDS management script. Use to manage the CHORDS portal configuration,
+# running/stopping the portal, and updating the portal software.
+#
+# The CHORDS configuration is kept in a YAML file (default chords.yml).
+# This file contains standard configuration items, followed by user
+# created non-standard options. The later are for developer use only.
+#
+# In configuration mode (-c), the existing configuration will be 
+# read from the configuration file, the user will be prompted for changes,
+# and the configuration file will be re-written. For each configuration item,
+# the user may select the current value (hit enter), select the default
+# value (enter a period), or change the value (enter a new value). The configuration
+# may be initialized to complete default vaues by using the -d switch in conjunction
+# with -c. 
+#
+# If the CHORDs configuration file does not exist, then it will be created. Thus,
+# to create an initial default configuration, use:
+#    ./chords_control -c -d
+#
+# A .env file is also created by the configuration mode. It contains
+#  environment variable commands, with one for each configuration item. 
+# This .env file is used by docker-compose. The non-standard options will 
+# be included in .env, allowing developers to test additional environment variables,
+# without having to edit the standardoptions specified in this script.
+#
+# The -r and -s switches are used to run/stop a portal.
+#
+# The -u switch updates the portal software by pulling the docker images.
+#
+# Use -t to see the current portal status.
+#
+# The devmode (-m) enables development mode, where the current directory
+# is mounted as the CHORDS Rails source.
+#
+#####################################################################
+"""
+The definitions of standard configuration items. This are tri-tuples:
+ [0]: The configuration item description. This will be printed as a prompt
+      during configuration, and included in the configuration file as a description.
+ [1]: The name of the environment variable to be set in the .env file.
+ [2]: The default value.
+"""
 standardConfig = [
     [
         "The password for r/w and admin access to CHORDS, mysql and influxdb.\n"
@@ -48,6 +92,10 @@ standardConfig = [
     ]
 ]
 
+"""
+Verbose flag
+"""
+verbose = False
 
 #####################################################################
 """
@@ -197,7 +245,6 @@ class ChordsConfig(OrderedDict):
         for key in self.keys():
             f.write(key + "=" + str(self[key])+"\n")
         f.close()
-        print 
         print "*** .env has been written with the new configuration."
         
     
@@ -223,24 +270,25 @@ class CommandArgs:
         CHORDS configuration and operation management.
         
         In configuration mode, you are prompted for configuration options. These will be
-        saved in th configuration file. With -e, the CHORDS environment file (".env") will also
-        be created from the configuration.
+        saved in the configuration file and in a corresponding .env file. Use the -d option
+        to set the configuration to default values.
         """)
         
         epilog = ("""
-        Only one of -c, -r, -s, or -u can be specified.
+        Only one of -c, -r, -s, or -u can be specified. -d must be accompanied by -c.
+        To create an initial default configuration: ./chords_control -c -d
         """)
         
         parser = argparse.ArgumentParser(description=description, epilog=epilog)
-        parser.add_argument("-f", "--file",        help="configuration file (default chords.yml)", default="chords.yml", action="store")
-        parser.add_argument("-c", "--config",      help="configure",      default=False, action="store_true")
-        parser.add_argument("-r", "--run",         help="run",            default=False, action="store_true")
-        parser.add_argument("-s", "--stop",        help="stop",           default=False, action="store_true")
-        parser.add_argument("-u", "--update",      help="update",         default=False, action="store_true")
-        parser.add_argument("-t", "--status",      help="status",         default=False, action="store_true")
-        parser.add_argument("-d", "--default",     help="set all values to defaults", default=False, action="store_true")
-        parser.add_argument("-e", "--env",         help="create/update .env", default=False, action="store_true")
-        parser.add_argument("-v", "--verbose",     help="verbose output", default=False, action="store_true")
+        parser.add_argument("-f", "--file",    help="configuration file (default chords.yml)",              default="chords.yml", action="store")
+        parser.add_argument("-c", "--config",  help="prompt for configuration and write config/.env files", default=False,        action="store_true")
+        parser.add_argument("-d", "--default", help="set all configuration values to defaults",             default=False,        action="store_true")
+        parser.add_argument("-r", "--run",     help="run",                                                  default=False,        action="store_true")
+        parser.add_argument("-s", "--stop",    help="stop",                                                 default=False,        action="store_true")
+        parser.add_argument("-u", "--update",  help="update",                                               default=False,        action="store_true")
+        parser.add_argument("-t", "--status",  help="status",                                               default=False,        action="store_true")
+        parser.add_argument("-m", "--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
+        parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
 
         # Parse the command line. 
         args = parser.parse_args()
@@ -249,13 +297,22 @@ class CommandArgs:
         # Make sure that at most only one of these args was specified
         o = self.options
         if [o['config'], o['run'], o['stop'], o['update']].count(True) > 1:
-            parser.print_help()
+            print epilog
             exit(1)
-        
+            
+        if o['default'] and not o['config']:
+            print epilog
+            exit(1)
+            
     def get_options(self):
         # return the dictionary of existing options.
         return self.options 
 
+#####################################################################
+"""
+Manage docker activities. docker-compose.yml and docker-compose-dev.yml are 
+expected in the working directory.
+"""
 class Docker:
     def __init__(self):
         self.docker_compose_cmd = '/usr/local/bin/docker-compose'
@@ -275,7 +332,7 @@ class Docker:
               '--format', 
               '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
 
-        ps_result = self.os_cmd(ps_cmd).split('\n')
+        ps_result = os_cmd(ps_cmd, printlines=False).split('\n')
 
         containers = []
         for p in ps_result:
@@ -288,26 +345,62 @@ class Docker:
         return byteify(containers)
     
     """
+    Bring the containers up with docker-compose.
     """
-    def up(self):
-        up_cmd = [self.docker_compose_cmd,
+    def up(self, devmode=False):
+        if devmode == False:
+            up_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 'up', '-d']
-        print self.os_cmd(up_cmd)
+        else:
+            up_cmd = [self.docker_compose_cmd,
+              '-p', 'chords', 
+              '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml', 
+              'up', '-d']
+            
+        print os_cmd(up_cmd)
     
     """
+    Take the containers down with docker-compose.
     """
     def down(self):
         dn_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 'down']
-        print self.os_cmd(dn_cmd)
+        print os_cmd(dn_cmd)
 
-    def os_cmd(self, cmd):
-        try:
-            return subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-        except Exception as e:
-            print str(e) + ': ' + ' '.join(str(x) for x in cmd)
-        
-    
+    """
+    Pull docker images.
+    """
+    def pull(self):
+        dn_cmd = [self.docker_compose_cmd,
+              'pull']
+        print os_cmd(dn_cmd)
+
+#####################################################################
+"""
+Run a shell command. The command output is returned as a single string, with each
+line delimited by a newline. 
+"""
+def os_cmd(cmd, printlines=True):
+    if verbose:
+        print ' '.join(str(x) for x in cmd)
+    try:
+        proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        lines = ''
+        while True:
+          line = proc.stdout.readline()
+          lines = lines + line
+          if line != '':
+            #the real code does filtering here
+            if printlines:
+                print line.rstrip()
+          else:
+            break
+        return lines
+    except Exception as e:
+        print str(e) + ': ' + ' '.join(str(x) for x in cmd)
+
+
+#####################################################################
 """
 Convert unicode to a byte strings
 """
@@ -327,22 +420,23 @@ def byteify(input):
 
 # Get the command line options
 options = CommandArgs().get_options()
+verbose = options['verbose']
 
 if options["config"] == True:
     config = ChordsConfig(options=options)
     config.queryValues(options)
     config.writeYMLFile(options)
+    config.writeEnvFile()
 
 if options["run"] == True:
-    Docker().up()
+    Docker().up(options['devmode'])
     
 if options["stop"] == True:
     Docker().down()
 
 if options["status"] == True:
-    containers = Docker().ps()
-    for c in containers:
+    for c in Docker().ps():
         print c['name'] + ': ' + str(c)
 
-if options["env"] == True:
-    config.writeEnvFile()
+if options["update"] == True:
+    Docker().pull()
