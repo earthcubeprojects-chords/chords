@@ -24,8 +24,8 @@ SECRET_KEY_BASE=aaaaaaaaaaa
 # Generally, the values below here will not need to be modified.
 #
 # The docker image tag of the desired CHORDS image.
-DOCKER_TAG=latest
+DOCKER_TAG=development
 #
 # The RAILS environment. Unlikely to to use anything other than "production"
-RAILS_ENV=production
+RAILS_ENV=development
 #
