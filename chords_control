@@ -101,25 +101,25 @@ verbose = False
 """
 """
 class ChordsConfig(OrderedDict):
-    def __init__(self, options):
+    def __init__(self, configfile):
         OrderedDict.__init__(self)
         
         # Initialize the configuration item descriptions. These are 
         # used as comments in the output configuration file.
         self.initConfigItems()
 
-        self.getPairs(options)
+        self.getPairs(configfile)
                 
-    def getPairs(self, options):
+    def getPairs(self, configfile):
         
         items = dict()
         # Get the current configuration file
-        if not os.path.isfile(options["file"]):
+        if not os.path.isfile(configfile):
             f = open(options["file"], 'w')
             f.close()
-            print options["file"], 'has been created'
+            print configfile, 'has been created'
         
-        f = open(options["file"])
+        f = open(configfile)
         lines = f.readlines()
         f.close()
         i = 1
@@ -208,7 +208,7 @@ class ChordsConfig(OrderedDict):
         print key,
         if default:
             print "(default: " + str(default) + ")" ,
-        print '[' + self[key] + ']? ',
+        print '[' + str(self[key]) + ']? ',
         if not options["default"]:
             l = sys.stdin.readline().strip()
         else:
@@ -307,6 +307,24 @@ class CommandArgs:
     def get_options(self):
         # return the dictionary of existing options.
         return self.options 
+
+#####################################################################
+"""
+Manage CHORDS git activities.
+"""
+class ChordsGit:
+    def __init__(self, config):
+        self.config = config
+        self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
+        
+    """
+    Fetch system configurations from the CHORDS git repository
+    """
+    def fetch(self):
+        wget_cmd = [
+            'wget', self.docker_compose_yml
+            ]
+        os_cmd(wget_cmd)
 
 #####################################################################
 """
@@ -423,7 +441,7 @@ options = CommandArgs().get_options()
 verbose = options['verbose']
 
 if options["config"] == True:
-    config = ChordsConfig(options=options)
+    config = ChordsConfig(configfile=options['file'])
     config.queryValues(options)
     config.writeYMLFile(options)
     config.writeEnvFile()
@@ -439,4 +457,11 @@ if options["status"] == True:
         print c['name'] + ': ' + str(c)
 
 if options["update"] == True:
+    if not os.path.isfile(options["file"]):
+        print "The CHORDS configuration file " + options['file'] + "does not exist. It can be created with ./chords_control -c -d."
+        exit(1)
+    # Get the system configuration.
+    config = ChordsConfig(configfile=options['file'])
+    ChordsGit(config).fetch()
+    # Pull the images.
     Docker().pull()
