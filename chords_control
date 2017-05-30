@@ -237,6 +237,7 @@ class CommandArgs:
         parser.add_argument("-r", "--run",         help="run",            default=False, action="store_true")
         parser.add_argument("-s", "--stop",        help="stop",           default=False, action="store_true")
         parser.add_argument("-u", "--update",      help="update",         default=False, action="store_true")
+        parser.add_argument("-t", "--status",      help="status",         default=False, action="store_true")
         parser.add_argument("-d", "--default",     help="set all values to defaults", default=False, action="store_true")
         parser.add_argument("-e", "--env",         help="create/update .env", default=False, action="store_true")
         parser.add_argument("-v", "--verbose",     help="verbose output", default=False, action="store_true")
@@ -257,7 +258,7 @@ class CommandArgs:
 
 class Docker:
     def __init__(self):
-        pass
+        self.docker_compose_cmd = '/usr/local/bin/docker-compose'
     
     """
     Return an array containing a dictionary for each currently running container.
@@ -270,11 +271,11 @@ class Docker:
     """
     def ps(self):
         ps_cmd = ['docker',
-                  'ps', 
-                  '--format', 
-                  '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
+              'ps', 
+              '--format', 
+              '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
 
-        ps_result = subprocess.check_output(ps_cmd).split('\n')
+        ps_result = self.os_cmd(ps_cmd).split('\n')
 
         containers = []
         for p in ps_result:
@@ -285,7 +286,28 @@ class Docker:
         
         # Convert the json unicode to bytes
         return byteify(containers)
+    
+    """
+    """
+    def up(self):
+        up_cmd = [self.docker_compose_cmd,
+              '-p', 'chords', 'up', '-d']
+        print self.os_cmd(up_cmd)
+    
+    """
+    """
+    def down(self):
+        dn_cmd = [self.docker_compose_cmd,
+              '-p', 'chords', 'down']
+        print self.os_cmd(dn_cmd)
+
+    def os_cmd(self, cmd):
+        try:
+            return subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+        except Exception as e:
+            print str(e) + ': ' + ' '.join(str(x) for x in cmd)
         
+    
 """
 Convert unicode to a byte strings
 """
@@ -303,13 +325,6 @@ def byteify(input):
 #####################################################################
 #####################################################################
 
-docker = Docker()
-containers = docker.ps()
-#for c in containers:
-#    print c['name'] + ':' + str(c)
-
-print
-
 # Get the command line options
 options = CommandArgs().get_options()
 
@@ -317,6 +332,17 @@ if options["config"] == True:
     config = ChordsConfig(options=options)
     config.queryValues(options)
     config.writeYMLFile(options)
+
+if options["run"] == True:
+    Docker().up()
+    
+if options["stop"] == True:
+    Docker().down()
+
+if options["status"] == True:
+    containers = Docker().ps()
+    for c in containers:
+        print c['name'] + ': ' + str(c)
 
 if options["env"] == True:
     config.writeEnvFile()
