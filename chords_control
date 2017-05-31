@@ -78,7 +78,7 @@ standardConfig = [
         "inf"
     ],
     [
-        "The docker image tag of the desired CHORDS image.",
+        "The version tag of the desired CHORDS release.",
         "DOCKER_TAG",
         "latest"
     ],
@@ -165,6 +165,8 @@ class ChordsConfig(OrderedDict):
         # used as comments in the output configuration file.
         self.initConfigItems()
 
+        # Fetch the configuration key:value pairs from the configuration file.
+        # Add them to self.
         self.getPairs(configfile)
                 
     def getPairs(self, configfile):
@@ -385,6 +387,24 @@ class Docker:
     Bring the containers up with docker-compose.
     """
     def up(self, devmode=False):
+        # Make sure that .env exists
+        if not os.path.isfile('.env'):
+            print '*** The environment file .env is missing. Use chords_control to create it.'
+            exit (1)
+            
+        # Find out the release that we are running
+        d = os_cmd(['grep', 'DOCKER_TAG', '.env'], printlines=False).strip()
+        d = d.split('=')
+        if len(d) == 2:
+            print '*** Running the \'' + d[1] + '\' release of CHORDS',
+            if not devmode:
+                print '.'
+            else:
+                print ', in development mode.'
+        else:
+            print '.env file is incorrectly formatted (DOCKER_TAG is missing)'
+            exit (1)
+        
         if devmode == False:
             up_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 'up', '-d']
@@ -394,7 +414,7 @@ class Docker:
               '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml', 
               'up', '-d']
             
-        print os_cmd(up_cmd)
+        os_cmd(up_cmd)
     
     """
     Take the containers down with docker-compose.
@@ -402,7 +422,7 @@ class Docker:
     def down(self):
         dn_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 'down']
-        print os_cmd(dn_cmd)
+        os_cmd(dn_cmd)
 
     """
     Pull docker images.

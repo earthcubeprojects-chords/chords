@@ -47,4 +47,5 @@ chords_env.sh
 
 # Docker .env environment variable file
 .env
-/chords.yml
+/chords*.yml
+
