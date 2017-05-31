@@ -76,7 +76,7 @@ We request that researchers cite its use in any relevant publication or other co
   Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS). 2017. Version 0.9 [Software]. Boulder, Colorado: UCAR/NCAR. http://dx.doi.org/10.5065/D6V1236Q.
 </div>
 
-Please see [http://data.datacite.org/10.5065/D6V1236Q](http://data.datacite.org/10.5065/D6V1236Q) to view the relevant DOI metadata fields.
+Please see [http://data.datacite.org/application/vnd.datacite.datacite+json/10.5065/D6V1236Q](http://data.datacite.org/application/vnd.datacite.datacite+json/10.5065/D6V1236Q) to view the relevant DOI metadata fields.
 
 CHORDS is being developed for the National Science Foundation’s EarthCube program under grants 1639750, 1639720, 1639640, 1639570 and 1639554.
 
