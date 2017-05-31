@@ -1,5 +1,41 @@
 #!/usr/local/bin/python
 
+"""
+The CHORDS management script. Use to manage the CHORDS portal configuration,
+running/stopping the portal, and updating the portal software.
+
+The CHORDS configuration is kept in a YAML file (default chords.yml).
+This file contains standard configuration items, followed by user
+created non-standard options. The later are for developer use only.
+
+In configuration mode (-c), the existing configuration will be 
+read from the configuration file, the user will be prompted for changes,
+and the configuration file will be re-written. For each configuration item,
+the user may select the current value (hit enter), select the default
+value (enter a period), or change the value (enter a new value). The configuration
+may be initialized to complete default vaues by using the -d switch in conjunction
+with -c. 
+
+If the CHORDs configuration file does not exist, then it will be created. Thus,
+to create an initial default configuration, use:
+   ./chords_control -c -d
+
+A .env file is also created by the configuration mode. It contains
+ environment variable commands, with one for each configuration item. 
+This .env file is used by docker-compose. The non-standard options will 
+be included in .env, allowing developers to test additional environment variables,
+without having to edit the standardoptions specified in this script.
+
+The -r and -s switches are used to run/stop a portal.
+
+The -u switch updates the portal software by pulling the docker images.
+
+Use -t to see the current portal status.
+
+The devmode (-m) enables development mode, where the current directory
+is mounted as the CHORDS Rails source.
+"""
+
 import os
 import sys
 import shutil
@@ -9,51 +45,14 @@ import subprocess
 import json
 from collections import OrderedDict
 
-#####################################################################
+# The definitions of standard configuration items. These are tri-tuples:
+# [0]: The configuration item description. This will be printed as a prompt
+#      during configuration, and included in the configuration file as a description.
+# [1]: The name of the environment variable to be set in the .env file.
+# [2]: The default value.
 # 
-# CHORDS management script. Use to manage the CHORDS portal configuration,
-# running/stopping the portal, and updating the portal software.
-#
-# The CHORDS configuration is kept in a YAML file (default chords.yml).
-# This file contains standard configuration items, followed by user
-# created non-standard options. The later are for developer use only.
-#
-# In configuration mode (-c), the existing configuration will be 
-# read from the configuration file, the user will be prompted for changes,
-# and the configuration file will be re-written. For each configuration item,
-# the user may select the current value (hit enter), select the default
-# value (enter a period), or change the value (enter a new value). The configuration
-# may be initialized to complete default vaues by using the -d switch in conjunction
-# with -c. 
-#
-# If the CHORDs configuration file does not exist, then it will be created. Thus,
-# to create an initial default configuration, use:
-#    ./chords_control -c -d
-#
-# A .env file is also created by the configuration mode. It contains
-#  environment variable commands, with one for each configuration item. 
-# This .env file is used by docker-compose. The non-standard options will 
-# be included in .env, allowing developers to test additional environment variables,
-# without having to edit the standardoptions specified in this script.
-#
-# The -r and -s switches are used to run/stop a portal.
-#
-# The -u switch updates the portal software by pulling the docker images.
-#
-# Use -t to see the current portal status.
-#
-# The devmode (-m) enables development mode, where the current directory
-# is mounted as the CHORDS Rails source.
-#
-#####################################################################
-"""
-The definitions of standard configuration items. This are tri-tuples:
- [0]: The configuration item description. This will be printed as a prompt
-      during configuration, and included in the configuration file as a description.
- [1]: The name of the environment variable to be set in the .env file.
- [2]: The default value.
-"""
-standardConfig = [
+# When you need to add required keys to the configuration, just define them here.
+stdConfigItems = [
     [
         "The password for r/w and admin access to CHORDS, mysql and influxdb.\n"
         "Replace this with a strong password.",
@@ -94,18 +93,19 @@ standardConfig = [
     ]
 ]
 
-"""
-Verbose flag
-"""
+# The path for the docker-compose configuration.
+dockerComposeYmlURL = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
+
+# If set True, add some diagnostic printing.
 verbose = False
 
 #####################################################################
-"""
-Manage the command line options.
-The options are collated in a dictionary keyed on the option long name.
-The option dictionary will have None for options that aren't present.
-"""
 class CommandArgs:
+    """
+    Manage the command line options.
+    The options are collated in a dictionary keyed on the option long name.
+    The option dictionary will have None for options that aren't present.
+    """
     def __init__(self):
         
         description=("""
@@ -152,12 +152,12 @@ class CommandArgs:
         return self.options 
 
 #####################################################################
-"""
-Manage a CHORDS configuration. It is associated with the CHORDS configuration
-file, which is a YAML document containing comments and key:value pairs.
-Note: more complex YAML structuring is not supported.
-"""
 class ChordsConfig(OrderedDict):
+    """
+    Manage a CHORDS configuration. It is associated with the CHORDS configuration
+    file, which is a YAML document containing comments and key:value pairs.
+    Note: more complex YAML structuring is not supported.
+    """
     def __init__(self, configfile):
         OrderedDict.__init__(self)
         
@@ -209,22 +209,22 @@ class ChordsConfig(OrderedDict):
             self[key] = config[key]
         
         
-    """
-    Create a collection of config items which must be in the final configuration.
-    These items define the default values which will be used if they haven't already been
-    set in a configuration.
-    """
     def initConfigItems(self):
+        """
+        Create a collection of config items which must be in the final configuration.
+        These items define the default values which will be used if they haven't already been
+        set in a configuration.
+        """
         self.configItems  = OrderedDict()
         
-        for i in standardConfig:
+        for i in stdConfigItems:
             self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2])
 
-    """
-    Create the YML version of the configuration. Line terminators will be included.
-    The standard items are wrtten first, followed by the extras.
-    """
     def toYML(self):
+        """
+        Create the YML version of the configuration. Line terminators will be included.
+        The standard items are wrtten first, followed by the extras.
+        """
         yml = ''
         for key in self.keys():
             if key in self.configItems.keys():
@@ -238,14 +238,14 @@ class ChordsConfig(OrderedDict):
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         return yml
     
-    """
-    Go through the configuration, asking the user if they want to 
-    change the values. The response can be a return, to accept the
-    value, a new value to replace the value, or a period to use the default value.
-    The items found in configItems are done first, followed by all other
-    items.
-    """
     def queryValues(self, usedefault):
+        """
+        Go through the configuration, asking the user if they want to 
+        change the values. The response can be a return, to accept the
+        value, a new value to replace the value, or a period to use the default value.
+        The items found in configItems are done first, followed by all other
+        items.
+        """
         print 'Enter a return to keep the current value, a period to set to the default, or a new value.'
 
         for key in self.keys():
@@ -257,10 +257,12 @@ class ChordsConfig(OrderedDict):
         for key in self.keys():
             if key not in self.configItems.keys():
                 self.queryValue(key=key, usedefault = usedefault)
-    """
-    Query the user for a replacement value.
-    """
+                
     def queryValue(self, key, usedefault, description=None, defaultval=None):
+        """
+        Query the user for a replacement value.
+        """
+
         print
         if description:
             print description
@@ -283,14 +285,14 @@ class ChordsConfig(OrderedDict):
             else:
                 self[key] = l
     
-    """
-    Write the configuration to the file. The whole configuration is written,
-    starting with the elements listed in the configItems. Configuration items
-    are prefixed with the comments provided in the configItems.
-    
-    A backup copy of the original file is created.
-    """
     def writeYMLFile(self, configfile):
+        """
+        Write the configuration to the file. The whole configuration is written,
+        starting with the elements listed in the configItems. Configuration items
+        are prefixed with the comments provided in the configItems.
+        
+        A backup copy of the original file is created.
+        """
         print
         self.createBackup(configfile)
         f = open(configfile, "w")
@@ -298,11 +300,11 @@ class ChordsConfig(OrderedDict):
         f.close()
         print "*** " + options["file"] + " has been written with the new configuration."
 
-    """
-    Write the configuration to the .env file, in environment
-    notation.
-    """
     def writeEnvFile(self):
+        """
+        Write the configuration to the .env file, in environment
+        notation.
+        """
         f = open(".env", 'w')
         for key in self.keys():
             f.write(key + "=" + str(self[key])+"\n")
@@ -310,6 +312,10 @@ class ChordsConfig(OrderedDict):
         print "*** .env has been written with the new configuration."
         
     def createBackup(self, filename):
+        """
+        Create a backup copy of the file. A timestamp is included 
+        in the new file name.
+        """
         # Create the backup file name
         fsplit = os.path.splitext(filename)
         backupfile = fsplit[0] + "-" + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
@@ -321,51 +327,56 @@ class ChordsConfig(OrderedDict):
         print "*** " + filename + " has been backed up to " + backupfile
 
 #####################################################################
-"""
-"""
 class ConfigItem(OrderedDict):
+    """
+    An expected configuration item. The default value and description
+    are recorded.
+    """
     def __init__(self, default, description):
         OrderedDict.__init__(self)
         self["default"] = default
         self["description"] = description
     
 #####################################################################
-"""
-Manage CHORDS git activities.
-"""
 class ChordsGit:
+    """
+    Manage CHORDS git activities.
+    """
     def __init__(self, config):
+        global dockerComposeYmlURL
         self.config = config
-        self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
+        self.docker_compose_yml = dockerComposeYmlURL
         
-    """
-    Fetch system configurations from the CHORDS git repository
-    """
     def fetch(self):
+        """
+        Fetch system configurations from the CHORDS git repository
+        """
         wget_cmd = [
             'wget', self.docker_compose_yml
             ]
         os_cmd(wget_cmd)
 
 #####################################################################
-"""
-Manage docker activities. docker-compose.yml and docker-compose-dev.yml are 
-expected in the working directory.
-"""
 class Docker:
+    """
+    Manage docker activities. docker-compose.yml and docker-compose-dev.yml are 
+    expected in the working directory.
+    """
+
     def __init__(self):
         self.docker_compose_cmd = '/usr/local/bin/docker-compose'
     
-    """
-    Return an array containing a dictionary for each currently running container.
-    The dictionaries keys are a subset of the output columns from docker ps. They are:
-        name:
-        runningfor
-        status
-        createdat
-        image
-    """
     def ps(self):
+        """
+        Return an array containing a dictionary for each currently running container.
+        The dictionaries keys are a subset of the output columns from docker ps. They are:
+            name:
+            runningfor
+            status
+            createdat
+            image
+        """
+
         ps_cmd = ['docker',
               'ps', 
               '--format', 
@@ -383,10 +394,10 @@ class Docker:
         # Convert the json unicode to bytes
         return byteify(containers)
     
-    """
-    Bring the containers up with docker-compose.
-    """
     def up(self, devmode=False):
+        """
+        Bring the containers up with docker-compose.
+        """
         # Make sure that .env exists
         if not os.path.isfile('.env'):
             print '*** The environment file .env is missing. Use chords_control to create it.'
@@ -416,28 +427,29 @@ class Docker:
             
         os_cmd(up_cmd)
     
-    """
-    Take the containers down with docker-compose.
-    """
     def down(self):
+        """
+        Take the containers down with docker-compose.
+        """
         dn_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 'down']
         os_cmd(dn_cmd)
 
-    """
-    Pull docker images.
-    """
     def pull(self):
+        """
+        Pull docker images.
+        """
+        
         dn_cmd = [self.docker_compose_cmd,
               'pull']
         print os_cmd(dn_cmd)
 
 #####################################################################
-"""
-Run a shell command. The command output is returned as a single string, with each
-line delimited by a newline. 
-"""
 def os_cmd(cmd, printlines=True):
+    """
+    Run a shell command. The command output is returned as a single string, with each
+    line delimited by a newline. 
+    """
     if verbose:
         print ' '.join(str(x) for x in cmd)
     try:
@@ -458,10 +470,10 @@ def os_cmd(cmd, printlines=True):
 
 
 #####################################################################
-"""
-Convert unicode to a byte strings
-"""
 def byteify(input):
+    """
+    Convert unicode to a byte strings
+    """
     if isinstance(input, dict):
         return {byteify(key): byteify(value)
                 for key, value in input.iteritems()}
@@ -475,39 +487,41 @@ def byteify(input):
 #####################################################################
 #####################################################################
 
-# Get the command line options
-options = CommandArgs().get_options()
-verbose = options['verbose']
-
-if options["run"] == True:
-    Docker().up(options['devmode'])
+if __name__ == '__main__':
+    # Get the command line options
+    options = CommandArgs().get_options()
+    verbose = options['verbose']
     
-if options["stop"] == True:
-    Docker().down()
-
-if options["status"] == True:
-    for c in Docker().ps():
-        print c['name'] + ': ' + str(c)
-
-if options["config"] == True:
-    config = ChordsConfig(configfile=options['file'])
-    config.queryValues(usedefault=options['default'])
-    config.writeYMLFile(configfile=options['file'])
-    config.writeEnvFile()
-
-if options["env"] == True:
-    if not os.path.isfile(options["file"]):
-        print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
-        exit(1)
-    config = ChordsConfig(configfile=options['file'])
-    config.writeEnvFile()
-
-if options["update"] == True:
-    if not os.path.isfile(options["file"]):
-        print "The CHORDS configuration file " + options['file'] + "does not exist. It can be created with ./chords_control -c -d [-f FILE]"
-        exit(1)
-    # Get the system configuration.
-    config = ChordsConfig(configfile=options['file'])
-    ChordsGit(config).fetch()
-    # Pull the images.
-    Docker().pull()
+    if options["run"] == True:
+        Docker().up(options['devmode'])
+        
+    if options["stop"] == True:
+        Docker().down()
+    
+    if options["status"] == True:
+        for c in Docker().ps():
+            print c['name'] + ': ' + str(c)
+    
+    if options["config"] == True:
+        config = ChordsConfig(configfile=options['file'])
+        config.queryValues(usedefault=options['default'])
+        config.writeYMLFile(configfile=options['file'])
+        config.writeEnvFile()
+    
+    if options["env"] == True:
+        if not os.path.isfile(options["file"]):
+            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
+            exit(1)
+        config = ChordsConfig(configfile=options['file'])
+        config.writeEnvFile()
+    
+    if options["update"] == True:
+        if not os.path.isfile(options["file"]):
+            print "The CHORDS configuration file " + options['file'] + "does not exist. It can be created with ./chords_control -c -d [-f FILE]"
+            exit(1)
+        # Get the system configuration.
+        config = ChordsConfig(configfile=options['file'])
+        # Get items from git that are needed.
+        ChordsGit(config).fetch()
+        # Pull the images.
+        Docker().pull()
