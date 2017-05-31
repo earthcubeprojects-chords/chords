@@ -2,15 +2,18 @@
 
 # Get the CHORDS rails application server running.
 #
-# Set RAILS_ENV to development or productioon. If not set,
-# it will default to development.
+# Set RAILS_ENV to development or production. If not set,
+# it will default to production.
 #
 # Set CHORDS_ADMIN_PW to the database password.
 #
 # If RAILS_ENV=production, SECRET_KEY_BASE must be set.
 #
+# Many environment variables will be used by the CHORDS Rails app
+# to show system characteristics (e.g O/S type, source code 
+# hash tag, etc.)
 
-# default to development mode
+# default to production mode
 if [ -z "$RAILS_ENV" ]; then
   export RAILS_ENV="production"
 fi
@@ -28,6 +31,7 @@ if [ $RAILS_ENV == "production" ]; then
 fi
 
 mysql_host="mysql"
+# The mysql seeded flag is saved in the directory containing the mysql database.
 mysql_seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
 
 influxdb_host="influxdb"
@@ -38,6 +42,8 @@ influxdb_guest_user="guest"
 influxdb_guest_pw=$CHORDS_GUEST_PW
 influxdb_retention=$DB_RETENTION
 
+# A script that sets useful environment variables. It in turn
+# is created by the create_chords_env_script.sh.
 chords_env="./chords_env.sh"
 
 # (Re)start nginx
@@ -53,7 +59,7 @@ then
   env
 fi
 
-# Set some other interesting environment variables
+# Set some other interesting environment variables.
 export CHORDS_KERNEL_NAME=`uname --kernel-name`
 export CHORDS_NODENAME=`uname --nodename`
 export CHORDS_KERNEL_RELEASE=`uname --kernel-release`
