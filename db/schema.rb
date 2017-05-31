@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531041654) do
+ActiveRecord::Schema.define(version: 20170531103855) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20170531041654) do
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                   limit: 65535
+    t.text     "doi_citation",          limit: 65535
   end
 
   create_table "sites", force: :cascade do |t|
