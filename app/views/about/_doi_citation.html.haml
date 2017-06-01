@@ -1,0 +1,6 @@
+- if !(@profile.doi.blank?)
+	- citation = get_citation(@profile.doi)
+- else
+	- citation = ""
+
+= citation
