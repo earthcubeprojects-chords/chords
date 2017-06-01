@@ -28,7 +28,7 @@ worker_processes workers
 
 preload_app true
 
-listen "/chords/tmp/unicorn.chords.sock"
+listen "/tmp/unicorn.chords.sock"
 
 before_fork do |server, worker|
   # disconnect from database
