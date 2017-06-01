@@ -201,13 +201,14 @@ class ChordsConfig(OrderedDict):
                 config[key] = items[key]
                 del items[key]
             else:
-                config[key] = self.configItems[key]
+                config[key] = self.configItems[key]['default']
         for key in items.keys():
             # Append any remaining items that aren't in the standard list
             config[key] = items[key]
         for key in config.keys():
             self[key] = config[key]
         
+        print self
         
     def initConfigItems(self):
         """
@@ -262,8 +263,6 @@ class ChordsConfig(OrderedDict):
         """
         Query the user for a replacement value.
         """
-
-        print
         if description:
             print description
         print key,
