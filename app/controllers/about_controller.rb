@@ -5,7 +5,8 @@ class AboutController < ApplicationController
     notavailmsg = "unknown"
     
     @profile         = Profile.first
-    @source_revision = ENV.fetch('CHORDS_GIT_SHA'       ,notavailmsg) [0..6]
+    @chords_release  = ENV.fetch('DOCKER_TAG'           , notavailmsg)
+    @source_revision = ENV.fetch('CHORDS_GIT_SHA'       , notavailmsg) [0..6]
     @source_branch   = ENV.fetch('CHORDS_GIT_BRANCH'    , notavailmsg)
     @build_time      = ENV.fetch('CHORDS_BUILD_TIME'    , notavailmsg)
     @kernel_release  = ENV.fetch('CHORDS_KERNEL_RELEASE', notavailmsg)

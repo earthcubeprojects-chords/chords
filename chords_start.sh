@@ -68,6 +68,7 @@ export CHORDS_MACHINE=`uname --machine`
 export CHORDS_PROCESSOR=`uname --processor`
 export CHORDS_HARDWARE_PLATFORM=`uname --hardware-platform`
 export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
+export CHORDS_RELEASE=$DOCKER_TAG
 
 # Number of Unicorn workers
 if [ -z "$WORKERS" ]; then
