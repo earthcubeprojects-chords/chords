@@ -303,7 +303,11 @@ class ChordsConfig(OrderedDict):
         """
         Write the configuration to the .env file, in environment
         notation.
+        
+        A backup copy of the original file is created.
         """
+        self.createBackup(".env")
+        
         f = open(".env", 'w')
         for key in self.keys():
             f.write(key + "=" + str(self[key])+"\n")
