@@ -355,10 +355,10 @@ class ChordsGit:
         """
         Fetch system configurations from the CHORDS git repository
         """
-        wget_cmd = [
-            'wget', self.docker_compose_yml
+        curl_cmd = [
+            'curl', '-O', self.docker_compose_yml
             ]
-        os_cmd(wget_cmd)
+        os_cmd(curl_cmd)
 
 #####################################################################
 class Docker:
