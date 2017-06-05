@@ -278,11 +278,12 @@ class ChordsConfig(OrderedDict):
         if l != "":
             # A period means use the default, if it is avaiable
             if l == ".":
-                if usedefault:
-                    self[key] = defaultval
+                self[key] = defaultval
             # Other replace with the user entered value
             else:
                 self[key] = l
+        if usedefault:
+            print
     
     def writeYMLFile(self, configfile):
         """
