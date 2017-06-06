@@ -208,8 +208,6 @@ class ChordsConfig(OrderedDict):
         for key in config.keys():
             self[key] = config[key]
         
-        print self
-        
     def initConfigItems(self):
         """
         Create a collection of config items which must be in the final configuration.
@@ -447,6 +445,24 @@ class Docker:
         dn_cmd = [self.docker_compose_cmd,
               'pull']
         print os_cmd(dn_cmd)
+        
+    def tags(self):
+        """
+        Return an array of tag names for dockerhub ncareol/chords.
+        """
+        dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
+          
+        curl_cmd = [
+            'curl', '-s', dockerhub_tags_uri
+            ]
+        curl_result = os_cmd(curl_cmd, printlines=False)
+        tags = []
+        for t in json.loads(curl_result):
+            tags.append(byteify(t["name"]))
+            
+        return tags
+            
+
 
 #####################################################################
 def os_cmd(cmd, printlines=True):
@@ -489,12 +505,31 @@ def byteify(input):
         return input
     
 #####################################################################
+def addChoicesToDOCKER_TAG():
+    """
+    Get the avaiable tags and and them to the DOCKER_TAG 
+    description.
+    """
+    for s in stdConfigItems:
+        if s[1] =="DOCKER_TAG":
+            tags = Docker().tags()
+            avail_tags = " Available releases are"
+            tags = Docker().tags()
+            for t in tags:
+                avail_tags = avail_tags + " '" + t + "'"
+            s[0] = s[0] + avail_tags
+    
+#####################################################################
 #####################################################################
 
 if __name__ == '__main__':
+    
     # Get the command line options
     options = CommandArgs().get_options()
     verbose = options['verbose']
+    
+    # Adjust the available releases
+    addChoicesToDOCKER_TAG()
     
     if options["run"] == True:
         Docker().up(options['devmode'])
