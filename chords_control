@@ -313,10 +313,11 @@ class ChordsConfig(OrderedDict):
         f.close()
         print "*** .env has been written with the new configuration."
         
-    def createBackup(self, filename):
+    def createBackup(self, filename, print_note=True):
         """
         Create a backup copy of the file. A timestamp is included 
-        in the new file name.
+        in the new file name. If print_note is True, print
+        out a  friendly message indicating that a backup copy was made.
         """
         # Create the backup file name
         fsplit = os.path.splitext(filename)
@@ -326,7 +327,8 @@ class ChordsConfig(OrderedDict):
         # Copy the existing foile to the backup
         shutil.copyfile(filename, backupfile)     
         
-        print "*** " + filename + " has been backed up to " + backupfile
+        if print_note:
+            print "*** " + filename + " has been backed up to " + backupfile + "."
 
 #####################################################################
 class ConfigItem(OrderedDict):
