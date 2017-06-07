@@ -1,5 +1,7 @@
 # CHORDS Portal
 
+See instructions for running the [CHORDS Docker containers](https://github.com/NCAR/chords/wiki/Running-CHORDS).
+
 A testbed for CHORDS developer and user experiences. It will allow us
 to explore technical and usabilty aspects of CHORDS. It can be used
 to demonstrate CHORDS design and operational concepts.
