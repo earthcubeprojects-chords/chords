@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   
-  before_filter :set_profile, :set_access_control_header
+  before_filter :set_global, :set_access_control_header
 
   before_action :authenticate_user!
   
@@ -12,8 +12,21 @@ class ApplicationController < ActionController::Base
   end
   
   
-  def set_profile
+  def set_global
     ActionMailer::Base.default_url_options = {:host => request.host_with_port}
+      
+    notavailmsg = "unknown"
+    @chords_release  = ENV.fetch('DOCKER_TAG'           , notavailmsg)
+    @source_revision = ENV.fetch('CHORDS_GIT_SHA'       , notavailmsg) [0..6]
+    @source_branch   = ENV.fetch('CHORDS_GIT_BRANCH'    , notavailmsg)
+    @build_time      = ENV.fetch('CHORDS_BUILD_TIME'    , notavailmsg)
+    @kernel_release  = ENV.fetch('CHORDS_KERNEL_RELEASE', notavailmsg)
+    @kernel_version  = ENV.fetch('CHORDS_KERNEL_VERSION', notavailmsg)
+    @machine         = ENV.fetch('CHORDS_MACHINE'       , notavailmsg)
+    @rails_env       = Rails.env
+    @rails_version   = Rails::VERSION::STRING
+    @system_uptime   = ApplicationHelper.system_uptime
+    @server_uptime   = ApplicationHelper.server_uptime
     
     if ! @profile = Profile.first
       Profile.initialize

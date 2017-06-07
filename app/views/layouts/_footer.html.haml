@@ -1,15 +1,4 @@
-.row
-  .hidden-xs.col-sm-4 
-  .hidden-xs.col-sm-2= link_to image_tag('earthcube_full_50.png', :class=>"img-responsive"), "http://earthcube.org/",      :target => "_blank"
-  .hidden-xs.col-sm-2= link_to image_tag('CHORDS_logo_50.png',    :class=>"img-responsive"), "http://chordsrt.com",        :target => "_blank"
-  .hidden-xs.col-sm-4 
-%br/
-.row
-  .hidden-xs.col-sm-1  
-  .hidden-xs.col-sm-2= link_to image_tag('NCAR_50.png',           :class=>"img-responsive"), "https://www.ncar.ucar.edu",  :target => "_blank"
-  .hidden-xs.col-sm-2= link_to image_tag('UMich_50.png',          :class=>"img-responsive"), "https://www.umich.edu/",     :target => "_blank"
-  .hidden-xs.col-sm-2= link_to image_tag('CSU_50.png',            :class=>"img-responsive"), "https://www.colostate.edu/", :target => "_blank"
-  .hidden-xs.col-sm-2= link_to image_tag('VTech_50.png',          :class=>"img-responsive"), "https://www.vt.edu/",        :target => "_blank"
-  .hidden-xs.col-sm-2= link_to image_tag('UAH_50.png',            :class=>"img-responsive"), "http://www.uah.edu/",        :target => "_blank"
-  .hidden-xs.col-sm-1  
-%br/
+.div.text-center.hidden-xs
+  Release: #{@chords_release} (#{@source_revision}) (#{@build_time})
+
+  

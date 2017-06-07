@@ -51,6 +51,7 @@ services:
       - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - DB_RETENTION=${DB_RETENTION}
+      - DOCKER_TAG=${DOCKER_TAG}
       # Note: INFLUXDB_ variables are used by the Influxer gem, meaning that
       # you should not create your own variables beginning with INFLUXDB_.
       - INFLUXDB_USERNAME=admin
@@ -107,7 +108,7 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: grafana/grafana:4.2.0
+    image: grafana/grafana:4.3.2
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:

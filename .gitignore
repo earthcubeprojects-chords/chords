@@ -46,6 +46,6 @@ vendor/ruby
 chords_env.sh
 
 # Docker .env environment variable file
-.env
+.env*
 /chords*.yml
 

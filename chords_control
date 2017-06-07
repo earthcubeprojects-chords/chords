@@ -99,6 +99,10 @@ dockerComposeYmlURL = 'https://raw.githubusercontent.com/NCAR/chords/master/dock
 # If set True, add some diagnostic printing.
 verbose = False
 
+# Terminal control characters
+termBoldOn  = '\033[1m'
+termBoldOff = '\033[0m'
+
 #####################################################################
 class CommandArgs:
     """
@@ -201,13 +205,12 @@ class ChordsConfig(OrderedDict):
                 config[key] = items[key]
                 del items[key]
             else:
-                config[key] = self.configItems[key]
+                config[key] = self.configItems[key]['default']
         for key in items.keys():
             # Append any remaining items that aren't in the standard list
             config[key] = items[key]
         for key in config.keys():
             self[key] = config[key]
-        
         
     def initConfigItems(self):
         """
@@ -262,14 +265,13 @@ class ChordsConfig(OrderedDict):
         """
         Query the user for a replacement value.
         """
-
-        print
+        global termBoldOn, termBoldOff
         if description:
             print description
         print key,
         if defaultval:
             print "(default: " + str(defaultval) + ")" ,
-        print '[' + str(self[key]) + ']? ',
+        print termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ',
         if not usedefault:
             l = sys.stdin.readline().strip()
         else:
@@ -279,11 +281,12 @@ class ChordsConfig(OrderedDict):
         if l != "":
             # A period means use the default, if it is avaiable
             if l == ".":
-                if usedefault:
-                    self[key] = defaultval
+                self[key] = defaultval
             # Other replace with the user entered value
             else:
                 self[key] = l
+        if usedefault:
+            print
     
     def writeYMLFile(self, configfile):
         """
@@ -304,18 +307,30 @@ class ChordsConfig(OrderedDict):
         """
         Write the configuration to the .env file, in environment
         notation.
+        
+        A backup copy of the original file is created.
         """
+        self.createBackup(".env")
+        
         f = open(".env", 'w')
         for key in self.keys():
             f.write(key + "=" + str(self[key])+"\n")
         f.close()
         print "*** .env has been written with the new configuration."
         
-    def createBackup(self, filename):
+    def createBackup(self, filename, print_note=True):
         """
         Create a backup copy of the file. A timestamp is included 
-        in the new file name.
+        in the new file name. If print_note is True, print
+        out a  friendly message indicating that a backup copy was made.
         """
+        # No need to backup a file that doesn't already exist or is zero size
+        if not os.path.isfile(filename):
+            return
+        
+        if os.stat(filename).st_size == 0:
+            return
+        
         # Create the backup file name
         fsplit = os.path.splitext(filename)
         backupfile = fsplit[0] + "-" + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
@@ -324,7 +339,8 @@ class ChordsConfig(OrderedDict):
         # Copy the existing foile to the backup
         shutil.copyfile(filename, backupfile)     
         
-        print "*** " + filename + " has been backed up to " + backupfile
+        if print_note:
+            print "*** " + filename + " has been backed up to " + backupfile + "."
 
 #####################################################################
 class ConfigItem(OrderedDict):
@@ -351,10 +367,12 @@ class ChordsGit:
         """
         Fetch system configurations from the CHORDS git repository
         """
-        wget_cmd = [
-            'wget', self.docker_compose_yml
+        print 'Downloading docker-compose.yml.',
+        curl_cmd = [
+            'curl', '-O', '-s', self.docker_compose_yml
             ]
-        os_cmd(wget_cmd)
+        os_cmd(curl_cmd)
+        print
 
 #####################################################################
 class Docker:
@@ -440,9 +458,30 @@ class Docker:
         Pull docker images.
         """
         
+        # We need docker-compose.yml
+        checkFileExists('docker-compose.yml')
+        
         dn_cmd = [self.docker_compose_cmd,
               'pull']
         print os_cmd(dn_cmd)
+        
+    def tags(self):
+        """
+        Return an array of tag names for dockerhub ncareol/chords.
+        """
+        dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
+          
+        curl_cmd = [
+            'curl', '-s', dockerhub_tags_uri
+            ]
+        curl_result = os_cmd(curl_cmd, printlines=False)
+        tags = []
+        for t in json.loads(curl_result):
+            tags.append(byteify(t["name"]))
+            
+        return tags
+            
+
 
 #####################################################################
 def os_cmd(cmd, printlines=True):
@@ -485,17 +524,52 @@ def byteify(input):
         return input
     
 #####################################################################
+def addChoicesToDOCKER_TAG():
+    """
+    Get the avaiable tags and and them to the DOCKER_TAG 
+    description.
+    """
+    for s in stdConfigItems:
+        if s[1] =="DOCKER_TAG":
+            tags = Docker().tags()
+            avail_tags = " Available releases are"
+            tags = Docker().tags()
+            for t in tags:
+                avail_tags = avail_tags + " '" + t + "'"
+            s[0] = s[0] + avail_tags
+    
+#####################################################################
+def checkFileExists(file):
+    """
+    Make sure that the file is readable. If not, print error message
+    and exit.
+    """
+
+    if not os.path.isfile(file) or not os.access(file, os.R_OK):
+        print "File " + file +  " doesn't exist or isn't readable."
+        exit(1)
+  
+#####################################################################
 #####################################################################
 
 if __name__ == '__main__':
+    
     # Get the command line options
     options = CommandArgs().get_options()
     verbose = options['verbose']
     
+    # Adjust the available releases
+    addChoicesToDOCKER_TAG()
+    
     if options["run"] == True:
+        checkFileExists('docker-compose.yml')       
+        if options['devmode'] == True:
+            checkFileExists('docker-compose-yml.yml')
+        
         Docker().up(options['devmode'])
         
     if options["stop"] == True:
+        checkFileExists('docker-compose.yml')       
         Docker().down()
     
     if options["status"] == True:
