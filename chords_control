@@ -99,6 +99,10 @@ dockerComposeYmlURL = 'https://raw.githubusercontent.com/NCAR/chords/master/dock
 # If set True, add some diagnostic printing.
 verbose = False
 
+# Terminal control characters
+termBoldOn  = '\033[1m'
+termBoldOff = '\033[0m'
+
 #####################################################################
 class CommandArgs:
     """
@@ -261,12 +265,13 @@ class ChordsConfig(OrderedDict):
         """
         Query the user for a replacement value.
         """
+        global termBoldOn, termBoldOff
         if description:
             print description
         print key,
         if defaultval:
             print "(default: " + str(defaultval) + ")" ,
-        print '[' + str(self[key]) + ']? ',
+        print termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ',
         if not usedefault:
             l = sys.stdin.readline().strip()
         else:
