@@ -359,10 +359,12 @@ class ChordsGit:
         """
         Fetch system configurations from the CHORDS git repository
         """
+        print 'Downloading docker-compose.yml.',
         curl_cmd = [
-            'curl', '-O', self.docker_compose_yml
+            'curl', '-O', '-s', self.docker_compose_yml
             ]
         os_cmd(curl_cmd)
+        print
 
 #####################################################################
 class Docker:
