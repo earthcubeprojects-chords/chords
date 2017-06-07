@@ -324,8 +324,11 @@ class ChordsConfig(OrderedDict):
         in the new file name. If print_note is True, print
         out a  friendly message indicating that a backup copy was made.
         """
-        # No need to backup a file that doesn't already exist
+        # No need to backup a file that doesn't already exist or is zero size
         if not os.path.isfile(filename):
+            return
+        
+        if os.stat(filename).st_size == 0:
             return
         
         # Create the backup file name
@@ -574,7 +577,6 @@ if __name__ == '__main__':
             print c['name'] + ': ' + str(c)
     
     if options["config"] == True:
-        checkFileExists('docker-compose.yml')       
         config = ChordsConfig(configfile=options['file'])
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
