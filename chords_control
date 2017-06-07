@@ -319,6 +319,10 @@ class ChordsConfig(OrderedDict):
         in the new file name. If print_note is True, print
         out a  friendly message indicating that a backup copy was made.
         """
+        # No need to backup a file that doesn't already exist
+        if not os.path.isfile(filename):
+            return
+        
         # Create the backup file name
         fsplit = os.path.splitext(filename)
         backupfile = fsplit[0] + "-" + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
@@ -444,6 +448,9 @@ class Docker:
         Pull docker images.
         """
         
+        # We need docker-compose.yml
+        checkFileExists('docker-compose.yml')
+        
         dn_cmd = [self.docker_compose_cmd,
               'pull']
         print os_cmd(dn_cmd)
@@ -522,6 +529,17 @@ def addChoicesToDOCKER_TAG():
             s[0] = s[0] + avail_tags
     
 #####################################################################
+def checkFileExists(file):
+    """
+    Make sure that the file is readable. If not, print error message
+    and exit.
+    """
+
+    if not os.path.isfile(file) or not os.access(file, os.R_OK):
+        print "File " + file +  " doesn't exist or isn't readable."
+        exit(1)
+  
+#####################################################################
 #####################################################################
 
 if __name__ == '__main__':
@@ -534,9 +552,14 @@ if __name__ == '__main__':
     addChoicesToDOCKER_TAG()
     
     if options["run"] == True:
+        checkFileExists('docker-compose.yml')       
+        if options['devmode'] == True:
+            checkFileExists('docker-compose-yml.yml')
+        
         Docker().up(options['devmode'])
         
     if options["stop"] == True:
+        checkFileExists('docker-compose.yml')       
         Docker().down()
     
     if options["status"] == True:
@@ -544,6 +567,7 @@ if __name__ == '__main__':
             print c['name'] + ': ' + str(c)
     
     if options["config"] == True:
+        checkFileExists('docker-compose.yml')       
         config = ChordsConfig(configfile=options['file'])
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
