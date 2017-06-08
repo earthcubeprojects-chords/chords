@@ -38,6 +38,7 @@ is mounted as the CHORDS Rails source.
 
 import os
 import sys
+import re
 import shutil
 import datetime
 import argparse
@@ -102,6 +103,9 @@ verbose = False
 # Terminal control characters
 termBoldOn  = '\033[1m'
 termBoldOff = '\033[0m'
+if os.name == 'nt':
+    termBoldOn  = ''
+    termBoldOff = ''
 
 #####################################################################
 class CommandArgs:
@@ -383,6 +387,8 @@ class Docker:
 
     def __init__(self):
         self.docker_compose_cmd = '/usr/local/bin/docker-compose'
+        if os.name == 'nt':
+            self.docker_compose_cmd = 'docker-compose'
     
     def ps(self):
         """
@@ -406,8 +412,9 @@ class Docker:
         for p in ps_result:
             p = p.strip()
             if p != '':
-                p = '{' + p + '}'
-                containers.append(json.loads(p))
+            	if not re.search("WARNING", p):
+                	p = '{' + p + '}'
+                	containers.append(json.loads(p))
         
         # Convert the json unicode to bytes
         return byteify(containers)
@@ -422,8 +429,8 @@ class Docker:
             exit (1)
             
         # Find out the release that we are running
-        d = os_cmd(['grep', 'DOCKER_TAG', '.env'], printlines=False).strip()
-        d = d.split('=')
+        d = grep('DOCKER_TAG', '.env')
+        d = d[0].split('=')
         if len(d) == 2:
             print '*** Running the \'' + d[1] + '\' release of CHORDS',
             if not devmode:
@@ -549,6 +556,22 @@ def checkFileExists(file):
         print "File " + file +  " doesn't exist or isn't readable."
         exit(1)
   
+#####################################################################
+def grep(expression, file):
+    """
+    Find a lines in a file containing the expression.
+    Return ass an array of strings. White space is
+    removed.
+    """
+    file = open(file, "r")
+
+    matches = []
+    for line in file:
+       if re.search(expression, line):
+           matches.append(line.strip())
+
+    return matches
+    
 #####################################################################
 #####################################################################
 
