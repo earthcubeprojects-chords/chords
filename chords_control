@@ -394,7 +394,17 @@ class Docker:
 
     def __init__(self):
         global os_name
+        global os_arch
         self.docker_compose_cmd = '/usr/local/bin/docker-compose'
+        
+        self.docker_compose_yml = 'docker-compose.yml'
+        if os_arch[:3] == 'arm':
+            self.docker_compose_yml = 'rpi-docker-compose.yml'
+        
+        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
+        if os_arch[:3] == 'arm':
+            self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/rpi-chords/tags"
+        
         if os_name == 'nt':
             self.docker_compose_cmd = 'docker-compose'
     
@@ -451,7 +461,7 @@ class Docker:
         
         if devmode == False:
             up_cmd = [self.docker_compose_cmd,
-              '-p', 'chords', 'up', '-d']
+              '-f', self.docker_compose_yml, '-p', 'chords', 'up', '-d']
         else:
             up_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 
@@ -465,7 +475,7 @@ class Docker:
         Take the containers down with docker-compose.
         """
         dn_cmd = [self.docker_compose_cmd,
-              '-p', 'chords', 'down']
+              '-f', self.docker_compose_yml, '-p', 'chords', 'down']
         os_cmd(dn_cmd)
 
     def pull(self):
@@ -474,20 +484,19 @@ class Docker:
         """
         
         # We need docker-compose.yml
-        checkFileExists('docker-compose.yml')
+        checkFileExists(self.docker_compose_yml)
         
-        dn_cmd = [self.docker_compose_cmd,
-              'pull']
-        print os_cmd(dn_cmd)
+        pull_cmd = [self.docker_compose_cmd,
+              '-f', self.docker_compose_yml, 'pull']
+        print os_cmd(pull_cmd)
         
     def tags(self):
         """
-        Return an array of tag names for dockerhub ncareol/chords.
+        Return an array of tag names for dockerhub images.
         """
-        dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
           
         curl_cmd = [
-            'curl', '-s', dockerhub_tags_uri
+            'curl', '-s', self.dockerhub_tags_uri
             ]
         curl_result = os_cmd(curl_cmd, printlines=False)
         tags = []
