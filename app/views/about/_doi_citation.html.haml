@@ -1,0 +1,7 @@
+- citation = ""
+- if !(@profile.doi.blank?)
+	- citation = get_citation(@profile.doi)
+	- if citation[0...9] == "<!DOCTYPE"
+		- citation = "DOI citation could not be found."
+
+= citation

@@ -20,7 +20,12 @@ class ProfilesController < ApplicationController
     authorize! :manage, Profile
   
     # update attributes
-    @profile.update(profile_params)      
+    if !@profile.update(profile_params)
+      flash.now[:alert] = "Invalid field(s). Please try again."
+      render :index
+      return
+    end
+
 
     # Handle the logo stuff separately
     if params[:reset_logo].to_i == 1
@@ -113,7 +118,7 @@ class ProfilesController < ApplicationController
       params.require(:profile).permit(
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
-        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi
+        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi, :doi_citation
         )
     end
 
