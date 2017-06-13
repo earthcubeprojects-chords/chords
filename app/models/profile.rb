@@ -1,5 +1,10 @@
 class Profile < ActiveRecord::Base
 
+    validates :doi, allow_blank: true, format: {
+      with:    /10.\d{4,9}\/[-._;()\/:A-Z0-9]+/i,
+      message: "invalid DOI"
+    }
+
   def self.initialize
     Profile.create([{
     project: 'Real-Time Measurements', 

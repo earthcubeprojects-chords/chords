@@ -20,7 +20,12 @@ class ProfilesController < ApplicationController
     authorize! :manage, Profile
   
     # update attributes
-    @profile.update(profile_params)      
+    if !@profile.update(profile_params)
+      flash.now[:alert] = "Invalid field(s). Please try again."
+      render :index
+      return
+    end
+
 
     # Handle the logo stuff separately
     if params[:reset_logo].to_i == 1

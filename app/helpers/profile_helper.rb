@@ -26,5 +26,10 @@ module ProfileHelper
       new_object.save(validate: false)
     end
   end
+
+    # Return DOI citation
+  def get_citation(doi)
+    %x(curl -LH "Accept: text/x-bibliography; style=apa" https://doi.org/#{doi})
+  end
     
 end
