@@ -94,9 +94,6 @@ stdConfigItems = [
     ]
 ]
 
-# The path for the docker-compose configuration.
-dockerComposeYmlURL = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
-
 # If set True, add some diagnostic printing.
 verbose = False
 
@@ -370,15 +367,17 @@ class ChordsGit:
     Manage CHORDS git activities.
     """
     def __init__(self, config):
-        global dockerComposeYmlURL
         self.config = config
-        self.docker_compose_yml = dockerComposeYmlURL
+        # The path for the docker-compose configuration.
+        self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
+        if os_arch[:3] == 'arm':
+            self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/rpi-docker-compose.yml'
         
     def fetch(self):
         """
         Fetch system configurations from the CHORDS git repository
         """
-        print 'Downloading docker-compose.yml.',
+        print 'Downloading ' + self.docker_compose_yml + '.',
         curl_cmd = [
             'curl', '-O', '-s', self.docker_compose_yml
             ]
