@@ -2,6 +2,7 @@
 layout: page
 title: Getting Started
 ---
+<h2> Option 1: AWS</h2>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
@@ -29,7 +30,22 @@ title: Getting Started
       instance (server) in just a few steps.</p>
     </div>
   </div>
+  
+<h2> Option 2: Local Machine</h2>
 
+  <div class="row" style="margin-bottom: 20px">
+    <div class="col-sm-4">
+      <br/>
+      <a class="btn btn-success pull-right" href="control.html">
+      <img src="images/chevron-left.svg" width="30" /> Create a Portal</a>
+    </div>
+    <div class="col-sm-8">
+      <h3>CHORDS Portal</h3>
+      <p>Simply run the chords setup and control script to create a CHORDS Portal instance.</p>
+    </div>
+  </div>
+
+<h2> Configuration</h2>
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
      <br/>
