@@ -106,6 +106,10 @@ termBoldOff = '\033[0m'
 if os.name == 'nt':
     termBoldOn  = ''
     termBoldOff = ''
+    
+# Platform characteristics
+os_name = os.name
+os_arch = os.uname()[4]
 
 #####################################################################
 class CommandArgs:
@@ -115,21 +119,24 @@ class CommandArgs:
     The option dictionary will have None for options that aren't present.
     """
     def __init__(self):
+        global os_name
+        global os_arch
         
-        description=("""
-        CHORDS configuration and operation management.
+        description="""
+CHORDS configuration and operation management.
         
-        In configuration mode, you are prompted for configuration options. These will be
-        saved in the configuration file and in a corresponding .env file. Use the -d option
-        to set the configuration to default values.
-        """)
+In configuration mode, you are prompted for configuration options. These will be
+saved in the configuration file and in a corresponding .env file. Use the -d option
+to set the configuration to default values.
+"""
         
-        epilog = ("""
-        Only one of -c, -e, -r, -s, or -u can be specified. -d must be accompanied by -c.
-        To create an initial default configuration: ./chords_control -c -d
-        """)
+        epilog = """
+Only one of -c, -e, -r, -s, or -u can be specified. -d must be accompanied by -c.
+To create an initial default configuration: ./chords_control -c -d
+
+""" + "This operating system is " + os_name + ", architecture is " + os_arch
         
-        parser = argparse.ArgumentParser(description=description, epilog=epilog)
+        parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("-r", "--run",     help="run",                                                  default=False,        action="store_true")
         parser.add_argument("-s", "--stop",    help="stop",                                                 default=False,        action="store_true")
         parser.add_argument("-u", "--update",  help="update",                                               default=False,        action="store_true")
@@ -386,8 +393,9 @@ class Docker:
     """
 
     def __init__(self):
+        global os_name
         self.docker_compose_cmd = '/usr/local/bin/docker-compose'
-        if os.name == 'nt':
+        if os_name == 'nt':
             self.docker_compose_cmd = 'docker-compose'
     
     def ps(self):
