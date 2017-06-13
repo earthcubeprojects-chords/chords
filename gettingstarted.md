@@ -2,7 +2,8 @@
 layout: page
 title: Getting Started
 ---
-<h2> Option 1: AWS</h2>
+<h2> Creation</h2>
+<h3> Option 1: AWS</h3>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
@@ -31,7 +32,7 @@ title: Getting Started
     </div>
   </div>
   
-<h2> Option 2: Local Machine</h2>
+<h3> Option 2: Local Machine</h3>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
