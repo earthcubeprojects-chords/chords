@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+ #!/usr/local/bin/python
 
 """
 The CHORDS management script. Use to manage the CHORDS portal configuration,
@@ -564,7 +564,7 @@ if __name__ == '__main__':
     if options["run"] == True:
         checkFileExists('docker-compose.yml')       
         if options['devmode'] == True:
-            checkFileExists('docker-compose-yml.yml')
+            checkFileExists('docker-compose-dev.yml')
         
         Docker().up(options['devmode'])
         

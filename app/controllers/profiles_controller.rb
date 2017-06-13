@@ -21,7 +21,7 @@ class ProfilesController < ApplicationController
   
     # update attributes
     if !@profile.update(profile_params)
-      # flash[:notice] = 'Invalid DOI.'
+      flash.now[:alert] = "Invalid field(s). Please try again."
       render :index
       return
     end
