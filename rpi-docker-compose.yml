@@ -130,7 +130,7 @@ services:
   # Mail transfer agent
   mta:
     container_name: chords_mta
-    image: fduarte/rpi-postfix:latest
+    image: fduarte42/rpi-postfix:latest
     volumes:
       - postfix-spool:/var/spool/postfix
     environment:
