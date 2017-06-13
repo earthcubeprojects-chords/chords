@@ -16,7 +16,7 @@ _Note: On systems where docker requires root, you may need to use sudo to run th
    * W10 Pro: [Docker for Windows](https://docs.docker.com/engine/installation/windows/#/docker-for-mac)
    * W7: For us hapless Windows 7 users, we have to use the less elegant [Docker Toolbox](https://docs.docker.com/engine/installation/windows/#/docker-toolbox). 
    * Linux: See [instructions](https://docs.docker.com/engine/installation/linux/) for various flavors of this OS.
-   * Raspberry Pi: See the easy to follow [[instructions|Docker-on-Raspberry-Pi]] for bringing up a Docker enabled
+   * Raspberry Pi: See the easy to follow [instructions](https://github.com/NCAR/chords/wiki/Docker-on-Raspberry-Pi) for bringing up a Docker enabled
    Raspberry Pi.
  * Port 25 must be open. Port 3000 must be open for the Grafana visualization, but you can use CHORDs without this 
    feature.
