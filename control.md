@@ -1,4 +1,7 @@
-# CHORDS Setup and Control
+---
+layout: page
+title: CHORDS Setup and Control
+---
 
 CHORDS configuration and control are performed by running a python management script from the
 directory containing the configuration files.
@@ -9,6 +12,12 @@ _Note: On systems where docker requires root, you may need to use sudo to run th
  * python 2.7 (Linux and MacOS have this by default; [install](https://www.python.org/downloads/windows/) on Windows)
  * curl (Linux and MacOS have this by default; [install](https://help.zendesk.com/hc/en-us/articles/229136847-Installing-and-using-cURL#install) on Windows)
  * A running docker system
+   * OSX: [Docker for Mac](https://docs.docker.com/engine/installation/mac/#/docker-for-mac) is fantastic on the Mac.
+   * W10 Pro: [Docker for Windows](https://docs.docker.com/engine/installation/windows/#/docker-for-mac)
+   * W7: For us hapless Windows 7 users, we have to use the less elegant [Docker Toolbox](https://docs.docker.com/engine/installation/windows/#/docker-toolbox). 
+   * Linux: See [instructions](https://docs.docker.com/engine/installation/linux/) for various flavors of this OS.
+   * Raspberry Pi: See the easy to follow [[instructions|Docker-on-Raspberry-Pi]] for bringing up a Docker enabled
+   Raspberry Pi.
  * Port 25 must be open. Port 3000 must be open for the Grafana visualization, but you can use CHORDs without this 
    feature.
 
