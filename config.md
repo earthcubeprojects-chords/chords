@@ -3,7 +3,7 @@ layout: page
 title: Portal Configuration
 ---
 
-#How to Configure your Portal
+# How to Configure your Portal
 
 ## Step 1
 * Log into your portal using 
@@ -29,11 +29,13 @@ It will take you to a page called <em>Configuration</em>
 
 From here enter the:
   - Project name
+  - DOI (optional)
   - Affiliation
   - Page title (e.g. what project you’re working on. Like Orcas, STORM, NCAR Portal, etc.)
   - Time zone
-  - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to this link http://www.w3schools.com/html/html_intro.asp 
-  - select security options
+  - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
+  - Select security options 
+
 Once you've entered all of that click **Save**.
 <br>
 <hr>
