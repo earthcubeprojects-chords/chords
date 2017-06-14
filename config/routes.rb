@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   get 'profiles/import_configuration'              => 'profiles#import_configuration'
   post 'profiles/import_configuration'              => 'profiles#import_configuration'
 
+  get 'profiles/export_influxdb'              => 'profiles#export_influxdb'
+
+
   # devise_for :users
   devise_for :users, controllers: {
      sessions: 'users/sessions'
