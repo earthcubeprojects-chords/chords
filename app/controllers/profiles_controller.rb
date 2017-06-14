@@ -109,7 +109,7 @@ class ProfilesController < ApplicationController
 
     # render text: "OUTPUT\n" + output.to_s
     temp_file_path = '/tmp/chords-influxdb-backup'
-    File.open(file_path, 'r') do |f|
+    File.open(temp_file_path, 'r') do |f|
       send_data f.read, type: "application/zip"
     end
 
@@ -132,7 +132,7 @@ class ProfilesController < ApplicationController
       end
       command_thread.join
 
-      File.delete(file_path)
+      File.delete(temp_file_path)
     
       flash[:notice] = 'The InfluxDB data have been imported.'
     end
