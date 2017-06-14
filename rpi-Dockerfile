@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
   nodejs \
   mysql-client \
   dos2unix \
+  git \
   ntp\
   mysql-client\
   libmysqlclient-dev\
