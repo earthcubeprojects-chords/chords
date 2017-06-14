@@ -4,6 +4,9 @@
   = link_to "Export Configuration", {controller: "profiles", action: "export_configuration"}, class: "button"
   = link_to "Import Configuration", {controller: "profiles", action: "import_configuration"}, class: "button"
 
+.center
+  = link_to "Export InfluxDB Data", {controller: "profiles", action: "export_influxdb"}, class: "button"
+
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
   .configuration
     .line
