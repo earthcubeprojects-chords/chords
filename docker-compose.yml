@@ -45,6 +45,8 @@ services:
     image: ncareol/chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./tmp/:/tmp/
     environment:
       - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
@@ -91,6 +93,9 @@ services:
     image: influxdb:1.2
     volumes:
       - influxdb-data:/var/lib/influxdb/
+      - ./bin/influxdb/:/usr/local/bin/
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./tmp/:/tmp/
     environment:
       - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
       - INFLUXDB_HTTP_AUTH_ENABLED=true
