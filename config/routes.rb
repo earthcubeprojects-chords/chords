@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   post 'profiles/import_configuration'              => 'profiles#import_configuration'
 
   get 'profiles/export_influxdb'              => 'profiles#export_influxdb'
+  get 'profiles/import_influxdb'              => 'profiles#import_influxdb'
+  post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
 
 
   # devise_for :users

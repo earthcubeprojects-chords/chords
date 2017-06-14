@@ -100,7 +100,7 @@ class ProfilesController < ApplicationController
     command = 'docker exec -i chords_influxdb /usr/local/bin/export_influxdb_tsdata_file.sh'
     
     command_thread = Thread.new do
-      system(command) # long-long programm
+      system(command) 
     end
     command_thread.join
     # output = `#{actual_command}`
@@ -108,12 +108,36 @@ class ProfilesController < ApplicationController
     # system(command)
 
     # render text: "OUTPUT\n" + output.to_s
-    file_path = '/tmp/chords-influxdb-backup'
+    temp_file_path = '/tmp/chords-influxdb-backup'
     File.open(file_path, 'r') do |f|
       send_data f.read, type: "application/zip"
     end
-    File.delete(file_path)
+
+    File.delete(temp_file_path)
   end  
+
+  def import_influxdb
+    if (params[:influxdb_backup_file])
+
+      # read and parse the JSON file
+      file = params[:influxdb_backup_file]
+      
+      temp_file_path = '/tmp/chords-influxdb-backup'
+      FileUtils.mv(params[:influxdb_backup_file].path, temp_file_path)
+
+      command = 'docker exec -i chords_influxdb /usr/local/bin/import_influxdb_tsdata_file.sh'
+
+      command_thread = Thread.new do
+        system(command) 
+      end
+      command_thread.join
+
+      File.delete(file_path)
+    
+      flash[:notice] = 'The InfluxDB data have been imported.'
+    end
+
+  end
 
   # def conditionally_authenticate_user!
   #   before_action :authenticate_user   
