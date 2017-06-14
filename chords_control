@@ -44,6 +44,7 @@ import datetime
 import argparse
 import subprocess
 import json
+import platform
 from collections import OrderedDict
 
 # The definitions of standard configuration items. These are tri-tuples:
@@ -106,7 +107,7 @@ if os.name == 'nt':
     
 # Platform characteristics
 os_name = os.name
-os_arch = os.uname()[4]
+os_arch = platform.uname()[4]
 
 #####################################################################
 class CommandArgs:
