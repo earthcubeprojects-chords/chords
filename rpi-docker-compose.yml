@@ -2,18 +2,18 @@ version: '2'
 
 # The CHORDS configuration (x86) for docker-compose. 
 #
-# It defines these services:
-#   1. chords_mysql:    A MyQSL database for CHORDS metadata.
-#   2. chords_influxdb: An InfluxDB database for real-time time series data.
-#   3. chords_grafana:  A Grafana dashboard server
-#   4. chords_app:   The CHORDS Ruby on Rails server
+# When run with "-p chords", it creates these containers:
+#   1. chords_app:      The CHORDS Ruby on Rails server
+#   2. chords_mysql:    A MyQSL database for CHORDS metadata.
+#   3. chords_influxdb: An InfluxDB database for real-time time series data.
+#   4. chords_grafana:  A Grafana dashboard server
+#   5. chords_mta:      A postfix mail transfer agent.
+#
 # The following docker volumes provide data persistance:
 #   1. mysql-data:     (/var/lib/mysql)
 #   2. influxdb-data:  (/var/lib/influxdb)
 #   3. grafana-data:   (/var/lib/grafana)
-
-
-# database volume (mysql-data).
+#   4. postfix-spool:  (var/spool/postfox)
 #
 # This configuration is used to both build the chords image,
 # and to deploy the CHORDS system. Dockerfile provides the recipe
@@ -21,20 +21,14 @@ version: '2'
 #
 # To build and upload the chords image:
 #   cd <directory containing the CHORDS project>
-#   docker build --squash --tag ncareol/chords:<branch>
-#   docker push ncareol/chords:<branch>
+#   docker build --squash --tag ncareol/chords:<tag>
+#   docker push ncareol/chords:<tag>
 #
-# Create a .env (in the directory that you run docker-compose from) containing:
-# CHORDS_ADMIN_PW=<password>       # The password for r/w and admin access to CHORDS, mysql and influxdb.
-# CHORDS_ADMIN_PW=<password>       # The password for ro access to influxdb.
-# DOCKER_TAG=<git branch>          # Convention is to use the git branch used to generate the image as the tag.
-#
-# These environment variables may also be provided in .env:
-# SECRET_KEY_BASE=<strong key, generated as suggested by rake.>
-# RAILS_ENV=production|development
+# Create a .env file (in the directory that you run docker-compose from) containing
+# CHORDS configuration values. See chords_env_template for a description of values.
 # 
 # To deploy/start/stop CHORDS:
-#   curl -kL https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
+#   curl -L https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
 #   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
@@ -45,29 +39,37 @@ version: '2'
 #  docker-compose -p chords up -d
 
 services:
+  # CHORDS Rails application: nginx + rails + CHORDS rails code 
   app:
     container_name: chords_app
-    build:
-      context: ./
-      dockerfile: rpi-Dockerfile
     image: ncareol/rpi-chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
     environment:
-      - RAILS_ENV=production
+      - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
       - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
-      - SECRET_KEY_BASE=aaaaaaaaaaa
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - DB_RETENTION=${DB_RETENTION}
-      #  Note: INFLUXDB_ variables are used by the Influxer gem.
+      - DOCKER_TAG=${DOCKER_TAG}
+      # Note: INFLUXDB_ variables are used by the Influxer gem, meaning that
+      # you should not create your own variables beginning with INFLUXDB_.
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
     ports:
         - "80:80"
     links:
       - mysql
+      - influxdb
+      - mta
 
+  # Rails mysql database
   mysql:
     container_name: chords_mysql
     image: hypriot/rpi-mysql:5.5
@@ -77,29 +79,78 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
       
+  # Time series database
   influxdb:
     container_name: chords_influxdb
-    image: fgabriel/rpi-influxdb:1.1.1
+    image: fgabriel/rpi-influxdb:1.2.0
     volumes:
       - influxdb-data:/var/lib/influxdb/
     environment:
       - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
       - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
+      - INFLUXDB_REPORTING_DISABLED=true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     ports:
       - 8086:8086
       - 8083:8083
       
+  # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
     image: yangxuan8282/rpi-alpine-grafana:4.1.1
+    # Note: GF_ variables are used by grafana, meaning that
+    # you should not create your own variables beginning with GF_.
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
     volumes:
       - grafana-data:/var/lib/grafana/
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     ports:
       - 3000:3000
+    links:
+      - mta
+      - influxdb
+
+  # Mail transfer agent
+  mta:
+    container_name: chords_mta
+    image: fduarte42/rpi-postfix:latest
+    volumes:
+      - postfix-spool:/var/spool/postfix
+    environment:
+      - MY_NETWORKS=172.18.0.0/16 127.0.0.0/8
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
+    ports:
+      - 25:25
 
 volumes:
+  # CHORDS Rails meta-data
   mysql-data: 
+  # CHORDS time-series data
   influxdb-data:
+  # Grafana configuration data
   grafana-data:
+  # mta spool data
+  postfix-spool:
+  
   

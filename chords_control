@@ -94,9 +94,6 @@ stdConfigItems = [
     ]
 ]
 
-# The path for the docker-compose configuration.
-dockerComposeYmlURL = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
-
 # If set True, add some diagnostic printing.
 verbose = False
 
@@ -106,6 +103,10 @@ termBoldOff = '\033[0m'
 if os.name == 'nt':
     termBoldOn  = ''
     termBoldOff = ''
+    
+# Platform characteristics
+os_name = os.name
+os_arch = os.uname()[4]
 
 #####################################################################
 class CommandArgs:
@@ -115,21 +116,24 @@ class CommandArgs:
     The option dictionary will have None for options that aren't present.
     """
     def __init__(self):
+        global os_name
+        global os_arch
         
-        description=("""
-        CHORDS configuration and operation management.
+        description="""
+CHORDS configuration and operation management.
         
-        In configuration mode, you are prompted for configuration options. These will be
-        saved in the configuration file and in a corresponding .env file. Use the -d option
-        to set the configuration to default values.
-        """)
+In configuration mode, you are prompted for configuration options. These will be
+saved in the configuration file and in a corresponding .env file. Use the -d option
+to set the configuration to default values.
+"""
         
-        epilog = ("""
-        Only one of -c, -e, -r, -s, or -u can be specified. -d must be accompanied by -c.
-        To create an initial default configuration: ./chords_control -c -d
-        """)
+        epilog = """
+Only one of -c, -e, -r, -s, or -u can be specified. -d must be accompanied by -c.
+To create an initial default configuration: ./chords_control -c -d
+
+""" + "This operating system is " + os_name + ", architecture is " + os_arch
         
-        parser = argparse.ArgumentParser(description=description, epilog=epilog)
+        parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("-r", "--run",     help="run",                                                  default=False,        action="store_true")
         parser.add_argument("-s", "--stop",    help="stop",                                                 default=False,        action="store_true")
         parser.add_argument("-u", "--update",  help="update",                                               default=False,        action="store_true")
@@ -363,15 +367,17 @@ class ChordsGit:
     Manage CHORDS git activities.
     """
     def __init__(self, config):
-        global dockerComposeYmlURL
         self.config = config
-        self.docker_compose_yml = dockerComposeYmlURL
+        # The path for the docker-compose configuration.
+        self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
+        if os_arch[:3] == 'arm':
+            self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/rpi-docker-compose.yml'
         
     def fetch(self):
         """
         Fetch system configurations from the CHORDS git repository
         """
-        print 'Downloading docker-compose.yml.',
+        print 'Downloading ' + self.docker_compose_yml + '.',
         curl_cmd = [
             'curl', '-O', '-s', self.docker_compose_yml
             ]
@@ -386,8 +392,19 @@ class Docker:
     """
 
     def __init__(self):
+        global os_name
+        global os_arch
         self.docker_compose_cmd = '/usr/local/bin/docker-compose'
-        if os.name == 'nt':
+        
+        self.docker_compose_yml = 'docker-compose.yml'
+        if os_arch[:3] == 'arm':
+            self.docker_compose_yml = 'rpi-docker-compose.yml'
+        
+        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
+        if os_arch[:3] == 'arm':
+            self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/rpi-chords/tags"
+        
+        if os_name == 'nt':
             self.docker_compose_cmd = 'docker-compose'
     
     def ps(self):
@@ -443,7 +460,7 @@ class Docker:
         
         if devmode == False:
             up_cmd = [self.docker_compose_cmd,
-              '-p', 'chords', 'up', '-d']
+              '-f', self.docker_compose_yml, '-p', 'chords', 'up', '-d']
         else:
             up_cmd = [self.docker_compose_cmd,
               '-p', 'chords', 
@@ -457,7 +474,7 @@ class Docker:
         Take the containers down with docker-compose.
         """
         dn_cmd = [self.docker_compose_cmd,
-              '-p', 'chords', 'down']
+              '-f', self.docker_compose_yml, '-p', 'chords', 'down']
         os_cmd(dn_cmd)
 
     def pull(self):
@@ -466,20 +483,19 @@ class Docker:
         """
         
         # We need docker-compose.yml
-        checkFileExists('docker-compose.yml')
+        checkFileExists(self.docker_compose_yml)
         
-        dn_cmd = [self.docker_compose_cmd,
-              'pull']
-        print os_cmd(dn_cmd)
+        pull_cmd = [self.docker_compose_cmd,
+              '-f', self.docker_compose_yml, 'pull']
+        print os_cmd(pull_cmd)
         
     def tags(self):
         """
-        Return an array of tag names for dockerhub ncareol/chords.
+        Return an array of tag names for dockerhub images.
         """
-        dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
           
         curl_cmd = [
-            'curl', '-s', dockerhub_tags_uri
+            'curl', '-s', self.dockerhub_tags_uri
             ]
         curl_result = os_cmd(curl_cmd, printlines=False)
         tags = []
