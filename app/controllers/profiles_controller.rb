@@ -95,6 +95,25 @@ class ProfilesController < ApplicationController
       flash[:notice] = 'The portal configuration has been sucessfully restored.'
     end
   end
+  
+  def export_influxdb
+    command = 'docker exec -i chords_influxdb /usr/local/bin/export_influxdb_tsdata_file.sh'
+    
+    command_thread = Thread.new do
+      system(command) # long-long programm
+    end
+    command_thread.join
+    # output = `#{actual_command}`
+    # sleep(5)
+    # system(command)
+
+    # render text: "OUTPUT\n" + output.to_s
+    file_path = '/tmp/chords-influxdb-backup'
+    File.open(file_path, 'r') do |f|
+      send_data f.read, type: "application/zip"
+    end
+    File.delete(file_path)
+  end  
 
   # def conditionally_authenticate_user!
   #   before_action :authenticate_user   
