@@ -5,6 +5,7 @@ class Instrument < ActiveRecord::Base
   belongs_to :site
   # has_many :measurements, :dependent => :destroy
   has_many :vars, :dependent => :destroy
+  has_and_belongs_to_many :topic_categories
   accepts_nested_attributes_for :vars
 
 
