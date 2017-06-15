@@ -6,6 +6,7 @@
   %description= @instrument.description
   %identifier{:codespace => "uid"}= instrument_url(@instrument)
   %name= @instrument.name
+  %topiccategory= @instrument.topic_categories.map(&:name).join(', ')
   / metadata deleted for brevity sake
   / =================================================
   / Observed Property = Output
