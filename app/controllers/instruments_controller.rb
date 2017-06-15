@@ -109,6 +109,11 @@ class InstrumentsController < ApplicationController
           new_instrument.vars << new_var
         end
 
+        old_topics = old_instrument.topic_category_ids
+        old_topics.each{ |id|
+          cat = TopicCategory.find(id)
+          new_instrument.topic_categories<<cat}
+
         # Save the new instrument
         new_instrument.save
 
