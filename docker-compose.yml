@@ -101,6 +101,8 @@ services:
       - INFLUXDB_HTTP_AUTH_ENABLED=true
       - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
       - INFLUXDB_REPORTING_DISABLED=true
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}      
     logging:
       driver: "json-file"
       options:
