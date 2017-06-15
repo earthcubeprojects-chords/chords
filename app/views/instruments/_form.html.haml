@@ -14,7 +14,7 @@
   .field
     = f.label :topic_category
     %br/
-    = f.collection_select :topic_categories, TopicCategory.order(:name),:id,:name, {include_blank: false}, {multiple: true}
+    = f.collection_select :topic_category_ids, TopicCategory.order(:name),:id,:name, {include_blank: false}, {multiple: true}
   .field
     = f.label :description
     %br/
