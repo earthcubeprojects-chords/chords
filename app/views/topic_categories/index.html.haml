@@ -1,6 +1,6 @@
 %p#notice= notice
 %h1 Listing Topic Categories
-%table{:style=>"border: 1px; width: 50%"}
+%table{:style=>"width: 50%"}
   %thead
     %tr
       %th Name
@@ -10,4 +10,5 @@
       %tr
         %td= topic.name
         %td= topic.definition
+        %td= link_to 'Show', topic
 

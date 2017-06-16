@@ -5,4 +5,9 @@ class TopicCategoriesController < ApplicationController
     @topic_categories = TopicCategory.all
   end
 
+  def show
+  	@topic_category = TopicCategory.find(params[:id])
+  end
+
+
 end
