@@ -1,0 +1,13 @@
+%p#notice= notice
+%h1 Listing Topic Categories
+%table{:style=>"border: 1px; width: 50%"}
+  %thead
+    %tr
+      %th Name
+      %th Definition
+  %tbody
+    - @topic_categories.each do |topic|
+      %tr
+        %td= topic.name
+        %td= topic.definition
+
