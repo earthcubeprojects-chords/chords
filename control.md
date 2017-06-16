@@ -3,8 +3,9 @@ layout: page
 title: CHORDS Setup and Control
 ---
 
-CHORDS configuration and control are performed by running a python management script from the
-directory containing the configuration files.
+CHORDS is packaged as a collection of [Docker containers](https://hub.docker.com/r/ncareol/chords/). 
+Configuration and control of these containers are performed by running a python management script. The script
+shares the directory containing CHORDS configuration files.
 
 _Note: On systems where docker requires root, you may need to use sudo to run these commands._
 
