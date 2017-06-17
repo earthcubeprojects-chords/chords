@@ -367,8 +367,7 @@ class ChordsGit:
     """
     Manage CHORDS git activities.
     """
-    def __init__(self, config):
-        self.config = config
+    def __init__(self):
         # The path for the docker-compose configuration.
         self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
         if os_arch[:3] == 'arm':
@@ -400,7 +399,8 @@ class Docker:
         self.docker_compose_yml = 'docker-compose.yml'
         if os_arch[:3] == 'arm':
             self.docker_compose_yml = 'rpi-docker-compose.yml'
-        checkFileExists(self.docker_compose_yml)
+        if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
+            ChordsGit().fetch() 
         
         self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
         if os_arch[:3] == 'arm':
@@ -564,7 +564,7 @@ def addChoicesToDOCKER_TAG():
             s[0] = s[0] + avail_tags
     
 #####################################################################
-def checkFileExists(file):
+def checkFileExists(file, exit_on_failure=True):
     """
     Make sure that the file is readable. If not, print error message
     and exit.
@@ -572,7 +572,11 @@ def checkFileExists(file):
 
     if not os.path.isfile(file) or not os.access(file, os.R_OK):
         print "File " + file +  " doesn't exist or isn't readable."
-        exit(1)
+        if exit_on_failure:
+            exit(1)
+        else:
+            return False
+    return True
   
 #####################################################################
 def grep(expression, file):
@@ -635,6 +639,6 @@ if __name__ == '__main__':
         # Get the system configuration.
         config = ChordsConfig(configfile=options['file'])
         # Get items from git that are needed.
-        ChordsGit(config).fetch()
+        ChordsGit().fetch()
         # Pull the images.
         Docker().pull()
