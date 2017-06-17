@@ -400,6 +400,7 @@ class Docker:
         self.docker_compose_yml = 'docker-compose.yml'
         if os_arch[:3] == 'arm':
             self.docker_compose_yml = 'rpi-docker-compose.yml'
+        checkFileExists(self.docker_compose_yml)
         
         self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
         if os_arch[:3] == 'arm':
@@ -602,14 +603,12 @@ if __name__ == '__main__':
     addChoicesToDOCKER_TAG()
     
     if options["run"] == True:
-        checkFileExists('docker-compose.yml')       
         if options['devmode'] == True:
             checkFileExists('docker-compose-dev.yml')
         
         Docker().up(options['devmode'])
         
     if options["stop"] == True:
-        checkFileExists('docker-compose.yml')       
         Docker().down()
     
     if options["status"] == True:
