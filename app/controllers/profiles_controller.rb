@@ -83,17 +83,67 @@ class ProfilesController < ApplicationController
       Site.delete_all
       MeasuredProperty.delete_all
       Profile.delete_all
+      # User.delete_all
+      
       
       # Rebuild the configuration based on the uploaded JSON
       ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
+      ProfileHelper::replace_model_instances_from_JSON('User', users)
       ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
       ProfileHelper::replace_model_instances_from_JSON('Site', sites)
       ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
       ProfileHelper::replace_model_instances_from_JSON('Var', vars)
 
+      # Delete all mesurements from influxdb
+      # DropTsPointsSeries.call(TsPoint)
+
       
       flash[:notice] = 'The portal configuration has been sucessfully restored.'
     end
+  end
+  
+  def export_influxdb
+    command = 'docker exec -i chords_influxdb /usr/local/bin/export_influxdb_tsdata_file.sh'
+    
+    command_thread = Thread.new do
+      system(command) 
+    end
+    command_thread.join
+    # output = `#{actual_command}`
+    # sleep(5)
+    # system(command)
+
+    # render text: "OUTPUT\n" + output.to_s
+    temp_file_path = '/tmp/chords-influxdb-backup'
+    export_filename = 'chords_influxdb_export_' + Date.today.to_s
+    File.open(temp_file_path, 'r') do |f|
+      send_data f.read, type: "application/zip", filename: export_filename
+    end
+
+    File.delete(temp_file_path)
+  end  
+
+  def import_influxdb
+    if (params[:influxdb_backup_file])
+
+      # read and parse the JSON file
+      file = params[:influxdb_backup_file]
+      
+      temp_file_path = '/tmp/chords-influxdb-backup'
+      FileUtils.mv(params[:influxdb_backup_file].path, temp_file_path)
+
+      command = 'docker exec -i chords_influxdb /usr/local/bin/import_influxdb_tsdata_file.sh'
+
+      command_thread = Thread.new do
+        system(command) 
+      end
+      command_thread.join
+
+      File.delete(temp_file_path)
+    
+      flash[:notice] = 'The InfluxDB data have been imported.'
+    end
+
   end
 
   # def conditionally_authenticate_user!
