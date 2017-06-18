@@ -83,13 +83,19 @@ class ProfilesController < ApplicationController
       Site.delete_all
       MeasuredProperty.delete_all
       Profile.delete_all
+      # User.delete_all
+      
       
       # Rebuild the configuration based on the uploaded JSON
       ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
+      ProfileHelper::replace_model_instances_from_JSON('User', users)
       ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
       ProfileHelper::replace_model_instances_from_JSON('Site', sites)
       ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
       ProfileHelper::replace_model_instances_from_JSON('Var', vars)
+
+      # Delete all mesurements from influxdb
+      # DropTsPointsSeries.call(TsPoint)
 
       
       flash[:notice] = 'The portal configuration has been sucessfully restored.'
@@ -109,8 +115,9 @@ class ProfilesController < ApplicationController
 
     # render text: "OUTPUT\n" + output.to_s
     temp_file_path = '/tmp/chords-influxdb-backup'
+    export_filename = 'chords_influxdb_export_' + Date.today.to_s
     File.open(temp_file_path, 'r') do |f|
-      send_data f.read, type: "application/zip"
+      send_data f.read, type: "application/zip", filename: export_filename
     end
 
     File.delete(temp_file_path)
