@@ -49,13 +49,13 @@ class ProfilesController < ApplicationController
     @profiles = Profile.all
     @sites = Site.all
     @instruments = Instrument.all
-    @users = User.all
+    # @users = User.all
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
     
     file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf"".json"
 
-    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, users: @users, measured_properties: @measured_properties].to_json  , :filename => file_name
+    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties].to_json  , :filename => file_name
   end
   
   def import_configuration
@@ -88,15 +88,16 @@ class ProfilesController < ApplicationController
       
       # Rebuild the configuration based on the uploaded JSON
       ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
-      ProfileHelper::replace_model_instances_from_JSON('User', users)
+      # ProfileHelper::replace_model_instances_from_JSON('User', users)
       ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
       ProfileHelper::replace_model_instances_from_JSON('Site', sites)
       ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
       ProfileHelper::replace_model_instances_from_JSON('Var', vars)
 
       # Delete all mesurements from influxdb
-      # DropTsPointsSeries.call(TsPoint)
-
+      series = TsPoint.series.map {|x| x.to_s}[0]
+      dropQuery = "drop series FROM \"#{series}\""
+      queryresult = Influxer.client.query(dropQuery)
       
       flash[:notice] = 'The portal configuration has been sucessfully restored.'
     end
@@ -115,7 +116,9 @@ class ProfilesController < ApplicationController
 
     # render text: "OUTPUT\n" + output.to_s
     temp_file_path = '/tmp/chords-influxdb-backup'
-    export_filename = 'chords_influxdb_export_' + Date.today.to_s
+
+    export_filename = @profile.project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + '_chords_influxdb_export_' + Date.today.to_s + '.zip'
+
     File.open(temp_file_path, 'r') do |f|
       send_data f.read, type: "application/zip", filename: export_filename
     end
