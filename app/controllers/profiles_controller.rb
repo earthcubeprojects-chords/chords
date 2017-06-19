@@ -53,7 +53,7 @@ class ProfilesController < ApplicationController
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
     
-    file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf"".json"
+    file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf_"  + Date.today.to_s + ".json"
 
     send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties].to_json  , :filename => file_name
   end
@@ -104,7 +104,7 @@ class ProfilesController < ApplicationController
   end
   
   def export_influxdb
-    command = "docker exec -i chords_influxdb influx_inspect export -database chords_ts_development -datadir /var/lib/influxdb/data -waldir /var/lib/influxdb/wal -out /tmp/chords-influxdb-backup -compress"
+    command = "docker exec -i chords_influxdb influx_inspect export -database chords_ts_#{Rails.env} -datadir /var/lib/influxdb/data -waldir /var/lib/influxdb/wal -out /tmp/chords-influxdb-backup -compress"
     
     command_thread = Thread.new do
       system(command) 
@@ -135,7 +135,7 @@ class ProfilesController < ApplicationController
       temp_file_path = '/tmp/chords-influxdb-backup'
       FileUtils.mv(params[:influxdb_backup_file].path, temp_file_path)
 
-      command = "docker exec -i chords_influxdb influx -username $INFLUXDB_USERNAME -password $INFLUXDB_PASSWORD -database chords_ts_development  -import -compressed -precision=ns -path=/tmp/chords-influxdb-backup"
+      command = "docker exec -i chords_influxdb influx -username $INFLUXDB_USERNAME -password $INFLUXDB_PASSWORD -database chords_ts_#{Rails.env}  -import -compressed -precision=ns -path=/tmp/chords-influxdb-backup"
 
       command_thread = Thread.new do
         system(command) 
