@@ -1,0 +1,14 @@
+%p#notice= notice
+%h1 Listing Topic Categories
+%table{:style=>"git stawidth: 50%"}
+  %thead
+    %tr
+      %th Name
+      %th Definition
+  %tbody
+    - @topic_categories.each do |topic|
+      %tr
+        %td= topic.name
+        %td= topic.definition
+        %td= link_to 'Show', topic
+

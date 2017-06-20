@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <soap:Body>
+      <GetTopicCategoryCVResponse xmlns="http://his.cuahsi.org/his/1.1/ws/">
+         <GetTopicCategoryCVResult>
+            <GetTopicCategoryCVResponse>
+               <Records count="20">
+                  <Record>
+                     <Term>biota</Term>
+                     <Definition>Data associated with biological organisms</Definition>
+                  </Record>
+                  <Record>
+                     <Term>boundaries</Term>
+                     <Definition>Data associated with boundaries</Definition>
+                  </Record>
+                  <Record>
+                     <Term>climatology/meteorology/atmosphere</Term>
+                     <Definition>Data associated with climatology, meteorology, or the atmosphere</Definition>
+                  </Record>
+                  <Record>
+                     <Term>economy</Term>
+                     <Definition>Data associated with the economy</Definition>
+                  </Record>
+                  <Record>
+                     <Term>elevation</Term>
+                     <Definition>Data associated with elevation</Definition>
+                  </Record>
+                  <Record>
+                     <Term>environment</Term>
+                     <Definition>Data associated with the environment</Definition>
+                  </Record>
+                  <Record>
+                     <Term>farming</Term>
+                     <Definition>Data associated with agricultural production</Definition>
+                  </Record>
+                  <Record>
+                     <Term>geoscientificInformation</Term>
+                     <Definition>Data associated with geoscientific information</Definition>
+                  </Record>
+                  <Record>
+                     <Term>health</Term>
+                     <Definition>Data associated with health</Definition>
+                  </Record>
+                  <Record>
+                     <Term>imageryBaseMapsEarthCover</Term>
+                     <Definition>Data associated with imagery, base maps, or earth cover</Definition>
+                  </Record>
+                  <Record>
+                     <Term>inlandWaters</Term>
+                     <Definition>Data associated with inland waters</Definition>
+                  </Record>
+                  <Record>
+                     <Term>intelligenceMilitary</Term>
+                     <Definition>Data associated with intelligence or the military</Definition>
+                  </Record>
+                  <Record>
+                     <Term>location</Term>
+                     <Definition>Data associated with location</Definition>
+                  </Record>
+                  <Record>
+                     <Term>oceans</Term>
+                     <Definition>Data associated with oceans</Definition>
+                  </Record>
+                  <Record>
+                     <Term>planningCadastre</Term>
+                     <Definition>Data associated with planning or cadestre</Definition>
+                  </Record>
+                  <Record>
+                     <Term>society</Term>
+                     <Definition>Data associated with society</Definition>
+                  </Record>
+                  <Record>
+                     <Term>structure</Term>
+                     <Definition>Data associated with structure</Definition>
+                  </Record>
+                  <Record>
+                     <Term>transportation</Term>
+                     <Definition>Data associated with transportation</Definition>
+                  </Record>
+                  <Record>
+                     <Term>Unknown</Term>
+                     <Definition>The topic category is unknown</Definition>
+                  </Record>
+                  <Record>
+                     <Term>utilitiesCommunication</Term>
+                     <Definition>Data associated with utilities or communication</Definition>
+                  </Record>
+               </Records>
+            </GetTopicCategoryCVResponse>
+         </GetTopicCategoryCVResult>
+      </GetTopicCategoryCVResponse>
+   </soap:Body>
+</soap:Envelope>

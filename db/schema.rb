@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531041654) do
+ActiveRecord::Schema.define(version: 20170615020238) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -27,6 +27,11 @@ ActiveRecord::Schema.define(version: 20170531041654) do
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
+
+  create_table "instruments_topic_categories", id: false, force: :cascade do |t|
+    t.integer "instrument_id",     limit: 4, null: false
+    t.integer "topic_category_id", limit: 4, null: false
+  end
 
   create_table "measured_properties", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -67,6 +72,7 @@ ActiveRecord::Schema.define(version: 20170531041654) do
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                   limit: 65535
+    t.text     "doi_citation",          limit: 65535
   end
 
   create_table "sites", force: :cascade do |t|
@@ -77,6 +83,13 @@ ActiveRecord::Schema.define(version: 20170531041654) do
     t.datetime "updated_at",                                                       null: false
     t.text     "description", limit: 65535
     t.decimal  "elevation",                 precision: 12, scale: 6, default: 0.0
+  end
+
+  create_table "topic_categories", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.text     "definition", limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "users", force: :cascade do |t|
