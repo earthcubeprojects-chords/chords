@@ -68,7 +68,7 @@ python chords_control --stop
 python chords_control --run
 ````
 
-#### Monitoring startup (optional):
+#### Monitoring:
 * You can watch the startup log for the chords application. It's not critical,
   but can be useful for diagnosing problems, and for monitoring the tedious
   asset compilation process, which takes several minutes on the Raspberry Pi:  
@@ -82,7 +82,16 @@ Hit the _Visualization_ button to open a tab pointing to the builtin Grafana ser
 Login with admin/<CHORDS_ADMIN_PW> to begin configuring Grafana (login on the Raspbery Pi is admin/changeme).
 
 The [Getting Started Guide](http://docs.grafana.org/guides/getting_started/) is a good place to begin
-learning about Grafana.
+learning about Grafana. Data Source parameters are:
+
+|Parameter|Value|
+|---------|-----|
+|Name|CHORDS|
+|Type|InfluxDB
+|URL|http://localhost:8086|
+|Access|direct|
+|Database|chords_ts_production|
+|User|guest:guest|
 
 ### Tips
 * You reconfigure the portal using ```python chords_control --config```. Backup copies of the configuration
