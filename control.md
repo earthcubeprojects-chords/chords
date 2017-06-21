@@ -84,14 +84,42 @@ Login with admin/<CHORDS_ADMIN_PW> to begin configuring Grafana (login on the Ra
 The [Getting Started Guide](http://docs.grafana.org/guides/getting_started/) is a good place to begin
 learning about Grafana. Data Source parameters are:
 
-|Parameter|Value|
-|---------|-----|
-|Name|CHORDS|
-|Type|InfluxDB
-|URL|http://localhost:8086|
-|Access|direct|
-|Database|chords_ts_production|
-|User|guest:guest|
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Name</td>
+      <td>CHORDS</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>InfluxDB</td>
+    </tr>
+    <tr>
+      <td>URL</td>
+      <td>http://localhost:8086</td>
+    </tr>
+    <tr>
+      <td>Access</td>
+      <td>direct</td>
+    </tr>
+    <tr>
+      <td>Database</td>
+      <td>chords_ts_production</td>
+    </tr>
+    <tr>
+      <td>User</td>
+      <td>guest:guest</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ### Tips
 * You reconfigure the portal using ```python chords_control --config```. Backup copies of the configuration
