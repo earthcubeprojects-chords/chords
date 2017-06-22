@@ -14,12 +14,20 @@ Parameters:
     Description: CHORDS database guest password. Choose carefully.
     Type: String
 
-  GitBranchAndDockerTag:
+  ChordsVersion:
+    AllowedValues:
+      - latest
+      - development
+    Default: latest
+    Description: The version of CHORDS to deploy (E.g. the dockerhub tag)
+    Type: String
+
+  GitBranch:
     AllowedValues:
     - master
     - development
     Default: master
-    Description: CHORDS git branch/docker image tag
+    Description: CHORDS git branch
     Type: String
                 
   SecretKeyBase:
@@ -112,6 +120,8 @@ Parameters:
     Type: String
 
 #####################################################################
+    
+    
 Mappings:
   AWSInstanceType2Arch:
     c1.medium:
@@ -238,10 +248,14 @@ Mappings:
       HVM64: ami-1ecae776
       HVMG2: ami-8c6b40e4
       PV64: ami-1ccae774
+    us-east-2:
+      HVM64: ami-f6035893
+      HVMG2: NOT_SUPPORTED
+      PV64: NOT_SUPPORTED      
     us-west-1:
-      HVM64: ami-d114f295
+      HVM64: ami-a07379d9
       HVMG2: ami-f31ffeb7
-      PV64: ami-d514f291
+      PV64: ami-ca7278b3
     us-west-2:
       HVM64: ami-e7527ed7
       HVMG2: ami-abbe919b
@@ -260,7 +274,7 @@ Resources:
     Type: AWS::EC2::Instance
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT10M
+        Timeout: PT30M
     Properties:
       ImageId:
         Fn::FindInMap:
@@ -417,7 +431,8 @@ Resources:
               content: !Sub |     
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
                 CHORDS_GUEST_PW=${ChordsGuestPw}
-                DOCKER_TAG=${GitBranchAndDockerTag}
+                GIT_BRANCH=${GitBranch}
+                DOCKER_TAG=${ChordsVersion}
                 RAILS_ENV=production
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=$(SecretKeyBase}
@@ -429,7 +444,7 @@ Resources:
               command: "curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
             # Fetch the CHORDS docker-compose.yml.
             02_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranchAndDockerTag}/docker-compose.yml > /root/docker-compose.yml"
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/docker-compose.yml > /root/docker-compose.yml"
             # Pull the CHORDS images.
             03_docker_pull:
               command: "cd /root && /bin/docker-compose pull"
