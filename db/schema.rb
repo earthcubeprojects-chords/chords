@@ -72,7 +72,6 @@ ActiveRecord::Schema.define(version: 20170615020238) do
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                   limit: 65535
-    t.text     "doi_citation",          limit: 65535
   end
 
   create_table "sites", force: :cascade do |t|
