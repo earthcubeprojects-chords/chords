@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :units
   resources :topic_categories
   root      'dashboard#index'
 

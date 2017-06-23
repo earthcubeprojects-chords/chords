@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615020238) do
+ActiveRecord::Schema.define(version: 20170616172431) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -88,6 +88,13 @@ ActiveRecord::Schema.define(version: 20170615020238) do
   create_table "topic_categories", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.text     "definition", limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  create_table "units", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "abbreviation", limit: 255
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
   end
