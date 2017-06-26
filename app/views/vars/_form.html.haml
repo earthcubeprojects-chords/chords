@@ -23,6 +23,7 @@
     = f.label :units
     %br/
     = f.text_field :units
+    / = f.collection_select :unit_id, Unit.order(:abbreviation),:id,:label, include_blank: false
   .field
     = f.label :measured_property_id
     %br/

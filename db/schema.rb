@@ -72,7 +72,6 @@ ActiveRecord::Schema.define(version: 20170616172431) do
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                   limit: 65535
-    t.text     "doi_citation",          limit: 65535
   end
 
   create_table "sites", force: :cascade do |t|
@@ -121,19 +120,16 @@ ActiveRecord::Schema.define(version: 20170616172431) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "vars", force: :cascade do |t|
-    t.string   "name",                 limit: 255
-    t.integer  "instrument_id",        limit: 4
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.string   "shortname",            limit: 255
-    t.string   "units",                limit: 255, default: "C", null: false
-    t.integer  "measured_property_id", limit: 4,   default: 795, null: false
-    t.float    "minimum_plot_value",   limit: 24
-    t.float    "maximum_plot_value",   limit: 24
+    t.string   "name",               limit: 255
+    t.integer  "instrument_id",      limit: 4
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "shortname",          limit: 255
+    t.float    "minimum_plot_value", limit: 24
+    t.float    "maximum_plot_value", limit: 24
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
-  add_index "vars", ["measured_property_id"], name: "index_vars_on_measured_property_id", using: :btree
 
   add_foreign_key "instruments", "sites"
   add_foreign_key "measurements", "instruments"

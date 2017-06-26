@@ -68,11 +68,12 @@ class VarsController < ApplicationController
   # DELETE /vars/1.json
   def destroy
     authorize! :manage, Var
-    
+    x=@var.instrument_id
     @var.destroy
     
+    
     respond_to do |format|
-      format.html { redirect_to Instrument.find(@var.instrument_id), notice: 'Variable was deleted.' }      
+      format.html { redirect_to Instrument.find(x), notice: 'Variable was deleted.' }      
       # format.html { redirect_to vars_url, notice: 'Var was successfully destroyed.' }
       format.json { head :no_content }
     end

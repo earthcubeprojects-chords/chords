@@ -1,6 +1,7 @@
 class Var < ActiveRecord::Base
   belongs_to :instrument
   belongs_to :measured_property
+  belongs_to :unit
 
   before_destroy :delete_ts_points
   
