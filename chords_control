@@ -124,15 +124,17 @@ class CommandArgs:
 CHORDS configuration and operation management.
         
 In configuration mode, you are prompted for configuration options. These will be
-saved in the configuration file and in a corresponding .env file. Use the -d option
+saved in the configuration file and in a corresponding .env file. Backup
+copies will be made of the existing configuration files. Use the -d option
 to set the configuration to default values.
 """
         
         epilog = """
-Only one of -c, -e, -r, -s, or -u can be specified. -d must be accompanied by -c.
-To create an initial default configuration: ./chords_control -c -d
+At least one and only one of -c, -e, -r, -s, or -u can be 
+specified. -d must be accompanied by -c. To create an initial 
+default configuration: 'python chords_control -c -d'
 
-""" + "This operating system is " + os_name + ", architecture is " + os_arch
+""" + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
         
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("-r", "--run",     help="run",                                                  default=False,        action="store_true")
@@ -146,12 +148,18 @@ To create an initial default configuration: ./chords_control -c -d
         parser.add_argument("-m", "--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
         parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
 
+        # If no switches, print the help.
+        if len(sys.argv[1:])==0:
+            parser.print_help()
+            parser.exit()
+
         # Parse the command line. 
         args = parser.parse_args()
         self.options = vars(args)
         
         # Make sure that at most only one of these args was specified
         o = self.options
+        
         if [o['config'], o['run'], o['stop'], o['update'], o['env']].count(True) > 1:
             print epilog
             exit(1)
