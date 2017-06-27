@@ -402,21 +402,31 @@ class Docker:
     def __init__(self):
         global os_name
         global os_arch
-        self.docker_compose_cmd = '/usr/local/bin/docker-compose'
         
         self.docker_compose_yml = 'docker-compose.yml'
+        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"        
         if os_arch[:3] == 'arm':
             self.docker_compose_yml = 'rpi-docker-compose.yml'
+            self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/rpi-chords/tags"
+
+        # Determine the path for docker-compose
+        if os_name == 'nt':
+            self.docker_compose_cmd = 'docker-compose'
+        else:
+            cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose']
+            found_cmd = False
+            for choice in cmd_choices:
+                self.docker_compose_cmd = choice
+                if checkFileExists(self.docker_compose_cmd, exit_on_failure=False):
+                    found_cmd = True
+                    break
+            if not found_cmd:
+                print 'You must install docker-compose before proceeding.'
+                exit(1)
+    
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
             ChordsGit().fetch() 
         
-        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
-        if os_arch[:3] == 'arm':
-            self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/rpi-chords/tags"
-        
-        if os_name == 'nt':
-            self.docker_compose_cmd = 'docker-compose'
-    
     def ps(self):
         """
         Return an array containing a dictionary for each currently running container.
