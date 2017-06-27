@@ -417,10 +417,11 @@ class Docker:
             found_cmd = False
             for choice in cmd_choices:
                 self.docker_compose_cmd = choice
-                if checkFileExists(self.docker_compose_cmd, exit_on_failure=False):
+                if checkFileExists(self.docker_compose_cmd, print_warning=False, exit_on_failure=False):
                     found_cmd = True
                     break
             if not found_cmd:
+                print 'docker-compose was not found in', cmd_choices
                 print 'You must install docker-compose before proceeding.'
                 exit(1)
     
@@ -582,14 +583,15 @@ def addChoicesToDOCKER_TAG():
             s[0] = s[0] + avail_tags
     
 #####################################################################
-def checkFileExists(file, exit_on_failure=True):
+def checkFileExists(file, print_warning=True, exit_on_failure=True):
     """
     Make sure that the file is readable. If not, print error message
     and exit.
     """
 
     if not os.path.isfile(file) or not os.access(file, os.R_OK):
-        print "File " + file +  " doesn't exist or isn't readable."
+        if print_warning:
+            print "File " + file +  " doesn't exist or isn't readable."
         if exit_on_failure:
             exit(1)
         else:
