@@ -9,7 +9,7 @@ class UnitsController < ApplicationController
 
 	private
     def unit_params
-      params.require(:unit).permit(:name, :abbbreviation)
+      params.require(:unit).permit(:name, :abbreviation)
     end
 
 end
