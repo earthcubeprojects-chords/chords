@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616172431) do
+ActiveRecord::Schema.define(version: 20170623211848) do
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
@@ -120,16 +120,20 @@ ActiveRecord::Schema.define(version: 20170616172431) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "vars", force: :cascade do |t|
-    t.string   "name",               limit: 255
-    t.integer  "instrument_id",      limit: 4
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "shortname",          limit: 255
-    t.float    "minimum_plot_value", limit: 24
-    t.float    "maximum_plot_value", limit: 24
+    t.string   "name",                 limit: 255
+    t.integer  "instrument_id",        limit: 4
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.string   "shortname",            limit: 255
+    t.float    "minimum_plot_value",   limit: 24
+    t.float    "maximum_plot_value",   limit: 24
+    t.integer  "unit_id",              limit: 4
+    t.integer  "measured_property_id", limit: 4,   default: 795, null: false
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
+  add_index "vars", ["measured_property_id"], name: "index_vars_on_measured_property_id", using: :btree
+  add_index "vars", ["unit_id"], name: "index_vars_on_unit_id", using: :btree
 
   add_foreign_key "instruments", "sites"
   add_foreign_key "measurements", "instruments"

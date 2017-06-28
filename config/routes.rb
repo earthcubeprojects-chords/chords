@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :units
-  resources :topic_categories
   root      'dashboard#index'
 
   get 'about/data_urls'          => 'about#data_urls'
@@ -41,6 +39,10 @@ Rails.application.routes.draw do
     get :autocomplete_measured_property_label, :on => :collection
   end
 
+  resources :vars do
+    get :autocomplete_unit_abbreviation, :on => :collection
+  end
+
   resources :about
   resources :dashboard
   resources :data
@@ -53,6 +55,8 @@ Rails.application.routes.draw do
   resources :users
   resources :urlbuilder
   resources :vars
+  resources :units
+  resources :topic_categories
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

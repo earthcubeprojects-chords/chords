@@ -7,4 +7,9 @@ class UnitsController < ApplicationController
   	@unit = Unit.find(params[:id])
   end
 
+	private
+    def unit_params
+      params.require(:unit).permit(:name, :abbbreviation)
+    end
+
 end

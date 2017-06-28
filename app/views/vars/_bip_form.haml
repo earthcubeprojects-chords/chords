@@ -17,45 +17,40 @@
     .variable_header
       Units:
     - if can?(:manage, Var)
-      = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
+      - form_tag_id = "unit_for_tag_#{variable.id}"
+      = autocomplete_field_tag form_tag_id, variable.unit, autocomplete_unit_abbreviation_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      :javascript
+        $(document).ready(function(){
+          $("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
+            /* Submit the new value to update the DB */
+
+
+            var url = "/vars/#{variable.id}";
+
+            // To prevent xss attacks, a csrf token must be defined as a meta attribute
+            var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
+            csrf_param = jQuery('meta[name=csrf-param]').attr('content');
+
+            var submit_data = "_method=" + 'put';
+            submit_data += "&" + 'var' + '[' + 'unit_id' + ']=' + data['item']['id'];
+
+            if (csrf_param !== undefined && csrf_token !== undefined) {
+              submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
+            }
+
+            $.ajax({
+              type: "PUT",
+              dataType: "script",
+              url: url,
+              contentType: 'application/json',
+              data: JSON.stringify({ var:{unit_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
+            }).done(function( msg ) {
+              alert( "Data Saved: " + msg );
+            });
+          });
+        });
     - else
-      = variable.units
-    /   Units:
-    / - if can?(:manage, Var)
-    /   - form_tag_id = "unit_for_tag_#{variable.id}"
-    /   = autocomplete_field_tag form_tag_id, variable.unit.abbreviation, autocomplete_unit_abbreviation_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
-    /   :javascript
-    /     $(document).ready(function(){
-    /       $("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
-    /         /* Submit the new value to update the DB */
-
-
-    /         var url = "/vars/#{variable.id}";
-
-    /         // To prevent xss attacks, a csrf token must be defined as a meta attribute
-    /         var csrf_token = jQuery('meta[name=csrf-token]').attr('content'),
-    /         csrf_param = jQuery('meta[name=csrf-param]').attr('content');
-
-    /         var submit_data = "_method=" + 'put';
-    /         submit_data += "&" + 'var' + '[' + 'measured_property_id' + ']=' + data['item']['id'];
-
-    /         if (csrf_param !== undefined && csrf_token !== undefined) {
-    /           submit_data += "&" + csrf_param + "=" + encodeURIComponent(csrf_token);
-    /         }
-
-    /         $.ajax({
-    /           type: "PUT",
-    /           dataType: "script",
-    /           url: url,
-    /           contentType: 'application/json',
-    /           data: JSON.stringify({ var:{unit_id:data['item']['id']}, _method:'put', csrf_param: encodeURIComponent(csrf_token) })
-    /         }).done(function( msg ) {
-    /           alert( "Data Saved: " + msg );
-    /         });
-    /       });
-    /     });
-    / - else
-    /   = variable.units
+      = variable.unit.abbreviation
 
 
   .col-sm-2
