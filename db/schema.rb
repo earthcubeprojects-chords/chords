@@ -127,8 +127,8 @@ ActiveRecord::Schema.define(version: 20170623211848) do
     t.string   "shortname",            limit: 255
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
-    t.integer  "unit_id",              limit: 4
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
+    t.integer  "unit_id",              limit: 4,   default: 1
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
