@@ -19,6 +19,7 @@
     - if can?(:manage, Var)
       - form_tag_id = "unit_for_tag_#{variable.id}"
       = autocomplete_field_tag form_tag_id, variable.unit.abbreviation, autocomplete_unit_abbreviation_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      / = javascript_include_tag "autocomplete"
       :javascript
         $(document).ready(function(){
           $("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
