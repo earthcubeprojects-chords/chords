@@ -11,7 +11,7 @@ title: Operating System Configuration
   <li>               <a data-toggle="tab" href="#windows7" >w7</a>    </li>
 </ul>
 
-<div class="tab-content">
+<div class="tab-content" active>
   <div id="ubuntu" class="tab-pane">
     {% highlight sh %}
 sudo -i
