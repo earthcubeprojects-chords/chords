@@ -14,24 +14,32 @@ title: Operating System Configuration
 <div class="tab-content">
   <div id="ubuntu" class="tab-pane">
     {% highlight sh %}
-    sudo -i
-    apt-get install docker.io docker-compose
-    curl -O  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
-    python chords_control --config
-    python chords_control --update
-    python chords_control --run
+sudo -i
+apt-get install docker.io docker-compose
+curl -O  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
+python chords_control --config
+python chords_control --update
+python chords_control --run
+    {% endhighlight %}
   </div>
 
   <div id="centos" class="tab-pane">
     {% highlight sh %}
+    {% endhighlight %}
   </div>
+  
   <div id="macos" class="tab-pane">
     {% highlight sh %}
+    {% endhighlight %}
   </div>
+  
   <div id="w10" class="tab-pane">
     {% highlight sh %}
+    {% endhighlight %}
   </div>
+  
   <div id="w7" class="tab-pane">
     {% highlight sh %}
+    {% endhighlight %}
   </div>
 </div>
