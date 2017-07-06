@@ -84,6 +84,12 @@ stdConfigItems = [
         "latest"
     ],
     [
+        "Proxy URL (e.g. http://proxy.myorg.com:8080).\n"
+        "Leave blank if not needed.",
+        "PROXY",
+        ""
+    ],
+    [
         "The RAILS environment. Unlikely to to be anything other than \"production\".",
         "RAILS_ENV",
         "production"
@@ -145,6 +151,7 @@ default configuration: 'python chords_control -c -d'
         parser.add_argument("-d", "--default", help="set all configuration values to defaults",             default=False,        action="store_true")
         parser.add_argument("-t", "--status",  help="status",                                               default=False,        action="store_true")
         parser.add_argument("-e", "--env",     help="read config file and write CHORDS env file",           default=False,        action="store_true")
+        parser.add_argument("-x", "--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
         parser.add_argument("-m", "--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
         parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
 
@@ -375,20 +382,29 @@ class ChordsGit:
     """
     Manage CHORDS git activities.
     """
-    def __init__(self):
+    def __init__(self, proxy=""):
         # The path for the docker-compose configuration.
         self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
         if os_arch[:3] == 'arm':
             self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/rpi-docker-compose.yml'
+            
+        self.proxy = proxy
         
     def fetch(self):
         """
         Fetch system configurations from the CHORDS git repository
         """
+        proxy_switch = []
+        if self.proxy != '':
+            proxy_switch = ['-xxx', self.proxy]
+                
         print 'Downloading ' + self.docker_compose_yml + '.',
         curl_cmd = [
             'curl', '-O', '-s', self.docker_compose_yml
             ]
+        # Insert proxy switch
+        curl_cmd[1:1] = proxy_switch
+
         os_cmd(curl_cmd)
         print
 
@@ -399,7 +415,7 @@ class Docker:
     expected in the working directory.
     """
 
-    def __init__(self):
+    def __init__(self, proxy=""):
         global os_name
         global os_arch
         
@@ -426,7 +442,7 @@ class Docker:
                 exit(1)
     
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
-            ChordsGit().fetch() 
+            ChordsGit(proxy).fetch() 
         
     def ps(self):
         """
@@ -568,16 +584,16 @@ def byteify(input):
         return input
     
 #####################################################################
-def addChoicesToDOCKER_TAG():
+def addChoicesToDOCKER_TAG(proxy=""):
     """
     Get the avaiable tags and and them to the DOCKER_TAG 
     description.
     """
     for s in stdConfigItems:
         if s[1] =="DOCKER_TAG":
-            tags = Docker().tags()
+            tags = Docker(proxy=proxy).tags()
             avail_tags = " Available releases are"
-            tags = Docker().tags()
+            tags = Docker(proxy=proxy).tags()
             for t in tags:
                 avail_tags = avail_tags + " '" + t + "'"
             s[0] = s[0] + avail_tags
@@ -630,13 +646,13 @@ if __name__ == '__main__':
         if options['devmode'] == True:
             checkFileExists('docker-compose-dev.yml')
         
-        Docker().up(options['devmode'])
+        Docker(proxy=options['proxy']).up(options['devmode'])
         
     if options["stop"] == True:
-        Docker().down()
+        Docker(proxy=options['proxy']).down()
     
     if options["status"] == True:
-        for c in Docker().ps():
+        for c in Docker(proxy=options['proxy']).ps():
             print c['name'] + ': ' + str(c)
     
     if options["config"] == True:
@@ -644,6 +660,8 @@ if __name__ == '__main__':
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
         config.writeEnvFile()
+        print
+        print "*** Don't forget to run 'python chords_control --update' if you have changed the configuration."
     
     if options["env"] == True:
         if not os.path.isfile(options["file"]):
@@ -659,6 +677,6 @@ if __name__ == '__main__':
         # Get the system configuration.
         config = ChordsConfig(configfile=options['file'])
         # Get items from git that are needed.
-        ChordsGit().fetch()
+        ChordsGit(proxy=options['proxy']).fetch()
         # Pull the images.
-        Docker().pull()
+        Docker(proxy=options['proxy']).pull()
