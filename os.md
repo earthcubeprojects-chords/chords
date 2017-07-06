@@ -11,8 +11,8 @@ title: Operating System Configuration
   <li>               <a data-toggle="tab" href="#windows7" >w7</a>    </li>
 </ul>
 
-<div class="tab-content" active>
-  <div id="ubuntu" class="tab-pane">
+<div class="tab-content">
+  <div id="ubuntu" class="tab-pane" active>
     {% highlight sh %}
 sudo -i
 apt-get install docker.io docker-compose
@@ -25,21 +25,25 @@ python chords_control --run
 
   <div id="centos" class="tab-pane">
     {% highlight sh %}
+yum    
     {% endhighlight %}
   </div>
   
   <div id="macos" class="tab-pane">
     {% highlight sh %}
+brew
     {% endhighlight %}
   </div>
   
   <div id="w10" class="tab-pane">
     {% highlight sh %}
+Docker for Windows
     {% endhighlight %}
   </div>
   
   <div id="w7" class="tab-pane">
     {% highlight sh %}
+Docker engine
     {% endhighlight %}
   </div>
 </div>
