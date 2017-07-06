@@ -42,7 +42,7 @@ title: Getting Started
     </div>
     <div class="col-sm-8">
       <h3>CHORDS Portal</h3>
-      <p>Configure the operating system, then run the chords control script to create a CHORDS Portal instance.</p>
+      <p>Configure the operating system, then run the CHORDS control script to create a CHORDS Portal instance.</p>
     </div>
   </div>
 
