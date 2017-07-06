@@ -37,7 +37,7 @@ title: Getting Started
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
       <br/>
-      <a class="btn btn-success pull-right" href="control.html">
+      <a class="btn btn-success pull-right" href="os.html">
       <img src="images/chevron-left.svg" width="30" /> Create a Portal</a>
     </div>
     <div class="col-sm-8">
