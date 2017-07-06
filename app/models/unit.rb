@@ -8,14 +8,14 @@ class Unit < ActiveRecord::Base
 
 
   	def self.populate
-  		csv_file = Rails.root + 'lib/assets/units.csv'
+  		csv_file = Rails.root + 'lib/assets/udunits.csv'
   		csv_text = File.read(csv_file)
 			csv = CSV.parse(csv_text, :headers => true)
 			csv.each do |row|
 				fields = row.to_hash
 				unit = Unit.new
-				unit.name = fields["UnitsName"]
-				unit.abbreviation = fields["UnitsAbbreviation"]
+				unit.name = fields["name"]
+				unit.abbreviation = fields["abbreviation"]
 				unit.save
 			end
   	end
