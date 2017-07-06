@@ -72,7 +72,11 @@ class MeasurementsController < ApplicationController
 
     save_ok = false
     
-    if Instrument.exists?(id: params[:instrument_id])
+    # some CHORDS users had an extra '0' on the beginnig of their instrument_id.
+    # cleans this dirty input so that the create still works 
+    cleansed_instrument_id = params[:instrument_id].to_i
+
+    if Instrument.exists?(id: cleansed_instrument_id)
         
       # Are the data submitted in this query a test?
       is_test_value = false
@@ -81,13 +85,13 @@ class MeasurementsController < ApplicationController
       end
       
       # Save the url that invoked us
-      Instrument.update(params[:instrument_id], :last_url => request.original_url)
+      Instrument.update(cleansed_instrument_id, :last_url => request.original_url)
   
       # Create an array containing the names of legitimate variable names
       measured_at_parameters = Array.new
       variable_shortnames = Array.new
       
-      Instrument.find(params[:instrument_id]).vars.each do |var|
+      Instrument.find(cleansed_instrument_id).vars.each do |var|
         measured_at_parameters.push(var.measured_at_parameter)
         variable_shortnames.push(var.shortname)
         
@@ -109,8 +113,8 @@ class MeasurementsController < ApplicationController
             TsPoint,
             { 
               timestamp:  ConvertIsoToMs.call(measured_at),
-              site:       Instrument.find(params[:instrument_id]).site_id, 
-              inst:       params[:instrument_id], 
+              site:       Instrument.find(cleansed_instrument_id).site_id, 
+              inst:       cleansed_instrument_id, 
               var:        var.id,
               test:       params.has_key?(:test),
               value:      params[var.shortname].to_f
