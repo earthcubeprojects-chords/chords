@@ -4,7 +4,7 @@ title: Operating System Configuration
 ---
 
 See the [detailed instructions](control.html) if the Quick Start recipes are not adequate
-to get your portal running.
+to get your portal running, and for additional information.
 
 ### Quick Start
 <ul class="nav nav-pills">
@@ -46,16 +46,19 @@ yum
   </div>
   
   <div id="macos" class="tab-pane">
-  Install <a href="https://download.docker.com/mac/stable/Docker.dmg">Docker for Mac</a>. 
-  
-  Run Docker and configure it to start automatically. Then in a terminal window:
+  <ul>
+  <li>Install <a href="https://download.docker.com/mac/stable/Docker.dmg">Docker for Mac</a>.</li>
+  <li>Run Docker and configure the preferences to start it automatically. </li>
+  <li>Then in a terminal window:
     {% highlight sh %}
 mkdir <CHORDS config dir>
 cd <CHORDS config dir>
 curl -O  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
+
 python chords_control --config
 python chords_control --update
 python chords_control --run
+
 # To reconfigure/update:
 curl -O  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
 python chords_control --config
@@ -63,6 +66,8 @@ python chords_control --update
 python chords_control --stop
 python chords_control --run
     {% endhighlight %}
+  </li>
+  </ul>
   </div>
   
   <div id="w10" class="tab-pane">
