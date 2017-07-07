@@ -23,7 +23,7 @@ _Note: On systems where docker requires root, you may need to use sudo to run th
    feature.
 
 #### Installation:
-````
+{% highlight sh %}
 # Select the configuration directory
 cd <configuration directory>
 
@@ -36,12 +36,11 @@ python chords_control --config
 
 # Update the CHORDS software
 python chords_control --update
-````
-
+{% endhighlight %}
 #### Running:
-````
+{% highlight sh %}
 python chords_control --run
-````
+{% endhighlight %}
 
 #### Verifying:
 * Point your browser at the CHORDS portal by entering the IP address of the system into the address bar. This may be
@@ -53,28 +52,28 @@ Raspberry Pi can take up to a couple of minutes.
   probably also want to uncheck "Restrict viewing of data" (under Configure).
 
 #### Shutting down:
-````
+{% highlight sh %}
 python chords_control --stop  
-````
+{% endhighlight %}
 * The CHORDS database will persist and be used the next time you run the CHORDS containers.
 
 
 #### Updating:
-````
+{% highlight sh %}
 curl -O  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
 python chords_control --config  # Optional if you are using, and want to stick with, the 'latest' release
 python chords_control --update
 python chords_control --stop
 python chords_control --run
-````
+{% endhighlight %}
 
 #### Monitoring:
 * You can watch the startup log for the chords application. It's not critical,
   but can be useful for diagnosing problems, and for monitoring the tedious
   asset compilation process, which takes several minutes on the Raspberry Pi:  
-````
+{% highlight sh %}
 docker logs -f chords_app
-````
+{% endhighlight %}
 
 #### Visualization
 Hit the _Visualization_ button to open a tab pointing to the builtin Grafana server.
