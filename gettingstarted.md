@@ -32,7 +32,7 @@ title: Getting Started
     </div>
   </div>
   
-<h3> Option 2: Other Machine Environments</h3>
+<h3> Option 2: Other O/S Environments</h3>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
@@ -42,7 +42,7 @@ title: Getting Started
     </div>
     <div class="col-sm-8">
       <h3>CHORDS Portal</h3>
-      <p>Configure the operating system, then run the CHORDS control script to create a CHORDS Portal instance.</p>
+      <p>Configure the operating system, and then run the CHORDS control script to create a CHORDS Portal instance.</p>
     </div>
   </div>
 
