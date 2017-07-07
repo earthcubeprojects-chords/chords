@@ -37,7 +37,7 @@ electronvolt,eV
 unified atomic mass unit,u
 astronomical unit,au
 atronomical unit BIPM 2006,ua
-nautical mile,NM
+nautical mile,nmile
 international knot,knot
 angstrom,A
 are,a
@@ -608,3 +608,58 @@ femtosievert,fSv
 attosievert,aSv
 zeptosievert,zSv
 yoctosievert,ySv
+baud,Bd
+knot,kt
+percent,%
+parts per volume,ppv
+parts per million,ppm
+parts per billion,ppb
+parts per trillion,ppt
+parts per quadrillion,ppq
+grade,grade
+pound,lb
+carat,kt
+grain,gr
+dram,dr
+short ton,ton
+printers pica,pica
+inch,in
+foot,ft
+yard,yd
+mile,mi
+rotations per second,rps
+rotation per minute,rpm
+bushel,bu
+peck,pk
+centimeter cubed,cc
+barrel,bbl
+pint,pt
+US fliud ounce,oz
+tablespoon,Tbl
+fliud dram,fldr
+teaspoon,tsp
+year,yr
+conventional mercury,Hg
+kilogram force,kgf
+ounce force,ozf
+pound force,lbf
+force gram,gf
+atmosphere,atm
+technical atmosphere,at
+centimeter H2O,cmH2O
+foot H2O,fth2O
+centimeter Hg,cmHg
+torr,mmHg
+inch Hg,inHg
+stokes,St
+calorie,cal
+therm,thm
+voltampere,VA
+horsepower,hp
+degree Fahrenheit, degF
+stilb,sb
+phot,ph
+nit,nt
+geopotential,gp
+potential vorticity unit,PVU
+dobson,DU
