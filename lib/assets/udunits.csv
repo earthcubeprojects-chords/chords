@@ -1,4 +1,5 @@
 name,abbreviation
+degree Celsius,degC
 meter,m
 gram,g
 second,s
@@ -21,7 +22,6 @@ siemens,S
 weber,Wb
 tesla,T
 henry,H
-degree Celsius,degC
 lumen,lm
 lux,lx
 katal,kat
