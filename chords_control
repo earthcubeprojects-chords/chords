@@ -403,7 +403,7 @@ class ChordsGit:
             'curl', '-O', '-s', self.docker_compose_yml
             ]
         if os_name == 'nt':
-          curl_cmd[1:1] = '-k'
+          curl_cmd[1:1] = ['-k']
 
         # Insert proxy switch
         curl_cmd[1:1] = proxy_switch
@@ -538,7 +538,7 @@ class Docker:
             'curl', '-s', self.dockerhub_tags_uri
             ]
         if os_name == 'nt':
-          curl_cmd[1:1] = '-k'
+          curl_cmd[1:1] = ['-k']
         
         curl_result = os_cmd(curl_cmd, printlines=False)
         tags = []
