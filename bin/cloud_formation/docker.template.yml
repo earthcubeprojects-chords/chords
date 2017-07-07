@@ -184,27 +184,27 @@ Mappings:
 
   AWSRegionArch2AMI:
     ap-northeast-1:
-      HVM64: ami-cbf90ecb
+      HVM64: ami-3bd3c45c
     ap-southeast-1:
-      HVM64: ami-68d8e93a
+      HVM64: ami-77af2014
     ap-southeast-2:
-      HVM64: ami-fd9cecc7
-    cn-north-1:
-      HVM64: ami-f239abcb
+      HVM64: ami-10918173
+    ca-north-1:
+      HVM64: ami-a7aa15c3
     eu-central-1:
-      HVM64: ami-a8221fb5
+      HVM64: ami-82be18ed 
     eu-west-1:
-      HVM64: ami-a10897d6
+      HVM64: ami-d7b9a2b1
     sa-east-1:
-      HVM64: ami-b52890a8
+      HVM64: ami-87dab1eb
     us-east-1:
-      HVM64: ami-1ecae776
+      HVM64: ami-a4c7edb2
     us-east-2:
-      HVM64: ami-f6035893
+      HVM64: ami-8a7859ef
     us-west-1:
-      HVM64: ami-a07379d9
+      HVM64: ami-327f5352
     us-west-2:
-      HVM64: ami-e7527ed7
+      HVM64: ami-6df1e514
 
 #####################################################################
 Resources:
