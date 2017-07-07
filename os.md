@@ -7,7 +7,7 @@ See the [detailed instructions](control.html) if the Quick Start recipes are not
 to get your portal running.
 
 ### Quick Start
-<ul class="nav nav-pills md-2">
+<ul class="nav nav-pills">
   <li class="active"><a data-toggle="tab" href="#ub">Ubuntu</a></li>
   <li><a data-toggle="tab" href="#centos">CentOS7</a></li>
   <li><a data-toggle="tab" href="#macos">MacOS</a></li>
@@ -17,7 +17,7 @@ to get your portal running.
 
 <div class="tab-content">
 
-  <div id="ub" class="tab-pane" active>
+  <div id="ub" class="tab-pane active">
     {% highlight sh %}
 sudo -i
 apt-get install docker.io docker-compose
