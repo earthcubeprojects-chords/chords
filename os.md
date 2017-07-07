@@ -23,7 +23,6 @@ sudo -i
 apt-get install docker.io docker-compose
 {% endhighlight %}
 {% include chords_control.md %}
-<ul><li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li></ul>
 </div>
 
 <div id="centos7" class="tab-pane">
@@ -34,24 +33,29 @@ systemctl enable docker
 systemctl start docker
 {% endhighlight %}
 {% include chords_control.md %}
-<ul><li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li></ul></div>
+</div>
   
 <div id="macos" class="tab-pane">
 <ul>
 <li>Install <a href="https://download.docker.com/mac/stable/Docker.dmg">Docker for Mac</a>.</li>
-<li>Run Docker and configure the preferences to start it automatically. </li>
+<li>Run Docker. Configure its preferences to start Docker automatically. </li>
 <li>Then in a terminal window:
 {% include chords_control.md %}
 </li>
-<li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li>
 </ul>
 </div>
   
 <div id="w10" class="tab-pane">
-{% highlight sh %}
-Docker for Windows
-{% endhighlight %}
-<ul><li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li></ul>
+<ul>
+<li>Install <a href="https://download.docker.com/win/stable/InstallDocker.msi">Docker for Windows</a></li>
+<li>Run Docker  (it may take a minute to start up).</li>
+<li>Install <a href="https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi">Python 2.7.</a></li>
+<li>Unpack <a href="http://www.paehl.com/open_source/?download=curl_754_0_ssl.zip">curl.</a> into a directory of your choice.</li>
+<li>Add C:\Python27 to the Path environment variable.</li>
+<li>Add the curl directory to the Path environment variable.</li>
+<li>Open a PowerShell, and:
+{% include chords_control.md %} </li>
+</ul>
 </div>
   
 <div id="w7" class="tab-pane">
