@@ -3,7 +3,7 @@ class VarsController < ApplicationController
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
   autocomplete :measured_property, :label, :full => true
-  autocomplete :unit, :abbreviation, :full => true
+  autocomplete :unit, :name, :full => true
 
   # GET /vars
   # GET /vars.json

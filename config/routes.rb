@@ -37,7 +37,7 @@ Rails.application.routes.draw do
 
   resources :vars do
     get :autocomplete_measured_property_label, :on => :collection
-    get :autocomplete_unit_abbreviation, :on => :collection
+    get :autocomplete_unit_name, :on => :collection
   end
 
   resources :about
