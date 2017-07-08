@@ -82,7 +82,7 @@ Login with admin/<CHORDS_ADMIN_PW> to begin configuring Grafana (login on the Ra
 
 The [Getting Started Guide](http://docs.grafana.org/guides/getting_started/) is a good place to begin
 learning about Grafana. There is also a [very useful tutorial](http://docs.grafana.org/features/datasources/influxdb/)
-for configuring the dashboard queris. Data Source parameters are:
+for configuring the dashboard queries. Data Source parameters are:
 
 <table class="table table-striped">
   <thead>
