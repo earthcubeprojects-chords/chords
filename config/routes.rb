@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :influxdb_tags
-  resources :topic_categories
   root      'dashboard#index'
 
   get 'about/data_urls'          => 'about#data_urls'
@@ -53,6 +51,8 @@ Rails.application.routes.draw do
   resources :users
   resources :urlbuilder
   resources :vars
+  resources :topic_categories
+  resources :influxdb_tags
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
