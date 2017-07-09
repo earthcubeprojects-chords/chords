@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615020238) do
+ActiveRecord::Schema.define(version: 20170709044607) do
+
+  create_table "influxdb_tags", force: :cascade do |t|
+    t.string   "name",          limit: 255
+    t.string   "value",         limit: 255
+    t.integer  "instrument_id", limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "influxdb_tags", ["instrument_id"], name: "index_influxdb_tags_on_instrument_id", using: :btree
 
   create_table "instruments", force: :cascade do |t|
     t.string   "name",                limit: 255
