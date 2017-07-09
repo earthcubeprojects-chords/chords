@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :influxdb_tags
   resources :topic_categories
   root      'dashboard#index'
 
