@@ -28,7 +28,8 @@ class InfluxdbTagsController < ApplicationController
 
     respond_to do |format|
       if @influxdb_tag.save
-        format.html { redirect_to @influxdb_tag, notice: 'Influxdb tag was successfully created.' }
+        format.html { redirect_to Instrument.find(@influxdb_tag.instrument_id), notice: 'InfluxDB Tag created.' }
+        # format.html { redirect_to @influxdb_tag, notice: 'Influxdb tag was successfully created.' }
         format.json { render :show, status: :created, location: @influxdb_tag }
       else
         format.html { render :new }
@@ -56,7 +57,8 @@ class InfluxdbTagsController < ApplicationController
   def destroy
     @influxdb_tag.destroy
     respond_to do |format|
-      format.html { redirect_to influxdb_tags_url, notice: 'Influxdb tag was successfully destroyed.' }
+      # format.html { redirect_to influxdb_tags_url, notice: 'Influxdb tag was successfully destroyed.' }
+      format.html { redirect_to Instrument.find(@influxdb_tag.instrument_id), notice: 'Influxdb tag was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -70,5 +72,7 @@ class InfluxdbTagsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def influxdb_tag_params
       params.fetch(:influxdb_tag, {})
+      params.require(:influxdb_tag).permit(:name, :value, :instrument_id)
+
     end
 end
