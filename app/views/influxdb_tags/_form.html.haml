@@ -6,5 +6,19 @@
         - @influxdb_tag.errors.full_messages.each do |msg|
           %li= msg
 
+
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name
+  .field
+    = f.label :value
+    %br/
+    = f.text_field :value
+  .field
+    = f.label :instrument_id
+    %br/
+    = f.text_field :instrument_id
+
   .actions
     = f.submit 'Save'

@@ -81,7 +81,38 @@
 
 
 
-    
+
+
+  .instrument_measurements
+    %h4
+      InfluxDB Tags
+    .row-fluid.instruments_variables_header
+      .col-sm-2
+        Tag Name
+      .col-sm-2
+        Value
+      .com-sm-2
+        &nbsp;
+
+    - @instrument.influxdb_tags.each do |influxdb_tag|
+      = render partial: 'influxdb_tags/bip_form', locals: {influxdb_tag: influxdb_tag}
+      .clear
+
+    .row-fluid
+      .col-sm-1
+        = form_for :influxdb_tag, url: influxdb_tags_path, :remote => false, :format => :js do |f|
+          = f.hidden_field :name, :value => 'tag'
+          = f.hidden_field :value, :value => 'value'
+          = f.hidden_field :instrument_id, :value => @instrument.id
+          - if can?(:manage, Instrument)
+            = f.submit :value	 => 'Add a New InfluxDB Tag'
+
+
+
+
+
+
+
   .instrument_variables
     %h4
       Variables
