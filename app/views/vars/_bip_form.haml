@@ -78,5 +78,5 @@
       = variable.measured_property.label
   .col-sm-2.delete_variable_container
     - if can?(:manage, Var)
-      = link_to variable, method: :copy, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
+      = link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
         = image_tag('trash.svg', :class=>"delete-icon", :style=>"height:16px;")
