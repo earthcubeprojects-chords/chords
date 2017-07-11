@@ -126,5 +126,14 @@ class Instrument < ActiveRecord::Base
     return data.join(', ')
     
   end
+  
+  def influxdb_tags_hash
+    influxdb_tags = Hash.new
+    self.influxdb_tags.each do |influxdb_tag|
+      influxdb_tags[influxdb_tag.name] = influxdb_tag.value
+    end
+    
+    return influxdb_tags
+  end
         
 end
