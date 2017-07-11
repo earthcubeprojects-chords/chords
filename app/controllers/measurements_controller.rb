@@ -109,17 +109,21 @@ class MeasurementsController < ApplicationController
             measured_at = Time.now.iso8601
           end
          
-          SaveTsPoint.call(
-            TsPoint,
-            { 
-              timestamp:  ConvertIsoToMs.call(measured_at),
-              site:       Instrument.find(cleansed_instrument_id).site_id, 
-              inst:       cleansed_instrument_id, 
-              var:        var.id,
-              test:       params.has_key?(:test),
-              value:      params[var.shortname].to_f
-            }
-          )
+         instrument = Instrument.find(cleansed_instrument_id)
+         
+
+          timestamp = ConvertIsoToMs.call(measured_at)
+          value     = params[var.shortname].to_f
+
+          tags = influxdb_tags = instrument.influxdb_tags_hash
+          tags[:site] = instrument.site_id
+          tags[:inst] = instrument.id
+          tags[:var]  = var.id
+          tags[:test] = params.has_key?(:test)
+          
+
+          SaveTsPoint.call(timestamp, value, tags)
+          
         end
       end
       
