@@ -46,6 +46,8 @@ class ProfilesController < ApplicationController
   end
   
   def export_configuration
+    authorize! :manage, Profile
+    
     @profiles = Profile.all
     @sites = Site.all
     @instruments = Instrument.all
@@ -59,6 +61,8 @@ class ProfilesController < ApplicationController
   end
   
   def import_configuration
+    authorize! :manage, Profile
+    
     if (params[:backup_file])
 
       # read and parse the JSON file
@@ -104,6 +108,8 @@ class ProfilesController < ApplicationController
   end
   
   def export_influxdb
+    authorize! :manage, Profile
+    
     command = "docker exec -i chords_influxdb influx_inspect export -database chords_ts_#{Rails.env} -datadir /var/lib/influxdb/data -waldir /var/lib/influxdb/wal -out /tmp/chords-influxdb-backup -compress"
     
     command_thread = Thread.new do
@@ -127,6 +133,8 @@ class ProfilesController < ApplicationController
   end  
 
   def import_influxdb
+    authorize! :manage, Profile
+    
     if (params[:influxdb_backup_file])
 
       # read and parse the JSON file
