@@ -52,6 +52,7 @@ class ProfilesController < ApplicationController
     @sites = Site.all
     @instruments = Instrument.all
     # @users = User.all
+    @influxdb_tags = InfluxdbTag.all
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
     
@@ -72,33 +73,40 @@ class ProfilesController < ApplicationController
 
       backup_hash = JSON.parse(file_content)
 
-
-      profiles = backup_hash[0]['profiles']
-      sites = backup_hash[0]['sites']
-      instruments = backup_hash[0]['instruments']
-      users = backup_hash[0]['users']
-      vars = backup_hash[0]['vars']
-      measured_properties = backup_hash[0]['measured_properties']
-
-      # Delete all records from the database
-      # Thor order is important here, as there are foreign keys in place
-      Var.delete_all
-      Instrument.delete_all
-      Site.delete_all
-      MeasuredProperty.delete_all
-      Profile.delete_all
-      # User.delete_all
+      # The order is important here, as there are foreign keys in place
+      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty]
       
-      
-      # Rebuild the configuration based on the uploaded JSON
-      ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
-      # ProfileHelper::replace_model_instances_from_JSON('User', users)
-      ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
-      ProfileHelper::replace_model_instances_from_JSON('Site', sites)
-      ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
-      ProfileHelper::replace_model_instances_from_JSON('Var', vars)
 
-      # Delete all mesurements from influxdb
+      # delete the existing configuration
+      # BUT ONLY FOR THE MODELS PRESENT IN THE CONFIG FILE
+      models.each do |model|        
+        if backup_hash[0].key?(model.model_name.plural)
+
+          # Delete all records from the database
+          eval("#{model.model_name.name}.delete_all")
+        end
+      end
+
+      
+      # Insert the new configuration
+      # BUT ONLY FOR THE MODELS PRESENT IN THE CONFIG FILE
+      models.reverse.each do |model|
+        if backup_hash[0].key?(model.model_name.plural)
+          
+          json = backup_hash[0][model.model_name.plural]
+
+          # remove the model name
+          if model.model_name.name == 'Profile'
+            json[0]['logo'] = nil
+          end
+          
+          # Rebuild the configuration based on the uploaded JSON
+          ProfileHelper::replace_model_instances_from_JSON(model, json)
+        end
+      end
+
+
+      # Delete all measurements from influxdb
       series = TsPoint.series.map {|x| x.to_s}[0]
       dropQuery = "drop series FROM \"#{series}\""
       queryresult = Influxer.client.query(dropQuery)
@@ -163,8 +171,6 @@ class ProfilesController < ApplicationController
 
   def upload_logo
     authorize! :manage, Profile
-    
-    Rails.logger.debug 'Profiles:upload_logo!'
   end
   
 
