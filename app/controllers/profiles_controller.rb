@@ -185,8 +185,14 @@ class ProfilesController < ApplicationController
       params.require(:profile).permit(
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
-        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi
+        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
+        :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_zipcode
         )
     end
 
 end
+
+
+
+
+
