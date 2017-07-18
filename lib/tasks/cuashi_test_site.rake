@@ -1,10 +1,11 @@
 namespace :db do
-  desc "test adding source to hydroserver"
-  task :cuahsi_test => :environment do |task, args|
+  desc "test adding site to hydroserver"
+  task :cuahsi_test_site => :environment do |task, args|
 
-  	data = Profile.create_cuahsi_source
+  	data = Site.create_cuahsi_site
+    puts data
 
-    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/sources")
+    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/sites")
 
     request = Net::HTTP::Post.new uri.path
     request.body = data.to_json
@@ -13,7 +14,5 @@ namespace :db do
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
       response = http.request request
     end
-    puts "done"
-    
   end
 end
