@@ -37,7 +37,7 @@ class Profile < ActiveRecord::Base
     p = Profile.find(1)
     citation = p.doi
     if citation.nil? || citation.empty?
-        citation = "missing citation"
+        citation = p.project
     end
     data = {
         "user" => 'chords',
@@ -50,7 +50,7 @@ class Profile < ActiveRecord::Base
         "email" =>p.contact_email,
         "address" => p.contact_address,
         "city" => p.contact_city,
-        "state" => "state",
+        "state" => p.contact_state,
         "zipcode" => p.contact_zipcode,
         "citation" => citation,
         "metadata" => 1
