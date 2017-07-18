@@ -7,7 +7,7 @@ namespace :db do
   	sourceName = 'name'
 
   	data = {
-	    "username" => username,
+	    "user" => username,
 	    "password" => password,
 	    "organization" =>"CHORDS",
 	    "description" => "desc",
@@ -27,7 +27,7 @@ namespace :db do
 
     request = Net::HTTP::Post.new uri.path
     request.body = data.to_json
-    # request['Content-Type'] = 'application/json'
+    request['Content-Type'] = 'application/json'
     
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
       # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
