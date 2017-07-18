@@ -87,6 +87,8 @@ ActiveRecord::Schema.define(version: 20170718180231) do
     t.string   "contact_email",         limit: 255,      default: "Contact Email",   null: false
     t.string   "contact_address",       limit: 255,      default: "Contact Address", null: false
     t.string   "contact_city",          limit: 255,      default: "Contact City",    null: false
+    t.string   "contact_state",         limit: 255,      default: "Contact State",   null: false
+    t.string   "contact_country",       limit: 255,      default: "Contact Country", null: false
     t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode", null: false
   end
 
