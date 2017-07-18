@@ -6,22 +6,7 @@ namespace :db do
   	sourceID = 1
   	sourceName = 'name'
 
-  	data = {
-	    "user" => username,
-	    "password" => password,
-	    "organization" =>"CHORDS",
-	    "description" => "desc",
-	    "link" => "http://example.com",
-	    "name" => "name",
-	    "phone" =>"012-345-6789",
-	    "email" =>"test@gmail.com",
-	    "address" => sourceName,
-	    "city" => sourceName,
-	    "state" => "California",
-	    "zipcode" => "098762",
-	    "citation" => "uploaded from python as a test",
-	    "metadata" => 1
-		}
+  	data = Profile.create_cuahsi_source
 
     uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/sources")
 

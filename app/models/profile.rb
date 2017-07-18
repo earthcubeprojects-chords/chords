@@ -32,4 +32,29 @@ class Profile < ActiveRecord::Base
     
     }])      
   end
+
+  def self.create_cuahsi_source
+    p = Profile.find(1)
+    citation = p.doi
+    if citation.nil? || citation.empty?
+        citation = "missing citation"
+    end
+    data = {
+        "user" => 'chords',
+        "password" => 'chords',
+        "organization" => p.affiliation,
+        "description" => p.project,
+        "link" => 'example.com',
+        "name" => p.contact_name,
+        "phone" =>p.contact_phone,
+        "email" =>p.contact_email,
+        "address" => p.contact_address,
+        "city" => p.contact_city,
+        "state" => "state",
+        "zipcode" => p.contact_zipcode,
+        "citation" => citation,
+        "metadata" => 1
+        }
+    return data
+  end
 end
