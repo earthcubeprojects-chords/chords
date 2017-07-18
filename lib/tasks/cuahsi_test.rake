@@ -15,12 +15,7 @@ namespace :db do
     request['Content-Type'] = 'application/json'
     
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
-      # http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      # http.ssl_version = :SSLv3
       response = http.request request
-
-      puts response.inspect
-      puts response.body
     end
     
     
