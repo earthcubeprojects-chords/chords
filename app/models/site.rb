@@ -8,8 +8,8 @@ class Site < ActiveRecord::Base
       Site.select("id, name").map {|site| [site.id, site.name] }
   end  
   
-  def self.create_cuahsi_site
-  	s = Site.find(1)
+  def self.create_cuahsi_site(site_id)
+  	s = Site.find(site_id)
 	  data = {
       "user" => 'chords',
       "password" => 'chords',

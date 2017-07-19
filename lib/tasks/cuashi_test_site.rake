@@ -2,8 +2,7 @@ namespace :db do
   desc "test adding site to hydroserver"
   task :cuahsi_test_site => :environment do |task, args|
 
-  	data = Site.create_cuahsi_site
-    puts data
+  	data = Site.create_cuahsi_site(1)
 
     uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/sites")
 

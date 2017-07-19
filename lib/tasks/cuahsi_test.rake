@@ -13,7 +13,6 @@ namespace :db do
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
       response = http.request request
     end
-    puts "done"
     
   end
 end
