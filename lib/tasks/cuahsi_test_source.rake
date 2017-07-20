@@ -1,6 +1,6 @@
 namespace :db do
   desc "test adding source to hydroserver"
-  task :cuahsi_test => :environment do |task, args|
+  task :cuahsi_test_source => :environment do |task, args|
 
   	data = Profile.create_cuahsi_source
 

@@ -1,11 +1,11 @@
 namespace :db do
-  desc "test adding variable to hydroserver"
-  task :cuahsi_test_variable => :environment do |task, args|
+  desc "test adding value to hydroserver"
+  task :cuahsi_test_value => :environment do |task, args|
 
-  	data = Var.create_cuahsi_variable(1)
+  	data = Measurement.create_cuahsi_value(1, 1, 1, 1, 1)
     puts data
 
-    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/variables")
+    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/values")
 
     request = Net::HTTP::Post.new uri.path
     request.body = data.to_json

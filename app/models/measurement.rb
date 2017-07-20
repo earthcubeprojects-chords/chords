@@ -51,6 +51,19 @@ class Measurement < ActiveRecord::Base
   def age
     time_ago_in_words(self.measured_at)
   end
+
+  def self.create_cuahsi_value(measurement_id, sourceID, variableID, siteID, methodID)
+    m = Measurement.find(measurement_id)
+    data = {
+      "user" => 'chords',
+      "password" => 'chords',
+      "SiteID" => siteID,
+      "VariableID" => variableID,
+      "MethodID" => methodID,
+      "SourceID" => sourceID,
+      "values" => [[m.measured_at.strftime("%Y-%m-%d %H:%M:%S"), m.value]]
+    }
+  end
   
 end
 
