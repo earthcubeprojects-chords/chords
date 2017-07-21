@@ -30,8 +30,8 @@ set :environment, ENV['RAILS_ENV']
 ENV.each { |k, v| env(k, v) }
 
 every 1.minutes do 
-  rake "archive:send_data"
-  rake "db:seed_measurements[1]"
+  # rake "archive:send_data"
+  # rake "db:seed_measurements[1]"
 end
 
 
