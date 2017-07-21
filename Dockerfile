@@ -51,9 +51,13 @@ RUN rm -rf .git log/* tmp/*
 # from the outside.
 EXPOSE 80
 
+
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
 # Configure an entry point, so we don't need to specify 
 # "bundle exec" for each of our commands.
 ENTRYPOINT ["bundle", "exec"]
 
 # Start CHORDS
-CMD ["/bin/bash", "-f", "chords_start.sh"]
+CMD ["cron", "&&", "/bin/bash", "-f", "chords_start.sh"]
