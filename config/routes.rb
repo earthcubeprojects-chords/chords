@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :site_types
   root      'dashboard#index'
 
   get 'about/data_urls'          => 'about#data_urls'
