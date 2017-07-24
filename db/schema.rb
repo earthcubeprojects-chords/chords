@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724184430) do
+ActiveRecord::Schema.define(version: 20170724192624) do
 
   create_table "influxdb_tags", force: :cascade do |t|
     t.string   "name",          limit: 255
@@ -100,14 +100,17 @@ ActiveRecord::Schema.define(version: 20170724184430) do
   end
 
   create_table "sites", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.decimal  "lat",                       precision: 12, scale: 9
-    t.decimal  "lon",                       precision: 12, scale: 9
-    t.datetime "created_at",                                                       null: false
-    t.datetime "updated_at",                                                       null: false
-    t.text     "description", limit: 65535
-    t.decimal  "elevation",                 precision: 12, scale: 6, default: 0.0
+    t.string   "name",         limit: 255
+    t.decimal  "lat",                        precision: 12, scale: 9
+    t.decimal  "lon",                        precision: 12, scale: 9
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
+    t.text     "description",  limit: 65535
+    t.decimal  "elevation",                  precision: 12, scale: 6, default: 0.0
+    t.integer  "site_type_id", limit: 4
   end
+
+  add_index "sites", ["site_type_id"], name: "index_sites_on_site_type_id", using: :btree
 
   create_table "topic_categories", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -154,5 +157,6 @@ ActiveRecord::Schema.define(version: 20170724184430) do
 
   add_foreign_key "instruments", "sites"
   add_foreign_key "measurements", "instruments"
+  add_foreign_key "sites", "site_types"
   add_foreign_key "vars", "instruments"
 end

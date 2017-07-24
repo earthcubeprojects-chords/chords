@@ -1,5 +1,4 @@
 class SiteType < ActiveRecord::Base
-	has_many :sites
 
 	validates :name, uniqueness: { case_sensitive: false }
   validates :definition, uniqueness: { case_sensitive: false }

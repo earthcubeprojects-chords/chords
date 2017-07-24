@@ -1,5 +1,6 @@
 class Site < ActiveRecord::Base
   has_many :instruments, :dependent => :destroy
+  belongs_to :site_type
   
   def self.initialize
   end
