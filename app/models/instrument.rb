@@ -37,7 +37,7 @@ class Instrument < ActiveRecord::Base
     if(defined? latest_point.to_a.first['time'])
       latest_time_ms = Time.parse(latest_point.to_a.first['time'])
     else
-      latest_time_ms = Time.now
+      latest_time_ms = "None"
     end          
     
     return latest_time_ms
