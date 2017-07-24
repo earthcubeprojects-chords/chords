@@ -140,5 +140,17 @@ class Instrument < ActiveRecord::Base
     
     return influxdb_tags
   end
+
+  def self.create_cuahsi_method(instrument_id)
+    inst = Instrument.find(instrument_id)
+    puts inst.name
+    data = {
+      "user" => 'chords',
+      "password" => 'chords',
+      "MethodDescription" => inst.name,
+      "MethodLink" => "http://example.com"
+      }
+    return data
+  end
         
 end
