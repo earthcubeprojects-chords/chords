@@ -5,7 +5,9 @@ namespace :db do
   	data = Measurement.create_cuahsi_value(1, 1, 1, 1, 1)
     puts data
 
-    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/values")
+
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/values"
+    uri = URI.parse(uri_path)
 
     request = Net::HTTP::Post.new uri.path
     request.body = data.to_json

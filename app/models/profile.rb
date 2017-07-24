@@ -46,8 +46,8 @@ class Profile < ActiveRecord::Base
         citation = p.project
     end
     data = {
-        "user" => 'chords',
-        "password" => 'chords',
+        "user" => Rails.application.config.x.archive['username'],
+        "password" => Rails.application.config.x.archive['password'],
         "organization" => p.affiliation,
         "description" => p.project,
         "link" => 'example.com',

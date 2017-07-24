@@ -145,8 +145,8 @@ class Instrument < ActiveRecord::Base
     inst = Instrument.find(instrument_id)
     puts inst.name
     data = {
-      "user" => 'chords',
-      "password" => 'chords',
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
       "MethodDescription" => inst.name,
       "MethodLink" => "http://example.com"
       }

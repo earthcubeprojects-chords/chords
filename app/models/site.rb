@@ -11,8 +11,8 @@ class Site < ActiveRecord::Base
   def self.create_cuahsi_site(site_id)
   	s = Site.find(site_id)
 	  data = {
-      "user" => 'chords',
-      "password" => 'chords',
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
       "SourceID" => 1,
       "SiteName" => s.name,
       "SiteCode" => 1,

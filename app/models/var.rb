@@ -97,8 +97,8 @@ class Var < ActiveRecord::Base
   def self.create_cuahsi_variable(var_id)
     var = Var.find(var_id)
     data = {
-      "user" => 'chords',
-      "password" => 'chords',
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
       "VariableCode" => var_id,
       "VariableName" => "Streamflow",
       # "NewVariableName" => "string",
