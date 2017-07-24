@@ -14,4 +14,6 @@ This instrument is expected to report a measurement every
   = @instrument.sample_rate_seconds
 seconds.
 %br
-= "The last measurement is #{@instrument.last_age} old."
+= "The first measurement was measured at #{@instrument.point_time_in_ms("first")}."
+%br
+= "The last measurement is #{@instrument.last_age} old. It was measured at #{@instrument.point_time_in_ms("last")}."

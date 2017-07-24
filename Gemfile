@@ -69,6 +69,12 @@ gem 'influxdb'
 # influxer
 gem "influxer", "~>0.5.0"
 
+
+# Chronic
+# gem 'chronic', ">-0.10.2"
+
+# Whenever 
+gem 'whenever', "~>0.9.7", :require => false
  
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -25,9 +25,14 @@ class Instrument < ActiveRecord::Base
       return nil
     end
   end
-  
-  def last_time_in_ms
-    latest_point = GetLastTsPoint.call(TsPoint, 'value', self.id)
+
+  # Returns the time of first or last measurement given parameter point ("first" or "last")
+  def point_time_in_ms(point)
+    if point == "last"
+      latest_point = GetLastTsPoint.call(TsPoint, 'value', self.id)
+    else
+      latest_point = GetFirstTsPoint.call(TsPoint, 'value', self.id)
+    end
 
     if(defined? latest_point.to_a.first['time'])
       latest_time_ms = Time.parse(latest_point.to_a.first['time'])
