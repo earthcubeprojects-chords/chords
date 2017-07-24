@@ -21,7 +21,10 @@ class ProfilesController < ApplicationController
   
     # update attributes
     if !@profile.update(profile_params)
-      flash.now[:alert] = "Invalid field(s). Please try again."
+      if (! @profile.valid?)
+        flash.now[:alert] = @profile.errors.full_messages.to_sentence
+      end
+
       render :index
       return
     end
