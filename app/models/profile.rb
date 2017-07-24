@@ -49,7 +49,8 @@ class Profile < ActiveRecord::Base
       response = http.request request
     end
 
-    url = "example.com" #url from profile
+    profile = Profile.find(1)
+    url = profile.domain_name
     sources = JSON.parse(response.body)
     id = sources.find {|source| source['SourceLink']==url}['SourceID']
     return id
