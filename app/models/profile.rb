@@ -32,4 +32,21 @@ class Profile < ActiveRecord::Base
     
     }])      
   end
+
+  def self.get_cuahsi_sourceid
+
+    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/GetSourcesJSON")
+
+    request = Net::HTTP::Post.new uri.path
+
+    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
+      response = http.request request
+    end
+
+    url = "example.com" #url from profile
+    sources = JSON.parse(response.body)
+    id = sources.find {|source| source['SourceLink']==url}['SourceID']
+    return id
+  end
+
 end
