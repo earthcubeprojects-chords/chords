@@ -16,7 +16,7 @@ class InstrumentsController < ApplicationController
       start_time_ms = Time.strptime(params[:after], '%Q')
     else
       time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
-      start_time_ms = @instrument.last_time_in_ms - eval(time_offset)
+      start_time_ms = @instrument.point_time_in_ms("last") - eval(time_offset)
     end
 
     # Initialze the return value
@@ -183,13 +183,13 @@ class InstrumentsController < ApplicationController
       end      
     end
     
-        @instrument.last_time_in_ms
+        @instrument.point_time_in_ms("last")
     # Determine the time range. Default to the most recent day
     end_time   = Time.now
     start_time = end_time - 1.day
 
     if params.key?(:last)
-      start_time = @instrument.last_time_in_ms
+      start_time = @instrument.point_time_in_ms("last")
 
       end_time   = start_time
     else
