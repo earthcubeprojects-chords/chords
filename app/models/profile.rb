@@ -39,7 +39,7 @@ class Profile < ActiveRecord::Base
     }])      
   end
 
-  def self.get_cuahsi_sourceid
+  def self.get_cuahsi_sourceid(url)
 
     uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/GetSourcesJSON")
 
@@ -49,8 +49,6 @@ class Profile < ActiveRecord::Base
       response = http.request request
     end
 
-    profile = Profile.find(1)
-    url = profile.domain_name
     sources = JSON.parse(response.body)
     id = sources.find {|source| source['SourceLink']==url}['SourceID']
     return id

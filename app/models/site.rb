@@ -9,11 +9,13 @@ class Site < ActiveRecord::Base
   end  
   
   def self.create_cuahsi_site(site_id)
+    profile = Profile.find(1)
+    url = profile.domain_name
   	s = Site.find(site_id)
 	  data = {
       "user" => 'chords',
       "password" => 'chords',
-      "SourceID" => 1,
+      "SourceID" => Profile.get_cuahsi_sourceid(url),
       "SiteName" => s.name,
       "SiteCode" => 1,
       "Latitude" => s.lat,
