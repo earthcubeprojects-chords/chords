@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724221838) do
+ActiveRecord::Schema.define(version: 20170725203405) do
+
+  create_table "archives", force: :cascade do |t|
+    t.string   "name",             limit: 255
+    t.string   "base_url",         limit: 255
+    t.string   "send_frequency",   limit: 255
+    t.datetime "last_archived_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "influxdb_tags", force: :cascade do |t|
     t.string   "name",          limit: 255
@@ -101,7 +110,6 @@ ActiveRecord::Schema.define(version: 20170724221838) do
   end
 
   create_table "sites", force: :cascade do |t|
-<<<<<<< HEAD
     t.string   "name",         limit: 255
     t.decimal  "lat",                        precision: 12, scale: 9
     t.decimal  "lon",                        precision: 12, scale: 9
@@ -110,17 +118,6 @@ ActiveRecord::Schema.define(version: 20170724221838) do
     t.text     "description",  limit: 65535
     t.decimal  "elevation",                  precision: 12, scale: 6, default: 0.0
     t.integer  "site_type_id", limit: 4
-=======
-    t.string   "name",             limit: 255
-    t.decimal  "lat",                            precision: 12, scale: 9
-    t.decimal  "lon",                            precision: 12, scale: 9
-    t.datetime "created_at",                                                            null: false
-    t.datetime "updated_at",                                                            null: false
-    t.text     "description",      limit: 65535
-    t.decimal  "elevation",                      precision: 12, scale: 6, default: 0.0
-    t.integer  "site_type_id",     limit: 4
-    t.integer  "cuahsi_site_code", limit: 4
->>>>>>> feature-310-retrieve_sourceID
   end
 
   add_index "sites", ["site_type_id"], name: "index_sites_on_site_type_id", using: :btree
