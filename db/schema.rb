@@ -11,11 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20170724192624) do
-=======
 ActiveRecord::Schema.define(version: 20170724212745) do
->>>>>>> development
 
   create_table "influxdb_tags", force: :cascade do |t|
     t.string   "name",          limit: 255
@@ -86,14 +82,15 @@ ActiveRecord::Schema.define(version: 20170724212745) do
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                   limit: 65535
-    t.string   "contact_name",          limit: 255,      default: "Contact Name",    null: false
-    t.string   "contact_phone",         limit: 255,      default: "Contact Phone",   null: false
-    t.string   "contact_email",         limit: 255,      default: "Contact Email",   null: false
-    t.string   "contact_address",       limit: 255,      default: "Contact Address", null: false
-    t.string   "contact_city",          limit: 255,      default: "Contact City",    null: false
-    t.string   "contact_state",         limit: 255,      default: "Contact State",   null: false
-    t.string   "contact_country",       limit: 255,      default: "Contact Country", null: false
-    t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode", null: false
+    t.string   "contact_name",          limit: 255,      default: "Contact Name",        null: false
+    t.string   "contact_phone",         limit: 255,      default: "Contact Phone",       null: false
+    t.string   "contact_email",         limit: 255,      default: "Contact Email",       null: false
+    t.string   "contact_address",       limit: 255,      default: "Contact Address",     null: false
+    t.string   "contact_city",          limit: 255,      default: "Contact City",        null: false
+    t.string   "contact_state",         limit: 255,      default: "Contact State",       null: false
+    t.string   "contact_country",       limit: 255,      default: "Contact Country",     null: false
+    t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode",     null: false
+    t.string   "domain_name",           limit: 255,      default: "portal.chordsrt.com", null: false
   end
 
   create_table "site_types", force: :cascade do |t|
