@@ -9,4 +9,9 @@ class Archive < ActiveRecord::Base
     }])      
   end
 
+
+  def self.name_options
+    options = { :none =>  'none', :CUAHSI => 'CUAHSI' }
+  end
+  
 end

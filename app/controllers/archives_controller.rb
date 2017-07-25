@@ -1,5 +1,8 @@
 class ArchivesController < ApplicationController
 
+  before_action :set_archive
+
+
   # GET /archives
 
   def index
@@ -36,6 +39,26 @@ class ArchivesController < ApplicationController
   
 
 
+  # PATCH/PUT /archives/1
+  # PATCH/PUT /archives/1.json
+
+  def update
+    authorize! :manage, Archive
+
+    respond_to do |format|
+      if @archive.update_attributes(archive_params)
+        format.html { redirect_to(@archive, :notice => 'User was successfully updated.') }
+        format.json { respond_with_bip(@archive) }
+      else
+        format.html { render :action => "index" }
+        format.json { respond_with_bip(@archive) }
+      end
+    end
+  end
+
+
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_archive
@@ -44,11 +67,10 @@ class ArchivesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def archive_params
-      # params.fetch(:archive, {:name ,:base_url, :send_frequency, :last_archived_at})
+      params.require(:archive).permit(:id, :name, :base_url, :send_frequency, :last_archived_at, :created_at, :updated_at)
       
-      params.require(:archive).permit(
-        :name ,:base_url, :send_frequency, :last_archived_at
-        )
+      
+      
     end
 end
 
