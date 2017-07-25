@@ -96,6 +96,7 @@ class Var < ActiveRecord::Base
 
   def self.create_cuahsi_variable(var_id)
     var = Var.find(var_id)
+    instrument = Instrument.find(var.instrument_id)
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
@@ -108,7 +109,7 @@ class Var < ActiveRecord::Base
       "SampleMedium"=> "Groundwater",
       "ValueType" => "Sample",
       "IsRegular" => 1,
-      "TimeSupport" => 0,
+      "TimeSupport" => instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
       "GeneralCategory" => "Hydrology",
