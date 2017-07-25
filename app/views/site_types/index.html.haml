@@ -1,0 +1,13 @@
+%p#notice= notice
+%h1 Listing Site Types
+%table{:style=>"git stawidth: 50%"}
+  %thead
+    %tr
+      %th Name
+      %th Definition
+  %tbody
+    - @site_types.each do |type|
+      %tr
+        %td= type.name
+        %td= type.definition
+        %td= link_to 'Show', type

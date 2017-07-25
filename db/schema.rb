@@ -71,8 +71,8 @@ ActiveRecord::Schema.define(version: 20170724221838) do
     t.string   "affiliation",           limit: 255
     t.text     "description",           limit: 65535
     t.binary   "logo",                  limit: 16777215
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.datetime "created_at",                                                             null: false
+    t.datetime "updated_at",                                                             null: false
     t.string   "timezone",              limit: 255
     t.boolean  "secure_administration",                  default: false
     t.boolean  "secure_data_viewing",                    default: true
@@ -82,14 +82,15 @@ ActiveRecord::Schema.define(version: 20170724221838) do
     t.string   "google_maps_key",       limit: 255,      default: "none"
     t.string   "page_title",            limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                   limit: 65535
-    t.string   "contact_name",          limit: 255,      default: "Contact Name",    null: false
-    t.string   "contact_phone",         limit: 255,      default: "Contact Phone",   null: false
-    t.string   "contact_email",         limit: 255,      default: "Contact Email",   null: false
-    t.string   "contact_address",       limit: 255,      default: "Contact Address", null: false
-    t.string   "contact_city",          limit: 255,      default: "Contact City",    null: false
-    t.string   "contact_state",         limit: 255,      default: "Contact State",   null: false
-    t.string   "contact_country",       limit: 255,      default: "Contact Country", null: false
-    t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode", null: false
+    t.string   "contact_name",          limit: 255,      default: "Contact Name",        null: false
+    t.string   "contact_phone",         limit: 255,      default: "Contact Phone",       null: false
+    t.string   "contact_email",         limit: 255,      default: "Contact Email",       null: false
+    t.string   "contact_address",       limit: 255,      default: "Contact Address",     null: false
+    t.string   "contact_city",          limit: 255,      default: "Contact City",        null: false
+    t.string   "contact_state",         limit: 255,      default: "Contact State",       null: false
+    t.string   "contact_country",       limit: 255,      default: "Contact Country",     null: false
+    t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode",     null: false
+    t.string   "domain_name",           limit: 255,      default: "portal.chordsrt.com", null: false
   end
 
   create_table "site_types", force: :cascade do |t|
@@ -100,6 +101,14 @@ ActiveRecord::Schema.define(version: 20170724221838) do
   end
 
   create_table "sites", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.decimal  "lat",                        precision: 12, scale: 9
+    t.decimal  "lon",                        precision: 12, scale: 9
+    t.datetime "created_at",                                                        null: false
+    t.datetime "updated_at",                                                        null: false
+    t.text     "description",  limit: 65535
+    t.decimal  "elevation",                  precision: 12, scale: 6, default: 0.0
+    t.integer  "site_type_id", limit: 4
     t.string   "name",             limit: 255
     t.decimal  "lat",                            precision: 12, scale: 9
     t.decimal  "lon",                            precision: 12, scale: 9
@@ -109,7 +118,6 @@ ActiveRecord::Schema.define(version: 20170724221838) do
     t.decimal  "elevation",                      precision: 12, scale: 6, default: 0.0
     t.integer  "site_type_id",     limit: 4
     t.integer  "cuahsi_site_code", limit: 4
-  end
 
   add_index "sites", ["site_type_id"], name: "index_sites_on_site_type_id", using: :btree
 

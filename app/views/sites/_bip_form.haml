@@ -3,6 +3,7 @@
   %td= best_in_place site, :lat,       :as => :input
   %td= best_in_place site, :lon,       :as => :input
   %td= best_in_place site, :elevation, :as => :input
+  %td= best_in_place site, :site_type_id, :as => :select, :collection => SiteType.all.map { |i| [i.id, i.name] }
   %td= button_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' }
 %tr
   %td{:colspan => "4"}

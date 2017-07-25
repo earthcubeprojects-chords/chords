@@ -94,4 +94,27 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
+  def self.create_cuahsi_variable(var_id)
+    var = Var.find(var_id)
+    data = {
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
+      "VariableCode" => var_id,
+      "VariableName" => "Streamflow",
+      # "NewVariableName" => "string",
+      # "VariableDefinition" => var.name,
+      "Speciation" => "Not Applicable",
+      "VariableUnitsID" => 349,
+      "SampleMedium"=> "Groundwater",
+      "ValueType" => "Sample",
+      "IsRegular" => 1,
+      "TimeSupport" => 0,
+      "TimeUnitsID" => 100,
+      "DataType" => "Unknown",
+      "GeneralCategory" => "Hydrology",
+      "NoDataValue" => -9999
+      }
+    return data
+  end
+
 end
