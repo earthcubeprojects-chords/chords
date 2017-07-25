@@ -1,0 +1,33 @@
+%h1 Archive Configuration
+
+
+= form_for(:archive, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
+  .configuration
+    .line
+      .title
+        Archive Name
+      .field
+        #{f.text_field('name', size: 60)}
+    .line
+      .title
+        Base URL of Archive
+      .field
+        #{f.text_field('base_url', size: 60)}
+    .line
+      .title
+        How often should data be pushed to the archive?
+      .field
+        #{f.text_field('send_frequency', size: 60)}
+    .line
+      .title
+        Data most recently sent to archive at
+      .field
+        #{f.text_field('last_archived_at', size: 60)}
+
+    .line
+      .center
+        = f.submit('Save')
+
+    .line
+      &nbsp;
+
