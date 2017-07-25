@@ -33,7 +33,7 @@ class Site < ActiveRecord::Base
       "password" => Rails.application.config.x.archive['password'],
       "SourceID" => Profile.get_cuahsi_sourceid(url),
       "SiteName" => s.name,
-      "SiteCode" => 1,
+      "SiteCode" => s.cuahsi_site_code,
       "Latitude" => s.lat,
       "Longitude" => s.lon,
       "SiteType" => "Stream",
