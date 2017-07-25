@@ -65,7 +65,7 @@ class Profile < ActiveRecord::Base
         "password" => 'chords',
         "organization" => p.affiliation,
         "description" => p.project,
-        "link" => 'example.com',
+        "link" => p.domain_name,
         "name" => p.contact_name,
         "phone" =>p.contact_phone,
         "email" =>p.contact_email,
