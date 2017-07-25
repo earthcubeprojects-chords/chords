@@ -1,0 +1,15 @@
+default: &default
+    type:   'cuahsi'
+    username:  'chords'
+    password:  'chords'
+    base_url:  'http://hydroportal.cuahsi.org/CHORDS/index.php'
+    
+development:
+  <<: *default
+  
+test:
+  <<: *default
+  
+production:
+  <<: *default
+  

@@ -11,7 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170724192624) do
+=======
+ActiveRecord::Schema.define(version: 20170724212745) do
+>>>>>>> development
 
   create_table "influxdb_tags", force: :cascade do |t|
     t.string   "name",          limit: 255
@@ -71,8 +75,8 @@ ActiveRecord::Schema.define(version: 20170724192624) do
     t.string   "affiliation",           limit: 255
     t.text     "description",           limit: 65535
     t.binary   "logo",                  limit: 16777215
-    t.datetime "created_at",                                                         null: false
-    t.datetime "updated_at",                                                         null: false
+    t.datetime "created_at",                                                             null: false
+    t.datetime "updated_at",                                                             null: false
     t.string   "timezone",              limit: 255
     t.boolean  "secure_administration",                  default: false
     t.boolean  "secure_data_viewing",                    default: true
