@@ -49,3 +49,5 @@ chords_env.sh
 .env*
 /chords*.yml
 
+#archive configuration
+config/archive.yml
