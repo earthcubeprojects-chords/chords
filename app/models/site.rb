@@ -36,7 +36,7 @@ class Site < ActiveRecord::Base
       "SiteCode" => s.cuahsi_site_code,
       "Latitude" => s.lat,
       "Longitude" => s.lon,
-      "SiteType" => "Stream",
+      "SiteType" => s.site_type.name,
       "Elevation_m" => s.elevation
       }
 	  return data
