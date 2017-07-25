@@ -1,0 +1,9 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @site_type.name
+%p
+  %strong Definition:
+  = @site_type.definition
+
+= link_to 'Back', site_types_path

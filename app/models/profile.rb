@@ -39,6 +39,21 @@ class Profile < ActiveRecord::Base
     }])      
   end
 
+  def self.get_cuahsi_sourceid(url)
+
+    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/GetSourcesJSON")
+
+    request = Net::HTTP::Post.new uri.path
+
+    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
+      response = http.request request
+    end
+
+    sources = JSON.parse(response.body)
+    id = sources.find {|source| source['SourceLink']==url}['SourceID']
+    return id
+  end
+
   def self.create_cuahsi_source
     p = Profile.find(1)
     citation = p.doi
@@ -50,7 +65,7 @@ class Profile < ActiveRecord::Base
         "password" => Rails.application.config.x.archive['password'],
         "organization" => p.affiliation,
         "description" => p.project,
-        "link" => 'example.com',
+        "link" => p.domain_name,
         "name" => p.contact_name,
         "phone" =>p.contact_phone,
         "email" =>p.contact_email,
