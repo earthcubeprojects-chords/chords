@@ -54,6 +54,7 @@ class SitesController < ApplicationController
     authorize! :manage, Site
     
     @site = Site.new(site_params)
+    @site.cuahsi_site_code = Site.get_cuahsi_sitecode
 
     respond_to do |format|
       if @site.save
