@@ -143,12 +143,13 @@ class Instrument < ActiveRecord::Base
 
   def self.create_cuahsi_method(instrument_id)
     inst = Instrument.find(instrument_id)
-    puts inst.name
+    p = Profile.find(1)
+    link = p.domain_name + "/instruments/" + instrument_id.to_s
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
       "MethodDescription" => inst.name,
-      "MethodLink" => "http://example.com"
+      "MethodLink" => link
       }
     return data
   end
