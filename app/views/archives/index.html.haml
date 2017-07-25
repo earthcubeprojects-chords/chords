@@ -9,8 +9,6 @@
       .field        
         = best_in_place @archive, :name , :as => :select, :collection => Archive.name_options
         
-
-        
     .line
       .title
         Base URL of Archive
@@ -20,13 +18,14 @@
       .title
         How often should data be pushed to the archive?
       .field
-        #{f.text_field('send_frequency', size: 60)}
+        = best_in_place @archive, :send_frequency , :as => :select, :collection => Archive.send_frequency_options
+
         
     .line
       .title
         Data most recently sent to archive at
       .field
-        #{f.text_field('last_archived_at', size: 60)}
+        #{@archive.last_archived_at}
 
     .line
       .center
