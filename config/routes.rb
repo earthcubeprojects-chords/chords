@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :archives
   resources :site_types
   root      'dashboard#index'
 
