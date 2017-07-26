@@ -101,6 +101,7 @@ class Var < ActiveRecord::Base
 
   def self.create_cuahsi_variable(var_id)
     general_categories = list_general_categories
+    var = Var.find(var_id)
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
@@ -116,7 +117,7 @@ class Var < ActiveRecord::Base
       "TimeSupport" => var.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
-      "GeneralCategory" => general_categories[var.general_category_id - 1],
+      "GeneralCategory" => general_categories[var.general_category_id.to_i - 1],
       "NoDataValue" => -9999
       }
     return data
