@@ -23,8 +23,13 @@
         %ul.nav.navbar-nav.navbar-right
           - if can? :manage, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
-            - if can? :manage, Profile
-              %li= link_to 'Configure', '/profiles'
+
+            - if can? :manage, Archive
+              %li= link_to 'Archive', '/archives'
+
+
+          - if can? :manage, Profile
+            %li= link_to 'Configure', '/profiles'
             %li= link_to 'Users', '/users'
           - if user_signed_in?
             %li= link_to 'Sign Out', '/users/sign_out'
