@@ -94,9 +94,13 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
+  def self.list_general_categories
+    categories = ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
+    return categories
+  end
+
   def self.create_cuahsi_variable(var_id)
-    general_categories = ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
-    var = Var.find(var_id)
+    general_categories = list_general_categories
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],

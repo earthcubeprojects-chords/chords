@@ -75,7 +75,7 @@
     .variable_header
       General Category:
     - if can?(:manage, Var)
-      = best_in_place variable, :general_category_id, :as => :select, :collection => ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
+      = best_in_place variable, :general_category_id, :as => :select, :collection => Var.list_general_categories
     - else
       = variable.general_category
 
