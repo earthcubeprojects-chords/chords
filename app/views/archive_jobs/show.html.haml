@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Archive name:
+  = @archive_job.archive_name
+%p
+  %b Start at:
+  = @archive_job.start_at
+%p
+  %b End at:
+  = @archive_job.end_at
+%p
+  %b Status:
+  = @archive_job.status
+%p
+  %b Message:
+  = @archive_job.message
+
+= link_to 'Edit', edit_archive_job_path(@archive_job)
+\|
+= link_to 'Back', archive_jobs_path
