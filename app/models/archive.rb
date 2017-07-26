@@ -47,8 +47,8 @@ class Archive < ActiveRecord::Base
       password = ActionController::Base.helpers.sanitize(params['password'])
 
       # convert to YAML (escape single quotes, etc.)
-      username = username.to_yaml
-      password = password.to_yaml
+      # username = username.to_yaml
+      # password = password.to_yaml
 
       # insert parameters into template
       template = File.new(template_file_path).read
