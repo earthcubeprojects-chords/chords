@@ -133,6 +133,12 @@ curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=grant read on $influxdb_dbname to $influxdb_guest_user"
 set +x
 
+# start cron
+touch /var/log/whenever.log
+touch /var/log/cron.log
+whenever -w
+service cron restart
+
 echo "**** Starting web server."
 mkdir -p tmp/pids/
 rm -f tmp/pids/unicorn.pid
