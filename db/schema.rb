@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725223909) do
+ActiveRecord::Schema.define(version: 20170726173830) do
 
   create_table "influxdb_tags", force: :cascade do |t|
     t.string   "name",          limit: 255
@@ -152,7 +152,7 @@ ActiveRecord::Schema.define(version: 20170725223909) do
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
-    t.string   "general_category",     limit: 255
+    t.string   "general_category",     limit: 255, default: "9"
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree

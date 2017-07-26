@@ -1,5 +1,5 @@
 class AddGeneralCategoryToVars < ActiveRecord::Migration
   def change
-    add_column :vars, :general_category, :string
+    change_column_default :vars, :general_category, "9"
   end
 end
