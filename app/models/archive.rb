@@ -80,4 +80,16 @@ class Archive < ActiveRecord::Base
       self.password = nil
     end
   end
+  
+  def calculate_end_at (start_at, execution_start_time)
+    temp_end_at = eval("start_at + #{self.send_frequency}")
+    
+    if(temp_end_at > execution_start_time)
+      end_at = execution_start_time
+    else
+      end_at = temp_end_at
+    end
+    
+    return end_at
+  end
 end
