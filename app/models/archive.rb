@@ -3,7 +3,7 @@ class Archive < ActiveRecord::Base
   attr_accessor :username,  :password
   
   
-  def self.initialize
+  def self.populate
     Archive.create([{
       name: 'none',
       base_url: '', 

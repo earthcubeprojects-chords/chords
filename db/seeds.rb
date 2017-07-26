@@ -19,3 +19,5 @@ User.create(:email => "admin@chordsrt.com",    :password => "realtimedata", :is_
 MeasuredProperty.populate
 TopicCategory.populate
 SiteType.populate
+
+Archive.populate
