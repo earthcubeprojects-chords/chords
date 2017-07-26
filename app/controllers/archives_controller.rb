@@ -8,6 +8,8 @@ class ArchivesController < ApplicationController
   def index
     authorize! :manage, Archive
     
+    @archive.get_credentials
+    
     if @archive == nil
       Archive.initialize
       @archive = Archive.first
@@ -20,6 +22,7 @@ class ArchivesController < ApplicationController
   # PATCH/PUT /archives/1
   def create
     authorize! :manage, Archive
+  
   
     # update attributes
     if !@archive.update(archive_params)
@@ -41,13 +44,28 @@ class ArchivesController < ApplicationController
 
   # PATCH/PUT /archives/1
   # PATCH/PUT /archives/1.json
+  
+  def update_credentials
+    authorize! :manage, Archive
+
+    respond_to do |format|
+      if @archive.update_attributes(archive_params) && @archive.update_credentials(archive_params)
+        format.html { redirect_to(archives_path, :notice => 'Archive Credentials successfully updated.') }
+        format.json { respond_with_bip(@archive) }
+      else
+        format.html { render :action => "index" }
+        format.json { respond_with_bip(@archive) }
+      end
+    end
+
+  end
 
   def update
     authorize! :manage, Archive
 
     respond_to do |format|
       if @archive.update_attributes(archive_params)
-        format.html { redirect_to(@archive, :notice => 'User was successfully updated.') }
+        format.html { redirect_to(@archive, :notice => 'Configurations was successfully updated.') }
         format.json { respond_with_bip(@archive) }
       else
         format.html { render :action => "index" }
@@ -67,7 +85,7 @@ class ArchivesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def archive_params
-      params.require(:archive).permit(:id, :name, :base_url, :send_frequency, :last_archived_at, :created_at, :updated_at)
+      params.require(:archive).permit(:id, :name, :base_url, :send_frequency, :last_archived_at, :created_at, :updated_at, :username, :password)
       
       
       

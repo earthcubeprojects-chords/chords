@@ -2,18 +2,15 @@
 
 
 = form_for(:archive, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
-  .configuration
+  %div
     .line
       .title
         Archive Name
       .field        
         = best_in_place @archive, :name , :as => :select, :collection => Archive.name_options
         
-    .line
-      .title
-        Base URL of Archive
-      .field
-        #{f.text_field('base_url', size: 60)}
+        
+        
     .line
       .title
         How often should data be pushed to the archive?
@@ -28,9 +25,37 @@
         #{@archive.last_archived_at}
 
     .line
+      &nbsp;
+      
+      
+      
+%h1 Archive Credentials      
+= form_for(:archive, method: "post", :url => { :action => :update_credentials }, multipart: true, html: {class: "new_or_edit_form" }) do |f|
+  .configuration
+    .line
+      .title
+        Base URL of Archive
+      .field
+        #{f.text_field('base_url', size: 60)}
+
+
+    .line
+      .title
+        Archive Username
+      .field        
+        #{f.text_field('username', size: 60)}
+      
+    .line
+      .title
+        Archive Password
+      .field
+        #{f.text_field('password', size: 60)}
+
+      
+
+    .line
       .center
         = f.submit('Save')
 
     .line
       &nbsp;
-

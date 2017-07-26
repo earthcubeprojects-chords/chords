@@ -26,6 +26,10 @@ Rails.application.routes.draw do
   post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
 
 
+  post 'archives/update_credentials'              => 'archives#update_credentials'
+
+
+
   # devise_for :users
   devise_for :users, controllers: {
      sessions: 'users/sessions'
