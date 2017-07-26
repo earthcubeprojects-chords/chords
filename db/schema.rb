@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170724221838) do
+ActiveRecord::Schema.define(version: 20170725203405) do
+
+  create_table "archives", force: :cascade do |t|
+    t.string   "name",             limit: 255
+    t.string   "base_url",         limit: 255
+    t.string   "send_frequency",   limit: 255
+    t.datetime "last_archived_at"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "influxdb_tags", force: :cascade do |t|
     t.string   "name",          limit: 255

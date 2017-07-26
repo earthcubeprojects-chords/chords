@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :archives
   resources :site_types
   root      'dashboard#index'
 
@@ -23,6 +24,10 @@ Rails.application.routes.draw do
   get 'profiles/export_influxdb'              => 'profiles#export_influxdb'
   get 'profiles/import_influxdb'              => 'profiles#import_influxdb'
   post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
+
+
+  post 'archives/update_credentials'              => 'archives#update_credentials'
+
 
 
   # devise_for :users
