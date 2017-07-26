@@ -5,9 +5,11 @@ namespace :db do
   desc "test adding variable to hydroserver"
   task :cuahsi_variable => :environment do |task, args|
 
-  	data = Var.create_cuahsi_variable(1)
-    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
+    Var.find_each do |var|
+    	data = Var.create_cuahsi_variable(var.id)
+      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
 
-    CuahsiHelper.send_request(uri_path, data)
+      CuahsiHelper.send_request(uri_path, data)
+    end
   end
 end

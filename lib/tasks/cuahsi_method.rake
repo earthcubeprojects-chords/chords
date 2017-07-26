@@ -5,10 +5,12 @@ namespace :db do
   desc "test adding method to hydroserver"
   task :cuahsi_method => :environment do |task, args|
 
-  	data = Instrument.create_cuahsi_method(1)
-    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/methods"
+  	Instrument.find_each do |instrument|
+	  	data = Instrument.create_cuahsi_method(instrument.id)
+	    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/methods"
 
-    CuahsiHelper.send_request(uri_path, data)
+	    CuahsiHelper.send_request(uri_path, data)
+	  end
 
   end
 end
