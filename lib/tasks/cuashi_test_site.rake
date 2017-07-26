@@ -4,7 +4,8 @@ namespace :db do
 
   	data = Site.create_cuahsi_site(1)
 
-    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/sites")
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sites"
+    uri = URI.parse(uri_path)
 
     request = Net::HTTP::Post.new uri.path
     request.body = data.to_json
@@ -13,5 +14,6 @@ namespace :db do
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
       response = http.request request
     end
+
   end
 end

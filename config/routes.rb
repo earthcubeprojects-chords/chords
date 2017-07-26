@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :archives
+  resources :site_types
   root      'dashboard#index'
 
   get 'about/data_urls'          => 'about#data_urls'
@@ -22,6 +24,10 @@ Rails.application.routes.draw do
   get 'profiles/export_influxdb'              => 'profiles#export_influxdb'
   get 'profiles/import_influxdb'              => 'profiles#import_influxdb'
   post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
+
+
+  post 'archives/update_credentials'              => 'archives#update_credentials'
+
 
 
   # devise_for :users
@@ -53,6 +59,7 @@ Rails.application.routes.draw do
   resources :vars
   resources :topic_categories
   resources :influxdb_tags
+  resources :site_types
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -55,8 +55,8 @@ class Measurement < ActiveRecord::Base
   def self.create_cuahsi_value(measurement_id, sourceID, variableID, siteID, methodID)
     m = Measurement.find(measurement_id)
     data = {
-      "user" => 'chords',
-      "password" => 'chords',
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
       "SiteID" => siteID,
       "VariableID" => variableID,
       "MethodID" => methodID,

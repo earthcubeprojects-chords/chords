@@ -2,7 +2,8 @@ namespace :db do
   desc "test getSitesJson"
   task :test_GetSitesJSON=> :environment do |task, args|
 
-    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/GetSitesJSON")
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSitesJSON"
+    uri = URI.parse(uri_path)
 
     request = Net::HTTP::Post.new uri.path
 

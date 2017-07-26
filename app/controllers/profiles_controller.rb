@@ -21,7 +21,10 @@ class ProfilesController < ApplicationController
   
     # update attributes
     if !@profile.update(profile_params)
-      flash.now[:alert] = "Invalid field(s). Please try again."
+      if (! @profile.valid?)
+        flash.now[:alert] = @profile.errors.full_messages.to_sentence
+      end
+
       render :index
       return
     end
@@ -186,7 +189,7 @@ class ProfilesController < ApplicationController
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
         :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
-        :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country, :contact_zipcode
+        :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country, :contact_zipcode, :domain_name
         )
     end
 
