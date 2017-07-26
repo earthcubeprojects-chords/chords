@@ -68,9 +68,16 @@ class Archive < ActiveRecord::Base
   
   def get_credentials
     file_path = "#{Rails.root.to_s}/config/archive.yml"
-    config = YAML.load(ERB.new(File.new(file_path).read).result)[Rails.env]
 
-    self.username = config['username']
-    self.password = config['password']
+    if File.exists? file_path
+
+      config = YAML.load(ERB.new(File.new(file_path).read).result)[Rails.env]
+
+      self.username = config['username']
+      self.password = config['password']
+    else
+      self.username = nil
+      self.password = nil
+    end
   end
 end
