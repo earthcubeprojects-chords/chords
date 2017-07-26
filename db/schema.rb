@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725203405) do
+ActiveRecord::Schema.define(version: 20170726035824) do
+
+  create_table "archive_jobs", force: :cascade do |t|
+    t.string   "archive_name", limit: 255
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.string   "status",       limit: 255
+    t.text     "message",      limit: 65535
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
 
   create_table "archives", force: :cascade do |t|
     t.string   "name",             limit: 255
