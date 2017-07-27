@@ -45,6 +45,7 @@ class Archive < ActiveRecord::Base
       #sanitize the user input
       username = ActionController::Base.helpers.sanitize(params['username'])
       password = ActionController::Base.helpers.sanitize(params['password'])
+      base_url = ActionController::Base.helpers.sanitize(params['base_url'])
 
       # convert to YAML (escape single quotes, etc.)
       # username = username.to_yaml
@@ -52,7 +53,7 @@ class Archive < ActiveRecord::Base
 
       # insert parameters into template
       template = File.new(template_file_path).read
-      new_archive_configuration = template % [username, password]
+      new_archive_configuration = template % [username, password, base_url]
 
       # save the template
       archive_configuration_file_path = "#{Rails.root.to_s}/config/archive.yml"
@@ -75,6 +76,7 @@ class Archive < ActiveRecord::Base
 
       self.username = config['username']
       self.password = config['password']
+      self.base_url = config['base_url']
     else
       self.username = nil
       self.password = nil

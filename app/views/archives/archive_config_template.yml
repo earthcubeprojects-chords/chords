@@ -1,6 +1,7 @@
 default: &default
     username:  %s
     password:  %s
+    base_url: %s
     
 development:
   <<: *default
