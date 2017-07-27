@@ -9,7 +9,7 @@ namespace :db do
 	  	data = Instrument.create_cuahsi_method(instrument.id)
 	    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/methods"
 
-	    CuahsiHelper.send_request(uri_path, data)
+	    send_request(uri_path, data)
 	  end
 
   end
