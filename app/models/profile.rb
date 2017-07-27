@@ -1,4 +1,7 @@
 class Profile < ActiveRecord::Base
+  require 'task_helpers/cuahsi_helper'
+  include CuahsiHelper
+
 
   validates :doi, allow_blank: true, format: {
     with:    /10.\d{4,9}\/[-._;()\/:A-Z0-9]+/i,
@@ -39,18 +42,24 @@ class Profile < ActiveRecord::Base
     }])      
   end
 
+  def self.get_cuahsi_sources
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSourcesJSON"
+    # uri = URI.parse(uri_path)
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
+    # request = Net::HTTP::Post.new uri.path
+
+    # response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
+    #   response = http.request request
+    # end
+    # return JSON.parse(response.body)
+  end
+
   def self.get_cuahsi_sourceid(url)
-
-    uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/GetSourcesJSON")
-
-    request = Net::HTTP::Post.new uri.path
-
-    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
-      response = http.request request
+    sources = get_cuahsi_sources
+    id = sources.find {|source| source['SourceLink']==url}
+    if id != nil
+      return id["SourceID"]
     end
-
-    sources = JSON.parse(response.body)
-    id = sources.find {|source| source['SourceLink']==url}['SourceID']
     return id
   end
 

@@ -1,6 +1,8 @@
 class Instrument < ActiveRecord::Base
-
+  
+  require 'task_helpers/cuahsi_helper'
   include Rails.application.routes.url_helpers
+  include CuahsiHelper
   
   belongs_to :site
 
@@ -140,6 +142,18 @@ class Instrument < ActiveRecord::Base
     
     return influxdb_tags
   end
+
+  def self.get_cuahsi_methods
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetMethodsJSON"
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
+  end
+
+  def self.check_duplicate(method_link)
+    methods = get_cuahsi_methods
+    id = methods.find {|method| method['MethodLink']==method_link}
+    return id
+  end
+
 
   def self.create_cuahsi_method(instrument_id)
     inst = Instrument.find(instrument_id)

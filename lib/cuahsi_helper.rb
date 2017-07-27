@@ -1,6 +1,6 @@
 module CuahsiHelper
 
-	def self.send_request(uri_path, data)
+	def send_request(uri_path, data)
     uri = URI.parse(uri_path)
 
     request = Net::HTTP::Post.new uri.path
