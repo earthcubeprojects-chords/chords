@@ -10,6 +10,8 @@ module CuahsiHelper
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
       response = http.request request
     end
+    
+    return response
   end
   
 end
