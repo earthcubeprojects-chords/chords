@@ -8,7 +8,7 @@ namespace :db do
     	if Var.check_duplicate(var.id) == nil
     		data = Var.create_cuahsi_variable(var.id)
 	      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
-	      send_request(uri_path, data)
+	      CuahsiHelper::send_request(uri_path, data)
 	    end
     end
   end

@@ -28,6 +28,8 @@ module ChordTestbed
     # Bootstrap
     config.assets.paths << Rails.root.join("vendor/bootstrap-3.3.6-dist")
 
+    config.autoload_paths += %W(#{config.root}/lib)
+
     # To get rid of console complaints in docker deployment
     #config.web_console.whitelisted_ips = '192.168.0.0/16'
   end

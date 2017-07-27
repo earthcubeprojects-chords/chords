@@ -1,4 +1,8 @@
 class Var < ActiveRecord::Base
+
+  require 'task_helpers/cuahsi_helper'
+  include CuahsiHelper
+  
   belongs_to :instrument
   belongs_to :measured_property
 
@@ -96,14 +100,7 @@ class Var < ActiveRecord::Base
 
   def self.get_cuahsi_variables
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
-    uri = URI.parse(uri_path)
-
-    request = Net::HTTP::Post.new uri.path
-
-    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
-      response = http.request request
-    end
-    return JSON.parse(response.body)
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
   end
 
   def self.check_duplicate(var_id)
