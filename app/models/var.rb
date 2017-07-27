@@ -94,6 +94,25 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
+  def self.get_cuahsi_variables
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
+    uri = URI.parse(uri_path)
+
+    request = Net::HTTP::Post.new uri.path
+
+    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
+      response = http.request request
+    end
+    return JSON.parse(response.body)
+  end
+
+  def self.check_duplicate(var_id)
+    variables = get_cuahsi_variables
+    id = variables.find {|variable| variable['VariableCode']==var_id}
+    return id
+  end
+
+
   def self.create_cuahsi_variable(var_id)
     var = Var.find(var_id)
     data = {

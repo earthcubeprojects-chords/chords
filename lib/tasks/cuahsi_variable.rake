@@ -5,10 +5,11 @@ namespace :db do
   task :cuahsi_variable => :environment do |task, args|
 
     Var.find_each do |var|
-    	data = Var.create_cuahsi_variable(var.id)
-      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
-
-      send_request(uri_path, data)
+    	if Var.check_duplicate(var.id) == nil
+    		data = Var.create_cuahsi_variable(var.id)
+	      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
+	      send_request(uri_path, data)
+	    end
     end
   end
 end
