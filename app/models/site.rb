@@ -10,18 +10,28 @@ class Site < ActiveRecord::Base
   end  
   
 
-  def self.get_cuahsi_sitecode
-  	uri = URI.parse("http://hydroportal.cuahsi.org/CHORDS/index.php/default/services/api/GetSitesJSON")
+  def self.get_cuahsi_sites
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSitesJSON"
+    uri = URI.parse(uri_path)
 
     request = Net::HTTP::Post.new uri.path
 
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
       response = http.request request
     end
-    puts response.body
-    sites = JSON.parse(response.body)
+    return JSON.parse(response.body)
+  end
+
+  def self.get_cuahsi_sitecode
+    sites = get_cuahsi_sites
     code = sites.count
     return code + 1
+  end
+
+  def self.check_duplicate(name)
+    sites = get_cuahsi_sites
+    id = sites.find {|site| site['SiteName']==name}
+    return id
   end
 
   def self.create_cuahsi_site(site_id)
