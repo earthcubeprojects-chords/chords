@@ -1,3 +1,4 @@
+require 'task_helpers/cuahsi_helper'
 
 namespace :archive do
   task send_data: :environment do |task, args|
@@ -13,7 +14,7 @@ namespace :archive do
     jobs.each do |job|
 
       # retrieve the data points for the date range
-      Instrument.all.each do |inst|
+      Instrument.find_each do |inst|
         points = GetTsPoints.call(TsPoint, "data", inst.id, job.start_at, job.end_at)
       
 
@@ -29,10 +30,12 @@ namespace :archive do
           data = Array.new
           data.push(p["time"])
           data.push(p["value"])
-      
+
 
           # send the data array
-          Measurement.create_cuahsi_value(data, sourceID, siteID, methodID, variableID)
+          value = Measurement.create_cuahsi_value(data, sourceID, siteID, methodID, variableID)
+          uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/values"
+          CuahsiHelper::send_request(uri_path, value)
         end
       end
       

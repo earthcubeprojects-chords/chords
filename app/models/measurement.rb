@@ -60,7 +60,7 @@ class Measurement < ActiveRecord::Base
       "VariableID" => variableID,
       "MethodID" => methodID,
       "SourceID" => sourceID,
-      "values" => data_array
+      "values" => [data_array]
     }
   end
   
