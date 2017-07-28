@@ -12,6 +12,7 @@ namespace :archive do
 
     # loops through the jobs
     jobs.each do |job|
+      success = true
 
       # retrieve the data points for the date range
       Instrument.find_each do |inst|
@@ -35,15 +36,24 @@ namespace :archive do
           # send the data array
           value = Measurement.create_cuahsi_value(data, sourceID, siteID, methodID, variableID)
           uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/values"
-          CuahsiHelper::send_request(uri_path, value)
+          response = CuahsiHelper::send_request(uri_path, value)
+
+          # retrieve any errors that occurred
+          if (response.code.to_s != '200')
+            success = false
+          end
         end
       end
       
-      # retrieve any errors that occurred
-      
       # update status of the archive job
-      job.status = 'complete'
+      if success
+        job.status = 'success'
+      else
+        job.status = 'failed'
+      end
+
       job.save
+
     end
   end
 end
