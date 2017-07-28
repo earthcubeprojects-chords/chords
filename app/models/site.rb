@@ -28,9 +28,12 @@ class Site < ActiveRecord::Base
     return code + 1
   end
 
-  def self.check_duplicate(name)
+  def self.get_cuahsi_siteid(name)
     sites = get_cuahsi_sites
     id = sites.find {|site| site['SiteName']==name}
+    if id != nil
+      return id["SiteID"]
+    end
     return id
   end
 

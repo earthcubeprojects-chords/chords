@@ -64,7 +64,7 @@ class Profile < ActiveRecord::Base
   end
 
   def self.create_cuahsi_source
-    p = Profile.find(1)
+    p = Profile.first
     citation = p.doi
     if citation.nil? || citation.empty?
         citation = p.project

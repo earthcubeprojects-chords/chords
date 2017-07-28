@@ -6,9 +6,11 @@ namespace :db do
 
     Var.find_each do |var|
     	data = Var.create_cuahsi_variable(var.id)
-      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
+    	if Profile.get_cuahsi_variableid(data["VariableCode"]) == nil
+	      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
 
-      send_request(uri_path, data)
+	      send_request(uri_path, data)
+	    end
     end
   end
 end

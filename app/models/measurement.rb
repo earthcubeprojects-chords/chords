@@ -52,8 +52,7 @@ class Measurement < ActiveRecord::Base
     time_ago_in_words(self.measured_at)
   end
 
-  def self.create_cuahsi_value(measurement_id, sourceID, variableID, siteID, methodID)
-    m = Measurement.find(measurement_id)
+  def self.create_cuahsi_value(data_array, sourceID, siteID, methodID, variableID)
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
@@ -61,7 +60,7 @@ class Measurement < ActiveRecord::Base
       "VariableID" => variableID,
       "MethodID" => methodID,
       "SourceID" => sourceID,
-      "values" => [[m.measured_at.strftime("%Y-%m-%d %H:%M:%S"), m.value]]
+      "values" => data_array
     }
   end
   

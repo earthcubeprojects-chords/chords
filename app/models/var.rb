@@ -94,6 +94,20 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
+  def self.get_cuahsi_variables
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
+  end
+
+  def self.get_cuahsi_variableid(variable_code)
+    variables = get_cuahsi_variables
+    id = variables.find {|variable| variable['VariableCode']==variable_code}
+    if id != nil
+      return id["VariableID"]
+    end
+    return id
+  end
+
   def self.create_cuahsi_variable(var_id)
     var = Var.find(var_id)
     data = {
