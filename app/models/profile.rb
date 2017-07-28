@@ -44,14 +44,8 @@ class Profile < ActiveRecord::Base
 
   def self.get_cuahsi_sources
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSourcesJSON"
-    # uri = URI.parse(uri_path)
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
-    # request = Net::HTTP::Post.new uri.path
 
-    # response = Net::HTTP.start(uri.host, uri.port, :use_ssl => false) do |http|
-    #   response = http.request request
-    # end
-    # return JSON.parse(response.body)
   end
 
   def self.get_cuahsi_sourceid(url)
