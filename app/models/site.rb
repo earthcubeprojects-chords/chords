@@ -37,6 +37,12 @@ class Site < ActiveRecord::Base
     profile = Profile.find(1)
     url = profile.domain_name
   	s = Site.find(site_id)
+  	
+  	if s.cuahsi_site_code == nil
+  	  s.cuahsi_site_code = Site.get_cuahsi_sitecode
+  	  s.save
+	  end
+	  
 	  data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
