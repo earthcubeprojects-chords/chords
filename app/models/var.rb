@@ -1,4 +1,8 @@
 class Var < ActiveRecord::Base
+
+  require 'task_helpers/cuahsi_helper'
+  include CuahsiHelper
+  
   belongs_to :instrument
   belongs_to :measured_property
 
@@ -99,6 +103,7 @@ class Var < ActiveRecord::Base
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
   end
 
+<<<<<<< HEAD
   def self.get_cuahsi_variableid(variable_code)
     variables = get_cuahsi_variables
     id = variables.find {|variable| variable['VariableCode']==variable_code}
@@ -108,6 +113,15 @@ class Var < ActiveRecord::Base
     return id
   end
 
+=======
+  def self.check_duplicate(var_id)
+    variables = get_cuahsi_variables
+    id = variables.find {|variable| variable['VariableCode']==var_id}
+    return id
+  end
+
+
+>>>>>>> development
   def self.create_cuahsi_variable(var_id)
     var = Var.find(var_id)
     data = {

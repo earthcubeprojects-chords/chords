@@ -8,7 +8,7 @@ namespace :db do
     	data = Site.create_cuahsi_site(site.id)
     	if Site.get_cuahsi_siteid(data["SiteName"]) == nil
 	      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sites"
-	      send_request(uri_path, data)
+	      CuahsiHelper::send_request(uri_path, data)
 	    end
     end
 
