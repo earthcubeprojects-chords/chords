@@ -171,12 +171,11 @@ class Instrument < ActiveRecord::Base
 
 
   def create_cuahsi_method
-    link = instrument_url
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
       "MethodDescription" => self.name,
-      "MethodLink" => link
+      "MethodLink" => instrument_url
       }
     return data
   end
