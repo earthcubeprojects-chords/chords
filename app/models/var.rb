@@ -98,12 +98,12 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
-  def self.get_cuahsi_variables
+  def get_cuahsi_variables
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
   end
 
-  def self.get_cuahsi_variableid(variable_code)
+  def get_cuahsi_variableid(variable_code)
     variables = get_cuahsi_variables
     id = variables.find {|variable| variable['VariableCode']==variable_code}
     if id != nil
@@ -113,22 +113,21 @@ class Var < ActiveRecord::Base
   end
 
 
-  def self.create_cuahsi_variable(var_id)
-    var = Var.find(var_id)
+  def create_cuahsi_variable
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "VariableCode" => var_id,
+      "VariableCode" => self.id,
       "VariableName" => "Color",
       # "VariableName" => "OtherSlashNew",
       # "NewVarName" => "string",
-      # "vardef" => var.name,
+      # "vardef" => self.name,
       "Speciation" => "Not Applicable",
       "VariableUnitsID" => 349,
       "SampleMedium"=> "Groundwater",
       "ValueType" => "Sample",
       "IsRegular" => 1,
-      "TimeSupport" => var.instrument.sample_rate_seconds,
+      "TimeSupport" => self.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
       "GeneralCategory" => "Hydrology",

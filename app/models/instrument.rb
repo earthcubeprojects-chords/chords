@@ -143,12 +143,12 @@ class Instrument < ActiveRecord::Base
     return influxdb_tags
   end
 
-  def self.get_cuahsi_methods
+  def get_cuahsi_methods
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetMethodsJSON"
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
   end
 
-  def self.get_cuahsi_methodid(method_link)
+  def get_cuahsi_methodid(method_link)
     methods = get_cuahsi_methods
     id = methods.find {|method| method['MethodLink']==method_link}
     if id != nil
@@ -157,20 +157,19 @@ class Instrument < ActiveRecord::Base
     return id
   end
 
-  def self.instrument_url(instrument_id)
+  def instrument_url
     p = Profile.first
-    link = p.domain_name + "/instruments/" + instrument_id.to_s
+    link = p.domain_name + "/instruments/" + self.id.to_s
     return link
   end
 
 
-  def self.create_cuahsi_method(instrument_id)
-    inst = Instrument.find(instrument_id)
-    link = instrument_url(instrument_id)
+  def create_cuahsi_method
+    link = instrument_url
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "MethodDescription" => inst.name,
+      "MethodDescription" => self.name,
       "MethodLink" => link
       }
     return data

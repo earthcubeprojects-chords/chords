@@ -8,7 +8,7 @@ namespace :archive do
     jobs = ArchiveJob.where("status = 'scheduled'")
 
     profile = Profile.first
-    sourceID = Profile.get_cuahsi_sourceid(profile.domain_name)
+    sourceID = profile.get_cuahsi_sourceid(profile.domain_name)
 
     # loops through the jobs
     jobs.each do |job|
@@ -20,12 +20,12 @@ namespace :archive do
       
 
         # extract site, instrument and var information
-        siteID = Site.get_cuahsi_siteid(inst.site.name) 
-        url = Instrument.instrument_url(inst.id)
-        methodID = Instrument.get_cuahsi_methodid(url)
+        siteID = inst.site.get_cuahsi_siteid
+        url = inst.instrument_url
+        methodID = inst.get_cuahsi_methodid(url)
 
         points.each do |p|
-          variableID = Var.get_cuahsi_variableid(p["var"])
+          variableID = Var.find(p['var']).get_cuahsi_variableid(p["var"])
 
           # build the data array
           data = Array.new

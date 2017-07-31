@@ -42,47 +42,45 @@ class Profile < ActiveRecord::Base
     }])      
   end
 
-  def self.get_cuahsi_sources
+  def get_cuahsi_sources
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSourcesJSON"
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
 
   end
 
-  def self.get_cuahsi_sourceid(url)
-    p = Profile.find_by domain_name: url
-    if p && p.cuahsi_source_id
-      return p.cuahsi_source_id 
+  def get_cuahsi_sourceid(url)
+    if self.cuahsi_source_id
+      return self.cuahsi_source_id 
     else
       sources = get_cuahsi_sources
       id = sources.find {|source| source['SourceLink']==url}
       if id != nil
-        p.cuahsi_source_id = id["SourceID"]
-        p.save
+        self.cuahsi_source_id = id["SourceID"]
+        self.save
         return id["SourceID"]
       end
       return id
     end
   end
 
-  def self.create_cuahsi_source
-    p = Profile.first
-    citation = p.doi
+  def create_cuahsi_source
+    citation = self.doi
     if citation.nil? || citation.empty?
-        citation = p.project
+        citation = self.project
     end
     data = {
         "user" => Rails.application.config.x.archive['username'],
         "password" => Rails.application.config.x.archive['password'],
-        "organization" => p.affiliation,
-        "description" => p.project,
-        "link" => p.domain_name,
-        "name" => p.contact_name,
-        "phone" =>p.contact_phone,
-        "email" =>p.contact_email,
-        "address" => p.contact_address,
-        "city" => p.contact_city,
-        "state" => p.contact_state,
-        "zipcode" => p.contact_zipcode,
+        "organization" => self.affiliation,
+        "description" => self.project,
+        "link" => self.domain_name,
+        "name" => self.contact_name,
+        "phone" =>self.contact_phone,
+        "email" =>self.contact_email,
+        "address" => self.contact_address,
+        "city" => self.contact_city,
+        "state" => self.contact_state,
+        "zipcode" => self.contact_zipcode,
         "citation" => citation,
         "metadata" => 1
         }
