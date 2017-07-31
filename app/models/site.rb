@@ -25,12 +25,19 @@ class Site < ActiveRecord::Base
   end
 
   def self.get_cuahsi_siteid(name)
-    sites = get_cuahsi_sites
-    id = sites.find {|site| site['SiteName']==name}
-    if id != nil
-      return id["SiteID"]
+    s = Site.find_by name: name
+    if s && s.cuahsi_site_id
+      return s.cuahsi_site_id 
+    else
+      sites = get_cuahsi_sites
+      id = sites.find {|site| site['SiteName']==name}
+      if id != nil
+        s.cuahsi_site_id = id["SiteID"]
+        s.save
+        return id["SiteID"]
+      end
+      return id
     end
-    return id
   end
 
   def self.create_cuahsi_site(site_id)

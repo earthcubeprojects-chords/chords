@@ -52,13 +52,16 @@ class Profile < ActiveRecord::Base
     p = Profile.find_by domain_name: url
     if p && p.cuahsi_source_id
       return p.cuahsi_source_id 
+    else
+      sources = get_cuahsi_sources
+      id = sources.find {|source| source['SourceLink']==url}
+      if id != nil
+        p.cuahsi_source_id = id["SourceID"]
+        p.save
+        return id["SourceID"]
+      end
+      return id
     end
-    sources = get_cuahsi_sources
-    id = sources.find {|source| source['SourceLink']==url}
-    if id != nil
-      return id["SourceID"]
-    end
-    return id
   end
 
   def self.create_cuahsi_source
