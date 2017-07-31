@@ -57,7 +57,7 @@ class Profile < ActiveRecord::Base
       if id != nil
         self.cuahsi_source_id = id["SourceID"]
         self.save
-        return id["SourceID"]
+        return self.cuahsi_source_id
       end
       return id
     end

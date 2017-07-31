@@ -149,12 +149,18 @@ class Instrument < ActiveRecord::Base
   end
 
   def get_cuahsi_methodid(method_link)
-    methods = get_cuahsi_methods
-    id = methods.find {|method| method['MethodLink']==method_link}
-    if id != nil
-      return id["MethodID"]
+    if self.cuahsi_method_id
+      return self.cuahsi_method_id
+    else
+      methods = get_cuahsi_methods
+      id = methods.find {|method| method['MethodLink']==method_link}
+      if id != nil
+        self.cuahsi_method_id = id["MethodID"]
+        self.save
+        return self.cuahsi_method_id
+      end
+      return id
     end
-    return id
   end
 
   def instrument_url

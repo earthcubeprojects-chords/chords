@@ -38,7 +38,7 @@ class Site < ActiveRecord::Base
     if id != nil
       self.cuahsi_site_id = id["SiteID"]
       self.save
-      return id["SiteID"]
+      return self.cuahsi_site_id
     end
     return id
   end

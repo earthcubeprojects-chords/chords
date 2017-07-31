@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731165627) do
+ActiveRecord::Schema.define(version: 20170731200237) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 20170731165627) do
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
+    t.integer  "cuahsi_variable_id",   limit: 4
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
