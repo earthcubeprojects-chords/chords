@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731164203) do
+ActiveRecord::Schema.define(version: 20170731165627) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20170731164203) do
     t.text     "description",         limit: 65535
     t.integer  "plot_offset_value",   limit: 4,     default: 1
     t.string   "plot_offset_units",   limit: 255,   default: "weeks"
+    t.integer  "cuahsi_method_id",    limit: 4
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
