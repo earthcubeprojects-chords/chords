@@ -10,7 +10,6 @@ namespace :db do
 	  	if profile.get_cuahsi_sourceid(data["link"]) == nil
 		    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
 		    CuahsiHelper::send_request(uri_path, data)
-		    puts response.body
 		  end
     end
   end
