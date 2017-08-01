@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731200237) do
+ActiveRecord::Schema.define(version: 20170801220557) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -148,6 +148,8 @@ ActiveRecord::Schema.define(version: 20170731200237) do
     t.string   "abbreviation", limit: 255
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.integer  "id_num",       limit: 4
+    t.string   "type",         limit: 255
   end
 
   create_table "users", force: :cascade do |t|

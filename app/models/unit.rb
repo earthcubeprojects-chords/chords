@@ -13,13 +13,13 @@ class Unit < ActiveRecord::Base
       params = Hash.new
       node.children.each do |property_node| 
       	case property_node.name
-            when 'UnitID'
-              params['unit_id'] = property_node.text
-            when 'UnitName'            
+            when 'UnitsID'
+              params['id_num'] = property_node.text
+            when 'UnitsName'            
               params['name'] = property_node.text
-            when 'UnitType'            
+            when 'UnitsType'            
               params['type'] = property_node.text
-            when 'UnitAbbreviation'
+            when 'UnitsAbbreviation'
             	params['abbreviation'] = property_node.text
        	end
     	Unit.create(params)
