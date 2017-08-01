@@ -64,11 +64,11 @@
 %div
   .line
     .title
-      Resource name
+      Resource type
     .title
       Status
     .title
-      Archive links
+      Unconfigured resources
     .title
       
 
@@ -76,9 +76,15 @@
     .title
       Source
     .title
-      Configured / Unconfigured
+      - sources = unconfigured_sources
+      #{num_configured_sources} configured / #{sources.length} unconfigured
     .title
-      (a list of the sources and links to the corresponding entry on the hydroserver)
+      - if sources.empty?
+        None
+      - else 
+        - sources.each do |p|
+          = p.project
+          %br
     .title
       .button
         Configure source
@@ -87,9 +93,15 @@
     .title
       Sites
     .title
-      Configured / Unconfigured
+      - sites = unconfigured_sites
+      #{num_configured_sites} configured / #{sites.length} unconfigured
     .title
-      (a list of portal variables)
+      - if sites.empty?
+        None
+      - else 
+        -  sites.each do |s|
+          = s.name
+          %br
     .title
       .button
         Configure Sites
@@ -98,9 +110,15 @@
     .title
       Instruments (Methods)
     .title
-      Configured / Unconfigured
+      - methods = unconfigured_methods
+      #{num_configured_methods} configured / #{methods.length} unconfigured
     .title
-      (a list of portal instruments)
+      - if methods.empty?
+        None
+      - else 
+        -  methods.each do |m|
+          = m.name
+          %br
     .title
       .button
         Configure Instruments
@@ -109,9 +127,15 @@
     .title
       Variables
     .title
-      Configured / Unconfigured
+      - vars = unconfigured_vars
+      #{num_configured_vars} configured / #{vars.length} unconfigured
     .title
-      (a list of portal variables)
+      - if vars.empty?
+        None
+      - else 
+        -  vars.each do |v|
+          = v.name
+          %br
     .title
       .button
         Configure Variables

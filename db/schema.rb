@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170726035824) do
+ActiveRecord::Schema.define(version: 20170731200237) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20170726035824) do
     t.text     "description",         limit: 65535
     t.integer  "plot_offset_value",   limit: 4,     default: 1
     t.string   "plot_offset_units",   limit: 255,   default: "weeks"
+    t.integer  "cuahsi_method_id",    limit: 4
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
@@ -110,6 +111,7 @@ ActiveRecord::Schema.define(version: 20170726035824) do
     t.string   "contact_country",       limit: 255,      default: "Contact Country",     null: false
     t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode",     null: false
     t.string   "domain_name",           limit: 255,      default: "portal.chordsrt.com", null: false
+    t.integer  "cuahsi_source_id",      limit: 4
   end
 
   create_table "site_types", force: :cascade do |t|
@@ -129,6 +131,7 @@ ActiveRecord::Schema.define(version: 20170726035824) do
     t.decimal  "elevation",                      precision: 12, scale: 6, default: 0.0
     t.integer  "site_type_id",     limit: 4
     t.integer  "cuahsi_site_code", limit: 4
+    t.integer  "cuahsi_site_id",   limit: 4
   end
 
   add_index "sites", ["site_type_id"], name: "index_sites_on_site_type_id", using: :btree
@@ -171,6 +174,7 @@ ActiveRecord::Schema.define(version: 20170726035824) do
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
+    t.integer  "cuahsi_variable_id",   limit: 4
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
