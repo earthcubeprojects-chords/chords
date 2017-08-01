@@ -9,6 +9,7 @@ namespace :db do
     	if site.find_site == nil
 	      uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sites"
 	      response = CuahsiHelper::send_request(uri_path, data)
+        site.find_site
 	    end
     end
 

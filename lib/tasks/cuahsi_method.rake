@@ -7,9 +7,10 @@ namespace :db do
 
   	Instrument.find_each do |instrument|
 	  	data = instrument.create_cuahsi_method
-	  	if instrument.get_cuahsi_methodid(data["MethodLink"]) == nil
+	  	if instrument.get_cuahsi_methodid(data["MethodLink"]).nil?
 		    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/methods"
 		    CuahsiHelper::send_request(uri_path, data)
+		    instrument.get_cuahsi_methodid(data["MethodLink"])
 		  end
 	  end
 
