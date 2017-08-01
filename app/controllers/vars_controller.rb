@@ -1,5 +1,7 @@
 class VarsController < ApplicationController
 
+  include ArchiveHelper
+
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
   autocomplete :measured_property, :label, :full => true
@@ -75,17 +77,6 @@ class VarsController < ApplicationController
       format.html { redirect_to Instrument.find(@var.instrument_id), notice: 'Variable was deleted.' }      
       # format.html { redirect_to vars_url, notice: 'Var was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def push_cuahsi_variables
-    Var.all.each do |var|
-      data = var.create_cuahsi_variable
-      if var.get_cuahsi_variableid(data["VariableCode"]) == nil
-        uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
-        CuahsiHelper::send_request(uri_path, data)
-        var.get_cuahsi_variableid(data["VariableCode"])
-      end
     end
   end
 

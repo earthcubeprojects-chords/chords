@@ -14,7 +14,7 @@ module ArchiveHelper
 		Profile.all.length - unconfigured_sources.length
 	end
 
-	def unconfigured_sites
+	def self.unconfigured_sites
 		sites = Array.new
 		Site.all.each do |s|
 			if s.cuahsi_site_id.nil?
@@ -25,7 +25,7 @@ module ArchiveHelper
 	end
 
 	def num_configured_sites
-		Site.all.length - unconfigured_sites.length
+		Site.all.length - ArchiveHelper::unconfigured_sites.length
 	end
 
 
