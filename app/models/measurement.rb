@@ -51,6 +51,18 @@ class Measurement < ActiveRecord::Base
   def age
     time_ago_in_words(self.measured_at)
   end
+
+  def self.create_cuahsi_value(data_array, sourceID, siteID, methodID, variableID)
+    data = {
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
+      "SiteID" => siteID,
+      "VariableID" => variableID,
+      "MethodID" => methodID,
+      "SourceID" => sourceID,
+      "values" => [data_array]
+    }
+  end
   
 end
 

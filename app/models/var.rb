@@ -1,4 +1,8 @@
 class Var < ActiveRecord::Base
+
+  require 'task_helpers/cuahsi_helper'
+  include CuahsiHelper
+  
   belongs_to :instrument
   belongs_to :measured_property
   belongs_to :unit
@@ -93,6 +97,50 @@ class Var < ActiveRecord::Base
   def delete_ts_points
 
     DeleteVariableTsPoints.call(TsPoint, self)
+  end
+
+  def get_cuahsi_variables
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
+  end
+
+  def get_cuahsi_variableid(variable_code)
+    if self.cuahsi_variable_id 
+      return self.cuahsi_variable_id 
+    else
+      variables = get_cuahsi_variables
+      id = variables.find {|variable| variable['VariableCode']==variable_code.to_s}
+      if id != nil
+        self.cuahsi_variable_id = id["VariableID"]
+        self.save
+        return self.cuahsi_variable_id 
+      end
+      return id
+    end
+  end
+
+
+  def create_cuahsi_variable
+    data = {
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
+      "VariableCode" => self.id,
+      "VariableName" => "Color",
+      # "VariableName" => "OtherSlashNew",
+      # "NewVarName" => "string",
+      # "vardef" => self.name,
+      "Speciation" => "Not Applicable",
+      "VariableUnitsID" => 349,
+      "SampleMedium"=> "Groundwater",
+      "ValueType" => "Sample",
+      "IsRegular" => 1,
+      "TimeSupport" => self.instrument.sample_rate_seconds,
+      "TimeUnitsID" => 100,
+      "DataType" => "Unknown",
+      "GeneralCategory" => "Hydrology",
+      "NoDataValue" => -9999
+      }
+    return data
   end
 
 end

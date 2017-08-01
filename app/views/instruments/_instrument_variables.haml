@@ -1,0 +1,30 @@
+%h4
+  Variables
+
+.row-fluid
+  .col-sm-1
+    = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
+      = f.hidden_field :name, :value => 'name'
+      = f.hidden_field :shortname, :value => 'shortname'
+      = f.hidden_field :instrument_id, :value => @instrument.id
+      - if can?(:manage, Var)
+        = f.submit :value	 => 'Add a New Variable'
+.clear
+.row-fluid.instruments_variables_header
+  .col-sm-2
+    Short Name
+  .col-sm-2
+    Name
+  .col-sm-2
+    Units
+  .col-sm-2
+    Min/Max (Plot)
+  .com-sm-2
+    Measured Property
+  .com-sm-2
+    &nbsp;
+
+- @instrument.vars.each do |variable|
+  = render partial: 'vars/bip_form', locals: {variable: variable}
+  .clear
+

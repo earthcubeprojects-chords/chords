@@ -35,86 +35,21 @@
 
 
 .instrument_configuration
-  .instrument_measurements
-    %h4
-      Measurements 
-    = @instrument.sample_count(:either)
-    measurements were reported.
-    - if @instrument.sample_count(:test) > 0
-      = "#{@instrument.sample_count(:test)} of these are test values."
-      .delete_test_measurements_form
-        = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}      
-    %br
-    This instrument is expected to report a measurement every
-    - if can?(:manage, Instrument)        
-      = best_in_place @instrument, :sample_rate_seconds, :as => :input
-    - else
-      = @instrument.sample_rate_seconds
-    seconds.
-    %br
-    = "The first measurement was measured at #{@instrument.point_time_in_ms("first")}."
-    %br
-    = "The last measurement is #{@instrument.last_age} old. It was measured at #{@instrument.point_time_in_ms("last")}."
+  .left
+    .instrument_measurements
+      = render partial: "instrument_measurements", locals: {instrument: @instrument}  
 
-  .instrument_download
-    %h4
-      Data Access and Downloads
-
-    %div
-      %strong Data ingest/fetch
-      %br
-      = link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)  
-
-    %div
-      %strong
-        Download current day as
-      %br
-      \#{link_to("CSV",  instrument_url( :format => 'csv')  )},
-      \#{link_to("XML",  instrument_url( :format => 'xml')  )},
-      \#{link_to("JSON", instrument_url( :format => 'jsf') )},
-      \#{link_to("GEOJSON", instrument_url( :format => 'geojson') )},
-      \#{link_to("GEOCSV", instrument_url( :format => 'geocsv') )}
-
-    %div
-      %strong 
-        Instrument Description
-      %br
-      #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
-
-
+    .instrument_metadata
+      = render partial: "instrument_metadata", locals: {instrument: @instrument}  
+  .right    
+    .instrument_download
+      = render partial: "instrument_downloads", locals: {instrument: @instrument}  
 
     
-  .instrument_variables
-    %h4
-      Variables
-    .row-fluid.instruments_variables_header
-      .col-sm-2
-        Short Name
-      .col-sm-2
-        Name
-      .col-sm-2
-        Units
-      .col-sm-2
-        Min/Max (Plot)
-      .com-sm-2
-        Measured Property
-      .com-sm-2
-        &nbsp;
- 
-    - @instrument.vars.each do |variable|
-      = render partial: 'vars/bip_form', locals: {variable: variable}
-      .clear
+  .full_width
+    .instrument_variables
+      = render partial: "instrument_variables", locals: {instrument: @instrument}  
 
-    .row-fluid
-      .col-sm-1
-        = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
-          = f.hidden_field :name, :value => 'name'
-          = f.hidden_field :shortname, :value => 'shortname'
-          = f.hidden_field :instrument_id, :value => @instrument.id
-          - if can?(:manage, Var)
-            = f.submit :value	 => 'Add a New Variable'
-
-.clear
 
 %br
 
@@ -124,7 +59,7 @@
     = best_in_place @instrument, :plot_offset_value, :as => :input, :html_attrs => { size: 3 }, :classes => 'plot_offset_value'
     = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :classes => 'plot_offset_units'
   - else
-    = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units
+    = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
   
 = render 'multivariable_graph'
 
@@ -139,3 +74,4 @@
   $('.best_in_place.plot_offset_units').bind("ajax:success", function(){ 
     location.reload();
   });  
+Contact GitHub API Training Shop Blog About

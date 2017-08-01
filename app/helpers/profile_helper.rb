@@ -18,12 +18,17 @@ module ProfileHelper
   end
   
   def self.replace_model_instances_from_JSON (model, json_array)
-    json_array.each do |json_object|
-      new_object = eval("#{model}.new")
-      new_object.assign_attributes(json_object)
-      output = new_object.to_json
+    if json_array.kind_of?(Array)
 
-      new_object.save(validate: false)
+      json_array.each do |json_object|
+        new_object = model.new
+        new_object.assign_attributes(json_object)
+
+        new_object.save(validate: false)
+      end
+            
+    else
+      return false
     end
   end
 

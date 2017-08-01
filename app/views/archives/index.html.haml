@@ -1,0 +1,151 @@
+%h1 Archive Configuration
+
+
+= form_for(:archive, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
+  %div
+    .line
+      .title
+        Archive Name
+      .field        
+        = best_in_place @archive, :name , :as => :select, :collection => Archive.name_options
+        
+        
+        
+    .line
+      .title
+        How often should data be pushed to the archive?
+      .field
+        = best_in_place @archive, :send_frequency , :as => :select, :collection => Archive.send_frequency_options
+
+        
+    .line
+      .title
+        Data most recently sent to archive at
+      .field
+        #{@archive.last_archived_at}
+
+    .line
+      &nbsp;
+      
+      
+      
+%h1 Archive Credentials      
+= form_for(:archive, method: "post", :url => { :action => :update_credentials }, multipart: true, html: {class: "new_or_edit_form" }) do |f|
+  .configuration
+    .line
+      .title
+        Base URL of Archive
+      .field
+        #{f.text_field('base_url', size: 60)}
+
+
+    .line
+      .title
+        Archive Username
+      .field        
+        #{f.text_field('username', size: 60)}
+      
+    .line
+      .title
+        Archive Password
+      .field
+        #{f.text_field('password', size: 60)}
+
+      
+
+    .line
+      .center
+        = f.submit('Save')
+
+    .line
+      &nbsp;
+
+%h1 Archive Status
+%div
+  .line
+    .title
+      Resource type
+    .title
+      Status
+    .title
+      Unconfigured resources
+    .title
+      
+
+  .line
+    .title
+      Source
+    .title
+      - sources = unconfigured_sources
+      #{num_configured_sources} configured / #{sources.length} unconfigured
+    .title
+      - if sources.empty?
+        None
+      - else 
+        - sources.each do |p|
+          = p.project
+          %br
+    .title
+      = button_to 'Configure Sources', push_cuahsi_sources_path
+      
+  .line
+    .title
+      Sites
+    .title
+      - sites = ArchiveHelper::unconfigured_sites
+      #{num_configured_sites} configured / #{sites.length} unconfigured
+    .title
+      - if sites.empty?
+        None
+      - else 
+        -  sites.each do |s|
+          = s.name
+          %br
+    .title
+      = button_to 'Configure Sites', push_cuahsi_sites_path
+    
+  .line
+    .title
+      Instruments (Methods)
+    .title
+      - methods = unconfigured_methods
+      #{num_configured_methods} configured / #{methods.length} unconfigured
+    .title
+      - if methods.empty?
+        None
+      - else 
+        -  methods.each do |m|
+          = m.name
+          %br
+    .title
+      = button_to 'Configure Instruments', push_cuahsi_methods_path
+        
+  .line
+    .title
+      Variables
+    .title
+      - vars = unconfigured_vars
+      #{num_configured_vars} configured / #{vars.length} unconfigured
+    .title
+      - if vars.empty?
+        None
+      - else 
+        -  vars.each do |v|
+          = v.name
+          %br
+    .title
+      = button_to 'Configure Variables', push_cuahsi_variables_path
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    

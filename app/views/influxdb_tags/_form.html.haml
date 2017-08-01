@@ -1,0 +1,24 @@
+= form_for @influxdb_tag do |f|
+  - if @influxdb_tag.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@influxdb_tag.errors.count, "error")} prohibited this influxdb_tag from being saved:"
+      %ul
+        - @influxdb_tag.errors.full_messages.each do |msg|
+          %li= msg
+
+
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name
+  .field
+    = f.label :value
+    %br/
+    = f.text_field :value
+  .field
+    = f.label :instrument_id
+    %br/
+    = f.text_field :instrument_id
+
+  .actions
+    = f.submit 'Save'

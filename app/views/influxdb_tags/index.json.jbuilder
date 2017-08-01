@@ -1,0 +1,1 @@
+json.array! @influxdb_tags, partial: 'influxdb_tags/influxdb_tag', as: :influxdb_tag

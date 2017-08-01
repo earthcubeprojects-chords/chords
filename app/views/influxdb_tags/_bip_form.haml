@@ -1,0 +1,23 @@
+.row-fluid.variable
+  .col-sm-2
+    .variable_header
+      Name:
+    - if can?(:manage, Var)
+      = best_in_place influxdb_tag, :name, :as => :input, :class => 'bip_short_name', :html_attrs => { size: 8 }
+    - else
+      = influxdb_tag.name
+  .col-sm-2
+    .variable_header
+      Shortname:
+    - if can?(:manage, Var)
+      = best_in_place influxdb_tag, :value, :as => :input, :html_attrs => { size: 12 }
+    - else
+      = influxdb_tag.name
+    
+    
+
+
+  .col-sm-2.delete_variable_container
+    - if can?(:manage, Var)
+      = link_to influxdb_tag, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the influxdb tag #{influxdb_tag.name}?"} do
+        = image_tag('trash.svg', :class=>"delete-icon", :style=>"height:16px;")

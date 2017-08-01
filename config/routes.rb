@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+
+  resources :archives
+  resources :archive_jobs
+
+  resources :site_types
+
   root      'dashboard#index'
 
   get 'about/data_urls'          => 'about#data_urls'
@@ -22,6 +28,15 @@ Rails.application.routes.draw do
   get 'profiles/export_influxdb'              => 'profiles#export_influxdb'
   get 'profiles/import_influxdb'              => 'profiles#import_influxdb'
   post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
+
+  post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
+  post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
+  post 'archive/push_cuahsi_sites' => 'archives#push_cuahsi_sites', as: :push_cuahsi_sites
+  post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
+
+
+  post 'archives/update_credentials'              => 'archives#update_credentials'
+
 
 
   # devise_for :users
@@ -54,6 +69,9 @@ Rails.application.routes.draw do
   resources :vars
   resources :units
   resources :topic_categories
+  resources :topic_categories
+  resources :influxdb_tags
+  resources :site_types
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,0 +1,19 @@
+%h1 Listing influxdb_tags
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @influxdb_tags.each do |influxdb_tag|
+      %tr
+        %td= link_to 'Show', influxdb_tag
+        %td= link_to 'Edit', edit_influxdb_tag_path(influxdb_tag)
+        %td= link_to 'Destroy', influxdb_tag, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Influxdb tag', new_influxdb_tag_path

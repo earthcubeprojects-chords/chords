@@ -54,6 +54,7 @@ class SitesController < ApplicationController
     authorize! :manage, Site
     
     @site = Site.new(site_params)
+    @site.cuahsi_site_code = @site.get_cuahsi_sitecode
 
     respond_to do |format|
       if @site.save
@@ -102,6 +103,6 @@ class SitesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def site_params
-      params.require(:site).permit(:name, :lat, :lon, :elevation, :description)
+      params.require(:site).permit(:name, :lat, :lon, :elevation, :description, :site_type_id, :cuahsi_site_code)
     end
 end

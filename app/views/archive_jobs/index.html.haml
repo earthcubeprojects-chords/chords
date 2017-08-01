@@ -1,0 +1,29 @@
+%h1 Listing archive_jobs
+
+%table
+  %thead
+    %tr
+      %th Archive name
+      %th Start at
+      %th End at
+      %th Status
+      %th Message
+      %th
+      %th
+      %th
+
+  %tbody
+    - @archive_jobs.each do |archive_job|
+      %tr
+        %td= archive_job.archive_name
+        %td= archive_job.start_at
+        %td= archive_job.end_at
+        %td= archive_job.status
+        %td= archive_job.message
+        %td= link_to 'Show', archive_job
+        %td= link_to 'Edit', edit_archive_job_path(archive_job)
+        %td= link_to 'Destroy', archive_job, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Archive job', new_archive_job_path

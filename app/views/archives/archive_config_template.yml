@@ -1,0 +1,14 @@
+default: &default
+    username:  %s
+    password:  %s
+    base_url: %s
+    
+development:
+  <<: *default
+  
+test:
+  <<: *default
+  
+production:
+  <<: *default
+  

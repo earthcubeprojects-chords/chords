@@ -1,9 +1,18 @@
 class Profile < ActiveRecord::Base
+  require 'task_helpers/cuahsi_helper'
+  include CuahsiHelper
 
-    validates :doi, allow_blank: true, format: {
-      with:    /10.\d{4,9}\/[-._;()\/:A-Z0-9]+/i,
-      message: "invalid DOI"
-    }
+
+  validates :doi, allow_blank: true, format: {
+    with:    /10.\d{4,9}\/[-._;()\/:A-Z0-9]+/i,
+    message: "invalid DOI"
+  }
+    	
+  validates :domain_name, format: { 
+     with: /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix,
+     multiline: true,
+     message: "The domain name is not in a valid format. (Expecting subdomain.domain.com format. Do not include http/https.)" 
+  }
 
   def self.initialize
     Profile.create([{
@@ -31,5 +40,61 @@ class Profile < ActiveRecord::Base
     data_entry_key: 'key'
     
     }])      
+  end
+
+  def get_cuahsi_sources
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSourcesJSON"
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
+
+  end
+
+  def get_cuahsi_sourceid(url)
+    if self.cuahsi_source_id
+      return self.cuahsi_source_id 
+    else
+      sources = get_cuahsi_sources
+      id = sources.find {|source| source['SourceLink']==url}
+      if id != nil
+        self.cuahsi_source_id = id["SourceID"]
+        self.save
+        return self.cuahsi_source_id
+      end
+      return id
+    end
+  end
+
+  def push_cuahsi_sources
+    Profile.all.each do |profile|
+      data = profile.create_cuahsi_source
+      if profile.get_cuahsi_sourceid(data["link"]).nil?
+        uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
+        CuahsiHelper::send_request(uri_path, data)
+        profile.get_cuahsi_sourceid(data["link"])
+      end
+    end
+  end
+
+  def create_cuahsi_source
+    citation = self.doi
+    if citation.nil? || citation.empty?
+        citation = self.project
+    end
+    data = {
+        "user" => Rails.application.config.x.archive['username'],
+        "password" => Rails.application.config.x.archive['password'],
+        "organization" => self.affiliation,
+        "description" => self.project,
+        "link" => self.domain_name,
+        "name" => self.contact_name,
+        "phone" =>self.contact_phone,
+        "email" =>self.contact_email,
+        "address" => self.contact_address,
+        "city" => self.contact_city,
+        "state" => self.contact_state,
+        "zipcode" => self.contact_zipcode,
+        "citation" => citation,
+        "metadata" => 1
+        }
+    return data
   end
 end

@@ -1,11 +1,16 @@
 class Instrument < ActiveRecord::Base
-
+  
+  require 'task_helpers/cuahsi_helper'
   include Rails.application.routes.url_helpers
+  include CuahsiHelper
   
   belongs_to :site
-  # has_many :measurements, :dependent => :destroy
+
   has_many :vars, :dependent => :destroy
+  has_many :influxdb_tags, :dependent => :destroy
+
   has_and_belongs_to_many :topic_categories
+
   accepts_nested_attributes_for :vars
 
 
@@ -22,7 +27,7 @@ class Instrument < ActiveRecord::Base
       return nil
     end
   end
-  
+
   # Returns the time of first or last measurement given parameter point ("first" or "last")
   def point_time_in_ms(point)
     if point == "last"
@@ -34,7 +39,7 @@ class Instrument < ActiveRecord::Base
     if(defined? latest_point.to_a.first['time'])
       latest_time_ms = Time.parse(latest_point.to_a.first['time'])
     else
-      latest_time_ms = Time.now
+      latest_time_ms = "None"
     end          
     
     return latest_time_ms
@@ -127,6 +132,52 @@ class Instrument < ActiveRecord::Base
 
     return data.join(', ')
     
+  end
+  
+  def influxdb_tags_hash
+    influxdb_tags = Hash.new
+    self.influxdb_tags.each do |influxdb_tag|
+      influxdb_tags[influxdb_tag.name] = influxdb_tag.value
+    end
+    
+    return influxdb_tags
+  end
+
+  def get_cuahsi_methods
+    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetMethodsJSON"
+    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
+  end
+
+  def get_cuahsi_methodid(method_link)
+    if self.cuahsi_method_id
+      return self.cuahsi_method_id
+    else
+      methods = get_cuahsi_methods
+      id = methods.find {|method| method['MethodLink']==method_link}
+      if id != nil
+        self.cuahsi_method_id = id["MethodID"]
+        self.save
+        return self.cuahsi_method_id
+      end
+      return id
+    end
+  end
+
+  def instrument_url
+    p = Profile.first
+    link = p.domain_name + "/instruments/" + self.id.to_s
+    return link
+  end
+
+
+  def create_cuahsi_method
+    data = {
+      "user" => Rails.application.config.x.archive['username'],
+      "password" => Rails.application.config.x.archive['password'],
+      "MethodDescription" => self.name,
+      "MethodLink" => instrument_url
+      }
+    return data
   end
         
 end
