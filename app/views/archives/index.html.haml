@@ -86,8 +86,7 @@
           = p.project
           %br
     .title
-      .button
-        Configure source
+      = button_to 'Configure Sources', push_cuahsi_sources_path
       
   .line
     .title
@@ -103,8 +102,7 @@
           = s.name
           %br
     .title
-      .button
-        Configure Sites
+      = button_to 'Configure Sites', push_cuahsi_sites_path
     
   .line
     .title
@@ -120,8 +118,7 @@
           = m.name
           %br
     .title
-      .button
-        Configure Instruments
+      = button_to 'Configure Instruments', push_cuahsi_methods_path
         
   .line
     .title
@@ -137,9 +134,7 @@
           = v.name
           %br
     .title
-      .button
-        Configure Variables
-    
+      = button_to 'Configure Variables', push_cuahsi_variables_path
     
     
     
