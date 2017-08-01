@@ -4,12 +4,12 @@ namespace :db do
   desc "test adding source to hydroserver"
   task :cuahsi_source => :environment do |task, args|
 
-  	data = Profile.create_cuahsi_source
-  	if Profile.get_cuahsi_sourceid(data["link"]) == nil
-	    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
-
-	    CuahsiHelper::send_request(uri_path, data)
-	  end
-    
+  	Profile.all.each do |profile|
+	  	data = profile.create_cuahsi_source
+	  	if profile.get_cuahsi_sourceid(data["link"]) == nil
+		    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
+		    CuahsiHelper::send_request(uri_path, data)
+		  end
+    end
   end
 end

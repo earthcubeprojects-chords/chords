@@ -143,27 +143,39 @@ class Instrument < ActiveRecord::Base
     return influxdb_tags
   end
 
-  def self.get_cuahsi_methods
+  def get_cuahsi_methods
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetMethodsJSON"
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
   end
 
-  def self.check_duplicate(method_link)
-    methods = get_cuahsi_methods
-    id = methods.find {|method| method['MethodLink']==method_link}
-    return id
+  def get_cuahsi_methodid(method_link)
+    if self.cuahsi_method_id
+      return self.cuahsi_method_id
+    else
+      methods = get_cuahsi_methods
+      id = methods.find {|method| method['MethodLink']==method_link}
+      if id != nil
+        self.cuahsi_method_id = id["MethodID"]
+        self.save
+        return self.cuahsi_method_id
+      end
+      return id
+    end
+  end
+
+  def instrument_url
+    p = Profile.first
+    link = p.domain_name + "/instruments/" + self.id.to_s
+    return link
   end
 
 
-  def self.create_cuahsi_method(instrument_id)
-    inst = Instrument.find(instrument_id)
-    p = Profile.find(1)
-    link = p.domain_name + "/instruments/" + instrument_id.to_s
+  def create_cuahsi_method
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "MethodDescription" => inst.name,
-      "MethodLink" => link
+      "MethodDescription" => self.name,
+      "MethodLink" => instrument_url
       }
     return data
   end

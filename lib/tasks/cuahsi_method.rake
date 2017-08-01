@@ -6,8 +6,8 @@ namespace :db do
   task :cuahsi_method => :environment do |task, args|
 
   	Instrument.find_each do |instrument|
-	  	data = Instrument.create_cuahsi_method(instrument.id)
-	  	if Instrument.check_duplicate(data["MethodLink"]) == nil
+	  	data = instrument.create_cuahsi_method
+	  	if instrument.get_cuahsi_methodid(data["MethodLink"]) == nil
 		    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/methods"
 		    CuahsiHelper::send_request(uri_path, data)
 		  end

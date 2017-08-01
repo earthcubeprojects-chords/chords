@@ -98,34 +98,43 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
-  def self.get_cuahsi_variables
+  def get_cuahsi_variables
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
   end
 
-  def self.check_duplicate(var_id)
-    variables = get_cuahsi_variables
-    id = variables.find {|variable| variable['VariableCode']==var_id}
-    return id
+  def get_cuahsi_variableid(variable_code)
+    if self.cuahsi_variable_id 
+      return self.cuahsi_variable_id 
+    else
+      variables = get_cuahsi_variables
+      id = variables.find {|variable| variable['VariableCode']==variable_code}
+      puts id
+      if id != nil
+        self.cuahsi_variable_id = id["VariableID"]
+        self.save
+        return self.cuahsi_variable_id 
+      end
+      return id
+    end
   end
 
 
-  def self.create_cuahsi_variable(var_id)
-    var = Var.find(var_id)
+  def create_cuahsi_variable
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "VariableCode" => var_id,
+      "VariableCode" => self.id,
       "VariableName" => "Color",
       # "VariableName" => "OtherSlashNew",
       # "NewVarName" => "string",
-      # "vardef" => var.name,
+      # "vardef" => self.name,
       "Speciation" => "Not Applicable",
       "VariableUnitsID" => 349,
       "SampleMedium"=> "Groundwater",
       "ValueType" => "Sample",
       "IsRegular" => 1,
-      "TimeSupport" => var.instrument.sample_rate_seconds,
+      "TimeSupport" => self.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
       "GeneralCategory" => "Hydrology",
