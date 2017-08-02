@@ -70,6 +70,11 @@
     .line
     .line
       .title
+        Unit Source
+      .field
+        #{f.select :unit_source, options_for_select([['CUAHSI', 'CUAHSI'], ['UDUNITS', 'UDUNITS']], @profile.unit_source)}
+    .line
+      .title
         Google Maps
         %br/ 
         %strong JavaScript API Key
@@ -94,7 +99,6 @@
           %div
             Measurement security key
             #{f.text_field(:data_entry_key, size: 30)}
-    .line
 
     .configuration
       .line

@@ -10,6 +10,7 @@ class Unit < ActiveRecord::Base
 		validates :source, uniqueness: false, presence: true
 
 	def self.populate
+		
 		#populate CUAHSI units
 		xml_file = Rails.root + 'lib/assets/cuahsi_units.xml'
   	doc = File.open(xml_file) { |f| Nokogiri::XML(f) }
@@ -31,8 +32,8 @@ class Unit < ActiveRecord::Base
     	end
     end
 
-    id_num = 1
     #populate UDUNITS
+    id_num = 1
   	csv_file = Rails.root + 'lib/assets/udunits.csv'
 		csv_text = File.read(csv_file)
 		csv = CSV.parse(csv_text, :headers => true)
