@@ -108,8 +108,7 @@ class Var < ActiveRecord::Base
       return self.cuahsi_variable_id 
     else
       variables = get_cuahsi_variables
-      id = variables.find {|variable| variable['VariableCode']==variable_code}
-      puts id
+      id = variables.find {|variable| variable['VariableCode']==variable_code.to_s}
       if id != nil
         self.cuahsi_variable_id = id["VariableID"]
         self.save

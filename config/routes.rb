@@ -27,6 +27,11 @@ Rails.application.routes.draw do
   get 'profiles/import_influxdb'              => 'profiles#import_influxdb'
   post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
 
+  post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
+  post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
+  post 'archive/push_cuahsi_sites' => 'archives#push_cuahsi_sites', as: :push_cuahsi_sites
+  post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
+
 
   post 'archives/update_credentials'              => 'archives#update_credentials'
 

@@ -1,5 +1,7 @@
 class VarsController < ApplicationController
 
+  include ArchiveHelper
+
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
   autocomplete :measured_property, :label, :full => true

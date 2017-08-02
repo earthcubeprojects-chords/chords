@@ -1,6 +1,7 @@
 class Site < ActiveRecord::Base
   require 'task_helpers/cuahsi_helper'
   include CuahsiHelper
+  include ArchiveHelper
 
   has_many :instruments, :dependent => :destroy
   belongs_to :site_type
@@ -20,7 +21,7 @@ class Site < ActiveRecord::Base
 
   def get_cuahsi_sitecode
     sites = get_cuahsi_sites
-    code = sites.count
+    code = sites.count + ArchiveHelper::unconfigured_sites.length
     return code + 1
   end
 

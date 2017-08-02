@@ -176,6 +176,16 @@ class ProfilesController < ApplicationController
     authorize! :manage, Profile
   end
   
+  def push_cuahsi_sources
+    Profile.all.each do |profile|
+      data = profile.create_cuahsi_source
+      if profile.get_cuahsi_sourceid(data["link"]).nil?
+        uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
+        CuahsiHelper::send_request(uri_path, data)
+        profile.get_cuahsi_sourceid(data["link"])
+      end
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
