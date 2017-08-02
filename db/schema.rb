@@ -179,12 +179,11 @@ ActiveRecord::Schema.define(version: 20170801220557) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.string   "shortname",            limit: 255
-    t.string   "units",                limit: 255, default: "C", null: false
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
-    t.integer  "cuahsi_variable_id",   limit: 4
     t.integer  "unit_id",              limit: 4,   default: 1
+    t.integer  "cuahsi_variable_id",   limit: 4
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
