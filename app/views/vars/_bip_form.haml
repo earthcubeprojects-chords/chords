@@ -18,7 +18,7 @@
       Units:
     - if can?(:manage, Var)
       - form_tag_id = "unit_for_tag_#{variable.id}"
-      = autocomplete_field_tag form_tag_id, variable.unit.name, autocomplete_unit_name_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      = autocomplete_field_tag form_tag_id, variable.unit.name, autocomplete_unit_name_vars_path(:search_mode=>'unit_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
       :javascript
         $(document).ready(function(){
           $("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){

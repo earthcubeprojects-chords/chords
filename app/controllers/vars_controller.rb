@@ -82,6 +82,14 @@ class VarsController < ApplicationController
     end
   end
 
+  def get_autocomplete_items (parameters)
+    if(params[:search_mode].eql? 'unit_source')
+      items = Unit.where("source = ?", Profile.first.unit_source)
+    else
+      items = super(parameters)
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_var
