@@ -84,7 +84,7 @@ class VarsController < ApplicationController
 
   def get_autocomplete_items (parameters)
     if(params[:search_mode].eql? 'unit_source')
-      items = Unit.where("source = ?", Profile.first.unit_source)
+      items = Unit.where("source = :source and name LIKE :term", {source: Profile.first.unit_source, term: '%' + params[:term] + '%'})
     else
       items = super(parameters)
     end
