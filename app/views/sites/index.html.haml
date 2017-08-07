@@ -9,7 +9,8 @@
         %th Elevation (m)
         %th 
           = link_to 'Site Type', :site_types
-        %th CUAHSI Site Code
+        - if Archive.first.name == "CUAHSI"
+          %th CUAHSI Site Code
         %th{:colspan => "1"}
     %tbody
       - @sites.each do |site|

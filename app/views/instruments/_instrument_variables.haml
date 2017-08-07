@@ -23,9 +23,9 @@
     Min/Max (Plot)
   .col-sm-2
     = link_to 'Measured Property', :measured_properties
-    
-  .col-sm-2
-    General Category
+  - if Archive.first.name == "CUAHSI"  
+    .col-sm-2
+      General Category
   .col-sm-2
     &nbsp;
 
