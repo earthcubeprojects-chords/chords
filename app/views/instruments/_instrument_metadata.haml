@@ -1,7 +1,8 @@
 %h4
   Instrument Metadata
   %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#metadata_configuration'} InfluxDB Tags
-  %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#archive_configuration'} Archive Metadata
+  - if Archive.first.name == "CUAHSI"
+    %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#archive_configuration'} Archive Metadata
 
 %div{:id => 'metadata_configuration', :class => 'collapse'}
 
