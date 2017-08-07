@@ -34,7 +34,10 @@
         .clear
 
 %div{:id => 'archive_configuration', :class => 'collapse'}
-  Topic Category
+  %strong
+    = link_to 'Topic Category', :topic_categories
+    
+  
   = best_in_place @instrument, :topic_category_id, :as => :select, :collection => TopicCategory::list_topic_category_options
   
     

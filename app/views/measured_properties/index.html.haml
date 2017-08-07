@@ -1,22 +1,47 @@
 %p#notice= notice
-%h1 Listing Measured Properties
-%table
-  %thead
-    %tr
-      %th Name
-      %th Label
-      %th Url
-      %th Definition
-      %th{:colspan => "3"}
-  %tbody
-    - @measured_properties.each do |measured_property|
-      %tr
-        %td= measured_property.name
-        %td= measured_property.label
-        %td= measured_property.url
-        %td= measured_property.definition
-        %td= link_to 'Show', measured_property
-        %td= link_to 'Edit', edit_measured_property_path(measured_property)
-        %td= link_to 'Destroy', measured_property, method: :delete, data: { confirm: 'Are you sure?' }
-%br/
+
+
+%h1 
+  .center
+    Measured Properties
+
+.row-fluid.variable
+  .col-sm-1
+    %strong
+      Id
+  .col-sm-3
+    %strong
+      Name
+  .col-sm-3
+    %strong
+      Label
+  .col-sm-3
+    %strong
+      URL
+
+.clear
+
+- @measured_properties.each do |measured_property|
+
+  .row-fluid.variable
+    .col-sm-1
+      .variable_header
+        Id:
+      = measured_property.id
+    .col-sm-3
+      .variable_header
+        Name:
+      = measured_property.name
+    .col-sm-3
+      .variable_header
+        Label:
+      = measured_property.label
+    .col-sm-3
+      .variable_header
+        URL:
+      = measured_property.url
+  .clear
+
+%br
+
 = link_to 'New Measured property', new_measured_property_path
