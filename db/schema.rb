@@ -53,15 +53,11 @@ ActiveRecord::Schema.define(version: 20170802195722) do
     t.text     "description",         limit: 65535
     t.integer  "plot_offset_value",   limit: 4,     default: 1
     t.string   "plot_offset_units",   limit: 255,   default: "weeks"
+    t.integer  "topic_category_id",   limit: 4
     t.integer  "cuahsi_method_id",    limit: 4
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
-
-  create_table "instruments_topic_categories", id: false, force: :cascade do |t|
-    t.integer "instrument_id",     limit: 4, null: false
-    t.integer "topic_category_id", limit: 4, null: false
-  end
 
   create_table "measured_properties", force: :cascade do |t|
     t.string   "name",       limit: 255
