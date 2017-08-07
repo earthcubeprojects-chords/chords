@@ -1,28 +1,51 @@
-%h1 Listing archive_jobs
+%h1 
+  .center
+    Existing Archive Jobs
 
-%table
-  %thead
-    %tr
-      %th Archive name
-      %th Start at
-      %th End at
-      %th Status
-      %th Message
-      %th
-      %th
-      %th
 
-  %tbody
-    - @archive_jobs.each do |archive_job|
-      %tr
-        %td= archive_job.archive_name
-        %td= archive_job.start_at
-        %td= archive_job.end_at
-        %td= archive_job.status
-        %td= archive_job.message
-        %td= link_to 'Show', archive_job
-        %td= link_to 'Edit', edit_archive_job_path(archive_job)
-        %td= link_to 'Destroy', archive_job, :method => :delete, :data => { :confirm => 'Are you sure?' }
+.row-fluid.variable
+  .col-sm-2
+    %strong
+      Archive
+  .col-sm-3
+    %strong
+      Start
+  .col-sm-3
+    %strong
+      End
+  .col-sm-2
+    %strong
+      Status
+  .col-sm-2
+    %strong
+      Message
+
+.clear
+
+- @archive_jobs.each do |archive_job|
+
+  .row-fluid.variable
+    .col-sm-2
+      .variable_header
+        Archive:
+      = archive_job.archive_name
+    .col-sm-3
+      .variable_header
+        Start:
+      = archive_job.start_at
+    .col-sm-3
+      .variable_header
+        End:
+      = archive_job.end_at
+    .col-sm-2
+      .variable_header
+        Status:
+      = archive_job.status
+    .col-sm-2
+      .variable_header
+        Message:
+      = archive_job.message
+  .clear
 
 %br
 
