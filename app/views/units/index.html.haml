@@ -1,0 +1,20 @@
+%p#notice= notice
+%h1 Listing Units
+%table{:style=>"git stawidth: 50%"}
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Abbreviation
+      %th Type
+      %th Source
+  %tbody
+    - @units.each do |unit|
+      %tr
+        %td= unit.id_num
+        %td= unit.name
+        %td= unit.abbreviation
+        %td= unit.unit_type
+        %td= unit.source
+        %td= link_to 'Show', unit
+

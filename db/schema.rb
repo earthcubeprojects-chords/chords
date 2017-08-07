@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170731200237) do
+ActiveRecord::Schema.define(version: 20170802195722) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 20170731200237) do
     t.string   "contact_zipcode",       limit: 255,      default: "Contact Zipcode",     null: false
     t.string   "domain_name",           limit: 255,      default: "portal.chordsrt.com", null: false
     t.integer  "cuahsi_source_id",      limit: 4
+    t.string   "unit_source",           limit: 255,      default: "CUAHSI"
   end
 
   create_table "site_types", force: :cascade do |t|
@@ -143,6 +144,16 @@ ActiveRecord::Schema.define(version: 20170731200237) do
     t.datetime "updated_at",               null: false
   end
 
+  create_table "units", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "abbreviation", limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "id_num",       limit: 4
+    t.string   "unit_type",    limit: 255
+    t.string   "source",       limit: 255
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "",    null: false
     t.string   "encrypted_password",     limit: 255, default: "",    null: false
@@ -170,15 +181,16 @@ ActiveRecord::Schema.define(version: 20170731200237) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.string   "shortname",            limit: 255
-    t.string   "units",                limit: 255, default: "C", null: false
     t.integer  "measured_property_id", limit: 4,   default: 795, null: false
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
+    t.integer  "unit_id",              limit: 4,   default: 1
     t.integer  "cuahsi_variable_id",   limit: 4
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
   add_index "vars", ["measured_property_id"], name: "index_vars_on_measured_property_id", using: :btree
+  add_index "vars", ["unit_id"], name: "index_vars_on_unit_id", using: :btree
 
   add_foreign_key "instruments", "sites"
   add_foreign_key "measurements", "instruments"

@@ -20,9 +20,10 @@
     %br/
     = f.text_field :instrument_id
   .field
-    = f.label :units
+    = f.label :unit_id
     %br/
-    = f.text_field :units
+    / = f.text_field :units
+    = f.collection_select :unit_id, Unit.order(:name),:id,:name, include_blank: false
   .field
     = f.label :measured_property_id
     %br/
