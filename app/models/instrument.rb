@@ -9,7 +9,7 @@ class Instrument < ActiveRecord::Base
   has_many :vars, :dependent => :destroy
   has_many :influxdb_tags, :dependent => :destroy
 
-  has_and_belongs_to_many :topic_categories
+  belongs_to  :topic_categories
 
   accepts_nested_attributes_for :vars
 

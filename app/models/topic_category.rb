@@ -1,5 +1,5 @@
 class TopicCategory < ActiveRecord::Base
-	has_and_belongs_to_many :instruments
+  has_many :instruments
 
 	validates :name, uniqueness: { case_sensitive: false }
   	validates :definition, uniqueness: { case_sensitive: false }
@@ -20,6 +20,12 @@ class TopicCategory < ActiveRecord::Base
         	end
 	    end
 	end
+	
+	
+  
+  def self.list_topic_category_options 
+    TopicCategory.select("id, name").map {|topic_category| [topic_category.id, topic_category.name] }
+  end	
 
 
 end
