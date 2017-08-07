@@ -5,7 +5,6 @@ class Var < ActiveRecord::Base
   
   belongs_to :instrument
   belongs_to :measured_property
-  belongs_to :unit
 
   before_destroy :delete_ts_points
   
@@ -120,15 +119,7 @@ class Var < ActiveRecord::Base
   end
 
 
-
-  def self.list_general_categories
-    categories = ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
-    return categories
-  end
-
-  def self.create_cuahsi_variable(var_id)
-    general_categories = list_general_categories
-    var = Var.find(var_id)
+  def create_cuahsi_variable
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
@@ -145,7 +136,7 @@ class Var < ActiveRecord::Base
       "TimeSupport" => self.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
-      "GeneralCategory" => general_categories[var.general_category_id.to_i - 1],
+      "GeneralCategory" => "Hydrology",
       "NoDataValue" => -9999
       }
     return data
