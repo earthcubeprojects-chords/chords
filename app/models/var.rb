@@ -136,7 +136,7 @@ class Var < ActiveRecord::Base
       # "vardef" => self.name,
       "Speciation" => "Not Applicable",
       "VariableUnitsID" => 349,
-      "SampleMedium"=> "Groundwater",
+      "SampleMedium"=> "Unknown",
       "ValueType" => "Sample",
       "IsRegular" => 1,
       "TimeSupport" => self.instrument.sample_rate_seconds,
