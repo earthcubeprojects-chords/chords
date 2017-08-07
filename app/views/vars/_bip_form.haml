@@ -64,7 +64,6 @@
       = variable.maximum_plot_value
 
 
-
   .col-sm-2
     .variable_header
       Measured Property:
@@ -103,6 +102,15 @@
         });
     - else
       = variable.measured_property.label
+
+  .col-sm-2
+    .variable_header
+      General Category:
+    - if can?(:manage, Var)
+      = best_in_place variable, :general_category_id, :as => :select, :collection => Var.list_general_categories
+    - else
+      = variable.general_category
+
   .col-sm-2.delete_variable_container
     - if can?(:manage, Var)
       = link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
