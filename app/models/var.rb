@@ -5,6 +5,7 @@ class Var < ActiveRecord::Base
   
   belongs_to :instrument
   belongs_to :measured_property
+  belongs_to :unit
 
   before_destroy :delete_ts_points
   
@@ -96,6 +97,11 @@ class Var < ActiveRecord::Base
   def delete_ts_points
 
     DeleteVariableTsPoints.call(TsPoint, self)
+  end
+
+  def self.list_general_categories
+    categories = ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
+    return categories
   end
 
   def get_cuahsi_variables
