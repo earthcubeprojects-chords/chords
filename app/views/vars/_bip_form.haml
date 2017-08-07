@@ -50,6 +50,14 @@
     - else
       = variable.unit.name
 
+  .col-sm-2
+    .variable_header
+      Unit Label:
+    - if can?(:manage, Var)
+      = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
+    - else
+      = variable.units
+
 
   .col-sm-2
     .variable_header
