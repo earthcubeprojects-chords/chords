@@ -1,6 +1,7 @@
 %h4
   Instrument Metadata
   %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#metadata_configuration'} InfluxDB Tags
+  %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#archive_configuration'} Archive Metadata
 
 %div{:id => 'metadata_configuration', :class => 'collapse'}
 
@@ -32,3 +33,9 @@
         = render partial: 'influxdb_tags/bip_form', locals: {influxdb_tag: influxdb_tag}
         .clear
 
+%div{:id => 'archive_configuration', :class => 'collapse'}
+  Topic Category
+  = best_in_place @instrument, :topic_category_id, :as => :select, :collection => TopicCategory::list_topic_category_options
+  
+    
+  
