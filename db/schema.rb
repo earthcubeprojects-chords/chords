@@ -185,8 +185,8 @@ ActiveRecord::Schema.define(version: 20170802195722) do
     t.float    "minimum_plot_value",   limit: 24
     t.float    "maximum_plot_value",   limit: 24
     t.integer  "unit_id",              limit: 4,   default: 1
-    t.integer  "cuahsi_variable_id",   limit: 4
     t.string   "general_category_id",  limit: 255, default: "9"
+    t.integer  "cuahsi_variable_id",   limit: 4
   end
 
   add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree

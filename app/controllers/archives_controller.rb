@@ -1,6 +1,7 @@
 class ArchivesController < ApplicationController
 
   before_action :set_archive
+  include ArchiveHelper
 
 
   # GET /archives
@@ -83,57 +84,90 @@ class ArchivesController < ApplicationController
 
 
   def push_cuahsi_variables
-    Var.all.each do |var|
+    error = ""
+    unconfigured_vars.each do |var|
       data = var.create_cuahsi_variable
       if var.get_cuahsi_variableid(data["VariableCode"]) == nil
         uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
-        CuahsiHelper::send_request(uri_path, data)
+        response = CuahsiHelper::send_request(uri_path, data)
+        if (response.code.to_s != '200')
+          error = response.body.to_s
+        end
         var.get_cuahsi_variableid(data["VariableCode"])
       end
     end
-    flash[:notice] = 'Variables successfully configured.'
+    if unconfigured_vars.length == 0
+      flash[:notice] = 'Variables successfully configured.'
+    else
+      flash[:alert] = 'One or more variables failed to configure. Error: ' + error
+    end
     
     redirect_to archives_path
   end
 
   def push_cuahsi_methods
-    Instrument.find_each do |instrument|
+    error = ""
+    unconfigured_methods.each do |instrument|
       data = instrument.create_cuahsi_method
       if instrument.get_cuahsi_methodid(data["MethodLink"]).nil?
         uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/methods"
-        CuahsiHelper::send_request(uri_path, data)
+        response = CuahsiHelper::send_request(uri_path, data)
+        if (response.code.to_s != '200')
+          error = response.body.to_s
+        end
         instrument.get_cuahsi_methodid(data["MethodLink"])
       end
     end
-    flash[:notice] = 'Instruments successfully configured.'
+    if unconfigured_methods.length == 0
+      flash[:notice] = 'Instruments successfully configured.'
+    else
+      flash[:alert] = 'One or more instruments failed to configure. Error: ' + error
+    end
     
     redirect_to archives_path
   end
 
   def push_cuahsi_sites
-    Site.find_each do |site|    
+    error = ""
+    ArchiveHelper::unconfigured_sites.each do |site|    
       data = site.create_cuahsi_site
       if site.find_site == nil
         uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sites"
         response = CuahsiHelper::send_request(uri_path, data)
+        if (response.code.to_s != '200')
+          error = response.body.to_s
+        end
         site.find_site
       end
     end
-    flash[:notice] = 'Sites successfully configured.'
+    if ArchiveHelper::unconfigured_sites.length == 0
+      flash[:notice] = 'Sites successfully configured.'
+    else
+      flash[:alert] = 'One or more sites failed to configure. Error: ' + error
+    end
     
     redirect_to archives_path
   end
 
   def push_cuahsi_sources
-    Profile.all.each do |profile|
+    error = ""
+    unconfigured_sources.each do |profile|
       data = profile.create_cuahsi_source
       if profile.get_cuahsi_sourceid(data["link"]) == nil
         uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
-        CuahsiHelper::send_request(uri_path, data)
+        response = CuahsiHelper::send_request(uri_path, data)
+        if (response.code.to_s != '200')
+          error = response.body.to_s
+        end
         profile.get_cuahsi_sourceid(data["link"])
       end
     end
-    flash[:notice] = 'Sources successfully configured.'
+
+    if unconfigured_sources.length == 0
+      flash[:notice] = 'Sources successfully configured.'
+    else
+      flash[:alert] = 'One or more sources failed to configure. Error ' + error
+    end
     
     redirect_to archives_path
   end
