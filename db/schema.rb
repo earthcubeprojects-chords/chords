@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170807222730) do
+ActiveRecord::Schema.define(version: 20170808024514) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -64,8 +64,9 @@ ActiveRecord::Schema.define(version: 20170807222730) do
     t.string   "label",      limit: 255
     t.string   "url",        limit: 255
     t.text     "definition", limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "source",     limit: 255,   default: "SensorML"
   end
 
   create_table "measurements", force: :cascade do |t|
