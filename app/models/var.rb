@@ -135,7 +135,7 @@ class Var < ActiveRecord::Base
       # "NewVarName" => "string",
       # "vardef" => self.name,
       "Speciation" => "Not Applicable",
-      "VariableUnitsID" => 349,
+      "VariableUnitsID" => self.cuahsi_variable_id,
       "SampleMedium"=> "Unknown",
       "ValueType" => "Sample",
       "IsRegular" => 1,
