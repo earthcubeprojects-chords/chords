@@ -86,6 +86,17 @@ class ArchivesController < ApplicationController
   def push_cuahsi_variables
     error = ""
     unconfigured_vars.each do |var|
+      if var.measured_property.source != "CUAHSI" 
+        error = "Measured property source needs to be set to CUAHSI. Please change the portal configuration and update the variable measured properties."
+        redirect_to archives_path
+        flash[:alert] = error
+        return
+      elsif var.unit.source != "CUAHSI"
+        error = "Unit source needs to be set to CUAHSI. Please change the portal configuration and update the variable units."
+        redirect_to archives_path
+        flash[:alert] = error
+        return
+      end
       data = var.create_cuahsi_variable
       if var.get_cuahsi_variableid(data["VariableCode"]) == nil
         uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/variables"
