@@ -77,7 +77,8 @@
       = link_to 'Measured Property:', :measured_properties
     - if can?(:manage, Var)
       - form_tag_id = "mp_for_tag_#{variable.id}"
-      = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path, {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path(:search_mode=>'measured_property_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
+
       :javascript
         $(document).ready(function(){
         	$("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){

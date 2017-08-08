@@ -85,6 +85,8 @@ class VarsController < ApplicationController
   def get_autocomplete_items (parameters)
     if(params[:search_mode].eql? 'unit_source')
       items = Unit.where("source = :source and name LIKE :term", {source: Profile.first.unit_source, term: '%' + params[:term] + '%'})
+    elsif(params[:search_mode].eql? 'measured_property_source')
+      items = MeasuredProperty.where("source = :source and name LIKE :term", {source: Profile.first.measured_property_source, term: '%' + params[:term] + '%'})
     else
       items = super(parameters)
     end
