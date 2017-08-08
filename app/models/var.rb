@@ -142,7 +142,7 @@ class Var < ActiveRecord::Base
       "TimeSupport" => self.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
-      "GeneralCategory" => "Hydrology",
+      "GeneralCategory" => Var.list_general_categories[self.general_category_id.to_i - 1],
       "NoDataValue" => -9999
       }
     return data
