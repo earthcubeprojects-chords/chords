@@ -2,7 +2,7 @@ require 'task_helpers/cuahsi_helper'
 
 namespace :archive do
   task send_data: :environment do |task, args|
-    Rails.logger.debug "send data called at " + Time.now.utc.to_s
+    # Rails.logger.debug "send data called at " + Time.now.utc.to_s
     
     # retrieve the current archive jobs data points to be sent
     jobs = ArchiveJob.where("status = 'scheduled'")
