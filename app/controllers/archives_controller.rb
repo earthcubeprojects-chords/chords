@@ -88,13 +88,13 @@ class ArchivesController < ApplicationController
     unconfigured_vars.each do |var|
       if var.measured_property.source != "CUAHSI" 
         error = "Measured property source needs to be set to CUAHSI. Please change the portal configuration and update the variable measured properties."
-        redirect_to archives_path
         flash[:alert] = error
+        redirect_to archives_path
         return
       elsif var.unit.source != "CUAHSI"
         error = "Unit source needs to be set to CUAHSI. Please change the portal configuration and update the variable units."
-        redirect_to archives_path
         flash[:alert] = error
+        redirect_to archives_path
         return
       end
       data = var.create_cuahsi_variable

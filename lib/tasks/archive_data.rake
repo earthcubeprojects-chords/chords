@@ -41,10 +41,10 @@ namespace :archive do
           # retrieve any errors that occurred
           if (response.code.to_s != '200')
             success = false
+            job.message += p["time"] + response.body.to_s + "\n"
           end
         end
       end
-      
       # update status of the archive job
       if success
         job.status = 'success'
