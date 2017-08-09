@@ -129,11 +129,8 @@ class Var < ActiveRecord::Base
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "VariableCode" => self.id,
+      "VariableCode" => Profile.first.domain_name + ':' + self.instrument.site.name + ":" + self.instrument.name + ":" + self.name,
       "VariableName" => self.measured_property.name,
-      # "VariableName" => "OtherSlashNew",
-      # "NewVarName" => "string",
-      # "vardef" => self.name,
       "Speciation" => "Not Applicable",
       "VariableUnitsID" => self.unit.id_num,
       "SampleMedium"=> "Unknown",
