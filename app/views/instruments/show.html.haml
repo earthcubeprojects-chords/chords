@@ -45,11 +45,6 @@
     .instrument_download
       = render partial: "instrument_downloads", locals: {instrument: @instrument}  
 
-    
-  .full_width
-    .instrument_variables
-      = render partial: "instrument_variables", locals: {instrument: @instrument}  
-
 
 %br
 
@@ -74,3 +69,9 @@
   $('.best_in_place.plot_offset_units').bind("ajax:success", function(){ 
     location.reload();
   });  
+
+.clear
+
+.full_width
+  .instrument_variables
+    = render partial: "instrument_variables", locals: {instrument: @instrument}  
