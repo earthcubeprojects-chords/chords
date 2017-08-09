@@ -87,7 +87,7 @@ class ProfilesController < ApplicationController
       backup_hash = JSON.parse(file_content)
 
       # The order is important here, as there are foreign keys in place
-      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty]
+      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, Archive, ArchiveJob, SiteType, TopicCategory, Unit]
       
 
       # delete the existing configuration
