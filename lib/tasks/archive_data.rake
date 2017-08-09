@@ -26,7 +26,7 @@ namespace :archive do
 
         points.each do |p|
           v = Var.find(p['var'])
-          variableID = v.get_cuahsi_variableid(profile.domain_name + ":" + inst.site.name + ":" + inst.name + ":" + v.name)
+          variableID = v.get_cuahsi_variableid(profile.domain_name + ":" + inst.site.id.to_s + ":" + inst.id.to_s + ":" + v.id.to_s)
 
           # build the data array
           data = Array.new

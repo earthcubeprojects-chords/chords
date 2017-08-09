@@ -129,7 +129,7 @@ class Var < ActiveRecord::Base
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "VariableCode" => Profile.first.domain_name + ':' + self.instrument.site.name + ":" + self.instrument.name + ":" + self.name,
+      "VariableCode" => Profile.first.domain_name + ':' + self.instrument.site.id.to_s + ":" + self.instrument.id.to_s + ":" + self.id.to_s,
       "VariableName" => self.measured_property.name,
       "Speciation" => "Not Applicable",
       "VariableUnitsID" => self.unit.id_num,
