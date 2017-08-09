@@ -51,6 +51,9 @@ class ProfilesController < ApplicationController
   def export_configuration
     authorize! :manage, Profile
     
+    data = Array.new
+
+
     @profiles = Profile.all
     @sites = Site.all
     @instruments = Instrument.all
@@ -58,10 +61,17 @@ class ProfilesController < ApplicationController
     @influxdb_tags = InfluxdbTag.all
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
+
+    @archives = Archive.all
+    @archive_jobs = ArchiveJob.all
+    @site_types = SiteType.all
+    @topic_categories = TopicCategory.all
+    @units = Unit.all
     
     file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf_"  + Date.today.to_s + ".json"
 
-    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties].to_json  , :filename => file_name
+    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties, \
+      archives: @archives, archive_jobs: @archive_jobs, site_types: @site_types, topic_categories: @topic_categories, units: @units].to_json  , :filename => file_name
   end
   
   def import_configuration
