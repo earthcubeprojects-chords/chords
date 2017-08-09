@@ -9,25 +9,30 @@
       = f.hidden_field :instrument_id, :value => @instrument.id
       - if can?(:manage, Var)
         = f.submit :value	 => 'Add a New Variable'
-.clear
-.row-fluid.instruments_variables_header
-  .col-sm-2
-    Short Name
-  .col-sm-2
-    Name
-  .col-sm-2
-    = link_to 'Units', :units
-  .col-sm-2
-    Min/Max (Plot)
-  .col-sm-2
-    = link_to 'Measured Property', :measured_properties
-  - if Archive.first.name == "CUAHSI"  
-    .col-sm-2
-      General Category
-  .col-sm-2
-    &nbsp;
 
-- @instrument.vars.each do |variable|
-  = render partial: 'vars/bip_form', locals: {variable: variable}
-  .clear
+.clear
+
+
+%table.table.border
+  %tr
+    %td
+      Short Name
+    %td
+      Name
+    %td
+      = link_to 'Units', :units
+    %td
+      Min/Max (Plot)
+    %td
+      = link_to 'Measured Property', :measured_properties
+
+    - if Archive.first.name == "CUAHSI"  
+      %td
+        General Category
+
+    %td
+      &nbsp;
+
+    - @instrument.vars.each do |variable|
+      = render partial: 'vars/bip_form', locals: {variable: variable}
 

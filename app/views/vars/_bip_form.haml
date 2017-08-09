@@ -1,21 +1,17 @@
-.row-fluid.variable
-  .col-sm-2
-    .variable_header
-      Name:
+%tr.border
+  %td
     - if can?(:manage, Var)
       = best_in_place variable, :shortname, :as => :input, :class => 'bip_short_name', :html_attrs => { size: 8 }
     - else
       = variable.shortname
-  .col-sm-2
-    .variable_header
-      Shortname:
+
+  %td
     - if can?(:manage, Var)
       = best_in_place variable, :name, :as => :input, :html_attrs => { size: 12 }
     - else
       = variable.name
-  .col-sm-2
-    .variable_header
-      = link_to 'Units:', :units
+
+  %td
     - if can?(:manage, Var)
       - form_tag_id = "unit_for_tag_#{variable.id}"
       = autocomplete_field_tag form_tag_id, variable.unit.name, autocomplete_unit_name_vars_path(:search_mode=>'unit_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
@@ -47,8 +43,10 @@
             });
           });
         });
+
+
       %br
-      Units Plot Label: 
+      Plot Label: 
       = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
     - else
       = variable.unit.name
@@ -57,9 +55,7 @@
 
 
 
-  .col-sm-2
-    .variable_header
-      Min/Max (Plot):
+  %td
     - if can?(:manage, Var)
       = best_in_place variable, :minimum_plot_value, :as => :input, :html_attrs => { size: 5 }
       \/
@@ -70,9 +66,7 @@
       = variable.maximum_plot_value
 
 
-  .col-sm-2
-    .variable_header
-      = link_to 'Measured Property:', :measured_properties
+  %td
     - if can?(:manage, Var)
       - form_tag_id = "mp_for_tag_#{variable.id}"
       = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path(:search_mode=>'measured_property_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
@@ -109,16 +103,15 @@
         });
     - else
       = variable.measured_property.label
+
   - if Archive.first.name == "CUAHSI"
-    .col-sm-2
-      .variable_header
-        General Category:
+    %td
       - if can?(:manage, Var)
         = best_in_place variable, :general_category_id, :as => :select, :collection => Var.list_general_categories
       - else
         = variable.general_category
 
-  .col-sm-2.delete_variable_container
+  %td
     - if can?(:manage, Var)
       = link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
         = image_tag('trash.svg', :class=>"delete-icon", :style=>"height:16px;")
