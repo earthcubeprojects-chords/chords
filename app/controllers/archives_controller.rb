@@ -69,7 +69,6 @@ class ArchivesController < ApplicationController
         
         # rebuild the cron schedule of the send frequency is set.
         if @archive.send_frequency != nil
-          # Rails.logger.debug('*****************')
           @archive.rebuild_crontab_schedule
         end
         
