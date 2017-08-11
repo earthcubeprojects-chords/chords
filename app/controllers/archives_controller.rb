@@ -7,13 +7,13 @@ class ArchivesController < ApplicationController
 
   def index
     authorize! :manage, Archive
-    
-    @archive.get_credentials
-    
+
     if @archive == nil
       Archive.initialize
       @archive = Archive.first
     end
+
+    @archive.get_credentials
 
   end
 
