@@ -18,6 +18,6 @@ User.create(:email => "admin@chordsrt.com",    :password => "realtimedata", :is_
 # another possibility is http://mmisw.org/ont/cf/parameter/
 MeasuredProperty.populate
 TopicCategory.populate
+Unit.populate
 SiteType.populate
-
 Archive.populate

@@ -89,9 +89,7 @@
         %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
         %td{:align => "center"}
 
-          %button.csvButton{:value => "#{instrument.id}"} CSV
           %button.geoCsvButton{:value => "#{instrument.id}"} GeoCSV
-          %button.jsonButton{:value => "#{instrument.id}"} JSON
           %button.geoJsonButton{:value => "#{instrument.id}"} GeoJSON
           %button.xmlButton{:value => "#{instrument.id}"} XML
 

@@ -2,7 +2,7 @@ require 'task_helpers/cuahsi_helper'
 
 namespace :archive do
   task send_data: :environment do |task, args|
-    Rails.logger.debug "send data called at " + Time.now.utc.to_s
+    # Rails.logger.debug "send data called at " + Time.now.utc.to_s
     
     # retrieve the current archive jobs data points to be sent
     jobs = ArchiveJob.where("status = 'scheduled'")
@@ -25,7 +25,8 @@ namespace :archive do
         methodID = inst.get_cuahsi_methodid(url)
 
         points.each do |p|
-          variableID = Var.find(p['var']).get_cuahsi_variableid(p["var"])
+          v = Var.find(p['var'])
+          variableID = v.get_cuahsi_variableid(profile.domain_name + ":" + inst.site.id.to_s + ":" + inst.id.to_s + ":" + v.id.to_s)
 
           # build the data array
           data = Array.new
@@ -41,10 +42,10 @@ namespace :archive do
           # retrieve any errors that occurred
           if (response.code.to_s != '200')
             success = false
+            job.message += p["time"] + response.body.to_s + "\n"
           end
         end
       end
-      
       # update status of the archive job
       if success
         job.status = 'success'

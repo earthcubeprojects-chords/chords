@@ -51,6 +51,9 @@ class ProfilesController < ApplicationController
   def export_configuration
     authorize! :manage, Profile
     
+    data = Array.new
+
+
     @profiles = Profile.all
     @sites = Site.all
     @instruments = Instrument.all
@@ -58,10 +61,17 @@ class ProfilesController < ApplicationController
     @influxdb_tags = InfluxdbTag.all
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
+
+    @archives = Archive.all
+    @archive_jobs = ArchiveJob.all
+    @site_types = SiteType.all
+    @topic_categories = TopicCategory.all
+    @units = Unit.all
     
     file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf_"  + Date.today.to_s + ".json"
 
-    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties].to_json  , :filename => file_name
+    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties, \
+      archives: @archives, archive_jobs: @archive_jobs, site_types: @site_types, topic_categories: @topic_categories, units: @units].to_json  , :filename => file_name
   end
   
   def import_configuration
@@ -77,7 +87,7 @@ class ProfilesController < ApplicationController
       backup_hash = JSON.parse(file_content)
 
       # The order is important here, as there are foreign keys in place
-      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty]
+      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, Archive, ArchiveJob, SiteType, TopicCategory, Unit]
       
 
       # delete the existing configuration
@@ -199,7 +209,8 @@ class ProfilesController < ApplicationController
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
         :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
-        :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country, :contact_zipcode, :domain_name
+        :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country, :contact_zipcode, :domain_name, 
+        :unit_source, :measured_property_source
         )
     end
 

@@ -45,21 +45,22 @@
     .instrument_download
       = render partial: "instrument_downloads", locals: {instrument: @instrument}  
 
-    
-  .full_width
-    .instrument_variables
-      = render partial: "instrument_variables", locals: {instrument: @instrument}  
 
 
+.clear
+%br
 %br
 
+
 .instrument_plot_time_window
-  %strong Plot measurements for the last 
-  - if can?(:manage, Instrument)
-    = best_in_place @instrument, :plot_offset_value, :as => :input, :html_attrs => { size: 3 }, :classes => 'plot_offset_value'
-    = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :classes => 'plot_offset_units'
-  - else
-    = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
+  .left
+    %strong Plot measurements for the last 
+  
+    - if can?(:manage, Instrument)
+      = best_in_place @instrument, :plot_offset_value, :as => :input, :html_attrs => { size: 3 }, :classes => 'plot_offset_value'
+      = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :classes => 'plot_offset_units'
+    - else
+      = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
   
 = render 'multivariable_graph'
 
@@ -74,3 +75,9 @@
   $('.best_in_place.plot_offset_units').bind("ajax:success", function(){ 
     location.reload();
   });  
+
+.clear
+
+.full_width
+  .instrument_variables
+    = render partial: "instrument_variables", locals: {instrument: @instrument}  

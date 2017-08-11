@@ -5,6 +5,7 @@ class Var < ActiveRecord::Base
   
   belongs_to :instrument
   belongs_to :measured_property
+  belongs_to :unit
 
   before_destroy :delete_ts_points
   
@@ -98,6 +99,11 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
+  def self.list_general_categories
+    categories = ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
+    return categories
+  end
+
   def get_cuahsi_variables
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
     return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
@@ -123,20 +129,17 @@ class Var < ActiveRecord::Base
     data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],
-      "VariableCode" => self.id,
-      "VariableName" => "Color",
-      # "VariableName" => "OtherSlashNew",
-      # "NewVarName" => "string",
-      # "vardef" => self.name,
+      "VariableCode" => Profile.first.domain_name + ':' + self.instrument.site.id.to_s + ":" + self.instrument.id.to_s + ":" + self.id.to_s,
+      "VariableName" => self.measured_property.name,
       "Speciation" => "Not Applicable",
-      "VariableUnitsID" => 349,
-      "SampleMedium"=> "Groundwater",
+      "VariableUnitsID" => self.unit.id_num,
+      "SampleMedium"=> "Unknown",
       "ValueType" => "Sample",
       "IsRegular" => 1,
       "TimeSupport" => self.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
-      "GeneralCategory" => "Hydrology",
+      "GeneralCategory" => Var.list_general_categories[self.general_category_id.to_i - 1],
       "NoDataValue" => -9999
       }
     return data

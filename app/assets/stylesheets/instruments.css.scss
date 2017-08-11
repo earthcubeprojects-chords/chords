@@ -9,9 +9,9 @@
   position: relative;
   text-align: right;
   top: 0px;
+  v-align: top;
+  top: 0px;
 }
-
-
 
 @media screen and (max-width:13660px){
   .left {
@@ -25,10 +25,25 @@
   .full_width {
   	width: 95%;
   }
+  
+  .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
+    width:12%;
+  }
+
+
+  
 }
 
 
 @media screen and (max-width:1024px){
+.instruments_variables_header {
+  display: none;
+}
+
+.variable_header {
+  display: inline;
+}
+
   .left {
   	width: 95%;
   }
@@ -40,6 +55,13 @@
   .full_width {
   	width: 95%;
   }
+  
+  .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
+    width:12%;
+  }
+
+
+  
 }
 
 @media screen and (max-width:767px){

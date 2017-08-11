@@ -1,6 +1,13 @@
 class MeasuredPropertiesController < ApplicationController
   before_action :set_measured_property, only: [:show, :edit, :update, :destroy]
 
+
+  # def get_autocomplete_items(parameters)
+  #   p = Profile.first
+  #   super(parameters).where(:measured_property_source => p.measured_property_source)
+  # end
+
+
   # GET /measured_properties
   # GET /measured_properties.json
   def index

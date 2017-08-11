@@ -5,6 +5,7 @@ class VarsController < ApplicationController
   before_action :set_var, only: [:show, :edit, :update, :destroy]
 
   autocomplete :measured_property, :label, :full => true
+  autocomplete :unit, :name, :full => true
 
   # GET /vars
   # GET /vars.json
@@ -70,13 +71,24 @@ class VarsController < ApplicationController
   # DELETE /vars/1.json
   def destroy
     authorize! :manage, Var
-    
+    x=@var.instrument_id
     @var.destroy
     
+    
     respond_to do |format|
-      format.html { redirect_to Instrument.find(@var.instrument_id), notice: 'Variable was deleted.' }      
+      format.html { redirect_to Instrument.find(x), notice: 'Variable was deleted.' }      
       # format.html { redirect_to vars_url, notice: 'Var was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def get_autocomplete_items (parameters)
+    if(params[:search_mode].eql? 'unit_source')
+      items = Unit.where("source = :source and name LIKE :term", {source: Profile.first.unit_source, term: '%' + params[:term] + '%'})
+    elsif(params[:search_mode].eql? 'measured_property_source')
+      items = MeasuredProperty.where("source = :source and name LIKE :term", {source: Profile.first.measured_property_source, term: '%' + params[:term] + '%'})
+    else
+      items = super(parameters)
     end
   end
 
@@ -88,6 +100,6 @@ class VarsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def var_params
-      params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value)
+      params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category)
     end
 end

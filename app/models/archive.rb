@@ -116,6 +116,7 @@ class Archive < ActiveRecord::Base
 
     every #{self.send_frequency} do 
       rake "archive:create_jobs"
+      rake "archive:send_data"
     end
     
     EOS

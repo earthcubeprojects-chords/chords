@@ -1,9 +1,11 @@
 Rails.application.routes.draw do
 
+
   resources :archives
   resources :archive_jobs
 
   resources :site_types
+
   root      'dashboard#index'
 
   get 'about/data_urls'          => 'about#data_urls'
@@ -50,6 +52,7 @@ Rails.application.routes.draw do
 
   resources :vars do
     get :autocomplete_measured_property_label, :on => :collection
+    get :autocomplete_unit_name, :on => :collection
   end
 
   resources :about
@@ -64,6 +67,8 @@ Rails.application.routes.draw do
   resources :users
   resources :urlbuilder
   resources :vars
+  resources :units
+  resources :topic_categories
   resources :topic_categories
   resources :influxdb_tags
   resources :site_types
