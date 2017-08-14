@@ -3,7 +3,7 @@ layout: page
 title: Getting Started
 ---
 <h2> Creation</h2>
-<h3> Option 1: AWS</h3>
+<h3> Option 1: Run CHORDS on Amazon Web Services</h3>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
@@ -23,7 +23,7 @@ title: Getting Started
     <div class="col-sm-4">
       <br/>
       <a class="btn btn-success pull-right" href="create.html">
-      <img src="images/chevron-left.svg" width="30" /> Create a Portal</a>
+      <img src="images/chevron-left.svg" width="30" /> Create on AWS</a>
     </div>
     <div class="col-sm-8">
       <h3>CHORDS Portal</h3>
@@ -32,7 +32,7 @@ title: Getting Started
     </div>
   </div>
   
-<h3> Option 2: Other O/S Environments</h3>
+<h3> Option 2: Run CHORDS in other compute environments</h3>
 
   <div class="row" style="margin-bottom: 20px">
     <div class="col-sm-4">
