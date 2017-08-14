@@ -1,13 +1,16 @@
 # CHORDS Portal
 
-See instructions for running the [CHORDS Docker containers](https://github.com/NCAR/chords/wiki/Running-CHORDS).
+The [CHORDS website](http://chordsrt.com) is the offical documentation for CHORDS.
 
+There are also condensed instructions for running the 
+[CHORDS Docker containers](https://github.com/NCAR/chords/wiki/Running-CHORDS).
+
+The [CHORDS wiki](https://github.com/NCAR/chords_portal/wiki) has lots of nitty-gritty information.
+
+# What is this project?
 A testbed for CHORDS developer and user experiences. It will allow us
 to explore technical and usabilty aspects of CHORDS. It can be used
 to demonstrate CHORDS design and operational concepts.
-
-For a slick presentation, see the [CHORDS user documentation pages](http://chordsrt.com).
-The [CHORDS wiki](https://github.com/NCAR/chords_portal/wiki) has lots of nitty-gritty information.
 
 The goal is to demonstrate that:
 * The development and deployment workflow can be rational and organized,
