@@ -169,12 +169,12 @@ When you click on the geo button you will see one of two things.
 The first will be a map showing the areas where you have set up the instruments with some distinct geographical pointers.
 
 <img class="img-responsive" src="images/Config_TZVolcano1.PNG" alt="Geo Button" />
-<em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo](http://tzvolcano.chordsrt.com/sites/geo) </em>
+<em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo] (http://tzvolcano.chordsrt.com/sites/geo)</em>
 
 The second is a satellite image showing a snapshot of the area and where you’ve specified the instruments are. 
 
 <img class="img-responsive" src="images/Config_TZVolcano2.PNG" alt="Geo Button" />
-<em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo](http://tzvolcano.chordsrt.com/sites/geo) </em>
+<em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo] (http://tzvolcano.chordsrt.com/sites/geo)</em>
 
 **Note:**  If the map says “Opps!...”, you need to enter a google Maps API key in CHORDS configuration. Google allows up to 25,000 free map accesses per day. You can request a google maps API key if you have  Google account. After you have the key, go to the Configure page and enter it into the “google Maps JavaScript API Key” box.
 
