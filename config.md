@@ -50,7 +50,7 @@ Once you've entered all of that click **Save**.
 <hr>
 <img class="img-responsive" src="images/Config_Step3_pt2.PNG" alt="New Instrument" />
 
-* Enter your information here and then click ""<em>**Create Instrument**</em>"
+* Enter your information here and then click "<em>**Create Instrument**</em>"
 
 **Definitions:**
 ````
