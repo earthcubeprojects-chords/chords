@@ -42,7 +42,8 @@ title: Getting Started
     </div>
     <div class="col-sm-8">
       <h3>CHORDS Portal</h3>
-      <p>Configure the operating system, and then run the CHORDS control script to create a CHORDS Portal instance.</p>
+      <p>CHORDS can be run on a cloud service of your choice, or just a local machine, running Liux, MacOS or Windows.
+      Configure the operating system, and then run the CHORDS control script to create a CHORDS Portal instance.</p>
     </div>
   </div>
 
