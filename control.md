@@ -81,8 +81,8 @@ Hit the _Visualization_ button to open a tab pointing to the builtin Grafana ser
 Login with admin/<CHORDS_ADMIN_PW> to begin configuring Grafana (login on the Raspbery Pi is admin/changeme).
 
 The [Getting Started Guide](http://docs.grafana.org/guides/getting_started/) is a good place to begin
-learning about Grafana. Data Source parameters are:
-
+learning about Grafana. There is also a [very useful tutorial](http://docs.grafana.org/features/datasources/influxdb/)
+for configuring the dashboard queries. Data Source parameters are:
 
 <table class="table table-striped">
   <thead>
