@@ -54,7 +54,7 @@ Once you've entered all of that click **Save**.
 
 **Definitions:**
 ````
-Instrument: (The name you game the instrument)
+Instrument: (The name you gave the instrument)
 Site: (Physical location of the instrument)
 Description: (Add additional information you feel necessary here. Like location, website, or purpose.)
 ````
