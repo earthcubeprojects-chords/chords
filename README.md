@@ -1,4 +1,4 @@
-# CHORDS Portal
+# Summary
 
 The [CHORDS website](http://chordsrt.com) is the offical documentation for CHORDS.
 
@@ -7,7 +7,7 @@ There are also condensed instructions for running the
 
 The [CHORDS wiki](https://github.com/NCAR/chords_portal/wiki) has lots of nitty-gritty information.
 
-# What is this project?
+# What is CHORDS
 A testbed for CHORDS developer and user experiences. It will allow us
 to explore technical and usabilty aspects of CHORDS. It can be used
 to demonstrate CHORDS design and operational concepts.
