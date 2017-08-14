@@ -10,7 +10,7 @@ class ArchivesController < ApplicationController
     authorize! :manage, Archive
 
     if @archive == nil
-      Archive.initialize
+      Archive.populate
       @archive = Archive.first
     end
 
