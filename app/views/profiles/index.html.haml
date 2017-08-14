@@ -12,6 +12,8 @@
     = link_to "Export InfluxDB Data", {controller: "profiles", action: "export_influxdb"}, class: "button"
     = link_to "Import InfluxDB Data", {controller: "profiles", action: "import_influxdb"}, class: "button"
 
+%h2 Standard Options
+
 = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
   .configuration
     .line
@@ -95,68 +97,74 @@
             Measurement security key
             #{f.text_field(:data_entry_key, size: 30)}
 
-    .configuration
-      .line
-      .line
-        .title
-          Unit Ontology
-        .field
-          #{f.select :unit_source, options_for_select([['CUAHSI', 'CUAHSI'], ['UDUNITS', 'UDUNITS']], @profile.unit_source)}
-
-      .line
-        .title
-          Measured Property Ontology
-        .field
-          #{f.select :measured_property_source, options_for_select([['SensorML', 'SensorML'], ['CUAHSI', 'CUAHSI']], @profile.measured_property_source)}
-    
-      .line
-    
-      .line
-        .title
-          Contact Name
-        .field
-          #{f.text_field('contact_name', size: 30)}
-      .line
-        .title
-          Contact Email
-        .field
-          #{f.text_field('contact_email', size: 30)}
-      .line
-        .title
-          Contact Phone
-        .field
-          #{f.text_field('contact_phone', size: 30)}
-      .line
-        .title
-          Contact Address
-        .field
-          #{f.text_field('contact_address', size: 30)}
-      .line
-        .title
-          Contact City
-        .field
-          #{f.text_field('contact_city', size: 30)}
-      .line
-        .title
-          Contact State
-        .field
-          #{f.text_field('contact_state', size: 30)}
-      .line
-        .title
-          Contact Country
-        .field
-          #{f.text_field('contact_country', size: 30)}
-      .line
-        .title
-          Contact Zipcode
-        .field
-          #{f.text_field('contact_zipcode', size: 30)}             
-
-
 
     .line
       .center
         = f.submit('Save')
+    .line
+      &nbsp;
 
+%h2 CUASHI HydroServer Options
+
+= form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
+  .configuration
+    .line
+      .title
+        Unit Ontology
+      .field
+        #{f.select :unit_source, options_for_select([['CUAHSI', 'CUAHSI'], ['UDUNITS', 'UDUNITS']], @profile.unit_source)}
+
+    .line
+      .title
+        Measured Property Ontology
+      .field
+        #{f.select :measured_property_source, options_for_select([['SensorML', 'SensorML'], ['CUAHSI', 'CUAHSI']], @profile.measured_property_source)}
+  
+    .line
+  
+    .line
+      .title
+        Contact Name
+      .field
+        #{f.text_field('contact_name', size: 30)}
+    .line
+      .title
+        Contact Email
+      .field
+        #{f.text_field('contact_email', size: 30)}
+    .line
+      .title
+        Contact Phone
+      .field
+        #{f.text_field('contact_phone', size: 30)}
+    .line
+      .title
+        Contact Address
+      .field
+        #{f.text_field('contact_address', size: 30)}
+    .line
+      .title
+        Contact City
+      .field
+        #{f.text_field('contact_city', size: 30)}
+    .line
+      .title
+        Contact State
+      .field
+        #{f.text_field('contact_state', size: 30)}
+    .line
+      .title
+        Contact Country
+      .field
+        #{f.text_field('contact_country', size: 30)}
+    .line
+      .title
+        Contact Zipcode
+      .field
+        #{f.text_field('contact_zipcode', size: 30)}             
+
+    .line
+      .center
+        = f.submit('Save')
     .line
       &nbsp;
