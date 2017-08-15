@@ -46,6 +46,8 @@ Quoted from http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html
 
 * When you hit next you’ll see a page about groups and users. Select **Attach existing policies directly** and check the first box in the window below, **Administrator Access*.
 
+<img class="img-responsive" src="images/AWS_Step3.5.PNG" alt="Step 3.5" />
+
 Move onto the **Review** step. Here you can double check your user and what permissions they have before creating their account. If this looks OK, click on **Create user**.
 
 
