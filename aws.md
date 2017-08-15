@@ -40,11 +40,13 @@ If you already have an AWS account, just go to <a href="{{site.baseurl}}/create.
   - Amazon.com states that, “The name can consist of letters, digits, and the following characters: plus (+), equal (=), comma (,), period (.), at (@), underscore (_), and hyphen (-). The name is not case sensitive and can be a maximum of 64 characters in length.” 
 Quoted from http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html
 
-* Click the checkbox next to **AWS Management Console access**, select **Custom password**, type the new user’s password in the text box and unclick **Require password reset**. You can also select Programmatic access which will give the user more access to the key ID and secret access key
+* Click the checkbox next to **AWS Management Console access**, select **Custom password**, type the new user’s password in the text box and unclick **Require password reset**. You can also select Programmatic access which will give the user more access to the key ID and secret access key.
 
 <img class="img-responsive" src="images/AWS_Step3.PNG" alt="Step 3" />
 
-* When you hit next you’ll see a page about groups and users. Move onto the **Review** step. Here you can double check your user and what permissions they have before creating their account. If this looks OK, click on **Create user**.
+* When you hit next you’ll see a page about groups and users. Select **Attach existing policies directly** and check the first box in the window below, **Administrator Access*.
+
+Move onto the **Review** step. Here you can double check your user and what permissions they have before creating their account. If this looks OK, click on **Create user**.
 
 
 ## 3. Sign in as the new IAM user
