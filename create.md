@@ -32,9 +32,9 @@ Log onto your AWS account to begin.
 
 <img class="img-responsive" src="images/Portal_Step2_pt1.PNG" alt="Create Stack">
 
-* Click **"Create new stack**
+* Click **Create new stack**
 
-* Click on _Specify Amazon S3 template URL_ and Copy and Paste the following link in the box:
+* Click on **Specify Amazon S3 template URL** and Copy and Paste the following link in the box:
 ````
 https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
 ````
