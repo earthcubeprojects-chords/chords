@@ -44,7 +44,7 @@ Quoted from http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html
 
 <img class="img-responsive" src="images/AWS_Step3.PNG" alt="Step 3" />
 
-* When you hit next you’ll see a page about groups and users. Select **Attach existing policies directly** and check the first box in the window below, **Administrator Access*.
+* When you hit next you’ll see a page about groups and users. Select **Attach existing policies directly** and check the first box in the window below, **Administrator Access**.
 
 <img class="img-responsive" src="images/AWS_Step3.5.PNG" alt="Step 3.5" />
 
