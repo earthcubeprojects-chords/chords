@@ -54,7 +54,7 @@ https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
 
 * Hit **Next**
 
-## 4. Options
+## 4. Options (if needed)
 * Hit **Next**.
 
 <img class="img-responsive" src="images/Portal_Step4.PNG" alt="Options">
