@@ -1,7 +1,7 @@
 %h1 
   .center
     Existing Archive Jobs
-    - if can?(:manage, Instrument)
+    - if can?(:manage, Archive)
       = button_to 'Delete Complete Archive Jobs', {:controller => 'archive_jobs', :action => 'delete_completed_jobs'}, {:class => 'btn btn-default', :method => 'post'}
     
 
