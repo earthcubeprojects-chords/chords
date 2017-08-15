@@ -35,7 +35,11 @@ Rails.application.routes.draw do
   post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
 
 
-  post 'archives/update_credentials'              => 'archives#update_credentials'
+  post 'archives/update_credentials'  => 'archives#update_credentials'
+
+  post 'archives/enable_archiving'    => 'archives#enable_archiving'
+  post 'archives/disable_archiving'   => 'archives#disable_archiving'
+
 
 
 
