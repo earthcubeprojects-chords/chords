@@ -6,7 +6,8 @@ class ArchivesController < ApplicationController
 
 
   def enable_archiving
-
+    authorize! :manage, Archive
+    
     #check site configuration
     configuration_error_messages = Array.new
 
@@ -79,6 +80,8 @@ class ArchivesController < ApplicationController
 
 
   def disable_archiving
+    authorize! :manage, Archive
+
     @archive.enabled = false
     @archive.save
 
