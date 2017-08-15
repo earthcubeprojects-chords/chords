@@ -51,9 +51,9 @@ Quoted from http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html
 
 ## 3. Sign in as the new IAM user
 
-* Use the following URL to login to console:
+* In the green "Success" shaded area, note the link at the bottom that says "Users with AWS Management Console access can sign-in at:", which looks like this:
 ````
-https://aws_account_number.signin.aws.amazon.com/console/
+https://[aws account number goes here].signin.aws.amazon.com/console/
 ````
  - Remember your AWS account ID? You’re going to use it as your aws_account_number without the hyphen. 
  
@@ -63,7 +63,7 @@ https://aws_account_number.signin.aws.amazon.com/console/
 `````
 **Note:** If you need to find your account number again go to “Your AWS Account ID and It’s Alias” at http://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html
 
-* Enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar should show <em> your_user_name@your_aws_account_id </em>
+* Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar should show <em> your_user_name@your_aws_account_id </em>
 
 ## 4. To create or remove an account alias
 
