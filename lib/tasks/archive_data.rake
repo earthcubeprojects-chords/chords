@@ -4,6 +4,16 @@ namespace :archive do
   task send_data: :environment do |task, args|
     # Rails.logger.debug "send data called at " + Time.now.utc.to_s
     
+    # Check to make sure archiving is enabled before sending data
+    
+    if Archive.first.enabled != true
+      # Archiving is disabled, no data will be transmitted
+      # puts "Archiving is disabled, no data will be transmitted"
+
+      # exit the rake task
+      next
+    end
+    
     # retrieve the current archive jobs data points to be sent
     jobs = ArchiveJob.where("status = 'scheduled'")
 
