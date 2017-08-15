@@ -9,44 +9,80 @@ class ArchivesController < ApplicationController
 
     #check site configuration
     configuration_error_messages = Array.new
-    
-    #sources
-    #sites
-      # site type is defined
-      
-    #instruments
 
-    #variables
-      # general category defined
-      
-    #units ontology
 
-    #measured property ontology
-    
     #domain name != example.chordsrt.com
     if @profile.domain_name == 'example.chordsrt.com'
-      configuration_error_messages.push('You must change the default domain name in the profile configuration')
+      configuration_error_messages.push('You must change the default domain name in the profile configuration.')
     end
 
-    if (configuration_error_messages.count > 0 )
+    #units ontology
+    if @profile.unit_source != 'CUAHSI'
+      configuration_error_messages.push("You must set the 'Units Ontology' to 'CUAHSI' in the profile configuration.")
+    end
 
+    #measured property ontology
+    if @profile.measured_property_source != 'CUAHSI'
+      configuration_error_messages.push("You must set the 'Measured Property Ontology' to 'CUAHSI' in the profile configuration.")
+    end
+
+    
+    #sources
+    if unconfigured_sources.count > 0 
+      configuration_error_messages.push('CUAHSI source is not configured.')
+    end
+    
+    #sites
+    sites = ArchiveHelper::unconfigured_sites
+    if sites.count > 0 
+      configuration_error_messages.push("#{sites.count} CUAHSI sites are not configured.")
+    end
+
+    #######
+    # TO DO: check if site type is defined for each site ?
+    #######
+
+      
+    #instruments
+    methods = unconfigured_methods
+    if methods.count > 0 
+      configuration_error_messages.push("#{methods.count} CUAHSI methods are not configured.")
+    end
+
+    #variables
+    vars = unconfigured_vars
+    if vars.count > 0 
+      configuration_error_messages.push("#{vars.count} CUAHSI variables are not configured.")
+    end
+    
+    #######
+    # TO DO: check id a general category defined for each variable ?
+    #######
+
+      
+    # if (configuration_error_messages.count > 0 )
+
+    if (false)
       flash[:alert] = "The archive configuration is not complete:<br/><br/>".html_safe      
       flash[:alert] << configuration_error_messages.join("<br/>").html_safe 
     else
       # enable archiving
+
+      flash[:notice] = "Archiving is now enabled.<br/><br/>Data will start being transmitted to the configured archive.".html_safe
+
       @archive.enabled = true
       @archive.save
     end
     
-    # redirect_to archives_path    
-    render :index
-    
+    redirect_to archives_path    
   end
 
 
   def disable_archiving
     @archive.enabled = false
     @archive.save
+
+    flash[:notice] = "Archiving is now disabled. <br/><br/>Data will no longer be transmitted to the configured archive.".html_safe
 
     redirect_to archives_path    
   end
