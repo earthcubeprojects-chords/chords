@@ -44,7 +44,7 @@ Quoted from http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html
 
 <img class="img-responsive" src="images/AWS_Step3.PNG" alt="Step 3" />
 
-* When you hit next you’ll see a page about groups and users. Select **Attach existing policies directly** and check the first box in the window below, **Administrator Access**.
+* When you hit next you’ll see a page about groups and users. Select **Attach existing policies directly** and check the first box in the window below, **AdministratorAccess**.
 
 <img class="img-responsive" src="images/AWS_Step3.5.PNG" alt="Step 3.5" />
 
@@ -67,7 +67,7 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 
 * Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar at the top should show <em> your_user_name@your_aws_account_id </em>
 
-## 4. To create or remove an account alias
+## 4. To create or remove an account alias (only if needed)
 
 * Sign into IAM (Identity and Access Management) https://console.aws.amazon.com/iam/
 * Click on <em>**Services**</em> and then <em>**IAM**</em> 
