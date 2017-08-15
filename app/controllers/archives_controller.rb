@@ -4,6 +4,53 @@ class ArchivesController < ApplicationController
   include ArchiveHelper
 
 
+
+  def enable_archiving
+
+    #check site configuration
+    configuration_error_messages = Array.new
+    
+    #sources
+    #sites
+      # site type is defined
+      
+    #instruments
+
+    #variables
+      # general category defined
+      
+    #units ontology
+
+    #measured property ontology
+    
+    #domain name != example.chordsrt.com
+    if @profile.domain_name == 'example.chordsrt.com'
+      configuration_error_messages.push('You must change the default domain name in the profile configuration')
+    end
+
+    if (configuration_error_messages.count > 0 )
+
+      flash[:alert] = "The archive configuration is not complete:<br/><br/>".html_safe      
+      flash[:alert] << configuration_error_messages.join("<br/>").html_safe 
+    else
+      # enable archiving
+      @archive.enabled = true
+      @archive.save
+    end
+    
+    # redirect_to archives_path    
+    render :index
+    
+  end
+
+
+  def disable_archiving
+    @archive.enabled = false
+    @archive.save
+
+    redirect_to archives_path    
+  end
+  
   # GET /archives
 
   def index
@@ -190,7 +237,7 @@ class ArchivesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def archive_params
-      params.require(:archive).permit(:id, :name, :base_url, :send_frequency, :last_archived_at, :created_at, :updated_at, :username, :password)
+      params.require(:archive).permit(:id, :name, :base_url, :send_frequency, :last_archived_at, :created_at, :updated_at, :username, :password, :enabled)
       
       
       

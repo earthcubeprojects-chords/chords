@@ -1,3 +1,5 @@
+%p#notice= notice
+
 %h1 Archive Configuration
 
 
@@ -26,7 +28,16 @@
 
     .line
       &nbsp;
-      
+
+    .line
+      &nbsp;
+
+.center
+  - if @archive.enabled == false
+    = button_to 'Enable Archiving', {:controller => 'archives', :action => 'enable_archiving'}, {:class => 'btn btn-default', :method => 'post'}
+  - else
+    = button_to 'Disable Archiving', {:controller => 'archives', :action => 'disable_archiving'}, {:class => 'btn btn-default', :method => 'post'}
+  
       
 %h1 Archive Credentials      
 = form_for(:archive, method: "post", :url => { :action => :update_credentials }, multipart: true, html: {class: "new_or_edit_form" }) do |f|
