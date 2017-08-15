@@ -101,13 +101,6 @@ class ArchivesController < ApplicationController
     end
 
     @archive.get_credentials
-    
-    
-    crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-    @encrypted_data = crypt.encrypt_and_sign(@archive.username)
-    # And encrypted data can be decrypted with:
-
-    @decrypted_back = crypt.decrypt_and_verify(@encrypted_data)
 
   end
 
