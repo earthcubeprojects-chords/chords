@@ -30,17 +30,19 @@ Log onto your AWS account to begin.
       
 ## 2. Start stack creation and Specify template 
 
-* Click **"Create Stack**
-
 <img class="img-responsive" src="images/Portal_Step2_pt1.PNG" alt="Create Stack">
+
+* Click **"Create Stack**
 
 * Copy and Paste the following link into _Specify an S3 template URL_: <br/>
 ````
 https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
 ````
-* Hit **Next**
 
 <img class="img-responsive" src="images/Portal_Step2_pt2.PNG" alt="Cloud Formation Template">
+
+* Hit **Next**
+
 
 ## 3. Specify the portal name and key
 
