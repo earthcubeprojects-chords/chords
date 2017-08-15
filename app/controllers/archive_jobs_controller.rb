@@ -4,6 +4,8 @@ class ArchiveJobsController < ApplicationController
 
 
   def delete_completed_jobs    
+    authorize! :manage, Archive
+
     ArchiveJob.where(:status => 'success').destroy_all
     
     flash[:notice] = "All successful archive jobs have been removed."
@@ -24,16 +26,22 @@ class ArchiveJobsController < ApplicationController
 
   # GET /archive_jobs/new
   def new
+    authorize! :manage, Archive
+
     @archive_job = ArchiveJob.new
   end
 
   # GET /archive_jobs/1/edit
   def edit
+    authorize! :manage, Archive
+
   end
 
   # POST /archive_jobs
   # POST /archive_jobs.json
   def create
+    authorize! :manage, Archive
+    
     @archive_job = ArchiveJob.new(archive_job_params)
 
     respond_to do |format|
@@ -50,6 +58,8 @@ class ArchiveJobsController < ApplicationController
   # PATCH/PUT /archive_jobs/1
   # PATCH/PUT /archive_jobs/1.json
   def update
+    authorize! :manage, Archive
+
     respond_to do |format|
       if @archive_job.update(archive_job_params)
         format.html { redirect_to @archive_job, notice: 'Archive job was successfully updated.' }
@@ -64,6 +74,8 @@ class ArchiveJobsController < ApplicationController
   # DELETE /archive_jobs/1
   # DELETE /archive_jobs/1.json
   def destroy
+    authorize! :manage, Archive
+
     @archive_job.destroy
     respond_to do |format|
       format.html { redirect_to archive_jobs_url, notice: 'Archive job was successfully destroyed.' }
