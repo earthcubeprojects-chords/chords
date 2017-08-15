@@ -46,7 +46,7 @@ Quoted from http://docs.aws.amazon.com/lambda/latest/dg/setting-up.html
 
 **Note:** you can optionally select Require password reset to force the user to select a new password when they sign in. 
 
-* When you hit next you’ll see a page about groups and users. For now just click next again and move onto the **Review** step. Here you can double check your user and what permissions they have before creating their account. Click on **Create user**.
+* When you hit next you’ll see a page about groups and users. For now just click next again and move onto the **Review** step. Here you can double check your user and what permissions they have before creating their account. If this looks OK, click on **Create user**.
 
 
 ## 3. Sign in as the new IAM user
