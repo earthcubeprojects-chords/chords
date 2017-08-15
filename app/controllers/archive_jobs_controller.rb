@@ -1,6 +1,16 @@
 class ArchiveJobsController < ApplicationController
   before_action :set_archive_job, only: [:show, :edit, :update, :destroy]
 
+
+
+  def delete_completed_jobs    
+    ArchiveJob.where(:status => 'success').destroy_all
+    
+    flash[:notice] = "All successful archive jobs have been removed."
+    
+    redirect_to archive_jobs_path  
+  end
+
   # GET /archive_jobs
   # GET /archive_jobs.json
   def index

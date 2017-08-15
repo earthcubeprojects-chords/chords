@@ -1,8 +1,8 @@
-%p#notice= notice
-
 %h1 
   .center
     Existing Archive Jobs
+    = button_to 'Delete Complete Archive Jobs', {:controller => 'archive_jobs', :action => 'delete_completed_jobs'}, {:class => 'btn btn-default', :method => 'post'}
+    
 
 
 .row-fluid.variable

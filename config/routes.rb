@@ -39,6 +39,9 @@ Rails.application.routes.draw do
 
   post 'archives/enable_archiving'    => 'archives#enable_archiving'
   post 'archives/disable_archiving'   => 'archives#disable_archiving'
+  
+  post 'archive_jobs/delete_completed_jobs'   => 'archive_jobs#delete_completed_jobs'
+  
 
 
 
