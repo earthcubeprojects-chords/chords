@@ -271,6 +271,7 @@ class InstrumentsController < ApplicationController
 
   # GET /instruments/1/edit
   def edit
+    authorize! :manage, Instrument
   end
 
   # POST /instruments

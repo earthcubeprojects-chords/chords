@@ -47,6 +47,13 @@ class Archive < ActiveRecord::Base
       password = ActionController::Base.helpers.sanitize(params['password'])
       base_url = ActionController::Base.helpers.sanitize(params['base_url'])
 
+
+      #encrpyt the credentials
+      crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
+      username = crypt.encrypt_and_sign(username)
+      password = crypt.encrypt_and_sign(password)
+      base_url = crypt.encrypt_and_sign(base_url)
+
       # convert to YAML (escape single quotes, etc.)
       # username = username.to_yaml
       # password = password.to_yaml
@@ -74,9 +81,11 @@ class Archive < ActiveRecord::Base
 
       config = YAML.load(ERB.new(File.new(file_path).read).result)[Rails.env]
 
-      self.username = config['username']
-      self.password = config['password']
-      self.base_url = config['base_url']
+      crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)      
+
+      self.username = crypt.decrypt_and_verify(config['username'])
+      self.password = crypt.decrypt_and_verify(config['password'])
+      self.base_url = crypt.decrypt_and_verify(config['base_url'])
     else
       self.username = nil
       self.password = nil
