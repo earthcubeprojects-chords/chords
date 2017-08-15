@@ -63,7 +63,7 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 `````
 **Note:** If you need to find your account number again go to “Your AWS Account ID and It’s Alias” at http://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html
 
-* Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar should show <em> your_user_name@your_aws_account_id </em>
+* Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar at the top should show <em> your_user_name@your_aws_account_id </em>
 
 ## 4. To create or remove an account alias
 
