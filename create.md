@@ -48,11 +48,11 @@ https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
 
 * Give the stack a name. The convention is _CHORDS-_ suffixed with your project or organization name, e.g. _CHORDS-CSURadar_.
 * If you created a key for your Amazon account, select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, 
-  if ever needed.
-* Hit **Next**
+  if ever needed. For demonstrations and simple streaming feeds, select a _t2.micro_ instance type which are free of charge for the first year. Otherwise, use the default.
 
 <img class="img-responsive" src="images/Portal_Step3.PNG" alt="Specify">
 
+* Hit **Next**
 
 ## 4. Options
 * Hit **Next**.
