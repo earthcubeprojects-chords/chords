@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20170808200737) do
     t.text     "description",         limit: 65535
     t.integer  "plot_offset_value",   limit: 4,     default: 1
     t.string   "plot_offset_units",   limit: 255,   default: "weeks"
-    t.integer  "topic_category_id",   limit: 4,     default: 19
+    t.integer  "topic_category_id",   limit: 4
     t.integer  "cuahsi_method_id",    limit: 4
   end
 
@@ -89,8 +89,8 @@ ActiveRecord::Schema.define(version: 20170808200737) do
     t.string   "affiliation",              limit: 255
     t.text     "description",              limit: 65535
     t.binary   "logo",                     limit: 16777215
-    t.datetime "created_at",                                                                null: false
-    t.datetime "updated_at",                                                                null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
     t.string   "timezone",                 limit: 255
     t.boolean  "secure_administration",                     default: false
     t.boolean  "secure_data_viewing",                       default: true
@@ -100,15 +100,15 @@ ActiveRecord::Schema.define(version: 20170808200737) do
     t.string   "google_maps_key",          limit: 255,      default: "none"
     t.string   "page_title",               limit: 255,      default: "CHORDS Portal"
     t.text     "doi",                      limit: 65535
-    t.string   "contact_name",             limit: 255,      default: "Contact Name",        null: false
-    t.string   "contact_phone",            limit: 255,      default: "Contact Phone",       null: false
-    t.string   "contact_email",            limit: 255,      default: "Contact Email",       null: false
-    t.string   "contact_address",          limit: 255,      default: "Contact Address",     null: false
-    t.string   "contact_city",             limit: 255,      default: "Contact City",        null: false
-    t.string   "contact_state",            limit: 255,      default: "Contact State",       null: false
-    t.string   "contact_country",          limit: 255,      default: "Contact Country",     null: false
-    t.string   "contact_zipcode",          limit: 255,      default: "Contact Zipcode",     null: false
-    t.string   "domain_name",              limit: 255,      default: "portal.chordsrt.com", null: false
+    t.string   "contact_name",             limit: 255,      default: "Contact Name",         null: false
+    t.string   "contact_phone",            limit: 255,      default: "Contact Phone",        null: false
+    t.string   "contact_email",            limit: 255,      default: "Contact Email",        null: false
+    t.string   "contact_address",          limit: 255,      default: "Contact Address",      null: false
+    t.string   "contact_city",             limit: 255,      default: "Contact City",         null: false
+    t.string   "contact_state",            limit: 255,      default: "Contact State",        null: false
+    t.string   "contact_country",          limit: 255,      default: "Contact Country",      null: false
+    t.string   "contact_zipcode",          limit: 255,      default: "Contact Zipcode",      null: false
+    t.string   "domain_name",              limit: 255,      default: "example.chordsrt.com", null: false
     t.integer  "cuahsi_source_id",         limit: 4
     t.string   "unit_source",              limit: 255,      default: "CUAHSI"
     t.string   "measured_property_source", limit: 255,      default: "SensorML"
