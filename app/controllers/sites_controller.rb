@@ -54,7 +54,10 @@ class SitesController < ApplicationController
     authorize! :manage, Site
     
     @site = Site.new(site_params)
-    @site.cuahsi_site_code = @site.get_cuahsi_sitecode
+    
+    if Archive.first.name == 'CUAHSI'
+      @site.cuahsi_site_code = @site.get_cuahsi_sitecode
+    end
 
     respond_to do |format|
       if @site.save
