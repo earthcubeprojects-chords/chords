@@ -103,16 +103,14 @@ Sample Rate: How often you are sampling data, in seconds (fastest is 1 second)
 
 <br>
 <hr>
+
 * Click on **Add a New Variable**
 
 * Change the <em>short name, name, units, the minimum and maximum for plotting, the measured property and general measurement category </em> to match what your Instrument will be measuring.
 
 **Note:** The short name you choose will be used in the URLs for entering data points. Make sure that they make sense for later use.
 (e.g. use a short name like **temp** for temperature):
-http://localhost:8080/measurements/url_create?instrument_id=2&**temp**=202.0&bv=209.5&uv=218.3&aq=231.9&at=2017-02-15T23:16:21.988Z&key=key&test)
-
-<img class="img-responsive" src="images/Config_Step3_pt4.PNG" alt="Shortname" />
-
+http://localhost:8080/measurements/url_create?instrument_id=2&temp=202.0&bv=209.5&uv=218.3&aq=231.9&at=2017-02-15T23:16:21.988Z&key=key&test)
 
 <br>
 <hr>
