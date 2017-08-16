@@ -7,7 +7,7 @@ class TopicCategory < ActiveRecord::Base
   def self.populate
   	xml_file = Rails.root + 'lib/assets/topic_categories.xml'
     doc = File.open(xml_file) { |f| Nokogiri::XML(f) }
-    puts doc.xpath("//Record")
+    # puts doc.xpath("//Record")
     doc.xpath("//Record").each do |node|
       params = Hash.new
       node.children.each do |property_node| 
