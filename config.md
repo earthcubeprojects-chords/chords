@@ -36,7 +36,7 @@ From here enter the:
   - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
   - Select security options 
   
-  For Google Maps API Key, use:
+  For Google Maps API Key, you can cut and past this text:
 `````
   AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
 `````
