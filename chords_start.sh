@@ -115,6 +115,10 @@ else
   echo "**** $mysql_seeded_flag was found. Database will not be seeded."
 fi
 
+# poplate empty ontologies 
+# this is only relevant to existing portals that have been upgraded
+bundle exec rake db:populate_ontologies
+
 # Database ready. Set the SEEDED flag.
 touch $mysql_seeded_flag
 
