@@ -32,6 +32,7 @@ From here enter the:
   - DOI (optional)
   - Affiliation
   - Page title (e.g. what project you’re working on. Like Orcas, STORM, NCAR Portal, etc.)
+  - Domain name: the domain name should either be the fully qualified domain name of the portal (if you have one) or the IP address of the server on which the portal is hosted. Make sure to change the default value as archiving will fail!
   - Time zone
   - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
   - Select security options 
