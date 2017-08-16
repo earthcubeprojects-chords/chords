@@ -2,6 +2,14 @@ namespace :db do
 	desc 'Populate any empty ontology models'
   task populate_ontologies: :environment do |task, args|
 
+      ##########
+      # Archive
+      ##########
+      if (Archive.all.count == 0)
+        puts "Populating Archive"
+        Archive.populate
+      end
+      
       
       ##########
       # Measured Properties
