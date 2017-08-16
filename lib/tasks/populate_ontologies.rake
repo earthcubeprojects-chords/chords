@@ -37,7 +37,7 @@ namespace :db do
       
       
       ##########
-      # site_types
+      # SiteType
       ##########
       # Populate Site Type Ontology
       
@@ -47,7 +47,7 @@ namespace :db do
       end
 
       ##########
-      # topic_categories
+      # TopicCategory
       ##########
       # Populate Topic Category Ontology
       
@@ -57,7 +57,7 @@ namespace :db do
       end
       
       ##########
-      # units
+      # Unit
       ##########
       # Populate Units Ontology
 
