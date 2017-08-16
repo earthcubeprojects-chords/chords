@@ -4,7 +4,7 @@ title: Getting Started with Amazon Web Services
 ---
 
 <div class="well" style="text-align: center;">
-If you already have an AWS account, just go to <a href="{{site.baseurl}}/create.html">Portal creation</a>.
+If you already have an AWS account, just go to [Portal creation] (http://ncar.github.io/chords/create.html).
 </div>
 
 
