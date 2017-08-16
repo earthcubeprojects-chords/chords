@@ -44,11 +44,13 @@ https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
 * Click **Next**
 
 
-## 3. Specify the portal name and key
+## 3. Specify the portal name and Pey Pair
 
 * Give the stack a name. The convention is _CHORDS-_ suffixed with your project or organization name, e.g. _CHORDS-CSURadar_.
-* If you created a key for your Amazon account, select an EC2 KeyPair for *KeyName*. This will allow you to ssh into the instance, 
-  if ever needed. For demonstrations and simple, low-bandwidth streaming feeds, select a _t2.micro_ instance type which are free of charge for the first year. Otherwise, use the default.
+* You will need to create a key pair for your Amazon account if you have not already done so. See Step 4 of
+[Setting up your Amazon Account](http://ncar.github.io/chords/aws.html). Then select an EC2 KeyPair that you created for *KeyName*.
+This will allow you to ssh into the instance, if ever needed. For demonstrations and simple, low-bandwidth streaming feeds, select
+a _t2.micro_ instance type which are free of charge for the first year. Otherwise, use the default.
 
 <img class="img-responsive" src="images/Portal_Step3.PNG" alt="Specify">
 
