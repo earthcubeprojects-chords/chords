@@ -11,7 +11,7 @@ engine, your CHORDS docker containers, or restart the server, and
 the database will survive. It's also very easy to update
 to new releases of CHORDS without loosing any data.
 
-[Instructions](https://github.com/NCAR/chords_portal/wiki/Docker-for-CHORDS)
+[Instructions]({{site.baseurl}}/os.html)
 for deploying CHORDS with Docker have been updated.
 
 The Docker version of CHORDS is also now being tested on Amazon Web Services. 
