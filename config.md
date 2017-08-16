@@ -19,7 +19,7 @@ Password: realtimedata
 
 ## Step 2
 
-* Click on the "**Configure**" button in the upper right part of the screen
+* Click on the "**Configure**" selection in the upper right part of the screen
 
 <img class="img-responsive" src="images/Config_Step2_pt1.PNG" alt="Step 2 Configure" />
 
@@ -35,6 +35,11 @@ From here enter the:
   - Time zone
   - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
   - Select security options 
+  
+  For Google Maps API Key, use:
+`````
+  AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
+`````
 
 Once you've entered all of that click **Save**.
 <br>
@@ -115,28 +120,8 @@ If you’d like to see more about this, the “Data out” tab from chordsrt.com
 <br>
 <hr>
 
+
 ## Step 6
-
-* Say you have more than one site you want to use to keep an eye on your instruments. You can add another site by clicking “**Sites**”
-
-<img class="img-responsive" src="images/Config_Step6_pt1.PNG" alt="Sites" />
-
-* Once there click on a button towards the bottom of the page that says “**Add a New Site**”
-
-<img class="img-responsive" src="images/Config_Step6_pt2.PNG" alt="Sites Page" />
- 
- * From here you can rename the site, specify latitude and longitude location of the site, and last but not least elevation.
-
-<img class="img-responsive" src="images/Config_Step6_pt3.PNG" alt="Sites edit" />
-
-**Note:** This is also where you can Destroy a site.
-
-* Now if you want to add an instrument to your new site or move one over from an old site Simply go back to the “Instruments” tab and this time select your new site instead.
-
-<img class="img-responsive" src="images/Config_Step6_pt4.PNG" alt="Sites Configure" />
-<br>
-<hr>
-## Step 7
 Now your portal is up and running and you’re ready to add your team in. But how on earth do we do that? 
 * First your users will have to create an account of their own. They can do this by clicking on the “<em>**Sign In**</em>” Button at the top right hand corner of your chords site. 
 
