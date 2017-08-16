@@ -72,6 +72,7 @@ CUAHSI Site Code:
 
 * Click on the **Instruments** button in the middle left part of the screen.
 <img class="img-responsive" src="images/Config_Step3_pt1.PNG" alt="Instruments" />
+
 * Click on **New Instrument** it will open up a new page where you can create an instrument.
 
 <br>
