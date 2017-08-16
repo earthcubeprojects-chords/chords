@@ -35,6 +35,7 @@ From here enter the:
   - Domain name: the domain name should either be the fully qualified domain name of the portal (if you have one) or the IP address of the server on which the portal is hosted. Make sure to change the default value as archiving will fail!
   - Time zone
   - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
+  - Logo File: You may upload a customized logo for your portal here. It will appear in the portal header pages.
   - Select security options 
   
   For Google Maps API Key, you can cut and past this text:
