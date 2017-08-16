@@ -3,9 +3,7 @@ layout: page
 title: Getting Started with Amazon Web Services
 ---
 
-<div class="well" style="text-align: center;">
-If you already have an AWS account, just go to <a href="{{site.baseurl}}/create.html">Portal creation</a>.
-</div>
+If you already have an AWS account, just go to [Portal creation](http://ncar.github.io/chords/create.html).
 
 
 ## 1. Sign up in AWS
@@ -20,7 +18,7 @@ If you already have an AWS account, just go to <a href="{{site.baseurl}}/create.
 
 * Enter your email and create a password. Make sure to select “I am a new user” If you don’t have an amazon account.
 * Walk through their online setup and make a note of your **ID**
-  - **Note:** <em>There will be a section where you will need to provide a credit card number and  make a phone call</em>
+  - **Note:** <em>There will be a section where you will need to provide a credit card number and enter a PIN via a phone call from Amazon</em>
   <img class="img-responsive" src="images/AWS_Step1.PNG" alt="Step 1" />
   
   Please <em>keep a note of your AWS account ID</em>, you'll need it next.
@@ -65,22 +63,26 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 `````
 **Note:** If you need to find your account number again go to “Your AWS Account ID and It’s Alias” at http://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html
 
-* Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar at the top should show <em> your_user_name@your_aws_account_id </em>
-
-## 4. To create or remove an account alias (only if needed)
-
-* Sign into IAM (Identity and Access Management) https://console.aws.amazon.com/iam/
-* Click on <em>**Services**</em> and then <em>**IAM**</em> 
-* Click on Dashboard on the left side of the screen then <em>**Users**</em>
-
 <img class="img-responsive" src="images/AWS_Step4.PNG" alt="Step 4" />
 
-* Find the IAM <em>users sign-in</em> link
-* To create the alias click **Customize** and enter the name you want. Once that’s done click on the **Add User**
-* To remove the alias click **Customize** and then click **Delete Users**. This will revert the sign in URL to your AWS ID
+* Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar at the top should show <em> your_user_name@your_aws_account_id </em>
+
+## 4. Create a Key Pair
+
+* Bring up EC2 Services by Selecting **Services** on the top bar:
+
+<img class="img-responsive" src="images/AWS_Step4.5.PNG" alt="Step 4.5" />
+
+* Click on **EC2**
+
 <img class="img-responsive" src="images/AWS_Step5.PNG" alt="Step 5" />
-* To sign in after it’s created use your ID URL
-````
-https://your_account_alias.signin.aws.amazon.com/console/
-````
   
+* Select **Key Pairs** on the left
+
+<img class="img-responsive" src="images/AWS_Step6.PNG" alt="Step 6" />
+
+* Click **Create Key Pair** and enter a Key pair name:
+
+<img class="img-responsive" src="images/AWS_Step7.PNG" alt="Step 7" />
+
+All done, now go to this link to [Create a Portal via AWS](http://ncar.github.io/chords/create.html)!
