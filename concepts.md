@@ -166,6 +166,7 @@ title: Concepts
       test data can be easily deleted when testing is completed.
       </p>
       <ul>
+      <li>Simulation will not be available unless you are logged in with administrator access.</li>
       <li>Select Simulator from the top bar to open the simulation page. It's best to right-click 
       the link, and select "Open Link In New Tab".</li>
       <li>You can  individually toggle each intrument on/off.</li>
