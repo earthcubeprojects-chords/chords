@@ -3,7 +3,6 @@ layout: page
 title: Create a Portal
 ---
 
-<div class="well" style="text-align: left;">
 If someone else has already created a Portal for you, you can skip Portal creation. Just point
 your browser at the new Portal and perform the initial login as user: <em>admin@chordsrt.com</em>, 
 password: <em>realtimedata</em>. You will be prompted to change the password during this first login.
