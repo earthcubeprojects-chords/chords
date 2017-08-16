@@ -120,7 +120,7 @@ http://localhost:8080/measurements/url_create?instrument_id=2&temp=202.0&bv=209.
 <img class="img-responsive" src="images/Config_Step4.PNG" alt="Data In" />
 
 
-Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser. This method, however, isn’t meant for serious data collection. It would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this the [Data In tab in our documentation](http://ncar.github.io/chords/datain.html) shows code examples as well.
+Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser. This method, however, isn’t meant for serious data collection. It would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
 
 <br>
 <hr>
@@ -137,7 +137,7 @@ as options for downloading and viewing the data collected. Once you click on one
 
 <img class="img-responsive" src="images/Config_Step5_pt2.PNG" alt="Data Download" />
 
-If you’d like to see more about this, the “Data out” tab from chordsrt.com or http://ncar.github.io/chords/dataout.html will provide additional information as well as programming examples. 
+If you’d like to see more about this, the [Data out tab from chordsrt.com](http://ncar.github.io/chords/dataout.html) will provide additional information as well as programming examples. 
 <br>
 <hr>
 
