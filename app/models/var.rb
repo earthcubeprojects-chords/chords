@@ -2,7 +2,7 @@ class Var < ActiveRecord::Base
 
   require 'task_helpers/cuahsi_helper'
   include CuahsiHelper
-  
+
   belongs_to :instrument
   belongs_to :measured_property
   belongs_to :unit
@@ -99,9 +99,12 @@ class Var < ActiveRecord::Base
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
-  def self.list_general_categories
-    categories = ['Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Unknown', 'Water Quality']
-    return categories
+  def self.get_general_categories_collection
+    category_names = ['Unknown', 'Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Water Quality']
+    
+    general_categories = Hash[category_names.map {|name| [name, name]}]
+
+    return general_categories
   end
 
   def get_cuahsi_variables
@@ -139,7 +142,7 @@ class Var < ActiveRecord::Base
       "TimeSupport" => self.instrument.sample_rate_seconds,
       "TimeUnitsID" => 100,
       "DataType" => "Unknown",
-      "GeneralCategory" => Var.list_general_categories[self.general_category_id.to_i - 1],
+      "GeneralCategory" => self.general_category,
       "NoDataValue" => -9999
       }
     return data

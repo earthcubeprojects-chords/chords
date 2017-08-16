@@ -107,7 +107,7 @@
   - if Archive.first.name == "CUAHSI"
     %td
       - if can?(:manage, Var)
-        = best_in_place variable, :general_category_id, :as => :select, :collection => Var.list_general_categories
+        = best_in_place variable, :general_category, :as => :select, :collection => Var.get_general_categories_collection
       - else
         = variable.general_category
 
