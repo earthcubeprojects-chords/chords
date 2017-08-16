@@ -55,7 +55,20 @@ Click **Save**.
 
 ## Step 3
 
-* Click on the **instruments** button in the middle left part of the screen.
+
+* Create a new Site by clicking on the **Sites** button in the middle left part of the screen.
+<img class="img-responsive" src="images/Config_Step3_pt1.PNG" alt="Instruments" />
+
+Fill out the green highlighted fields to create a new Site:
+
+````
+Name: name of site
+Lat, Lon and Elevation: physical location of site
+Site Type: select among the terms in the pull-down menu
+CUAHSI Site Code:
+````
+
+* Click on the **Instruments** button in the middle left part of the screen.
 <img class="img-responsive" src="images/Config_Step3_pt1.PNG" alt="Instruments" />
 * Click on "<em>**New Instrument**</em>" it will open up a new page where you can create an instrument.
 
