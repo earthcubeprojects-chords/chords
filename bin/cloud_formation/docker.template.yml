@@ -6,7 +6,7 @@ Description: AWS CloudFormation Template for a CHORDS Portal.
 Parameters:
   ChordsAdminPw:
     Default: chords_ec_demo
-    Description: CHORDS database admin password. Choose carefully.
+    Description: CHORDS database admin password (this is not the portal admin password). Choose carefully.
     Type: String
 
   ChordsGuestPw:
