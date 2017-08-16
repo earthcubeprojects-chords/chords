@@ -69,7 +69,7 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 
 * Click on this link and enter the IAM username and password you made. Once you’ve successfully logged in your navigation bar at the top should show <em> your_user_name@your_aws_account_id </em>
 
-## 4. Create a key pair
+## 4. Create a Key Pair
 
 * Bring up EC2 Services by Selecting **Services** on the top bar:
 
