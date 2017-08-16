@@ -48,6 +48,8 @@ the example of settings needed for the [Consortium of Universities for the Advan
 
 <img class="img-responsive" src="images/Config_Step2_pt3.PNG" alt="Step 2 Archive Configure Page" />
 
+Click **Save**.
+
 <br>
 <hr>
 
