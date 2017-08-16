@@ -56,7 +56,7 @@ Click **Save**.
 ## Step 3
 
 
-* Create a new Site by clicking on the **Sites** button in the middle left part of the screen.
+* Create a new Site by clicking on the **Sites** selection in the middle left part of the screen and clicking the **Add A New Site** button.
 <img class="img-responsive" src="images/Config_Step3_pt0.PNG" alt="Sites" />
 
 Fill out the highlighted fields to create a new Site:
