@@ -44,7 +44,7 @@ From here enter the:
 Once you've entered all of that click **Save**.
 
 If you are planning to archive the data at one of NSF's data archive sites, you can enter the archive-specific settings below. Here we use
-the example of settings needed for the [CUAHSI](https://www.cuahsi.org/) archive:
+the example of settings needed for the [Consortium of Universities for the Advancement of Hydrologic Science, Inc. (CUAHSI)](https://www.cuahsi.org/) archive:
 
 <img class="img-responsive" src="images/Config_Step2_pt3.PNG" alt="Step 2 Archive Configure Page" />
 
