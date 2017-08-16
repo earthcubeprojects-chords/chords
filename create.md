@@ -80,7 +80,7 @@ Once your portal is created click on the **“Outputs”** tab. Below it will sh
 
 <img class="img-responsive" src="images/Portal_Step7.PNG" alt="Accessing">
 
-## 8. Log Into to Your CHORDS Portal
+## 8. Log Into to Your Brand-New CHORDS Portal!
 * Click on the **“Sign in”** 
 
 
