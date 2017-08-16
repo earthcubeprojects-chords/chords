@@ -121,6 +121,14 @@
         #{f.select :measured_property_source, options_for_select([['SensorML', 'SensorML'], ['CUAHSI', 'CUAHSI']], @profile.measured_property_source)}
   
     .line
+
+    .line
+      .title
+        CUASHI Source ID
+      .field
+        #{f.text_field('cuahsi_source_id', size: 30)}
+
+    .line
   
     .line
       .title

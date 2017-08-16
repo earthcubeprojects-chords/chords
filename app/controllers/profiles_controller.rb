@@ -210,7 +210,7 @@ class ProfilesController < ApplicationController
         :secure_administration, :secure_data_viewing, :secure_data_download, 
         :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
         :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country, :contact_zipcode, :domain_name, 
-        :unit_source, :measured_property_source
+        :unit_source, :measured_property_source, :cuahsi_source_id
         )
     end
 
