@@ -43,11 +43,11 @@ From here enter the:
 
 Once you've entered all of that click **Save**.
 
+If you are planning to archive the data at one of NSF's data archive sites, archive-specific settings will appear below. Here we use
+the example of settings for the CUAHSI archive:
+
 <img class="img-responsive" src="images/Config_Step2_pt3.PNG" alt="Step 2 Archive Configure Page" />
 
-If you are planning to archive the data at one of NSF's data archive sites, these may require archive-specific configuration. Here we use
-the example of settings for the CUAHSI archive:
-  
 <br>
 <hr>
 
