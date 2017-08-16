@@ -87,4 +87,4 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 
 <img class="img-responsive" src="images/AWS_Step7.PNG" alt="Step 7" />
 
-All done! Now go to this link to [Create a Portal via AWS](http://ncar.github.io/chords/create.html)!
+All done, now go to this link to [Create a Portal via AWS](http://ncar.github.io/chords/create.html)!
