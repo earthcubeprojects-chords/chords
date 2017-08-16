@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 20170808200737) do
     t.string   "contact_state",            limit: 255,      default: "Contact State",       null: false
     t.string   "contact_country",          limit: 255,      default: "Contact Country",     null: false
     t.string   "contact_zipcode",          limit: 255,      default: "Contact Zipcode",     null: false
-    t.string   "domain_name",              limit: 255,      default: "example.chordsrt.com", null: false
+    t.string   "domain_name",              limit: 255,      default: "portal.chordsrt.com", null: false
     t.integer  "cuahsi_source_id",         limit: 4
     t.string   "unit_source",              limit: 255,      default: "CUAHSI"
     t.string   "measured_property_source", limit: 255,      default: "SensorML"
