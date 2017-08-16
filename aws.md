@@ -71,7 +71,7 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 
 ## 4. Create a key pair
 
-* Bring up EC2 Services by Selecting **Services* on the top bar:
+* Bring up EC2 Services by Selecting **Services** on the top bar:
 
 <img class="img-responsive" src="images/AWS_Step4.5.PNG" alt="Step 4.5" />
 
@@ -85,6 +85,6 @@ https://[aws account number goes here].signin.aws.amazon.com/console/
 
 * Click **Create Key Pair** and enter a Key pair name:
 
-<img class="img-responsive" src="images/AWS_Step6.PNG" alt="Step 6" />
+<img class="img-responsive" src="images/AWS_Step7.PNG" alt="Step 7" />
 
 All done! Now go to this link to [Create a Portal via AWS](http://ncar.github.io/chords/create.html)!
