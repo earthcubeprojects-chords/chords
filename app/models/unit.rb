@@ -9,7 +9,13 @@ class Unit < ActiveRecord::Base
 		validates :abbreviation, uniqueness: false, presence: true
 		validates :source, uniqueness: false, presence: true
 
+
 	def self.populate
+	  self.populate_cuahsi_unit
+	  self.populate_udunits_units 
+  end
+  
+	def self.populate_cuahsi_units
 		
 		#populate CUAHSI units
 		xml_file = Rails.root + 'lib/assets/cuahsi_units.xml'
@@ -31,6 +37,9 @@ class Unit < ActiveRecord::Base
 	    	Unit.create(params)
     	end
     end
+  end
+
+	def self.populate_udunits_units
 
     #populate UDUNITS
     id_num = 1
