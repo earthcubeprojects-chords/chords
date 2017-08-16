@@ -10,6 +10,7 @@ title: Concepts
     <li><a data-toggle="tab" href="#monitor">Monitoring</a></li>
     <li><a data-toggle="tab" href="#geo">Geo</a></li>
     <li><a data-toggle="tab" href="#sim">Simulation</a></li>
+    <li><a data-toggle="tab" href="#config">Configure</a></li>
     <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>
 
@@ -112,6 +113,22 @@ title: Concepts
         setup for this instrument.</li>
       </ul>
       <img class="img-responsive" src="images/monitor.png" alt="Dashboard">
+    </div>
+    
+    <div id="config" class="tab-pane">
+      <p>
+      Configuration is used for managing many (but not all) of the portal characteristics. Sites, instruments,
+      and variables are configured on their own specific pages.
+      </p>
+      <ul>
+        <li>You must be logged in with administrator access in order to modify the configuration.</li>
+        <li>Be sure to press the save button at the bottom of the configuration sections.</li>
+        <li>A backup copy of the configuration may be created and reloaded using the Export/Import
+        Configuration buttons.</li>
+        <li>A backup copy of the time-series database may be created and reloaded using Export/Import 
+        Database buttons.</li>
+      </ul>
+      <img class="img-responsive" src="images/configure.png" alt="Dashboard">
     </div>
     
     <div id="data" class="tab-pane">
