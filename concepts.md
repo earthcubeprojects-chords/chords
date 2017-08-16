@@ -8,6 +8,7 @@ title: Concepts
     <li class="active"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
     <li><a data-toggle="tab" href="#data">Data</a></li>
     <li><a data-toggle="tab" href="#monitor">Monitoring</a></li>
+    <li><a data-toggle="tab" href="#geo">Geo</a></li>
     <li><a data-toggle="tab" href="#sim">Simulation</a></li>
     <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>
@@ -87,7 +88,7 @@ title: Concepts
       Dashboard link.
       </p>
       <ul>
-        <li>A list of instrument links have status indicators which are green/red  indicating if a measurement 
+        <li>The instrument links have status indicators which are green/red indicating if a measurement 
         has been received within the nominal reporting interval for the instrument.</li>
         <li>The most recent measurement URL is shown in the green box.</li>
         <li>Three bar graphs show the number of measurements received for each instrument,
@@ -98,14 +99,16 @@ title: Concepts
     
     <div id="monitor" class="tab-pane">
       <p>
-      Clicking on an instrument link takes you to a page where you can monitor data from 
+      Clicking on an instrument link (from the dashboard or instrument page 
+      takes you to a page where you can monitor data from 
       that instrument. You can also modify the instrument configuration.
       </p>
       <ul>
-        <li>Select the variableto be plotted by pressing a link above the graph.</li>
+        <li>Select the variables to be plotted by selecting them below the graph.</li>
+        <li>The time span and range can be adjusted with a drop down and slider.</li>
         <li>The graph has live updates. When a new measurement is recieved, it is plotted.</li>
         <li>The most recent URL received from the instrument is displayed in the green alert box.</li>
-        <li>Configuration parameters appear in green boxes.You can edit them directly, to change the 
+        <li>Configuration parameters appear in green boxes. You can edit them directly, to change the 
         setup for this instrument.</li>
       </ul>
       <img class="img-responsive" src="images/monitor.png" alt="Dashboard">
@@ -113,20 +116,31 @@ title: Concepts
     
     <div id="data" class="tab-pane">
       <p>
-      The sidebar Data link takes you to a page where instrument data can be directly downloaded with
+      The top bar Data link takes you to a page where instrument data can be directly downloaded with
       a few button clicks. Old measurements can be trimmed from the database. Simple URLs can also be used by programs to 
       <a href="{{site.baseurl}}/dataout.html">fetch data</a>.
       </p>
       <ul>
-      <li>The Data page of the Portal lets you download instrument data for selected days in
+      <li>You can download instrument data for selected days in
       various file formats.</li>
-      <li>Use the Trim function to remove older measurements from a bloated database.</li>
       <li>Links are also provided to "Data URLs" pages, which describe how to 
       construct a data request for each instrument.</li>
-      <li>Remember that data can also be fetched directly by programs. You don't have
+      <li>Remember that data can also be fetched directly by <a href="{{site.baseurl}}/dataout.html">programs</a>. You don't have
       to download files.</li>
       </ul>
       <img class="img-responsive" src="images/data.png" alt="Data">
+    </div>
+    
+    <div id="geo" class="tab-pane">
+      <p>
+      The top bar Geo link takes you to a geographical display of site locations.
+      </p>
+      <ul>
+      <li>A Google API credential is required in order to show google maps on a web site. Anyone with a Google account can 
+      <a href="https://console.developers.google.com/project/_/apiui/credential" target="_blank">create an API credential</a>. 
+      The value is entered into the CHORDS configuration.</li>
+      </ul>
+      <img class="img-responsive" src="images/geo.png" alt="Data">
     </div>
     
     <div id="sim" class="tab-pane">
@@ -135,7 +149,7 @@ title: Concepts
       test data can be easily deleted when testing is completed.
       </p>
       <ul>
-      <li>Select Simulator from the side bar to open the simulation page. It's best to right-click 
+      <li>Select Simulator from the top bar to open the simulation page. It's best to right-click 
       the link, and select "Open Link In New Tab".</li>
       <li>You can  individually toggle each intrument on/off.</li>
       <li>URLs with simulated measurements will be sent to the Portal, at the nominal instrument
