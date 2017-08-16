@@ -3,12 +3,10 @@ layout: page
 title: Create a Portal
 ---
 
-<div class="well" style="text-align: left;">
 If someone else has already created a Portal for you, you can skip Portal creation. Just point
 your browser at the new Portal and perform the initial login as user: <em>admin@chordsrt.com</em>, 
 password: <em>realtimedata</em>. You will be prompted to change the password during this first login.
-You can then proceed to <a href="{{site.baseurl}}/config.html">Portal configuration</a>.
-</div>
+You can then proceed to [Portal configuration](http://ncar.github.io/chords/config.html).
 
 The Portal runs as a standalone web server on Amazon Web Services (AWS). 
 The interface to AWS can seem a bit overwhelming (currently offering 52
@@ -48,7 +46,8 @@ https://s3-us-west-2.amazonaws.com/chords-template/docker.template.yml
 
 * Give the stack a name. The convention is _CHORDS-_ suffixed with your project or organization name, e.g. _CHORDS-CSURadar_.
 * You will need to create a key pair for your Amazon account if you have not already done so. You can see instructions about how to do this on _Step 4_ of [Setting up your Amazon Account](http://ncar.github.io/chords/aws.html).
-Then select an EC2 KeyPair that you created for *KeyName*.This will allow you to ssh into the instance, if ever needed.
+Then select an EC2 KeyPair that you created for *KeyName*. This will allow you to ssh into the instance, if ever needed.
+
 For demonstrations and simple, low-bandwidth streaming feeds, select a _t2.micro_ instance type which are free of charge for the first
 year. Otherwise, use the default.
 
