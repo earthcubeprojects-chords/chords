@@ -83,19 +83,18 @@ CUAHSI Site Code:
 
 **Definitions:**
 `````
-Instrument: (The name you gave the instrument)
-Site: (Physical location of the instrument)
+Name: The name you gave the instrument
+Topic category: Pull down menu of categories of instruments
 Description: (Add additional information you feel necessary here. Like location, website, or purpose.)
+Site: Site that the instrument resides at
 `````
+
 <img class="img-responsive" src="images/Config_Example 1.PNG" alt="Description" />
+
 `````
-Data Ingest/fetch: (URLS for collecting data)
-Instrument ID: The latest instrument you’ve made (e.g. 16 means this is the 16th instrument I’ve created)
-Last Measurement: (Keeps track of how many days ago you last collected data with this instrument, if you haven’t collected any yet it will say “never”)
-Measurements: How many measurements you’ve taken
-Test Measurements: How many simulated measurements you’ve taken
 Display Points: How many points are shown on the graph
-Measurement interval (s): How often you are adding data per second. (speed of data collecting. fastest is 1 second)
+Plot offset: How often the plot window should span
+Sample Rate: How often you are sampling data, in seconds (fastest is 1 second)
 `````
 <br>
 <hr>
