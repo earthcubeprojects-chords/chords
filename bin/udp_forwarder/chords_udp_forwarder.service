@@ -6,7 +6,7 @@
 #
 # To install:
 # Fetch the service definition
-#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.service
+#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
 #
 # If you are making a fresh configuration, create the configuration file for for udp_forwarder.rb 
 # (Don't do this if you have an existing configuration. And note that the configuration file name
