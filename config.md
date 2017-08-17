@@ -39,8 +39,8 @@ From here enter the:
   - Logo File: You may upload a customized logo for your portal here. It will appear in the portal header pages.
   - Select security options. For production use we recommend that a key be used for data entry (see example in Step 4).
   
-  Note to CUAHSI workshop participants: For the [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key),
-  you can cut and past this text:
+  Enter your [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key)
+  **Note to CUAHSI workshop participants:** You can cut and past this text to use as your Google Maps API Key:
 `````
   AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
 `````
