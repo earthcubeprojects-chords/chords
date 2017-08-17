@@ -57,7 +57,7 @@ Click **Save**.
 
 ## Step 3
 
-**Note**: In the following screens you may click on the areas highlighted in <em>light green</em> you can change the information there.
+**Note**: In the following screens you may click on the areas highlighted in <em>light green</em> to change the settings there.
 
 * Create a new Site by clicking on the **Sites** selection in the middle left part of the screen and clicking the **Add A New Site** button.
 <img class="img-responsive" src="images/Config_Step3_pt0.PNG" alt="Sites" />
