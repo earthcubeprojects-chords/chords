@@ -63,13 +63,13 @@
               data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTRUMENT AND ALL DATA WILL BE PERMANENTLY DELETED" } |
 %br/
 - if @sites.count > 0
-  = link_to 'New Instrument', new_instrument_path
+  = link_to 'New Instrument', new_instrument_path, :class => 'btn btn-default btn-lg dropdown-toggle'
 - else
   %strong At least one site must be defined before creating a new instrument.
  
 %h2 Identifiers
 
-%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", :type => "button"} 
+%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", :type => "button", :class => 'btn btn-default btn-lg dropdown-toggle'} 
   Toggle Details
 
 #summarytable.table-responsive.collapse

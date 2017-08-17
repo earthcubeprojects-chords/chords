@@ -53,4 +53,4 @@
             = button_to 'Edit', edit_var_path(v), method: :edit
           %td= button_to 'Destroy', v, method: :delete, data: { confirm: 'Are you sure?' }
   .actions
-    = f.submit
+    = f.submit  :class => 'btn btn-default btn-lg dropdown-toggle'

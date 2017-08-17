@@ -48,6 +48,12 @@ class Archive < ActiveRecord::Base
       base_url = ActionController::Base.helpers.sanitize(params['base_url'])
 
 
+      # Update the current rails environment
+      Rails.application.config.x.archive['username'] = username
+      Rails.application.config.x.archive['password'] = password
+      Rails.application.config.x.archive['base_url'] = base_url
+
+
       #encrpyt the credentials
       crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
       username = crypt.encrypt_and_sign(username)
@@ -68,6 +74,8 @@ class Archive < ActiveRecord::Base
       out_file = File.new(archive_configuration_file_path, "w")
       out_file.puts(new_archive_configuration)
       out_file.close
+      
+
 
     end
 
