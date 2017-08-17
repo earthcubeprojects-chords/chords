@@ -31,8 +31,8 @@ Parameters:
     Type: String
                 
   SecretKeyBase:
-    Default: aaaaaaaaaaa
-    Description: SECRET_KEY_BASE for Rails
+    Default: 9a9c4d7e7bed3d85a53bfaaee9cefd338c2ab5fda573cd933dfd3fea4178004425cb50a06df00a0c59a1d353defb9bd3e49fb5f47a791dec7daff95b2a6d080d
+    Description: SECRET_KEY_BASE for Rails. This MUST be a randomly generated and 256 bits long.
     Type: String
 
   DbRetention:
@@ -107,8 +107,8 @@ Parameters:
     Type: String
 
   SecretKeyBase:
-    Default: aaaaaaaaaaa
-    Description: CHORDS secret key base
+    Default: 9a9c4d7e7bed3d85a53bfaaee9cefd338c2ab5fda573cd933dfd3fea4178004425cb50a06df00a0c59a1d353defb9bd3e49fb5f47a791dec7daff95b2a6d080d
+    Description: SECRET_KEY_BASE for Rails. This MUST be a randomly generated and 256 bits long.
     Type: String
 
 #####################################################################
