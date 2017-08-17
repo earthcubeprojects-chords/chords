@@ -116,19 +116,21 @@ http://localhost:8080/measurements/url_create?instrument_id=2&temp=202.0&bv=209.
 <hr>
 
 ## Step 4
- Now you’ve gotten logged into your portal and set up your instrument. You’ll notice that there is a URL that is generated when you created your instrument. 
+ Now you’ve gotten logged into your portal and set up your instrument. Click on the **Data URLs** link in the _Data Access and Downloads_
+ box. 
 <img class="img-responsive" src="images/Config_Step4.PNG" alt="Data In" />
 
 
-Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser. This method, however, isn’t meant for serious data collection. It would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
+This page describes how to put data into your portal and get data out via simple URLs.Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser. You will only need to use the short variable names you have set up add the key if you specified one. This method, however, isn’t meant for serious data collection. It would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
 
 <br>
 <hr>
 ## Step 5
-Now that you’ve learned how to put Data In, how about taking Data Out? You can do this from the Portal by clicking on <em>**“Data”**</em>
+Now that you’ve learned how to put Data In and Out via web services protocols, how about downloading all data across a block of time?
+You can do this from the Portal by clicking on <em>**“Data”**</em>
 <img class="img-responsive" src="images/Config_Step5_pt1.PNG" alt="Data out" />
 
-Once there you can choose which instrument you want the data from and in what format. CHORDS offers data in 
+Once there you can choose which instrument you want the data from, the timeframe and in what format. CHORDS offers data in 
 * **GeoCSV** (Standardized Comma Separated Variables) 
 * **GeoJSON** (Standardized JavaScript Object Notation)
 * **XML** (Extensible Markup Language) 
