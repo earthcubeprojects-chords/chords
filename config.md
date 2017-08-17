@@ -120,8 +120,9 @@ http://localhost:8080/measurements/url_create?instrument_id=2&temp=202.0&bv=209.
  box. 
 <img class="img-responsive" src="images/Config_Step4.PNG" alt="Data In" />
 
+<img class="img-responsive" src="images/Config_Step4.5.PNG" alt="Data URLs page" />
 
-This page describes how to put data into your portal and get data out via simple URLs.Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser. You will only need to use the short variable names you have set up add the key if you specified one. This method, however, isn’t meant for serious data collection. It would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
+This page describes how to put data into your portal and get data out via simple URLs. Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser, using the short variable names you have set up add the key if you specified one. This method, however, isn’t meant for serious data submission as it would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
 
 <br>
 <hr>
