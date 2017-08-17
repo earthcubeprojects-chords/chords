@@ -68,7 +68,7 @@ Fill out the highlighted fields to create a new Site:
 Name: name of site
 Lat, Lon and Elevation: physical location of site
 Site Type: select among the terms in the pull-down menu
-CUAHSI Site Code:
+CUAHSI Site Code: leave this field blank as it will be auto-configured
 `````
 
 * Click on the **Instruments** button in the middle left part of the screen.
