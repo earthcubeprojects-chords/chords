@@ -36,15 +36,13 @@ From here enter the:
   server on which the portal is hosted, e.g. from AWS. Make sure to change the default value as archiving will fail if it is not set!
   - Time zone
   - Project Description: A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
-  - Logo File: You may upload a customized logo for your portal here. It will appear in the portal header pages.
-  - Select security options. For production use we recommend that a key be used for data entry (see example in Step 4).
-  
-  Enter your [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key)
-  
-  **Note to CUAHSI workshop participants:** You can cut and past this text to use as your Google Maps API Key:
+  - Logo File: You may upload a customized logo for your portal here. It will appear in the portal header page.
+  - Enter your [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key)
+    **Special note to CUAHSI workshop participants:** You can cut and past this text to use as your Google Maps API Key:
 `````
   AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
 `````
+  - Select security options. For production use we recommend that a key be used for data entry (see example in Step 4).
 
 Once you've entered all of that click **Save**.
 
