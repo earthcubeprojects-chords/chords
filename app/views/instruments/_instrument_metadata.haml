@@ -19,7 +19,7 @@
             = f.hidden_field :value, :value => 'value'
             = f.hidden_field :instrument_id, :value => @instrument.id
             - if can?(:manage, Instrument)
-              = f.submit :value	 => 'Add a New InfluxDB Tag'
+              = f.submit :value	 => 'Add a New InfluxDB Tag', :class => 'btn btn-default btn-lg dropdown-toggle'
     .clear
 
       .row-fluid.instruments_variables_header

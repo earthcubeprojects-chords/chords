@@ -6,7 +6,7 @@
   %td= best_in_place site, :site_type_id, :as => :select, :collection => SiteType.all.map { |i| [i.id, i.name] }
   - if Archive.first.name == "CUAHSI"
     %td= best_in_place site, :cuahsi_site_code, :as => :input
-  %td= button_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' }
+  %td= button_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' }, :class => 'btn btn-default btn-lg dropdown-toggle'
 %tr
   %td{:colspan => "4"}
     %ul{:style => "list-style-type:none;padding:0; margin:0px 0px 0px 30px;"}
