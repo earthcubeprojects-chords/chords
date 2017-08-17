@@ -40,6 +40,7 @@ From here enter the:
   - Select security options. For production use we recommend that a key be used for data entry (see example in Step 4).
   
   Enter your [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key)
+  
   **Note to CUAHSI workshop participants:** You can cut and past this text to use as your Google Maps API Key:
 `````
   AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
