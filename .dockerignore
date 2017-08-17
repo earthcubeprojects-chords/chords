@@ -5,3 +5,4 @@ tmp/
 public/assets/
 vendor/cache/
 .DS_Store
+config/archive.yml
