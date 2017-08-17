@@ -122,7 +122,15 @@ http://localhost:8080/measurements/url_create?instrument_id=2&temp=202.0&bv=209.
 
 <img class="img-responsive" src="images/Config_Step4.5.PNG" alt="Data URLs page" />
 
-This page describes how to put data into your portal and get data out via simple URLs. Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser, using the short variable names you have set up add the key if you specified one. This method, however, isn’t meant for serious data submission as it would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
+This page describes how to put data into your portal and get data out via simple URLs. Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser, using the short variable names you have set up add the key if you specified one. Thus, a sample URL to put one item of test data into your portal, using the configuration specified in these instrcutions, could be:
+
+`````
+http://portal.chordsrt.com/measurements/url_create?instrument_id=4&depth=202.0&bv=209.5&at=2017-02-15T23:16:21.988Z&key=chordskeyforvales&test)
+`````
+
+By entering this URL in your browser, one point of test data is entered into your portal. The URL specifies that it was collected on February 15th, 2017 at 23:16:21.988 GMT and that the depth value recorded was 202.0 and the battery voltage was 209.5
+
+This method, however, isn’t meant for serious data submission as it would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
 
 <br>
 <hr>
