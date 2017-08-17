@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
   
+  before_action :load_archive_configuration
+  
   def set_access_control_header
     headers['Access-Control-Allow-Origin'] = '*'
   end
@@ -58,6 +60,13 @@ class ApplicationController < ActionController::Base
     current_user.present? || super(*args)
   end
 
+
+  def load_archive_configuration
+    # TO DO: THIS IS A HACK AND NEED TO BE REFACTORED!!!
+    # Re-run the initializer to set the config
+    load "#{Rails.root}/config/initializers/archive.rb"
+  end
+  
 
   def authorize!(*args)
 
