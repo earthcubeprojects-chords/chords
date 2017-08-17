@@ -38,7 +38,7 @@ From here enter the:
   - Logo File: You may upload a customized logo for your portal here. It will appear in the portal header pages.
   - Select security options 
   
-  For Google Maps API Key, you can cut and past this text:
+  For the [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key), you can cut and past this text:
 `````
   AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
 `````
