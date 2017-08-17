@@ -32,13 +32,15 @@ From here enter the:
   - DOI (optional)
   - Affiliation
   - Page title (e.g. what project you’re working on. Like Orcas, STORM, NCAR Portal, etc.)
-  - Domain name: the domain name should either be the fully qualified domain name of the portal (if you have one) or the IP address of the server on which the portal is hosted. Make sure to change the default value as archiving will fail!
+  - Domain name: The domain name should either be the fully qualified domain name of the portal (if you have one) or the IP address of the
+  server on which the portal is hosted, e.g. from AWS. Make sure to change the default value as archiving will fail if it is not set!
   - Time zone
-  - A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
+  - Project Description: A short description of what your project is. This may use HTML Markup, if you haven’t used HTML markup or aren’t sure what it is, go to [this link](http://www.w3schools.com/html/html_intro.asp)
   - Logo File: You may upload a customized logo for your portal here. It will appear in the portal header pages.
-  - Select security options 
+  - Select security options. For production use we recommend that a key be used for data entry (see example in Step 4).
   
-  For the [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key), you can cut and past this text:
+  Note to CUAHSI workshop participants: For the [Google Maps API Key](https://developers.google.com/maps/documentation/embed/get-api-key),
+  you can cut and past this text:
 `````
   AIzaSyCaJcuGGmb9pumPJ8tptUobGUMlMWpmSRQ
 `````
@@ -60,16 +62,17 @@ Click **Save**.
 **Note**: In the following screens, it may not be obvious that you can click on the areas highlighted in <em>light green</em> to change
 the settings there.
 
-* Create a new Site by clicking on the **Sites** selection in the middle left part of the screen and clicking the **Add A New Site** button.
+* Create a new Site by clicking on the **Sites** selection in the middle left part of the screen and clicking the **Add A New Site**
+button.
 <img class="img-responsive" src="images/Config_Step3_pt0.PNG" alt="Sites" />
 
 Fill out the highlighted fields to create a new Site:
 
 `````
-Name: name of site
-Lat, Lon and Elevation: physical location of site
-Site Type: select among the terms in the pull-down menu
-CUAHSI Site Code: leave this field blank as it will be auto-configured
+Name: Name of site
+Lat, Lon and Elevation: Physical location of site
+Site Type: Select among the terms in the pull-down menu
+CUAHSI Site Code: Leave this field blank as it will be auto-configured
 `````
 
 * Click on the **Instruments** button in the middle left part of the screen.
@@ -124,7 +127,9 @@ http://localhost:8080/measurements/url_create?instrument_id=2&temp=202.0&bv=209.
 
 <img class="img-responsive" src="images/Config_Step4.5.PNG" alt="Data URLs page" />
 
-This page describes how to put data into your portal and get data out via simple URLs. Your data can be submitted to a portal by just copying and pasting the URL into the address bar of a browser, using the short variable names you have set up add the key if you specified one. Thus, a sample URL to put one item of test data into your portal, using the configuration specified in these instrcutions, could be:
+This page describes how to put data into your portal and get data out via simple URLs. A data point can be submitted to a portal by just
+copying and pasting the URL into the address bar of a browser, using the short variable names you have set up add the key if you specified
+one. Thus, a sample URL to put one item of test data into your portal, using the configuration specified in these instrcutions, could be:
 
 `````
 http://portal.chordsrt.com/measurements/url_create?instrument_id=4&depth=202.0&bv=209.5&at=2017-02-
@@ -144,11 +149,11 @@ You can do this from the Portal by clicking on <em>**“Data”**</em>
 <img class="img-responsive" src="images/Config_Step5_pt1.PNG" alt="Data out" />
 
 Once there you can choose which instrument you want the data from, the timeframe and in what format. CHORDS offers data in 
-* **GeoCSV** (Standardized Comma Separated Variables) 
-* **GeoJSON** (Standardized JavaScript Object Notation)
+* **GeoCSV** (Standardized Comma Separated Value file) 
+* **GeoJSON** (Standardized JavaScript Object Notation file)
 * **XML** (Extensible Markup Language) 
 
-as options for downloading and viewing the data collected. Once you click on one of these buttons your data will be downloaded into a format which can be opened in word or notepad.
+as options for downloading and viewing the data collected. Once you click on one of these buttons your data will be downloaded into the specified format which can be opened in Excel, Word or Notepad.
 
 <img class="img-responsive" src="images/Config_Step5_pt2.PNG" alt="Data Download" />
 
@@ -197,7 +202,7 @@ The second is a satellite image showing a snapshot of the area and where you’v
 <img class="img-responsive" src="images/Config_TZVolcano2.PNG" alt="Geo Button" />
 <em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo] (http://tzvolcano.chordsrt.com/sites/geo)</em>
 
-**Note:**  If the map says “Opps!...”, you need to enter a google Maps API key in CHORDS configuration. Google allows up to 25,000 free map accesses per day. You can request a google maps API key if you have  Google account. After you have the key, go to the Configure page and enter it into the “google Maps JavaScript API Key” box.
+**Note:**  If the map says “Opps!...”, you need to enter a google Maps API key in CHORDS configuration. Google allows up to 25,000 free map accesses per day. You can request a google maps API key if you have a Google account. After you have the key, go to the Configure page and enter it into the “google Maps JavaScript API Key” box.
 
 
 
