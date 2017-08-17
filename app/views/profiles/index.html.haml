@@ -13,16 +13,16 @@
     = link_to "Import InfluxDB Data", {controller: "profiles", action: "import_influxdb"}, class: "button"
 
 
-
-= form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
-  = render partial: "standard_options", locals: {f: f} 
-  .line
-  .line
-  = render partial: "metadata_options", locals: {f: f} 
-  .line
-  .line
-  = render partial: "cuahsi_data_services", locals: {f: f} 
+.profile
+  = form_for(:profile, method: "post", multipart: true, html: {class: "new_or_edit_form" }) do |f|
+    = render partial: "standard_options", locals: {f: f} 
+    .line
+    .line
+    = render partial: "metadata_options", locals: {f: f} 
+    .line
+    .line
+    = render partial: "cuahsi_data_services", locals: {f: f} 
   
-  .line
-    .center
-      = f.submit('Save')
+    .line
+      .center
+        = f.submit('Save', :class => 'btn btn-default btn-lg dropdown-toggle')
