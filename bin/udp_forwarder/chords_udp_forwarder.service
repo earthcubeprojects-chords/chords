@@ -4,6 +4,11 @@
 # Assume: The udp_forwarder service description (this file), the udp_forwarder.rb application, and
 # the udp_forwarder.rb configuration (.json) are all located in /var/lib/chords/
 #
+# *** Note. If a security key is needed for CHORDS ingest:
+#     Edit this file once you have installed it, and add the security key parameter (-s xxxx) to the
+#     ExecStart command. This way you can keep the udp_forwarder configuration file (e.g. ncar_wx.json) on github,
+#     without keeping a security key in it. 
+#
 # To install:
 # Install udp_forwarder.rb
 #  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.rb
