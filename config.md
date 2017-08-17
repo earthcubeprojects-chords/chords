@@ -130,9 +130,10 @@ http://portal.chordsrt.com/measurements/url_create?instrument_id=4&depth=202.0&b
 15T23:16:21Z&key=chordskeyforvalues&test
 `````
 
-By entering this URL in your browser, one point of test data is entered into your portal. The URL specifies that it was collected on February 15th, 2017 at 23:16:21 GMT and that the depth value recorded was 202.0 and the battery voltage was 209.5
+By entering this URL in your browser, one point of test data is entered into your portal. The URL specifies that the data were collected
+on February 15th, 2017 at 23:16:21 GMT and that the depth value recorded was 202.0 and the battery voltage was 209.5
 
-This method, however, isn’t meant for serious data submission as it would be more likely that you would write a script to automate the data entry via URLs. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
+This method, however, isn’t meant for serious data submission as it would be more likely that you would write a script to automate the data entry via URLs rather than typing them in manually. If you’d like more information on this, the [Data In tab from chordsrt.com](http://ncar.github.io/chords/datain.html) shows code examples as well.
 
 <br>
 <hr>
