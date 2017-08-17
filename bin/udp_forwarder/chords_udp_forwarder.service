@@ -7,6 +7,7 @@
 # To install:
 # Install udp_forwarder.rb
 #  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.rb
+#  sudo chmod a+x /var/lib/chords/udp_forwarder.rb
 #
 #  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
 #
