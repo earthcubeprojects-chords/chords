@@ -6,6 +6,7 @@
   %description= @instrument.description
   %identifier{:codespace => "uid"}= instrument_url(@instrument)
   %name= @instrument.name
+  %topiccategory= @instrument.topic_categories.map(&:name).join(', ')
   / metadata deleted for brevity sake
   / =================================================
   / Observed Property = Output
@@ -26,7 +27,7 @@
                   - @instrument.vars.each do |variable|
                     %field{:name => "#{variable.name}"}
                       %quantity{:definition => "#{variable.measured_property.url}"}
-                        %uom{:code => "#{variable.units}"}
+                        %uom{:code => "#{variable.unit.name}"}
               / encoding description
               %encoding
                 %textencoding{:blockseparator => " ", :tokenseparator => ","}

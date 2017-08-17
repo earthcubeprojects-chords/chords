@@ -1,0 +1,160 @@
+name,definition
+Absorbance,The amount of radiation absorbed by a material
+Abundance,"The relative representation of a species in a particular ecosystem. If this generic term is used, the publisher should specify/qualify the species, class, etc. being measured in the method, qualifier, or other appropriate field."
+Acid neutralizing capacity,Acid neutralizing capacity
+"Acidity, CO2 acidity",CO2 acidity
+"Acidity, exchange","The total amount of the Cation Exchange Capacity (CEC) of a soil that is due to H+ and Al3+ ions. It is a proportion of the total acidity and it is dependent on the type of soil and the percentage of the CEC that is composed of exchangeable bases (Ca2+, Mg2+, K+)."
+"Acidity, hot",Hot Acidity
+"Acidity, mineral acidity",Mineral Acidity
+"Acidity, total acidity",Total acidity
+Albedo,The ratio of reflected to incident light.
+Aldrin,Aldrin (C12H8Cl6)
+"Alkalinity, bicarbonate",Bicarbonate Alkalinity
+"Alkalinity, carbonate",Carbonate Alkalinity
+"Alkalinity, carbonate plus bicarbonate","Alkalinity, carbonate plus bicarbonate"
+"Alkalinity, hydroxide",Hydroxide Alkalinity
+"Alkalinity, total",Total Alkalinity
+Area,Area of a measurement location
+Argon,Argon
+Barometric pressure,Barometric pressure
+Baseflow,The portion of streamflow (discharge) that is supplied by groundwater sources.
+Battery Temperature,The battery temperature of a datalogger or sensing system
+Battery voltage,"The battery voltage of a datalogger or sensing system, often recorded as an indicator of data reliability"
+Biomass,"Mass of living biological organisms in a given area or ecosystem at a given time. If this generic term is used, the publisher should specify/qualify the species, class, etc. being measured in the method, qualifier, or other appropriate field."
+"Biomass, phytoplankton","Total mass of phytoplankton, per unit area or volume"
+"Biomass, total",Total biomass
+Body length,Length of the body of an organism
+Borehole log material classification,Classification of material encountered by a driller at various depths during the drilling of a well and recorded in the borehole log.
+Bulk density,"The mass of many particles of the material divided by the total volume they occupy. The total volume includes particle volume, inter-particle void volume and internal pore volume."
+Bulk electrical conductivity,"Bulk electrical conductivity of a medium measured using a sensor such as time domain reflectometry (TDR), as a raw sensor response in the measurement of a quantity like soil moisture."
+Color,Color in quantified in color units
+Counter,The total number of events within the measurement period
+Density,Density
+Discharge,Discharge
+Distance,Distance measured from a sensor to a target object such as the surface of a water body or snow surface.
+Electric Current,A flow of electric charge
+Electric Energy,Electric Energy
+Electric Power,Electric Power
+Electrical conductivity,Electrical conductivity
+Evaporation,Evaporation
+Evapotranspiration,Evapotranspiration
+"Evapotranspiration, potential",The amount of water that could be evaporated and transpired if there was sufficient water available.
+Frequency of Rotation,Number of rotations within a time period
+Friction velocity,Friction velocity
+Gage height,Water level with regard to an arbitrary gage datum (also see Water depth for comparison)
+Global Radiation,"Solar radiation, direct and diffuse, received from a solid angle of 2p steradians on a horizontal surface. Source: World Meteorological Organization, Meteoterm"
+Ground heat flux,Ground heat flux
+Groundwater Depth,Groundwater depth is the distance between the water surface and the ground surface at a specific location specified by the site location and offset.
+"Hardness, total",Total hardness
+Heat index,The combination effect of heat and humidity on the temperature felt by people.
+"height, above sea floor",Vertical distance from the sea floor to a point.
+Imaginary dielectric constant,Soil reponse of a reflected standing electromagnetic wave of a particular frequency which is related to the dissipation (or loss) of energy within the medium. This is the imaginary portion of the complex dielectric constant.
+Latent Heat Flux,Latent Heat Flux
+Latitude,Latitude as a variable measurement or observation (Spatial reference to be designated in methods).
+Leaf wetness,The effect of moisture settling on the surface of a leaf as a result of either condensation or rainfall.
+Light attenuation coefficient,Light attenuation coefficient
+Limonium nashii Coverage,Areal coverage of the plant Limonium nashii
+Lipid content,Lipid content
+Longitude,Longitude as a variable measurement or observation (Spatial reference to be designated in methods). This is distinct from the longitude of a site which is a site attribute.
+Luminous Flux,A measure of the total amount of visible light present
+Net heat flux,Outgoing rate of heat energy transfer minus the incoming rate of heat energy transfer through a given area
+Orientation,Azimuth orientation of sensor platform
+Osmotic pressure,Osmotic pressure
+pH,pH is the measure of the acidity or alkalinity of a solution. pH is formally a measure of the activity of dissolved hydrogen ions (H+). Solutions in which the concentration of H+ exceeds that of OH- have a pH value lower than 7.0 and are known as acids.
+Position,Position of an element that interacts with water such as reservoir gates
+Precipitation,Precipitation such as rainfall. Should not be confused with settling.
+"Pressure, absolute",Pressure
+"Pressure, gauge",Pressure relative to the local atmospheric or ambient pressure
+"Radiation, incoming",Incoming radiation
+"Radiation, incoming longwave",Incoming Longwave Radiation
+"Radiation, incoming PAR",Incoming Photosynthetically-Active Radiation
+"Radiation, incoming shortwave",Incoming Shortwave Radiation
+"Radiation, incoming UV-A",Incoming Ultraviolet A Radiation
+"Radiation, incoming UV-B",Incoming Ultraviolet B Radiation
+"Radiation, net",Net Radiation
+"Radiation, net longwave",Net Longwave Radiation
+"Radiation, net PAR",Net Photosynthetically-Active Radiation
+"Radiation, net shortwave",Net Shortwave radiation
+"Radiation, outgoing longwave",Outgoing Longwave Radiation
+"Radiation, outgoing PAR",Outgoing Photosynthetically-Active Radiation
+"Radiation, outgoing shortwave",Outgoing Shortwave Radiation
+"Radiation, total incoming",Total amount of incoming radiation from all frequencies
+"Radiation, total outgoing",Total amount of outgoing radiation from all frequencies
+"Radiation, total shortwave",Total Shortwave Radiation
+Rainfall rate,"A measure of the intensity of rainfall, calculated as the depth of water to fall over a given time period if the intensity were to remain constant over that time interval (in/hr, mm/hr, etc)"
+Real dielectric constant,Soil reponse of a reflected standing electromagnetic wave of a particular frequency which is related to the stored energy within the medium. This is the real portion of the complex dielectric constant.
+Reduction potential,Oxidation-reduction potential
+Relative humidity,Relative humidity
+Reservoir storage,Reservoir water volume
+"Respiration, ecosystem",Gross carbon dioxide production by all organisms in an ecosystem. Ecosystem respiration is the sum of all respiration occurring by the living organisms in a specific ecosystem.
+"Respiration, net",Net respiration
+Salinity,Salinity
+Secchi depth,Secchi depth
+Sensible Heat Flux,Sensible Heat Flux
+Shannon diversity index,"A diversity index that is based on the number of taxa, and the proportion of individuals in each taxa relative to the entire community, evaluated as entropy. Also known as Shannon-Weaver diversity index, the Shannon-Wiener index, the Shannon index and the Shannon entropy."
+Shannon evenness index,"A dimensionless diversity index, calculated as a ratio of the Shannon diversity index over its maximum. Also known as the Shannon Weaver evenness index"
+Sigma-t,"Density of seawater calculated with in situ salinity and temperature, but pressure equal to zero, rather than the in situ pressure, and 1000 kg/m^3 is subtracted. Defined as (S,T)-1000 kg m-3, where (S,T) is the density of a sample of seawater at temperature T and salinity S, measured in kg m-3, at standard atmospheric pressure."
+Signal-to-noise ratio,"Signal-to-noise ratio (often abbreviated SNR or S/N) is defined as the ratio of a signal power to the noise power corrupting the signal. The higher the ratio, the less obtrusive the background noise is."
+"Silt, total",Total silt
+Slope,Ratio between two variables in a linear relationship.
+Snow depth,Snow depth
+Snow Water Equivalent,"The depth of water if a snow cover is completely melted, expressed in units of depth, on a corresponding horizontal surface area."
+Specific conductance,Specific conductance
+Speed of sound,Speed of sound in the medium sampled
+Streamflow,The volume of water flowing past a fixed point.
+Sunshine duration,Sunshine duration
+Tactile Water Presence,"A Boolean indicator for the tactile presence of water on the landscape or on the soil surface, as it feels to a human observer's touch. Typically this variable is employed for wet/dry mapping or citizen science efforts."
+Taxa count,"Count of unique taxa. A taxon (plural: taxa) is a group of one (or more) populations of organism(s), which is judged to be a unit."
+TDR waveform relative length,"Time domain reflextometry, apparent length divided by probe length. Square root of dielectric"
+Temperature,Temperature
+Temperature change,temperature change
+"Temperature, datalogger","Temperature, raw data from datalogger"
+"Temperature, dew point",Dew point temperature
+"Temperature, initial",initial temperature before heating
+"Temperature, sensor","Temperature, raw data from sensor"
+"Temperature, transducer signal","Temperature, raw data from sensor"
+"Temperature, wet-bulb",Temperature of air when cooled to saturation by evaporation of water
+Threshold,A level above or below which an action is performed.
+THSW Index,"The THSW Index uses temperature, humidity, solar radiation, and wind speed to calculate an apparent temperature."
+THW Index,"The THW Index uses temperature, humidity, and wind speed to calculate an apparent temperature."
+Tide stage,Tidal stage
+Time Stamp,The time at which a sensor produces output
+"Time, elapsed",Time elapsed since an event occurred
+Transpiration,Transpiration
+Turbidity,Turbidity
+Vapor pressure,The pressure of a vapor in equilibrium with its non-vapor phases
+Vapor pressure deficit,The difference between the actual water vapor pressure and the saturation of water vapor pressure at a particular temperature.
+Velocity,"The velocity of a substance, fluid or object"
+Visibility,Visibility
+Visible Water Presence,"A Boolean indicator for the visible presence of water on the landscape or on the soil surface, as it appears to a human observer's eyes. Typically this variable is employed for wet/dry mapping or citizen science efforts."
+Voltage,Voltage or Electrical Potential
+Volume,Volume. To quantify discharge or hydrograph volume or some other volume measurement.
+Volumetric water content,Volume of liquid water relative to bulk volume. Used for example to quantify soil moisture
+"Water column equivalent height, absolute",The absolute pressure (combined water + barometric) on a sensor expressed as the height of an equivalent column of water.
+"Water column equivalent height, barometric",Barometric pressure expressed as an equivalent height of water over the sensor.
+Water Content,Quantity of water contained in a material or organism
+Water depth,Water depth is the distance between the water surface and the bottom of the water body at a specific location specified by the site location and offset.
+"Water depth, averaged",Water depth averaged over a channel cross-section or water body.
+Water flux,Water Flux
+Water level,Water level relative to datum. The datum may be local or global such as NGVD 1929 and should be specified in the method description for associated data values.
+Water potential,"Water potential is the potential energy of water relative to pure free water (e.g. deionized water) in reference conditions. It quantifies the tendency of water to move from one area to another due to osmosis, gravity, mechanical pressure, or matrix effects including surface tension."
+Water Presence,"A Boolean indicator for the presence of water on the landscape or on the soil surface, in excess of a detection threshold, as indicated by a sensor"
+"Water Use, Agriculture",Water pumped for Agriculture
+"Water Use, Commercial + Industrial + Power","Water pumped by commercial, industrial users."
+"Water Use, Domestic wells",Water pumped by domestic wells; residents and landowners not using public supply. Nonagriculture wells.
+"Water Use, Public Supply",Water supplied by a public utility
+"Water Use, Recreation","Recreational water use, for example golf courses."
+Water vapor concentration,Water vapor concentration
+Water vapor density,Water vapor density
+Wave height,"The height of a surface wave, measured as the difference in elevation between the wave crest and an adjacent trough."
+Weather conditions,Weather conditions
+Well flow rate,Flow rate from well while pumping
+Wellhead pressure,"The pressure exerted by the fluid at the wellhead or casinghead after the well has been shut off for a period of time, typically 24 hours"
+Wind chill,The effect of wind on the temperature felt on human skin.
+Wind direction,Wind direction
+Wind gust direction,Direction of gusts of wind
+Wind gust speed,Speed of gusts of wind
+Wind Run,The length of flow of air past a point over a time interval. Windspeed times the interval of time.
+Wind speed,Wind speed
+Wind stress,Drag or trangential force per unit area exerted on a surface by the adjacent layer of moving air
+Wrack coverage,Areal coverage of dead vegetation

@@ -9,38 +9,59 @@
   position: relative;
   text-align: right;
   top: 0px;
+  v-align: top;
+  top: 0px;
 }
 
-
 @media screen and (max-width:13660px){
-  .instrument_measurements {
+  .left {
   	width: 60%;
   }
 
-  .instrument_download {
-  	width: 35%;
-	
+  .right {
+  	width: 35%;	
   }
 
-  .instrument_variables {
-  	width: 97%;
+  .full_width {
+  	width: 95%;
   }
+  
+  .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
+    width:12%;
+  }
+
+
+  
 }
 
 
 @media screen and (max-width:1024px){
-  .instrument_measurements {
+.instruments_variables_header {
+  display: none;
+}
+
+.variable_header {
+  display: inline;
+}
+
+  .left {
   	width: 95%;
   }
 
-  .instrument_download {
-  	width: 95%;
-	
+  .right {
+  	width: 95%;	
   }
 
-  .instrument_variables {
+  .full_width {
   	width: 95%;
   }
+  
+  .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
+    width:12%;
+  }
+
+
+  
 }
 
 @media screen and (max-width:767px){
@@ -67,40 +88,31 @@
   
 }
 
-.instrument_information {
-	border-radius: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	border: 2px solid black;
-	
-	float: left;
-}
 
-/*
-.instrument_details_and_variables {
-overflow: hidden;
-}
-
-*/
-
-
-.instrument_information {
-	margin: 10px;
-}
 
 .instrument_configuration {
   // border: 2px solid black;
 }
 
-.instrument_download, .instrument_measurements, .instrument_variables {
-	float: left;
-	margin: 10px;
+.left, .right {
+  float: left;
+}
+
+.full_width { 
+  clear: both;
+}
+
+.instrument_download, .instrument_measurements, .instrument_metadata, .instrument_variables {
+  margin: 10px;
+}
+
+
+.instrument_download, .instrument_measurements, .instrument_metadata, .instrument_variables {
 	border-radius: 10px;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 	border: 2px solid black;
-	
 }
 
 

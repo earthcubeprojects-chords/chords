@@ -1,5 +1,7 @@
 default: &default
   host:           'influxdb'
+  username: <%= ENV['INFLUXDB_USERNAME'] %>
+  password: <%= ENV['INFLUXDB_PASSWORD'] %>
   port:           8086
   time_precision: 'ns'
     

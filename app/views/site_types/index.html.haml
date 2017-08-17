@@ -1,0 +1,43 @@
+%p#notice= notice
+
+%h1 
+  .center
+    Site Types
+
+
+.row-fluid.variable
+  .col-sm-1
+    %strong
+      Id
+
+  .col-sm-3
+    %strong
+      Name
+
+  .col-sm-8
+    %strong
+      Definition
+
+.clear
+
+- @site_types.each do |type|
+
+  .row-fluid.variable
+    .col-sm-1
+      .variable_header
+        Id:
+      = type.id
+
+    .col-sm-3
+      .variable_header
+        Start:
+      = type.name
+
+    .col-sm-8
+      .variable_header
+        Definition:
+      = type.definition
+  .clear
+
+%br
+        

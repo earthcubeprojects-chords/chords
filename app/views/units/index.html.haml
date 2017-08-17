@@ -1,0 +1,60 @@
+%p#notice= notice
+
+%h1 
+  .center
+    Units
+
+.row-fluid.variable
+  .col-sm-1
+    %strong
+      Id
+  .col-sm-2
+    %strong
+      Remote Archive Id
+  .col-sm-2
+    %strong
+      Source
+  .col-sm-2
+    %strong
+      Name
+  .col-sm-2
+    %strong
+      Abbreviation
+  .col-sm-2
+    %strong
+      Type
+
+.clear
+
+- @units.each do |unit|
+
+  .row-fluid.variable
+    .col-sm-1
+      .variable_header
+        Id:
+      = unit.id
+    .col-sm-2
+      .variable_header
+        Id:
+      = unit.id_num
+    .col-sm-2
+      .variable_header
+        Source:
+      = unit.source
+    .col-sm-2
+      .variable_header
+        Name:
+      = unit.name
+    .col-sm-2
+      .variable_header
+        Abbreviation:
+      = unit.abbreviation
+    .col-sm-2
+      .variable_header
+        Type:
+      = unit.unit_type
+
+  .clear
+
+%br
+

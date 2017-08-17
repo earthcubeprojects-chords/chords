@@ -1,0 +1,38 @@
+%h4
+  Variables
+
+.row-fluid
+  .col-sm-1
+    = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
+      = f.hidden_field :name, :value => 'name'
+      = f.hidden_field :shortname, :value => 'shortname'
+      = f.hidden_field :instrument_id, :value => @instrument.id
+      - if can?(:manage, Var)
+        = f.submit :value	 => 'Add a New Variable'
+
+.clear
+
+
+%table.table.border
+  %tr
+    %td
+      Short Name
+    %td
+      Name
+    %td
+      = link_to 'Units', :units
+    %td
+      Min/Max (Plot)
+    %td
+      = link_to 'Measured Property', :measured_properties
+
+    - if Archive.first.name == "CUAHSI"  
+      %td
+        General Category
+
+    %td
+      &nbsp;
+
+    - @instrument.vars.each do |variable|
+      = render partial: 'vars/bip_form', locals: {variable: variable}
+

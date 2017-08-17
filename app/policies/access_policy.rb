@@ -8,10 +8,12 @@ class AccessPolicy
     role :administrator, { is_administrator: true } do
       can [:view, :manage], User
       can [:manage], Profile
+      can [:manage], Archive
       can [:view, :download, :manage], Site
       can [:view, :download, :manage], Instrument
       can [:view, :download, :manage], Var
       can [:view, :download, :manage], Measurement
+
     end
 
 

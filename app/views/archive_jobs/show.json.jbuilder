@@ -1,0 +1,1 @@
+json.partial! "archive_jobs/archive_job", archive_job: @archive_job

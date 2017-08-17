@@ -1,6 +1,13 @@
 class MeasuredPropertiesController < ApplicationController
   before_action :set_measured_property, only: [:show, :edit, :update, :destroy]
 
+
+  # def get_autocomplete_items(parameters)
+  #   p = Profile.first
+  #   super(parameters).where(:measured_property_source => p.measured_property_source)
+  # end
+
+
   # GET /measured_properties
   # GET /measured_properties.json
   def index
@@ -14,16 +21,21 @@ class MeasuredPropertiesController < ApplicationController
 
   # GET /measured_properties/new
   def new
+    authorize! :manage, Instrument
+
     @measured_property = MeasuredProperty.new
   end
 
   # GET /measured_properties/1/edit
   def edit
+    authorize! :manage, Instrument
   end
 
   # POST /measured_properties
   # POST /measured_properties.json
   def create
+    authorize! :manage, Instrument
+
     @measured_property = MeasuredProperty.new(measured_property_params)
 
     respond_to do |format|
@@ -40,6 +52,8 @@ class MeasuredPropertiesController < ApplicationController
   # PATCH/PUT /measured_properties/1
   # PATCH/PUT /measured_properties/1.json
   def update
+    authorize! :manage, Instrument
+
     respond_to do |format|
       if @measured_property.update(measured_property_params)
         format.html { redirect_to @measured_property, notice: 'Measured property was successfully updated.' }
@@ -54,6 +68,8 @@ class MeasuredPropertiesController < ApplicationController
   # DELETE /measured_properties/1
   # DELETE /measured_properties/1.json
   def destroy
+    authorize! :manage, Instrument
+
     @measured_property.destroy
     respond_to do |format|
       format.html { redirect_to measured_properties_url, notice: 'Measured property was successfully destroyed.' }

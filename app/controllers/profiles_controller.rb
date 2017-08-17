@@ -21,7 +21,10 @@ class ProfilesController < ApplicationController
   
     # update attributes
     if !@profile.update(profile_params)
-      flash.now[:alert] = "Invalid field(s). Please try again."
+      if (! @profile.valid?)
+        flash.now[:alert] = @profile.errors.full_messages.to_sentence
+      end
+
       render :index
       return
     end
@@ -46,19 +49,34 @@ class ProfilesController < ApplicationController
   end
   
   def export_configuration
+    authorize! :manage, Profile
+    
+    data = Array.new
+
+
     @profiles = Profile.all
     @sites = Site.all
     @instruments = Instrument.all
     # @users = User.all
+    @influxdb_tags = InfluxdbTag.all
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
+
+    @archives = Archive.all
+    @archive_jobs = ArchiveJob.all
+    @site_types = SiteType.all
+    @topic_categories = TopicCategory.all
+    @units = Unit.all
     
     file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf_"  + Date.today.to_s + ".json"
 
-    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties].to_json  , :filename => file_name
+    send_data [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars, measured_properties: @measured_properties, \
+      archives: @archives, archive_jobs: @archive_jobs, site_types: @site_types, topic_categories: @topic_categories, units: @units].to_json  , :filename => file_name
   end
   
   def import_configuration
+    authorize! :manage, Profile
+    
     if (params[:backup_file])
 
       # read and parse the JSON file
@@ -68,33 +86,40 @@ class ProfilesController < ApplicationController
 
       backup_hash = JSON.parse(file_content)
 
-
-      profiles = backup_hash[0]['profiles']
-      sites = backup_hash[0]['sites']
-      instruments = backup_hash[0]['instruments']
-      users = backup_hash[0]['users']
-      vars = backup_hash[0]['vars']
-      measured_properties = backup_hash[0]['measured_properties']
-
-      # Delete all records from the database
-      # Thor order is important here, as there are foreign keys in place
-      Var.delete_all
-      Instrument.delete_all
-      Site.delete_all
-      MeasuredProperty.delete_all
-      Profile.delete_all
-      # User.delete_all
+      # The order is important here, as there are foreign keys in place
+      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, Archive, ArchiveJob, SiteType, TopicCategory, Unit]
       
-      
-      # Rebuild the configuration based on the uploaded JSON
-      ProfileHelper::replace_model_instances_from_JSON('Profile', profiles)
-      # ProfileHelper::replace_model_instances_from_JSON('User', users)
-      ProfileHelper::replace_model_instances_from_JSON('MeasuredProperty', measured_properties)
-      ProfileHelper::replace_model_instances_from_JSON('Site', sites)
-      ProfileHelper::replace_model_instances_from_JSON('Instrument', instruments)
-      ProfileHelper::replace_model_instances_from_JSON('Var', vars)
 
-      # Delete all mesurements from influxdb
+      # delete the existing configuration
+      # BUT ONLY FOR THE MODELS PRESENT IN THE CONFIG FILE
+      models.each do |model|        
+        if backup_hash[0].key?(model.model_name.plural)
+
+          # Delete all records from the database
+          eval("#{model.model_name.name}.delete_all")
+        end
+      end
+
+      
+      # Insert the new configuration
+      # BUT ONLY FOR THE MODELS PRESENT IN THE CONFIG FILE
+      models.reverse.each do |model|
+        if backup_hash[0].key?(model.model_name.plural)
+          
+          json = backup_hash[0][model.model_name.plural]
+
+          # remove the model name
+          if model.model_name.name == 'Profile'
+            json[0]['logo'] = nil
+          end
+          
+          # Rebuild the configuration based on the uploaded JSON
+          ProfileHelper::replace_model_instances_from_JSON(model, json)
+        end
+      end
+
+
+      # Delete all measurements from influxdb
       series = TsPoint.series.map {|x| x.to_s}[0]
       dropQuery = "drop series FROM \"#{series}\""
       queryresult = Influxer.client.query(dropQuery)
@@ -104,6 +129,8 @@ class ProfilesController < ApplicationController
   end
   
   def export_influxdb
+    authorize! :manage, Profile
+    
     command = "docker exec -i chords_influxdb influx_inspect export -database chords_ts_#{Rails.env} -datadir /var/lib/influxdb/data -waldir /var/lib/influxdb/wal -out /tmp/chords-influxdb-backup -compress"
     
     command_thread = Thread.new do
@@ -127,6 +154,8 @@ class ProfilesController < ApplicationController
   end  
 
   def import_influxdb
+    authorize! :manage, Profile
+    
     if (params[:influxdb_backup_file])
 
       # read and parse the JSON file
@@ -155,10 +184,18 @@ class ProfilesController < ApplicationController
 
   def upload_logo
     authorize! :manage, Profile
-    
-    Rails.logger.debug 'Profiles:upload_logo!'
   end
   
+  def push_cuahsi_sources
+    Profile.all.each do |profile|
+      data = profile.create_cuahsi_source
+      if profile.get_cuahsi_sourceid(data["link"]).nil?
+        uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
+        CuahsiHelper::send_request(uri_path, data)
+        profile.get_cuahsi_sourceid(data["link"])
+      end
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -171,8 +208,15 @@ class ProfilesController < ApplicationController
       params.require(:profile).permit(
         :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone, 
         :secure_administration, :secure_data_viewing, :secure_data_download, 
-        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi
+        :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
+        :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country, :contact_zipcode, :domain_name, 
+        :unit_source, :measured_property_source, :cuahsi_source_id
         )
     end
 
 end
+
+
+
+
+

@@ -16,7 +16,7 @@ class InstrumentsController < ApplicationController
       start_time_ms = Time.strptime(params[:after], '%Q')
     else
       time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
-      start_time_ms = @instrument.last_time_in_ms - eval(time_offset)
+      start_time_ms = @instrument.point_time_in_ms("last") - eval(time_offset)
     end
 
     # Initialze the return value
@@ -109,6 +109,11 @@ class InstrumentsController < ApplicationController
           new_instrument.vars << new_var
         end
 
+        old_topics = old_instrument.topic_category_ids
+        old_topics.each{ |id|
+          cat = TopicCategory.find(id)
+          new_instrument.topic_categories<<cat}
+
         # Save the new instrument
         new_instrument.save
 
@@ -178,13 +183,13 @@ class InstrumentsController < ApplicationController
       end      
     end
     
-        @instrument.last_time_in_ms
+        @instrument.point_time_in_ms("last")
     # Determine the time range. Default to the most recent day
     end_time   = Time.now
     start_time = end_time - 1.day
 
     if params.key?(:last)
-      start_time = @instrument.last_time_in_ms
+      start_time = @instrument.point_time_in_ms("last")
 
       end_time   = start_time
     else
@@ -266,6 +271,7 @@ class InstrumentsController < ApplicationController
 
   # GET /instruments/1/edit
   def edit
+    authorize! :manage, Instrument
   end
 
   # POST /instruments
@@ -326,7 +332,7 @@ class InstrumentsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def instrument_params
       params.require(:instrument).permit(
-        :name, :site_id, :display_points, :sample_rate_seconds, :description, :instrument_id, :plot_offset_value, :plot_offset_units)
+        :name, :site_id, :display_points, :sample_rate_seconds, :description, :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
     end
 
 end

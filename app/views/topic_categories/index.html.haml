@@ -1,0 +1,38 @@
+%p#notice= notice
+
+
+%h1 
+  .center
+    Topic Categories
+
+.row-fluid.variable
+  .col-sm-1
+    %strong
+      Id
+  .col-sm-3
+    %strong
+      Name
+  .col-sm-7
+    %strong
+      Definition
+
+.clear
+
+- @topic_categories.each do |topic|
+
+  .row-fluid.variable
+    .col-sm-1
+      .variable_header
+        Id:
+      = topic.id
+    .col-sm-4
+      .variable_header
+        Name:
+      = topic.name
+    .col-sm-7
+      .variable_header
+        Definition:
+      = topic.definition
+  .clear
+
+%br

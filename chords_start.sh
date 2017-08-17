@@ -115,6 +115,10 @@ else
   echo "**** $mysql_seeded_flag was found. Database will not be seeded."
 fi
 
+# poplate empty ontologies 
+# this is only relevant to existing portals that have been upgraded
+bundle exec rake db:populate_ontologies
+
 # Database ready. Set the SEEDED flag.
 touch $mysql_seeded_flag
 
@@ -132,6 +136,12 @@ curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create user $influxdb_guest_user with password '$influxdb_guest_pw'"
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=grant read on $influxdb_dbname to $influxdb_guest_user"
 set +x
+
+# start cron
+touch /var/log/whenever.log
+touch /var/log/cron.log
+whenever -w
+service cron restart
 
 echo "**** Starting web server."
 mkdir -p tmp/pids/
