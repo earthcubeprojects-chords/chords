@@ -389,7 +389,7 @@ Resources:
                 DOCKER_TAG=${ChordsVersion}
                 RAILS_ENV=production
                 DB_RETENTION=${DbRetention}
-                SECRET_KEY_BASE=$(SecretKeyBase}
+                SECRET_KEY_BASE=${SecretKeyBase}
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
