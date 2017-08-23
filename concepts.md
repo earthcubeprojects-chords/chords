@@ -206,7 +206,7 @@ title: Concepts
         </ul>
         <br>
       </li>
-      <li><strong>Create a Datasource</strong>
+      <li><strong>Create a datasource</strong>
         <ul>
         <li>Add a data source
         <img class="img-responsive" src="images/grafsetup_030.png" alt="Dashboard">
@@ -228,9 +228,11 @@ title: Concepts
         <li> A new dashboard is created, with an empty panel. Add a graph by pressing Graph:
         <img class="img-responsive" src="images/grafsetup_051.png" alt="Dashboard">
         </li>
-        <li> Click in the bar at the top of the graph, to pop up a menu. Selet Edit:
+        <li> Click in the bar at the top of the graph, to pop up a menu:
         <img class="img-responsive" src="images/grafsetup_060.png" alt="Dashboard">
         <br>
+        </li>
+        <li> And select Edit:
         <img class="img-responsive" src="images/grafsetup_070.png" alt="Dashboard">
         </li>
         <br>
@@ -245,7 +247,7 @@ title: Concepts
         The variable identifiers are obtained from the CHORDS Instruments page:
         <img class="img-responsive" src="images/Identifiers.png" alt="Dashboard">
         <br>
-        Use the Metrics tab to select a variable from database:
+        Use the Metrics tab to configure the database access. Close when you see plotted data:
         <img class="img-responsive" src="images/grafsetup_095.png" alt="Dashboard">
         </li>
         </ul>
