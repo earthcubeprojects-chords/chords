@@ -180,15 +180,24 @@ title: Concepts
     </div>
     
     <div id="grafana" class="tab-pane">
+      <hr>
+      <p><a href="https://grafana.com/">Grafana</a> is an open-source visualization system that allows you to create powerful 
+      data dashboards, right from the browser. The dashboards are very responsive because
+      they fetch data directly from the CHORDS database. The extensive <a href="http://docs.grafana.org/">
+      Grafana documentation</a> explains how to unleash the full capability of the system.</p>
+      <p>However, the following tutorial explains quickly how to configure Grafana to interact with CHORDS, and 
+      how to create a simple dashboard. </p>
+      <p><strong>Note: You should have the portal configured with at least one site/instrument/variable before
+      trying to create a dashboard. If there is no data in the portal, you can create some test data 
+      using the simulation function.</strong></p>
+      <ol>
+      <li><strong>Open Grafana</strong>
       <p>
         The visualization link will open a new browser window which provides access to the Grafana 
         time-series visualization system.
       </p>
       <img class="img-responsive" src="images/vis.png" alt="Vis">
-      <hr>
-      <p>The following instructions explain how to configure Grafana with CHORDS, and create an example
-      dashboard. </p>
-      <ol>
+      </li>
       <li><strong>Login</strong>
         <ul>
         <li>Log into Grafana
@@ -211,19 +220,39 @@ title: Concepts
         </ul>
         <br>
       </li>
-      <li><strong>Change the admin password</strong>
+      <li><strong>Add a dashboard</strong>
         <ul>
-        <li>Be sure to change (and remember) the admin password for grafana. This is accessed through
-        Admin->Profile
-        <img class="img-responsive" src="images/grafsetup_020.png" alt="Dashboard">
+        <li> Select New dashboard:
+        <img class="img-responsive" src="images/grafsetup_050.png" alt="Dashboard">
+        </li>
+        <li> A new dashboard is created, with an empty panel. Add a graph by pressing Graph:
+        <img class="img-responsive" src="images/grafsetup_051.png" alt="Dashboard">
+        </li>
+        <li> Click in the bar at the top of the graph, to pop up a menu. Selet Edit:
+        <img class="img-responsive" src="images/grafsetup_060.png" alt="Dashboard">
+        <br>
+        <img class="img-responsive" src="images/grafsetup_070.png" alt="Dashboard">
+        </li>
+        <br>
+        <li> Configure the panel
+        <br>
+        Use the General tab to change set a title:
+        <img class="img-responsive" src="images/grafsetup_110.png" alt="Dashboard">
+        <br>
+        Use the Display tab to change the appearance:
+        <img class="img-responsive" src="images/grafsetup_100.png" alt="Dashboard">
+        <br>
+        Use the Metrics tab to select a variable from database:
+        <img class="img-responsive" src="images/grafsetup_095.png" alt="Dashboard">
         </li>
         </ul>
         <br>
       </li>
-      <li><strong>Add a dashboard</strong>
+      <li><strong>Change the admin password</strong>
         <ul>
-        <li> Select New Dashboard
-        <img class="img-responsive" src="images/grafsetup_050.png" alt="Dashboard">
+        <li>Finally, be sure to change (and remember) the admin password for grafana. This is accessed through
+        Admin->Profile
+        <img class="img-responsive" src="images/grafsetup_020.png" alt="Dashboard">
         </li>
         </ul>
         <br>
