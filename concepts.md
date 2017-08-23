@@ -242,6 +242,9 @@ title: Concepts
         Use the Display tab to change the appearance:
         <img class="img-responsive" src="images/grafsetup_100.png" alt="Dashboard">
         <br>
+        The variable identifiers are obtained from the CHORDS Instruments page:
+        <img class="img-responsive" src="images/Identifiers.png" alt="Dashboard">
+        <br>
         Use the Metrics tab to select a variable from database:
         <img class="img-responsive" src="images/grafsetup_095.png" alt="Dashboard">
         </li>
