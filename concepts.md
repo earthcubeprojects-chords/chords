@@ -179,39 +179,56 @@ title: Concepts
       <img class="img-responsive" src="images/simulate.png" alt="Simulate">
     </div>
     
-        <div id="grafana" class="tab-pane">
+    <div id="grafana" class="tab-pane">
       <p>
         The visualization link will open a new browser window which provides access to the Grafana 
         time-series visualization system.
       </p>
       <img class="img-responsive" src="images/vis.png" alt="Vis">
-      <br/>
+      <hr>
       <p>The following instructions explain how to configure Grafana with CHORDS, and create an example
       dashboard. </p>
-      <ul>
-      <br/>
-      <li>Log into Grafana
-      <img class="img-responsive" src="images/grafsetup_010.png" alt="Dashboard">
+      <ol>
+      <li><strong>Login</strong>
+        <ul>
+        <li>Log into Grafana
+        <img class="img-responsive" src="images/grafsetup_010.png" alt="Dashboard">
+        </li>
+        </ul>
+        <br>
       </li>
-      <br/>
-      <li>Add a data source
-      <img class="img-responsive" src="images/grafsetup_030.png" alt="Dashboard">
+      <li><strong>Create a Datasource</strong>
+        <ul>
+        <li>Add a data source
+        <img class="img-responsive" src="images/grafsetup_030.png" alt="Dashboard">
+        </li>
+        <li>Configure the data source
+        <img class="img-responsive" src="images/grafsetup_040.png" alt="Dashboard">
+        </li>
+        <li>When configured correctly, success will be indicated
+        <img class="img-responsive" src="images/grafsetup_041.png" alt="Dashboard">
+        </li>
+        </ul>
+        <br>
       </li>
-      <br/>
-      <li>Configure the data source
-      <img class="img-responsive" src="images/grafsetup_040.png" alt="Dashboard">
+      <li><strong>Change the admin password</strong>
+        <ul>
+        <li>Be sure to change (and remember) the admin password for grafana. This is accessed through
+        Admin->Profile
+        <img class="img-responsive" src="images/grafsetup_020.png" alt="Dashboard">
+        </li>
+        </ul>
+        <br>
       </li>
-      <br/>
-      <li>When configured correctly, success will be indicated
-      <img class="img-responsive" src="images/grafsetup_041.png" alt="Dashboard">
+      <li><strong>Add a dashboard</strong>
+        <ul>
+        <li> Select New Dashboard
+        <img class="img-responsive" src="images/grafsetup_050.png" alt="Dashboard">
+        </li>
+        </ul>
+        <br>
       </li>
-      <br/>
-      <li>Be sure to change (and remember) the admin password for grafana. This is accessed through
-      Admin->Profile
-      <img class="img-responsive" src="images/grafsetup_020.png" alt="Dashboard">
-      </li>
-      </ul>
+      </ol>
     </div>
-    
   </div>
 </div>
