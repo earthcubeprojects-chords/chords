@@ -72,11 +72,14 @@
   %div
     .line
       .title
-        Resource type
+        %u
+          Resource type
       .title
-        Status
+        %u
+          Status
       .title
-        Unconfigured resources
+        %u
+          Unconfigured resources
       .title
         
 
@@ -94,8 +97,9 @@
             = p.project
             %br
       .title
-        = button_to 'Configure Sources', push_cuahsi_sources_path
+        = button_to 'Configure Sources', push_cuahsi_sources_path, {:class => 'btn btn-default'}
         
+    .line
     .line
       .title
         Sites
@@ -110,8 +114,9 @@
             = s.name
             %br
       .title
-        = button_to 'Configure Sites', push_cuahsi_sites_path
+        = button_to 'Configure Sites', push_cuahsi_sites_path, {:class => 'btn btn-default'}
       
+    .line
     .line
       .title
         Instruments (Methods)
@@ -126,8 +131,9 @@
             = m.name
             %br
       .title
-        = button_to 'Configure Instruments', push_cuahsi_methods_path
+        = button_to 'Configure Instruments', push_cuahsi_methods_path, {:class => 'btn btn-default'}
           
+    .line  
     .line
       .title
         Variables
@@ -142,7 +148,7 @@
             = v.name
             %br
       .title
-        = button_to 'Configure Variables', push_cuahsi_variables_path
+        = button_to 'Configure Variables', push_cuahsi_variables_path, {:class => 'btn btn-default'}
       
   .clear
     
