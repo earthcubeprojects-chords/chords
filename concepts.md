@@ -11,6 +11,7 @@ title: Concepts
     <li><a data-toggle="tab" href="#geo">Geo</a></li>
     <li><a data-toggle="tab" href="#sim">Simulation</a></li>
     <li><a data-toggle="tab" href="#config">Configure</a></li>
+    <li><a data-toggle="tab" href="#grafana">Grafana</a></li>
     <li><a data-toggle="tab" href="#terms">Terminology</a></li>
   </ul>
 
@@ -177,5 +178,40 @@ title: Concepts
       </ul>
       <img class="img-responsive" src="images/simulate.png" alt="Simulate">
     </div>
+    
+        <div id="grafana" class="tab-pane">
+      <p>
+        The visualization link will open a new browser window which provides access to the Grafana 
+        time-series visualization system.
+      </p>
+      <img class="img-responsive" src="images/vis.png" alt="Vis">
+      <br/>
+      <p>The following instructions explain how to configure Grafana with CHORDS, and create an example
+      dashboard. </p>
+      <ul>
+      <br/>
+      <li>Log into Grafana
+      <img class="img-responsive" src="images/grafsetup_010.png" alt="Dashboard">
+      </li>
+      <br/>
+      <li>Add a data source
+      <img class="img-responsive" src="images/grafsetup_030.png" alt="Dashboard">
+      </li>
+      <br/>
+      <li>Configure the data source
+      <img class="img-responsive" src="images/grafsetup_040.png" alt="Dashboard">
+      </li>
+      <br/>
+      <li>When configured correctly, success will be indicated
+      <img class="img-responsive" src="images/grafsetup_041.png" alt="Dashboard">
+      </li>
+      <br/>
+      <li>Be sure to change (and remember) the admin password for grafana. This is accessed through
+      Admin->Profile
+      <img class="img-responsive" src="images/grafsetup_020.png" alt="Dashboard">
+      </li>
+      </ul>
+    </div>
+    
   </div>
 </div>
