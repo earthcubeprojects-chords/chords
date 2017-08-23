@@ -9,7 +9,7 @@ class Profile < ActiveRecord::Base
   }
     	
   validates :domain_name, format: { 
-     with: /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/ix,
+     with: /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z0-9]{1,5}(:[0-9]{1,5})?(\/.*)?$/ix,
      multiline: true,
      message: "The domain name is not in a valid format. (Expecting subdomain.domain.com format. Do not include http/https.)" 
   }
