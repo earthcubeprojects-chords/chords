@@ -201,6 +201,8 @@ The second is a satellite image showing a snapshot of the area and where you’v
 <img class="img-responsive" src="images/Config_TZVolcano2.PNG" alt="Geo Button" />
 <em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo] (http://tzvolcano.chordsrt.com/sites/geo)</em>
 
+Next, you can configure CHORDS services, such as [CUAHSI Data Services for hydrology data] (https://github.com/NCAR/chords/wiki/CUAHSI-Archive) which will connect your CHORDS data stream to an official archive.
+
 **Note:**  If the map says “Opps!...”, you need to enter a google Maps API key in CHORDS configuration. Google allows up to 25,000 free map accesses per day. You can request a google maps API key if you have a Google account. After you have the key, go to the Configure page and enter it into the “google Maps JavaScript API Key” box.
 
 
