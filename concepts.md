@@ -190,6 +190,9 @@ title: Concepts
       <p><strong>Note: You should have the portal configured with at least one site/instrument/variable before
       trying to create a dashboard. If there is no data in the portal, you can create some test data 
       using the simulation function.</strong></p>
+      <p>Extra credit: once you have been able to make a simple Grafana graph, see this
+      <a href="http://docs.grafana.org/features/datasources/influxdb/">
+        tutorial</a> for indepth instructions on database access and calculations.</P>
       <ol>
       <li><strong>Open Grafana</strong>
       <p>
@@ -247,7 +250,8 @@ title: Concepts
         The variable identifiers are obtained from the CHORDS Instruments page:
         <img class="img-responsive" src="images/Identifiers.png" alt="Dashboard">
         <br>
-        Use the Metrics tab to configure the database access. Close when you see plotted data:
+        <p>Use the Metrics tab to configure the database access.
+        Close when you see plotted data:</p>
         <img class="img-responsive" src="images/grafsetup_095.png" alt="Dashboard">
         </li>
         </ul>
