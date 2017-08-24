@@ -196,8 +196,8 @@ The first will be a map showing the areas where you have set up the instruments 
 The second is a satellite image showing a snapshot of the area and where you’ve specified the instruments are. 
 
 <img class="img-responsive" src="images/Config_TZVolcano2.PNG" alt="Geo Button" />
-picture courtesy of [Tanzania Volcano Observatory](http://tzvolcano.chordsrt.com/sites/geo)
 
+picture courtesy of [Tanzania Volcano Observatory](http://tzvolcano.chordsrt.com/sites/geo)
 
 Next, you can configure CHORDS services, such as [CUAHSI Data Services for hydrology data](https://github.com/NCAR/chords/wiki/CUAHSI-Archive) which will connect your CHORDS data stream to an official archive.
 
