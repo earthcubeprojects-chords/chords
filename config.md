@@ -193,13 +193,11 @@ When you click on the geo button you will see one of two things.
 
 The first will be a map showing the areas where you have set up the instruments with some distinct geographical pointers.
 
-<img class="img-responsive" src="images/Config_TZVolcano1.PNG" alt="Geo Button" />
-<em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo](http://tzvolcano.chordsrt.com/sites/geo)</em>
-
 The second is a satellite image showing a snapshot of the area and where you’ve specified the instruments are. 
 
 <img class="img-responsive" src="images/Config_TZVolcano2.PNG" alt="Geo Button" />
 <em>picture courtesy of Tanzania Volcano Observatory [http://tzvolcano.chordsrt.com/sites/geo](http://tzvolcano.chordsrt.com/sites/geo)</em>
+
 
 Next, you can configure CHORDS services, such as [CUAHSI Data Services for hydrology data](https://github.com/NCAR/chords/wiki/CUAHSI-Archive) which will connect your CHORDS data stream to an official archive.
 
