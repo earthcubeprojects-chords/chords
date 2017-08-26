@@ -40,10 +40,11 @@ class MakeGeoJsonFromTsPoints
       point.delete('inst')
       point.delete('site')
 
-
       data << point
     end
     
+
+    source['features'][0]['properties']['measurements_in_file'] = ts_points.count
       
     source["Data"] = data
     json_points = source.to_json

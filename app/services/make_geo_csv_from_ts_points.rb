@@ -36,7 +36,6 @@ class MakeGeoCsvFromTsPoints
     header_lines.push("# data collection latitude: #{instrument.site.lat}")
     header_lines.push("# data collection elevation: #{instrument.site.elevation} meters")
     header_lines.push("# Units of Measure: (milliseconds, #{units_of_measure})")
-    header = header_lines.join("\n")
     
 
     
@@ -50,6 +49,9 @@ class MakeGeoCsvFromTsPoints
     column_titles = []
     column_titles << "Time"
     varnames_by_id.each { |k, v| column_titles << v}
+    
+    # measurement count
+    measurement_count = 0
     
     # Generate CSV
     csv = CSV.generate do |csv|
@@ -71,11 +73,20 @@ class MakeGeoCsvFromTsPoints
         varnames_by_id.keys.each do |k, v|
           # Nil values will create ',,'
           row << ts_columns[k][i]
+          
+          if ts_columns[k][i] != nil
+            measurement_count += 1
+          end
+          
         end
         csv << row
       end
       
     end
+
+    header_lines.push("# Measurements in File: #{measurement_count}")
+    
+    header = header_lines.join("\n")
     
     return header + "\n" + csv
   end
