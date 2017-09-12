@@ -203,22 +203,36 @@ title: Concepts
       </li>
       <li><strong>Login</strong>
         <ul>
-        <li>Log into Grafana
+        <li>Sign in to Grafana:
         <img class="img-responsive" src="images/grafsetup_010.png" alt="Dashboard">
         </li>
         </ul>
         <br>
       </li>
-      <li><strong>Create a datasource</strong>
+      <li><strong>Creating a datasource</strong>
         <ul>
-        <li>Add a data source
+        <li>Add a data source:
         <img class="img-responsive" src="images/grafsetup_030.png" alt="Dashboard">
         </li>
-        <li>Configure the data source
+        <li>Configure the data source:
+        <ul>
+          <li>Hint: On Windows, you can find the IP address by running the <b>ipconfig</b> command in a command window.</li>
+        </ul>
         <img class="img-responsive" src="images/grafsetup_040.png" alt="Dashboard">
         </li>
-        <li>When configured correctly, success will be indicated
+        <li>When configured correctly, success will be indicated:
         <img class="img-responsive" src="images/grafsetup_041.png" alt="Dashboard">
+        </li>
+        <li>If something is not configured correctly, you may see a message: <b>"Unknown error"</b>: 
+        <ul>
+          <li>Try changing <b>Access</b> from <b>proxy</b> to <b>direct</b>.</li>
+          <li>Verify that your Url address is correct. Perhaps you need to change <b>localhost</b> to
+          a regular IP address.</li>
+        </ul>
+        <img class="img-responsive" src="images/grafsetup_042.png" alt="Dashboard">
+        <ul>
+          <li>Make changes, and mash <b>Save & Test</b> again.</li>
+        </ul>
         </li>
         </ul>
         <br>
@@ -239,7 +253,7 @@ title: Concepts
         <img class="img-responsive" src="images/grafsetup_070.png" alt="Dashboard">
         </li>
         <br>
-        <li> Configure the panel
+        <li> Configure the panel:
         <br>
         Use the General tab to change set a title:
         <img class="img-responsive" src="images/grafsetup_110.png" alt="Dashboard">
@@ -260,7 +274,7 @@ title: Concepts
       <li><strong>Change the admin password</strong>
         <ul>
         <li>Finally, be sure to change (and remember) the admin password for grafana. This is accessed through
-        Admin->Profile
+        Admin->Profile:
         <img class="img-responsive" src="images/grafsetup_020.png" alt="Dashboard">
         </li>
         </ul>
