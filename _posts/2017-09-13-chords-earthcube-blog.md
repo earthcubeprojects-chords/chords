@@ -1,6 +1,6 @@
 ---
 layout: post
-title: New EarthCube blog article "Striking Power CHORDS with the Geosciences"
+title: New EarthCube blog article featuring CHORDS
 ---
 
 A new [EarthCube blog post](https://earthcube.wordpress.com/2017/08/31/chords-expanded-project/) entitled
