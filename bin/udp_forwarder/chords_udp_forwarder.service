@@ -14,8 +14,6 @@
 #  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.rb
 #  sudo chmod a+x /var/lib/chords/udp_forwarder.rb
 #
-#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
-#
 # Fetch the service definition
 #  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
 #
@@ -33,10 +31,10 @@
 # To start udp_forwarder:
 #  sudo systemctl start  udp_forwarder
 #
-# To stop chords:
+# To stop udp_forwarder:
 #  sudo systemctl stop    udp_forwarder
 #
-# To restart chords:
+# To restart udp_forwarder:
 #  sudo systemctl restart udp_forwarder
 #
 #
