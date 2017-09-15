@@ -68,10 +68,11 @@ class MeasurementsController < ApplicationController
         return
       end
     end
-    
 
     save_ok = false
-    
+    # If the save fails, include this error message in the response.
+    create_err_msg = ""    
+
     # some CHORDS users had an extra '0' on the beginnig of their instrument_id.
     # cleans this dirty input so that the create still works 
     cleansed_instrument_id = params[:instrument_id].to_i
@@ -111,33 +112,33 @@ class MeasurementsController < ApplicationController
          
          instrument = Instrument.find(cleansed_instrument_id)
          
-
-          timestamp = ConvertIsoToMs.call(measured_at)
-          value     = params[var.shortname].to_f
-
-          tags = influxdb_tags = instrument.influxdb_tags_hash
-          tags[:site] = instrument.site_id
-          tags[:inst] = instrument.id
-          tags[:var]  = var.id
-          tags[:test] = params.has_key?(:test)
-          
-
-          SaveTsPoint.call(timestamp, value, tags)
-          
+          begin
+            timestamp = ConvertIsoToMs.call(measured_at)
+          rescue ArgumentError
+            create_err_msg = "Time error."
+          else
+            value     = params[var.shortname].to_f
+  
+            tags = influxdb_tags = instrument.influxdb_tags_hash
+            tags[:site] = instrument.site_id
+            tags[:inst] = instrument.id
+            tags[:var]  = var.id
+            tags[:test] = params.has_key?(:test)
+  
+            SaveTsPoint.call(timestamp, value, tags)
+            save_ok = true
+          end
         end
-      end
-      
-      save_ok = true
-      
+      end   
     end 
     
     respond_to do |format|
       if save_ok
         format.json { render text: "OK"  }
-        format.html { render text: "Measurement created" }
+        format.html { render text: "Measurement created." }
       else
         format.json { render text: "FAIL" }
-        format.html { render text: "Measurement could not be created" }
+        format.html { render text: "Measurement could not be created. " + create_err_msg }
       end
     end
   end  
