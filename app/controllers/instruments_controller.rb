@@ -137,10 +137,8 @@ class InstrumentsController < ApplicationController
 
   # GET /instruments/1
   # GET /instruments/1.csv
-  # GET /instruments/1.geocsv
   # GET /instruments/1.jsf
   # GET /instruments/1.json
-  # GET /instruments/1.geojson
   def show
     # This method sets the following instance variables:
     #  @var_to_plot    - The variable currently being plotted
@@ -151,7 +149,6 @@ class InstrumentsController < ApplicationController
     authorize! :view, Instrument
     authorize! :download, @instrument if ["csv", "xml", "json", "jsf"].include?(params[:format])
 
-    
     # Get and sanitize the last_url
     @last_url = InstrumentsHelper.sanitize_url(
         !@profile.secure_administration, 
@@ -168,8 +165,6 @@ class InstrumentsController < ApplicationController
     
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
-    
-
 
     # Set the variable to plot
     if params[:var_id]
@@ -183,14 +178,12 @@ class InstrumentsController < ApplicationController
       end      
     end
     
-        @instrument.point_time_in_ms("last")
     # Determine the time range. Default to the most recent day
     end_time   = Time.now
     start_time = end_time - 1.day
 
     if params.key?(:last)
       start_time = @instrument.point_time_in_ms("last")
-
       end_time   = start_time
     else
       # See if we have the start and end parameters
@@ -202,11 +195,8 @@ class InstrumentsController < ApplicationController
       end
     end
 
-
-
     # Get the time series points from the database
     ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, start_time, end_time)
-
 
     # File name root
     file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
@@ -222,43 +212,26 @@ class InstrumentsController < ApplicationController
         render :file => "app/views/instruments/sensorml.xml.haml", :layout => false
       }
       
-      # format.csv { 
-      #   varnames_by_id = {}
-      # 
-      #   Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-      #   
-      #   ts_csv = MakeCsvFromTsPoints.call(ts_points, metadata, varnames_by_id)
-      #   send_data ts_csv, filename: file_root+'.csv' 
-      # }
-      
-      format.csv { 
-
+      format.csv {
         varnames_by_id = {}
         Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-        
         ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
-        
-        send_data ts_csv, filename: file_root+'geocsv.csv'
+        send_data ts_csv, filename: file_root+'.csv'
+      }
+      
+      format.json { 
+        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
+      }
+
+      format.jsf { 
+        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)       
+        send_data ts_json, filename: file_root+'.json'
       }
       
       format.xml { 
         send_data MakeXmlFromTsPoints.call(ts_points, metadata), filename: file_root+'.xml'
       } 
-         
-      # format.json { 
-      #   render text: MakeJsonFromTsPoints.call(ts_points, metadata)
-      # }
-
-      format.json { 
-        
-        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-                
-        send_data ts_json, filename: file_root+'geojson.json'
-      }
-      
-      format.jsf { 
-        send_data  MakeJsonFromTsPoints.call(ts_points, metadata), filename: file_root+'.json'
-      }
+   
     end
   end
     
