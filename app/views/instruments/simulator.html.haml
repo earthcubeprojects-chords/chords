@@ -1,7 +1,7 @@
 
 :javascript
   // run status and variable shortnames for each instrument.
-  #{create_instrument_variables_js(@instruments)}
+  #{create_instrument_variables_js(@instruments).html_safe}
 
   function shortnames(id) {
     var command = "var names = instrument_" + id + "_shortnames";
