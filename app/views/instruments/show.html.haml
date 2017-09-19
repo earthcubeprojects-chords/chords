@@ -19,7 +19,6 @@
   - else
     = @instrument.site.name
 
-
 .instrument_description
   - if can?(:manage, Instrument)
     = best_in_place @instrument,                              |
@@ -29,10 +28,6 @@
       :html_attrs => {:style => 'width:800px; height:100px;'} |
   - else
     = @instrument.description
-
-
-
-
 
 .instrument_configuration
   .left
@@ -45,12 +40,9 @@
     .instrument_download
       = render partial: "instrument_downloads", locals: {instrument: @instrument}  
 
-
-
 .clear
 %br
 %br
-
 
 .instrument_plot_time_window
   .left
@@ -62,8 +54,7 @@
     - else
       = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
   
-= render 'multivariable_graph'
-
+= (render 'multivariable_graph').html_safe
 
 :javascript
   $('.best_in_place.plot_offset_value').bind("ajax:success", function(){ 

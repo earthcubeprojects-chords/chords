@@ -1,4 +1,3 @@
 - if (@var_to_plot)
-
   #instrument_live_chart.instrument_highchart{:style => "min-width: 310px; height: 400px; margin: 0 auto"}
-    = render 'multivariable_graph_chart'
+    = (render 'multivariable_graph_chart').html_safe
