@@ -9,8 +9,9 @@ class GetTsPoints
   # end_time       - the end time. Times less than this will be returned..
   def self.call(time_series_db, field, inst_id, start_time, end_time)
     
-    start_time_ns = (start_time.to_f*1000000000).to_i
-    end_time_ns   = (end_time.to_f*1000000000).to_i
+    # Use a time accuracy of ms
+    start_time_ns = start_time.strftime("%s%L000000")
+    end_time_ns   =   end_time.strftime("%s%L000000")
     
     # See if a single timestamp has been requested.
     if start_time_ns != end_time_ns
