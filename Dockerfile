@@ -27,7 +27,12 @@ WORKDIR /chords
 # will be cached unless changes to one of those two files 
 # are made.
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler && bundle install --jobs 1 --retry 5
+#
+# setting BUNDLE_JOBS to more than 1 will cause bundle install's console 
+# output to show up asynchronously, potentially making debugging more difficult
+#
+ENV BUNDLE_JOBS 1
+RUN gem install bundler && bundle install --jobs $BUNDLE_JOBS --retry 5
 
 # Copy the main application.
 COPY . ./
