@@ -44,7 +44,7 @@ ADD http://www.random.org/strings/?num=10&len=8&digits=on&upperalpha=on&loweralp
 RUN /bin/bash -f create_chords_env_script.sh > chords_env.sh && chmod a+x chords_env.sh
 
 # Install Docker on the container itself
-RUN curl -sSL https://get.docker.com/ | TERM=vt100 sh
+RUN curl -sSL https://get.docker.com/ | DEBIAN_FRONTEND=noninteractive sh
 
 # Remove artifacts that are not needed. The docker image will only shrink
 # however if the docker build command is run with the --squash option
