@@ -1,4 +1,4 @@
-FROM ruby:2.2 
+FROM ruby:2.2-slim 
 MAINTAINER martinc@ucar.edu
 
 # Install apt based dependencies required to run Rails as 
@@ -8,10 +8,14 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   nodejs \
   mysql-client \
+  libmysqlclient-dev \
   dos2unix \
   nginx \
-  cron
-
+  cron \
+  git \
+  apt-utils \
+  curl
+  
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
 # commands.
@@ -23,7 +27,7 @@ WORKDIR /chords
 # will be cached unless changes to one of those two files 
 # are made.
 COPY Gemfile Gemfile.lock ./
-RUN gem install bundler && bundle install --jobs 20 --retry 5
+RUN gem install bundler && bundle install --jobs 1 --retry 5
 
 # Copy the main application.
 COPY . ./
@@ -35,13 +39,12 @@ RUN mkdir -p /chords/log && RAILS_ENV=production bundle exec rake assets:precomp
 COPY ./nginx_default.conf /etc/nginx/sites-available/default
 
 # Create the CHORDS environment value setting script chords_env.sh.
-# Use this bit of magic to invalidate the cache so that the command is run.
+# Use this bit of magic to invalidate the Dokcker cache to ensure that the command is run.
 ADD http://www.random.org/strings/?num=10&len=8&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new cache_invalidator
 RUN /bin/bash -f create_chords_env_script.sh > chords_env.sh && chmod a+x chords_env.sh
 
 # Install Docker on the container itself
-RUN apt-get install curl
-RUN curl -sSL https://get.docker.com/ | sh
+RUN curl -sSL https://get.docker.com/ | TERM=vt100 sh
 
 # Remove artifacts that are not needed. The docker image will only shrink
 # however if the docker build command is run with the --squash option
