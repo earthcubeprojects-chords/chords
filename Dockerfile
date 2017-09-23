@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
   cron \
   git \
   apt-utils \
-  curl
+  curl \
+  logrotate
   
 # Configure the main working directory. This is the base 
 # directory used in any further RUN, COPY, and ENTRYPOINT 
@@ -40,8 +41,10 @@ COPY . ./
 # Bake the assets (for production mode) into the image
 RUN mkdir -p /chords/log && RAILS_ENV=production bundle exec rake assets:precompile
 
-# Customize the nginx configuration
+# Customize the nginx configuration and log rotation
 COPY ./nginx_default.conf /etc/nginx/sites-available/default
+COPY ./logrotate_nginx /etc/logrotate.d/nginx
+COPY ./logrotate_nginx_cron /etc/cron.d
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the Dokcker cache to ensure that the command is run.
@@ -58,7 +61,6 @@ RUN rm -rf .git log/* tmp/*
 # Expose port 80 to the Docker host, so we can access it 
 # from the outside.
 EXPOSE 80
-
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
