@@ -44,7 +44,7 @@ RUN mkdir -p /chords/log && RAILS_ENV=production bundle exec rake assets:precomp
 # Customize the nginx configuration and log rotation
 COPY ./nginx_default.conf /etc/nginx/sites-available/default
 COPY ./logrotate_nginx /etc/logrotate.d/nginx
-COPY ./logrotate_nginx_cron /etc/cron.d
+COPY ./logrotate_nginx_cron /etc/cron.d/nginx
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the Dokcker cache to ensure that the command is run.

@@ -14,6 +14,6 @@
                 fi \
         endscript
         postrotate
-                service nginx reload >/dev/null 2>&1
+                kill -USR1 `cat /var/run/nginx.pid` &>/dev/null
         endscript
 }

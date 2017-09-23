@@ -1,2 +1,2 @@
 # Cron entry to rotate the nginx log files
-30 * * * * /usr/sbin/logrotate /etc/logrotate.d/nginx
+30 * * * * root /usr/sbin/logrotate /etc/logrotate.d/nginx
