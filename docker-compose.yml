@@ -47,6 +47,8 @@ services:
       - mysql-data:/var/lib/mysql
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-tmp:/tmp/
+      - nginx-log:/var/log/nginx
+      - rails-log:/chords/log
     environment:
       - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
@@ -77,6 +79,7 @@ services:
     image: mysql:5.7
     volumes:
       - mysql-data:/var/lib/mysql
+      - mysql-log:/var/log/mysql
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
@@ -92,7 +95,8 @@ services:
     container_name: chords_influxdb
     image: influxdb:1.2
     volumes:
-      - influxdb-data:/var/lib/influxdb/
+      - influxdb-data:/var/lib/influxdb
+      - influxdb-log:/var/log/influxdb
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-tmp:/tmp/
     environment:
@@ -121,7 +125,8 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
     volumes:
-      - grafana-data:/var/lib/grafana/
+      - grafana-data:/var/lib/grafana
+      - grafana-log:/var/log/grafana
     logging:
       driver: "json-file"
       options:
@@ -160,4 +165,10 @@ volumes:
   postfix-spool:
   #shared_tmp volume
   shared-tmp:
+  # log directories
+  rails-log:
+  nginx-log:
+  mysql-log:
+  influxdb-log:
+  grafana-log:
   
