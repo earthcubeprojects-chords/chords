@@ -57,6 +57,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    crass (1.0.2)
     debug_inspector (0.0.3)
     devise (4.3.0)
       bcrypt (~> 3.0)
@@ -103,19 +104,20 @@ GEM
       railties (>= 3.2.16)
     json (1.8.6)
     kgio (2.11.0)
-    loofah (2.0.3)
+    loofah (2.1.1)
+      crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.6.6)
       mime-types (>= 1.16, < 4)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mini_portile2 (2.2.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.3)
     multi_json (1.12.2)
     mysql2 (0.3.21)
-    nokogiri (1.8.0)
-      mini_portile2 (~> 2.2.0)
+    nokogiri (1.8.1)
+      mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     rack (1.6.8)
     rack-test (0.6.3)
@@ -226,6 +228,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-ui-rails
+  mini_portile2
   mysql2 (~> 0.3.19)
   rails (= 4.2.7)
   rails4-autocomplete
@@ -241,4 +244,4 @@ DEPENDENCIES
   whenever (~> 0.9.7)
 
 BUNDLED WITH
-   1.15.1
+   1.15.4

@@ -69,6 +69,8 @@ gem 'influxdb'
 # influxer
 gem "influxer", "~>0.5.0"
 
+# mini_portile2
+gem 'mini_portile2'
 
 # Chronic
 # gem 'chronic', ">-0.10.2"
