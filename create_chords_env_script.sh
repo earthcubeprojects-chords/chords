@@ -15,9 +15,3 @@ echo "export CHORDS_GIT_SHA=\"$CHORDS_GIT_SHA\""
 echo "export CHORDS_GIT_BRANCH=\"$CHORDS_GIT_BRANCH\"" 
 echo "export CHORDS_BUILD_TIME=\"$CHORDS_BUILD_TIME\"" 
 echo "#"                                               
-echo "echo CHORDS environment settings:"               
-echo "echo CHORDS_GIT_SHA=\$CHORDS_GIT_SHA"            
-echo "echo CHORDS_GIT_BRANCH=\$CHORDS_GIT_BRANCH"      
-echo "echo CHORDS_BUILD_TIME=\$CHORDS_BUILD_TIME"      
-
-#chmod a+x $chords_env_script

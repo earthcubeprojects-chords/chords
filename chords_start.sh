@@ -56,8 +56,9 @@ mkdir -p log
 if [ -e $chords_env ]
 then
   . $chords_env
-  env
 fi
+echo "echo CHORDS environment settings:"               
+env
 
 # Set some other interesting environment variables.
 export CHORDS_KERNEL_NAME=`uname --kernel-name`
