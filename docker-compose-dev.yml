@@ -12,9 +12,3 @@ services:
   app:
     volumes:
       - ./:/chords
-
-
-  # Time series database
-  influxdb:
-    volumes:
-      - ./bin/influxdb/:/usr/local/bin/
