@@ -215,20 +215,12 @@ title: Concepts
         <img class="img-responsive" src="images/grafsetup_030.png" alt="Dashboard">
         </li>
         <li>Configure the data source:
-        <ul>
-          <li>Hint: On Windows, you can find the IP address by running the <b>ipconfig</b> command in a command window.</li>
-        </ul>
         <img class="img-responsive" src="images/grafsetup_040.png" alt="Dashboard">
         </li>
         <li>When configured correctly, success will be indicated:
         <img class="img-responsive" src="images/grafsetup_041.png" alt="Dashboard">
         </li>
         <li>If something is not configured correctly, you may see a message: <b>"Unknown error"</b>: 
-        <ul>
-          <li>Try changing <b>Access</b> from <b>proxy</b> to <b>direct</b>.</li>
-          <li>Verify that your Url address is correct. Perhaps you need to change <b>localhost</b> to
-          a regular IP address.</li>
-        </ul>
         <img class="img-responsive" src="images/grafsetup_042.png" alt="Dashboard">
         <ul>
           <li>Make changes, and mash <b>Save & Test</b> again.</li>
