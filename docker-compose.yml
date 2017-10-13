@@ -128,6 +128,8 @@ services:
       - GF_EMAILS_WELCOME_EMAIL_ON_SIGN_UP=true
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=chords_mta:25
+      - GF_SMTP_SKIP_VERIFY=true
+      
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
