@@ -30,6 +30,10 @@ if [ $RAILS_ENV == "production" ]; then
   fi
 fi
 
+if [ -z "$GRAFANA_ADMIN_PW" ]; then
+  export GRAFANA_ADMIN_PW="admin"
+fi
+
 mysql_host="mysql"
 # The mysql seeded flag is saved in the directory containing the mysql database.
 mysql_seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
@@ -41,6 +45,8 @@ influxdb_admin_pw=$CHORDS_ADMIN_PW
 influxdb_guest_user="guest"
 influxdb_guest_pw=$CHORDS_GUEST_PW
 influxdb_retention=$DB_RETENTION
+
+grafana_admin_pw=$GRAFANA_ADMIN_PW
 
 # A script that sets useful environment variables. It in turn
 # is created by the create_chords_env_script.sh.
@@ -75,6 +81,7 @@ export CHORDS_RELEASE=$DOCKER_TAG
 if [ -z "$WORKERS" ]; then
   export WORKERS=4
 fi
+
 # See if there is an existing mysql database
 if [ ! -e $mysql_seeded_flag ] 
 then
@@ -123,6 +130,7 @@ bundle exec rake db:populate_ontologies
 # Database ready. Set the SEEDED flag.
 touch $mysql_seeded_flag
 
+# InfluxDB initialization
 set -x
 # Create the influxdb admin account, used for database writes etc.
 curl -s http://$influxdb_host:8086/query --data-urlencode "q=create user $influxdb_admin_user with password '$influxdb_admin_pw' with all privileges"
@@ -136,6 +144,16 @@ curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin
 # Create the influxdb guest account, used for anonymous reads.
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create user $influxdb_guest_user with password '$influxdb_guest_pw'"
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=grant read on $influxdb_dbname to $influxdb_guest_user"
+set +x
+
+# Grafana initialization
+set -x
+# Create a the default CHORDS datasource
+curl http://admin:$grafana_admin_pw@chords_grafana:3000/api/datasources -X POST -H "Content-Type: application/json" --data @grafana_datasource.json
+# Create an example dashboard
+curl http://admin:$grafana_admin_pw@chords_grafana:3000/api/dashboards/db -X POST -H "Content-Type: application/json" --data @grafana_dashboard.json
+# Set the org preferences, inclusing default dashboard
+curl http://admin:$grafana_admin_pw@chords_grafana:3000/api/org/preferences -X PUT -H "Content-Type: application/json" --data @grafana_orgprefs.json
 set +x
 
 # start cron

@@ -57,7 +57,7 @@ from collections import OrderedDict
 stdConfigItems = [
     [
         "The password for r/w and admin access to CHORDS, mysql and influxdb.\n"
-        "Replace this with a strong password.",
+        "Replace this with a secure password.",
         "CHORDS_ADMIN_PW",  
         "chords_ec_demo"
     ],
@@ -67,7 +67,16 @@ stdConfigItems = [
         "guest"
     ],
     [
-        "A secret key base for Rails. Generate a secure value (*add link with instructions*).",
+        "The password for admin access to Grafana.\n"
+        "Once Grafana is initialized with this password,\n"
+        "it can only be changed from the Grafana admin web page.\n"
+        "Replace this with a secure password.",
+        "GRAFANA_ADMIN_PW",  
+        "admin"
+    ],
+    [
+        "A secret key base for Rails. Generate a\n"
+        "secure value (e.g. 'openssl rand -hex 32').",
         "SECRET_KEY_BASE",
         "aaaaaaaaaaa"
     ],
@@ -273,9 +282,10 @@ class ChordsConfig(OrderedDict):
         The items found in configItems are done first, followed by all other
         items.
         """
-        print 'Enter a return to keep the current value, a period to set to the default, or a new value.'
+        print "Enter:\n   Return to keep the current value, or\n   Period (.) to select to the default value, or a\n   New value."
 
         for key in self.keys():
+            print
             if key in self.configItems.keys():
                 self.queryValue(key=key, 
                                 usedefault = usedefault,

@@ -53,6 +53,7 @@ services:
       - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
       - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
+      - GRAFANA_ADMIN_PW=${GRAFANA_ADMIN_PW}
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - DB_RETENTION=${DB_RETENTION}
       - DOCKER_TAG=${DOCKER_TAG}
@@ -123,7 +124,10 @@ services:
     # you should not create your own variables beginning with GF_.
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PW}
+      - GF_EMAILS_WELCOME_EMAIL_ON_SIGN_UP=true
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=chords_mta:25
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
