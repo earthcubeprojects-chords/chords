@@ -123,13 +123,14 @@ services:
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
+      - GF_DEFAULT_INSTANCE_NAME=localhost.localdomain
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PW}
       - GF_EMAILS_WELCOME_EMAIL_ON_SIGN_UP=true
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=chords_mta:25
       - GF_SMTP_SKIP_VERIFY=true
-      
+      - GF_SMTP_FROM_ADDRESS=admin@chordsrt.com 
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
@@ -147,10 +148,9 @@ services:
   # Mail transfer agent
   mta:
     container_name: chords_mta
-    image: tozd/postfix:master
+    image: tozd/postfix:latest
     volumes:
       - postfix-spool:/var/spool/postfix
-    environment:
     environment:
       - MY_NETWORKS=172.0.0.0/8 127.0.0.0/8
     logging:
@@ -178,4 +178,3 @@ volumes:
   mysql-log:
   influxdb-log:
   grafana-log:
-  
