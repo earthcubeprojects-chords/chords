@@ -56,18 +56,18 @@ from collections import OrderedDict
 # When you need to add required keys to the configuration, just define them here.
 stdConfigItems = [
     [
-        "The password for r/w and admin access to CHORDS, mysql and influxdb.\n"
+        "The PASSWORD for r/w and admin access to CHORDS, mysql and influxdb.\n"
         "Replace this with a secure password.",
         "CHORDS_ADMIN_PW",  
         "chords_ec_demo"
     ],
     [
-        "The password for read-only access to influxdb.",
+        "The PASSWORD for read-only access to influxdb.",
         "CHORDS_GUEST_PW",
         "guest"
     ],
     [
-        "The password for admin access to Grafana.\n"
+        "The PASSWORD for admin access to Grafana.\n"
         "Once Grafana is initialized with this password,\n"
         "it can only be changed from the Grafana admin web page.\n"
         "Replace this with a secure password.",
@@ -75,36 +75,56 @@ stdConfigItems = [
         "admin"
     ],
     [
-        "A secret key base for Rails. Generate a\n"
+        "An EMAIL ACCOUNT that will send CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
+        "instead set up an account specifically for CHORDS (e.g. at gmail).",
+        "CHORDS_EMAIL_ADDRESS",
+        ""
+    ],
+    [
+        "The PASSWORD for the email account that will send CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
+        "instead set up an account specifically for CHORDS (e.g. at gmail).",
+        "CHORDS_EMAIL_PASSWORD",
+        ""
+    ],
+    [
+        "The EMAIL SERVER that can relay CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. You must have an account on this service.",
+        "CHORDS_EMAIL_SERVER",
+        "smtp.gmail.com"
+    ],
+    [
+        "A SECRET KEY BASE for Rails. Generate a\n"
         "secure value (e.g. 'openssl rand -hex 32').",
         "SECRET_KEY_BASE",
         "aaaaaaaaaaa"
     ],
     [
-        "The time series database retention duration, e.g. 168h or 52w. Use \"inf\" for permanent.\n"
+        "The time series DATABASE RETENTION DURATION, e.g. 168h or 52w. Use \"inf\" for permanent.\n"
         "This value can be changed on successive restarts of a portal. Note: making it shorter\n"
         "will trim the existing time series database.",
         "DB_RETENTION",
         "inf"
     ],
     [
-        "The version tag of the desired CHORDS release.",
+        "The VERSION TAG of the desired CHORDS release.",
         "DOCKER_TAG",
         "latest"
     ],
     [
-        "Proxy URL (e.g. http://proxy.myorg.com:8080).\n"
+        "PROXY URL (e.g. http://proxy.myorg.com:8080).\n"
         "Leave blank if not needed.",
         "PROXY",
         ""
     ],
     [
-        "The RAILS environment. Unlikely to to be anything other than \"production\".",
+        "The RAILS ENVIRONMENT. Unlikely to to be anything other than \"production\".",
         "RAILS_ENV",
         "production"
     ],
     [
-        "The number of nginx workers.",
+        "The number of NGINX WORKERS. 4 is a good value",
         "WORKERS",
         4
     ]
@@ -392,9 +412,11 @@ class ChordsGit:
     """
     Manage CHORDS git activities.
     """
-    def __init__(self, proxy=""):
+    def __init__(self, proxy="", release=""):
         # The path for the docker-compose configuration.
         self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
+        if release == "development":
+            self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/development/docker-compose.yml'
         if os_arch[:3] == 'arm':
             self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/rpi-docker-compose.yml'
             
@@ -693,6 +715,6 @@ if __name__ == '__main__':
         # Get the system configuration.
         config = ChordsConfig(configfile=options['file'])
         # Get items from git that are needed.
-        ChordsGit(proxy=options['proxy']).fetch()
+        ChordsGit(proxy=config['PROXY'], release=config["DOCKER_TAG"]).fetch()
         # Pull the images.
-        Docker(proxy=options['proxy']).pull()
+        Docker(proxy=options['PROXY']).pull()

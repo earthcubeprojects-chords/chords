@@ -128,9 +128,11 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PW}
       - GF_EMAILS_WELCOME_EMAIL_ON_SIGN_UP=true
       - GF_SMTP_ENABLED=true
-      - GF_SMTP_HOST=chords_mta:25
-      - GF_SMTP_SKIP_VERIFY=true
-      - GF_SMTP_FROM_ADDRESS=admin@chordsrt.com 
+      - GF_SMTP_FROM_ADDRESS=${GRAFANA_SMTP_EMAIL}
+      - GF_SMTP_FROM_NAME=CHORDS Grafana
+      - GF_SMTP_HOST=${CHORDS_EMAIL_SERVER}:465
+      - GF_SMTP_USER=${CHORDS_EMAIL_ADDRESS}
+      - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}      
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
