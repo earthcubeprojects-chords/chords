@@ -729,6 +729,6 @@ if __name__ == '__main__':
         # Get the system configuration.
         config = ChordsConfig(configfile=options['file'])
         # Get items from git that are needed.
-        ChordsGit(proxy=config['PROXY'], release=config["DOCKER_TAG"]).fetch()
+        ChordsGit(proxy=options['proxy'], release=config["DOCKER_TAG"]).fetch()
         # Pull the images.
-        Docker(proxy=options['PROXY']).pull()
+        Docker(proxy=config['PROXY']).pull()
