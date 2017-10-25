@@ -7,7 +7,6 @@ version: '2'
 #   2. chords_mysql:    A MyQSL database for CHORDS metadata.
 #   3. chords_influxdb: An InfluxDB database for real-time time series data.
 #   4. chords_grafana:  A Grafana dashboard server
-#   5. chords_mta:      A postfix mail transfer agent.
 #
 # The following docker volumes provide data persistance:
 #   1. mysql-data:     (/var/lib/mysql)
@@ -58,7 +57,6 @@ services:
       - DB_RETENTION=${DB_RETENTION}
       - DOCKER_TAG=${DOCKER_TAG}
       - CHORDS_EMAIL_SERVER=${CHORDS_EMAIL_SERVER}
-      - CHORDS_EMAIL_DOMAIN=${CHORDS_EMAIL_DOMAIN}
       - CHORDS_EMAIL_PORT=${CHORDS_EMAIL_PORT}
       - CHORDS_EMAIL_ADDRESS=${CHORDS_EMAIL_ADDRESS}
       - CHORDS_EMAIL_PASSWORD=${CHORDS_EMAIL_PASSWORD}
@@ -77,7 +75,6 @@ services:
     links:
       - mysql
       - influxdb
-      - mta
 
   # Rails mysql database
   mysql:
@@ -149,24 +146,7 @@ services:
     ports:
       - 3000:3000
     links:
-      - mta
       - influxdb
-
-  # Mail transfer agent
-  mta:
-    container_name: chords_mta
-    image: tozd/postfix:latest
-    volumes:
-      - postfix-spool:/var/spool/postfix
-    environment:
-      - MY_NETWORKS=172.0.0.0/8 127.0.0.0/8
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "1m"
-        max-file: "5"
-    ports:
-      - 25:25
 
 volumes:
   # CHORDS Rails meta-data
@@ -175,8 +155,6 @@ volumes:
   influxdb-data:
   # Grafana configuration data
   grafana-data:
-  # mta spool data
-  postfix-spool:
   #shared_tmp volume
   shared-tmp:
   # log directories
