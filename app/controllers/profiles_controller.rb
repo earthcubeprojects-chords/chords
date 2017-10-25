@@ -12,7 +12,6 @@ class ProfilesController < ApplicationController
     end
     
     @email   = Rails.application.config.action_mailer.smtp_settings[:user_name]
-    Rails.logger.debug 'Email:' + @email
    
   end
 
