@@ -37,6 +37,7 @@ is mounted as the CHORDS Rails source.
 """
 
 import os
+import stat
 import sys
 import re
 import shutil
@@ -362,6 +363,7 @@ class ChordsConfig(OrderedDict):
         f = open(configfile, "w")
         f.write(self.toYML())
         f.close()
+        os.chmod(configfile, stat.S_IRUSR | stat.S_IWUSR)
         print "*** " + options["file"] + " has been written with the new configuration."
 
     def writeEnvFile(self):
@@ -377,6 +379,7 @@ class ChordsConfig(OrderedDict):
         for key in self.keys():
             f.write(key + "=" + str(self[key])+"\n")
         f.close()
+        os.chmod(".env", stat.S_IRUSR | stat.S_IWUSR)
         print "*** .env has been written with the new configuration."
         
     def createBackup(self, filename, print_note=True):
@@ -398,7 +401,11 @@ class ChordsConfig(OrderedDict):
         if fsplit[1]:
             backupfile = backupfile + fsplit[1]     
         # Copy the existing foile to the backup
-        shutil.copyfile(filename, backupfile)     
+        shutil.copyfile(filename, backupfile)   
+        
+        # Make it accesible only to the use
+        os.chmod(backupfile, stat.S_IRUSR | stat.S_IWUSR)
+  
         
         if print_note:
             print "*** " + filename + " has been backed up to " + backupfile + "."
