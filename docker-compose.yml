@@ -57,8 +57,13 @@ services:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - DB_RETENTION=${DB_RETENTION}
       - DOCKER_TAG=${DOCKER_TAG}
+      - CHORDS_EMAIL_SERVER=${CHORDS_EMAIL_SERVER}
+      - CHORDS_EMAIL_DOMAIN=${CHORDS_EMAIL_DOMAIN}
+      - CHORDS_EMAIL_PORT=${CHORDS_EMAIL_PORT}
+      - CHORDS_EMAIL_ADDRESS=${CHORDS_EMAIL_ADDRESS}
+      - CHORDS_EMAIL_PASSWORD=${CHORDS_EMAIL_PASSWORD}
       # Note: INFLUXDB_ variables are used by the Influxer gem, meaning that
-      # you should not create your own variables beginning with INFLUXDB_.
+      # you should NOT create your own variables beginning with INFLUXDB_.
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
@@ -130,7 +135,7 @@ services:
       - GF_SMTP_ENABLED=true
       - GF_SMTP_FROM_ADDRESS=${CHORDS_EMAIL_ADDRESS}
       - GF_SMTP_FROM_NAME=CHORDS Grafana
-      - GF_SMTP_HOST=${CHORDS_EMAIL_SERVER}:465
+      - GF_SMTP_HOST=${CHORDS_EMAIL_SERVER}:${CHORDS_EMAIL_PORT}
       - GF_SMTP_USER=${CHORDS_EMAIL_ADDRESS}
       - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}      
     volumes:

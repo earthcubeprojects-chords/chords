@@ -56,7 +56,8 @@ from collections import OrderedDict
 # When you need to add required keys to the configuration, just define them here.
 stdConfigItems = [
     [
-        "The PASSWORD for r/w and admin access to CHORDS, mysql and influxdb.\n"
+        "The PASSWORD for sysadmin access to CHORDS, mysql and influxdb in docker.\n"
+        "(NOTE: This not the CHORDS website admin login)\n"
         "Replace this with a secure password.",
         "CHORDS_ADMIN_PW",  
         "chords_ec_demo"
@@ -79,20 +80,26 @@ stdConfigItems = [
         "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
         "instead set up an account specifically for CHORDS (e.g. at gmail).",
         "CHORDS_EMAIL_ADDRESS",
-        ""
+        "unknown@gmail.com"
     ],
     [
         "The PASSWORD for the email account that will send CHORDS password reset instructions, \n"
         "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
         "instead set up an account specifically for CHORDS (e.g. at gmail).",
         "CHORDS_EMAIL_PASSWORD",
-        ""
+        "unknown"
     ],
     [
         "The EMAIL SERVER that can relay CHORDS password reset instructions, \n"
         "Grafana alerts, etc. You must have an account on this service.",
         "CHORDS_EMAIL_SERVER",
         "smtp.gmail.com"
+    ],
+    [
+        "The SERVER PORT for the email server that can relay CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. You must have an account on this service.",
+        "CHORDS_EMAIL_PORT",
+        "587"
     ],
     [
         "A SECRET KEY BASE for Rails. Generate a\n"
