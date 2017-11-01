@@ -509,9 +509,9 @@ Resources:
         IpProtocol: tcp
         ToPort: '3000'
       - CidrIp: 0.0.0.0/0
-        FromPort: '8086'
+        FromPort: '9092'
         IpProtocol: tcp
-        ToPort: '8086'
+        ToPort: '9092'
     Type: AWS::EC2::SecurityGroup
     
 #####################################################################
