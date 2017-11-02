@@ -69,14 +69,6 @@ stdConfigItems = [
         "guest"
     ],
     [
-        "The PASSWORD for admin access to Grafana.\n"
-        "Once Grafana is initialized with this password,\n"
-        "it can only be changed from the Grafana admin web page.\n"
-        "Replace this with a secure password.",
-        "GRAFANA_ADMIN_PW",  
-        "admin"
-    ],
-    [
         "An EMAIL ACCOUNT that will send CHORDS password reset instructions, \n"
         "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
         "instead set up an account specifically for CHORDS (e.g. at gmail).",
@@ -101,6 +93,14 @@ stdConfigItems = [
         "Grafana alerts, etc. You must have an account on this service.",
         "CHORDS_EMAIL_PORT",
         "587"
+    ],
+    [
+        "The PASSWORD for admin access to Grafana.\n"
+        "Once Grafana is initialized with this password,\n"
+        "it can only be changed from the Grafana admin web page.\n"
+        "Replace this with a secure password.",
+        "GRAFANA_ADMIN_PW",  
+        "admin"
     ],
     [
         "A SECRET KEY BASE for Rails. Generate a\n"
