@@ -121,7 +121,7 @@ services:
   # InfluxData kapacitor time series monitoring
   kapacitor:
     container_name: chords_kapacitor
-    image: kapacitor:1.3-alpine
+    image: kapacitor:1.3
     volumes:
       - kapacitor-data:/var/lib/kapacitor
       - kapacitor-log:/var/log/kapacitor
