@@ -152,7 +152,7 @@ services:
     ports:
       - 9092:9092
     links:
-      - influxdb
+      - app
       
   # Grafana graphing server. It draws data from influxdb.
   grafana:
