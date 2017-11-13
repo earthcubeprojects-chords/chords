@@ -121,18 +121,19 @@ services:
   # InfluxData kapacitor time series monitoring
   kapacitor:
     container_name: chords_kapacitor
-    image: kapacitor:1.3
+    image: ncareol/kapacitor
     volumes:
       - kapacitor-data:/var/lib/kapacitor
       - kapacitor-log:/var/log/kapacitor
     environment:
+      # Custom environment variable, used by ncareol/kapacitor
+      - KAPACITOR_ENABLED=${KAPACITOR_ENABLED}
+      #
       - KAPACITOR_HOSTNAME=chords_kapacitor
       - KAPACITOR_LOGGING_LEVEL=INFO
       - KAPACITOR_REPORTING_ENABLED=false
       #
       - KAPACITOR_HTTP_AUTH_ENABLED=true
-      - KAPACITOR_HTTP_USERNAME=admin
-      - KAPACITOR_HTTP_PASSWORD=${CHORDS_ADMIN_PW}
       #
       - KAPACITOR_INFLUXDB_0_URLS_0=http://chords_influxdb:8086
       - KAPACITOR_INFLUXDB_0_USERNAME=admin

@@ -72,6 +72,14 @@ Parameters:
     Description: Database retention duration (weeks, INF=forever)
     Type: String
 
+  KapacitorEnabled:
+    AllowedValues:
+    - false
+    - true
+    Default: false
+    Description: Enable kapacitor (WARNING, opens a security hole)
+    Type: String
+    
   InstanceType:
     AllowedValues:
     - t2.micro
@@ -420,6 +428,7 @@ Resources:
                 RAILS_ENV=production
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=${SecretKeyBase}
+                KAPACITOR_ENABLED=${KapacitorEnabled}
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:

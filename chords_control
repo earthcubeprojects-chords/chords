@@ -127,6 +127,13 @@ stdConfigItems = [
         ""
     ],
     [
+        "Enable InfluxData kapacitor.\n"
+        "This is experimental.In general, do NOT enable,\n"
+        "as it opens a security hole. Specify either true or false.",
+        "KAPACITOR_ENABLED",
+        "false"
+    ],
+    [
         "The RAILS ENVIRONMENT. Unlikely to to be anything other than \"production\".",
         "RAILS_ENV",
         "production"
