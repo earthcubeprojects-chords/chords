@@ -326,6 +326,7 @@ Resources:
           - docker_service
           - docker_config
           - docker_compose
+          - chords_extras
           - chords_service
 
         # configure cfn.
@@ -429,6 +430,7 @@ Resources:
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=${SecretKeyBase}
                 KAPACITOR_ENABLED=${KapacitorEnabled}
+ 
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
@@ -441,6 +443,13 @@ Resources:
             # Pull the CHORDS images.
             03_docker_pull:
               command: "cd /root && /bin/docker-compose pull"
+
+        # Get some CHORDS extras.
+        chords_extras:
+          commands:
+            # Fetch chords_control.
+            01_docker_compose_yml:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /root/chords_control"
 
         # Install and enable the chords service
         chords_service:
