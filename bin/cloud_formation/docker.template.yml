@@ -29,6 +29,31 @@ Parameters:
     Default: master
     Description: CHORDS git branch
     Type: String
+    
+  GrafanaAdminPw:
+    Default: admin
+    Description: The password for admin access to Grafana. Once Grafana is initialized with this password, it can only be changed from the Grafana admin web page. Replace this with a secure password.    
+    Type: String
+  
+  ChordsEmailAddress:
+    Default: unknown@gmail.com
+    Description: An email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail).
+    Type: String
+  
+  ChordsEmailPassword:
+    Default: unknown
+    Description: The password for the email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail).
+    Type: String
+  
+  ChordsEmailServer:
+    Default: smtp.gmail.com
+    Description: The email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service.
+    Type: String
+  
+  ChordsEmailPort:
+    Default: 587
+    Description: The SERVER PORT for the email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service.
+    Type: String
                 
   SecretKeyBase:
     Default: 9a9c4d7e7bed3d85a53bfaaee9cefd338c2ab5fda573cd933dfd3fea4178004425cb50a06df00a0c59a1d353defb9bd3e49fb5f47a791dec7daff95b2a6d080d
@@ -47,6 +72,14 @@ Parameters:
     Description: Database retention duration (weeks, INF=forever)
     Type: String
 
+  KapacitorEnabled:
+    AllowedValues:
+    - false
+    - true
+    Default: false
+    Description: Enable kapacitor (WARNING, opens a security hole)
+    Type: String
+    
   InstanceType:
     AllowedValues:
     - t2.micro
@@ -293,6 +326,7 @@ Resources:
           - docker_service
           - docker_config
           - docker_compose
+          - chords_extras
           - chords_service
 
         # configure cfn.
@@ -385,11 +419,18 @@ Resources:
               content: !Sub |     
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
                 CHORDS_GUEST_PW=${ChordsGuestPw}
+                CHORDS_EMAIL_ADDRESS=${ChordsEmailAddress}
+                CHORDS_EMAIL_PASSWORD=${ChordsEmailPassword}
+                CHORDS_EMAIL_SERVER=${ChordsEmailServer}
+                CHORDS_EMAIL_PORT=${ChordsEmailPort}
+                GRAFANA_ADMIN_PW=${GrafanaAdminPw}
                 GIT_BRANCH=${GitBranch}
                 DOCKER_TAG=${ChordsVersion}
                 RAILS_ENV=production
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=${SecretKeyBase}
+                KAPACITOR_ENABLED=${KapacitorEnabled}
+ 
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
@@ -402,6 +443,13 @@ Resources:
             # Pull the CHORDS images.
             03_docker_pull:
               command: "cd /root && /bin/docker-compose pull"
+
+        # Get some CHORDS extras.
+        chords_extras:
+          commands:
+            # Fetch chords_control.
+            01_docker_compose_yml:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /root/chords_control"
 
         # Install and enable the chords service
         chords_service:
@@ -509,9 +557,9 @@ Resources:
         IpProtocol: tcp
         ToPort: '3000'
       - CidrIp: 0.0.0.0/0
-        FromPort: '8086'
+        FromPort: '9092'
         IpProtocol: tcp
-        ToPort: '8086'
+        ToPort: '9092'
     Type: AWS::EC2::SecurityGroup
     
 #####################################################################

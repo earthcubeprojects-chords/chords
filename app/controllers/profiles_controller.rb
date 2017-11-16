@@ -11,6 +11,8 @@ class ProfilesController < ApplicationController
       @profile = Profile.first
     end
     
+    @email   = Rails.application.config.action_mailer.smtp_settings[:user_name]
+   
   end
 
 

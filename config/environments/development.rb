@@ -50,9 +50,12 @@ Rails.application.configure do
   
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'mta',
-    port:    25,
-    :openssl_verify_mode => 'none'
+    address:               ENV['CHORDS_EMAIL_SERVER'],
+    port:                  ENV['CHORDS_EMAIL_PORT'],
+    user_name:             ENV['CHORDS_EMAIL_ADDRESS'],
+    password:              ENV['CHORDS_EMAIL_PASSWORD'],
+    authentication:        'plain',
+    enable_starttls_auto:  true
   }
 
   # Defaults to:

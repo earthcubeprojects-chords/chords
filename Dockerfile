@@ -48,7 +48,7 @@ COPY ./logrotate_nginx_cron /etc/cron.d/nginx
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the Dokcker cache to ensure that the command is run.
-ADD http://www.random.org/strings/?num=10&len=8&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new cache_invalidator
+ADD https://www.random.org/integers/\?num\=1\&min\=1\&max\=1000000000\&col\=1\&base\=10\&format\=plain\&rnd\=new cache_invalidator
 RUN /bin/bash -f create_chords_env_script.sh > chords_env.sh && chmod a+x chords_env.sh
 
 # Install Docker on the container itself
