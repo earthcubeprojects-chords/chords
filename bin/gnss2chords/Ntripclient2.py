@@ -182,7 +182,7 @@ if __name__ == '__main__':
     ntripArgs['buffer']=options.buffer
     ntripArgs['lat']=options.lat
     ntripArgs['lon']=options.lon
-    ntripArgs['user']="dstamps:Tj4JX71O"
+    ntripArgs['user']="xxx:xxx"
     ntripArgs['directConnect']=options.directConnect
     fileOutput=False
     if options.outputFile:
