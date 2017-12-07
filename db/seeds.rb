@@ -11,7 +11,7 @@
 # Site.initialize
 # Instrument.initialize
 
-User.create(:email => "admin@chordsrt.com",    :password => "realtimedata", :is_administrator => 1)
+User.create(:email => "admin@chordsrt.com", :password => "realtimedata", :is_administrator => 1)
 
 # Using the ontology  http://sensorml.com/ont/swe/property
 # (Recommended by Manil Maskey)
