@@ -12,7 +12,7 @@
     = best_in_place @instrument, :name, :as => :input
   - else
     = @instrument.name
-  = "(ID: #{@instrument.id})"
+  = "(id: #{@instrument.id})"
   located at
   - if can?(:manage, Instrument)          
     = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
@@ -20,6 +20,7 @@
     = @instrument.site.name
 
 .instrument_description
+  Description: 
   - if can?(:manage, Instrument)
     = best_in_place @instrument,                              |
       :description,                                           |
@@ -28,6 +29,17 @@
       :html_attrs => {:style => 'width:800px; height:100px;'} |
   - else
     = @instrument.description
+  %br
+  This instrument is designated as active:
+  - if can?(:manage, Instrument)          
+    = best_in_place @instrument, :is_active, :as => :checkbox
+  - else
+    - if @instrument.is_active
+      = "Yes"
+    - else
+      = "No"
+  %br
+  (If 'No', the instrument will not appear in the dashboard.)
 
 .instrument_configuration
   .left
