@@ -34,6 +34,11 @@ if [ -z "$GRAFANA_ADMIN_PW" ]; then
   export GRAFANA_ADMIN_PW="admin"
 fi
 
+# Number of Unicorn workers
+if [ -z "$WORKERS" ]; then
+  export WORKERS=4
+fi
+
 mysql_host="mysql"
 # The mysql seeded flag is saved in the directory containing the mysql database.
 mysql_seeded_flag="/var/lib/mysql/CHORDS_SEEDED_$RAILS_ENV"
@@ -63,8 +68,6 @@ if [ -e $chords_env ]
 then
   . $chords_env
 fi
-echo "echo CHORDS environment settings:"               
-env
 
 # Set some other interesting environment variables.
 export CHORDS_KERNEL_NAME=`uname --kernel-name`
@@ -77,10 +80,8 @@ export CHORDS_HARDWARE_PLATFORM=`uname --hardware-platform`
 export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 export CHORDS_RELEASE=$DOCKER_TAG
 
-# Number of Unicorn workers
-if [ -z "$WORKERS" ]; then
-  export WORKERS=4
-fi
+echo "echo CHORDS environment settings:"               
+env
 
 # See if there is an existing mysql database
 if [ ! -e $mysql_seeded_flag ] 
