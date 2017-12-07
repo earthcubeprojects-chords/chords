@@ -11,7 +11,7 @@ class Unit < ActiveRecord::Base
 
 
 	def self.populate
-	  self.populate_cuahsi_unit
+	  self.populate_cuahsi_units
 	  self.populate_udunits_units 
   end
   
