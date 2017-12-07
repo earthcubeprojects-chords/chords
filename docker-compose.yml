@@ -60,6 +60,7 @@ services:
       - CHORDS_EMAIL_PORT=${CHORDS_EMAIL_PORT}
       - CHORDS_EMAIL_ADDRESS=${CHORDS_EMAIL_ADDRESS}
       - CHORDS_EMAIL_PASSWORD=${CHORDS_EMAIL_PASSWORD}
+      - WORKERS=${WORKERS}
       # Note: INFLUXDB_ variables are used by the Influxer gem, meaning that
       # you should NOT create your own variables beginning with INFLUXDB_.
       - INFLUXDB_USERNAME=admin
