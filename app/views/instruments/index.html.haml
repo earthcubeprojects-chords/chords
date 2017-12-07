@@ -6,6 +6,7 @@
         %th{:align => "center"} Status
         %th{:align => "center"} Name
         %th{:align => "center"} Id
+        %th{:align => "center"} Active
         %th{:align => "center"}
           Interval
           %br>/
@@ -40,6 +41,15 @@
             = link_to(instrument.name, instrument_url(:id => instrument.id) )
           %td
             = instrument.id
+          %td{:align => "center"}
+            - if can?(:manage, Instrument)          
+              = best_in_place instrument, :is_active, :as => :checkbox
+            - else
+              - if instrument.is_active
+                = "Yes"
+              - else
+                = "No"
+              
           %td{:align => "center"}= instrument.sample_rate_seconds
           %td= instrument.last_age
           %td= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id))
