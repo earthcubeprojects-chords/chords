@@ -27,8 +27,10 @@ module DashboardHelper
     instrument_ids = []
     instrument_names = {}
     Instrument.all.each do |i|
-      instrument_ids << i.id
-      instrument_names[i.id] = i.name
+      if i.is_active
+        instrument_ids << i.id
+        instrument_names[i.id] = i.name
+      end
     end
     
     # Get the timeseries counts for the data field
