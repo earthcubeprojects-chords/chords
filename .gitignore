@@ -43,6 +43,7 @@ bower.json
 /.pydevproject
 /passenger.*
 vendor/ruby
+vendor/cache
 chords_env.sh
 
 # Docker .env environment variable file
