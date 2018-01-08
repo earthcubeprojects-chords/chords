@@ -26,6 +26,7 @@ gem 'jquery-ui-rails'
 
 # Google Maps For Rails and dependencies
 gem 'gmaps4rails'
+gem 'markerclustererplus-rails'
 
 # Javascript helpers
 gem 'underscore-rails'
