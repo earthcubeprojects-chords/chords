@@ -14,13 +14,11 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require underscore
-//= require best_in_place
 //= require autocomplete-rails
+//= require best_in_place
 
 //= require gmaps/google
 //= require markerclusterer
-
-//= require js/bootstrap
 
 //= require highcharts
 //= require highcharts/highcharts-more
