@@ -42,30 +42,30 @@
           %td
             = instrument.id
           %td{:align => "center"}
-            - if can?(:manage, Instrument)          
+            - if can?(:manage, Instrument)
               = best_in_place instrument, :is_active, :as => :checkbox
             - else
               - if instrument.is_active
                 = "Yes"
               - else
                 = "No"
-              
+
           %td{:align => "center"}= instrument.sample_rate_seconds
           %td= instrument.last_age
           %td= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id))
           %td{:align => "center"}= instrument.vars.count
           %td{:align => "center"}= instrument.sample_count(:either)
 
-          %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
+          %td{:align => "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
           - if can?(:manage, Instrument)
             %td
 
-              = form_tag(instruments_duplicate_path, :method => 'get') do
-                = select_tag "number_of_duplicates", options_for_select((1..100).to_a , "1") 
+              = form_tag(duplicate_instruments_path, :method => 'get') do
+                = select_tag "number_of_duplicates", options_for_select((1..100).to_a , "1")
                 copies
                 = hidden_field_tag('instrument_id', instrument.id )
                 = submit_tag("Duplicate")
-              
+
           %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
 
           - if can?(:manage, Instrument)
@@ -76,10 +76,10 @@
   = link_to 'New Instrument', new_instrument_path, :class => 'btn btn-default btn-lg dropdown-toggle'
 - else
   %strong At least one site must be defined before creating a new instrument.
- 
+
 %h2 Identifiers
 
-%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", :type => "button", :class => 'btn btn-default btn-lg dropdown-toggle'} 
+%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", :type => "button", :class => 'btn btn-default btn-lg dropdown-toggle'}
   Toggle Details
 
 #summarytable.table-responsive.collapse

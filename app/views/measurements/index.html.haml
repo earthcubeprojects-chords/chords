@@ -18,8 +18,8 @@
         %td= measurement.value
         %td= measurement.unit
         %td= measurement.measured_at
-        %td= button_to 'Show', measurement, method: => :get
-        %td= button_to 'Edit', edit_measurement_path(measurement), method: => :get
+        %td= button_to 'Show', measurement, method: :get
+        %td= button_to 'Edit', edit_measurement_path(measurement), method: :get
         %td= button_to 'Destroy', measurement, method: :delete, data: { confirm: 'Are you sure?' }
 %br/
 = link_to 'New Measurement', new_measurement_path

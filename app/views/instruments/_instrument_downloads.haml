@@ -4,7 +4,7 @@
 %div
   %strong Data ingest/fetch
   %br
-  = link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)  
+  = link_to 'Data URLs', data_urls_about_index_path(instrument_id: @instrument.id)
 
 %div
   %strong
@@ -15,7 +15,7 @@
   \#{link_to("GeoCSV",  instrument_url( :format => 'csv')  )}
 
 %div
-  %strong 
+  %strong
     Instrument Description
   %br
   #{link_to("SensorML", instrument_url( :format => 'sensorml') )}
