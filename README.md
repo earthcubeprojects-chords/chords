@@ -37,3 +37,4 @@ functionality:
 * A webpage which provides a summary of the current data holdings and 
   ingest activity.
 
+This project is sponsored by funding from the National Science Foundation under ICER awards 1639750, 1639640, 1639570, 1639554 and 1639720.
