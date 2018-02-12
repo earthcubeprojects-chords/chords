@@ -71,12 +71,12 @@ title: Partners
 <p/>
 <div class="row">
   <div class="col-sm-4">
-    <a href="https://ucsd.edu/">
-      <img class="img-responsive" alt="title" src="images/UCSD.png" style="max-height: 50px; margin: 0 auto;">
+    <a href="https://vt.edu/">
+      <img class="img-responsive" alt="title" src="images/Virginia_Tech_logo.png" style="max-height: 50px; margin: 0 auto;">
     </a>
   </div>
   <div class="col-sm-8">
-   University of California San Diego
+   Virginia Tech
   </div>
 </div>
 
