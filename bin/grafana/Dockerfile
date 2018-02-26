@@ -1,4 +1,4 @@
-FROM grafana/grafana:4.6.2 
+FROM grafana/grafana:5.0.0-beta5 
 MAINTAINER martinc@ucar.edu
 
 # Update
@@ -19,6 +19,5 @@ mtanda-histogram-panel,\
 bessler-pictureit-panel,\
 natel-plotly-panel,\
 btplc-status-dot-panel
-
 
 ENTRYPOINT ["/run.sh"]
