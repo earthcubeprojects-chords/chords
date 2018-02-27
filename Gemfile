@@ -68,7 +68,7 @@ gem 'haml-rails'
 gem 'influxdb'
 
 # influxer
-gem "influxer", "~>0.5.0"
+gem "influxer", "~>1.1"
 
 # mini_portile2
 gem 'mini_portile2'
