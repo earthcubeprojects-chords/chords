@@ -7,6 +7,11 @@ running/stopping the portal, and updating the portal software.
 The CHORDS configuration is kept in a YAML file (default chords.yml).
 This file contains standard configuration items, followed by user
 created non-standard options. The later are for developer use only.
+There is a one-to-one corresponence between the CHORDS configuration file
+and .env. The .env simply simply contains environment variables which
+will be passed to docker-compose. In most cases, .env is created from
+the configuration file. However, the "backwards" command allows the configuration
+file to be created from .env.
 
 In configuration mode (-c), the existing configuration will be 
 read from the configuration file, the user will be prompted for changes,
@@ -46,6 +51,7 @@ import argparse
 import subprocess
 import json
 import platform
+import tempfile
 from collections import OrderedDict
 
 # The definitions of standard configuration items. These are tri-tuples:
@@ -160,6 +166,34 @@ os_name = os.name
 os_arch = platform.uname()[4]
 
 #####################################################################
+def createBackupFile(filename, print_note=True):
+    """
+    Create a backup copy of the file. A timestamp is included 
+    in the new file name. If print_note is True, print
+    out a  friendly message indicating that a backup copy was made.
+    """
+    # No need to backup a file that doesn't already exist or is zero size
+    if not os.path.isfile(filename):
+        return
+    
+    if os.stat(filename).st_size == 0:
+        return
+    
+    # Create the backup file name
+    fsplit = os.path.splitext(filename)
+    backupfile = fsplit[0] + "-" + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
+    if fsplit[1]:
+        backupfile = backupfile + fsplit[1]     
+    # Copy the existing foile to the backup
+    shutil.copyfile(filename, backupfile)   
+    
+    # Make it accesible only to the use
+    os.chmod(backupfile, stat.S_IRUSR | stat.S_IWUSR)
+
+    if print_note:
+        print "*** " + filename + " has been backed up to " + backupfile + "."
+
+#####################################################################
 class CommandArgs:
     """
     Manage the command line options.
@@ -180,7 +214,7 @@ to set the configuration to default values.
 """
         
         epilog = """
-At least one and only one of -c, -e, -r, -s, or -u can be 
+At least one and only one of -c, -e, -b, -r, -s, or -u can be 
 specified. -d must be accompanied by -c. To create an initial 
 default configuration: 'python chords_control -c -d'
 
@@ -194,7 +228,8 @@ default configuration: 'python chords_control -c -d'
         parser.add_argument("-c", "--config",  help="prompt for configuration and write config/.env files", default=False,        action="store_true")
         parser.add_argument("-d", "--default", help="set all configuration values to defaults",             default=False,        action="store_true")
         parser.add_argument("-t", "--status",  help="status",                                               default=False,        action="store_true")
-        parser.add_argument("-e", "--env",     help="read config file and write CHORDS env file",           default=False,        action="store_true")
+        parser.add_argument("-e", "--env",     help="read config file and write CHORDS .env file",          default=False,        action="store_true")
+        parser.add_argument("-b", "--backwards", help="read CHORDS .env file and write config file (use with caution!)",        default=False,        action="store_true")
         parser.add_argument("-x", "--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
         parser.add_argument("-m", "--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
         parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
@@ -211,7 +246,7 @@ default configuration: 'python chords_control -c -d'
         # Make sure that at most only one of these args was specified
         o = self.options
         
-        if [o['config'], o['run'], o['stop'], o['update'], o['env']].count(True) > 1:
+        if [o['config'], o['run'], o['stop'], o['update'], o['env'], o['backwards']].count(True) > 1:
             print epilog
             exit(1)
             
@@ -363,10 +398,12 @@ class ChordsConfig(OrderedDict):
         starting with the elements listed in the configItems. Configuration items
         are prefixed with the comments provided in the configItems.
         
-        A backup copy of the original file is created.
+        If specified, a backup copy of the original file is created.
         """
+
         print
-        self.createBackup(configfile)
+        createBackupFile(configfile)
+
         f = open(configfile, "w")
         f.write(self.toYML())
         f.close()
@@ -380,7 +417,7 @@ class ChordsConfig(OrderedDict):
         
         A backup copy of the original file is created.
         """
-        self.createBackup(".env")
+        createBackupFile(".env")
         
         f = open(".env", 'w')
         for key in self.keys():
@@ -389,33 +426,6 @@ class ChordsConfig(OrderedDict):
         os.chmod(".env", stat.S_IRUSR | stat.S_IWUSR)
         print "*** .env has been written with the new configuration."
         
-    def createBackup(self, filename, print_note=True):
-        """
-        Create a backup copy of the file. A timestamp is included 
-        in the new file name. If print_note is True, print
-        out a  friendly message indicating that a backup copy was made.
-        """
-        # No need to backup a file that doesn't already exist or is zero size
-        if not os.path.isfile(filename):
-            return
-        
-        if os.stat(filename).st_size == 0:
-            return
-        
-        # Create the backup file name
-        fsplit = os.path.splitext(filename)
-        backupfile = fsplit[0] + "-" + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
-        if fsplit[1]:
-            backupfile = backupfile + fsplit[1]     
-        # Copy the existing foile to the backup
-        shutil.copyfile(filename, backupfile)   
-        
-        # Make it accesible only to the use
-        os.chmod(backupfile, stat.S_IRUSR | stat.S_IWUSR)
-  
-        
-        if print_note:
-            print "*** " + filename + " has been backed up to " + backupfile + "."
 
 #####################################################################
 class ConfigItem(OrderedDict):
@@ -599,8 +609,36 @@ class Docker:
             tags.append(byteify(t["name"]))
             
         return tags
-            
 
+#####################################################################
+def createConfigFilefromEnv(options):
+  """
+  Read the .env file, and convert it into a configuration file.
+  options["file"] is the name of the new configuration file.
+  If the named configuration file already exists, a backup copy is 
+  made when the new configuration is saved.
+  Since we are using the ChordsConfig class, any values
+  not present in .env will be given default values.
+  """
+  
+  # create a new temporary configuration file.
+  tfile = tempfile.mkstemp(prefix="chords_control_", text=True)[1]
+  cfile = open(tfile, "w")
+  if os.path.isfile(".env") == True:
+    efile = open(".env")
+    lines = efile.readlines()
+    for l in lines:
+      l = l.replace("=", ":")
+      cfile.write(l)
+  cfile.close()
+  
+  # Process the temporary configuration file, which will
+  # merge in default values for variables that weren't in .env.
+  config = ChordsConfig(configfile=tfile)
+  
+  # Save the new configuration file and update the .env file.
+  config.writeYMLFile(options["file"])
+  config.writeEnvFile()
 
 #####################################################################
 def os_cmd(cmd, printlines=True):
@@ -701,19 +739,25 @@ if __name__ == '__main__':
     # Adjust the available releases
     addChoicesToDOCKER_TAG()
     
+    # --- Command procesing ---
+    
+    # Run the CHORDS portal
     if options["run"] == True:
         if options['devmode'] == True:
             checkFileExists('docker-compose-dev.yml')
         
         Docker(proxy=options['proxy']).up(options['devmode'])
         
+    # Stop the currently running CHORDS portal
     if options["stop"] == True:
         Docker(proxy=options['proxy']).down()
     
+    # Show the current CHORDS status
     if options["status"] == True:
         for c in Docker(proxy=options['proxy']).ps():
             print c['name'] + ': ' + str(c)
     
+    # Prompt and update the configuration
     if options["config"] == True:
         config = ChordsConfig(configfile=options['file'])
         config.queryValues(usedefault=options['default'])
@@ -722,20 +766,26 @@ if __name__ == '__main__':
         print
         print "*** Don't forget to run 'python chords_control --update' if you have changed the configuration."
     
+    # Create the .env file from the configuration file
     if options["env"] == True:
         if not os.path.isfile(options["file"]):
             print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
             exit(1)
         config = ChordsConfig(configfile=options['file'])
         config.writeEnvFile()
-    
+        
+    # Create the configuration file from the .env file
+    if options["backwards"] == True:
+      createConfigFilefromEnv(options)
+
+    # Update the docker images
     if options["update"] == True:
-        if not os.path.isfile(options["file"]):
-            print "The CHORDS configuration file " + options['file'] + "does not exist. It can be created with ./chords_control -c -d [-f FILE]"
-            exit(1)
-        # Get the system configuration.
-        config = ChordsConfig(configfile=options['file'])
-        # Get items from git that are needed.
-        ChordsGit(proxy=options['proxy'], release=config["DOCKER_TAG"]).fetch()
-        # Pull the images.
-        Docker(proxy=config['PROXY']).pull()
+      if not os.path.isfile(options["file"]):
+        print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
+        exit(1)
+      # Get the system configuration.
+      config = ChordsConfig(configfile=options['file'])
+      # Get items from git that are needed.
+      ChordsGit(proxy=options['proxy'], release=config["DOCKER_TAG"]).fetch()
+      # Pull the images.
+      Docker(proxy=config['PROXY']).pull()
