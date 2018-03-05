@@ -26,6 +26,7 @@ Parameters:
     AllowedValues:
     - master
     - development
+    - aws-chords-control-refactor
     Default: master
     Description: CHORDS git branch
     Type: String
@@ -323,10 +324,10 @@ Resources:
           - install_cfn
           - sys_update
           - yum_extras
-          - docker_service
-          - docker_config
-          - docker_compose
           - chords_extras
+          - chords_config
+          - docker_service
+          - docker_compose
           - chords_service
 
         # configure cfn.
@@ -399,22 +400,18 @@ Resources:
             yum:
               emacs: []
               sysstat: []
-              
         
-        # Install docker as a service.
-        docker_service:
-          packages:
-            yum:
-              docker: []
-          services:
-            sysvinit:
-              docker:
-                enabled: 'true'
-                ensureRunning: 'true'
-                
-        # Create the docker-compose configuration file.
-        docker_config:
+        # Get some CHORDS extras.
+        chords_extras:
+          commands:
+            # Fetch chords_control.
+            01_docker_compose_yml:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /root/chords_control"
+
+        # Create the CHORDS and docker-compose configuration files.
+        chords_config:
           files:
+            # Create the basic configuration in .env:
             /root/.env:
               content: !Sub |     
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
@@ -430,7 +427,22 @@ Resources:
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=${SecretKeyBase}
                 KAPACITOR_ENABLED=${KapacitorEnabled}
+          commands:
+            # Create chords.yml from .env. The .env file will also be updated.
+            01_create_chords_yml:
+              command: "cd /root; python chords_control -b"
  
+        # Install docker as a service.
+        docker_service:
+          packages:
+            yum:
+              docker: []
+          services:
+            sysvinit:
+              docker:
+                enabled: 'true'
+                ensureRunning: 'true'
+                
         # Install docker-compose, docker-compose.yml, and get the CHORDS images.
         docker_compose:
           commands:
@@ -443,13 +455,6 @@ Resources:
             # Pull the CHORDS images.
             03_docker_pull:
               command: "cd /root && /bin/docker-compose pull"
-
-        # Get some CHORDS extras.
-        chords_extras:
-          commands:
-            # Fetch chords_control.
-            01_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /root/chords_control"
 
         # Install and enable the chords service
         chords_service:
