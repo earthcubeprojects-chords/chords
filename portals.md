@@ -4,6 +4,8 @@ title: Active CHORDS Portals
 ---
 
 ### Actively collecting data for scientific deployments
+[NCAR](http://portal.chordsrt.com){:target="_blank"}
+
 [3D](http://3d.chordsrt.com){:target="_blank"}
 
 [3D Zambia](http://3d-zambia.chordsrt.com){:target="_blank"}
@@ -14,9 +16,9 @@ title: Active CHORDS Portals
 
 [ARPA](http://arpa.chordsrt.com){:target="_blank"}
 
-[NCAR](http://portal.chordsrt.com){:target="_blank"}
-
 [STORM](http://storm.chordsrt.com){:target="_blank"}
+
+[SugarTech](http://wx.sugartechllc.com){:target="_blank"}
 
 ### Under configuration
 [yellowstone](http://yellowstone.chordsrt.com){:target="_blank"}
