@@ -500,11 +500,12 @@ Resources:
                 #
                 start () {
                   echo "Starting $LABEL"
-                  $DC $OPTS up $UPOPTS
+                  cd /var/lib/chords && python chords_control --run
                 }
                 #
                 stop () {
                   echo "Stopping $LABEL"
+                  cd /var/lib/chords && python chords_control --stop
                   $DC $OPTS stop
                 }
                 #
@@ -518,7 +519,7 @@ Resources:
                     ;;
                 #
                   status)
-                    $DC $OPTS ps
+                  cd /var/lib/chords && python chords_control --status
                     ;;
                 #
                   restart)
@@ -527,7 +528,7 @@ Resources:
                     ;;
                 #
                   *)
-                    echo "Usage: /etc/init.d/chords {up/start|stop|status|reload}" || true
+                    echo "Usage: /etc/init.d/chords {up/start|stop|status}" || true
                     exit 1
                     ;;
                 esac
