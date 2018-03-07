@@ -2,6 +2,7 @@
 layout: page
 title: Active CHORDS Portals
 ---
+(Be sure to hit the "Visualization" button for graphical presentation of real-time data.)
 
 ### Actively collecting data for scientific deployments
 [NCAR](http://portal.chordsrt.com){:target="_blank"}
