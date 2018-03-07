@@ -325,8 +325,8 @@ Resources:
           - sys_update
           - yum_extras
           - install_docker
-          - chords_extras
-          - docker_compose
+          - install_docker_compose
+          - chords_setup
           - chords_config
           - docker_pull
           - chords_service
@@ -413,19 +413,22 @@ Resources:
                 enabled: 'true'
                 ensureRunning: 'true'
 
-        # Get some CHORDS extras.
-        chords_extras:
-          commands:
-            # Fetch chords_control.
-            01_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /var/lib/chords/chords_control"
-
-        # Install docker-compose, docker-compose.yml, and get the CHORDS images.
-        docker_compose:
+        # Install docker-compose
+        install_docker_compose:
           commands:
             # Install docker-compose.
             01_get_docker_compose:
               command: "curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
+
+        # Set up CHORDS
+        chords_setup:
+          commands:
+            01_var_lib_chords:
+              command: "mkdir -p /var/lib/chords"
+            02_get_chords_control:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /var/lib/chords/chords_control"
+            03_get_docker_compose_yml:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/docker-compose.yml > /var/lib/chords/docker-compose.yml"
 
         # Create the CHORDS and docker-compose configuration files.
         chords_config:
@@ -454,9 +457,6 @@ Resources:
         # Install docker-compose.yml and get the CHORDS images.
         docker_pull:
           commands:
-            # Fetch the CHORDS docker-compose.yml.
-            01_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/docker-compose.yml > /var/lib/chords/docker-compose.yml"
             # Pull the CHORDS images.
             02_docker_pull:
               command: "cd /var/lib/chords && /bin/docker-compose pull"
@@ -489,7 +489,6 @@ Resources:
                 DOCKER_COMPOSE_YAMLFILE=/var/lib/chords/docker-compose.yml
                 #
                 OPTS="-f $DOCKER_COMPOSE_YAMLFILE -p $DOCKER_COMPOSE_PROJECT_NAME"
-                # UPOPTS="-d --no-recreate --no-build --no-deps"
                 UPOPTS="-d"
                 LABEL="docker-compose for CHORDS"
                 DC=/bin/docker-compose
