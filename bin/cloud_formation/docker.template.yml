@@ -464,17 +464,17 @@ Resources:
         # Install and enable the chords service
         chords_service:
           files:
-            /etc/init.d/docker-compose-chords:
+            /etc/init.d/chords:
               content: |
                 #!/bin/sh
                 #
                 # chkconfig:   2345 96 20
-                # description: Daemon for docker-compose-chords
+                # description: Daemon for chords
                 #
                 # based on https://gist.github.com/samalba/8bc1f848b4fa2db6f12e
                 #
                 ### BEGIN INIT INFO
-                # Provides:   docker-compose-chords
+                # Provides:   chords
                 # Required-Start: docker
                 # Required-Stop:  docker
                 # Default-Start:  2 3 4 5
@@ -528,7 +528,7 @@ Resources:
                     ;;
                 #
                   *)
-                    echo "Usage: /etc/init.d/docker-compose-chords {up/start|stop|status|reload}" || true
+                    echo "Usage: /etc/init.d/chords {up/start|stop|status|reload}" || true
                     exit 1
                     ;;
                 esac
@@ -539,11 +539,11 @@ Resources:
               owner: root
             
           commands:
-            # Enable the docker-compose-chords service
+            # Enable the chords service
             01_chkconfig:
-              command: "chkconfig docker-compose-chords --add && chkconfig docker-compose-chords on"  
+              command: "chkconfig chords --add && chkconfig chords on"  
             02_startchords:
-              command: "service docker-compose-chords up"
+              command: "service chords up"
 
   ChordsServerSecurityGroup:
     Properties:
