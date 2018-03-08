@@ -26,7 +26,6 @@ Parameters:
     AllowedValues:
     - master
     - development
-    - aws-chords-control-refactor
     Default: master
     Description: CHORDS git branch
     Type: String
