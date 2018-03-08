@@ -590,7 +590,7 @@ class Docker:
         
         pull_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, 'pull']
-        print os_cmd(pull_cmd)
+        os_cmd(pull_cmd)
         
     def tags(self):
         """
