@@ -1,8 +1,5 @@
-FROM grafana/grafana:5.0.0-beta5 
+FROM grafana/grafana:5.0.1
 MAINTAINER martinc@ucar.edu
-
-# Update
-RUN apt-get update 
 
 ENV GF_INSTALL_PLUGINS=\
 grafana-clock-panel,\
