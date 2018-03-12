@@ -52,7 +52,7 @@ gem 'rails4-autocomplete'
 gem 'devise'
 
 # authorization
-gem 'access-granted'
+gem 'cancancan', '~> 2.0.0'
 
 # system uptime
 gem 'sys-uptime'
@@ -89,6 +89,8 @@ group :development, :test do
   # layout
   gem 'rails_layout'
   gem 'puma'
+
+  gem 'rubocop', '~> 0.52.1', require: false
 end
 
 group :production do

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170816202450) do
+ActiveRecord::Schema.define(version: 20171227220333) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20170816202450) do
     t.string   "plot_offset_units",   limit: 255,   default: "weeks"
     t.integer  "topic_category_id",   limit: 4
     t.integer  "cuahsi_method_id",    limit: 4
+    t.boolean  "is_active",                         default: true
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
@@ -169,8 +170,10 @@ ActiveRecord::Schema.define(version: 20170816202450) do
     t.boolean  "is_administrator",                   default: false
     t.boolean  "is_data_viewer",                     default: true
     t.boolean  "is_data_downloader",                 default: true
+    t.string   "api_key",                limit: 255
   end
 
+  add_index "users", ["api_key"], name: "index_users_on_api_key", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
