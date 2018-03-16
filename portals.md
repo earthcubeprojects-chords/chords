@@ -4,7 +4,7 @@ title: Active CHORDS Portals
 ---
 (Be sure to hit the "Visualization" button for graphical presentation of real-time data.)
 
-### Actively collecting data for scientific deployments
+### Actively collecting data across a range of science interests
 [NCAR](http://portal.chordsrt.com){:target="_blank"} (weather station data in the Boulder, Colorado and Cheyenne, Wyoming areas)
 
 [3D](http://3d.chordsrt.com){:target="_blank"} (weather data from many sources around the world using the inexpensive [3D-PAWS](https://www.iepas.ucar.edu/core-programs/3dpaws/) stations developed at NCAR using 3D-printer technology)
