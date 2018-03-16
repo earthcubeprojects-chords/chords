@@ -21,11 +21,7 @@ title: Active CHORDS Portals
 
 [SugarTech](http://wx.sugartechllc.com){:target="_blank"} (home-grown, crowd-funded weather data and total precipitation gauge data from Colorado and Oregon)
 
-### Under configuration
-[yellowstone](http://yellowstone.chordsrt.com){:target="_blank"}
-
-
-### In the works
+### In the works and/or awaiting configuration for a future deployment
 drone-prequel.chordsrt.com
 
 csu-hail.chordsrt.com (hail sensors used for verification of radar hail estimates in the Dallas/Fort Worth region)
