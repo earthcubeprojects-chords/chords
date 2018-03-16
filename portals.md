@@ -11,7 +11,7 @@ title: Active CHORDS Portals
 
 [3D Zambia](http://3d-zambia.chordsrt.com){:target="_blank"} ([3D-PAWS](https://www.iepas.ucar.edu/core-programs/3dpaws/) stations in Zambia)
 
-[3D Kenya](http://3d-kenya.chordsrt.com){:target="_blank"} ([3D-PAWS](https://www.iepas.ucar.edu/core-programs/3dpaws/) stations in Zambia)
+[3D Kenya](http://3d-kenya.chordsrt.com){:target="_blank"} ([3D-PAWS](https://www.iepas.ucar.edu/core-programs/3dpaws/) stations in Kenya)
 
 [Tanzania Volcano](http://tzvolcano.chordsrt.com){:target="_blank"} (real-time data from the Tanzania Volcano Observatory at the Ol Doinyo Lengai volcano)
 
