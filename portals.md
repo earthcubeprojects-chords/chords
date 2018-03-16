@@ -17,7 +17,7 @@ title: Active CHORDS Portals
 
 [ARPA](http://arpa.chordsrt.com){:target="_blank"}
 
-[STORM](http://storm.chordsrt.com){:target="_blank"}
+[Open-Storm](http://open-storm.chordsrt.com){:target="_blank"}
 
 [SugarTech](http://wx.sugartechllc.com){:target="_blank"}
 
@@ -28,5 +28,5 @@ title: Active CHORDS Portals
 ### In the works
 drone-prequel.chordsrt.com
 
-csu-chill.chordsrt.com
+csu-hail.chordsrt.com
 
