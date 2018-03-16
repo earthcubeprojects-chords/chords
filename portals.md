@@ -28,5 +28,5 @@ title: Active CHORDS Portals
 ### In the works
 drone-prequel.chordsrt.com
 
-csu-hail.chordsrt.com
+csu-hail.chordsrt.com (Hail sensors used for verification of radar hail estimates in the Dallas/Fort Worth region)
 
