@@ -13,13 +13,13 @@ title: Active CHORDS Portals
 
 [3D Kenya](http://3d-kenya.chordsrt.com){:target="_blank"} ([3D-PAWS](https://www.iepas.ucar.edu/core-programs/3dpaws/) stations in Zambia)
 
-[Tanzania Volcano](http://tzvolcano.chordsrt.com){:target="_blank"} (Real-time data from the Tanzania Volcano Observatory at the Ol Doinyo Lengai volcano in Tanzania)
+[Tanzania Volcano](http://tzvolcano.chordsrt.com){:target="_blank"} (real-time data from the Tanzania Volcano Observatory at the Ol Doinyo Lengai volcano)
 
 [ARPA](http://arpa.chordsrt.com){:target="_blank"} (weather station data from Torino, Italy used by the Agenzia Regionale per la Protezione Ambientale)
 
-[Open-Storm](http://open-storm.chordsrt.com){:target="_blank"} (Water depth sensors for real-time flood forecasting in the Dallas/Fort Worth region) 
+[Open-Storm](http://open-storm.chordsrt.com){:target="_blank"} (water depth sensors for real-time flood forecasting in the Dallas/Fort Worth region) 
 
-[SugarTech](http://wx.sugartechllc.com){:target="_blank"} (Home-grown, crowd-funded weather data and total precipitation gueage data from Colorado and Oregon)
+[SugarTech](http://wx.sugartechllc.com){:target="_blank"} (home-grown, crowd-funded weather data and total precipitation gauge data from Colorado and Oregon)
 
 ### Under configuration
 [yellowstone](http://yellowstone.chordsrt.com){:target="_blank"}
@@ -28,5 +28,5 @@ title: Active CHORDS Portals
 ### In the works
 drone-prequel.chordsrt.com
 
-csu-hail.chordsrt.com (Hail sensors used for verification of radar hail estimates in the Dallas/Fort Worth region)
+csu-hail.chordsrt.com (hail sensors used for verification of radar hail estimates in the Dallas/Fort Worth region)
 
