@@ -1,4 +1,5 @@
 **Introduction**
+
 CHORDS Project Management will be guided by principles of low formal process and extensive communication among distributed team members.
 CHORDS will use the GitHub tools for Project Management and will implement a Kanban style workflow to track work. The NCAR CHORDS team will
 conduct weekly scrum meetings, typically on Monday mornings at 10AM. This will be an opportunity to discuss issues that have come up, help
@@ -12,37 +13,44 @@ contain issues with [markdown task lists](https://help.github.com/articles/about
 items. 
 
 **CHORDS GitHub Project Board for each Minor Release**
+
 We will create a Kanban style Project Board (with columns for “To Do”, “In Progress” and “Completed”) for each CHORDS Minor Release.
 Similar to other Project Boards described below, issues in the Minor Release Project Board will start in the “To Do” column, be assigned
 to one or more individuals, and moved to the “In Progress” or “Completed” columns as their status changes. Pull requests will be made for
 each of these releases and merged when all tasks are completed.
 
 **CHORDS GitHub Project Board for Feature Requests and Research Topics**
+
 Project Board for these items will contain issues describing new feature requests or items that require further research. These issues
 may also have a set of task lists and/or milestone dates described in them. There will be Four columns on the Feature Requests and
 Research Topics Project Board: “To Do, “In Progress”, “Review” and “Completed”.
  
 **CHORDS GitHub Project Board for Maintenance and Upgrade**
+
 Project Board for portal maintenance and upgrade will contain issues that track needed upgrades or maintenance on portal software or
 explicit CHORDS instances. There will be three columns on the Portal Maintenance and Upgrade Project Board: “To Do”, “In Progress” and
 “Completed”.
 
 **CHORDS GitHub Project Board for Bug Tracking**
+
 Project Board for bugs will contain issues containing bugs reported by a user. Before worked on, the bug will enter triage to define the
 bug clearly and make recommendations for a fix. The bug will  be assigned to one or more developers. There will be four columns on Bug
 Tracking Project Board: “Bug Reported”, “Triage”, “In Progress” and “Completed”.
 
 **CHORDS GitHub Project Board for Project Management and Outreach**
+
 Project Board for Project Management will contain issues that are related to CHORDS Project Management and Outreach, such as reports,
 presentations, posters, etc. There will be three columns on the Portal Management and Outreach Project Board: “To Do”, “In Progress” and
 “Completed”.
 
 **CHORDS GitHub Project Boards for Interns or Other Projects**
+
 Separate Kanban style Project Boards will be created for intern or other tasks not associated with a release. These Project Boards will
 contain a mix of issues that range from tasks to ideas. There will be four columns on the Intern Project Board: “To Do”, “In Progress”,
 “Review” and “Completed”.
 
 **CHORDS GitHub Project Labels**
+
 Labels for issues will include: “bug”, “feature”, “enhancement”, “research”, “high priority”, “rejected”, “short_term”, “icebox”,
 “backlog”, “project management”, “upgrades”, “sysadmin”, “refactor”, “documentation” and “intern”. In this way, issues may be quickly
 sorted as to their type. The purpose of each of these labels is described in GitHub.
