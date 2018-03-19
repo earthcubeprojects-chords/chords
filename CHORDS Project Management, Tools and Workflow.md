@@ -48,4 +48,4 @@ Labels for issues will include: “bug”, “feature”, “enhancement”, “
 sorted as to their type. The purpose of each of these labels is described in GitHub.
 
 Here is a graphic of how we plan to use GitHub pull requests and forks to manage development contributions, bug fixes and releases:
-![alt text](https://drive.google.com/open?id=1r9R3q_l1DJ2DV4Ylvm7Wy-vbrDyoW1Lh/view "CHORDS Pull requests, Releases and Forks")
+![alt text](https://drive.google.com/uc?id=1r9R3q_l1DJ2DV4Ylvm7Wy-vbrDyoW1Lh "CHORDS Pull requests, Releases and Forks")
