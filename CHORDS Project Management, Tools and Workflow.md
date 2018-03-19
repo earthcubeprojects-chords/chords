@@ -1,5 +1,4 @@
-**Introduction**
-
+###Introduction
 CHORDS Project Management will be guided by principles of low formal process and extensive communication among distributed team members.
 CHORDS will use the GitHub tools for Project Management and will implement a Kanban style workflow to track work. The NCAR CHORDS team will
 conduct weekly scrum meetings, typically on Monday mornings at 10AM. This will be an opportunity to discuss issues that have come up, help
