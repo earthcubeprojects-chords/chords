@@ -14,7 +14,7 @@ items.
 We will create a Kanban style Project Board (with columns for “To Do”, “In Progress” and “Completed”) for each CHORDS Minor Release.
 Similar to other Project Boards described below, issues in the Minor Release Project Board will start in the “To Do” column, be assigned
 to one or more individuals, and moved to the “In Progress” or “Completed” columns as their status changes. Pull requests will be made for
-each of these releases and merged when all tasks are completed. Milestones will also be used to track work on minro releases.
+each of these releases and merged when all tasks are completed. [Milestones](https://help.github.com/articles/about-milestones/) will also be used to track work on minor releases.
 
 ### CHORDS GitHub Project Board for Feature Requests and Research Topics
 Project Board for these items will contain issues describing new feature requests or items that require further research. These issues
