@@ -1,5 +1,7 @@
-FROM grafana/grafana:5.0.1
+FROM grafana/grafana:5.0.4
 MAINTAINER martinc@ucar.edu
+
+RUN apt-get update
 
 ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
 RUN mkdir -p $GF_PATHS_PLUGINS
