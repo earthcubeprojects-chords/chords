@@ -1,20 +1,18 @@
+require 'task_helpers/cuahsi_helper'
+
 class Instrument < ActiveRecord::Base
-  
-  require 'task_helpers/cuahsi_helper'
   include Rails.application.routes.url_helpers
   include CuahsiHelper
-  
+
   belongs_to :site
 
-  has_many :vars, :dependent => :destroy
-  has_many :influxdb_tags, :dependent => :destroy
+  has_many :vars, dependent: :destroy
+  has_many :influxdb_tags, dependent: :destroy
 
-  belongs_to  :topic_category
+  belongs_to :topic_category
 
   accepts_nested_attributes_for :vars
 
-
-  
   def self.initialize
   end
 
@@ -40,15 +38,13 @@ class Instrument < ActiveRecord::Base
       latest_time_ms = Time.parse(latest_point.to_a.first['time'])
     else
       latest_time_ms = "None"
-    end          
-    
+    end
+
     return latest_time_ms
   end
-  
-  def maximum_plot_points
-    
-    time_offset_seconds = eval("#{self.plot_offset_value}.#{self.plot_offset_units}")
 
+  def maximum_plot_points
+    time_offset_seconds = eval("#{self.plot_offset_value}.#{self.plot_offset_units}")
     points_to_plot = time_offset_seconds / self.sample_rate_seconds
 
     return points_to_plot.to_i
@@ -57,29 +53,17 @@ class Instrument < ActiveRecord::Base
   def self.to_csv(options = {})
     CSV.generate(options) do |csv|
       csv << column_names
+
       all.each do |rails_model|
         csv << rails_model.attributes.values_at(*column_names)
       end
     end
   end
 
-
   def self.data_insert_url
     url = instrument_url()
   end
 
-
-  # def last_measurement
-  #   measurement = Measurement.where("instrument_id = ?", self.id).order(:measured_at).last
-  # 
-  #   return measurement
-  # end
-  # 
-  # def self.last_measurement_url
-  #   url = instrument_url()
-  # end
-
-  
   def is_receiving_data
     if defined? TsPoint
       return IsTsInstrumentAlive.call(TsPoint, "value", self.id, self.sample_rate_seconds+5)
@@ -87,8 +71,8 @@ class Instrument < ActiveRecord::Base
       return false
     end
   end
-  
-  def last_age  
+
+  def last_age
     if defined? TsPoint
       return GetLastTsAge.call(TsPoint, "value", self.id)
     else
@@ -102,44 +86,40 @@ class Instrument < ActiveRecord::Base
     else
       return 0
     end
-
   end
-  
 
   def refresh_rate_ms
     # Limit the chart refresh rate
-    if (self.sample_rate_seconds >= 1) 
-      refresh_rate_ms           = self.sample_rate_seconds*1000
+    if self.sample_rate_seconds >= 1
+      refresh_rate_ms = self.sample_rate_seconds*1000
     else
       refresh_rate_ms = 1000
     end
 
     return refresh_rate_ms
   end
-  
-  def data(count, parameter)
 
+  def data(count, parameter)
+    data = Array.new
     measurements = Measurement.where("instrument_id = ? and parameter = ?", self.id, parameter).last(self.display_points)
-    
-    data = Array.new    
+
     measurements.each do |measurement|
       t = Time.new(measurement.measured_at.year, measurement.measured_at.month, measurement.measured_at.day, measurement.measured_at.hour, measurement.measured_at.min, measurement.measured_at.sec, "+00:00")
 
       x=((t.to_i) * 1000).to_s
-      data.push "[#{x}, #{measurement.value}]" 
-      
+      data.push "[#{x}, #{measurement.value}]"
     end
 
     return data.join(', ')
-    
   end
-  
+
   def influxdb_tags_hash
     influxdb_tags = Hash.new
+
     self.influxdb_tags.each do |influxdb_tag|
       influxdb_tags[influxdb_tag.name] = influxdb_tag.value
     end
-    
+
     return influxdb_tags
   end
 
@@ -154,11 +134,13 @@ class Instrument < ActiveRecord::Base
     else
       methods = get_cuahsi_methods
       id = methods.find {|method| method['MethodLink']==method_link}
+
       if id != nil
         self.cuahsi_method_id = id["MethodID"]
         self.save
         return self.cuahsi_method_id
       end
+
       return id
     end
   end
@@ -169,7 +151,6 @@ class Instrument < ActiveRecord::Base
     return link
   end
 
-
   def create_cuahsi_method
     data = {
       "user" => Rails.application.config.x.archive['username'],
@@ -179,5 +160,4 @@ class Instrument < ActiveRecord::Base
       }
     return data
   end
-        
 end
