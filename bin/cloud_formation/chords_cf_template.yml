@@ -323,10 +323,11 @@ Resources:
           - install_cfn
           - sys_update
           - yum_extras
-          - docker_service
-          - docker_config
-          - docker_compose
-          - chords_extras
+          - install_docker
+          - install_docker_compose
+          - chords_setup
+          - chords_config
+          - docker_pull
           - chords_service
 
         # configure cfn.
@@ -399,10 +400,9 @@ Resources:
             yum:
               emacs: []
               sysstat: []
-              
         
         # Install docker as a service.
-        docker_service:
+        install_docker:
           packages:
             yum:
               docker: []
@@ -411,11 +411,29 @@ Resources:
               docker:
                 enabled: 'true'
                 ensureRunning: 'true'
-                
-        # Create the docker-compose configuration file.
-        docker_config:
+
+        # Install docker-compose
+        install_docker_compose:
+          commands:
+            # Install docker-compose.
+            01_get_docker_compose:
+              command: "curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
+
+        # Set up CHORDS
+        chords_setup:
+          commands:
+            01_var_lib_chords:
+              command: "mkdir -p /var/lib/chords"
+            02_get_chords_control:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /var/lib/chords/chords_control"
+            03_get_docker_compose_yml:
+              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/docker-compose.yml > /var/lib/chords/docker-compose.yml"
+
+        # Create the CHORDS and docker-compose configuration files.
+        chords_config:
           files:
-            /root/.env:
+            # Create the basic configuration in .env:
+            /var/lib/chords/.env:
               content: !Sub |     
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
                 CHORDS_GUEST_PW=${ChordsGuestPw}
@@ -430,41 +448,32 @@ Resources:
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=${SecretKeyBase}
                 KAPACITOR_ENABLED=${KapacitorEnabled}
+          commands:
+            # Create chords.yml from .env. The .env file will also be updated.
+            01_create_chords_yml:
+              command: "cd /var/lib/chords && python chords_control -b"
  
-        # Install docker-compose, docker-compose.yml, and get the CHORDS images.
-        docker_compose:
+        # Install docker-compose.yml and get the CHORDS images.
+        docker_pull:
           commands:
-            # Install docker-compose.
-            01_get_docker_compose:
-              command: "curl -L https://github.com/docker/compose/releases/download/1.10.0/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
-            # Fetch the CHORDS docker-compose.yml.
-            02_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/docker-compose.yml > /root/docker-compose.yml"
             # Pull the CHORDS images.
-            03_docker_pull:
-              command: "cd /root && /bin/docker-compose pull"
-
-        # Get some CHORDS extras.
-        chords_extras:
-          commands:
-            # Fetch chords_control.
-            01_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /root/chords_control"
+            02_docker_pull:
+              command: "cd /var/lib/chords && /bin/docker-compose pull"
 
         # Install and enable the chords service
         chords_service:
           files:
-            /etc/init.d/docker-compose-chords:
+            /etc/init.d/chords:
               content: |
                 #!/bin/sh
                 #
                 # chkconfig:   2345 96 20
-                # description: Daemon for docker-compose-chords
+                # description: Daemon for chords
                 #
                 # based on https://gist.github.com/samalba/8bc1f848b4fa2db6f12e
                 #
                 ### BEGIN INIT INFO
-                # Provides:   docker-compose-chords
+                # Provides:   chords
                 # Required-Start: docker
                 # Required-Stop:  docker
                 # Default-Start:  2 3 4 5
@@ -476,10 +485,9 @@ Resources:
                 set -e
                 #
                 DOCKER_COMPOSE_PROJECT_NAME=chords
-                DOCKER_COMPOSE_YAMLFILE=/root/docker-compose.yml
+                DOCKER_COMPOSE_YAMLFILE=/var/lib/chords/docker-compose.yml
                 #
                 OPTS="-f $DOCKER_COMPOSE_YAMLFILE -p $DOCKER_COMPOSE_PROJECT_NAME"
-                # UPOPTS="-d --no-recreate --no-build --no-deps"
                 UPOPTS="-d"
                 LABEL="docker-compose for CHORDS"
                 DC=/bin/docker-compose
@@ -487,15 +495,16 @@ Resources:
                 #. /etc/rc.d/init.d/functions
                 #
                 #
-                cd /root
+                cd /var/lib/chords
                 #
                 start () {
                   echo "Starting $LABEL"
-                  $DC $OPTS up $UPOPTS
+                  cd /var/lib/chords && python chords_control --run
                 }
                 #
                 stop () {
                   echo "Stopping $LABEL"
+                  cd /var/lib/chords && python chords_control --stop
                   $DC $OPTS stop
                 }
                 #
@@ -509,7 +518,7 @@ Resources:
                     ;;
                 #
                   status)
-                    $DC $OPTS ps
+                  cd /var/lib/chords && python chords_control --status
                     ;;
                 #
                   restart)
@@ -518,7 +527,7 @@ Resources:
                     ;;
                 #
                   *)
-                    echo "Usage: /etc/init.d/docker-compose-chords {up/start|stop|status|reload}" || true
+                    echo "Usage: /etc/init.d/chords {up/start|stop|status}" || true
                     exit 1
                     ;;
                 esac
@@ -529,11 +538,11 @@ Resources:
               owner: root
             
           commands:
-            # Enable the docker-compose-chords service
+            # Enable the chords service
             01_chkconfig:
-              command: "chkconfig docker-compose-chords --add && chkconfig docker-compose-chords on"  
+              command: "chkconfig chords --add && chkconfig chords on"  
             02_startchords:
-              command: "service docker-compose-chords up"
+              command: "service chords up"
 
   ChordsServerSecurityGroup:
     Properties:

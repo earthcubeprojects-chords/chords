@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.10'
 gem 'mysql2', '~> 0.3.19'
-gem 'influxdb'
-gem "influxer", "~>0.5.0"
+gem 'influxdb', '~> 0.5.3'
+gem "influxer", "~> 1.1"
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
