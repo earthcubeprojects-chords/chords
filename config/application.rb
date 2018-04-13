@@ -24,9 +24,6 @@ module ChordTestbed
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-    
-    # Bootstrap
-    config.assets.paths << Rails.root.join("vendor/bootstrap-3.3.6-dist")
 
     config.autoload_paths += %W(#{config.root}/lib)
 

@@ -44,8 +44,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    anyway_config (0.3.0)
-      activesupport (>= 3.2)
+    anyway_config (1.2.0)
     arel (6.0.4)
     bcrypt (3.1.11)
     best_in_place (3.1.1)
@@ -109,10 +108,10 @@ GEM
       ruby_parser (~> 3.5)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
-    influxdb (0.4.1)
-    influxer (0.5.4)
-      activemodel (>= 4.0)
-      anyway_config (~> 0.3.0)
+    influxdb (0.5.3)
+    influxer (1.1.6)
+      activemodel (>= 3.2.0)
+      anyway_config (~> 1.0)
       influxdb (~> 0.3)
     jbuilder (2.7.0)
       activesupport (>= 4.2.0)
@@ -269,8 +268,8 @@ DEPENDENCIES
   gmaps4rails
   haml-rails
   highcharts-rails
-  influxdb
-  influxer (~> 0.5.0)
+  influxdb (~> 0.5.3)
+  influxer (~> 1.1)
   jbuilder (~> 2.0)
   jquery-rails
   jquery-ui-rails
