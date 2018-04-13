@@ -1,4 +1,4 @@
-class InstrumentsController < ApplicationController  
+class InstrumentsController < ApplicationController
   before_action :set_instrument, only: [:show, :edit, :update, :destroy, :live]
 
  # GET /instruments/1/live?var=varshortname&after=time
@@ -7,7 +7,7 @@ class InstrumentsController < ApplicationController
   def live
     # Authorize access to the measurements
     authorize! :view, Measurement
- 
+
 
     # Verify the parameters
 
@@ -21,19 +21,19 @@ class InstrumentsController < ApplicationController
 
     # Initialze the return value
     livedata = {
-      :points         => [], 
-      :multivariable_points         => {}, 
-      :multivariable_names         => [], 
+      :points         => [],
+      :multivariable_points         => {},
+      :multivariable_names         => [],
       :display_points => 0,
       :refresh_msecs  => 1000
       }
 
 
     livedata[:display_points] = @instrument.maximum_plot_points
-    livedata[:refresh_msecs]  = @instrument.refresh_rate_ms          
+    livedata[:refresh_msecs]  = @instrument.refresh_rate_ms
 
     # If the var parameter is set, then we build and return data for only this variable.
-    if (params[:var]) 
+    if (params[:var])
       variable = @instrument.find_var_by_shortname(params[:var])
 
       # Fetch the data
@@ -42,7 +42,7 @@ class InstrumentsController < ApplicationController
       if live_points
       livedata[:points] = live_points
       end
-      
+
     # otherwise we return data for all variables
     else
       @instrument.vars.each do |variable|
@@ -55,23 +55,23 @@ class InstrumentsController < ApplicationController
         if live_points
           livedata[:multivariable_points][variable.shortname] = live_points
         end
-        
-        
+
+
       end
     end
 
     # Convert to JSON
     livedata_json = ActiveSupport::JSON.encode(livedata)
-    
+
     # Return result
     render :json => livedata_json
   end
 
-  
+
   # GET instruments/simulator
   def simulator
     authorize! :manage, Instrument
-  
+
     # Returns:
     #  @instruments
     #  @sites
@@ -79,12 +79,12 @@ class InstrumentsController < ApplicationController
     @instruments = Instrument.all
     @sites       = Site.all
   end
-  
+
   # GET /instruments/duplicate?instrument_id=1
   def duplicate
 
     # Does it exist?
-    if (Instrument.exists?(params[:instrument_id]) && defined? params[:number_of_duplicates])   
+    if (Instrument.exists?(params[:instrument_id]) && defined? params[:number_of_duplicates])
       (1..params[:number_of_duplicates].to_i).each do
 
         old_instrument = Instrument.find(params[:instrument_id])
@@ -95,7 +95,7 @@ class InstrumentsController < ApplicationController
         new_instrument = old_instrument.dup
 
         # Add"clone" to the name
-        if !new_instrument.name.include? "clone" 
+        if !new_instrument.name.include? "clone"
           new_instrument.name = new_instrument.name + " clone"
         end
 
@@ -115,10 +115,10 @@ class InstrumentsController < ApplicationController
       end
 
     end
-    
+
     redirect_to instruments_path
   end
-  
+
   # GET /instruments
   # GET /instruments.json
   def index
@@ -146,18 +146,18 @@ class InstrumentsController < ApplicationController
 
     # Get and sanitize the last_url
     @last_url = InstrumentsHelper.sanitize_url(
-        !@profile.secure_administration, 
-        !(current_user && (can? :manage, Measurement)), 
+        !@profile.secure_administration,
+        !(current_user && (can? :manage, Measurement)),
         GetLastUrl.call(TsPoint, @instrument.id))
-        
+
     # Get useful details.
     metadata = {
-      "Project"     => @profile.project, 
-      "Site"        => @instrument.site.name, 
-      "Affiliation" => @profile.affiliation, 
+      "Project"     => @profile.project,
+      "Site"        => @instrument.site.name,
+      "Affiliation" => @profile.affiliation,
       "Instrument"  => @instrument.name
     }
-    
+
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
 
@@ -167,12 +167,12 @@ class InstrumentsController < ApplicationController
     else
       if ( defined? @instrument.vars.first.id)
         @var_to_plot = Var.find(@instrument.vars.first.id)
-      else 
+      else
         # No variable defined were found for this instrument.
-        # This leaves and @var_to_plot undefined. 
-      end      
+        # This leaves and @var_to_plot undefined.
+      end
     end
-    
+
     # Determine the time range. Default to the most recent day
     end_time   = Time.now
     start_time = end_time - 1.day
@@ -196,40 +196,40 @@ class InstrumentsController < ApplicationController
     # File name root
     file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
     file_root = file_root.split.join
-    
+
 
     # Prepare result
     respond_to do |format|
-      
       format.html
 
-      format.sensorml {
-        render :file => "app/views/instruments/sensorml.xml.haml", :layout => false
-      }
-      
-      format.csv {
+      format.sensorml do
+        topic_category = @instrument.topic_category ? @instrument.topic_category.name : ''
+
+        render file: "app/views/instruments/sensorml.xml.haml", layout: false, locals: { topic_category: topic_category }
+      end
+
+      format.csv do
         varnames_by_id = {}
         Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
         ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
         send_data ts_csv, filename: file_root+'.csv'
-      }
-      
-      format.json { 
-        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-      }
+      end
 
-      format.jsf { 
-        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)       
+      format.json do
+        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
+      end
+
+      format.jsf do
+        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
         send_data ts_json, filename: file_root+'.json'
-      }
-      
-      format.xml { 
+      end
+
+      format.xml do
         send_data MakeXmlFromTsPoints.call(ts_points, metadata), filename: file_root+'.xml'
-      } 
-   
+      end
     end
   end
-    
+
   # GET /instruments/new
   def new
     authorize! :manage, Instrument
@@ -264,7 +264,7 @@ class InstrumentsController < ApplicationController
   # PATCH/PUT /instruments/1.json
   def update
     authorize! :manage, Instrument
-        
+
     respond_to do |format|
       if @instrument.update(instrument_params)
         format.html { redirect_to @instrument, notice: 'Instrument was successfully updated.' }
@@ -275,13 +275,13 @@ class InstrumentsController < ApplicationController
       end
     end
   end
-  
+
 
   # DELETE /instruments/1
   # DELETE /instruments/1.json
   def destroy
     authorize! :manage, Instrument
-    
+
     # Measurement.delete_all "instrument_id = #{@instrument.id}"
 
     @instrument.destroy

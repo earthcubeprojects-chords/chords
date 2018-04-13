@@ -4,17 +4,23 @@ default: &default
   password: <%= ENV['INFLUXDB_PASSWORD'] %>
   port:           8086
   time_precision: 'ns'
-    
+
 development:
   <<: *default
-  database: 'chords_ts_development'
-  
+  database: chords_ts_development
+  host: localhost
+  username: admin
+  password: chords_ec_demo
+
 test:
   <<: *default
   database: chords_ts_test
-  
+  host: localhost
+  username: admin
+  password: chords_ec_demo
+
 production:
   <<: *default
   database: chords_ts_production
-  
-  
+
+
