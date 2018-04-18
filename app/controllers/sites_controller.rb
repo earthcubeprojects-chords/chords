@@ -45,7 +45,7 @@ class SitesController < ApplicationController
     @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
       # Create site link
       site_html = ""
-      site_html += ActionController::Base.helpers.content_tag(:h3, 
+      site_html += ActionController::Base.helpers.content_tag(:h4, 
         (ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site))).html_safe).html_safe
 
       # Collect a status image and link for each instrument at this site
