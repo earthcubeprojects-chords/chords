@@ -45,8 +45,8 @@ class SitesController < ApplicationController
     @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
       # Create site link
       site_html = ""
-      site_html += ActionController::Base.helpers.content_tag(:p, 
-        ('Site:' + ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site))).html_safe).html_safe
+      site_html += ActionController::Base.helpers.content_tag(:h3, 
+        (ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site))).html_safe).html_safe
 
       # Collect a status image and link for each instrument at this site
       status_and_links = site.instruments.collect do |inst|
@@ -60,7 +60,7 @@ class SitesController < ApplicationController
       rows_html = ""
       rows_html += ActionController::Base.helpers.content_tag(:tr,
       #  ActionController::Base.helpers.content_tag(:th, 'Status', :style =>"padding-right:10px;").html_safe +
-        ActionController::Base.helpers.content_tag(:th, 'Instrument').html_safe
+        ActionController::Base.helpers.content_tag(:th, 'Instruments').html_safe
       ).html_safe
       status_and_links.each do |x|
         rows_html += ActionController::Base.helpers.content_tag(:tr,
