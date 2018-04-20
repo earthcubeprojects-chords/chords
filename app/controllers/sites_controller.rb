@@ -39,9 +39,40 @@ class SitesController < ApplicationController
     authorize! :view, Site
 
     @sites = Site.all
-
+    
+    # The marker generation really should be done in the page javascript, so that 
+    # the marker can be dynamcally manipulated on the client side.
     @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
-      marker.infowindow(ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site)).html_safe)
+      # Create site link
+      site_html = ""
+      site_html += ActionController::Base.helpers.content_tag(:h4, 
+        (ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site))).html_safe).html_safe
+
+      # Collect a status image and link for each instrument at this site
+      status_and_links = site.instruments.collect do |inst|
+        image_html = inst.is_receiving_data ? 
+          ActionController::Base.helpers.image_tag('button_green_50.png', :size =>'16') : ActionController::Base.helpers.image_tag('button_red_50.png', :size =>'16')
+        [image_html.html_safe, ActionController::Base.helpers.link_to(inst.name, instrument_path(inst)).html_safe] 
+      end
+      
+      # Build instrument table
+      # Instrument status display is commented out since it does not dynamically update.
+      rows_html = ""
+      rows_html += ActionController::Base.helpers.content_tag(:tr,
+      #  ActionController::Base.helpers.content_tag(:th, 'Status', :style =>"padding-right:10px;").html_safe +
+        ActionController::Base.helpers.content_tag(:th, 'Instruments').html_safe
+      ).html_safe
+      status_and_links.each do |x|
+        rows_html += ActionController::Base.helpers.content_tag(:tr,
+        #   ActionController::Base.helpers.content_tag(:td, x[0]).html_safe +
+          ActionController::Base.helpers.content_tag(:td, x[1]).html_safe
+         ).html_safe
+      end
+      inst_table_html = ActionController::Base.helpers.content_tag(:table, rows_html.html_safe).html_safe
+      
+      info_window_html = site_html + inst_table_html
+
+      marker.infowindow(info_window_html)
       marker.lat site.lat
       marker.lng site.lon
       marker.title site.name
