@@ -14,17 +14,15 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require underscore
-//= require gmaps/google
-
-//= require best_in_place
 //= require autocomplete-rails
+//= require best_in_place
 
-//= require js/bootstrap
-//= require highstock
-//= require highcharts-more
-//= require modules/exporting
-
+//= require gmaps/google
 //= require markerclusterer
 
-//= require asset_paths
+//= require highcharts
+//= require highcharts/highcharts-more
+//= require highcharts/modules/exporting
+//= require highcharts/modules/stock
 
+//= require asset_paths
