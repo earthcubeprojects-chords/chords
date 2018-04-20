@@ -18,7 +18,7 @@
           %li= link_to 'Sites', sites_path
           %li= link_to 'Instruments', instruments_path
           %li= link_to 'Geo', geo_sites_path
-          %li= link_to 'Visualization', "http://#{request.host}:3000", :target => "_blank"
+          %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"
 
         %ul.nav.navbar-nav.navbar-right
           - if can? :manage, Instrument

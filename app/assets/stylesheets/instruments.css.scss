@@ -1,7 +1,6 @@
 .variable_header {
   display: none;
   font-weight: bolder;
-
 }
 
 .delete_variable_container {
@@ -9,7 +8,6 @@
   position: relative;
   text-align: right;
   top: 0px;
-  v-align: top;
   top: 0px;
 }
 
@@ -17,81 +15,56 @@
   .left {
   	width: 60%;
   }
-
   .right {
   	width: 35%;	
   }
-
   .full_width {
   	width: 95%;
   }
-  
   .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
     width:12%;
   }
-
-
-  
 }
-
 
 @media screen and (max-width:1024px){
-.instruments_variables_header {
-  display: none;
-}
-
-.variable_header {
-  display: inline;
-}
-
+  .instruments_variables_header {
+    display: none;
+  }
+  .variable_header {
+    display: inline;
+  }
   .left {
   	width: 95%;
   }
-
   .right {
   	width: 95%;	
   }
-
   .full_width {
   	width: 95%;
   }
-  
   .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
     width:12%;
   }
-
-
-  
 }
 
 @media screen and (max-width:767px){
   .instruments_variables_header {
     display: none;
   }
-
   .variable_header {
     display: inline;
-  }
-  
+  } 
   .variable {
   	border-radius: 10px;
   	border: 1px solid black;
   	margin-bottom: 5px;
   }
-  
   .delete_variable_container {
     height: 0px;
     width: 100%;
     position: relative;
     top: -100px;
   }
-  
-}
-
-
-
-.instrument_configuration {
-  // border: 2px solid black;
 }
 
 .left, .right {
@@ -106,7 +79,6 @@
   margin: 10px;
 }
 
-
 .instrument_download, .instrument_measurements, .instrument_metadata, .instrument_variables {
 	border-radius: 10px;
 	padding-left: 10px;
@@ -115,12 +87,9 @@
 	border: 2px solid black;
 }
 
-
-
 .instrument_download div {
 	margin-bottom: 10px;
 }
-
 
 .instrument_name {
 	font-size: 20pt;
@@ -143,4 +112,3 @@
 .delete-icon {
 	margin-left: 10px;
 }
-

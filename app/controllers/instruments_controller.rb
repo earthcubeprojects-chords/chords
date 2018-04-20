@@ -168,7 +168,9 @@ class InstrumentsController < ApplicationController
       format.html
 
       format.sensorml do
-        render file: "app/views/instruments/sensorml.xml.haml", layout: false
+        topic_category = @instrument.topic_category ? @instrument.topic_category.name : ''
+
+        render file: "app/views/instruments/sensorml.xml.haml", layout: false, locals: { topic_category: topic_category }
       end
 
       format.csv do

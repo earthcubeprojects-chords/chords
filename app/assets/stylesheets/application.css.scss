@@ -12,24 +12,18 @@
  *
  *= require_tree .
  *= require_self
- *= require css/bootstrap
+ *= require jquery-ui
  */
 .important {
   color: red;
 }
 
-
 .highcharts-range-selector-buttons {
   display: none;
 }
 
-
 .configuration {
   width: 100%
-}
-
-.configuration .title, .configuration .field {
-
 }
 
 .line {
@@ -39,7 +33,6 @@
 
 .title {
   font-weight: bolder;
-  style: inline;  
   float: left;
   min-width: 200px;
   width: 20%;
@@ -56,11 +49,10 @@
 }
 
 .clear {
-    clear: both;
+  clear: both;
 }
 
 .button {
-  # border: 1px solid #c22;
   padding: 5px;
   color: black !important;
   background-color: #ccc;

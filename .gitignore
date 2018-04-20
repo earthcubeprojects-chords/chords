@@ -56,3 +56,4 @@ config/archive.yml
 #whenever schedule config file
 # this is created dynamically!
 config/schedule.rb
+.byebug_history

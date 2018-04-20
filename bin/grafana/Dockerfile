@@ -1,24 +1,23 @@
-FROM grafana/grafana:4.6.2 
+FROM grafana/grafana:5.0.4
 MAINTAINER martinc@ucar.edu
 
-# Update
-RUN apt-get update 
+RUN apt-get update
 
-ENV GF_INSTALL_PLUGINS=\
-grafana-clock-panel,\
-grafana-worldmap-panel,\
-grafana-piechart-panel,\
-satellogic-3d-globe-panel,\
-ryantxu-ajax-panel,\
-neocat-cal-heatmap-panel,\
-petrslavotinek-carpetplot-panel,\
-digrich-bubblechart-panel,\
-briangann-gauge-panel,\
-jdbranham-diagram-panel,\
-mtanda-histogram-panel,\
-bessler-pictureit-panel,\
-natel-plotly-panel,\
-btplc-status-dot-panel
-
+ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
+RUN mkdir -p $GF_PATHS_PLUGINS
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-worldmap-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-piechart-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install satellogic-3d-globe-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install ryantxu-ajax-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install neocat-cal-heatmap-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install petrslavotinek-carpetplot-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install digrich-bubblechart-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install briangann-gauge-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install jdbranham-diagram-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install mtanda-histogram-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install bessler-pictureit-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install natel-plotly-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install btplc-status-dot-panel
 
 ENTRYPOINT ["/run.sh"]
