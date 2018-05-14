@@ -199,8 +199,6 @@ class InstrumentsController < ApplicationController
   end
 
   def create
-    @instrument = Instrument.new(instrument_params)
-
     respond_to do |format|
       if @instrument.save
         format.html { redirect_to @instrument, notice: 'Instrument was successfully created.' }
@@ -245,7 +243,7 @@ private
   end
 
   def instrument_params
-    params.require(:instrument).permit(
-      :name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description, :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
+    params.require(:instrument).permit(:name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description,
+                                       :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
   end
 end

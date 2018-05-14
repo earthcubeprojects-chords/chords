@@ -72,29 +72,24 @@ private
     end
   end
 
-  def authorize!(*args)
-    @data_download_actions = ['show']
+  # def authorize!(*args)
+  #   @data_download_actions = ['show']
 
-    if @data_download_actions.include?(action_name) && params.key?(:key) && params[:key] == @profile.data_entry_key
-      # skip the authorization if the security key is provided
-    else
-      super(*args)
-        # authorize! :download, @instrument
-    end
+  #   if @data_download_actions.include?(action_name) && params.key?(:key) && params[:key] == @profile.data_entry_key
+  #     # skip the authorization if the security key is provided
+  #   else
+  #     super(*args)
+  #       # authorize! :download, @instrument
+  #   end
 
-  end
+  # end
 
   def current_user
     if super
       user = super
     else
       user = User.new
-      user.is_administrator = false
-
-      # If data viewing / downloading is secured, set the anonymous user permissions so they can't access
-      # secured functionality
-      user.is_data_viewer = !(@profile.secure_data_viewing)
-      user.is_data_downloader = !(@profile.secure_data_download)
+      user.roles = [:guest]
     end
 
     user
@@ -107,7 +102,7 @@ private
   end
 
   # Access denied redirect
-  rescue_from "AccessGranted::AccessDenied" do |exception|
+  rescue_from "CanCan::AccessDenied" do |exception|
     respond_to do |format|
       format.html { redirect_to '/about', alert: "You don't have permission to access this page. Do you need to sign in?" }
       format.json { head :forbidden, content_type: 'text/html' }
