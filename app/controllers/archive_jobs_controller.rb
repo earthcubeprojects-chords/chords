@@ -12,25 +12,18 @@ class ArchiveJobsController < ApplicationController
   end
 
   def index
-    @archive_jobs = ArchiveJob.all
   end
 
   def show
   end
 
   def new
-    authorize! :create, Archive
-
-    @archive_job = ArchiveJob.new
   end
 
   def edit
-    authorize! :update, Archive
   end
 
   def create
-    authorize! :create, Archive
-
     @archive_job = ArchiveJob.new(archive_job_params)
 
     respond_to do |format|
@@ -45,8 +38,6 @@ class ArchiveJobsController < ApplicationController
   end
 
   def update
-    authorize! :update, Archive
-
     respond_to do |format|
       if @archive_job.update(archive_job_params)
         format.html { redirect_to @archive_job, notice: 'Archive job was successfully updated.' }
@@ -59,8 +50,6 @@ class ArchiveJobsController < ApplicationController
   end
 
   def destroy
-    authorize! :destroy, Archive
-
     respond_to do |format|
       if @archive_job.destroy
         format.html { redirect_to archive_jobs_url, notice: 'Archive job was successfully destroyed.' }

@@ -29,16 +29,28 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
 
-    if !user
+    if !user || user.role?(:guest)
       guest_user
-    elsif user.is_administrator
-      admin
-    elsif user.is_data_downloader
-      data_downloader
-    elsif user.is_data_viewer
-      data_viewer
-    else
-      registered_user
+    end
+
+    if user.role?(:registered_user)
+      registered_user(user)
+    end
+
+    if user.role?(:downloader)
+      data_downloader(user)
+    end
+
+    if user.role?(:measurements)
+      measurement_creator(user)
+    end
+
+    if user.role?(:site_config)
+      site_configurator(user)
+    end
+
+    if user.role?(:admin)
+      admin(user)
     end
   end
 
@@ -46,19 +58,38 @@ class Ability
     can :read, :about
   end
 
-  def registered_user
-    guest_user
+  def registered_user(user)
+    can :read, :all
+    can :read, :monitor
+
+    cannot :read, User
+    can :read, User, id: user.id
+
+    cannot :read, Profile
   end
 
-  def data_viewer
-    registered_user
+  def data_downloader(user)
+    registered_user(user)
   end
 
-  def data_downloader
-    data_viewer
+  def measurement_creator(user)
+    can :create, Measurement
   end
 
-  def admin
+  def site_configurator(user)
+    registered_user(user)
     can :manage, :all
+
+    can :export, Profile
+    can :import, Profile
+
+    cannot :manage, User
+  end
+
+  def admin(user)
+    can :manage, :all
+
+    can :export, Profile
+    can :import, Profile
   end
 end

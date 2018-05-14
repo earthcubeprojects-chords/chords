@@ -4,22 +4,23 @@
     %tbody
       %tr
         %th Email/Username
-        %th Is Admin?
-        %th May view data?
-        %th May Download Data?
+        %th Roles
+        %th API Key
       - @users.each do |user|
         - if can? :view, user
           %tr
             %td
-              = best_in_place_if (can? :manage, user), user, :email, :as => :input
+              = user.email
               - if user == current_user
                 %br/
                 = link_to "Change your password", edit_user_registration_path
-            %td{:align => "center"}
-              = best_in_place_if (can? :manage, user), user, :is_administrator, as: :checkbox, collection: {false: "No", true: "Yes"}
-            %td{:align => "center"}
-              = best_in_place_if (can? :manage, user), user, :is_data_viewer, as: :checkbox, collection: {false: "No", true: "Yes"}
-            %td{:align => "center"}
-              = best_in_place_if (can? :manage, user), user, :is_data_downloader, as: :checkbox, collection: {false: "No", true: "Yes"}
-
-              
+            %td
+              = user.roles_pretty_printed
+            %td
+              - if !user.api_key.nil?
+                - if user == current_user
+                  = user.api_key
+                - elsif !user.api_key.nil?
+                  Yes
+              - else
+                n/a

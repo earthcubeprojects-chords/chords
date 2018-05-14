@@ -1,6 +1,6 @@
 class TopicCategoriesController < ApplicationController
+  skip_authorize_resource only: [:index, :show]
 
-# GET /topic_categories
   def index
     @topic_categories = TopicCategory.all
   end
@@ -8,6 +8,4 @@ class TopicCategoriesController < ApplicationController
   def show
   	@topic_category = TopicCategory.find(params[:id])
   end
-
-
 end

@@ -1,4 +1,5 @@
 require 'time'
+
 class MeasurementsController < ApplicationController
   load_and_authorize_resource
 
@@ -22,14 +23,12 @@ class MeasurementsController < ApplicationController
   end
 
   def create
-    @measurement = Measurement.new(measurement_params)
-
     respond_to do |format|
       if @measurement.save
-        format.html { redirect_to @measurement, notice: 'Measurement was successfully created.' }
+        format.html { redirect_to @measurement, notice: 'Measurement was successfully created' }
         format.json { render :show, status: :created, location: @measurement }
       else
-        format.html { render :new }
+        format.html { render :new, alert: 'Measurement could not be created' }
         format.json { render json: @measurement.errors, status: :unprocessable_entity }
       end
     end
@@ -61,9 +60,9 @@ class MeasurementsController < ApplicationController
     cleansed_instrument_id = params[:instrument_id].to_i
 
     if Instrument.exists?(id: cleansed_instrument_id)
-
       # Are the data submitted in this query a test?
       is_test_value = false
+
       if params.key?(:test)
         is_test_value = true
       end
@@ -80,9 +79,7 @@ class MeasurementsController < ApplicationController
         variable_shortnames.push(var.shortname)
 
         # see if the parameter was submitted
-
         if params.include? var.shortname
-
           if params.key?(var.measured_at_parameter)
             measured_at = params[var.measured_at_parameter]
           elsif params.key?(var.at_parameter)
@@ -93,14 +90,14 @@ class MeasurementsController < ApplicationController
             measured_at = Time.now.iso8601
           end
 
-         instrument = Instrument.find(cleansed_instrument_id)
+          instrument = Instrument.find(cleansed_instrument_id)
 
           begin
             timestamp = ConvertIsoToMs.call(measured_at)
           rescue ArgumentError
             create_err_msg = "Time error."
           else
-            value     = params[var.shortname].to_f
+            value = params[var.shortname].to_f
 
             tags = influxdb_tags = instrument.influxdb_tags_hash
             tags[:site] = instrument.site_id
@@ -117,8 +114,8 @@ class MeasurementsController < ApplicationController
 
     respond_to do |format|
       if save_ok
-        format.json { render text: "OK"  }
-        format.html { render text: "Measurement created." }
+        format.html { render text: 'Measurement created successfully' }
+        format.json { render text: "OK" }
       else
         format.json { render text: "FAIL" }
         format.html { render text: "Measurement could not be created. " + create_err_msg, status: :bad_request }
@@ -126,14 +123,12 @@ class MeasurementsController < ApplicationController
     end
   end
 
-  # GET 'measurements/delete_test?instrument_id=1
   def delete_test
     authorize! :destroy, Measurement
 
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
       if Instrument.exists?(inst_id)
-        # Delete from the time series database
         DeleteTestTsPoints.call(TsPoint, inst_id)
       end
     end
@@ -144,13 +139,14 @@ class MeasurementsController < ApplicationController
     end
   end
 
-  # GET 'measurements/trim?end=date
   def trim
     authorize! :destroy, Measurement
 
     notice_text = nil
+
     if params.key?(:end) and params.key?(:trim_id)
       trim_id = params[:trim_id]
+
       if trim_id == "all"
         Measurement.where("measured_at < ?", params[:end]).delete_all
         notice_text = 'Measurements before ' + params[:end] + ' were deleted for ALL instruments.'
@@ -192,7 +188,6 @@ class MeasurementsController < ApplicationController
   end
 
 private
-  # Never trust parameters from the scary internet, only allow the white list through.
   def measurement_params
     params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test, :end, :trim_id)
   end
