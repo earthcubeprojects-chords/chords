@@ -1,6 +1,6 @@
 class DataController < ApplicationController
   def index
-    authorize! :view, :data
+    authorize! :read, :data
 
     @sites = Site.accessible_by(current_ability)
     @instruments = Instrument.accessible_by(current_ability)

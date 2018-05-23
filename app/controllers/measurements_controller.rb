@@ -1,39 +1,6 @@
 require 'time'
 
 class MeasurementsController < ApplicationController
-  load_and_authorize_resource
-
-  def index
-    @sites = Site.accessible_by(current_ability)
-    @instruments = Instrument.accessible_by(current_ability)
-
-    respond_to do |format|
-      format.html
-      format.csv { send_data @measurements.to_csv }
-    end
-  end
-
-  def show
-  end
-
-  def new
-  end
-
-  def edit
-  end
-
-  def create
-    respond_to do |format|
-      if @measurement.save
-        format.html { redirect_to @measurement, notice: 'Measurement was successfully created' }
-        format.json { render :show, status: :created, location: @measurement }
-      else
-        format.html { render :new, alert: 'Measurement could not be created' }
-        format.json { render json: @measurement.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # GET 'measurements/url_create?<many params>
   # Params:
   # test
@@ -42,18 +9,31 @@ class MeasurementsController < ApplicationController
   # at=iso8061
   # var_at=iso801
   def url_create
-    authorize! :create, Measurement
-
-    # secure the creation of new measurements
-    if @profile.secure_data_entry
-      unless @profile.data_entry_key == params[:key]
-        return
-      end
-    end
-
     save_ok = false
+    auth = false
+
     # If the save fails, include this error message in the response.
     create_err_msg = ""
+
+    # DEPRECATED: This needs to be removed down the road with just this left: authorize! :create, :measurement
+    # secure the creation of new measurements
+    if @profile.secure_data_entry
+      if params[:api_key] && params[:email]
+        authorize! :create, :measurement
+        auth = true
+      elsif params[:key] && @profile.data_entry_key == params[:key]
+        auth = true
+      end
+    else
+      auth = true
+    end
+
+    if !auth
+      respond_to do |format|
+        format.json { render json: 'FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.', status: :unauthorized }
+        format.html { render text: 'FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.', status: :unauthorized }
+      end
+    end
 
     # some CHORDS users had an extra '0' on the beginnig of their instrument_id.
     # cleans this dirty input so that the create still works
@@ -124,7 +104,7 @@ class MeasurementsController < ApplicationController
   end
 
   def delete_test
-    authorize! :destroy, Measurement
+    authorize! :delete_test, :measurement
 
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
@@ -136,54 +116,6 @@ class MeasurementsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to :back }
       format.json { head :no_content }
-    end
-  end
-
-  def trim
-    authorize! :destroy, Measurement
-
-    notice_text = nil
-
-    if params.key?(:end) and params.key?(:trim_id)
-      trim_id = params[:trim_id]
-
-      if trim_id == "all"
-        Measurement.where("measured_at < ?", params[:end]).delete_all
-        notice_text = 'Measurements before ' + params[:end] + ' were deleted for ALL instruments.'
-      else
-        if Instrument.exists?(trim_id)
-          Measurement.where("measured_at < ? and instrument_id = ?", params[:end], params[:trim_id]).delete_all
-          notice_text = 'Measurements before ' + params[:end] + ' were deleted for instrument ' + Instrument.find(trim_id).name
-        end
-      end
-    end
-
-    redirect_to data_path, notice: notice_text
-  end
-
-  def update
-    respond_to do |format|
-      if @measurement.update(measurement_params)
-        format.html { redirect_to @measurement, notice: 'Measurement was successfully updated.' }
-        format.json { render :show, status: :ok, location: @measurement }
-      else
-        format.html { render :edit }
-        format.json { render json: @measurement.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def destroy
-    if @measurement.destroy
-      respond_to do |format|
-        format.html { redirect_to measurements_url, notice: 'Measurement was successfully destroyed.' }
-        format.json { head :no_content }
-      end
-    else
-      respond_to do |format|
-        format.html { redirect_to measurements_url, notice: 'Measurement was successfully destroyed.' }
-        format.json { head :no_content }
-      end
     end
   end
 

@@ -1,6 +1,6 @@
 %h1 Import a InfluxDB Backup File
 
-- if can?(:manage, Measurement)
+- if can?(:import, Profile)
   = form_tag(profiles_import_influxdb_path, :method => 'post', :enctype =>"multipart/form-data") do
     %div
       = file_field_tag 'influxdb_backup_file', :accept => 'text/json', :multiple => false

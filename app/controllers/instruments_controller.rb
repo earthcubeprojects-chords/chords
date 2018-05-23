@@ -1,14 +1,12 @@
 class InstrumentsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :show
 
-  before_action :set_instrument, only: :live
+  before_action :set_instrument, only: [:show, :live]
 
  # GET /instruments/1/live?var=varshortname&after=time
  # Return measurements and metadata for a given instrument, var and time period.
  # Limit the number of points returned to the instrument's display_points value.
   def live
-    authorize! :view, Measurement
-
     # Verify the parameters
     # convert the millisecond input to seconds since epoch
     if ((defined? params[:after]) && (params[:after].to_i != 0))
@@ -60,8 +58,6 @@ class InstrumentsController < ApplicationController
 
   # GET instruments/simulator
   def simulator
-    authorize! :create, Measurement
-
     @sites = Site.accessible_by(current_ability)
     @instruments = Instrument.accessible_by(current_ability)
   end
@@ -69,8 +65,6 @@ class InstrumentsController < ApplicationController
   # GET /instruments/duplicate?instrument_id=1
   # TODO: should be GET /instruments/[INSTRUMENT_ID]/duplicate?number_of_duplicates=[num_dups]
   def duplicate
-    authorize! :create, Instrument
-
     old_instrument = Instrument.accessible_by(current_ability).find(params[:instrument_id])
     num_dups = params[:number_of_duplicates].to_i
 
@@ -112,14 +106,14 @@ class InstrumentsController < ApplicationController
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
 
-    if ["csv", "xml", "json", "jsf"].include?(params[:format])
+    if ['csv', 'xml', 'json', 'jsf', 'sensorml'].include?(params[:format])
       authorize! :download, @instrument
     else
-      authorize! :view, Instrument
+      authorize! :read, @instrument
     end
 
     @last_url = InstrumentsHelper.sanitize_url( !@profile.secure_administration,
-                                                !(current_user && (can? :manage, Measurement)),
+                                                !(current_user && (can? :create, :measurement)),
                                                 GetLastUrl.call(TsPoint, @instrument.id) )
 
     metadata = { "Project": @profile.project,
@@ -239,7 +233,8 @@ class InstrumentsController < ApplicationController
 
 private
   def set_instrument
-    @instrument = Instrument.accessible_by(current_ability).find(params[:id])
+    # using a where.first clause prevents an exception being thrown if the instrument is not present or not visible to the user
+    @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
   end
 
   def instrument_params

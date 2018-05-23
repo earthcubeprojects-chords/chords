@@ -1,12 +1,10 @@
 class UnitsController < ApplicationController
-  skip_authorize_resource only: [:index, :show]
+  load_and_authorize_resource
 
   def index
-    @units = Unit.all
   end
 
   def show
-  	@unit = Unit.find(params[:id])
   end
 
 private

@@ -24,14 +24,14 @@
           - if can? :manage, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
 
-            - if can? :manage, Archive
-              %li= link_to 'Archive', '/archives'
-
+          - if can? :manage, Archive
+            %li= link_to 'Archive', '/archives'
 
           - if can? :manage, Profile
             %li= link_to 'Configure', profiles_path
-            %li= link_to 'Users', users_path
+
           - if user_signed_in?
+            %li= link_to 'Users', users_path
             %li= link_to 'Sign Out', destroy_user_session_path
           - else
             %li= link_to 'Sign In', new_user_session_path

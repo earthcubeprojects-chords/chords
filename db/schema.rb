@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180504161804) do
+ActiveRecord::Schema.define(version: 20180518160952) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -70,20 +70,6 @@ ActiveRecord::Schema.define(version: 20180504161804) do
     t.datetime "updated_at",                                    null: false
     t.string   "source",     limit: 255,   default: "SensorML"
   end
-
-  create_table "measurements", force: :cascade do |t|
-    t.integer  "instrument_id", limit: 4
-    t.string   "parameter",     limit: 255
-    t.float    "value",         limit: 24
-    t.string   "unit",          limit: 255
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.datetime "measured_at"
-    t.boolean  "test",                      default: false, null: false
-  end
-
-  add_index "measurements", ["instrument_id"], name: "index_measurements_on_instrument_id", using: :btree
-  add_index "measurements", ["measured_at"], name: "index_measurements_on_measured_at", using: :btree
 
   create_table "profiles", force: :cascade do |t|
     t.string   "project",                  limit: 255
@@ -195,7 +181,6 @@ ActiveRecord::Schema.define(version: 20180504161804) do
   add_index "vars", ["unit_id"], name: "index_vars_on_unit_id", using: :btree
 
   add_foreign_key "instruments", "sites"
-  add_foreign_key "measurements", "instruments"
   add_foreign_key "sites", "site_types"
   add_foreign_key "vars", "instruments"
 end

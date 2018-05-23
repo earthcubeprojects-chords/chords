@@ -7,13 +7,10 @@
         %th Roles
         %th API Key
       - @users.each do |user|
-        - if can? :view, user
+        - if can? :read, user
           %tr
             %td
-              = user.email
-              - if user == current_user
-                %br/
-                = link_to "Change your password", edit_user_registration_path
+              = link_to user.email, user_path(user)
             %td
               = user.roles_pretty_printed
             %td

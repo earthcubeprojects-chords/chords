@@ -1,8 +1,8 @@
 class ArchiveJobsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :delete_completed_jobs
 
   def delete_completed_jobs
-    authorize! :destroy, Archive
+    authorize! :destroy, ArchiveJob
 
     ArchiveJob.where(:status => 'success').destroy_all
 

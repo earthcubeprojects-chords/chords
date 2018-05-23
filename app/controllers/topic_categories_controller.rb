@@ -1,11 +1,9 @@
 class TopicCategoriesController < ApplicationController
-  skip_authorize_resource only: [:index, :show]
+  load_and_authorize_resource
 
   def index
-    @topic_categories = TopicCategory.all
   end
 
   def show
-  	@topic_category = TopicCategory.find(params[:id])
   end
 end

@@ -1,21 +1,21 @@
 :javascript
-  $(document).ready(function() { 
+  $(document).ready(function() {
     $(function() {
       $("#startpicker").datepicker();
       $("#startpicker").datepicker('setDate', new Date());
     });
-  
+
     $(function() {
       $("#endpicker").datepicker();
       $("#endpicker").datepicker('setDate', new Date());
     });
-  
-  
+
+
     function send_download_url(id, datatype) {
       var startdate = $("#startpicker").datepicker("getDate");
       var enddate   = $("#endpicker"  ).datepicker("getDate");
       enddate.setDate(enddate.getDate() + 1);
-      
+
       if (startdate < enddate) {
         var url = '';
         url += '/instruments/'
@@ -28,22 +28,22 @@
         alert("Start date must be less than or equal to the end date");
       }
     };
-    
-      
+
+
     $('.geoCsvButton').click(function(){
       send_download_url(this.value, 'csv');
     });
-  
-  
+
+
     $('.xmlButton').click(function(){
       send_download_url(this.value, 'xml');
     });
-  
+
     $('.geoJsonButton').click(function(){
       send_download_url(this.value, 'jsf');
     });
-  
-  
+
+
   });
 %h2 Download Data By Day
 %table.table
@@ -79,7 +79,7 @@
         %td= @sites.find(instrument.site_id).name
         %td{:align => "center"}
           = instrument.sample_count(:either)
-        %td{:align => "center"}= link_to 'Data URLs', about_data_urls_path(instrument_id: instrument.id)
+        %td{:align => "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
         %td{:align => "center"}
 
           %button.geoCsvButton{:value => "#{instrument.id}"}  GeoCSV

@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
   def index
-    authorize! :view, Instrument
+    authorize! :read, :dashboard
 
     # Get all of the instruments.
     @instruments = Instrument.accessible_by(current_ability)
@@ -22,7 +22,7 @@ class DashboardController < ApplicationController
     @metrics["uptime"] = ApplicationHelper.server_uptime
 
     @metrics["last_url"] = InstrumentsHelper.sanitize_url(!@profile.secure_administration,
-                                                          !(current_user && (can? :manage, Measurement)),
+                                                          !(current_user && (can? :create, :measurement)),
                                                           GetLastUrl.call(TsPoint))
 
     # Create data series with the count of samples (measurements) made within regular time
