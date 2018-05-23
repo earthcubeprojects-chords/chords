@@ -24,11 +24,13 @@
           \# of
           = succeed "Measurements" do
             %br/
-        %th{:align => "center"}
-          Fetch/Ingest
-          %br>/
-          Data
-        %th{:colspan => "1"}
+
+        - if can?(:download, Instrument) || can?(:create, :measurement)
+          %th{:align => "center"}
+            Fetch/Ingest
+            %br>/
+            Data
+          %th{:colspan => "1"}
     %tbody
       - @instruments.each do |instrument|
         %tr
@@ -56,26 +58,29 @@
           %td{:align => "center"}= instrument.vars.count
           %td{:align => "center"}= instrument.sample_count(:either)
 
-          %td{:align => "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
-          - if can?(:manage, Instrument)
-            %td
+          - if can?(:download, Instrument) || can?(:create, :measurement)
+            %td{:align => "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
 
+          - if can?(:create, Instrument)
+            %td
               = form_tag(duplicate_instruments_path, :method => 'get') do
                 = select_tag "number_of_duplicates", options_for_select((1..100).to_a , "1")
                 copies
                 = hidden_field_tag('instrument_id', instrument.id )
                 = submit_tag("Duplicate")
 
-          %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
+          - if can?(:delete_test, :measurement)
+            %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
 
-          - if can?(:manage, Instrument)
+          - if can?(:destroy, instrument)
             %td= button_to 'Destroy', instrument, method: :delete,                                                                                                                                    |
               data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTRUMENT AND ALL DATA WILL BE PERMANENTLY DELETED" } |
 %br/
-- if @sites.count > 0
-  = link_to 'New Instrument', new_instrument_path, :class => 'btn btn-default btn-lg dropdown-toggle'
-- else
-  %strong At least one site must be defined before creating a new instrument.
+- if can?(:create, Instrument)
+  - if @sites.count > 0
+    = link_to 'New Instrument', new_instrument_path, :class => 'btn btn-default btn-lg dropdown-toggle'
+  - else
+    %strong At least one site must be defined before creating a new instrument.
 
 %h2 Identifiers
 
