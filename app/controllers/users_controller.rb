@@ -14,10 +14,10 @@ class UsersController < ApplicationController
 
   def destroy
     respond_to do |format|
-      if @user.destroy
+      if current_user.id != @user.id && @user.destroy
         format.html{ redirect_to users_path, notice: 'User was successfully deleted' }
       else
-        format.html{ render :edit, alert: 'User could not be deleted' }
+        format.html{ redirect_to edit_user_path, alert: 'User could not be deleted' }
       end
     end
   end

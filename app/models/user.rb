@@ -49,7 +49,8 @@ class User < ActiveRecord::Base
 
 private
   def set_default_roles
-    byebug
-    self.roles = [:registered_user]
+    if roles_mask.nil? && self.roles.blank?
+      self.roles = [:registered_user]
+    end
   end
 end
