@@ -25,70 +25,72 @@ Rails.application.routes.draw do
   resources :topic_categories
   resources :units
   resources :urlbuilder
-  resources :users
 
   resources :about, only: :index do
     collection do
-      get 'data_urls'
+      get :data_urls
     end
   end
 
   resources :archives do
     collection do
-      post 'update_credentials'
-      post 'enable_archiving'
-      post 'disable_archiving'
+      post :update_credentials
+      post :enable_archiving
+      post :disable_archiving
     end
   end
 
   resources :archive_jobs do
     collection do
-      post 'delete_completed_jobs'
+      post :delete_completed_jobs
     end
   end
 
   resources :instruments do
     member do
-      get 'live'
+      get :live
     end
 
     collection do
-      get 'duplicate'
-      get 'live'
-      get 'simulator'
+      get :duplicate
+      get :live
+      get :simulator
     end
   end
 
-  resources :measurements do
+  resources :measurements, except: [:index, :show, :new, :create, :update, :edit, :destroy] do
     collection do
-      get  'url_create'
-      post 'delete_test'
-      post 'trim'
+      get  :url_create
+      post :delete_test
     end
   end
 
   resources :monitor do
     collection do
-      get 'live'
+      get :live
     end
   end
 
   resources :profiles, only: [:index, :create, :backup, :restore] do
     collection do
-      get 'export_configuration'
-      get 'import_configuration'
-      post 'import_configuration'
+      get :export_configuration
+      get :import_configuration
+      post :import_configuration
 
-      get 'export_influxdb'
-      get 'import_influxdb'
-      post 'import_influxdb'
+      get :export_influxdb
+      get :import_influxdb
+      post :import_influxdb
     end
   end
 
   resources :sites do
     collection do
-      get 'geo'
+      get :geo
     end
+  end
+
+  resources :users do
+    get :assign_api_key
   end
 
   resources :vars do

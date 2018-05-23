@@ -1,7 +1,9 @@
 class ArchivesController < ApplicationController
   include ArchiveHelper
 
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:enable_archiving, :disable_archiving, :update_credentials,
+                                       :push_cuahsi_variables, :push_cuahsi_methods, :push_cuahsi_sites,
+                                       :push_cuahsi_sources]
 
   def enable_archiving
     authorize! :manage, Archive
@@ -102,7 +104,7 @@ class ArchivesController < ApplicationController
   end
 
   def update_credentials
-    authorize! :update, Archive
+    authorize! :update, @archive
 
     respond_to do |format|
       if @archive.update_attributes(archive_params) && @archive.update_credentials(archive_params)
@@ -133,6 +135,8 @@ class ArchivesController < ApplicationController
   end
 
   def push_cuahsi_variables
+    authorize! :manage, Archive
+
     error = ""
 
     unconfigured_vars.each do |var|
@@ -172,6 +176,8 @@ class ArchivesController < ApplicationController
   end
 
   def push_cuahsi_methods
+    authorize! :manage, Archive
+
     error = ""
 
     unconfigured_methods.each do |instrument|
@@ -199,6 +205,8 @@ class ArchivesController < ApplicationController
   end
 
   def push_cuahsi_sites
+    authorize! :manage, Archive
+
     error = ""
 
     ArchiveHelper::unconfigured_sites.each do |site|
@@ -226,6 +234,8 @@ class ArchivesController < ApplicationController
   end
 
   def push_cuahsi_sources
+    authorize! :manage, Archive
+
     error = ""
 
     unconfigured_sources.each do |profile|

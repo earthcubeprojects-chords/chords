@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   ROLES = %i[admin site_config measurements downloader registered_user guest]
   #######################################################################################
 
+  before_create :set_default_roles
+
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
     self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.inject(0, :+)
@@ -38,10 +40,16 @@ class User < ActiveRecord::Base
     roles.include?(role)
   end
 
-  def generate_api_key
+  def self.generate_api_key
     loop do
       token = Devise.friendly_token
       break token unless User.where(api_key: token).first
     end
+  end
+
+private
+  def set_default_roles
+    byebug
+    self.roles = [:registered_user]
   end
 end

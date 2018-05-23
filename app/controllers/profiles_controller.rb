@@ -3,9 +3,11 @@ class ProfilesController < ApplicationController
   # *** There should only be one record in the Profiles table ***
   ###############################################################
 
-  load_and_authorize_resource
+  load_resource
 
   def index
+    authorize! :read, Profile
+
     if @profile == nil
       Profile.initialize
       @profile = Profile.first
@@ -15,6 +17,8 @@ class ProfilesController < ApplicationController
   end
 
   def create
+    authorize! :create, Profile
+
     # update attributes
     if !@profile.update(profile_params)
       if !@profile.valid?
@@ -168,6 +172,8 @@ class ProfilesController < ApplicationController
   end
 
   def push_cuahsi_sources
+    authorize! :update, Profile
+
     Profile.all.each do |profile|
       data = profile.create_cuahsi_source
 

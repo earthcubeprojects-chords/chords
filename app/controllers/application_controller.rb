@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   before_filter :set_global, :set_access_control_header
 
+  before_filter :authenticate_user_from_token!
   before_action :authenticate_user!
   before_action :load_archive_configuration
 
@@ -65,24 +66,20 @@ private
     email = params[:email].presence
     user = email && User.find_by_email(email)
 
+    api_key = if params[:api_key]
+                params[:api_key]
+              elsif params[:key]
+                params[:key]
+              else
+                nil
+              end
+
     # Devise.secure_compare used to compare the token in the database with the
     # token given in the params, mitigating timing attacks
-    if user && Devise.secure_compare(user.api_key, params[:key])
+    if user && Devise.secure_compare(user.api_key, api_key)
       sign_in user, store: false
     end
   end
-
-  # def authorize!(*args)
-  #   @data_download_actions = ['show']
-
-  #   if @data_download_actions.include?(action_name) && params.key?(:key) && params[:key] == @profile.data_entry_key
-  #     # skip the authorization if the security key is provided
-  #   else
-  #     super(*args)
-  #       # authorize! :download, @instrument
-  #   end
-
-  # end
 
   def current_user
     if super
@@ -105,8 +102,12 @@ private
   rescue_from "CanCan::AccessDenied" do |exception|
     respond_to do |format|
       format.html { redirect_to '/about', alert: "You don't have permission to access this page. Do you need to sign in?" }
-      format.json { head :forbidden, content_type: 'text/html' }
-      format.js   { head :forbidden, content_type: 'text/html' }
+      format.sensorml { head :forbidden, content_type: 'text/sensorml' }
+      format.json { head :forbidden, content_type: 'text/json' }
+      format.jsf { head :forbidden, content_type: 'text/jsf' }
+      format.js { head :forbidden, content_type: 'text/js' }
+      format.csv { head :forbidden, content_type: 'text/csv' }
+      format.xml { head :forbidden, content_type: 'text/xml' }
     end
   end
 end

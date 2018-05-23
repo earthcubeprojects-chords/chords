@@ -3,7 +3,7 @@
 .table-responsive
   %table
     %tr
-      %td
+      %td{style: "width: 30%"}
         %strong Email
       %td #{@user.email if @user.email}
     %tr
@@ -16,5 +16,17 @@
     %tr
       %td
         %strong API Key
-      %td= @user.api_key
+      %td
+        - if !@user.api_key.nil?
+          - if @user == current_user
+            = @user.api_key
+          - elsif !@user.api_key.nil?
+            Yes
+        - else
+          n/a
 
+%p
+-if can? :edit, @user
+  %p= button_to 'Edit User', edit_user_path(@user), method: :get
+
+%p= link_to '< Back', users_path

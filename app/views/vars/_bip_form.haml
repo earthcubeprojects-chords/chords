@@ -14,7 +14,7 @@
   %td
     - if can?(:manage, Var)
       - form_tag_id = "unit_for_tag_#{variable.id}"
-      = autocomplete_field_tag form_tag_id, variable.unit.name, autocomplete_unit_name_vars_path(:search_mode=>'unit_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      = autocomplete_field_tag form_tag_id, variable.unit.try(:name), autocomplete_unit_name_vars_path(:search_mode=>'unit_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
       :javascript
         $(document).ready(function(){
           $("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
@@ -46,10 +46,10 @@
 
 
       %br
-      Plot Label: 
+      Plot Label:
       = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
     - else
-      = variable.unit.name
+      = variable.unit.try(:name)
       %br
       = variable.units
 
@@ -69,7 +69,7 @@
   %td
     - if can?(:manage, Var)
       - form_tag_id = "mp_for_tag_#{variable.id}"
-      = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path(:search_mode=>'measured_property_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      = autocomplete_field_tag form_tag_id, variable.measured_property.try(:label), autocomplete_measured_property_label_vars_path(:search_mode=>'measured_property_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
 
       :javascript
         $(document).ready(function(){
@@ -102,9 +102,9 @@
         	});
         });
     - else
-      = variable.measured_property.label
+      = variable.measured_property.try(:label)
 
-  - if Archive.first.name == "CUAHSI"
+  - if Archive.first.try(:name) == "CUAHSI"
     %td
       - if can?(:manage, Var)
         = best_in_place variable, :general_category, :as => :select, :collection => Var.get_general_categories_collection

@@ -29,12 +29,26 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
 
+    profile = Profile.first
+
     if !user || user.role?(:guest)
       guest_user
+
+      if !profile.secure_data_viewing
+        registered_user(nil)
+      end
+
+      if !profile.secure_data_download
+        can :download, Instrument
+      end
     end
 
     if user.role?(:registered_user)
       registered_user(user)
+
+      if !profile.secure_data_download
+        can :download, Instrument
+      end
     end
 
     if user.role?(:downloader)
@@ -60,25 +74,39 @@ class Ability
 
   def registered_user(user)
     can :read, :all
-    can :read, :monitor
+
+    can :geo, Site
+
+    can :live, Instrument
 
     cannot :read, User
-    can :read, User, id: user.id
+
+    if user
+      can [:read, :update], User, id: user.id
+      can :assign_api_key, User, id: user.id
+    end
 
     cannot :read, Profile
   end
 
   def data_downloader(user)
     registered_user(user)
+
+    can :download, Instrument
   end
 
   def measurement_creator(user)
-    can :create, Measurement
+    can :create, :measurement
   end
 
   def site_configurator(user)
     registered_user(user)
     can :manage, :all
+
+    can :duplicate, Instrument
+    can :simulator, Instrument
+
+    can :delete_test, :measurement
 
     can :export, Profile
     can :import, Profile
@@ -87,9 +115,8 @@ class Ability
   end
 
   def admin(user)
-    can :manage, :all
+    site_configurator(user)
 
-    can :export, Profile
-    can :import, Profile
+    can :manage, :all
   end
 end

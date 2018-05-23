@@ -1,7 +1,7 @@
 class VarsController < ApplicationController
   include ArchiveHelper
 
-  load_and_authorize_resource
+  load_and_authorize_resource except: :get_autocomplete_items
 
   autocomplete :measured_property, :label, :full => true
   autocomplete :unit, :name, :full => true
@@ -58,6 +58,8 @@ class VarsController < ApplicationController
   end
 
   def get_autocomplete_items (parameters)
+    authorize! :read, Var
+
     if(params[:search_mode].eql? 'unit_source')
       items = Unit.where("source = :source and name LIKE :term", {source: Profile.first.unit_source, term: '%' + params[:term] + '%'})
     elsif(params[:search_mode].eql? 'measured_property_source')

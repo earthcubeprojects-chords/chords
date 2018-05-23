@@ -18,8 +18,6 @@ class SitesController < ApplicationController
 
   # TODO: Clean this up and consider changing to another map framework
   def geo
-    authorize! :read, Site
-
     @sites = Site.accessible_by(current_ability)
 
     # The marker generation really should be done in the page javascript, so that

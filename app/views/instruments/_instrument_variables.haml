@@ -27,7 +27,7 @@
     %td
       = link_to 'Measured Property', :measured_properties
 
-    - if Archive.first.name == "CUAHSI"  
+    - if Archive.first.try(:name) == "CUAHSI"
       %td
         General Category
 
