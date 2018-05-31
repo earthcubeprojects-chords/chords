@@ -45,9 +45,11 @@ bower.json
 vendor/ruby
 chords_env.sh
 
-# Docker .env environment variable file
-.env*
-/chords*.yml
+# Various generated files
+.env-*
+chords-*.yml
+chords_control-*
+chords.yml
 
 #archive configuration
 config/archive.yml
