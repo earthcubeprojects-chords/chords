@@ -39,6 +39,9 @@ Use -t to see the current portal status.
 
 The devmode (-m) enables development mode, where the current directory
 is mounted as the CHORDS Rails source.
+
+The the --renew option makes a backup copy of this script, and pulls down 
+a new version from github.
 """
 
 import os
@@ -271,15 +274,15 @@ class CommandArgs:
 CHORDS configuration and operation management.
         
 In configuration mode, you are prompted for configuration options. These will be
-saved in the configuration file and in a corresponding .env file. Backup
-copies will be made of the existing configuration files. Use the -d option
+saved in the configuration file (default chords.yml) and in a corresponding .env file. 
+Backup copies will be made of the existing configuration files. Use the --defalut option
 to set the configuration to default values.
 """
         
         epilog = """
-At least one and only one of -c, -e, -b, -r, -s, or -u can be 
-specified. -d must be accompanied by -c. To create an initial 
-default configuration: 'python chords_control -c -d'
+At least one and only one of --config, --env, --backwards, --run, --stop, --update 
+or --renew can be specified. --default must be accompanied by --config. 
+To create an initial default configuration: 'python chords_control --config --default'
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
         
@@ -292,9 +295,10 @@ default configuration: 'python chords_control -c -d'
         parser.add_argument("-d", "--default", help="set all configuration values to defaults",             default=False,        action="store_true")
         parser.add_argument("-t", "--status",  help="status",                                               default=False,        action="store_true")
         parser.add_argument("-e", "--env",     help="read config file and write CHORDS .env file",          default=False,        action="store_true")
-        parser.add_argument("-b", "--backwards", help="read CHORDS .env file and write config file (use with caution!)",        default=False,        action="store_true")
+        parser.add_argument("-b", "--backwards", help="read CHORDS .env file and write config file (use with caution!)", default=False, action="store_true")
         parser.add_argument("-x", "--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
         parser.add_argument("-m", "--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
+        parser.add_argument("-w", "--renew",   help="replace chords_control with a new version (use with caution!)",  default=False, action="store_true")
         parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
 
         # If no switches, print the help.
@@ -309,7 +313,7 @@ default configuration: 'python chords_control -c -d'
         # Make sure that at most only one of these args was specified
         o = self.options
         
-        if [o['config'], o['run'], o['stop'], o['update'], o['env'], o['backwards']].count(True) > 1:
+        if [o['config'], o['run'], o['stop'], o['update'], o['env'], o['backwards'], o['renew']].count(True) > 1:
             print epilog
             exit(1)
             
@@ -530,31 +534,37 @@ class ChordsGit:
         # The path for the docker-compose configuration.
         self.proxy = proxy
         
-    def fetch(self, git_branch):
+    def fetch(self, git_branch, files):
         """
-        Fetch system configurations from the CHORDS git repository
+        Fetch files from the CHORDS git repository.
+        git_branch - the source brance
+        files - a single file or a list of files
         """
         
-        docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + 'master/docker-compose.yml'
-        if os_arch[:3] == 'arm':
-            docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/' + git_branch + '/rpi-docker-compose.yml'
+        if not isinstance(files, list):
+            files = [files]
 
-        proxy_switch = []
-        if self.proxy != '':
-            proxy_switch = ['-xxx', self.proxy]
-                
-        print 'Downloading ' + docker_compose_yml + '.',
-        curl_cmd = [
-            'curl', '-O', '-s', docker_compose_yml
-            ]
-        if os_name == 'nt':
-          curl_cmd[1:1] = ['-k']
-
-        # Insert proxy switch
-        curl_cmd[1:1] = proxy_switch
-
-        os_cmd(curl_cmd)
-        print
+        for file in files:
+            file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + '/' + file
+#            if os_arch[:3] == 'arm':
+#                docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/' + git_branch + '/rpi-docker-compose.yml'
+    
+            proxy_switch = []
+            if self.proxy != '':
+                proxy_switch = ['-xxx', self.proxy]
+                    
+            print 'Downloading ' + file_url + '.',
+            curl_cmd = [
+                'curl', '-O', '-s', file_url
+                ]
+            if os_name == 'nt':
+              curl_cmd[1:1] = ['-k']
+    
+            # Insert proxy switch
+            curl_cmd[1:1] = proxy_switch
+    
+            os_cmd(curl_cmd)
+            print
 
     def branches(self):
         git_cmd = [
@@ -598,7 +608,7 @@ class Docker:
                 exit(1)
     
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
-            ChordsGit(proxy=proxy).fetch(git_branch=git_branch) 
+            ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml) 
         
     def ps(self):
         """
@@ -795,13 +805,13 @@ def addChoicesToGIT_BRANCH(proxy=""):
                 s[4].append(b)
     
 #####################################################################
-def checkFileExists(file, print_warning=True, exit_on_failure=True):
+def checkFileExists(file, writeable=False, print_warning=True, exit_on_failure=True):
     """
     Make sure that the file is readable. If not, print error message
     and exit.
     """
 
-    if not os.path.isfile(file) or not os.access(file, os.R_OK):
+    if not os.path.isfile(file) or not os.access(file, os.R_OK if not writeable else os.W_OK):
         if print_warning:
             print "File " + file +  " doesn't exist or isn't readable."
         if exit_on_failure:
@@ -826,6 +836,38 @@ def grep(expression, file):
 
     return matches
     
+#####################################################################
+def renew_script():
+    """
+    Update this script and docker-compose.yml.
+    A github branch will be requested.
+    """
+    script_name = 'chords_control'
+    
+    if not checkFileExists(script_name, writeable=True, print_warning=False, exit_on_failure=False):
+        print "Either " + script_name + " isn't located in this directory, or it is not writeable."
+        exit(1)
+        
+    git_branches = ChordsGit().branches()
+    branch = ''
+    while True:
+        print "Which branch do you want to pull "+script_name+" from (",
+        for b in git_branches:
+            print '\''+b+'\'',
+        print ')? ',
+        choice = sys.stdin.readline().strip()
+        if choice in git_branches:
+            break
+        else:
+            print "The", choice, "branch is not avaiable."
+            
+    createBackupFile(script_name)
+    createBackupFile("docker-compose.yml")
+    
+    ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=[script_name, "docker-compose.yml"])
+            
+        
+
 #####################################################################
 #####################################################################
 
@@ -878,16 +920,22 @@ if __name__ == '__main__':
         
     # Create the configuration file from the .env file
     if options["backwards"] == True:
-      createConfigFilefromEnv(options)
+        createConfigFilefromEnv(options)
 
     # Update the docker images
     if options["update"] == True:
-      if not os.path.isfile(options["file"]):
-        print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
-        exit(1)
-      # Get the system configuration.
-      config = ChordsConfig(configfile=options['file'])
-      # Get items from git that are needed.
-      ChordsGit(proxy=options['proxy']).fetch(git_branch=config["GIT_BRANCH"])
-      # Pull the images.
-      Docker(proxy=config['PROXY']).pull()
+        if not os.path.isfile(options["file"]):
+            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
+            exit(1)
+        # Get the system configuration.
+        config = ChordsConfig(configfile=options['file'])
+        # Get items from git that are needed.
+        ChordsGit(proxy=options['proxy']).fetch(git_branch=config["GIT_BRANCH"], files="docker-compose.yml")
+        # Pull the images.
+        Docker(proxy=config['PROXY']).pull()
+      
+    # Replace this script with one from the repository
+    if options["renew"] == True:
+        renew_script()
+        
+
