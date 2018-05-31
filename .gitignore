@@ -48,6 +48,7 @@ chords_env.sh
 # Various generated files
 .env-*
 chords-*.yml
+docker-compose-*.yml
 chords_control-*
 chords.yml
 
