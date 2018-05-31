@@ -839,7 +839,7 @@ def grep(expression, file):
 #####################################################################
 def renew_script(proxy):
     """
-    Update this script and docker-compose.yml.
+    Update this script and docker-compose configurations.l.
     A github branch will be requested.
     """
     script_name = 'chords_control'
@@ -864,7 +864,7 @@ def renew_script(proxy):
     createBackupFile(script_name)
     createBackupFile("docker-compose.yml")
     
-    ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=[script_name, "docker-compose.yml"])
+    ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=[script_name, "docker-compose.yml", "docker-compose-dev.yml"])
             
         
 
