@@ -185,18 +185,25 @@ stdConfigItems = [
     [
         "Enable InfluxData kapacitor.\n"
         "This is experimental.In general, do NOT enable,\n"
-        "as it opens a security hole. Specify either true or false.",
+        "as it opens a security hole.",
         "KAPACITOR_ENABLED",
         "false",
-        False,
-        []
+        True,
+        [
+            "true",
+            "false"
+        ]
     ],
     [
         "The RAILS ENVIRONMENT. Unlikely to to be anything other than \"production\".",
         "RAILS_ENV",
         "production",
-        False,
-        []
+        True,
+        [
+            "production",
+            "development",
+            "test"
+        ]
     ],
     [
         "The number of NGINX WORKERS. 4 is a good value",
@@ -410,19 +417,31 @@ class ChordsConfig(OrderedDict):
         """
         print "Enter:\n   Return to keep the current value, or\n   Period (.) to select to the default value, or a\n   New value."
 
+        # Process config items that are part of the standard configuration
         for key in self.keys():
             print
             if key in self.configItems.keys():
                 description=self.configItems[key]['description']
                 print
+                # If verify is enabled for this item, then we need to populate the valid choices.
                 if self.configItems[key]['verify']:
                     description = description + ' Valid choices are: '
                     for choice in self.configItems[key]['choices']:
                         description = description + '\'' + choice + '\' '
-                self.queryValue(key=key, 
-                                usedefault = usedefault,
-                                description=description,
-                                defaultval =self.configItems[key]['default'])
+                while True:
+                    self.queryValue(key=key, 
+                                    usedefault = usedefault,
+                                    description=description,
+                                    defaultval =self.configItems[key]['default'])
+                    if not self.configItems[key]['verify']:
+                        break;
+                    else:
+                        if self[key] in self.configItems[key]['choices']:
+                            break;
+                        else:
+                            print '>>>> You entered an invalid value. Please try again (or use ctrl-C to exit)'
+
+        # Process items that extras which are not part of the standard configuration
         for key in self.keys():
             if key not in self.configItems.keys():
                 self.queryValue(key=key, usedefault = usedefault)
