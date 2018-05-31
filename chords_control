@@ -56,9 +56,13 @@ from collections import OrderedDict
 
 # The definitions of standard configuration items. These are tri-tuples:
 # [0]: The configuration item description. This will be printed as a prompt
-#      during configuration, and included in the configuration file as a description.
+#      during configuration, and included in the configuration file as a description. 
 # [1]: The name of the environment variable to be set in the .env file.
 # [2]: The default value.
+# [3]: Verify:True or False. If True, the user response is compared to the choices available,
+#      verifying that an valid response was entered.
+# [4]: If [3] is true, this is a list of valid choices. It may be modified/populated
+#      dynamically by the script
 # 
 # When you need to add required keys to the configuration, just define them here.
 stdConfigItems = [
@@ -67,38 +71,50 @@ stdConfigItems = [
         "(NOTE: This not the CHORDS website admin login)\n"
         "Replace this with a secure password.",
         "CHORDS_ADMIN_PW",  
-        "chords_ec_demo"
+        "chords_ec_demo",
+        False,
+        []
     ],
     [
         "The PASSWORD for read-only access to influxdb.",
         "CHORDS_GUEST_PW",
-        "guest"
+        "guest",
+        False,
+        []
     ],
     [
         "An EMAIL ACCOUNT that will send CHORDS password reset instructions, \n"
         "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
         "instead set up an account specifically for CHORDS (e.g. at gmail).",
         "CHORDS_EMAIL_ADDRESS",
-        "unknown@gmail.com"
+        "unknown@gmail.com",
+        False,
+        []
     ],
     [
         "The PASSWORD for the email account that will send CHORDS password reset instructions, \n"
         "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
         "instead set up an account specifically for CHORDS (e.g. at gmail).",
         "CHORDS_EMAIL_PASSWORD",
-        "unknown"
+        "unknown",
+        False,
+        []
     ],
     [
         "The EMAIL SERVER that can relay CHORDS password reset instructions, \n"
         "Grafana alerts, etc. You must have an account on this service.",
         "CHORDS_EMAIL_SERVER",
-        "smtp.gmail.com"
+        "smtp.gmail.com",
+        False,
+        []
     ],
     [
         "The SERVER PORT for the email server that can relay CHORDS password reset instructions, \n"
         "Grafana alerts, etc. You must have an account on this service.",
         "CHORDS_EMAIL_PORT",
-        "587"
+        "587",
+        False,
+        []
     ],
     [
         "The PASSWORD for admin access to Grafana.\n"
@@ -106,60 +122,88 @@ stdConfigItems = [
         "it can only be changed from the Grafana admin web page.\n"
         "Replace this with a secure password.",
         "GRAFANA_ADMIN_PW",  
-        "admin"
+        "admin",
+        False,
+        []
     ],
     [
         "A SECRET KEY BASE for Rails. Generate a\n"
         "secure value (e.g. 'openssl rand -hex 32').",
         "SECRET_KEY_BASE",
-        "aaaaaaaaaaa"
+        "aaaaaaaaaaa",
+        False,
+        []
     ],
     [
         "The time series DATABASE RETENTION DURATION, e.g. 168h or 52w. Use \"inf\" for permanent.\n"
         "This value can be changed on successive restarts of a portal. Note: making it shorter\n"
         "will trim the existing time series database.",
         "DB_RETENTION",
-        "inf"
+        "inf",
+        False,
+        []
     ],
     [
         "The VERSION TAG of the desired CHORDS release.",
         "DOCKER_TAG",
-        "latest"
+        "latest",
+        True,
+        []
+    ],
+    [
+        "The GIT BRANCH where the docker-compose recipe will be fetched.\n"
+        "Use \"master\" unless you have a valid reason to choose otherwise.",
+        "GIT_BRANCH",
+        "master",
+        True,
+        []
     ],
     [
         "CHORDS HTTP port.\n"
         "(Typically only changed if there are port conflicts or firewall restrictions).",
         "CHORDS_HTTP_PORT",
-        "80"
+        "80",
+        False,
+        []
     ],
     [
         "Grafana port.\n"
         "(Typically only changed if there are port conflicts or firewall restrictions).",
         "GRAFANA_HTTP_PORT",
-        "3000"
+        "3000",
+        False,
+        []
     ],
     [
         "PROXY URL (e.g. http://proxy.myorg.com:8080).\n"
         "Leave blank if not needed.",
         "PROXY",
-        ""
+        "",
+        False,
+        []
     ],
     [
         "Enable InfluxData kapacitor.\n"
         "This is experimental.In general, do NOT enable,\n"
         "as it opens a security hole. Specify either true or false.",
         "KAPACITOR_ENABLED",
-        "false"
+        "false",
+        False,
+        []
     ],
     [
         "The RAILS ENVIRONMENT. Unlikely to to be anything other than \"production\".",
         "RAILS_ENV",
-        "production"
+        "production",
+        False,
+        []
     ],
     [
         "The number of NGINX WORKERS. 4 is a good value",
         "WORKERS",
-        4
+        4,
+        False,
+        []
     ]
 ]
 
@@ -336,7 +380,7 @@ class ChordsConfig(OrderedDict):
         self.configItems  = OrderedDict()
         
         for i in stdConfigItems:
-            self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2])
+            self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2], verify=i[3], choices=i[4])
 
     def toYML(self):
         """
@@ -369,9 +413,15 @@ class ChordsConfig(OrderedDict):
         for key in self.keys():
             print
             if key in self.configItems.keys():
+                description=self.configItems[key]['description']
+                print
+                if self.configItems[key]['verify']:
+                    description = description + ' Valid choices are: '
+                    for choice in self.configItems[key]['choices']:
+                        description = description + '\'' + choice + '\' '
                 self.queryValue(key=key, 
                                 usedefault = usedefault,
-                                description=self.configItems[key]['description'],
+                                description=description,
                                 defaultval =self.configItems[key]['default'])
         for key in self.keys():
             if key not in self.configItems.keys():
@@ -403,7 +453,7 @@ class ChordsConfig(OrderedDict):
                 self[key] = l
         if usedefault:
             print
-    
+            
     def writeYMLFile(self, configfile):
         """
         Write the configuration to the file. The whole configuration is written,
@@ -445,37 +495,38 @@ class ConfigItem(OrderedDict):
     An expected configuration item. The default value and description
     are recorded.
     """
-    def __init__(self, default, description):
+    def __init__(self, default, description, verify, choices):
         OrderedDict.__init__(self)
         self["default"] = default
         self["description"] = description
+        self["verify"] = verify
+        self["choices"] = choices
     
 #####################################################################
 class ChordsGit:
     """
     Manage CHORDS git activities.
     """
-    def __init__(self, proxy="", release=""):
+    def __init__(self, proxy=""):
         # The path for the docker-compose configuration.
-        self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/docker-compose.yml'
-        if release == "development":
-            self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/development/docker-compose.yml'
-        if os_arch[:3] == 'arm':
-            self.docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/master/rpi-docker-compose.yml'
-            
         self.proxy = proxy
         
-    def fetch(self):
+    def fetch(self, git_branch):
         """
         Fetch system configurations from the CHORDS git repository
         """
+        
+        docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + 'master/docker-compose.yml'
+        if os_arch[:3] == 'arm':
+            docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/' + git_branch + '/rpi-docker-compose.yml'
+
         proxy_switch = []
         if self.proxy != '':
             proxy_switch = ['-xxx', self.proxy]
                 
-        print 'Downloading ' + self.docker_compose_yml + '.',
+        print 'Downloading ' + docker_compose_yml + '.',
         curl_cmd = [
-            'curl', '-O', '-s', self.docker_compose_yml
+            'curl', '-O', '-s', docker_compose_yml
             ]
         if os_name == 'nt':
           curl_cmd[1:1] = ['-k']
@@ -486,6 +537,14 @@ class ChordsGit:
         os_cmd(curl_cmd)
         print
 
+    def branches(self):
+        git_cmd = [
+            'git', 'ls-remote', '--heads', 'https://github.com/ncar/chords'
+            ]
+        heads = [e.replace('refs/heads/','') for e in os_cmd(git_cmd,printlines=False).split()[1::2]]
+        heads.remove('gh-pages')
+        return heads
+        
 #####################################################################
 class Docker:
     """
@@ -520,7 +579,7 @@ class Docker:
                 exit(1)
     
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
-            ChordsGit(proxy).fetch() 
+            ChordsGit(proxy=proxy).fetch(git_branch=git_branch) 
         
     def ps(self):
         """
@@ -695,17 +754,26 @@ def byteify(input):
 #####################################################################
 def addChoicesToDOCKER_TAG(proxy=""):
     """
-    Get the avaiable tags and and them to the DOCKER_TAG 
-    description.
+    Get the avaiable tags and and them to the DOCKER_TAG valid choices.
+    Modifies stdConfigItems.
     """
     for s in stdConfigItems:
         if s[1] =="DOCKER_TAG":
             tags = Docker(proxy=proxy).tags()
-            avail_tags = " Available releases are"
-            tags = Docker(proxy=proxy).tags()
             for t in tags:
-                avail_tags = avail_tags + " '" + t + "'"
-            s[0] = s[0] + avail_tags
+                s[4].append(t)
+    
+#####################################################################
+def addChoicesToGIT_BRANCH(proxy=""):
+    """
+    Get the avaiable branches and and them to the GIT_BRANCH valid choices. 
+    Modifies stdConfigItems.
+    """
+    for s in stdConfigItems:
+        if s[1] =="GIT_BRANCH":
+            branches = ChordsGit(proxy=proxy).branches()
+            for b in branches:
+                s[4].append(b)
     
 #####################################################################
 def checkFileExists(file, print_warning=True, exit_on_failure=True):
@@ -750,6 +818,9 @@ if __name__ == '__main__':
     
     # Adjust the available releases
     addChoicesToDOCKER_TAG()
+    
+    # Adjust the available branches
+    addChoicesToGIT_BRANCH()
     
     # --- Command procesing ---
     
@@ -798,6 +869,6 @@ if __name__ == '__main__':
       # Get the system configuration.
       config = ChordsConfig(configfile=options['file'])
       # Get items from git that are needed.
-      ChordsGit(proxy=options['proxy'], release=config["DOCKER_TAG"]).fetch()
+      ChordsGit(proxy=options['proxy']).fetch(git_branch=config["GIT_BRANCH"])
       # Pull the images.
       Docker(proxy=config['PROXY']).pull()
