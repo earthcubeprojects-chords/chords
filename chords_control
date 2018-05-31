@@ -861,10 +861,11 @@ def renew_script(proxy):
         else:
             print "The", choice, "branch is not avaiable."
             
-    createBackupFile(script_name)
-    createBackupFile("docker-compose.yml")
-    
-    ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=[script_name, "docker-compose.yml", "docker-compose-dev.yml"])
+    files = [script_name, "docker-compose.yml", "docker-compose-dev.yml"]
+    for file in files:
+        createBackupFile(file)
+            
+    ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
 
 #####################################################################
 #####################################################################
