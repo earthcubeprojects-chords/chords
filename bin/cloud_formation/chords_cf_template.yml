@@ -400,6 +400,7 @@ Resources:
             yum:
               emacs: []
               sysstat: []
+              git: []
         
         # Install docker as a service.
         install_docker:
