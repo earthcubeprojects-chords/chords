@@ -837,7 +837,7 @@ def grep(expression, file):
     return matches
     
 #####################################################################
-def renew_script():
+def renew_script(proxy):
     """
     Update this script and docker-compose.yml.
     A github branch will be requested.
@@ -849,14 +849,14 @@ def renew_script():
         exit(1)
         
     git_branches = ChordsGit().branches()
-    branch = ''
+    git_branch = ''
     while True:
         print "Which branch do you want to pull "+script_name+" from (",
         for b in git_branches:
             print '\''+b+'\'',
         print ')? ',
-        choice = sys.stdin.readline().strip()
-        if choice in git_branches:
+        git_branch = sys.stdin.readline().strip()
+        if git_branch in git_branches:
             break
         else:
             print "The", choice, "branch is not avaiable."
@@ -936,6 +936,6 @@ if __name__ == '__main__':
       
     # Replace this script with one from the repository
     if options["renew"] == True:
-        renew_script()
+        renew_script(proxy=options['proxy'])
         
 
