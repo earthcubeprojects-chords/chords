@@ -865,8 +865,6 @@ def renew_script(proxy):
     createBackupFile("docker-compose.yml")
     
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=[script_name, "docker-compose.yml", "docker-compose-dev.yml"])
-            
-        
 
 #####################################################################
 #####################################################################
