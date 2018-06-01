@@ -39,7 +39,7 @@ class Ability
       end
 
       if !profile.secure_data_download
-        can :download, Instrument
+        data_downloader(nil)
       end
     end
 
@@ -80,6 +80,7 @@ class Ability
     can :live, Instrument
 
     cannot :read, User
+    cannot :read, :data
 
     if user
       can [:read, :update], User, id: user.id
@@ -93,6 +94,7 @@ class Ability
     registered_user(user)
 
     can :download, Instrument
+    can :read, :data
   end
 
   def measurement_creator(user)
