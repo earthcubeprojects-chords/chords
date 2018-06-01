@@ -13,12 +13,24 @@
             / li><haml_loud> current_user.email </haml_loud></li
           %li= link_to 'About', '/about'
           %li= link_to 'Help', 'http://chordsrt.com', :target => "_blank"
-          %li= link_to 'Dashboard', '/dashboard'
-          %li= link_to 'Data', '/data'
-          %li= link_to 'Sites', sites_path
-          %li= link_to 'Instruments', instruments_path
-          %li= link_to 'Geo', geo_sites_path
-          %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"
+
+          - if can? :read, :dashboard
+            %li= link_to 'Dashboard', '/dashboard'
+
+          - if can? :download, Instrument
+            %li= link_to 'Data', '/data'
+
+          - if can? :read, Site
+            %li= link_to 'Sites', sites_path
+
+          - if can? :read, Instrument
+            %li= link_to 'Instruments', instruments_path
+
+          - if can? :geo, Site
+            %li= link_to 'Geo', geo_sites_path
+
+          - if can? :read, Instrument
+            %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"
 
         %ul.nav.navbar-nav.navbar-right
           - if can? :manage, Instrument
