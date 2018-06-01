@@ -11,7 +11,7 @@
 # Site.initialize
 # Instrument.initialize
 
-FactoryBot.create(:admin, email: 'admin@chordsrt.com', password: 'realtimedata')
+User.create(email: 'admin@chordsrt.com', password: 'realtimedata', roles: [:admin])
 
 # Using the ontology  http://sensorml.com/ont/swe/property
 # (Recommended by Manil Maskey)
