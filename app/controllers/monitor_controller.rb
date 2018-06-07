@@ -13,7 +13,7 @@ class MonitorController < ApplicationController
   end
 
   def live
-    authorize! :read, Measurement
+    authorize! :read, :measurement
 
     measurement = Instrument.accessible_by(current_ability).find(params[:instrument_id]).last_measurement
 
