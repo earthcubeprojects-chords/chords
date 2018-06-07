@@ -1,5 +1,7 @@
 class SetMeasuredAtValues < ActiveRecord::Migration
   def change
-    Measurement.connection.execute("update measurements set measured_at=created_at")
+    execute <<-SQL
+      UPDATE measurements SET measured_at=created_at;
+    SQL
   end
 end
