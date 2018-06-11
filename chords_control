@@ -608,6 +608,18 @@ class Docker:
                 exit(1)
     
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
+            git_branches = ChordsGit().branches()
+            git_branch = ''
+            while True:
+                print "Which branch do you want to pull "+self.docker_compose_yml+" from (",
+                for b in git_branches:
+                    print '\''+b+'\'',
+                print ')? ',
+                git_branch = sys.stdin.readline().strip()
+                if git_branch in git_branches:
+                    break
+                else:
+                    print "The", choice, "branch is not avaiable."
             ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml) 
         
     def ps(self):
