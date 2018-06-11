@@ -73,7 +73,7 @@ CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org
 We request that researchers cite its use in any relevant publication or other context using this format:
 
 <div class="well" style="text-align: left;">
-Daniels, M. D., Kerkez, B., Chandrasekar, V., Graves, S., Stamps, D. S., Martin, C., Dye, M., Gooch, R., Bartos, M., Jones, J., Keiser, K. (2016). Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS) software (Version 0.9). UCAR/NCAR - Earth Observing Laboratory. https://doi.org/10.5065/d6v1236q
+Daniels, M. D., Kerkez, B., Chandrasekar, V., Graves, S., Stamps, D. S., Martin, C., Botnick, A., Gooch, R., Bartos, M., Jones, J., Keiser, K. (2016). Cloud-Hosted Real-time Data Services for the Geosciences (CHORDS) software (Version 0.9). UCAR/NCAR - Earth Observing Laboratory. https://doi.org/10.5065/d6v1236q
 </div>
 
 Please see [http://data.datacite.org/application/vnd.datacite.datacite+json/10.5065/D6V1236Q](http://data.datacite.org/application/vnd.datacite.datacite+json/10.5065/D6V1236Q) to view the relevant DOI metadata fields.
