@@ -86,6 +86,7 @@ Rails.application.routes.draw do
   resources :sites do
     collection do
       get :geo
+      get :geo_json
     end
   end
 
