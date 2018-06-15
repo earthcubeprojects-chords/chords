@@ -1,22 +1,97 @@
-%script{:src => "//maps.google.com/maps/api/js?v=3.13&key=#{Profile.first.google_maps_key}&sensor=false&libraries=geometry", :type => "text/javascript"}
+%link{rel: "stylesheet", href: "https://unpkg.com/leaflet@1.3.1/dist/leaflet.css", integrity: "sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==", crossorigin: ""}
+%script{src: "https://unpkg.com/leaflet@1.3.1/dist/leaflet.js", integrity: "sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==", crossorigin: ""}
+%div#geomap{style: "width: 800px; height: 600px;"}
 :javascript
-  $(function() {
-  
-    var chords_map = function(mapId) {
-      var handler = Gmaps.build('Google');
-      handler.buildMap({ 
-        provider: { }, 
-        internal: {id: mapId}}, 
-        function() {
-        var site_markers = #{raw @site_markers.to_json};
-          markers = handler.addMarkers(site_markers);
-          handler.bounds.extendWith(markers);
-          handler.fitMapToBounds();
-        }
-      );
-    };
-    
-    chords_map('geomap');
+
+  /////////////////
+  /// MAP SETUP ///
+  /////////////////
+
+  // Markers for Operational/Non-operational Sites
+  var offMark = new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
   });
-%div
-  #geomap{:style => "width: 800px; height: 600px;"}
+  var onMark = new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
+  // function to generate instrument popup content
+  function instPopupHTML(inst, imageTag) {
+    instContent = '<div style="display:inline-block;height:12px">' + imageTag + '</div>' +
+                    '<div style="display:inline-block;height:12px">' +
+                    '<p style="margin:0;padding:0"><a href=' + inst.url + '>' + inst.name + '</a></p></div><br />';
+    return instContent;
+  }
+
+  // function to plot markers given geojson input data, return the markers layer and plot markers on map
+  function plotMarkers(data, map) {
+    // create markers layer
+    mLayer = L.geoJSON(data, {
+      pointToLayer: function(feature, latlng) {
+        // render appropriate site marker status image
+        if (feature.properties.active) {
+          return L.marker(latlng, {icon: onMark});
+        } else {
+          return L.marker(latlng, {icon: offMark});
+        }
+      },
+      onEachFeature: function(feature, layer) {
+        var popupContent = '<h4><a href=' + feature.properties.url + '>' + feature.properties.name + '</a></h4><p style="margin:0;padding:0">Instruments:</p>';
+        // loop through all instruments
+        feature.properties.instruments.forEach(function(inst) {
+          if (inst.active) {
+            popupContent += instPopupHTML(inst, '#{image_tag("button_green_50.png", size: "12")}');
+          } else {
+            popupContent += instPopupHTML(inst, '#{image_tag("button_red_50.png", size: "12")}');
+          }
+        });
+        layer.bindPopup(popupContent);
+      }
+    }).addTo(map);
+    return(mLayer);
+  }
+
+  ///////////////////////////
+  /// PLOTTING ACTUAL MAP ///
+  ///////////////////////////
+
+  // initialize json history variables
+  var prevJSON = null;
+  var recentJSON = null;
+
+  // initialize markers layer
+  var markersLayer = null;
+
+  // initialize map
+  var siteMap = L.map('geomap').setView([40.1672, -105.1019], 8);
+
+  // add tiling
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(siteMap);
+
+  // add initial markers
+  $.getJSON("#{geo_json_sites_url}", function (data) {
+    markersLayer = plotMarkers(data, siteMap);
+  })
+
+  // interval to refresh data source every 5 seconds
+  setInterval(function() {
+    $.getJSON("#{geo_json_sites_url}", function (data) {
+      // store recently retrieved JSON
+      recentJSON = data;
+      // if the JSON has changed, remove current markers and replot
+      if (JSON.stringify(recentJSON) != JSON.stringify(prevJSON)) {
+        siteMap.removeLayer(markersLayer);
+        markersLayer = plotMarkers(data, siteMap);
+      }
+      // save history
+      prevJSON = recentJSON;
+    })
+  }, 5000)
