@@ -86,7 +86,11 @@ Rails.application.routes.draw do
   resources :sites do
     collection do
       get :geo
-      get :geo_json
+      get :sites_json
+    end
+
+    member do
+      get :instruments_json
     end
   end
 

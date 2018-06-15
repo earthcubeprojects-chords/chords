@@ -19,8 +19,57 @@ class SitesController < ApplicationController
   def geo
   end
 
-  def geo_json
+  ## generates json for all sites, format:
+  # {
+  # "type": "FeatureCollection",
+  # "features": [
+  #   {
+  #     "type": "Feature",
+  #     "geometry": {
+  #       "type": "Point",
+  #       "coordinates": [
+  #         "-105.245923",
+  #         "39.971957"
+  #       ]
+  #     },
+  #     "properties": {
+  #       "name": "Test Site",
+  #       "url": "example.chordsrt.com/sites/1",
+  #       "active": true
+  #     }
+  #   }
+  # ]
+  # }
+  def sites_json
+    # loop through all sites
+    features = []
+    json_data = @sites.each do |site|
+      # determine whether site is active (ie. all instruments are active)
+      activeBool = (site.instruments.where({is_active: false}).length == 0)
+
+      geometry = {type: "Point", coordinates: [site.lon, site.lat]}
+      properties = {name: site.name, url: sites_url + '/' + site.id.to_s, active: activeBool}
+
+      feature = {type: "Feature", geometry: geometry, properties: properties}
+      features.push(feature)
+    end
+
+    sites_geojson = {type: "FeatureCollection", features: features}.to_json
+
     render json: sites_geojson
+  end
+
+  ## generate json for particular site's instruments, format:
+  # [{"name": "Instrument 1", "active": true, "url": "asdfasdf"}, {"name": "Instrument 2", "active": true, "url": "asdfasdf"}]
+  def instruments_json
+    # loop through all instruments of particular site
+    instJSON = []
+    @site.instruments.each do |instrument|
+      inst = {name: instrument.name, active: instrument.is_active, url: instrument_url}
+      instJSON.push(inst)
+    end
+
+    render json: instJSON.to_json
   end
 
   def create
@@ -66,29 +115,5 @@ class SitesController < ApplicationController
 private
   def site_params
     params.require(:site).permit(:name, :lat, :lon, :elevation, :description, :site_type_id, :cuahsi_site_code)
-  end
-
-  def sites_geojson
-    # loop through all sites
-    features = []
-    json_data = @sites.each do |site|
-      # determine whether site is active (ie. all instruments are active)
-      activeBool = (site.instruments.where({is_active: false}).length == 0)
-
-      # loop through all instruments of particular site
-      siteInst = []
-      site.instruments.each do |instrument|
-        inst = {name: instrument.name, active: instrument.is_active, url: instrument.instrument_url}
-        siteInst.push(inst)
-      end
-
-      geometry = {type: "Point", coordinates: [site.lon, site.lat]}
-      properties = {name: site.name, url: site.site_url, active: activeBool, instruments: siteInst}
-
-      feature = {type: "Feature", geometry: geometry, properties: properties}
-      features.push(feature)
-    end
-
-    {type: "FeatureCollection", features: features}.to_json
   end
 end
