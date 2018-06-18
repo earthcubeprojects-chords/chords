@@ -43,7 +43,7 @@
 
     $.getJSON(dataURL, function (data) {
       data.forEach(function (inst) {
-        if (inst.active) {
+        if (inst.status) {
           popupContent = instPopupHTML(inst, '#{image_tag("button_green_50.png", size: "12")}', popup, popupContent);
         } else {
           popupContent = instPopupHTML(inst, '#{image_tag("button_red_50.png", size: "12")}', popup, popupContent);
@@ -59,7 +59,7 @@
     mLayer = L.geoJSON(data, {
       pointToLayer: function(feature, latlng) {
         var defaultPopup = L.popup();
-        if (feature.properties.active) {
+        if (feature.properties.status) {
           return L.marker(latlng, {icon: onMark}).bindPopup(defaultPopup);
         } else {
           return L.marker(latlng, {icon: offMark}).bindPopup(defaultPopup);

@@ -35,7 +35,7 @@ class SitesController < ApplicationController
   #     "properties": {
   #       "name": "Test Site",
   #       "url": "example.chordsrt.com/sites/1",
-  #       "active": true
+  #       "status": true
   #     }
   #   }
   # ]
@@ -45,10 +45,10 @@ class SitesController < ApplicationController
     features = []
     json_data = @sites.each do |site|
       # determine whether site is active (ie. all instruments are active)
-      activeBool = (site.instruments.where({is_active: false}).length == 0)
+      statusBool = (site.instruments.select{|i| i.is_receiving_data == false}.length == 0)
 
       geometry = {type: "Point", coordinates: [site.lon, site.lat]}
-      properties = {name: site.name, url: sites_url + '/' + site.id.to_s, active: activeBool}
+      properties = {name: site.name, url: sites_url + '/' + site.id.to_s, status: statusBool}
 
       feature = {type: "Feature", geometry: geometry, properties: properties}
       features.push(feature)
@@ -60,12 +60,12 @@ class SitesController < ApplicationController
   end
 
   ## generate json for particular site's instruments, format:
-  # [{"name": "Instrument 1", "active": true, "url": "asdfasdf"}, {"name": "Instrument 2", "active": true, "url": "asdfasdf"}]
+  # [{"name": "Instrument 1", "status": true, "url": "asdfasdf"}, {"name": "Instrument 2", "status": true, "url": "asdfasdf"}]
   def instruments_json
     # loop through all instruments of particular site
     instJSON = []
     @site.instruments.each do |instrument|
-      inst = {name: instrument.name, active: instrument.is_active, url: instrument_url}
+      inst = {name: instrument.name, status: instrument.is_receiving_data, url: instrument_url}
       instJSON.push(inst)
     end
 
