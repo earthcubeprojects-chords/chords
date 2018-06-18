@@ -1,0 +1,149 @@
+#!/usr/bin/env python
+
+"""
+EarthCube CHORDS StackScript
+
+    Author: Charles Martin <martinc@ucar.edu>
+    Version: 0.1.0.0
+    Requirements:
+        - ss://linode/python-library <ssinclude StackScriptID="3">
+
+This StackScript deploys the EarthCube CHORDS Portal (https://chordsrt.com).
+
+StackScript User-Defined Variables (UDF):
+    
+    <UDF name="CHORDS_ADMIN_PW"       default="chords_ec_demo" label=
+        "The PASSWORD for sysadmin access to CHORDS, mysql and influxdb in docker.\n"
+        "(NOTE: This not the CHORDS website admin login)\n"
+        "Replace this with a secure password."/>
+    <UDF name="CHORDS_GUEST_PW"       default="guest" label=
+        "The PASSWORD for read-only access to influxdb."/>
+    <UDF name="CHORDS_EMAIL_ADDRESS"  default="unknown@gmail.com" label=
+         "An EMAIL ACCOUNT that will send CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
+        "instead set up an account specifically for CHORDS (e.g. at gmail)."/>
+    <UDF name="CHORDS_EMAIL_PASSWORD" default="unknown" label=
+         "The PASSWORD for the email account that will send CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. DO NOT use a personal or business account for this; \n"
+        "instead set up an account specifically for CHORDS (e.g. at gmail)."/>
+    <UDF name="CHORDS_EMAIL_SERVER"   default="smtp.gmail.com" label=
+         "The EMAIL SERVER that can relay CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. You must have an account on this service."/>
+    <UDF name="CHORDS_EMAIL_PORT"     default="587" label=
+         "The SERVER PORT for the email server that can relay CHORDS password reset instructions, \n"
+        "Grafana alerts, etc. You must have an account on this service."/>
+    <UDF name="GRAFANA_ADMIN_PW"      default="admin" label=
+         "The PASSWORD for admin access to Grafana.\n"
+        "Once Grafana is initialized with this password,\n"
+        "it can only be changed from the Grafana admin web page.\n"
+        "Replace this with a secure password."/>
+    <UDF name="SECRET_KEY_BASE"       default="aaaaaaaaaaa" label=
+        "A SECRET KEY BASE for Rails. Generate a\n"
+        "secure value (e.g. 'openssl rand -hex 32').",
+        "SECRET_KEY_BASE"/>
+    <UDF name="DB_RETENTION"          default="inf" label=
+        "The time series DATABASE RETENTION DURATION, e.g. 168h or 52w. Use \"inf\" for permanent.\n"
+        "This value can be changed on successive restarts of a portal. Note: making it shorter\n"
+        "will trim the existing time series database."/>
+    <UDF name="DOCKER_TAG"            default="latest" label=
+        "The VERSION TAG of the desired CHORDS release." />
+    <UDF name="GIT_BRANCH"            default="master" label=
+        "The GIT BRANCH where the docker-compose recipe will be fetched.\n"
+        "Use \"master\" unless you have a valid reason to choose otherwise."/>
+    <UDF name="CHORDS_HTTP_PORT"      default="80" label=
+         "CHORDS HTTP port.\n"
+         "(Typically only changed if there are port conflicts or firewall restrictions)."/>
+    <UDF name="GRAFANA_HTTP_PORT"     default="3000" label=
+        "Grafana port.\n"
+        "(Typically only changed if there are port conflicts or firewall restrictions)."/>
+    <UDF name="PROXY"                 default="" label=
+        "PROXY URL (e.g. http://proxy.myorg.com:8080).\n"
+        "Leave blank if not needed."/>
+    <UDF name="KAPACITOR_ENABLED"     default="false" label=
+        "Enable InfluxData kapacitor.\n"
+        "This is experimental.In general, do NOT enable,\n"
+        "as it opens a security hole."/>
+    <UDF name="RAILS_ENV"             default="production" label=
+        "The RAILS ENVIRONMENT. Unlikely to to be anything other than \"production\".",
+        "RAILS_ENV"/>
+    <UDF name="WORKERS"               default="4" label=
+        "The number of NGINX WORKERS. 4 is a good value"/>
+"""
+
+import os
+import pwd
+import shutil
+import sys
+import urllib
+import subprocess
+
+try: # we'll need to rename included StackScripts before we can import them
+    os.rename("/root/ssinclude-3", "/root/pythonlib.py")
+except:
+    pass
+
+def os_call(cmd):
+    print(cmd)
+    os.system(cmd)
+
+os_call('apt-get update')
+os_call('apt-get install apt-transport-https ca-certificates curl software-properties-common')
+os_call('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+os_call('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+os_call('apt-get updateos.system')
+os_call('apt-get update')
+os_call('apt-get install docker-ce')
+os_call('docker run hello-world')
+     
+import pythonlib
+
+def install():
+    """Install CHORDS."""
+    #logging support
+    
+    #shutil.rmtree(path)
+    #urllib.urlretrieve("https://wordpress.org/latest.tar.gz", "wordpress.tar.gz")
+    #tarball = tarfile.open("wordpress.tar.gz")
+    #tarball.extractall(os.path.dirname(path))
+    #tarball.close()
+
+    #os.rename(os.path.dirname(path) + "/wordpress", path)
+    
+    # might be better off a part of the Apache StackScript in the future
+    #httpd_user = {
+    #    'debian': 'www-data',
+    #    'redhat': 'apache'
+    #}
+    
+    # Recursively set permissions for our web directory
+    #os.chown(path, pwd.getpwnam(httpd_user[pythonlib.distro['family']]).pw_uid, -1)
+    #for root, dirs, files in os.walk(path):  
+    #    for found_dirs in dirs:  
+    #        os.chown(os.path.join(root, found_dirs), pwd.getpwnam(httpd_user[pythonlib.distro['family']]).pw_uid, -1)
+    #    for found_files in files:
+    #        os.chown(os.path.join(root, found_files), pwd.getpwnam(httpd_user[pythonlib.distro['family']]).pw_uid, -1)
+
+
+def main():
+    """Install CHORDS on a basic Docker stack.
+    
+    """
+    # add logging support
+    pythonlib.init()
+    
+    #if os.environ['DB_ROOT_PASSWORD'] != "":
+    #    db_root_password = os.environ['DB_ROOT_PASSWORD']
+    #else:
+    #    db_root_password = False
+    
+    pythonlib.system_update()
+    #apache.httpd_install()
+    
+    install()
+    #bashCommand = "firewall-cmd --zone=public --add-service=http --permanent && firewall-cmd --reload"
+    #proc = subprocess.Popen(bashCommand, shell=True)
+
+    pythonlib.end()
+
+if __name__ == "__main__":
+    sys.exit(main())
