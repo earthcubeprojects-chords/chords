@@ -47,6 +47,7 @@ vendor/cache
 chords_env.sh
 
 # Various generated files
+.env
 .env-*
 chords-*.yml
 docker-compose-*.yml
