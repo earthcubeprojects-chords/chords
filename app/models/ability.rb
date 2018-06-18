@@ -76,7 +76,8 @@ class Ability
     can :read, :all
 
     can :geo, Site
-    can :geo_json, Site
+    can :sites_json, Site
+    can :instruments_json, Site
 
     can :site_instruments, Site
 
