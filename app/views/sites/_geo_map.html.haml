@@ -27,7 +27,7 @@
   // function to generate instrument popup content, add to popup, return contents
   function instPopupHTML(inst, imageTag, popup, contents) {
     contents += '<div style="display:inline-block;height:12px">' + imageTag + '</div>' +
-                    '<div style="display:inline-block;height:12px">' +
+                    '<div style="display:inline-block;height:12px;margin-left: 5px">' +
                     '<p style="margin:0;padding:0"><a href=' + inst.url + '>' + inst.name + '</a></p></div><br />';
     popup.setContent(contents);
     popup.update();
