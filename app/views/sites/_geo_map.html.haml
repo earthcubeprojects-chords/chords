@@ -86,12 +86,21 @@
         });
       }
     }).addTo(map);
-    // center the map so that all markers are displayed
-    map.fitBounds(mLayer.getBounds().pad(0.5));
+
+    // checks to see if sites exists
+    if (data.features.length == 0) {
+      // if no sites, default to world view
+      map.setView([20.0, 5.0], 2);
+    } else {
+      // otherwise, center map so that all markers displayed
+      map.fitBounds(mLayer.getBounds().pad(0.5));
+    }
+
     // if popup closed, reset view/zoom
     map.on('popupclose', function(e) {
       map.fitBounds(mLayer.getBounds().pad(0.5));
     })
+
     return(mLayer);
   }
 
@@ -107,7 +116,7 @@
   var markersLayer = null;
 
   // initialize map
-  var siteMap = L.map('geomap');
+  var siteMap = L.map('geomap', { minZoom: 2 });
 
   // add tiling
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -117,6 +126,7 @@
   // add initial markers
   $.getJSON("#{sites_json_sites_url}", function (data) {
     markersLayer = plotMarkers(data, siteMap);
+    prevJSON = data;
   })
 
   // interval to refresh data source every 5 minutes
