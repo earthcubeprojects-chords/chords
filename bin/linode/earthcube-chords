@@ -6,7 +6,6 @@ EarthCube CHORDS StackScript
     Author: Charles Martin <martinc@ucar.edu>
     Version: 0.1.0.0
     Requirements:
-        - ss://linode/python-library <ssinclude StackScriptID="3">
 
 This StackScript deploys the EarthCube CHORDS Portal (https://chordsrt.com).
 
@@ -35,7 +34,7 @@ StackScript User-Defined Variables (UDF):
     <UDF name="DOCKER_TAG"            default="latest" 
         label="The VERSION TAG of the desired CHORDS release. 'latest' is the current stable release." />
     <UDF name="GIT_BRANCH"            default="master" 
-        label="The GIT BRANCH where the docker-compose recipe will be fetched. Use 'master' unless you have a valid reason to choose otherwise."/>
+        label="The GIT BRANCH where a few admin files will be fetched from. Use 'master' unless you have a valid reason to choose otherwise."/>
     <UDF name="CHORDS_HTTP_PORT"      default="80" 
          label="CHORDS HTTP port. (Typically only changed if there are port conflicts or firewall restrictions)."/>
     <UDF name="GRAFANA_HTTP_PORT"     default="3000" 
@@ -62,12 +61,8 @@ try: # we'll need to rename included StackScripts before we can import them
 except:
     pass
      
-import pythonlib
-
 # Where is CHORDS installed?
 chords_basedir = '/var/lib/chords/'
-# Source for the systemd service definition. NOTE: assumes that master is always up to date.
-chords_service_url = 'https://github.com/NCAR/chords/raw/master/bin/chords_service/chords.service'
 
 
 def system_install():
@@ -85,7 +80,8 @@ def service_install():
         os.system('ln -s /usr/bin/docker-compose')
 
     os.chdir(chords_basedir)
-    os.system('curl -O -s ' + chords_service_url)
+    chords_service_url = 'https://github.com/NCAR/chords/raw/' + os.environ['GIT_BRANCH'] + '/bin/chords_service/chords.service'    
+    os.system('curl -L ' + chords_service_url + ' > chords.service')
     os.system('systemctl enable /var/lib/chords/chords.service')
     os.system('systemctl daemon-reload')
     
@@ -123,16 +119,12 @@ def main():
     """Install CHORDS on a basic Docker stack.
     
     """
-    pythonlib.init()
-    pythonlib.system_update()
     
     os.makedirs(chords_basedir)
     system_install()
     service_install()
     chords_install()
     chords_start()
-
-    pythonlib.end()
 
 if __name__ == "__main__":
     sys.exit(main())
