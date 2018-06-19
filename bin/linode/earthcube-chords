@@ -81,53 +81,46 @@ try: # we'll need to rename included StackScripts before we can import them
     os.rename("/root/ssinclude-3", "/root/pythonlib.py")
 except:
     pass
-
-os.system('apt-get -y update')
-os.system('apt-get -y install apt-transport-https ca-certificates curl software-properties-common')
-os.system('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
-os.system('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
-os.system('apt-get -y update')
-os.system('apt-get -y install docker-ce')
      
 import pythonlib
 
-def install():
+def system_install():
+    os.system('apt-get -y update')
+    os.system('apt-get -y install apt-transport-https ca-certificates curl software-properties-common python2.7 python-pip')
+    os.system('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+    os.system('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+    os.system('apt-get -y update')
+    os.system('apt-get -y install docker-ce docker-compose')
+
+def chords_install():
     """Install CHORDS."""
 
+    # Where is CHORDS installed?
+    chords_basedir = '/var/lib/chords/'
+    os.makedirs(chords_basedir)
+    os.chdir(chords_basedir)
+
     # Create .env
-    os.makedirs('/var/lib/chords/')
-    f = open('/var/lib/chords/.env', 'w')
+    f = open('.env', 'w')
     for k,v in os.environ.items():
         p = k + '=' + v + '\n'
         print(p)
         f.write(p)
     f.close()
 
+    # Fetch chords_control
+    file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/chords_control'
+    curl_cmd = 'curl -O -s ' + file_url
+    os.system(curl_cmd)
 
-    #logging support
-    
-    #shutil.rmtree(path)
-    #urllib.urlretrieve("https://wordpress.org/latest.tar.gz", "wordpress.tar.gz")
-    #tarball = tarfile.open("wordpress.tar.gz")
-    #tarball.extractall(os.path.dirname(path))
-    #tarball.close()
+    # Create chords.yml
+    os.system('/usr/bin/python2.7 ./chords_control --backwards')
 
-    #os.rename(os.path.dirname(path) + "/wordpress", path)
-    
-    # might be better off a part of the Apache StackScript in the future
-    #httpd_user = {
-    #    'debian': 'www-data',
-    #    'redhat': 'apache'
-    #}
-    
-    # Recursively set permissions for our web directory
-    #os.chown(path, pwd.getpwnam(httpd_user[pythonlib.distro['family']]).pw_uid, -1)
-    #for root, dirs, files in os.walk(path):  
-    #    for found_dirs in dirs:  
-    #        os.chown(os.path.join(root, found_dirs), pwd.getpwnam(httpd_user[pythonlib.distro['family']]).pw_uid, -1)
-    #    for found_files in files:
-    #        os.chown(os.path.join(root, found_files), pwd.getpwnam(httpd_user[pythonlib.distro['family']]).pw_uid, -1)
+    # Install CHORDS
+    os.system('/usr/bin/python2.7 ./chords_control --update')
 
+    # run CHORDS
+    os.system('/usr/bin/python2.7 ./chords_control --run')
 
 def main():
     """Install CHORDS on a basic Docker stack.
@@ -142,9 +135,10 @@ def main():
     #    db_root_password = False
     
     pythonlib.system_update()
-    #apache.httpd_install()
     
-    install()
+    system_install()
+    chords_install()
+
     #bashCommand = "firewall-cmd --zone=public --add-service=http --permanent && firewall-cmd --reload"
     #proc = subprocess.Popen(bashCommand, shell=True)
 
@@ -152,4 +146,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-    
+ 
