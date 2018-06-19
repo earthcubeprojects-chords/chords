@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 """
 EarthCube CHORDS StackScript
@@ -82,23 +82,28 @@ try: # we'll need to rename included StackScripts before we can import them
 except:
     pass
 
-def os_call(cmd):
-    print(cmd)
-    os.system(cmd)
-
-os_call('apt-get update')
-os_call('apt-get install apt-transport-https ca-certificates curl software-properties-common')
-os_call('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
-os_call('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
-os_call('apt-get updateos.system')
-os_call('apt-get update')
-os_call('apt-get install docker-ce')
-os_call('docker run hello-world')
+os.system('apt-get -y update')
+os.system('apt-get -y install apt-transport-https ca-certificates curl software-properties-common')
+os.system('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+os.system('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+os.system('apt-get -y update')
+os.system('apt-get -y install docker-ce')
      
 import pythonlib
 
 def install():
     """Install CHORDS."""
+
+    # Create .env
+    os.makedirs('/var/lib/chords/')
+    f = open('/var/lib/chords/.env', 'w')
+    for k,v in os.environ.items():
+        p = k + '=' + v + '\n'
+        print(p)
+        f.write(p)
+    f.close()
+
+
     #logging support
     
     #shutil.rmtree(path)
@@ -147,3 +152,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+    
