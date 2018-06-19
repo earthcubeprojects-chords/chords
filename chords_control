@@ -631,9 +631,9 @@ class Docker:
         for p in ps_result:
             p = p.strip()
             if p != '':
-            	if not re.search("WARNING", p):
-                	p = '{' + p + '}'
-                	containers.append(json.loads(p))
+                if not re.search("WARNING", p):
+                    p = '{' + p + '}'
+                    containers.append(json.loads(p))
         
         # Convert the json unicode to bytes
         return byteify(containers)
