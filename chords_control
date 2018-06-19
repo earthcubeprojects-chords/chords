@@ -362,8 +362,7 @@ class ChordsConfig(OrderedDict):
                 if l[0] != "#":
                     tokens = l.split(":")
                     if len(tokens) != 2:
-                        print "Error at line", i, "<" + l + ">"
-                        sys.exit(1)
+                        print "Ambiguous value in line", i, "<" + l + ">"
                     items[tokens[0].strip()] = tokens[1].strip()
             i = i + 1
 
