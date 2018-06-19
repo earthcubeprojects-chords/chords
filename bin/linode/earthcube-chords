@@ -88,8 +88,11 @@ def chords_install():
         f.write(p)
     f.close()
 
-    # Fetch chords_control
+    # Fetch chords_control and docker-compose.yml
     file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/chords_control'
+    curl_cmd = 'curl -O -s ' + file_url
+    os.system(curl_cmd)
+    file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/docker-compose.yml'
     curl_cmd = 'curl -O -s ' + file_url
     os.system(curl_cmd)
 
@@ -106,24 +109,13 @@ def main():
     """Install CHORDS on a basic Docker stack.
     
     """
-    # add logging support
     pythonlib.init()
-    
-    #if os.environ['DB_ROOT_PASSWORD'] != "":
-    #    db_root_password = os.environ['DB_ROOT_PASSWORD']
-    #else:
-    #    db_root_password = False
-    
     pythonlib.system_update()
     
     system_install()
     chords_install()
 
-    #bashCommand = "firewall-cmd --zone=public --add-service=http --permanent && firewall-cmd --reload"
-    #proc = subprocess.Popen(bashCommand, shell=True)
-
     pythonlib.end()
 
 if __name__ == "__main__":
     sys.exit(main())
-    
