@@ -32,9 +32,9 @@ StackScript User-Defined Variables (UDF):
     <UDF name="DB_RETENTION"          default="inf" 
         label="The time series DATABASE RETENTION DURATION, e.g. 168h or 52w. Use 'inf' for permanent. "
         "This value can be changed on successive restarts of a portal. Note: making it shorter will trim the existing time series database."/>
-    <UDF name="DOCKER_TAG"            default="latest" 
+    <UDF name="DOCKER_TAG"            oneof="latest,development" 
         label="The VERSION TAG of the desired CHORDS release." />
-    <UDF name="GIT_BRANCH"            default="master" 
+    <UDF name="GIT_BRANCH"            oneof="master,development" 
         label="The GIT BRANCH where the docker-compose recipe will be fetched. Use 'master' unless you have a valid reason to choose otherwise."/>
     <UDF name="CHORDS_HTTP_PORT"      default="80" 
          label="CHORDS HTTP port. (Typically only changed if there are port conflicts or firewall restrictions)."/>
@@ -119,3 +119,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+    
