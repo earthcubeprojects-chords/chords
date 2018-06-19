@@ -64,6 +64,12 @@ except:
      
 import pythonlib
 
+# Where is CHORDS installed?
+chords_basedir = '/var/lib/chords/'
+# Source for the systemd service definition. NOTE: assumes that master is always up to date.
+chords_service_url = 'https://github.com/NCAR/chords/raw/master/bin/chords_service/chords.service'
+
+
 def system_install():
     os.system('apt-get -y update')
     os.system('apt-get -y install apt-transport-https ca-certificates curl software-properties-common python2.7 python-pip')
@@ -72,12 +78,20 @@ def system_install():
     os.system('apt-get -y update')
     os.system('apt-get -y install docker-ce docker-compose')
 
+def service_install():
+    # The service file thinks that docker-compose is in /usr/local/bin.
+    if not os.path.isfile('/usr/local/bin/docker-compose'):
+        os.chdir('/usr/local/bin')
+        os.system('ln -s /usr/bin/docker-compose')
+
+    os.chdir(chords_basedir)
+    os.system('curl -O -s ' + chords_service_url)
+    os.system('systemctl enable /var/lib/chords/chords.service')
+    os.system('systemctl daemon-reload')
+    
 def chords_install():
     """Install CHORDS."""
 
-    # Where is CHORDS installed?
-    chords_basedir = '/var/lib/chords/'
-    os.makedirs(chords_basedir)
     os.chdir(chords_basedir)
 
     # Create .env
@@ -102,8 +116,8 @@ def chords_install():
     # Install CHORDS
     os.system('/usr/bin/python2.7 ./chords_control --update')
 
-    # run CHORDS
-    os.system('/usr/bin/python2.7 ./chords_control --run')
+def chords_start():
+    os.system('systemctl start  chords')
 
 def main():
     """Install CHORDS on a basic Docker stack.
@@ -112,8 +126,11 @@ def main():
     pythonlib.init()
     pythonlib.system_update()
     
+    os.makedirs(chords_basedir)
     system_install()
+    service_install()
     chords_install()
+    chords_start()
 
     pythonlib.end()
 
