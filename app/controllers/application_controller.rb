@@ -100,8 +100,8 @@ private
     respond_to do |format|
       format.html { redirect_to '/about', alert: "You don't have permission to access this page. Do you need to sign in?" }
       format.sensorml { head :forbidden, content_type: 'text/sensorml' }
-      format.json { head :forbidden, content_type: 'text/json' }
-      format.jsf { head :forbidden, content_type: 'text/jsf' }
+      format.json { head :forbidden, content_type: 'application/json' }
+      format.geojson { head :forbidden, content_type: 'application/json' }
       format.js { head :forbidden, content_type: 'text/js' }
       format.csv { head :forbidden, content_type: 'text/csv' }
       format.xml { head :forbidden, content_type: 'text/xml' }

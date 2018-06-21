@@ -106,15 +106,13 @@ class InstrumentsController < ApplicationController
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
 
-    if ['csv', 'xml', 'json', 'jsf', 'sensorml'].include?(params[:format])
+    if ['csv', 'xml', 'json', 'geojson', 'sensorml'].include?(params[:format])
       authorize! :download, @instrument
     else
       authorize! :read, @instrument
     end
 
-    @last_url = InstrumentsHelper.sanitize_url( !@profile.secure_administration,
-                                                !(current_user && (can? :create, :measurement)),
-                                                GetLastUrl.call(TsPoint, @instrument.id) )
+    @last_url = InstrumentsHelper.sanitize_url(GetLastUrl.call(TsPoint, @instrument.id))
 
     metadata = { "Project": @profile.project,
                  "Site": @instrument.site.name,
@@ -175,12 +173,12 @@ class InstrumentsController < ApplicationController
       end
 
       format.json do
-        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
+        render json: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
       end
 
-      format.jsf do
+      format.geojson do
         ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-        send_data ts_json, filename: file_root+'.json'
+        send_data ts_json, filename: file_root + '.geojson'
       end
 
       format.xml do
