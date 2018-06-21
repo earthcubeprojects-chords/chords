@@ -112,9 +112,7 @@ class InstrumentsController < ApplicationController
       authorize! :read, @instrument
     end
 
-    @last_url = InstrumentsHelper.sanitize_url( !@profile.secure_administration,
-                                                !(current_user && (can? :create, :measurement)),
-                                                GetLastUrl.call(TsPoint, @instrument.id) )
+    @last_url = InstrumentsHelper.sanitize_url(GetLastUrl.call(TsPoint, @instrument.id))
 
     metadata = { "Project": @profile.project,
                  "Site": @instrument.site.name,
