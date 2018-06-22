@@ -76,10 +76,8 @@ class Ability
     can :read, :all
 
     can :geo, Site
-    can :sites_json, Site
-    can :instruments_json, Site
-
-    can :site_instruments, Site
+    can :map_markers_geojson, Site
+    can :map_balloon_json, Site
 
     can :live, Instrument
 

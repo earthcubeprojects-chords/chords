@@ -40,18 +40,19 @@ class SitesController < ApplicationController
   #   }
   # ]
   # }
-  def sites_json
+  def map_markers_geojson
     # loop through all sites
     features = []
+
     json_data = @sites.each do |site|
       # determine whether site is active (ie. all instruments are active)
-      statusBool = (site.instruments.select{|i| i.is_receiving_data == false}.length == 0)
+      is_receiving = (site.instruments.select{|i| i.is_receiving_data == false}.length == 0)
 
       geometry = {type: "Point", coordinates: [site.lon, site.lat]}
-      properties = {name: site.name, url: sites_url + '/' + site.id.to_s, status: statusBool}
+      properties = {name: site.name, url: site_url(site), status: is_receiving}
 
       feature = {type: "Feature", geometry: geometry, properties: properties}
-      features.push(feature)
+      features << feature
     end
 
     sites_geojson = {type: "FeatureCollection", features: features}.to_json
@@ -61,15 +62,16 @@ class SitesController < ApplicationController
 
   ## generate json for particular site's instruments, format:
   # [{"name": "Instrument 1", "status": true, "url": "asdfasdf"}, {"name": "Instrument 2", "status": true, "url": "asdfasdf"}]
-  def instruments_json
+  def map_balloon_json
     # loop through all instruments of particular site
-    instJSON = []
+    instrument_json = []
+
     @site.instruments.each do |instrument|
       inst = {name: instrument.name, status: instrument.is_receiving_data, url: instrument_url}
-      instJSON.push(inst)
+      instrument_json << inst
     end
 
-    render json: instJSON.to_json
+    render json: instrument_json.to_json
   end
 
   def create
