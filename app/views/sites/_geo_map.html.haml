@@ -72,7 +72,7 @@
       onEachFeature: function(feature, layer) {
         var siteName = feature.properties.name;
         var siteURL = feature.properties.url;
-        var dataURL = feature.properties.url + '/instruments_json';
+        var dataURL = feature.properties.url + '/map_balloon_json';
         // add click event listener
         layer.on('click', function(e) {
           map.setView(e.target.getLatLng(), 12);
@@ -150,14 +150,14 @@
 
 
   // add initial markers
-  $.getJSON("#{sites_json_sites_url}", function (data) {
+  $.getJSON("#{map_markers_geojson_sites_url}", function (data) {
     markersLayer = plotMarkers(data, siteMap);
     prevJSON = data;
   })
 
   // interval to refresh data source every 5 minutes
   setInterval(function() {
-    $.getJSON("#{sites_json_sites_url}", function (data) {
+    $.getJSON("#{map_markers_geojson_sites_url}", function (data) {
       // store recently retrieved JSON
       recentJSON = data;
       // if the JSON has changed, remove current markers and replot
