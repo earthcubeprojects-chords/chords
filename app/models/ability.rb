@@ -75,7 +75,7 @@ class Ability
   def registered_user(user)
     can :read, :all
 
-    can :geo, Site
+    can :map, Site
     can :map_markers_geojson, Site
     can :map_balloon_json, Site
 

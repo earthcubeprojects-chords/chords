@@ -16,7 +16,7 @@ class SitesController < ApplicationController
   def edit
   end
 
-  def geo
+  def map
   end
 
   ## generates json for all sites, format:
@@ -41,7 +41,6 @@ class SitesController < ApplicationController
   # ]
   # }
   def map_markers_geojson
-    # loop through all sites
     features = []
 
     json_data = @sites.each do |site|
@@ -63,7 +62,6 @@ class SitesController < ApplicationController
   ## generate json for particular site's instruments, format:
   # [{"name": "Instrument 1", "status": true, "url": "asdfasdf"}, {"name": "Instrument 2", "status": true, "url": "asdfasdf"}]
   def map_balloon_json
-    # loop through all instruments of particular site
     instrument_json = []
 
     @site.instruments.each do |instrument|
