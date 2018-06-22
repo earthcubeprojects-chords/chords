@@ -85,7 +85,7 @@ Rails.application.routes.draw do
 
   resources :sites do
     collection do
-      get :geo
+      get :map
       get :map_markers_geojson
     end
 

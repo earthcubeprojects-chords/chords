@@ -26,8 +26,8 @@
           - if can? :read, Instrument
             %li= link_to 'Instruments', instruments_path
 
-          - if can? :geo, Site
-            %li= link_to 'Geo', geo_sites_path
+          - if can? :map, Site
+            %li= link_to 'Map', map_sites_path
 
           - if can? :read, Instrument
             %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"

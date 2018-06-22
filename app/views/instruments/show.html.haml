@@ -1,6 +1,6 @@
-- # Create the query string for submitting measurements for all variables
-.last_url
-  = @last_url
+- if @last_url.presence
+  .last_url
+    = @last_url
 .instrument_name
   - if @instrument.is_receiving_data
     = image_tag('button_green_50.png', size:"16")
