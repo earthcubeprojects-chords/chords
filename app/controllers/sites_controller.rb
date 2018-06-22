@@ -16,47 +16,62 @@ class SitesController < ApplicationController
   def edit
   end
 
-  # TODO: Clean this up and consider changing to another map framework
   def geo
-    @sites = Site.accessible_by(current_ability)
+  end
 
-    # The marker generation really should be done in the page javascript, so that
-    # the marker can be dynamcally manipulated on the client side.
-    @site_markers = Gmaps4rails.build_markers(@sites) do |site, marker|
-      # Create site link
-      site_html = ""
-      site_html += ActionController::Base.helpers.content_tag(:h4,
-        (ActionController::Base.helpers.link_to(site.name ||= 'Name?',site_path(site))).html_safe).html_safe
+  ## generates json for all sites, format:
+  # {
+  # "type": "FeatureCollection",
+  # "features": [
+  #   {
+  #     "type": "Feature",
+  #     "geometry": {
+  #       "type": "Point",
+  #       "coordinates": [
+  #         "-105.245923",
+  #         "39.971957"
+  #       ]
+  #     },
+  #     "properties": {
+  #       "name": "Test Site",
+  #       "url": "example.chordsrt.com/sites/1",
+  #       "status": true
+  #     }
+  #   }
+  # ]
+  # }
+  def map_markers_geojson
+    # loop through all sites
+    features = []
 
-      # Collect a status image and link for each instrument at this site
-      status_and_links = site.instruments.collect do |inst|
-        image_html = inst.is_receiving_data ?
-          ActionController::Base.helpers.image_tag('button_green_50.png', :size =>'16') : ActionController::Base.helpers.image_tag('button_red_50.png', :size =>'16')
-        [image_html.html_safe, ActionController::Base.helpers.link_to(inst.name, instrument_path(inst)).html_safe]
-      end
+    json_data = @sites.each do |site|
+      # determine whether site is active (ie. all instruments are active)
+      is_receiving = (site.instruments.select{|i| i.is_receiving_data == false}.length == 0)
 
-      # Build instrument table
-      # Instrument status display is commented out since it does not dynamically update.
-      rows_html = ""
-      rows_html += ActionController::Base.helpers.content_tag(:tr,
-      #  ActionController::Base.helpers.content_tag(:th, 'Status', :style =>"padding-right:10px;").html_safe +
-        ActionController::Base.helpers.content_tag(:th, 'Instruments').html_safe
-      ).html_safe
-      status_and_links.each do |x|
-        rows_html += ActionController::Base.helpers.content_tag(:tr,
-        #   ActionController::Base.helpers.content_tag(:td, x[0]).html_safe +
-          ActionController::Base.helpers.content_tag(:td, x[1]).html_safe
-         ).html_safe
-      end
-      inst_table_html = ActionController::Base.helpers.content_tag(:table, rows_html.html_safe).html_safe
+      geometry = {type: "Point", coordinates: [site.lon, site.lat]}
+      properties = {name: site.name, url: site_url(site), status: is_receiving}
 
-      info_window_html = site_html + inst_table_html
-
-      marker.infowindow(info_window_html)
-      marker.lat site.lat
-      marker.lng site.lon
-      marker.title site.name
+      feature = {type: "Feature", geometry: geometry, properties: properties}
+      features << feature
     end
+
+    sites_geojson = {type: "FeatureCollection", features: features}.to_json
+
+    render json: sites_geojson
+  end
+
+  ## generate json for particular site's instruments, format:
+  # [{"name": "Instrument 1", "status": true, "url": "asdfasdf"}, {"name": "Instrument 2", "status": true, "url": "asdfasdf"}]
+  def map_balloon_json
+    # loop through all instruments of particular site
+    instrument_json = []
+
+    @site.instruments.each do |instrument|
+      inst = {name: instrument.name, status: instrument.is_receiving_data, url: instrument_url}
+      instrument_json << inst
+    end
+
+    render json: instrument_json.to_json
   end
 
   def create
