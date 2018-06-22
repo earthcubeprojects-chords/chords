@@ -30,9 +30,11 @@ class MeasurementsController < ApplicationController
 
     if !auth
       respond_to do |format|
-        format.json { render json: 'FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.', status: :unauthorized }
+        format.json { render json: {errors: ['FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.']}, status: :unauthorized }
         format.html { render text: 'FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.', status: :unauthorized }
       end
+
+      return
     end
 
     # some CHORDS users had an extra '0' on the beginnig of their instrument_id.
@@ -48,7 +50,8 @@ class MeasurementsController < ApplicationController
       end
 
       # Save the url that invoked us
-      Instrument.update(cleansed_instrument_id, :last_url => request.original_url)
+      Instrument.update(cleansed_instrument_id,
+                        last_url: InstrumentsHelper.sanitize_url(request.original_url.html_safe))
 
       # Create an array containing the names of legitimate variable names
       measured_at_parameters = Array.new
@@ -94,11 +97,12 @@ class MeasurementsController < ApplicationController
 
     respond_to do |format|
       if save_ok
-        format.html { render text: 'Measurement created successfully' }
-        format.json { render text: "OK" }
+        format.html { render text: 'Measurement created successfully', status: :ok }
+        format.json { render json: {errors: [], success: true, messages: ['OK']}, status: :ok }
       else
-        format.json { render text: "FAIL" }
-        format.html { render text: "Measurement could not be created. " + create_err_msg, status: :bad_request }
+        error_msg = 'Measurement could not be created. ' + create_err_msg
+        format.json { render json: {errors: [error_msg], success: false, messages: []}, status: :bad_request }
+        format.html { render text: error_msg, status: :bad_request }
       end
     end
   end
