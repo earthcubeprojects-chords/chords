@@ -75,7 +75,7 @@
         var dataURL = feature.properties.url + '/map_balloon_json';
         // add click event listener
         layer.on('click', function(e) {
-          map.setView(e.target.getLatLng(), 8);
+          map.setView(e.target.getLatLng(), map.getZoom());
           populateMarker(e, dataURL, siteName, siteURL);
         });
 
