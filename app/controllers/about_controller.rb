@@ -6,6 +6,7 @@ class AboutController < ApplicationController
 
     notavailmsg = "unknown"
     @profile = Profile.first
+    @json_ld_data = LinkedDatum.first.try(:to_json_ld)
   end
 
   # GET about/data_urls

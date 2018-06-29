@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :dashboard
   resources :data
   resources :influxdb_tags
+  resources :linked_data, only: [:index, :edit, :update, :show]
   resources :measured_properties
   resources :site_types
   resources :topic_categories
