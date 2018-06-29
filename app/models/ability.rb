@@ -90,6 +90,7 @@ class Ability
     end
 
     cannot :read, Profile
+    cannot :read, LinkedDatum
   end
 
   def data_downloader(user)

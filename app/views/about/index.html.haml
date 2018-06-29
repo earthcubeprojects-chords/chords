@@ -51,7 +51,7 @@
   %a{:href=>"http://data.datacite.org/10.5065/D6V1236Q", :target => "_blank"} DataCite reference
   to view the relevant DOI metadata fields.
 %p
-  We request that researchers cite 
+  We request that researchers cite
   CHORDS usage in any relevant publication or other context as follows:
 .div.well
   = render 'doi_citation'
@@ -80,23 +80,23 @@
 %h2
   Sponsor Acknowledgements
 %p
-  CHORDS is being developed for the National Science Foundation’s EarthCube program under grants 1639750, 
+  CHORDS is being developed for the National Science Foundation’s EarthCube program under grants 1639750,
   1639720, 1639640, 1639570 and 1639554.
 .row
-  .hidden-xs.col-sm-4 
+  .hidden-xs.col-sm-4
   .hidden-xs.col-sm-2= link_to image_tag('earthcube_full_50.png', :class=>"img-responsive"), "http://earthcube.org/",      :target => "_blank"
   .hidden-xs.col-sm-2= link_to image_tag('CHORDS_logo_50.png',    :class=>"img-responsive"), "http://chordsrt.com",        :target => "_blank"
-  .hidden-xs.col-sm-4 
+  .hidden-xs.col-sm-4
 %br/
 .row
-  .hidden-xs.col-sm-1  
+  .hidden-xs.col-sm-1
   .hidden-xs.col-sm-2= link_to image_tag('NCAR_50.png',           :class=>"img-responsive"), "https://www.ncar.ucar.edu",  :target => "_blank"
   .hidden-xs.col-sm-2= link_to image_tag('UMich_50.png',          :class=>"img-responsive"), "https://www.umich.edu/",     :target => "_blank"
   .hidden-xs.col-sm-2= link_to image_tag('CSU_50.png',            :class=>"img-responsive"), "https://www.colostate.edu/", :target => "_blank"
   .hidden-xs.col-sm-2= link_to image_tag('VTech_50.png',          :class=>"img-responsive"), "https://www.vt.edu/",        :target => "_blank"
   .hidden-xs.col-sm-2= link_to image_tag('UAH_50.png',            :class=>"img-responsive"), "http://www.uah.edu/",        :target => "_blank"
-  .hidden-xs.col-sm-1  
+  .hidden-xs.col-sm-1
 %br/
 
- 
- 
+- if @json_ld_data
+  = render 'json_ld_dataset'

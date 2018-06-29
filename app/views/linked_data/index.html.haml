@@ -1,0 +1,34 @@
+%h2 JSON-LD Configuration
+
+%p
+  JSON-LD helps data discovery by providing a uniform metadata interface for search engines to parse, such as
+  EarthCube's Project 418. Refer to
+  = link_to 'https://www.earthcube.org/group/project-418', 'https://www.earthcube.org/group/project-418'
+  for more information.
+
+%br/
+
+%p
+  %b Name:
+  = @linked_datum.name
+%p
+  %b Description:
+  = @linked_datum.description
+%p
+  %b Keywords:
+  = @linked_datum.keywords
+%p
+  %b URL:
+  = @linked_datum.dataset_url
+%p
+  %b License:
+  = @linked_datum.license
+%p
+  %b DOI:
+  = @linked_datum.doi
+
+%br
+- if can? :edit, LinkedDatum
+  = button_to 'Edit', edit_linked_datum_path(@linked_datum), method: :get
+%br
+= link_to 'Back', profiles_path

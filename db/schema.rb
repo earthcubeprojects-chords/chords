@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180518160952) do
+ActiveRecord::Schema.define(version: 20180625142707) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 20180518160952) do
   end
 
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
+
+  create_table "linked_data", force: :cascade do |t|
+    t.text     "name",        limit: 65535, null: false
+    t.text     "description", limit: 65535, null: false
+    t.text     "keywords",    limit: 65535, null: false
+    t.string   "dataset_url", limit: 255
+    t.string   "license",     limit: 255
+    t.string   "doi",         limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
 
   create_table "measured_properties", force: :cascade do |t|
     t.string   "name",       limit: 255
