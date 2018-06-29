@@ -65,7 +65,7 @@ class SitesController < ApplicationController
     instrument_json = []
 
     @site.instruments.each do |instrument|
-      inst = {name: instrument.name, status: instrument.is_receiving_data, url: instrument_url}
+      inst = {name: instrument.name, status: instrument.is_receiving_data, url: instrument_url(instrument)}
       instrument_json << inst
     end
 
