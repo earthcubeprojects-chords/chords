@@ -75,7 +75,7 @@
         var dataURL = feature.properties.url + '/map_balloon_json';
         // add click event listener
         layer.on('click', function(e) {
-          map.setView(e.target.getLatLng(), 12);
+          map.setView(e.target.getLatLng(), map.getZoom());
           populateMarker(e, dataURL, siteName, siteURL);
         });
 
@@ -99,11 +99,6 @@
       // otherwise, center map so that all markers displayed
       map.fitBounds(mLayer.getBounds().pad(0.5));
     }
-
-    // if popup closed, reset view/zoom
-    map.on('popupclose', function(e) {
-      map.fitBounds(mLayer.getBounds().pad(0.5));
-    })
 
     return(mLayer);
   }
