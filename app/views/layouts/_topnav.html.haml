@@ -13,25 +13,37 @@
             / li><haml_loud> current_user.email </haml_loud></li
           %li= link_to 'About', '/about'
           %li= link_to 'Help', 'http://chordsrt.com', :target => "_blank"
-          %li= link_to 'Dashboard', '/dashboard'
-          %li= link_to 'Data', '/data'
-          %li= link_to 'Sites', sites_path
-          %li= link_to 'Instruments', instruments_path
-          %li= link_to 'Geo', sites_geo_path
-          %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"
-          
+
+          - if can? :read, :dashboard
+            %li= link_to 'Dashboard', '/dashboard'
+
+          - if can? :download, Instrument
+            %li= link_to 'Data', '/data'
+
+          - if can? :read, Site
+            %li= link_to 'Sites', sites_path
+
+          - if can? :read, Instrument
+            %li= link_to 'Instruments', instruments_path
+
+          - if can? :map, Site
+            %li= link_to 'Map', map_sites_path
+
+          - if can? :read, Instrument
+            %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"
+
         %ul.nav.navbar-nav.navbar-right
           - if can? :manage, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
 
-            - if can? :manage, Archive
-              %li= link_to 'Archive', '/archives'
-
+          - if can? :manage, Archive
+            %li= link_to 'Archive', '/archives'
 
           - if can? :manage, Profile
-            %li= link_to 'Configure', '/profiles'
-            %li= link_to 'Users', '/users'
+            %li= link_to 'Configure', profiles_path
+
           - if user_signed_in?
-            %li= link_to 'Sign Out', '/users/sign_out'
+            %li= link_to 'Users', users_path
+            %li= link_to 'Sign Out', destroy_user_session_path
           - else
-            %li= link_to 'Sign In', '/users/sign_in'
+            %li= link_to 'Sign In', new_user_session_path

@@ -1,47 +1,29 @@
 class ArchiveJobsController < ApplicationController
-  before_action :set_archive_job, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource except: :delete_completed_jobs
 
-
-
-  def delete_completed_jobs    
-    authorize! :manage, Archive
+  def delete_completed_jobs
+    authorize! :destroy, ArchiveJob
 
     ArchiveJob.where(:status => 'success').destroy_all
-    
+
     flash[:notice] = "All successful archive jobs have been removed."
-    
-    redirect_to archive_jobs_path  
+
+    redirect_to archive_jobs_path
   end
 
-  # GET /archive_jobs
-  # GET /archive_jobs.json
   def index
-    @archive_jobs = ArchiveJob.all
   end
 
-  # GET /archive_jobs/1
-  # GET /archive_jobs/1.json
   def show
   end
 
-  # GET /archive_jobs/new
   def new
-    authorize! :manage, Archive
-
-    @archive_job = ArchiveJob.new
   end
 
-  # GET /archive_jobs/1/edit
   def edit
-    authorize! :manage, Archive
-
   end
 
-  # POST /archive_jobs
-  # POST /archive_jobs.json
   def create
-    authorize! :manage, Archive
-    
     @archive_job = ArchiveJob.new(archive_job_params)
 
     respond_to do |format|
@@ -55,42 +37,33 @@ class ArchiveJobsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /archive_jobs/1
-  # PATCH/PUT /archive_jobs/1.json
   def update
-    authorize! :manage, Archive
-
     respond_to do |format|
       if @archive_job.update(archive_job_params)
         format.html { redirect_to @archive_job, notice: 'Archive job was successfully updated.' }
         format.json { render :show, status: :ok, location: @archive_job }
       else
-        format.html { render :edit }
+        format.html { render :edit, alert: 'Could not update archive job' }
         format.json { render json: @archive_job.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /archive_jobs/1
-  # DELETE /archive_jobs/1.json
   def destroy
-    authorize! :manage, Archive
-
-    @archive_job.destroy
     respond_to do |format|
-      format.html { redirect_to archive_jobs_url, notice: 'Archive job was successfully destroyed.' }
-      format.json { head :no_content }
+      if @archive_job.destroy
+        format.html { redirect_to archive_jobs_url, notice: 'Archive job was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { render :show, alert: 'Could not destroy archive job' }
+        format.json { render json: @archive_job.errors, status: :bad_request }
+      end
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_archive_job
-      @archive_job = ArchiveJob.find(params[:id])
-    end
+private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def archive_job_params
-      params.require(:archive_job).permit(:archive_name, :start_at, :end_at, :status, :message)
-    end
+  def archive_job_params
+    params.require(:archive_job).permit(:archive_name, :start_at, :end_at, :status, :message)
+  end
 end

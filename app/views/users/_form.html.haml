@@ -9,7 +9,48 @@
           %li= message
   .field
     = f.label :email
-    %br/
-    = f.text_field :email
+    %p= f.text_field :email, style: "width: 30%"
+
+  .field
+    = f.label :api_key, 'API Key'
+    - if !@user.api_key.nil?
+      - if @user == current_user
+        = @user.api_key
+      - elsif !@user.api_key.nil?
+        Yes
+    - else
+      n/a
+    %p= link_to 'Renew API Key', user_assign_api_key_path(@user), method: :get, data: { confirm: 'Are you sure you want to renew the API Key?' }
+
+  - if current_user.role?(:admin)
+    %br
+
+    .field
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:admin)}, 'admin', nil
+      = f.label :roles, 'Admin'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:site_config)}, 'site_config', nil
+      = f.label :roles, 'Site Config'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:measurements)}, 'measurements', nil
+      = f.label :roles, 'Measurements'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:downloader)}, 'downloader', nil
+      = f.label :roles, 'Downloader'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:registered_user)}, 'registered_user', nil
+      = f.label :roles, 'Registered User'
+
+      %br
+
+    - if @user == current_user
+      %p= link_to "Change your password", edit_user_registration_path
   .actions
     = f.submit
+
+-if can? :destroy, @user
+  %p= button_to 'Delete User', @user, method: :delete, data: { confirm: "Are you sure you want to delete user: #{@user.email}?" }

@@ -4,18 +4,18 @@
 %div
   %strong Data ingest/fetch
   %br
-  = link_to 'Data URLs', about_data_urls_path(instrument_id: @instrument.id)  
+  = link_to 'Data URLs', data_urls_about_index_path(instrument_id: @instrument.id)
 
 %div
   %strong
     Download current day as
   %br
   \#{link_to("XML",     instrument_url( :format => 'xml')  )},
-  \#{link_to("GeoJSON", instrument_url( :format => 'jsf') )},
+  \#{link_to("GeoJSON", instrument_url( :format => 'geojson') )},
   \#{link_to("GeoCSV",  instrument_url( :format => 'csv')  )}
 
 %div
-  %strong 
+  %strong
     Instrument Description
   %br
   #{link_to("SensorML", instrument_url( :format => 'sensorml') )}

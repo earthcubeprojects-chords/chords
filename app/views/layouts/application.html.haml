@@ -6,9 +6,10 @@
     %meta{:content => "width=device-width, initial-scale=1.0, maximum-scale=1.0", :name => "viewport"}/
     %title= @profile.page_title
     %meta{:content => "#{content_for?(:description) ? yield(:description) : "CHORDS Portal"}", :name => "description"}/
+    = favicon_link_tag 'CHORDS_logo_144.png', type: 'image/png', rel: 'apple-touch-icon'
+    = favicon_link_tag 'CHORDS_logo_144.png', type: 'image/png', rel: 'icon', sizes:"144x144"
     = stylesheet_link_tag    'application', media: 'all'
     = javascript_include_tag 'application'
-    = favicon_link_tag 'CHORDS_logo_50.png'
     = csrf_meta_tags
     = stylesheet_link_tag 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css', 
       integrity:'sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7', crossorigin:'anonymous'

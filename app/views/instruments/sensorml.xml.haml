@@ -26,8 +26,8 @@
                       %uom{"xlink:href" => "http://www.opengis.net/def/uom/ISO-8601/0/Gregorian"}
                   - @instrument.vars.each do |variable|
                     %field{:name => "#{variable.name}"}
-                      %quantity{:definition => "#{variable.measured_property.url}"}
-                        %uom{:code => "#{variable.unit.name}"}
+                      %quantity{:definition => "#{variable.measured_property.try(:url)}"}
+                        %uom{:code => "#{variable.unit.try(:name)}"}
               / encoding description
               %encoding
                 %textencoding{:blockseparator => " ", :tokenseparator => ","}

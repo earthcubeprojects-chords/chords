@@ -1,24 +1,32 @@
 %h3 User
 %p
-  Email: #{@user.email if @user.email}
 .table-responsive
-  %table{:align => "center"}
+  %table
     %tr
-      %td
+      %td{style: "width: 30%"}
         %strong Email
-      %td= best_in_place @user, :email, :as => :input
+      %td #{@user.email if @user.email}
     %tr
       %td
-        %strong Is site administrator?
       %td
-        = best_in_place @user, :is_administrator, as: :checkbox, collection: {false: "No", true: "Yes"}
     %tr
       %td
-        %strong May view data?
-      %td
-        = best_in_place @user, :is_data_viewer, as: :checkbox, collection: {false: "No", true: "Yes"}
+        %strong Roles
+      %td= @user.roles_pretty_printed
     %tr
       %td
-        %strong May download data?
+        %strong API Key
       %td
-        = best_in_place @user, :is_data_downloader, as: :checkbox, collection: {false: "No", true: "Yes"}
+        - if !@user.api_key.nil?
+          - if @user == current_user
+            = @user.api_key
+          - elsif !@user.api_key.nil?
+            Yes
+        - else
+          n/a
+
+%p
+-if can? :edit, @user
+  %p= button_to 'Edit User', edit_user_path(@user), method: :get
+
+%p= link_to 'Back', users_path

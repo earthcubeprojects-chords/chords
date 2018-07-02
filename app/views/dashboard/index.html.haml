@@ -36,8 +36,11 @@
         - else
           = image_tag('button_red_50.png', size:"16")
         = link_to(instrument.name+" (#{instrument.id})", instrument_url(:id => instrument.id) )
-.last_url
-  = @metrics["last_url"]
+
+- if @metrics['last_url'].presence
+  %br/
+  .last_url
+    = @metrics['last_url']
 %br/
 = render 'samples_per_minute'
 = render 'samples_per_hour'

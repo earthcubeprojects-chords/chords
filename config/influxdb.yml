@@ -11,7 +11,7 @@ development:
   host: localhost
   username: admin
   password: chords_ec_demo
-
+  
 test:
   <<: *default
   database: chords_ts_test

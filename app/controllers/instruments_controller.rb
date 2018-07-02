@@ -1,16 +1,13 @@
 class InstrumentsController < ApplicationController
-  before_action :set_instrument, only: [:show, :edit, :update, :destroy, :live]
+  load_and_authorize_resource except: :show
+
+  before_action :set_instrument, only: [:show, :live]
 
  # GET /instruments/1/live?var=varshortname&after=time
  # Return measurements and metadata for a given instrument, var and time period.
  # Limit the number of points returned to the instrument's display_points value.
   def live
-    # Authorize access to the measurements
-    authorize! :view, Measurement
-
-
     # Verify the parameters
-
     # convert the millisecond input to seconds since epoch
     if ((defined? params[:after]) && (params[:after].to_i != 0))
       start_time_ms = Time.strptime(params[:after], '%Q')
@@ -19,18 +16,15 @@ class InstrumentsController < ApplicationController
       start_time_ms = @instrument.point_time_in_ms("last") - eval(time_offset)
     end
 
-    # Initialze the return value
-    livedata = {
-      :points         => [],
-      :multivariable_points         => {},
-      :multivariable_names         => [],
-      :display_points => 0,
-      :refresh_msecs  => 1000
-      }
-
+    livedata = { points: [],
+                 multivariable_points: {},
+                 multivariable_names: [],
+                 display_points: 0,
+                 refresh_msecs: 1000
+               }
 
     livedata[:display_points] = @instrument.maximum_plot_points
-    livedata[:refresh_msecs]  = @instrument.refresh_rate_ms
+    livedata[:refresh_msecs] = @instrument.refresh_rate_ms
 
     # If the var parameter is set, then we build and return data for only this variable.
     if (params[:var])
@@ -55,51 +49,36 @@ class InstrumentsController < ApplicationController
         if live_points
           livedata[:multivariable_points][variable.shortname] = live_points
         end
-
-
       end
     end
 
-    # Convert to JSON
-    livedata_json = ActiveSupport::JSON.encode(livedata)
-
-    # Return result
-    render :json => livedata_json
+    render json: ActiveSupport::JSON.encode(livedata)
   end
 
 
   # GET instruments/simulator
   def simulator
-    authorize! :manage, Instrument
-
-    # Returns:
-    #  @instruments
-    #  @sites
-
-    @instruments = Instrument.all
-    @sites       = Site.all
+    @sites = Site.accessible_by(current_ability)
+    @instruments = Instrument.accessible_by(current_ability)
   end
 
   # GET /instruments/duplicate?instrument_id=1
+  # TODO: should be GET /instruments/[INSTRUMENT_ID]/duplicate?number_of_duplicates=[num_dups]
   def duplicate
+    old_instrument = Instrument.accessible_by(current_ability).find(params[:instrument_id])
+    num_dups = params[:number_of_duplicates].to_i
 
-    # Does it exist?
-    if (Instrument.exists?(params[:instrument_id]) && defined? params[:number_of_duplicates])
-      (1..params[:number_of_duplicates].to_i).each do
-
-        old_instrument = Instrument.find(params[:instrument_id])
-
-        authorize! :manage, old_instrument
-
+    if old_instrument && num_dups > 0
+      num_dups.times do
         # Make a copy
+        # TODO: note this is shallow copy...make sure that is valid in this context
+        #       should do this in a transaction as well
         new_instrument = old_instrument.dup
 
-        # Add"clone" to the name
         if !new_instrument.name.include? "clone"
           new_instrument.name = new_instrument.name + " clone"
         end
 
-        # Zero out the last url
         new_instrument.last_url = nil
 
         # Create duplicates of the vars
@@ -109,31 +88,17 @@ class InstrumentsController < ApplicationController
           new_instrument.vars << new_var
         end
 
-        # Save the new instrument
         new_instrument.save
-
       end
-
     end
 
     redirect_to instruments_path
   end
 
-  # GET /instruments
-  # GET /instruments.json
   def index
-    authorize! :view, Instrument
-
-    @instruments = Instrument.all
-    @sites = Site.all
-
-
+    @sites = Site.accessible_by(current_ability)
   end
 
-  # GET /instruments/1
-  # GET /instruments/1.csv
-  # GET /instruments/1.jsf
-  # GET /instruments/1.json
   def show
     # This method sets the following instance variables:
     #  @var_to_plot    - The variable currently being plotted
@@ -141,22 +106,18 @@ class InstrumentsController < ApplicationController
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
 
-    authorize! :view, Instrument
-    authorize! :download, @instrument if ["csv", "xml", "json", "jsf"].include?(params[:format])
+    if ['csv', 'xml', 'json', 'geojson', 'sensorml'].include?(params[:format])
+      authorize! :download, @instrument
+    else
+      authorize! :read, @instrument
+    end
 
-    # Get and sanitize the last_url
-    @last_url = InstrumentsHelper.sanitize_url(
-        !@profile.secure_administration,
-        !(current_user && (can? :manage, Measurement)),
-        GetLastUrl.call(TsPoint, @instrument.id))
+    @last_url = InstrumentsHelper.sanitize_url(GetLastUrl.call(TsPoint, @instrument.id))
 
-    # Get useful details.
-    metadata = {
-      "Project"     => @profile.project,
-      "Site"        => @instrument.site.name,
-      "Affiliation" => @profile.affiliation,
-      "Instrument"  => @instrument.name
-    }
+    metadata = { "Project": @profile.project,
+                 "Site": @instrument.site.name,
+                 "Affiliation": @profile.affiliation,
+                 "Instrument": @instrument.name }
 
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
@@ -165,26 +126,24 @@ class InstrumentsController < ApplicationController
     if params[:var_id]
       @var_to_plot = Var.find(params[:var_id])
     else
-      if ( defined? @instrument.vars.first.id)
+      if (defined? @instrument.vars.first.id)
         @var_to_plot = Var.find(@instrument.vars.first.id)
-      else
-        # No variable defined were found for this instrument.
-        # This leaves and @var_to_plot undefined.
       end
     end
 
     # Determine the time range. Default to the most recent day
-    end_time   = Time.now
+    end_time = Time.now
     start_time = end_time - 1.day
 
     if params.key?(:last)
       start_time = @instrument.point_time_in_ms("last")
-      end_time   = start_time
+      end_time = start_time
     else
       # See if we have the start and end parameters
       if params.key?(:start)
         start_time = Time.parse(params[:start])
       end
+
       if params.key?(:end)
         end_time = Time.parse(params[:end])
       end
@@ -197,8 +156,6 @@ class InstrumentsController < ApplicationController
     file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
     file_root = file_root.split.join
 
-
-    # Prepare result
     respond_to do |format|
       format.html
 
@@ -216,12 +173,12 @@ class InstrumentsController < ApplicationController
       end
 
       format.json do
-        render text: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
+        render json: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
       end
 
-      format.jsf do
+      format.geojson do
         ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-        send_data ts_json, filename: file_root+'.json'
+        send_data ts_json, filename: file_root + '.geojson'
       end
 
       format.xml do
@@ -230,25 +187,10 @@ class InstrumentsController < ApplicationController
     end
   end
 
-  # GET /instruments/new
   def new
-    authorize! :manage, Instrument
-
-    @instrument = Instrument.new
   end
 
-  # GET /instruments/1/edit
-  def edit
-    authorize! :manage, Instrument
-  end
-
-  # POST /instruments
-  # POST /instruments.json
   def create
-    authorize! :manage, Instrument
-
-    @instrument = Instrument.new(instrument_params)
-
     respond_to do |format|
       if @instrument.save
         format.html { redirect_to @instrument, notice: 'Instrument was successfully created.' }
@@ -260,11 +202,10 @@ class InstrumentsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /instruments/1
-  # PATCH/PUT /instruments/1.json
-  def update
-    authorize! :manage, Instrument
+  def edit
+  end
 
+  def update
     respond_to do |format|
       if @instrument.update(instrument_params)
         format.html { redirect_to @instrument, notice: 'Instrument was successfully updated.' }
@@ -276,31 +217,26 @@ class InstrumentsController < ApplicationController
     end
   end
 
-
-  # DELETE /instruments/1
-  # DELETE /instruments/1.json
   def destroy
-    authorize! :manage, Instrument
-
-    # Measurement.delete_all "instrument_id = #{@instrument.id}"
-
-    @instrument.destroy
     respond_to do |format|
-      format.html { redirect_to instruments_url, notice: 'Instrument was successfully destroyed.' }
-      format.json { head :no_content }
+      if @instrument.destroy
+        format.html { redirect_to instruments_url, notice: 'Instrument was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { render :show, alert: 'Instrument could not be destroyed!' }
+        format.json { render @instrument.errors, status: :bad_request }
+      end
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_instrument
-      @instrument = Instrument.find(params[:id])
-    end
+private
+  def set_instrument
+    # using a where.first clause prevents an exception being thrown if the instrument is not present or not visible to the user
+    @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def instrument_params
-      params.require(:instrument).permit(
-        :name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description, :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
-    end
-
+  def instrument_params
+    params.require(:instrument).permit(:name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description,
+                                       :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
+  end
 end

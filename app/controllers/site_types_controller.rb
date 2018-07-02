@@ -1,10 +1,9 @@
 class SiteTypesController < ApplicationController
+  load_and_authorize_resource
 
 	def index
-    @site_types = SiteType.all
   end
 
   def show
-  	@site_type = SiteType.find(params[:id])
   end
 end

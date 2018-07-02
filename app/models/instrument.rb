@@ -99,20 +99,6 @@ class Instrument < ActiveRecord::Base
     return refresh_rate_ms
   end
 
-  def data(count, parameter)
-    data = Array.new
-    measurements = Measurement.where("instrument_id = ? and parameter = ?", self.id, parameter).last(self.display_points)
-
-    measurements.each do |measurement|
-      t = Time.new(measurement.measured_at.year, measurement.measured_at.month, measurement.measured_at.day, measurement.measured_at.hour, measurement.measured_at.min, measurement.measured_at.sec, "+00:00")
-
-      x=((t.to_i) * 1000).to_s
-      data.push "[#{x}, #{measurement.value}]"
-    end
-
-    return data.join(', ')
-  end
-
   def influxdb_tags_hash
     influxdb_tags = Hash.new
 

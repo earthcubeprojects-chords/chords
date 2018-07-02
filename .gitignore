@@ -43,11 +43,16 @@ bower.json
 /.pydevproject
 /passenger.*
 vendor/ruby
+vendor/cache
 chords_env.sh
 
-# Docker .env environment variable file
-.env*
-/chords*.yml
+# Various generated files
+.env
+.env-*
+chords-*.yml
+docker-compose-*.yml
+chords_control-*
+chords.yml
 
 #archive configuration
 config/archive.yml

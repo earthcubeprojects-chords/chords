@@ -1,7 +1,7 @@
 %h4
   Instrument Metadata
   %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#metadata_configuration'} InfluxDB Tags
-  - if Archive.first.name == "CUAHSI"
+  - if Archive.first.try(:name) == "CUAHSI"
     %button{:class => 'btn btn-default btn-lg dropdown-toggle', :type => 'button', 'data-toggle' => 'collapse', 'data-target' => '#archive_configuration'} Archive Metadata
 
 %div{:id => 'metadata_configuration', :class => 'collapse'}
@@ -11,14 +11,14 @@
       Tags and values defined here will by inserted into the timeseries database for all measurements associated with this instrument.
       %br
       %br
-    %div  
+    %div
       .row-fluid
         .col-sm-1
           = form_for :influxdb_tag, url: influxdb_tags_path, :remote => false, :format => :js do |f|
             = f.hidden_field :name, :value => 'tag'
             = f.hidden_field :value, :value => 'value'
             = f.hidden_field :instrument_id, :value => @instrument.id
-            - if can?(:manage, Instrument)
+            - if can?(:update, @instrument) && can?(:create, InfluxdbTag)
               = f.submit :value	 => 'Add a New InfluxDB Tag', :class => 'btn btn-default btn-lg dropdown-toggle'
     .clear
 
@@ -37,9 +37,9 @@
 %div{:id => 'archive_configuration', :class => 'collapse'}
   %strong
     = link_to 'Topic Category', :topic_categories
-    
+
   - if defined?(@instrument.topic_category_id)
     = best_in_place @instrument, :topic_category_id, :as => :select, :collection => TopicCategory::list_topic_category_options
-  
-    
-  
+
+
+

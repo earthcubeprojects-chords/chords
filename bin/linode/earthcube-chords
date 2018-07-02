@@ -1,0 +1,131 @@
+#!/usr/bin/env python
+
+"""
+EarthCube CHORDS StackScript
+
+    Author: Charles Martin <martinc@ucar.edu>
+    Version: 0.1.0.0
+    Requirements:
+
+This StackScript deploys the EarthCube CHORDS Portal (https://chordsrt.com).
+
+StackScript User-Defined Variables (UDF):
+    
+    <UDF name="CHORDS_ADMIN_PW" 
+        label="The PASSWORD for sysadmin access to CHORDS, mysql and influxdb in docker. (NOTE: This not the CHORDS website admin login). Replace this with a secure password."
+        default="chords_ec_demo" />
+    <UDF name="CHORDS_GUEST_PW"       default="guest" 
+        label="The PASSWORD for read-only access to influxdb."/>
+    <UDF name="CHORDS_EMAIL_ADDRESS"  default="unknown@gmail.com"
+        label="An EMAIL ACCOUNT that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail)."/>
+    <UDF name="CHORDS_EMAIL_PASSWORD" default="unknown" 
+         label="The PASSWORD for the email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail)."/>
+    <UDF name="CHORDS_EMAIL_SERVER"   default="smtp.gmail.com" 
+        label="The EMAIL SERVER that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service."/>
+    <UDF name="CHORDS_EMAIL_PORT"     default="587" 
+        label="The SERVER PORT for the email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service."/>
+    <UDF name="GRAFANA_ADMIN_PW"      default="admin" 
+        label="The PASSWORD for admin access to Grafana. Once Grafana is initialized with this password, it can only be changed from the Grafana admin web page. Replace this with a secure password."/>
+    <UDF name="SECRET_KEY_BASE"       default="aaaaaaaaaaa" 
+        label="A SECRET KEY BASE for Rails. Generate a secure value (e.g. 'openssl rand -hex 32')."/>
+    <UDF name="DB_RETENTION"          default="inf" 
+        label="The time series DATABASE RETENTION DURATION, e.g. 168h or 52w. Use 'inf' for permanent. "
+        "This value can be changed on successive restarts of a portal. Note: making it shorter will trim the existing time series database."/>
+    <UDF name="DOCKER_TAG"            default="latest" 
+        label="The VERSION TAG of the desired CHORDS release. 'latest' is the current stable release." />
+    <UDF name="GIT_BRANCH"            default="master" 
+        label="The GIT BRANCH where a few admin files will be fetched from. Use 'master' unless you have a valid reason to choose otherwise."/>
+    <UDF name="CHORDS_HTTP_PORT"      default="80" 
+         label="CHORDS HTTP port. (Typically only changed if there are port conflicts or firewall restrictions)."/>
+    <UDF name="GRAFANA_HTTP_PORT"     default="3000" 
+        label="Grafana port. (Typically only changed if there are port conflicts or firewall restrictions)."/>
+    <UDF name="PROXY"                 default="" 
+        label="PROXY URL (e.g. http://proxy.myorg.com:8080). Leave blank if not needed."/>
+    <UDF name="KAPACITOR_ENABLED"     oneof="false, true"
+        label="Enable InfluxData kapacitor. This is experimental.In general, do NOT enable, as it opens a security hole."/>
+    <UDF name="RAILS_ENV"             oneof="production, development, test" 
+        label="The RAILS ENVIRONMENT. Unlikely to to be anything other than 'production'."/>
+    <UDF name="WORKERS"               default="4" 
+        label="The number of NGINX WORKERS. 4 is a good valu.e"/>
+"""
+
+import os
+import pwd
+import shutil
+import sys
+import urllib
+import subprocess
+
+try: # we'll need to rename included StackScripts before we can import them
+    os.rename("/root/ssinclude-3", "/root/pythonlib.py")
+except:
+    pass
+     
+# Where is CHORDS installed?
+chords_basedir = '/var/lib/chords/'
+
+
+def system_install():
+    os.system('apt-get -y update')
+    os.system('apt-get -y install apt-transport-https ca-certificates curl software-properties-common python2.7 python-pip')
+    os.system('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+    os.system('add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"')
+    os.system('apt-get -y update')
+    os.system('apt-get -y install docker-ce docker-compose')
+
+def service_install():
+    # The service file thinks that docker-compose is in /usr/local/bin.
+    if not os.path.isfile('/usr/local/bin/docker-compose'):
+        os.chdir('/usr/local/bin')
+        os.system('ln -s /usr/bin/docker-compose')
+
+    os.chdir(chords_basedir)
+    chords_service_url = 'https://github.com/NCAR/chords/raw/' + os.environ['GIT_BRANCH'] + '/bin/chords_service/chords.service'    
+    os.system('curl -L ' + chords_service_url + ' > chords.service')
+    os.system('systemctl enable /var/lib/chords/chords.service')
+    os.system('systemctl daemon-reload')
+    
+def chords_install():
+    """Install CHORDS."""
+
+    os.chdir(chords_basedir)
+
+    # Create .env
+    f = open('.env', 'w')
+    for k,v in os.environ.items():
+        p = k + '=' + v + '\n'
+        print(p)
+        f.write(p)
+    f.close()
+
+    # Fetch chords_control and docker-compose.yml
+    file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/chords_control'
+    curl_cmd = 'curl -O -s ' + file_url
+    os.system(curl_cmd)
+    file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/docker-compose.yml'
+    curl_cmd = 'curl -O -s ' + file_url
+    os.system(curl_cmd)
+
+    # Create chords.yml
+    os.system('/usr/bin/env python ./chords_control --backwards')
+
+    # Install CHORDS
+    os.system('/usr/bin/env python ./chords_control --update')
+
+def chords_start():
+    os.system('systemctl start  chords')
+
+def main():
+    """Install CHORDS on a basic Docker stack.
+    
+    """
+    
+    os.makedirs(chords_basedir)
+    system_install()
+    service_install()
+    chords_install()
+    chords_start()
+
+if __name__ == "__main__":
+    sys.exit(main())
+    
