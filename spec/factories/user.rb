@@ -2,20 +2,23 @@ FactoryBot.define do
   factory :user do
     email { Faker::Internet.email }
     password 'fake_passwd'
-    is_administrator false
-    is_data_viewer false
-    is_data_downloader false
+    roles [:registered_user]
 
-    factory :data_viewer do
-      is_data_viewer true
+    factory :data_downloader do
+      roles [:downloader, :registered_user]
+    end
 
-      factory :data_downloader do
-        is_data_downloader true
+    factory :admin do
+      roles [:admin]
+    end
 
-        factory :admin do
-          is_administrator true
-        end
-      end
+    factory :data_creator do
+      roles [:measurements]
+      api_key { self.generate_api_key }
+    end
+
+    factory :site_configurator do
+      roles [:site_config, :registered_user]
     end
   end
 end

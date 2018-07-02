@@ -3,9 +3,9 @@ require 'task_helpers/cuahsi_helper'
 namespace :archive do
   task send_data: :environment do |task, args|
     # Rails.logger.debug "send data called at " + Time.now.utc.to_s
-    
+
     # Check to make sure archiving is enabled before sending data
-    
+
     if Archive.first.enabled != true
       # Archiving is disabled, no data will be transmitted
       # puts "Archiving is disabled, no data will be transmitted"
@@ -13,7 +13,7 @@ namespace :archive do
       # exit the rake task
       next
     end
-    
+
     # retrieve the current archive jobs data points to be sent
     jobs = ArchiveJob.where("status = 'scheduled'")
 
@@ -27,7 +27,7 @@ namespace :archive do
       # retrieve the data points for the date range
       Instrument.find_each do |inst|
         points = GetTsPoints.call(TsPoint, "data", inst.id, job.start_at, job.end_at)
-      
+
 
         # extract site, instrument and var information
         siteID = inst.site.get_cuahsi_siteid
@@ -45,7 +45,16 @@ namespace :archive do
 
 
           # send the data array
-          value = Measurement.create_cuahsi_value(data, sourceID, siteID, methodID, variableID)
+          value = {
+            "user" => Rails.application.config.x.archive['username'],
+            "password" => Rails.application.config.x.archive['password'],
+            "SiteID" => siteID,
+            "VariableID" => variableID,
+            "MethodID" => methodID,
+            "SourceID" => sourceID,
+            "values" => data
+          }
+
           uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/values"
           response = CuahsiHelper::send_request(uri_path, value)
 

@@ -33,22 +33,16 @@
           %br/
           = data_file_download_url("csv", 'last')
       %tr
-        %td Fetch a JSON file
-        %td .jsf
+        %td Fetch a GeoJSON file
+        %td .geojson
         %td start, end, last
         %td
-          = data_file_download_url("jsf")
+          = data_file_download_url("geojson")
           %br/
-          = data_file_download_url("jsf", 'start_end')
+          = data_file_download_url("geojson", 'start_end')
           %br/
-          = data_file_download_url("jsf", 'last')
-			
-      %tr
-        %td Fetch JSON
-        %td .json
-        %td start, end, last
-        %td
-          = data_file_download_url("json", 'last')
+          = data_file_download_url("geojson", 'last')
+
   .table-responsive
     %table.table.table-striped
       %tr

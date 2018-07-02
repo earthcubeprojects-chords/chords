@@ -1,84 +1,110 @@
 Rails.application.routes.draw do
+  # devise_for :users
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
 
+  # send logged in user to the dashboard
+  authenticated :user do
+    root 'dashboard#index', as: :authenticated_root
+  end
 
-  resources :archives
-  resources :archive_jobs
-
-  resources :site_types
-
-  root      'dashboard#index'
-
-  get 'about/data_urls'          => 'about#data_urls'
-  get 'sites/geo'                => 'sites#geo'
-
-  get 'instruments/duplicate'    => 'instruments#duplicate'
-  get 'instruments/live'         => 'instruments#live'
-  get 'instruments/simulator'    => 'instruments#simulator'
-
-  get  'measurements/url_create'  => 'measurements#url_create'
-  post 'measurements/delete_test' => 'measurements#delete_test'
-  post 'measurements/trim'        => 'measurements#trim'
-
-  get 'monitor/live'              => 'monitor#live'
-
-  get 'profiles/export_configuration'              => 'profiles#export_configuration'
-  get 'profiles/import_configuration'              => 'profiles#import_configuration'
-  post 'profiles/import_configuration'              => 'profiles#import_configuration'
-
-  get 'profiles/export_influxdb'              => 'profiles#export_influxdb'
-  get 'profiles/import_influxdb'              => 'profiles#import_influxdb'
-  post 'profiles/import_influxdb'              => 'profiles#import_influxdb'
+  # send guest user to the about page
+  root 'about#index'
 
   post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
   post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
   post 'archive/push_cuahsi_sites' => 'archives#push_cuahsi_sites', as: :push_cuahsi_sites
   post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
 
+  resources :dashboard
+  resources :data
+  resources :influxdb_tags
+  resources :linked_data, only: [:index, :edit, :update, :show]
+  resources :measured_properties
+  resources :site_types
+  resources :topic_categories
+  resources :units
+  resources :urlbuilder
 
-  post 'archives/update_credentials'  => 'archives#update_credentials'
-
-  post 'archives/enable_archiving'    => 'archives#enable_archiving'
-  post 'archives/disable_archiving'   => 'archives#disable_archiving'
-  
-  post 'archive_jobs/delete_completed_jobs'   => 'archive_jobs#delete_completed_jobs'
-  
-
-
-
-
-  # devise_for :users
-  devise_for :users, controllers: {
-     sessions: 'users/sessions'
-  }
-
-  resources :instruments do
-    member do
-      get 'live'
+  resources :about, only: :index do
+    collection do
+      get :data_urls
     end
   end
 
-  resources :vars do
-    get :autocomplete_measured_property_label, :on => :collection
-    get :autocomplete_unit_name, :on => :collection
+  resources :archives do
+    collection do
+      post :update_credentials
+      post :enable_archiving
+      post :disable_archiving
+    end
   end
 
-  resources :about
-  resources :dashboard
-  resources :data
-  resources :instruments
-  resources :measurements
-  resources :measured_properties
-  resources :monitor
-  resources :profiles, only: [:index, :create, :backup, :restore]
-  resources :sites
-  resources :users
-  resources :urlbuilder
-  resources :vars
-  resources :units
-  resources :topic_categories
-  resources :topic_categories
-  resources :influxdb_tags
-  resources :site_types
+  resources :archive_jobs do
+    collection do
+      post :delete_completed_jobs
+    end
+  end
+
+  resources :instruments do
+    member do
+      get :live
+    end
+
+    collection do
+      get :duplicate
+      get :live
+      get :simulator
+    end
+  end
+
+  resources :measurements, except: [:index, :show, :new, :create, :update, :edit, :destroy] do
+    collection do
+      get  :url_create
+      post :delete_test
+    end
+  end
+
+  resources :monitor do
+    collection do
+      get :live
+    end
+  end
+
+  resources :profiles, only: [:index, :create, :backup, :restore] do
+    collection do
+      get :export_configuration
+      get :import_configuration
+      post :import_configuration
+
+      get :export_influxdb
+      get :import_influxdb
+      post :import_influxdb
+    end
+  end
+
+  resources :sites do
+    collection do
+      get :map
+      get :map_markers_geojson
+    end
+
+    member do
+      get :map_balloon_json
+    end
+  end
+
+  resources :users do
+    get :assign_api_key
+  end
+
+  resources :vars do
+    collection do
+      get :autocomplete_measured_property_label
+      get :autocomplete_unit_name
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

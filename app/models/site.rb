@@ -44,7 +44,6 @@ class Site < ActiveRecord::Base
     return id
   end
 
-
   def create_cuahsi_site
     profile = Profile.first
     url = profile.domain_name
@@ -67,5 +66,5 @@ class Site < ActiveRecord::Base
       }
 	  return data
 	end
-  
+
 end

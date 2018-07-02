@@ -8,7 +8,7 @@
       = f.hidden_field :name, :value => 'name'
       = f.hidden_field :shortname, :value => 'shortname'
       = f.hidden_field :instrument_id, :value => @instrument.id
-      - if can?(:manage, Var)
+      - if can?(:create, Var)
         = f.submit :value	 => 'Add a New Variable', :class => 'btn btn-default btn-lg dropdown-toggle'
 
 .clear
@@ -27,7 +27,7 @@
     %td
       = link_to 'Measured Property', :measured_properties
 
-    - if Archive.first.name == "CUAHSI"  
+    - if Archive.first.try(:name) == "CUAHSI"
       %td
         General Category
 

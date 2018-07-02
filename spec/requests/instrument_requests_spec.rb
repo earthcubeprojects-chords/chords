@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 describe 'Unauthenticated instrument data requests', type: :request do
-  it 'returns 302 when unauthorized' do
+  it 'returns 403 when unauthorized' do
     profile = Profile.first || Profile.initialize.first
     profile.save!
 
     instrument = FactoryBot.create(:instrument)
 
     get "/instruments/#{instrument.id}.sensorml"
-    expect(response).to have_http_status(302)
+    expect(response).to have_http_status(:forbidden)
   end
 
   it 'returns sensorml when auth not required' do

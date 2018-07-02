@@ -8,14 +8,14 @@
     eval(command);
     return names;
   }
-  
+
   function is_running(id) {
     // return the running status for this id
     var command = "var run_status = instrument_" + id + "_run_status;";
     eval(command);
     return run_status;
   }
-  
+
   function random_value(offset) {
     // these values to be replaced later by configuration values:
     var measure_min   = 5.0;
@@ -26,7 +26,7 @@
     value = value.toPrecision(4);
     return value;
   }
-  
+
   function makeHttpObject() {
     try {return new XMLHttpRequest();}
     catch (error) {}
@@ -34,29 +34,29 @@
     catch (error) {}
     try {return new ActiveXObject("Microsoft.XMLHTTP");}
     catch (error) {}
-  
+
     throw new Error("Could not create HTTP request object.");
   }
-  
+
   function send_url(url) {
     var request = makeHttpObject();
     request.open("GET", url, false);
     request.send(null);
   }
-  
+
   function make_url(id) {
     // create base url
     var url = "/measurements/url_create?instrument_id=" + id;
-  
+
     // add variable values
     var s = shortnames(id);
     for (var i = 0; i < s.length; i++) {
-      url += "&" + s[i] + "=" + random_value(10.0*i + 100*parseInt(id)); 
+      url += "&" + s[i] + "=" + random_value(10.0*i + 100*parseInt(id));
     }
-  
+
     // add the measurement time
     var utc_time = new Date();
-    url += "&at=" + utc_time.toISOString(); 
+    url += "&at=" + utc_time.toISOString();
 
     // add the security key js if needed
     url += "#{get_security_key_url_fragment}";
@@ -66,22 +66,22 @@
 
     return(url);
   }
-  
+
   function display_url(url) {
     // manage a running display of the urls
     if ($('#instrument_simulator_requests').children().length > 20) {
       $('#instrument_simulator_requests').find('div').first().remove();
     }
-  
+
     $('#instrument_simulator_requests').append("<div>" + url + "</div>");
   }
-  
+
   function single_measurement(id) {
     var url = make_url(id);
     display_url(url);
     send_url(url);
   }
-  
+
   function repeat_measurement(id, refresh_ms) {
     if (is_running(id) == true) {
       // schedule next measurement
@@ -90,7 +90,7 @@
       single_measurement(id);
     }
   }
-  
+
   function toggle_run_state(id, refresh_ms) {
     if (is_running(id) == false) {
       // set the run status to true

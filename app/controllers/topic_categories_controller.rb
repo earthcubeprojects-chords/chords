@@ -1,13 +1,9 @@
 class TopicCategoriesController < ApplicationController
+  load_and_authorize_resource
 
-# GET /topic_categories
   def index
-    @topic_categories = TopicCategory.all
   end
 
   def show
-  	@topic_category = TopicCategory.find(params[:id])
   end
-
-
 end

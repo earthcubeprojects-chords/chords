@@ -1,6 +1,6 @@
-class Var < ActiveRecord::Base
+require 'task_helpers/cuahsi_helper'
 
-  require 'task_helpers/cuahsi_helper'
+class Var < ActiveRecord::Base
   include CuahsiHelper
 
   belongs_to :instrument
@@ -8,7 +8,7 @@ class Var < ActiveRecord::Base
   belongs_to :unit
 
   before_destroy :delete_ts_points
-  
+
   def measured_at_parameter
     return self.shortname + '_measured_at'
   end
@@ -18,17 +18,15 @@ class Var < ActiveRecord::Base
   end
 
   def random_value(previous_value = nil)
-
     # the maximum percent a previous value can change
     maximum_percent_change = 0.05
-    
+
     # the number of decimal places to return
     precision = 2
-    
+
     # default min/max values
     minimum = 0
     maximum = 100
-    
 
     # set a min/max if the are devined for this variable
     if self.minimum_plot_value
@@ -61,14 +59,14 @@ class Var < ActiveRecord::Base
         random_value =  previous_value - change
       end
 
-    else 
+    else
       random_value = (minimum + rand(maximum)).to_f
     end
 
     return random_value.round(precision)
   end
 
-  
+
   def get_tspoints (since, display_points = self.instrument.display_points)
     # Get the measurements
     # TODO: use the :after parameter. It did not interact correctly with
@@ -77,31 +75,28 @@ class Var < ActiveRecord::Base
       .where("inst = '#{self.instrument.id}'") \
       .where("var  = '#{self.id}'") \
       .order("desc") \
-      .since(since) 
-      
+      .since(since)
+
     ts_points = ts_points.to_a
     live_points = []
     if ts_points
       # Collect the times and values for the measurements
-      
-      ts_points.reverse_each do |p| 
+      ts_points.reverse_each do |p|
         live_points  << [ConvertIsoToMs.call(p["time"]), p["value"].to_f]
       end
-      
     end
-    
+
     return live_points
   end
 
 
   def delete_ts_points
-
     DeleteVariableTsPoints.call(TsPoint, self)
   end
 
   def self.get_general_categories_collection
     category_names = ['Unknown', 'Biota', 'Chemistry', 'Climate', 'Geology', 'Hydrology', 'Instrumentation', 'Limnology', 'Soil', 'Water Quality']
-    
+
     general_categories = Hash[category_names.map {|name| [name, name]}]
 
     return general_categories
@@ -113,15 +108,15 @@ class Var < ActiveRecord::Base
   end
 
   def get_cuahsi_variableid(variable_code)
-    if self.cuahsi_variable_id 
-      return self.cuahsi_variable_id 
+    if self.cuahsi_variable_id
+      return self.cuahsi_variable_id
     else
       variables = get_cuahsi_variables
       id = variables.find {|variable| variable['VariableCode']==variable_code.to_s}
       if id != nil
         self.cuahsi_variable_id = id["VariableID"]
         self.save
-        return self.cuahsi_variable_id 
+        return self.cuahsi_variable_id
       end
       return id
     end
@@ -147,5 +142,4 @@ class Var < ActiveRecord::Base
       }
     return data
   end
-
 end

@@ -1,20 +1,20 @@
 %tr.border
   %td
-    - if can?(:manage, Var)
+    - if can?(:update, Var)
       = best_in_place variable, :shortname, :as => :input, :class => 'bip_short_name', :html_attrs => { size: 8 }
     - else
       = variable.shortname
 
   %td
-    - if can?(:manage, Var)
+    - if can?(:update, Var)
       = best_in_place variable, :name, :as => :input, :html_attrs => { size: 12 }
     - else
       = variable.name
 
   %td
-    - if can?(:manage, Var)
+    - if can?(:update, Var)
       - form_tag_id = "unit_for_tag_#{variable.id}"
-      = autocomplete_field_tag form_tag_id, variable.unit.name, autocomplete_unit_name_vars_path(:search_mode=>'unit_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      = autocomplete_field_tag form_tag_id, variable.unit.try(:name), autocomplete_unit_name_vars_path(:search_mode=>'unit_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
       :javascript
         $(document).ready(function(){
           $("##{form_tag_id}").bind('railsAutocomplete.select', function(event, data){
@@ -46,17 +46,17 @@
 
 
       %br
-      Plot Label: 
+      Plot Label:
       = best_in_place variable, :units, :as => :input, :html_attrs => { size: 3 }
     - else
-      = variable.unit.name
+      = variable.unit.try(:name)
       %br
       = variable.units
 
 
 
   %td
-    - if can?(:manage, Var)
+    - if can?(:update, Var)
       = best_in_place variable, :minimum_plot_value, :as => :input, :html_attrs => { size: 5 }
       \/
       = best_in_place variable, :maximum_plot_value, :as => :input, :html_attrs => { size: 5 }
@@ -67,9 +67,9 @@
 
 
   %td
-    - if can?(:manage, Var)
+    - if can?(:udpate, Var)
       - form_tag_id = "mp_for_tag_#{variable.id}"
-      = autocomplete_field_tag form_tag_id, variable.measured_property.label, autocomplete_measured_property_label_vars_path(:search_mode=>'measured_property_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
+      = autocomplete_field_tag form_tag_id, variable.measured_property.try(:label), autocomplete_measured_property_label_vars_path(:search_mode=>'measured_property_source'), {class: "search-query", placeholder: "Start Typing...", type: "search"}
 
       :javascript
         $(document).ready(function(){
@@ -102,17 +102,17 @@
         	});
         });
     - else
-      = variable.measured_property.label
+      = variable.measured_property.try(:label)
 
-  - if Archive.first.name == "CUAHSI"
+  - if Archive.first.try(:name) == "CUAHSI"
     %td
-      - if can?(:manage, Var)
+      - if can?(:update, Var)
         = best_in_place variable, :general_category, :as => :select, :collection => Var.get_general_categories_collection
       - else
         = variable.general_category
 
   %td
-    - if can?(:manage, Var)
+    - if can?(:destroy, Var)
       = link_to variable, method: :delete, :data => {:confirm => "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"} do
         = image_tag('trash.svg', :class=>"delete-icon", :style=>"height:16px;")
 

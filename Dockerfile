@@ -1,8 +1,8 @@
-FROM ruby:2.2-slim 
+FROM ruby:2.2-slim
 MAINTAINER martinc@ucar.edu
 
-# Install apt based dependencies required to run Rails as 
-# well as RubyGems. As the Ruby image itself is based on a 
+# Install apt based dependencies required to run Rails as
+# well as RubyGems. As the Ruby image itself is based on a
 # Debian image, we use apt-get to install those.
 RUN apt-get update && apt-get install -y \
   build-essential \
@@ -15,21 +15,22 @@ RUN apt-get update && apt-get install -y \
   git \
   apt-utils \
   curl \
-  logrotate
-  
-# Configure the main working directory. This is the base 
-# directory used in any further RUN, COPY, and ENTRYPOINT 
+  logrotate \
+  nano
+
+# Configure the main working directory. This is the base
+# directory used in any further RUN, COPY, and ENTRYPOINT
 # commands.
-RUN mkdir -p /chords 
+RUN mkdir -p /chords
 WORKDIR /chords
 
-# Copy the Gemfile as well as the Gemfile.lock and install 
-# the RubyGems. This is a separate step so the dependencies 
-# will be cached unless changes to one of those two files 
+# Copy the Gemfile as well as the Gemfile.lock and install
+# the RubyGems. This is a separate step so the dependencies
+# will be cached unless changes to one of those two files
 # are made.
 COPY Gemfile Gemfile.lock ./
 #
-# setting BUNDLE_JOBS to more than 1 will cause bundle install's console 
+# setting BUNDLE_JOBS to more than 1 will cause bundle install's console
 # output to show up asynchronously, potentially making debugging more difficult
 #
 ENV BUNDLE_JOBS 1
@@ -58,14 +59,14 @@ RUN curl -sSL https://get.docker.com/ | DEBIAN_FRONTEND=noninteractive sh
 # however if the docker build command is run with the --squash option
 RUN rm -rf .git log/* tmp/*
 
-# Expose port 80 to the Docker host, so we can access it 
+# Expose port 80 to the Docker host, so we can access it
 # from the outside.
 EXPOSE 80
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
-# Configure an entry point, so we don't need to specify 
+# Configure an entry point, so we don't need to specify
 # "bundle exec" for each of our commands.
 ENTRYPOINT ["bundle", "exec"]
 

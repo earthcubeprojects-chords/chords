@@ -17,8 +17,8 @@
       #{f.text_field('affiliation', size: 60)}
   .line
     .title
-      Page Title        
-      (will appear in tab titles)   
+      Page Title
+      (will appear in tab titles)
     .field
       #{f.text_field('page_title', size: 60)}
   .line
@@ -43,10 +43,10 @@
   .line
     .title
       Project Description
-      %br/   
+      %br/
       (HTML markup may be used)
       %br/
-    .field   
+    .field
       #{f.text_area('description', size: "60x20")}
   .line
     .title
@@ -56,14 +56,14 @@
       %br/
       but not mandatory)
     .field
-      %div      
-        #{f.file_field :logo_file} 
+      %div
+        #{f.file_field :logo_file}
         Reset to default image: #{check_box_tag :reset_logo}
 
   .line
     .title
       Google Maps
-      %br/ 
+      %br/
       %strong JavaScript API Key
     .field
       #{f.text_field('google_maps_key', size: 50)}
@@ -75,7 +75,7 @@
     .title
       Security Options
     %div.field
-      %div 
+      %div
         %div
           = f.check_box :secure_data_viewing
           Restrict viewing of data
@@ -86,5 +86,5 @@
           #{f.check_box :secure_data_entry}
           Require the security key in order to submit a measurement
         %div
-          Measurement security key
-          #{f.text_field(:data_entry_key, size: 30)}        
+          Measurement security key (Deprecated: In the future, create a user with the measurement role and use an api_key)
+          #{f.text_field(:data_entry_key, size: 30)}
