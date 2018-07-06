@@ -608,6 +608,7 @@ class Docker:
     
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
             git_branch = choose_branch(self.docker_compose_yml)
+            print git_branch
             ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml) 
         
     def ps(self):
@@ -856,6 +857,7 @@ def renew_script(proxy):
             
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
 
+#####################################################################
 def choose_branch(script_name):
     git_branches = ChordsGit().branches()
     git_branch = ''
@@ -869,7 +871,7 @@ def choose_branch(script_name):
             break
         else:
             print "The", choice, "branch is not available."
-        return git_branch
+    return git_branch
             
 #####################################################################
 #####################################################################
