@@ -1,4 +1,4 @@
-FROM grafana/grafana:5.0.4
+FROM grafana/grafana:5.2.1
 MAINTAINER martinc@ucar.edu
 
 RUN apt-get update
