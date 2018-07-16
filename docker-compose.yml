@@ -98,7 +98,7 @@ services:
   # InfluxData influxdb time-series database
   influxdb:
     container_name: chords_influxdb
-    image: influxdb:1.4
+    image: influxdb:1.6
     volumes:
       - influxdb-data:/var/lib/influxdb
       - influxdb-log:/var/log/influxdb
@@ -160,7 +160,7 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: ncareol/grafana:5.0.4
+    image: ncareol/grafana:5.2.1
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
@@ -185,6 +185,7 @@ services:
         max-file: "5"
     ports:
       - ${GRAFANA_HTTP_PORT}:${GRAFANA_HTTP_PORT}
+    user: "104"
     links:
       - influxdb
 
