@@ -12,6 +12,7 @@ gem 'jquery-ui-rails'
 gem 'haml-rails'
 gem 'sass-rails', '~> 5.0'
 
+gem 'gmaps4rails'
 gem 'markerclustererplus-rails'
 gem 'underscore-rails'
 
