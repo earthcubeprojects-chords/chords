@@ -3,24 +3,24 @@ layout: page
 title: Data In
 ---
 
-It is easy to submit new data to a Portal, simply using standard HTTP URLs. The URL can be submitted 
+It is easy to submit new data to a Portal, simply using standard HTTP URLs. The URL can be submitted
 directly from the address bar of your browser (but of course this would get tedious).
 
 We will first describe the URL syntax, and follow this with examples that demonstrate how easy it is to feed your
 data to a CHORDS Portal, using Python, C, a browser or the command line. These are only a few
 of the languages that work, and you should be able to figure out a similar method for your own
-particular langauge. Almost all programming languages have functions for submitting HTTP requests. 
+particular langauge. Almost all programming languages have functions for submitting HTTP requests.
 
 ###  URL Syntax
 
 Sample URLs for submitting measurements to the Portal:
 
-    http://myportal.org/measurements/url_create?instrument_id=25&wdir=038&wspd=3.2&at=2015-08-20T19:50:28
-    http://myportal.org/measurements/url_create?instrument_id=1&p=981.2&key=A56F421
-    http://myportal.org/measurements/url_create?instrument_id=4&p=981.2&key=A56F421&at=2015-08-20T19:50:28&test
+    http://myportal.org/measurements/url_create?instrument_id=[INST_ID]&wdir=038&wspd=3.2&at=2015-08-20T19:50:28
+    http://myportal.org/measurements/url_create?instrument_id=[INST_ID]&p=981.2&email=[USER_EMAIL]&api_key=[API_KEY]
+    http://myportal.org/measurements/url_create?instrument_id=[INST_ID]&p=981.2&email=[USER_EMAIL]&api_key=[API_KEY]&at=2015-08-20T19:50:28&test
 
 _myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
-separated by "&". 
+separated by "&".
 
 Measurements for variables are specified by _shortname=value_ pairs. You do not need to include
 measurements for all variables defined for the instrument, if they are not available.
@@ -43,19 +43,24 @@ measurements for all variables defined for the instrument, if they are not avail
       <td>at=time</td>
       <td>Yes</td>
       <td>Specify a timestamp to be applied to the measurements. If <em>at</em> is not specified,
-      the measurement will be stamped with the time that it was received by the Portal (often 
+      the measurement will be stamped with the time that it was received by the Portal (often
       quite adequate). The time format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a>.</td>
     </tr>
     <tr>
-      <td>key=value</td>
+      <td>email=[USER_EMAIL]</td>
+      <td>Yes</td>
+      <td>If the Portal has been configured to require a security key for incoming measurements, the user email, <em>email</em> qualifier is needed.</td>
+    </tr>
+    <tr>
+      <td>api_key=[API_KEY]</td>
       <td>Yes</td>
       <td>If the Portal has been configured to require a security key for incoming measurements, it
-      is specified with the <em>key</em> qualifier. Keys are case sensitive.</td>
+      is specified with the <em>api_key</em> qualifier. Keys are case sensitive and specific for a given user with the measurements permission enabled.</td>
     </tr>
     <tr>
       <td>test</td>
       <td>Yes</td>
-      <td>Add the <em>test</em> qualifier to signify that the measurements are to be marked as test 
+      <td>Add the <em>test</em> qualifier to signify that the measurements are to be marked as test
       values. Test measurements may be easily deleted using the Portal interface.</td>
     </tr>
   </tbody>
@@ -77,7 +82,7 @@ measurements for all variables defined for the instrument, if they are not avail
 
 # Put a collection of measurements into the portal
 import requests
-url = 'http://my-chords-portal.com/measurements/url_create?instrument_id=3&t=27.1&rh=55&p=983.1&ws=4.1&wd=213.5&key=1762341'
+url = 'http://my-chords-portal.com/measurements/url_create?instrument_id=3&t=27.1&rh=55&p=983.1&ws=4.1&wd=213.5&email=[USER_EMAIL]&api_key=[API_KEY]'
 response = requests.get(url=url)
 print response
 ...
@@ -92,45 +97,45 @@ print response
     </p>
     <img  class="img-responsive" src="images/browserin.png" alt="CHORDS Portal Cartoon" >
     <p>
-    The <em>wget</em> and <em>curl</em> commands, available in Linux and OSX, can accomplish the same thing 
-    from a console. 
+    The <em>wget</em> and <em>curl</em> commands, available in Linux and OSX, can accomplish the same thing
+    from a console.
     </p>
     {% highlight sh %}
-wget http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&key=A5F461B1
-    
-curl http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&key=A5F461B1
+wget http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&email=[USER_EMAIL]&api_key=[API_KEY]
+
+curl http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&email=[USER_EMAIL]&api_key=[API_KEY]
     {% endhighlight %}
   </div>
 
   <div id="c" class="tab-pane">
   <p>
-  This example uses the <a href="http://curl.haxx.se/libcurl/c/libcurl.html">libCurl</a> library in a 
-  C program to send a measurement URL to a portal. 
+  This example uses the <a href="http://curl.haxx.se/libcurl/c/libcurl.html">libCurl</a> library in a
+  C program to send a measurement URL to a portal.
   </p>
   {% highlight c %}
 #include <stdio.h>
 #include <curl/curl.h>
- 
+
 int main(void)
 {
   CURL *curl;
   CURLcode res;
- 
+
   curl = curl_easy_init();
   if(curl) {
-    char* url = "http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&key=A5F461B1";
+    char* url = "http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&email=[USER_EMAIL]&api_key=[API_KEY]";
     curl_easy_setopt(curl, CURLOPT_URL, url);
-    /* example.com is redirected, so we tell libcurl to follow redirection */ 
+    /* example.com is redirected, so we tell libcurl to follow redirection */
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
- 
-    /* Perform the request, res will get the return code */ 
+
+    /* Perform the request, res will get the return code */
     res = curl_easy_perform(curl);
-    /* Check for errors */ 
+    /* Check for errors */
     if(res != CURLE_OK)
       fprintf(stderr, "curl_easy_perform() failed: %s\n",
               curl_easy_strerror(res));
- 
-    /* always cleanup */ 
+
+    /* always cleanup */
     curl_easy_cleanup(curl);
   }
   return 0;
