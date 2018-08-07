@@ -106,17 +106,26 @@ class Ability
 
   def site_configurator(user)
     can :manage, :all
-    cannot :manage, User
 
-    registered_user(user)
+    can :map, Site
+    can :map_markers_geojson, Site
+    can :map_balloon_json, Site
+
+    can :live, Instrument
+
+    cannot :manage, User
+    cannot :read, User
+
+    if user
+      can [:read, :update], User, id: user.id
+      can :assign_api_key, User, id: user.id
+    end
 
     can :duplicate, Instrument
     can :simulator, Instrument
 
     can :delete_test, :measurement
 
-    can :read, Profile
-    can :read, LinkedDatum
     can :export, Profile
     can :import, Profile
   end
