@@ -105,18 +105,20 @@ class Ability
   end
 
   def site_configurator(user)
-    registered_user(user)
     can :manage, :all
+    cannot :manage, User
+
+    registered_user(user)
 
     can :duplicate, Instrument
     can :simulator, Instrument
 
     can :delete_test, :measurement
 
+    can :read, Profile
+    can :read, LinkedDatum
     can :export, Profile
     can :import, Profile
-
-    cannot :manage, User
   end
 
   def admin(user)
