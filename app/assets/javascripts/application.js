@@ -17,9 +17,6 @@
 //= require autocomplete-rails
 //= require best_in_place
 
-//= require gmaps/google
-//= require markerclusterer
-
 //= require highcharts
 //= require highcharts/highcharts-more
 //= require highcharts/modules/exporting
