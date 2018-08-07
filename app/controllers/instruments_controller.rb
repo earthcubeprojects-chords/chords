@@ -232,11 +232,18 @@ class InstrumentsController < ApplicationController
 private
   def set_instrument
     # using a where.first clause prevents an exception being thrown if the instrument is not present or not visible to the user
-    @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
+    @instrument = Instrument.accessible_by(current_ability).where(sensor_id: params[:sensor_id]).first
+
+    if !@instrument
+      @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
+    end
+
+    @instrument
   end
 
   def instrument_params
     params.require(:instrument).permit(:name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description,
-                                       :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
+                                       :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id,
+                                       :sensor_id)
   end
 end

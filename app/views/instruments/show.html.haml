@@ -7,12 +7,21 @@
   - else
     = image_tag('button_red_50.png', size:"16")
   - if can?(:update, Instrument)
-    = best_in_place @instrument, :name, :as => :input
+    = best_in_place @instrument, :name, as: :input
   - else
     = @instrument.name
   = "(id: #{@instrument.id})"
+
+  - if can?(:update, @instrument)
+    (sensor_id:
+    = best_in_place @instrument, :sensor_id, as: :input
+    )
+  - else
+    - if !@instrument.sensor_id.blank?
+      = "(sensor_id: #{@instrument.sensor_id})"
+
   located at
-  - if can?(:update, Instrument)
+  - if can?(:update, @instrument)
     = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
   - else
     = @instrument.site.name
