@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180625142707) do
+ActiveRecord::Schema.define(version: 20180807200025) do
 
   create_table "archive_jobs", force: :cascade do |t|
     t.string   "archive_name", limit: 255
@@ -57,8 +57,10 @@ ActiveRecord::Schema.define(version: 20180625142707) do
     t.integer  "topic_category_id",   limit: 4
     t.integer  "cuahsi_method_id",    limit: 4
     t.boolean  "is_active",                         default: true
+    t.string   "sensor_id",           limit: 255
   end
 
+  add_index "instruments", ["sensor_id"], name: "index_instruments_on_sensor_id", unique: true, using: :btree
   add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
 
   create_table "linked_data", force: :cascade do |t|

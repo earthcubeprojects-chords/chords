@@ -19,11 +19,18 @@
         %th Qualifiers
         %th Example
       %tr
-        %td Put data
-        %td
-        %td at, key, test
+        %td Insert data w/instrument_id
+        %td GET
+        %td instrument_id, at, email, api_key, test
         %td
           = put_data_url
+      - if !@instrument.sensor_id.blank?
+        %tr
+          %td Insert data w/sensor_id
+          %td GET
+          %td sensor_id, at, email, api_key, test
+          %td
+            = put_data_url_with_sensor_id
       %tr
         %td Fetch a CSV file
         %td .csv
@@ -53,6 +60,13 @@
         %th Meaning
       %tr
         %td
+          sensor_id=
+          %i SENSOR_ID
+        %td
+          A sensor id may be specified instead of the numerical instrument id, this value superceeds instrument
+          id if both are given
+      %tr
+        %td
           at=
           %i time
         %td
@@ -60,16 +74,23 @@
           be time stamped with the time that it was received by the portal.
       %tr
         %td
-          key=
-          %i key
+          api_key=
+          %i API_KEY
         %td
           An optional validation key. It is required if "Require the security key in order to submit a measurement"
-          is checked in the configuration. The key value is also specified in the configuration.
+          is checked in the configuration. The api key value is specified in the user configuration.
+      %tr
+        %td
+          email=
+          %i USER_EMAIL
+        %td
+          A user email is required when supplying an API Key to access secured data.
       %tr
         %td test
         %td
           If present, this measurement will be marked as a test value.
           Test values can be deleted from the database using the "Delete Test Button" on the instrument page.
+          Do not use this option for production-ready instruments.
       %tr
         %td
           start=
@@ -87,5 +108,5 @@
     %li
       The optional qualifier section begins with a "?", followed by one or more qualifiers. Each is separated by "".
       Some qualifiers (e.g. at, start and end) have an associated value.
-      %li Time qualifiers (at, start and end) are in ISO8061 format.
+      %li Time qualifiers (at, start and end) are in ISO8601 format.
       %li If none of the time qualifiers are present for a data fetch, measurements for the current day are returned.

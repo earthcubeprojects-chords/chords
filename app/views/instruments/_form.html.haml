@@ -12,6 +12,10 @@
     %br/
     = f.text_field :name
   .field
+    = f.label :sensor_id, "Sensor ID"
+    %br/
+    = f.text_field :sensor_id
+  .field
     = f.label :topic_category
     %br/
     = f.collection_select :topic_category_id, TopicCategory.order(:name),:id,:name, include_blank: false
@@ -33,8 +37,8 @@
     %br/
     = f.text_field :plot_offset_value, :default => '1'
     = f.select(:plot_offset_units,  { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :selected => :weeks)
-    
-     
+
+
     %br/
   .field
     = f.label :sample_rate_seconds

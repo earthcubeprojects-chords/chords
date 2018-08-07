@@ -30,7 +30,22 @@ module InstrumentsHelper
     end
 
     url += "&at=2015-08-20T19:50:28"
-    url += "&key=KeyValue"
+    url += "&email=[USER_EMAIL]&api_key=[API_KEY]"
+    url += "&test"
+    return url
+  end
+
+  def put_data_url_with_sensor_id
+    url = url_for(:only_path => false, :host => request.host, :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id)
+
+    url = "#{root_url}measurements/url_create?sensor_id=#{@instrument.sensor_id}"
+
+    @instrument.vars.each do |var|
+      url +=  "&#{var.shortname}=#{var.name}"
+    end
+
+    url += "&at=2015-08-20T19:50:28"
+    url += "&email=[USER_EMAIL]&api_key=[API_KEY]"
     url += "&test"
     return url
   end
@@ -75,7 +90,7 @@ module InstrumentsHelper
 
     # add the security key
     if @profile.secure_data_entry == true
-      url_fragment = "&key=" + @profile.data_entry_key
+      url_fragment = "&email=" + @user.email + "api_key=" + @user.api_key
     end
 
     return url_fragment

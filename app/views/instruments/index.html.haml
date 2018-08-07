@@ -6,6 +6,7 @@
         %th{:align => "center"} Status
         %th{:align => "center"} Name
         %th{:align => "center"} Id
+        %th{:align => "center"} Sensor Id
         %th{:align => "center"} Active
         %th{:align => "center"}
           Interval
@@ -43,6 +44,11 @@
             = link_to(instrument.name, instrument_url(:id => instrument.id) )
           %td
             = instrument.id
+          %td
+            - if can?(:manage, Instrument)
+              = best_in_place instrument, :sensor_id
+            - else
+              = instrument.sensor_id
           %td{:align => "center"}
             - if can?(:manage, Instrument)
               = best_in_place instrument, :is_active, :as => :checkbox
@@ -118,6 +124,10 @@
           %br>/
           Id
         %th
+          Sensor
+          %br>/
+          Id
+        %th
           Variable
           %br>/
           Id
@@ -132,4 +142,5 @@
                 %td=var.shortname
                 %td=site.id
                 %td=instrument.id
+                %td=instrument.sensor_id
                 %td=var.id
