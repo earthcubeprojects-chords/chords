@@ -5,6 +5,7 @@ class MeasurementsController < ApplicationController
   # Params:
   # test
   # instrument_id
+  # sensor_id
   # shortname=val
   # at=iso8061
   # var_at=iso801
@@ -37,9 +38,21 @@ class MeasurementsController < ApplicationController
       return
     end
 
+    # sensor_id may be used to find an instrument easier for embedded devices, prefer this over an instrument_id
+    instrument = if params[:sensor_id]
+                   Instrument.where(sensor_id: params[:sensor_id]).first
+                 else
+                   nil
+                 end
+
     # some CHORDS users had an extra '0' on the beginnig of their instrument_id.
     # cleans this dirty input so that the create still works
-    cleansed_instrument_id = params[:instrument_id].to_i
+    # Use the instrument found from the sensor_id param, if one exists
+    cleansed_instrument_id = if instrument
+                               instrument.id
+                             else
+                               params[:instrument_id].to_i
+                             end
 
     if Instrument.exists?(id: cleansed_instrument_id)
       # Are the data submitted in this query a test?
@@ -125,6 +138,7 @@ class MeasurementsController < ApplicationController
 
 private
   def measurement_params
-    params.require(:measurement).permit(:instrument_id, :parameter, :value, :unit, :measured_at, :test, :end, :trim_id)
+    params.require(:measurement).permit(:instrument_id, :sensor_id, :parameter, :value, :unit, :measured_at, :test,
+                                        :end, :trim_id)
   end
 end
