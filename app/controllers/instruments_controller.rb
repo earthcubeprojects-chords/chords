@@ -191,6 +191,10 @@ class InstrumentsController < ApplicationController
   end
 
   def create
+    if @instrument.sensor_id.blank?
+      @instrument.sensor_id = nil
+    end
+
     respond_to do |format|
       if @instrument.save
         format.html { redirect_to @instrument, notice: 'Instrument was successfully created.' }
@@ -206,8 +210,14 @@ class InstrumentsController < ApplicationController
   end
 
   def update
+    data = instrument_params
+
+    if data[:sensor_id].blank?
+      data[:sensor_id] = nil
+    end
+
     respond_to do |format|
-      if @instrument.update(instrument_params)
+      if @instrument.update(data)
         format.html { redirect_to @instrument, notice: 'Instrument was successfully updated.' }
         format.json { render :show, status: :ok, location: @instrument }
       else
@@ -232,9 +242,13 @@ class InstrumentsController < ApplicationController
 private
   def set_instrument
     # using a where.first clause prevents an exception being thrown if the instrument is not present or not visible to the user
-    @instrument = Instrument.accessible_by(current_ability).where(sensor_id: params[:sensor_id]).first
+    @instrument = if !params[:sensor_id].blank?
+                    Instrument.accessible_by(current_ability).where(sensor_id: params[:sensor_id]).first
+                  else
+                    nil
+                  end
 
-    if !@instrument
+    if @instrument.nil?
       @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
     end
 
