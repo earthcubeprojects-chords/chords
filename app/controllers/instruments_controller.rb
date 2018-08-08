@@ -74,6 +74,7 @@ class InstrumentsController < ApplicationController
         # TODO: note this is shallow copy...make sure that is valid in this context
         #       should do this in a transaction as well
         new_instrument = old_instrument.dup
+        new_instrument.sensor_id = nil  # this value is unique, so we can't clone it
 
         if !new_instrument.name.include? "clone"
           new_instrument.name = new_instrument.name + " clone"
