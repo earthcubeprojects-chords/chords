@@ -43,11 +43,55 @@ class Instrument < ActiveRecord::Base
     return latest_time_ms
   end
 
-  def maximum_plot_points
-    time_offset_seconds = eval("#{self.plot_offset_value}.#{self.plot_offset_units}")
-    points_to_plot = time_offset_seconds / self.sample_rate_seconds
+  # # Returns the time of the first or last derivative calculation given parmeter point ("first" or "last")
+  # def deriv_time_in_ms(point)
+  #   if point == "last"
+  #     latest_deriv = GetLastDerivPoint.call(TsPoint, 'value', self.id)
+  #   else
+  #     first_deriv = GetFirstDerivPoint.call(TsPoint, 'value', self.id)
+  #   end
 
-    return points_to_plot.to_i
+  #   if (defined? latest_deriv.to_a.first['time'])
+  #     latest_deriv_time = Time.parse(latest_deriv.to_a.first['time'])
+  #   else
+  #     latest_deriv_time = "None"
+  #   end
+
+  #   return latest_deriv_time
+  # end
+
+  # get the downsampling rate for influx query
+  def downsample_rate (starttime, endtime, var_id)
+    max_points = self.maximum_plot_points
+
+    if endtime == nil
+      count = TsPoint \
+        .count("value") \
+        .where(inst: self.id) \
+        .where(var: var_id) \
+        .since(starttime)
+    else
+      count = TsPoint \
+        .count("value") \
+        .where(inst: self.id) \
+        .where(var: var_id) \
+        .where(time: starttime..endtime)
+    end
+
+    num_points = count.to_a[0]["count"].to_i
+
+    if num_points > max_points
+      rate = (num_points.to_f / max_points).ceil * self.sample_rate_seconds
+      return rate
+    else
+      return self.sample_rate_seconds
+    end
+  end
+
+  # return the maximum number of points per variable to render => 180
+  # TODO: add option for user input when setting env variables
+  def maximum_plot_points
+    return 180
   end
 
   def self.to_csv(options = {})

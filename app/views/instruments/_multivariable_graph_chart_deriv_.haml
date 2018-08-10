@@ -1,0 +1,362 @@
+%script{type:'text/javascript', src: "https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.js"}
+%link{type: 'text/css', rel: "stylesheet", href: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.css'}
+%script{src: "https://rawgithub.com/d-nation/highstock-beyond-extremes/master/beyond-extremes.js"}
+
+:javascript
+
+  // initialize variables to hold data
+  var live_series = [];
+  // var deriv_series;
+
+  // initialize variables to hold charts
+  var live_chart;
+  // var deriv_chart;
+
+  // variable to hold timestamp for last recorded/plotted measurements
+  var live_last_time;
+  // var deriv_last_time;
+
+  // array to hold timestamps of previously recorded/plotted measurements
+  var live_last_times;
+  // var deriv_last_times;
+
+  // refresh rate
+  var live_refresh_msecs;
+  // var deriv_refresh_msecs;
+
+  // live updating boolean
+  var pause;
+
+  // variable corresponding to current instrument
+  var variables = #{@instrument.vars.to_json.html_safe};
+
+  // Craft a title for the charts
+  var live_title = "#{@instrument.name}" + "- Live Data";
+  // var deriv_title = "#{@instrument.name}" + "- Derivative Data";
+
+  // Compile y axis data
+  var y_axis_js = [];
+  var visible_by_default = true;
+  var variable_index = 0;
+  variables.forEach (function(v) {
+
+    var y_axis_js_part = '';
+    y_axis_js_part += '{\n';
+    y_axis_js_part += '  "labels": {\n';
+    y_axis_js_part += '      "format": "{value}' + v.units + '"' +  ',\n';
+    y_axis_js_part += '       "style": { "color": "' + Highcharts.getOptions().colors[variable_index].toString() + '" }\n';
+    y_axis_js_part += '  },\n';
+
+    y_axis_js_part += '  "title": {\n ';
+    y_axis_js_part += '   "text": "' + v.name + '(' + v.units + ')",\n';
+    y_axis_js_part += '   "style": { "color": "' + Highcharts.getOptions().colors[variable_index].toString() + '" }\n';
+    y_axis_js_part += '  },\n';
+
+    y_axis_js_part += '  "opposite": false,\n';
+    y_axis_js_part += '  "showEmpty": false,\n';
+    y_axis_js_part += '  "plotLines": [{\n';
+    y_axis_js_part += '   "width": 0.5\n';
+    y_axis_js_part += '  }]\n';
+
+    y_axis_js_part += '}';
+
+    y_axis_js.push(JSON.parse(y_axis_js_part));
+
+    var temp_live_hash = {name: v.name, visible: visible_by_default, data: [], yAxis: variable_index, lineWidth: 1.3};
+    // var temp_deriv_hash = {name: v.name, visible: visible_by_default, data: [], yAxis: variable_index, lineWidth: 1.3};
+
+    live_series.push(temp_live_hash);
+    // deriv_series.push(temp_deriv_hash);
+
+    variable_index += 1;
+    visible_by_default = false;
+  });
+
+  function initialize() {
+    pause = false;
+
+    live_last_time = 0;
+    live_last_times = [];
+
+    // deriv_last_time = 0;
+    // deriv_last_times = []; 
+
+    for (i = 0; i < variables.length; i++) {
+      // reset last_time arrays to 0
+      live_last_times.push(0);
+      // deriv_last_times.push(0);
+    }
+  }
+
+  // parameter 'reset' indicates whether the data in chart is being reset
+  function requestLiveData(reset) {
+    // If the manual datetime input fields are meing modified (in focus) then don't don't redlive the chart
+    if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
+      pause = true;
+    } else {
+      pause = false;
+    }
+
+    $.getJSON('/instruments/#{@instrument.id}/' + 'live' + '?start=' + live_last_time, function(data) {
+      if (reset) {
+        live_last_time = plotData(data, live_chart, 'live', live_last_times, true);
+      } else {
+        live_last_time = plotData(data, live_chart, 'live', live_last_times, false);
+      }
+    })
+  
+    setTimeout(requestLiveData, 60000);
+  }
+
+  // function requestDerivData() {
+  //   // If the manual datetime input fields are meing modified (in focus) then don't don't redlive the chart
+  //   if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
+  //     pause = true;
+  //   } else {
+  //     pause = false;
+  //   }
+
+  //   $.getJSON('/instruments/#{@instrument.id}/' + 'derivative' + '?start=' + live_last_time, function(data) {
+  //     deriv_last_time = plotData(data, deriv_chart, 'derivative', deriv_last_times)
+  //   })
+
+  //   setTimeout(requestDerivData, 300000);
+  // }
+
+  // function that gets data from json and plots the data in the appropriate chart
+  // chart - chart to plot on
+  // type - whether data is 'derivative' or 'live' data
+  // last_times - array that holds plotted data timestamps
+  // returns the time stamp of the most recently plotted data timestamp
+  function plotData(data, chart, type, last_times, reset) {
+    var display_points = data["display_points"];
+    var multivariable_points = data["multivariable_points"];
+    var multivariable_names = data["multivariable_names"];
+
+    if (type == 'live') {
+      live_refresh_msecs = data["refresh_msecs"];
+    } else {
+      deriv_refresh_msecs = data["refresh_msecs"];
+    }
+
+    // loop through all variables
+    for (i = 0; i < multivariable_names.length; i++) {
+      var points = multivariable_points[multivariable_names[i]];
+
+      if (reset) {
+        // clear current data if is being reset
+        chart.series[i].setData([]);
+      }
+
+      var point_index;
+      var last_time;
+      for (point_index = 0; point_index < points.length; point_index++) {
+        if (points[point_index][0] > last_times[i] || points[point_index][0] < last_times[i]) {
+          console.log("added");
+          chart.series[i].addPoint(points[point_index], false);
+          last_time = points[point_index][0];
+          last_times[i] = points[point_index][0];
+        }
+      }
+    }
+
+    // don't redraw the chart if live updating is paused
+    if (pause == false) {
+      chart.redraw();
+    }
+
+    return last_time;
+  }
+
+
+  // function that creates and returns the chart given the class to render to and the series
+  // id is string representing name of html div id to render chart to
+  // series is array containing plot data
+  // type is string representing whether chart is for live or derivative data, ie 'live' or 'derivative'
+  function createChart(title, id, series, type, other_chart) {
+    new_chart = new Highcharts.stockChart({
+      chart: {
+        renderTo: id,
+        type: 'line',
+        zoomType: 'x',
+        events: {
+          selection: function(event) {
+            getZoomSelection(event, type);
+          }
+        },
+        animation: Highcharts.svg,
+        marginRight: 10
+      },
+      rangeSelector: {
+        beyondExtremes: true,
+        buttons: [],
+        inputBoxWidth: 180,
+        enabled: type == 'live',
+        inputEnabled: type == 'live',
+        inputDateFormat: '%b %e, %Y %H:%M:%S',
+        inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
+        inputDateParser: function (value) {
+          [date, time] = value.split(/[\s]/);
+          [year, month, day] = date.split(/[\-]/);
+          [hours, minutes, seconds] = time.split(/[\:]/);
+
+          ms =  Date.UTC(
+                parseInt(year, 10),
+                parseInt(month-1, 10),
+                parseInt(day, 10),
+                parseInt(hours, 10),
+                parseInt(minutes, 10),
+                parseInt(seconds, 10)
+            );
+
+          tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
+          ms = ms + tz_offset_ms;
+
+          return(ms);
+        },
+        allButtonsEnabled: false
+      },
+      credits: { enabled: false },
+      title: { text: title },
+      xAxis: {
+        title: {
+          text: '#{@tz_name.html_safe}'
+        },
+        type: 'datetime',
+        tickPixelInterval: 150
+      },
+      yAxis: y_axis_js,
+      tooltip: {
+        split: true,
+      },
+      legend: { enabled: true },
+      exporting: { enabled: false },
+      series: series,
+    });
+
+    return new_chart;
+  }
+
+  // function that carries out event when user selects region to zoom in on
+  function getZoomSelection(event, type) {
+    var startTime = event.xAxis[0].min;
+    var endTime = event.xAxis[0].max;
+
+    if (type == 'live') {
+        // get non downsampled data and plot
+      $.getJSON('/instruments/#{@instrument.id}/' + type + '?start=' + startTime + '&end=' + endTime, function (new_data) {
+        var new_mv_points = new_data["multivariable_points"];
+        var new_mv_names = new_data["multivariable_names"];
+
+        for (i = 0; i < new_mv_names.length; i++) {
+          var new_points  = new_mv_points[new_mv_names[i]];
+          live_chart.series[i].setData(new_points, false);
+        }
+
+        live_chart.redraw();
+      });
+    } else if (type == 'derivative') {
+      deriv_chart.xAxis[0].setExtremes(startTime, endTime);
+    }
+  }
+
+  // function that resets the live data chart to downsampled data when user clicks reset zoom
+  function resetZoom() {
+    initialize();
+    requestLiveData(true);
+    var max = #{@instrument.point_time_in_ms("last").to_time.to_i}
+    var offset = parseInt(#{eval("#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}")}) * 1000;
+    var min = max - offset;
+    live_chart.xAxis[0].setExtremes(min, max);
+    live_chart.redraw();
+  }
+
+
+  $(document).ready(function () {
+    // adjust the global timezone offset
+    Highcharts.setOptions({
+      global: {
+        timezoneOffset: #{@tz_offset_mins}
+      }
+    });
+
+    initialize();
+
+    // create charts
+    live_chart = createChart(live_title, 'instrument_live_chart', live_series, 'live');
+    // deriv_chart = createChart(deriv_title, 'derivative_chart', deriv_series, 'derivative');
+
+    // make initial data request
+    requestLiveData(false);
+    // requestDerivData();
+
+    // // synchronize charts
+    // live_chart.update({
+    //   legend: {
+    //     enabled: false
+    //   },
+    //   xAxis: {
+    //     events: {
+    //       setExtremes: function(e) {
+    //         deriv_chart.xAxis[0].setExtremes(e.min, e.max);
+    //       }
+    //     }
+    //   }
+    // });
+
+    // deriv_chart.update({
+    //   xAxis: {
+    //     events: {
+    //       setExtremes: function(e) {
+    //         live_chart.xAxis[0].setExtremes(e.min, e.max);
+    //       }
+    //     }
+    //   },
+    //   plotOptions: {
+    //     series: {
+    //       events: {
+    //         legendItemClick: function(event) {
+    //           var series = live_chart.series[this.options.index];
+    //           if (series) {
+    //             if (this.visible) {
+    //               series.hide();
+    //             } else {
+    //               series.show();
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
+
+
+    // reset zoom button
+    $('#resetZoom').click(function() {
+      resetZoom();
+    });
+
+    // calendar range selector
+    $(function() {
+      $("input.highcharts-range-selector").datetimepicker({
+        controlType:'select',
+        timeFormat:"hh:mm:ss",
+        dateFormat:"yy-mm-dd",
+        showMillisec: false,
+        showMicrosec: false
+      });
+    });
+
+    $('#adjustRange').click(function() {
+      var starttime = new Date($('input.highcharts-range-selector:eq(0)').val()).getTime();
+      var endtime = new Date($('input.highcharts-range-selector:eq(1)').val()).getTime();
+      $.getJSON('/instruments/#{@instrument.id}/' + 'live' + '?start=' + starttime + '&end=' + endtime, function(data) {
+        live_last_time = plotData(data, live_chart, 'live', live_last_times, false);
+      });
+    });
+
+  });
+
+
+
+

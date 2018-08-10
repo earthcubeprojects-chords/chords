@@ -1,3 +1,16 @@
 - if (@var_to_plot)
   #instrument_live_chart.instrument_highchart{:style => "min-width: 310px; height: 400px; margin: 0 auto"}
     = (render 'multivariable_graph_chart').html_safe
+  %br/
+  Data Start Time:
+  %input{type: "datetime-local", id: "start"}
+  Data End Time:
+  %input{type: "datetime-local", id: "end"}
+  %input{id: "adjustRange", type: "button", value: "Adjust Data Range"}
+  %br/
+  %input{id: "resetZoom", type: "button", value: "Reset Zoom"}
+/
+  %br/
+  #derivative_chart.instrument_highchart{:style => "min-width: 310px; height: 450px; margin: 0 auto"}
+    = (render 'multivariable_graph_chart').html_safe
+  %br/

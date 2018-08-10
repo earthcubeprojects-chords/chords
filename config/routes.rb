@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   resources :instruments do
     member do
       get :live
+      get :derivative
     end
 
     collection do
