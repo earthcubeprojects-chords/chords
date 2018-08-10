@@ -3,17 +3,24 @@ class InstrumentsController < ApplicationController
 
   before_action :set_instrument, only: [:show, :live]
 
- # GET /instruments/1/live?var=varshortname&after=time
- # Return measurements and metadata for a given instrument, var and time period.
- # Limit the number of points returned to the instrument's display_points value.
+
+  # GET /instruments/1/live?var=varshortname&start=time&end=time
+  # Return measurements and metadata for a given instrument, var and time period.
+  # Limit the number of points returned to the instrument's display_points value.
   def live
-    # Verify the parameters
-    # convert the millisecond input to seconds since epoch
-    if ((defined? params[:after]) && (params[:after].to_i != 0))
-      start_time_ms = Time.strptime(params[:after], '%Q')
+    # Verify the parameters and convert times
+    # if start and end time defined
+    if (params[:start]) && (params[:start].to_i != 0) && (params[:end]) && (params[:end].to_i != 0)
+      start_time_ms = Time.strptime(params[:start], '%Q')
+      end_time_ms = Time.strptime(params[:end], '%Q')
+    # if only start time defined
+    elsif (params[:start]) && (params[:start].to_i != 0)
+      start_time_ms = Time.strptime(params[:start], '%Q')
+      end_time_ms = nil
     else
       time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
       start_time_ms = @instrument.point_time_in_ms("last") - eval(time_offset)
+      end_time_ms = nil
     end
 
     livedata = { points: [],
@@ -26,34 +33,83 @@ class InstrumentsController < ApplicationController
     livedata[:display_points] = @instrument.maximum_plot_points
     livedata[:refresh_msecs] = @instrument.refresh_rate_ms
 
-    # If the var parameter is set, then we build and return data for only this variable.
+    # if var paremeter set, build and return data for only this variable
     if (params[:var])
       variable = @instrument.find_var_by_shortname(params[:var])
 
-      # Fetch the data
-      live_points = variable.get_tspoints(start_time_ms)
+      live_points = variable.get_tspoints(start_time_ms, end_time_ms)
 
       if live_points
-      livedata[:points] = live_points
+        livedata[:points] = live_points
       end
-
-    # otherwise we return data for all variables
+    # otherwise return data for all variables
     else
       @instrument.vars.each do |variable|
-        livedata[:multivariable_names].push  variable.shortname
+        livedata[:multivariable_names].push variable.shortname
         livedata[:multivariable_points][variable.shortname] = []
 
-        # Fetch the data
-        live_points = variable.get_tspoints(start_time_ms)
+        live_points = variable.get_tspoints(start_time_ms, end_time_ms)
 
         if live_points
           livedata[:multivariable_points][variable.shortname] = live_points
         end
+
       end
     end
 
     render json: ActiveSupport::JSON.encode(livedata)
   end
+
+  # # GET /instruments/1/derivative?var=varshortname&start=time&end=time
+  # # Return derivative data for given instrument, var, and time period.
+  # def derivative
+  #   # Verify the parameters and convert times
+  #   # if start and end time defined
+  #   if (params[:start]) && (params[:start].to_i != 0) && (params[:end]) && (params[:end].to_i != 0)
+  #     start_time_ms = Time.strptime(params[:start], '%Q')
+  #     end_time_ms = Time.strptime(params[:end], '%Q')
+  #   # if only start time defined
+  #   elsif (params[:start]) && (params[:start].to_i != 0)
+  #     start_time_ms = Time.strptime(params[:start], '%Q')
+  #     end_time_ms = nil
+  #   else
+  #     time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
+  #     start_time_ms = @instrument.deriv_time_in_ms("last") - eval(time_offset)
+  #     end_time_ms = nil
+  #   end
+
+  #   deriv_data = { points: [],
+  #                 multivariable_points: {},
+  #                 multivariable_names: [],
+  #                 display_points: 0,
+  #                 refresh_msecs: 1000 }
+
+  #   deriv_data[:display_points] = @instrument.maximum_plot_points
+  #   deriv_data[:refresh_msecs] = @instrument.refresh_rate_ms
+
+  #   if (params[:var])
+  #     variable = @instrument.find_var_by_shortname(params[:var])
+
+  #     derivatives = variable.get_tsderivatives(start_time_ms, end_time_ms)
+
+  #     if derivatives
+  #       deriv_data[:points] = derivatives
+  #     end
+  #   else
+  #     @instrument.vars.each do |variable|
+  #       deriv_data[:multivariable_names] << variable.shortname
+  #       deriv_data[:multivariable_points][variable.shortname] = []
+
+  #       derivatives = variable.get_tsderivatives(start_time_ms, end_time_ms)
+
+  #       if derivatives
+  #         deriv_data[:multivariable_points][variable.shortname] = derivatives
+  #       end
+  #     end
+  #   end
+
+  #   render json: ActiveSupport::JSON.encode(deriv_data)
+  # end
 
 
   # GET instruments/simulator
