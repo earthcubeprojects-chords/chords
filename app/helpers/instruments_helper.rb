@@ -84,15 +84,17 @@ module InstrumentsHelper
     return js_lines.join("\n")
   end
 
-
   def get_security_key_url_fragment
     url_fragment = ''
 
+    begin
     # add the security key
     if @profile.secure_data_entry == true
-      url_fragment = "&email=" + current_user.email + "api_key=" + current_user.api_key
+      url_fragment = "&email=" + current_user.email + "&api_key=" + current_user.api_key
     end
-
+    rescue TypeError
+      url_fragment = "&email=" + current_user.email + "&api_key=[INSERT_API_KEY]"
+    end
     return url_fragment
   end
 
