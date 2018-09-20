@@ -13,9 +13,9 @@
 //= require jquery2
 //= require jquery-ui
 //= require jquery_ujs
+//= require bootstrap-sprockets
 //= require underscore
 //= require autocomplete-rails
-//= require best_in_place
 
 //= require highcharts
 //= require highcharts/highcharts-more
