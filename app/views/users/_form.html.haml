@@ -9,7 +9,7 @@
           %li= message
   .field
     = f.label :email
-    %p= f.text_field :email, style: "width: 30%"
+    %p= f.text_field :email, style: "width: 30%", class: 'form-control'
 
   .field
     = f.label :api_key, 'API Key'
@@ -20,7 +20,7 @@
         Yes
     - else
       n/a
-    %p= link_to 'Renew API Key', user_assign_api_key_path(@user), method: :get, data: { confirm: 'Are you sure you want to renew the API Key?' }
+    %p= button_to 'Renew API Key', user_assign_api_key_path(@user), method: :get, data: { confirm: 'Are you sure you want to renew the API Key?' }, class: 'btn btn-default btn-md dropdown-toggle btn-warning'
 
   - if current_user.role?(:admin)
     %br
@@ -48,9 +48,9 @@
       %br
 
     - if @user == current_user
-      %p= link_to "Change your password", edit_user_registration_path
+      %p= button_to "Change your password", edit_user_registration_path, class: 'btn btn-default btn-md dropdown-toggle btn-warning'
   .actions
-    = f.submit
+    = f.submit class: 'btn btn-default btn-md dropdown-toggle btn-primary'
 
 -if can? :destroy, @user
-  %p= button_to 'Delete User', @user, method: :delete, data: { confirm: "Are you sure you want to delete user: #{@user.email}?" }
+  %p= button_to 'Delete User', @user, method: :delete, data: { confirm: "Are you sure you want to delete user: #{@user.email}?" }, class: 'btn btn-default btn-md dropdown-toggle btn-danger'

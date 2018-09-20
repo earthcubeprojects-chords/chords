@@ -1,4 +1,5 @@
-%p#notice= notice
+%h1 Variable
+%br
 %p
   %strong Name:
   = @var.name
@@ -8,6 +9,8 @@
 %p
   %strong Instrument:
   = @var.instrument
-= link_to 'Edit', edit_var_path(@var)
-|
+
+%br
+= button_to 'Edit', edit_var_path(@var), method: :get, class: 'btn btn-default btn-md'
+%br
 = link_to 'Back', vars_path

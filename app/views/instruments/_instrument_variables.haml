@@ -4,12 +4,9 @@
 
 .row-fluid
   .col-sm-1
-    = form_for :var, url: vars_path, :remote => false, :format => :js do |f|
-      = f.hidden_field :name, :value => 'name'
-      = f.hidden_field :shortname, :value => 'shortname'
-      = f.hidden_field :instrument_id, :value => @instrument.id
-      - if can?(:create, Var)
-        = f.submit :value	 => 'Add a New Variable', :class => 'btn btn-default btn-lg dropdown-toggle'
+    - if can? :create, Var
+      = button_to 'Add New Variable', new_var_path, params: {instrument_id: @instrument.id}, method: :get, class: 'btn btn-default btn-md'
+      %br
 
 .clear
 
@@ -35,5 +32,39 @@
       &nbsp;
 
     - @instrument.vars.each do |variable|
-      = render partial: 'vars/bip_form', locals: {variable: variable}
+      %tr.border
+        %td
+          = variable.shortname
+
+        %td
+          = variable.name
+
+        %td
+          = variable.unit.try(:name)
+          %br
+          = variable.units
+
+
+
+        %td
+          = variable.minimum_plot_value
+          \/
+          = variable.maximum_plot_value
+
+
+        %td
+          = variable.measured_property.try(:label)
+
+        - if Archive.first.try(:name) == "CUAHSI"
+          %td
+            = variable.general_category
+
+        %td.col-sm-1
+          - if can?(:edit, variable)
+            = link_to '', edit_var_path(variable), class: 'glyphicon glyphicon-pencil', style: 'text-decoration: none; color: black;', title: 'Edit'
+        %td.col-sm-1
+          - if can?(:destroy, variable)
+            = link_to '', variable, method: :delete, data: {confirm: "Are you sure you want to permanently delete the variable #{variable.name} and all associated data?"}, class: 'glyphicon glyphicon-trash', style: 'text-decoration: none; color: black;'
+
+
 
