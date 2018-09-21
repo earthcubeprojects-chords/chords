@@ -56,7 +56,7 @@
       %div.col-lg-10.col-md-11
         .row-fluid
           .col-sm-1
-            - if can? :create, Var
+            - if can?(:create, Var) && params[:action] == 'edit'
               %br
               = link_to 'Add New Variable', new_var_path(instrument_id: @instrument.id, return: 'edit'), class: 'btn btn-default btn-md', style: 'text-decoration: none; color: black;', title: 'Add New Variable'
               %br

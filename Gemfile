@@ -11,7 +11,6 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'haml-rails'
 gem 'sass-rails', '~> 5.0'
-gem 'bootstrap-sass', '~> 3.3.6'
 gem 'underscore-rails'
 
 gem 'jbuilder', '~> 2.0'
