@@ -13,7 +13,6 @@
 //= require jquery2
 //= require jquery-ui
 //= require jquery_ujs
-//= require bootstrap-sprockets
 //= require underscore
 //= require autocomplete-rails
 
