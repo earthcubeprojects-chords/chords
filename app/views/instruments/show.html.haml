@@ -31,8 +31,9 @@
   (If 'INACTIVE', the instrument will not appear in the dashboard.)
 
 %br
-= button_to 'Edit Instrument', edit_instrument_path(@instrument), method: :get, class: 'btn btn-primary btn-md'
-%br
+- if can? :edit, @instrument
+  = button_to 'Edit Instrument', edit_instrument_path(@instrument), method: :get, class: 'btn btn-primary btn-md'
+  %br
 
 .instrument_configuration
   .left
