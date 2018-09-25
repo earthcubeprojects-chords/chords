@@ -7,18 +7,17 @@
           %li= msg
 
 
+  .line
+    .title= f.label :name
+    .field= f.text_field :name, class: 'form-control'
+  .line
+    .title= f.label :value
+    .field= f.text_field :value, class: 'form-control'
   .field
-    = f.label :name
-    %br/
-    = f.text_field :name
-  .field
-    = f.label :value
-    %br/
-    = f.text_field :value
-  .field
-    = f.label :instrument_id
-    %br/
-    = f.text_field :instrument_id
+    = f.label :instrument
+    %br
+    = f.collection_select :instrument_id, Instrument.all.sort_by{|x| [x.site.name, x.name]}, :id, :select_label
 
   .actions
-    = f.submit 'Save'
+    %br
+    = f.submit 'Save', class: 'btn btn-primary btn-md'

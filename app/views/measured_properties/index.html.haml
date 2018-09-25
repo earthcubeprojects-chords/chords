@@ -1,53 +1,31 @@
 %p#notice= notice
 
-%h1 
+%h1
   .center
     Measured Properties
 
-.row-fluid.variable
-  .col-sm-1
-    %strong
-      Id
-  .col-sm-1
-    %strong
-      Source
-  .col-sm-3
-    %strong
-      Name
-  .col-sm-3
-    %strong
-      Label
-  .col-sm-3
-    %strong
-      URL
+.accordion
+  - @sources.each do |source|
+    %h3= source
+    %div
+      .row-fluid.variable
+        .col-sm-4
+          %strong Label
+        .col-sm-3
+          %strong URL
+      - @data[source].each do |mp|
+        %br
+        .row-fluid.variable
+          .col-sm-4= mp[:name]
+          .col-sm-3= link_to mp[:url], mp[:url]
 
 .clear
-
-- @measured_properties.each do |measured_property|
-
-  .row-fluid.variable
-    .col-sm-1
-      .variable_header
-        Id:
-      = measured_property.id
-    .col-sm-1
-      .variable_header
-        Source:
-      = measured_property.source
-    .col-sm-3
-      .variable_header
-        Name:
-      = measured_property.name
-
-    .col-sm-3
-      .variable_header
-        Label:
-      = measured_property.label
-    .col-sm-3
-      .variable_header
-        URL:
-      = measured_property.url
-  .clear
-
 %br
 
+:javascript
+  $(function() {
+    $('.accordion').accordion({
+      heightStyle: "content",
+      collapsible: true
+    });
+  });

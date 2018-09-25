@@ -13,9 +13,14 @@ class VarsController < ApplicationController
   end
 
   def new
+    @instrument = Instrument.find(params[:instrument_id])
+    @return = params[:return]
+
+    @var.instrument_id = @instrument.id
   end
 
   def edit
+    @return = params[:return]
   end
 
   def create
@@ -47,8 +52,12 @@ class VarsController < ApplicationController
 
     respond_to do |format|
       if @var.destroy
-        format.html { redirect_to instrument, notice: 'Variable was deleted' }
-        # format.html { redirect_to vars_url, notice: 'Var was successfully destroyed.' }
+        if instrument
+          format.html { redirect_to instrument, notice: 'Variable was deleted' }
+        else
+          format.html { redirect_to vars_path, notice: 'Variable was deleted' }
+        end
+
         format.json { head :no_content, status: :success }
       else
         format.html { render :show, alert: 'Could not destroy variable' }
@@ -71,6 +80,6 @@ class VarsController < ApplicationController
 
 private
   def var_params
-    params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category)
+    params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category, :return)
   end
 end
