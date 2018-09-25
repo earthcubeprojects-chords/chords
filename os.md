@@ -27,7 +27,8 @@ apt-get install docker.io docker-compose
 
 <div id="centos7" class="tab-pane">
 {% highlight sh %}
-sudo -i
+sudo -i # Or 'su -' if you do not have sudo privileges
+yum -y install epel-release
 yum -y install docker docker-compose
 systemctl enable docker
 systemctl start docker
