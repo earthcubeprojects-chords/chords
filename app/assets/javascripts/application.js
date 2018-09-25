@@ -15,7 +15,6 @@
 //= require jquery_ujs
 //= require underscore
 //= require autocomplete-rails
-//= require best_in_place
 
 //= require highcharts
 //= require highcharts/highcharts-more

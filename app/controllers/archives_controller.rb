@@ -109,10 +109,10 @@ class ArchivesController < ApplicationController
     respond_to do |format|
       if @archive.update_attributes(archive_params) && @archive.update_credentials(archive_params)
         format.html{ redirect_to(archives_path, notice: 'Archive Credentials successfully updated') }
-        format.json{ respond_with_bip(@archive) }
+        format.json{ render :show, status: :ok, location: @archive }
       else
-        format.html{ render :index }
-        format.json{ respond_with_bip(@archive) }
+        format.html{ render :index, alert: @archive.errors }
+        format.json{ render json: @archive.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -126,10 +126,10 @@ class ArchivesController < ApplicationController
         end
 
         format.html{ redirect_to(@archive, notice: 'Configurations was successfully updated') }
-        format.json{ respond_with_bip(@archive) }
+        format.json{ render :show, status: :ok, location: @archive }
       else
-        format.html{ render :index }
-        format.json{ respond_with_bip(@archive) }
+        format.html{ render :index, notice: @archive.errors }
+        format.json{ render json: @archive.errors, status: :unprocessable_entity }
       end
     end
   end

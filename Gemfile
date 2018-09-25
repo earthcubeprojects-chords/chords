@@ -15,7 +15,6 @@ gem 'underscore-rails'
 
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
-gem "best_in_place"
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 

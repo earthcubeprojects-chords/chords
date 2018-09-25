@@ -1,97 +1,103 @@
 %h1 Instruments
+
+- if can?(:create, Instrument)
+  - if @sites.count > 0
+    = button_to 'New Instrument', new_instrument_path, method: :get, class: 'btn btn-default btn-md'
+  - else
+    %strong At least one site must be defined before creating a new instrument.
+
 .table-responsive
   %table.table.table-striped
     %thead
       %tr
-        %th{:align => "center"} Status
-        %th{:align => "center"} Name
-        %th{:align => "center"} Id
-        %th{:align => "center"} Sensor Id
-        %th{:align => "center"} Active
-        %th{:align => "center"}
+        %th{align: "center"} Status
+        %th{align: "center"} Name
+        %th{align: "center"} Id
+        %th{align: "center"} Sensor Id
+        %th{align: "center"} Active
+        %th{align: "center"}
           Interval
           %br>/
           (s)
-        %th{:align => "center"}
+        %th{align: "center"}
           Last
           %br>/
           Measurement
-        %th{:align => "center"} Site
-        %th{:align => "center"}
+        %th{align: "center"} Site
+        %th{align: "center"}
           \# of
           = succeed "Variables" do
             %br/
-        %th{:align => "center"}
+        %th{align: "center"}
           \# of
           = succeed "Measurements" do
             %br/
 
         - if can?(:download, Instrument) || can?(:create, :measurement)
-          %th{:align => "center"}
+          %th{align: "center"}
             Fetch/Ingest
             %br>/
             Data
-          %th{:colspan => "1"}
+          %th{colspan: "1"}
     %tbody
       - @instruments.each do |instrument|
         %tr
-          %td{:align => "center"}
+          %td{align: "center"}
             - if instrument.is_receiving_data
               = image_tag('button_green_50.png', size:"16")
             - else
               = image_tag('button_red_50.png', size:"16")
           %td
-            = link_to(instrument.name, instrument_url(:id => instrument.id) )
+            = link_to(instrument.name, instrument_url(id: instrument.id) )
           %td
             = instrument.id
           %td
-            - if can?(:manage, Instrument)
-              = best_in_place instrument, :sensor_id
+            = instrument.sensor_id
+          %td{align: "center"}
+            - if instrument.is_active
+              = "Yes"
             - else
-              = instrument.sensor_id
-          %td{:align => "center"}
-            - if can?(:manage, Instrument)
-              = best_in_place instrument, :is_active, :as => :checkbox
-            - else
-              - if instrument.is_active
-                = "Yes"
-              - else
-                = "No"
+              = "No"
 
-          %td{:align => "center"}= instrument.sample_rate_seconds
+          %td{align: "center"}= instrument.sample_rate_seconds
           %td= instrument.last_age
           %td= link_to(@sites.find(instrument.site_id).name, site_url(@sites.find(instrument.site_id).id))
-          %td{:align => "center"}= instrument.vars.count
-          %td{:align => "center"}= instrument.sample_count(:either)
+          %td{align: "center"}= instrument.vars.count
+          %td{align: "center"}= instrument.sample_count(:either)
 
           - if can?(:download, Instrument) || can?(:create, :measurement)
-            %td{:align => "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
+            %td{align: "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
 
           - if can?(:create, Instrument)
-            %td
-              = form_tag(duplicate_instruments_path, :method => 'get') do
+            %td.col-sm-1
+              = form_tag(duplicate_instruments_path, method: :get) do
                 = select_tag "number_of_duplicates", options_for_select((1..100).to_a , "1")
                 copies
                 = hidden_field_tag('instrument_id', instrument.id )
-                = submit_tag("Duplicate")
+                &nbsp;
+                = link_to '', '', :onclick => "$('#form_id').submit()", class: 'glyphicon glyphicon-duplicate', style: 'text-decoration: none; color: black;', title: 'Duplicate'
 
           - if can?(:delete_test, :measurement)
             %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
 
-          - if can?(:destroy, instrument)
-            %td= button_to 'Destroy', instrument, method: :delete,                                                                                                                                    |
-              data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTRUMENT AND ALL DATA WILL BE PERMANENTLY DELETED" } |
-%br/
+          %td
+            - if can?(:edit, instrument)
+              = link_to '', edit_instrument_path(instrument), class: 'glyphicon glyphicon-pencil', style: 'text-decoration: none; color: black;', title: 'Edit'
+          %td
+            - if can?(:destroy, instrument)
+              = link_to '', instrument, method: :delete, class: 'glyphicon glyphicon-trash', style: 'text-decoration: none; color: black;', title: 'Delete', |
+                data: { confirm: "Are you sure you want to delete the \n#{instrument.name} at #{@sites.find(instrument.site_id).name}?\n\nTHE INSTRUMENT AND ALL DATA WILL BE PERMANENTLY DELETED" }
+
 - if can?(:create, Instrument)
   - if @sites.count > 0
-    = link_to 'New Instrument', new_instrument_path, :class => 'btn btn-default btn-lg dropdown-toggle'
+    = button_to 'New Instrument', new_instrument_path, method: :get, class: 'btn btn-default btn-md'
   - else
     %strong At least one site must be defined before creating a new instrument.
 
 %h2 Identifiers
 
-%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", :type => "button", :class => 'btn btn-default btn-lg dropdown-toggle'}
-  Toggle Details
+%button.collapsed{"aria-expanded" => "false", "data-target" => "#summarytable", "data-toggle" => "collapse", type: "button", class: 'btn btn-default btn-md'}
+  Show Details For Grafana Setup
 
 #summarytable.table-responsive.collapse
   %table.table.table-striped
@@ -124,10 +130,6 @@
           %br>/
           Id
         %th
-          Sensor
-          %br>/
-          Id
-        %th
           Variable
           %br>/
           Id
@@ -142,5 +144,4 @@
                 %td=var.shortname
                 %td=site.id
                 %td=instrument.id
-                %td=instrument.sensor_id
                 %td=var.id

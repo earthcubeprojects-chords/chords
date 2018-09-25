@@ -16,6 +16,14 @@ class Instrument < ActiveRecord::Base
   def self.initialize
   end
 
+  def to_s
+    name
+  end
+
+  def select_label
+    "#{site.name}: #{name}"
+  end
+
   def find_var_by_shortname (shortname)
     var_id = Var.all.where("instrument_id='#{self.id}' and shortname='#{shortname}'").pluck(:id)[0]
 

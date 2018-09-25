@@ -58,9 +58,10 @@ class InstrumentsController < ApplicationController
 
   # GET instruments/simulator
   def simulator
-    if @profile.secure_data_entry and current_user.api_key.blank?
-      flash[:notice] = "An API Key is necessary to use the simulator; please add one by editing the user in the Users section."
+    if @profile.secure_data_entry && current_user.api_key.blank?
+      flash[:notice] = 'An API Key is necessary to use the simulator. Please add one by editing the user in the Users section.'
     end
+
     @sites = Site.accessible_by(current_ability)
     @instruments = Instrument.accessible_by(current_ability)
   end

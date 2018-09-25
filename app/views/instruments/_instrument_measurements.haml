@@ -8,10 +8,7 @@ measurements were reported.
     = render partial: "delete_test_measurements_form", locals: {instrument: @instrument}
 %br
 This instrument is expected to report a measurement every
-- if can?(:update, @instrument)
-  = best_in_place @instrument, :sample_rate_seconds, :as => :input
-- else
-  = @instrument.sample_rate_seconds
+= @instrument.sample_rate_seconds
 seconds.
 %br
 - if @instrument.point_time_in_ms("first") != "None"

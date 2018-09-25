@@ -1,12 +1,52 @@
-.table-responsive
-  %table.table.table-striped
-    %thead
-      %tr
-        %th Name
-        %th Lat
-        %th Lon
-        %th Elevation
-        %th{:colspan => "1"}
-    %tbody
-      = render partial: 'sites/bip_form', locals: {site: @site}
+%h1 Site
+%br
+
+.line
+  .title
+    Name
+  .field
+    = @site.name
+.line
+  .title
+    Description
+  .field
+    = @site.description
+.line
+  .title
+    Latitude
+  .field
+    = @site.lat
+.line
+  .title
+    Longitude
+  .field
+    = @site.lon
+.line
+  .title
+    Elevation
+  .field
+    = @site.elevation
+- if Archive.first.name == "CUAHSI"
+  .line
+    .title
+      CUAHSI Site Code
+    .field
+      = @site.cuahsi_site_code
+
+.line
+  .title
+    Instruments
+
+- @site.instruments.each do |inst|
+  .line
+    .title
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      = link_to inst.name, instrument_url(inst)
+      %br
+
+%br
+-if can? :edit, @site
+  = button_to 'Edit Site', edit_site_path(@site), method: :get, class: 'btn btn-default btn-md'
+  %br
+
 = link_to 'Back', sites_path
