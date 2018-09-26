@@ -20,7 +20,7 @@ to get your portal running, and for additional information.
 <div id="ub" class="tab-pane active">
 {% highlight sh %}
 sudo -i
-apt-get install docker.io docker-compose
+apt-get install docker.io docker-compose git
 {% endhighlight %}
 {% include chords_control.md %}
 </div>
@@ -30,6 +30,7 @@ apt-get install docker.io docker-compose
 sudo -i # Or 'su -' if you do not have sudo privileges
 yum -y install epel-release
 yum -y install docker docker-compose
+yum -y install git
 systemctl enable docker
 systemctl start docker
 {% endhighlight %}
