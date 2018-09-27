@@ -18,13 +18,14 @@ class VarsController < ApplicationController
   end
 
   def edit
+    @instrument = @var.instrument
     @return = params[:return]
   end
 
   def create
     respond_to do |format|
       if @var.save
-        format.html { redirect_to Instrument.find(@var.instrument_id), notice: 'Variable was successfully created' }
+        format.html { redirect_to instrument_path(@var.instrument), notice: 'Variable was successfully created' }
         format.json { render :show, status: :created, location: @var }
       else
         format.html { render :new }
@@ -36,7 +37,7 @@ class VarsController < ApplicationController
   def update
     respond_to do |format|
       if @var.update(var_params)
-        format.html { redirect_to @var, notice: 'Var was successfully updated' }
+        format.html { redirect_to instrument_path(@var.instrument), notice: 'Variable was successfully updated' }
         format.json { render :show, status: :ok, location: @var }
       else
         format.html { render :edit }
