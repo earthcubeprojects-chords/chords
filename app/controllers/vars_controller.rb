@@ -15,8 +15,6 @@ class VarsController < ApplicationController
   def new
     @instrument = Instrument.find(params[:instrument_id])
     @return = params[:return]
-
-    @var.instrument_id = @instrument.id
   end
 
   def edit
