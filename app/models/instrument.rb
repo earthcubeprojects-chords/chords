@@ -1,6 +1,6 @@
 require 'task_helpers/cuahsi_helper'
 
-class Instrument < ActiveRecord::Base
+class Instrument < ApplicationRecord
   include Rails.application.routes.url_helpers
   include CuahsiHelper
 

@@ -1,3 +1,3 @@
-class InfluxdbTag < ActiveRecord::Base
+class InfluxdbTag < ApplicationRecord
   belongs_to :instrument
 end

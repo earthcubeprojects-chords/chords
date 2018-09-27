@@ -1,4 +1,4 @@
-class LinkedDatum < ActiveRecord::Base
+class LinkedDatum < ApplicationRecord
   validates :doi, allow_blank: true, format: {with: /\A(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?!["&\'<>])\S)+)/, message: "invalid DOI"}
 
   def self.initialize(default_host=nil)

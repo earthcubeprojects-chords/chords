@@ -1,4 +1,4 @@
-FROM ruby:2.2-slim
+FROM ruby:2.5-slim
 MAINTAINER martinc@ucar.edu
 
 # Install apt based dependencies required to run Rails as
