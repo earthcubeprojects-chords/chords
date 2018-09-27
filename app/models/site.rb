@@ -1,4 +1,4 @@
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
   require 'task_helpers/cuahsi_helper'
   include CuahsiHelper
   include ArchiveHelper

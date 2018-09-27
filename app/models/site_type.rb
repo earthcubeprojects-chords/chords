@@ -1,5 +1,4 @@
-class SiteType < ActiveRecord::Base
-
+class SiteType < ApplicationRecord
 	validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :definition, presence: true, uniqueness: { case_sensitive: false }
 

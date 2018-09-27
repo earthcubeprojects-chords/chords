@@ -1,2 +1,2 @@
-class ArchiveJob < ActiveRecord::Base
+class ArchiveJob < ApplicationRecord
 end
