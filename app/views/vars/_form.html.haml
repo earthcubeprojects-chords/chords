@@ -17,6 +17,7 @@
       = f.label :shortname
     .field
       = f.text_field :shortname, class: 'form-control'
+      = f.hidden_field :instrument_id, value: @instrument.id
   .line
     .title
       = link_to 'Units', :units
