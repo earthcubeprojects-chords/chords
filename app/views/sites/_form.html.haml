@@ -39,7 +39,7 @@
       .field
         = f.text_field :cuahsi_site_code, class: 'form-control'
   .actions
-    = f.submit class: 'btn btn-default btn-md btn-primary'
+    = f.submit class: 'btn btn-md btn-primary'
 
 -if (can? :destroy, @site) && action_name == 'edit'
-  %p= button_to 'Delete Site', @site, method: :delete, data: { confirm: "Are you sure you want to delete site: #{@site.name}?" }, class: 'btn btn-default btn-md btn-danger'
+  %p= button_to 'Delete Site', @site, method: :delete, data: { confirm: "Are you sure you want to delete site: #{@site.name}?" }, class: 'btn btn-md btn-danger'
