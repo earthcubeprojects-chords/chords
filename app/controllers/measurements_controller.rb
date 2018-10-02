@@ -125,13 +125,14 @@ class MeasurementsController < ApplicationController
 
     if params.key?(:instrument_id)
       inst_id = params[:instrument_id]
+
       if Instrument.exists?(inst_id)
         DeleteTestTsPoints.call(TsPoint, inst_id)
       end
     end
 
     respond_to do |format|
-      format.html { redirect_to :back }
+      format.html { redirect_back fallback_location: instruments_path }
       format.json { head :no_content }
     end
   end
