@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.7'
+gem 'rails', '~> 5.2'
 gem 'mysql2', '~> 0.5'
 gem 'influxdb', '~> 0.6'
 gem "influxer", "~> 1.1"
 
-gem 'uglifier', '>= 4.1'
+gem 'uglifier', '~> 4.1'
 gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails', '~> 4.3'
 gem 'jquery-ui-rails'
@@ -18,7 +18,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 
-gem 'devise'
+gem 'devise', '~> 4.5'
 gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
