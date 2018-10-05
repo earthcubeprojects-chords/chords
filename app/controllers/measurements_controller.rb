@@ -32,7 +32,7 @@ class MeasurementsController < ApplicationController
     if !auth
       respond_to do |format|
         format.json { render json: {errors: ['FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.']}, status: :unauthorized }
-        format.html { render text: 'FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.', status: :unauthorized }
+        format.html { render plain: 'FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.', status: :unauthorized }
       end
 
       return
@@ -110,12 +110,12 @@ class MeasurementsController < ApplicationController
 
     respond_to do |format|
       if save_ok
-        format.html { render text: 'Measurement created successfully', status: :ok }
+        format.html { render plain: 'Measurement created successfully', status: :ok }
         format.json { render json: {errors: [], success: true, messages: ['OK']}, status: :ok }
       else
         error_msg = 'Measurement could not be created. ' + create_err_msg
         format.json { render json: {errors: [error_msg], success: false, messages: []}, status: :bad_request }
-        format.html { render text: error_msg, status: :bad_request }
+        format.html { render plain: error_msg, status: :bad_request }
       end
     end
   end
