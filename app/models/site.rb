@@ -1,18 +1,22 @@
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
   require 'task_helpers/cuahsi_helper'
   include CuahsiHelper
   include ArchiveHelper
 
   has_many :instruments, :dependent => :destroy
   belongs_to :site_type
-  
+
   def self.initialize
   end
-  
-  def self.list_site_options 
+
+  def to_s
+    name
+  end
+
+  def self.list_site_options
     Site.select("id, name").map {|site| [site.id, site.name] }
-  end  
-  
+  end
+
 
   def get_cuahsi_sites
     uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetSitesJSON"
@@ -27,7 +31,7 @@ class Site < ActiveRecord::Base
 
   def get_cuahsi_siteid
     if self.cuahsi_site_id
-      return self.cuahsi_site_id 
+      return self.cuahsi_site_id
     else
       find_site
     end
@@ -47,12 +51,12 @@ class Site < ActiveRecord::Base
   def create_cuahsi_site
     profile = Profile.first
     url = profile.domain_name
-  	
+
   	if self.cuahsi_site_code == nil
   	  self.cuahsi_site_code = get_cuahsi_sitecode
   	  self.save
 	  end
-	  
+
 	  data = {
       "user" => Rails.application.config.x.archive['username'],
       "password" => Rails.application.config.x.archive['password'],

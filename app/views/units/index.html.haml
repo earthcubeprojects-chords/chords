@@ -1,60 +1,36 @@
 %p#notice= notice
 
-%h1 
+%h1
   .center
     Units
-
-.row-fluid.variable
-  .col-sm-1
-    %strong
-      Id
-  .col-sm-2
-    %strong
-      Remote Archive Id
-  .col-sm-2
-    %strong
-      Source
-  .col-sm-2
-    %strong
-      Name
-  .col-sm-2
-    %strong
-      Abbreviation
-  .col-sm-2
-    %strong
-      Type
-
-.clear
-
-- @units.each do |unit|
-
-  .row-fluid.variable
-    .col-sm-1
-      .variable_header
-        Id:
-      = unit.id
-    .col-sm-2
-      .variable_header
-        Id:
-      = unit.id_num
-    .col-sm-2
-      .variable_header
-        Source:
-      = unit.source
-    .col-sm-2
-      .variable_header
-        Name:
-      = unit.name
-    .col-sm-2
-      .variable_header
-        Abbreviation:
-      = unit.abbreviation
-    .col-sm-2
-      .variable_header
-        Type:
-      = unit.unit_type
-
-  .clear
-
 %br
 
+.accordion
+  - @sources.each do |source|
+    %h3= source
+    .accordion
+      - @data[source].keys.sort_by{|x| x.downcase if !x.nil?}.each do |unit_type|
+        %h3= unit_type.nil? ? 'Unknown' : unit_type.titlecase
+        %div
+          .row-fluid.variable
+            .col-sm-4
+              %strong Name
+            .col-sm-2
+              %strong Abbreviation
+
+            - @data[source][unit_type].sort_by{|x| x[:name].downcase}.each do |unit|
+              %br
+              .row-fluid.variable
+                .col-sm-4= unit[:name]
+                .col-sm-2= unit[:abbreviation]
+
+.clear
+%br
+
+:javascript
+  $(function() {
+    $('.accordion').accordion({
+      heightStyle: "content",
+      collapsible: true
+    });
+  });

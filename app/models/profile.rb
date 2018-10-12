@@ -1,4 +1,4 @@
-class Profile < ActiveRecord::Base
+class Profile < ApplicationRecord
   require 'task_helpers/cuahsi_helper'
   include CuahsiHelper
 
@@ -7,16 +7,16 @@ class Profile < ActiveRecord::Base
     with:    /10.\d{4,9}\/[-._;()\/:A-Z0-9]+/i,
     message: "invalid DOI"
   }
-    	
-  validates :domain_name, format: { 
+
+  validates :domain_name, format: {
      with: /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z0-9]{1,5}(:[0-9]{1,5})?(\/.*)?$/ix,
      multiline: true,
-     message: "The domain name is not in a valid format. (Expecting subdomain.domain.com format. Do not include http/https.)" 
+     message: "The domain name is not in a valid format. (Expecting subdomain.domain.com format. Do not include http/https.)"
   }
 
   def self.initialize
     Profile.create([{
-    project: 'Real-Time Measurements', 
+    project: 'Real-Time Measurements',
     affiliation: 'My Organization',
     timezone: 'Mountain Time (US & Canada)',
     description: 'This is a CHORDS Portal.
@@ -34,12 +34,12 @@ class Profile < ActiveRecord::Base
     <li>can leverage the real-time streams into other more sophisticated and standardized web services (such as mapping, data federation, and discovery).</li>
     </ul>
     </ul>
-    ', 
+    ',
     logo: nil,
     secure_administration: true,
     data_entry_key: 'key'
-    
-    }])      
+
+    }])
   end
 
   def get_cuahsi_sources
@@ -50,7 +50,7 @@ class Profile < ActiveRecord::Base
 
   def get_cuahsi_sourceid(url)
     if self.cuahsi_source_id
-      return self.cuahsi_source_id 
+      return self.cuahsi_source_id
     else
       sources = get_cuahsi_sources
       id = sources.find {|source| source['SourceLink']==url}

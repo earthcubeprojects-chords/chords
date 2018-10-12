@@ -1,6 +1,6 @@
 require 'task_helpers/cuahsi_helper'
 
-class Var < ActiveRecord::Base
+class Var < ApplicationRecord
   include CuahsiHelper
 
   belongs_to :instrument

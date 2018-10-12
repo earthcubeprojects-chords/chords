@@ -134,5 +134,9 @@ class Ability
     site_configurator(user)
 
     can :manage, :all
+
+    if user
+      cannot :destroy, User, id: user.id
+    end
   end
 end

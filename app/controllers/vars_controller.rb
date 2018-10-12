@@ -13,15 +13,19 @@ class VarsController < ApplicationController
   end
 
   def new
+    @instrument = Instrument.find(params[:instrument_id])
+    @return = params[:return]
   end
 
   def edit
+    @instrument = @var.instrument
+    @return = params[:return]
   end
 
   def create
     respond_to do |format|
       if @var.save
-        format.html { redirect_to Instrument.find(@var.instrument_id), notice: 'Variable was successfully created' }
+        format.html { redirect_to instrument_path(@var.instrument), notice: 'Variable was successfully created' }
         format.json { render :show, status: :created, location: @var }
       else
         format.html { render :new }
@@ -33,7 +37,7 @@ class VarsController < ApplicationController
   def update
     respond_to do |format|
       if @var.update(var_params)
-        format.html { redirect_to @var, notice: 'Var was successfully updated' }
+        format.html { redirect_to instrument_path(@var.instrument), notice: 'Variable was successfully updated' }
         format.json { render :show, status: :ok, location: @var }
       else
         format.html { render :edit }
@@ -47,8 +51,12 @@ class VarsController < ApplicationController
 
     respond_to do |format|
       if @var.destroy
-        format.html { redirect_to instrument, notice: 'Variable was deleted' }
-        # format.html { redirect_to vars_url, notice: 'Var was successfully destroyed.' }
+        if instrument
+          format.html { redirect_to instrument, notice: 'Variable was deleted' }
+        else
+          format.html { redirect_to vars_path, notice: 'Variable was deleted' }
+        end
+
         format.json { head :no_content, status: :success }
       else
         format.html { render :show, alert: 'Could not destroy variable' }
@@ -71,6 +79,6 @@ class VarsController < ApplicationController
 
 private
   def var_params
-    params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category)
+    params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category, :return)
   end
 end

@@ -1,5 +1,11 @@
-%h1 Editing Variable
-= render 'form'
-= link_to 'Show', @var
-|
-= link_to 'Back', instruments_path(@var.instrument)
+%h1 Editing Variable for Instrument: #{@var.instrument.try(:name)}
+%br
+%div.row
+  %div.col-lg-8.col-md-10
+    = render 'form'
+%br
+
+- if @return == 'edit'
+  = link_to 'Back', edit_instrument_path(@var.instrument)
+- else
+  = link_to 'Back', instrument_path(@var.instrument)

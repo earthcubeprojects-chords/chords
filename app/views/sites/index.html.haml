@@ -1,4 +1,10 @@
 %h1 Sites
+%br
+
+- if can?(:create, Site)
+  = button_to 'New Site', new_site_path, method: :get, class: 'btn btn-default btn-md'
+  %br
+
 .table-responsive
   %table.table.table-striped
     %thead
@@ -9,19 +15,36 @@
         %th Elevation (m)
         %th
           = link_to 'Site Type', :site_types
+
         - if Archive.first.try(:name) == "CUAHSI"
           %th CUAHSI Site Code
-        %th{:colspan => "1"}
+
+        %th{colspan: "1"}
     %tbody
       - @sites.each do |site|
-        = render partial: 'sites/bip_form', locals: {site: site}
-%br/
-= form_for :site, url: sites_path, :remote => false, :format => :js do |f|
-  = f.hidden_field :name,      :value => 'site name'
-  = f.hidden_field :lat,       :value => 'lat'
-  = f.hidden_field :lon,       :value => 'lon'
-  = f.hidden_field :elevation, :value => 'elevation'
-  = f.hidden_field :site_type_id, :value => '42'
+        %tr
+          %td= link_to site.name, site_path(site)
+          %td= site.lat
+          %td= site.lon
+          %td= site.elevation
+          %td= site.site_type
 
-  - if can?(:create, Site)
-    = f.submit :value	 => 'Add a New Site', :class => 'btn btn-default btn-lg dropdown-toggle'
+          - if Archive.first.try(:name) == "CUAHSI"
+            %td= site.cuahsi_site_code
+        %tr
+          %td{colspan: "4"}
+            %ul{style: "list-style-type:none;padding:0; margin:0px 0px 0px 25px;"}
+              = site.description
+
+        %tr
+          %td
+            %ul{:style => "list-style-type:none;padding:0; margin:0px 0px 0px 25px;"}
+              - site.instruments.each do |inst|
+                %li= link_to inst.name, instrument_path(inst)
+
+        %tr
+          %td
+            %br
+
+- if can?(:create, Site)
+  = button_to 'New Site', new_site_path, method: :get, class: 'btn btn-default btn-md'
