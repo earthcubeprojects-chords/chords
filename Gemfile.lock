@@ -87,7 +87,7 @@ GEM
     factory_bot_rails (4.8.2)
       factory_bot (~> 4.8.2)
       railties (>= 3.0.0)
-    ffi (1.9.23)
+    ffi (1.9.25)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     haml (5.0.4)
@@ -282,6 +282,7 @@ DEPENDENCIES
   devise (~> 4.5)
   factory_bot_rails
   faker!
+  ffi (~> 1.9.25)
   haml-rails
   highcharts-rails
   influxdb (~> 0.6)
