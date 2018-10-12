@@ -22,6 +22,7 @@ gem 'devise', '~> 4.5'
 gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
+gem 'ffi', '~> 1.9.25'
 
 gem 'mini_portile2'
 gem 'whenever', "~>0.9.7", :require => false
