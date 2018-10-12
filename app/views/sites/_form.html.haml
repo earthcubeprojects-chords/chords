@@ -17,6 +17,10 @@
       = f.label :description
     .field
       = f.text_area :description, rows: 3, class: 'form-control'
+  .field
+    = f.label :site_type, 'Site Type'
+    %br
+    = f.collection_select :site_type_id, SiteType.order(:name), :id, :name, include_blank: false
   .line
     .title
       = f.label :lat

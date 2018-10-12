@@ -1,4 +1,4 @@
-class MeasuredProperty < ActiveRecord::Base
+class MeasuredProperty < ApplicationRecord
   has_many :vars
 
   def self.populate

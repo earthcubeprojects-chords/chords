@@ -1,6 +1,6 @@
 require 'csv'
 
-class Unit < ActiveRecord::Base
+class Unit < ApplicationRecord
   has_many :vars
 
   validates :name, uniqueness: false, presence: true
