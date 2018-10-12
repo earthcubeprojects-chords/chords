@@ -1,38 +1,38 @@
 require 'csv'
 
-class Unit < ActiveRecord::Base
-    has_many :vars
+class Unit < ApplicationRecord
+  has_many :vars
 
-    validates :name, uniqueness: false, presence: true
-    validates_uniqueness_of :id_num, :scope => :source
-		validates :unit_type, uniqueness: false
-		validates :abbreviation, uniqueness: false, presence: true
-		validates :source, uniqueness: false, presence: true
-
+  validates :name, uniqueness: false, presence: true
+  validates_uniqueness_of :id_num, :scope => :source
+	validates :unit_type, uniqueness: false
+	validates :abbreviation, uniqueness: false, presence: true
+	validates :source, uniqueness: false, presence: true
 
 	def self.populate
 	  self.populate_cuahsi_units
-	  self.populate_udunits_units 
+	  self.populate_udunits_units
   end
-  
+
 	def self.populate_cuahsi_units
-		
-		#populate CUAHSI units
 		xml_file = Rails.root + 'lib/assets/cuahsi_units.xml'
   	doc = File.open(xml_file) { |f| Nokogiri::XML(f) }
-  	doc.xpath("//x:Record", {"x" => "http://his.cuahsi.org/his/1.1/ws/"}).each do |node|
+
+    doc.xpath("//x:Record", {"x" => "http://his.cuahsi.org/his/1.1/ws/"}).each do |node|
       params = Hash.new
-      node.children.each do |property_node| 
+
+      node.children.each do |property_node|
       	case property_node.name
           when 'UnitsID'
             params['id_num'] = property_node.text
-          when 'UnitsName'            
+          when 'UnitsName'
             params['name'] = property_node.text
-          when 'UnitsType'            
+          when 'UnitsType'
             params['unit_type'] = property_node.text
           when 'UnitsAbbreviation'
           	params['abbreviation'] = property_node.text
 	      end
+
 	      params['source'] = "CUAHSI"
 	    	Unit.create(params)
     	end
@@ -40,12 +40,11 @@ class Unit < ActiveRecord::Base
   end
 
 	def self.populate_udunits_units
-
-    #populate UDUNITS
     id_num = 1
   	csv_file = Rails.root + 'lib/assets/udunits.csv'
 		csv_text = File.read(csv_file)
-		csv = CSV.parse(csv_text, :headers => true)
+		csv = CSV.parse(csv_text, headers: true)
+
 		csv.each do |row|
 			fields = row.to_hash
 			unit = Unit.new
@@ -56,7 +55,5 @@ class Unit < ActiveRecord::Base
 			unit.save
 			id_num += 1
 		end
-
 	end
-
 end

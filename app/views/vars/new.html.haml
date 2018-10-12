@@ -1,26 +1,11 @@
-%h1
-  Create a New Variable for #{@instrument.name}
-= form_for(@var, html: {class: "new_or_edit_form" }) do |f|
-  .field
-    %table
-      - @currentvars.each do |v|
-        %tr
-          %td{:align => "right"}
-            = v.name
-          %td{:align => "right"}
-            = v.shortname
-      %tr
-        %td{:align => "right"}
-          = f.label :name
-          = f.text_field :name
-        %br/
-        %td{:align => "right"}
-          = f.label :shortname
-          = f.text_field :shortname
-        %br/
-        %td{:align => "right"}
-          = f.hidden_field :instrument_id, :value => params[:inst_id], :readonly => true
-        %br/
-  .field
-    = f.submit
-= link_to 'Back', instruments_path(@var.instrument)
+%h1 Create a New Variable for Instrument: #{@instrument.name}
+%br
+%div.row
+  %div.col-lg-8.col-md-10
+    = render 'form'
+%br
+
+- if @return == 'edit'
+  = link_to 'Back', edit_instrument_path(@instrument)
+- else
+  = link_to 'Back', instrument_path(@instrument)

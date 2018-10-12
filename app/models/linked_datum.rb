@@ -1,4 +1,4 @@
-class LinkedDatum < ActiveRecord::Base
+class LinkedDatum < ApplicationRecord
   validates :doi, allow_blank: true, format: {with: /\A(10[.][0-9]{4,}(?:[.][0-9]+)*\/(?:(?!["&\'<>])\S)+)/, message: "invalid DOI"}
 
   def self.initialize(default_host=nil)
@@ -77,6 +77,7 @@ class LinkedDatum < ActiveRecord::Base
     data['name'] = data_name
     data['description'] = description
     data['url'] = dataset_url
+    data['logo'] = dataset_url[0..-2] + ActionController::Base.helpers.image_url("CHORDS_full_50.png")
     data['version'] = version
     data['keywords'] = keywords
     data['spatialCoverage'] = spatial_coverage

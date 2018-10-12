@@ -49,7 +49,7 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :debug
 
-  # Rotate log files 
+  # Rotate log files
   config.logger = Logger.new(config.paths['log'].first, 10, 5242880)
 
   # Prepend all log lines with the following tags.
@@ -73,7 +73,7 @@ Rails.application.configure do
     password:              ENV['CHORDS_EMAIL_PASSWORD'],
     authentication:        'plain',
     enable_starttls_auto:  true
-  }  
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -91,7 +91,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
+
   config.assets.precompile += %w( *.js *.css )
 
   config.action_mailer.perform_deliveries = true

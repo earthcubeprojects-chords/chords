@@ -2,6 +2,7 @@ class InfluxdbTagsController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @influxdb_tags = @influxdb_tags.sort_by{|x| [x.instrument.site.name, x.instrument.name, x.name]}
   end
 
   def show
@@ -15,7 +16,7 @@ class InfluxdbTagsController < ApplicationController
 
     respond_to do |format|
       if @influxdb_tag.save
-        format.html { redirect_to Instrument.find(@influxdb_tag.instrument_id), notice: 'InfluxDB Tag created.' }
+        format.html { redirect_to influxdb_tags_path, notice: 'InfluxDB Tag created' }
         format.json { render :show, status: :created, location: @influxdb_tag }
       else
         format.html { render :new }
@@ -42,10 +43,10 @@ class InfluxdbTagsController < ApplicationController
   def destroy
     respond_to do |format|
       if @influxdb_tag.destroy
-        format.html { redirect_to Instrument.find(@influxdb_tag.instrument_id), notice: 'Influxdb tag was successfully destroyed' }
+        format.html { redirect_to influxdb_tags_path, notice: 'Influxdb tag was successfully destroyed' }
         format.json { head :no_content, status: :ok }
       else
-        format.html { redirect_to Instrument.find(@influxdb_tag.instrument_id), alert: 'Influxdb tag could not be destroyed' }
+        format.html { redirect_to influxdb_tag_path(@influxdb_tag), alert: 'Influxdb tag could not be destroyed' }
         format.json { render json: '{"errors": ["Influxdb tag could not be destroyed"]}', status: :bad_request }
       end
     end

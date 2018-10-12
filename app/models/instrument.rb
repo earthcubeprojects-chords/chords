@@ -1,6 +1,6 @@
 require 'task_helpers/cuahsi_helper'
 
-class Instrument < ActiveRecord::Base
+class Instrument < ApplicationRecord
   include Rails.application.routes.url_helpers
   include CuahsiHelper
 
@@ -14,6 +14,14 @@ class Instrument < ActiveRecord::Base
   accepts_nested_attributes_for :vars
 
   def self.initialize
+  end
+
+  def to_s
+    name
+  end
+
+  def select_label
+    "#{site.name}: #{name}"
   end
 
   def find_var_by_shortname (shortname)

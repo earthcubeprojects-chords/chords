@@ -2,7 +2,18 @@ class MeasuredPropertiesController < ApplicationController
   load_and_authorize_resource
 
   def index
+    @data = {}
     @measured_properties = MeasuredProperty.all
+    @sources = @measured_properties.where('source IS NOT NULL').map{|mp| mp.source}.uniq.sort_by{|source| source.downcase}
+
+    @measured_properties.each do |mp|
+      @data[mp.source] = [] if !@data.keys.include?(mp.source)
+      @data[mp.source] << {name: mp.label, url: mp.url}
+    end
+
+    @data.keys.each do |source|
+      @data[source] = @data[source].sort_by{|x| x[:name].downcase}
+    end
   end
 
   def show
