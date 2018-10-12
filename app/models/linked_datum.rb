@@ -77,6 +77,7 @@ class LinkedDatum < ApplicationRecord
     data['name'] = data_name
     data['description'] = description
     data['url'] = dataset_url
+    data['logo'] = dataset_url[0..-2] + ActionController::Base.helpers.image_url("CHORDS_full_50.png")
     data['version'] = version
     data['keywords'] = keywords
     data['spatialCoverage'] = spatial_coverage
