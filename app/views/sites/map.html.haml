@@ -184,7 +184,7 @@
       recentJSON = data;
       // if the JSON has changed, remove current markers and replot
       if (JSON.stringify(recentJSON) != JSON.stringify(prevJSON)) {
-        siteMap.removeLayer(markerCluster);
+        markerCluster.clearLayers();
         markerCluster = plotMarkers(data, siteMap, markerCluster);
       }
       // save history
