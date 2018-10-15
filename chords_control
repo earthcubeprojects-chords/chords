@@ -437,10 +437,10 @@ class ChordsConfig(OrderedDict):
                                     description=description,
                                     defaultval =self.configItems[key]['default'])
                     if not self.configItems[key]['verify']:
-                        break;
+                        break
                     else:
                         if self[key] in self.configItems[key]['choices']:
-                            break;
+                            break
                         else:
                             print '>>>> You entered an invalid value. Please try again (or use ctrl-C to exit)'
 
@@ -870,7 +870,7 @@ def choose_branch(script_name):
         if git_branch in git_branches:
             break
         else:
-            print "The", choice, "branch is not available."
+            print "The", git_branch, "branch is not available."
     return git_branch
             
 #####################################################################
