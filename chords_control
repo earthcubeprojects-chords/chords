@@ -562,7 +562,7 @@ class ChordsGit:
             # Insert proxy switch
             curl_cmd[1:1] = proxy_switch
     
-            curl_result, exit_status = os_cmd(curl_cmd)
+            _, exit_status = os_cmd(curl_cmd)
             check_cmd_status(exit_status=exit_status, cmd=curl_cmd, 
                 err_msg='Unable to fetch '+file)
 
@@ -676,7 +676,7 @@ class Docker:
               '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml', 
               'up', '-d']
             
-        up_result, exit_status = os_cmd(up_cmd)
+        _, exit_status = os_cmd(up_cmd)
         check_cmd_status(exit_status=exit_status, cmd=up_cmd, err_msg='Unable to start containers')
     
     def down(self):
@@ -685,7 +685,7 @@ class Docker:
         """
         dn_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, '-p', 'chords', 'down']
-        dn_result, exit_status = os_cmd(dn_cmd)
+        _, exit_status = os_cmd(dn_cmd)
         check_cmd_status(exit_status=exit_status, cmd=dn_cmd, err_msg='Unable to stop containers')
 
     def pull(self):
@@ -698,7 +698,7 @@ class Docker:
         
         pull_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, 'pull']
-        pull_result, exit_status = os_cmd(pull_cmd)
+        _, exit_status = os_cmd(pull_cmd)
         check_cmd_status(exit_status=exit_status, cmd=pull_cmd, err_msg='Unable to pull Docker images')
 
     def tags(self):
