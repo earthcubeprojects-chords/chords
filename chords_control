@@ -562,9 +562,7 @@ class ChordsGit:
             # Insert proxy switch
             curl_cmd[1:1] = proxy_switch
     
-            _, exit_status = os_cmd(cmd=curl_cmd)
-            check_cmd_status(exit_status=exit_status, cmd=curl_cmd, 
-                err_msg='Unable to fetch '+file)
+            os_cmd(cmd=curl_cmd)
 
             print
 
@@ -630,8 +628,7 @@ class Docker:
               '--format', 
               '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
 
-        ps_result, exit_status = os_cmd(cmd=ps_cmd, printlines=False)
-        check_cmd_status(exit_status=exit_status, cmd=ps_cmd, err_msg='Unable to obtain container status')
+        ps_result, _ = os_cmd(cmd=ps_cmd, printlines=False)
 
         ps_result = ps_result.split('\n')
         containers = []
