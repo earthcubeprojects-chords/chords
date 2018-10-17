@@ -562,14 +562,17 @@ class ChordsGit:
             # Insert proxy switch
             curl_cmd[1:1] = proxy_switch
     
-            os_cmd(curl_cmd)
+            curl_result, exit_status = os_cmd(curl_cmd)
+            check_cmd_status(exit_status=exit_status, cmd=curl_cmd, 
+                err_msg='Unable to fetch '+file)
+
             print
 
     def branches(self):
         git_cmd = [
             'git', 'ls-remote', '--heads', 'https://github.com/ncar/chords'
             ]
-        heads = [e.replace('refs/heads/','') for e in os_cmd(git_cmd,printlines=False).split()[1::2]]
+        heads = [e.replace('refs/heads/','') for e in os_cmd(git_cmd,printlines=False)[0].split()[1::2]]
         heads.remove('gh-pages')
         return heads
         
@@ -627,8 +630,10 @@ class Docker:
               '--format', 
               '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
 
-        ps_result = os_cmd(ps_cmd, printlines=False).split('\n')
+        ps_result, exit_status = os_cmd(ps_cmd, printlines=False)
+        check_cmd_status(exit_status=exit_status, cmd=ps_cmd, err_msg='Unable to obtain container status')
 
+        ps_result = ps_result.split('\n')
         containers = []
         for p in ps_result:
             p = p.strip()
@@ -671,7 +676,8 @@ class Docker:
               '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml', 
               'up', '-d']
             
-        os_cmd(up_cmd)
+        up_result, exit_status = os_cmd(up_cmd)
+        check_cmd_status(exit_status=exit_status, cmd=up_cmd, err_msg='Unable to start containers')
     
     def down(self):
         """
@@ -679,7 +685,8 @@ class Docker:
         """
         dn_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, '-p', 'chords', 'down']
-        os_cmd(dn_cmd)
+        dn_result, exit_status = os_cmd(dn_cmd)
+        check_cmd_status(exit_status=exit_status, cmd=dn_cmd, err_msg='Unable to stop containers')
 
     def pull(self):
         """
@@ -691,20 +698,23 @@ class Docker:
         
         pull_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, 'pull']
-        os_cmd(pull_cmd)
-        
+        pull_result, exit_status = os_cmd(pull_cmd)
+        check_cmd_status(exit_status=exit_status, cmd=pull_cmd, err_msg='Unable to pull Docker images')
+
     def tags(self):
         """
         Return an array of tag names for dockerhub images.
         """
           
         curl_cmd = [
-            'curl', '-s', self.dockerhub_tags_uri
+            'curl', '-f', '-s', self.dockerhub_tags_uri
             ]
         if os_name == 'nt':
           curl_cmd[1:1] = ['-k']
         
-        curl_result = os_cmd(curl_cmd, printlines=False)
+        curl_result, exit_status = os_cmd(curl_cmd, printlines=False)
+        check_cmd_status(exit_status=exit_status, cmd=curl_cmd, err_msg='Unable to fetch the Docker tags')
+            
         tags = []
         for t in json.loads(curl_result):
             tags.append(byteify(t["name"]))
@@ -744,24 +754,23 @@ def createConfigFilefromEnv(options):
 #####################################################################
 def os_cmd(cmd, printlines=True):
     """
-    Run a shell command. The command output is returned as a single string, with each
-    line delimited by a newline. 
+    Run a shell command. The return value a tuple. 
+    [0] is a single string, containing the command output, 
+    with each line delimited by a newline. 
+    [1] is the exit status of the command.
     """
     if verbose:
         print ' '.join(str(x) for x in cmd)
+
     try:
         proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        lines = ''
-        while True:
-          line = proc.stdout.readline()
-          lines = lines + line
-          if line != '':
-            #the real code does filtering here
-            if printlines:
-                print line.rstrip()
-          else:
-            break
-        return lines
+        lines = proc.communicate()[0]
+        exit_code = proc.wait()
+        output_lines = lines.split("\n")
+        for line in output_lines:
+          if line != '' and printlines:
+            print line.rstrip()
+        return (lines, exit_code)
     except Exception as e:
         print str(e) + ': ' + ' '.join(str(x) for x in cmd)
 
@@ -784,7 +793,7 @@ def byteify(input):
 #####################################################################
 def addChoicesToDOCKER_TAG(proxy=""):
     """
-    Get the avaiable tags and and them to the DOCKER_TAG valid choices.
+    Get the available tags and add them to the DOCKER_TAG valid choices.
     Modifies stdConfigItems.
     """
     for s in stdConfigItems:
@@ -840,7 +849,7 @@ def grep(expression, file):
 #####################################################################
 def renew_script(proxy):
     """
-    Update this script and docker-compose configurations.l.
+    Update this script and docker-compose configurations.
     A github branch will be requested.
     """
     script_name = 'chords_control'
@@ -856,6 +865,18 @@ def renew_script(proxy):
         createBackupFile(file)
             
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
+
+#####################################################################
+def check_cmd_status(exit_status, cmd, err_msg):
+    """
+    Check the exit_status. 
+    If it is non-zero, the error message will be printed
+    along with the command, and exit(1) will be called.
+    cmd is a list, such as used with the subrocess command.
+    """
+    if exit_status != 0:
+        print err_msg + ' using "' + " ".join(cmd) + '"'
+        exit(1)
 
 #####################################################################
 def choose_branch(script_name):
