@@ -562,7 +562,7 @@ class ChordsGit:
             # Insert proxy switch
             curl_cmd[1:1] = proxy_switch
     
-            _, exit_status = os_cmd(curl_cmd)
+            _, exit_status = os_cmd(cmd=curl_cmd)
             check_cmd_status(exit_status=exit_status, cmd=curl_cmd, 
                 err_msg='Unable to fetch '+file)
 
@@ -572,7 +572,7 @@ class ChordsGit:
         git_cmd = [
             'git', 'ls-remote', '--heads', 'https://github.com/ncar/chords'
             ]
-        heads = [e.replace('refs/heads/','') for e in os_cmd(git_cmd,printlines=False)[0].split()[1::2]]
+        heads = [e.replace('refs/heads/','') for e in os_cmd(cmd=git_cmd, printlines=False)[0].split()[1::2]]
         heads.remove('gh-pages')
         return heads
         
@@ -630,7 +630,7 @@ class Docker:
               '--format', 
               '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
 
-        ps_result, exit_status = os_cmd(ps_cmd, printlines=False)
+        ps_result, exit_status = os_cmd(cmd=ps_cmd, printlines=False)
         check_cmd_status(exit_status=exit_status, cmd=ps_cmd, err_msg='Unable to obtain container status')
 
         ps_result = ps_result.split('\n')
@@ -676,8 +676,7 @@ class Docker:
               '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml', 
               'up', '-d']
             
-        _, exit_status = os_cmd(up_cmd)
-        check_cmd_status(exit_status=exit_status, cmd=up_cmd, err_msg='Unable to start containers')
+        os_cmd(cmd=up_cmd, err_msg='Unable to start containers')
     
     def down(self):
         """
@@ -685,8 +684,7 @@ class Docker:
         """
         dn_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, '-p', 'chords', 'down']
-        _, exit_status = os_cmd(dn_cmd)
-        check_cmd_status(exit_status=exit_status, cmd=dn_cmd, err_msg='Unable to stop containers')
+        os_cmd(cmd=dn_cmd, err_msg='Unable to stop containers')
 
     def pull(self):
         """
@@ -696,10 +694,11 @@ class Docker:
         # We need docker-compose.yml
         checkFileExists(self.docker_compose_yml)
         
+        print "*** Pulling Docker images. This may take awhile..."
         pull_cmd = [self.docker_compose_cmd,
               '-f', self.docker_compose_yml, 'pull']
-        _, exit_status = os_cmd(pull_cmd)
-        check_cmd_status(exit_status=exit_status, cmd=pull_cmd, err_msg='Unable to pull Docker images')
+        os_cmd(cmd=pull_cmd, err_msg='Unable to pull Docker images')
+        print "*** ...Docker pull is finished."
 
     def tags(self):
         """
@@ -712,8 +711,8 @@ class Docker:
         if os_name == 'nt':
           curl_cmd[1:1] = ['-k']
         
-        curl_result, exit_status = os_cmd(curl_cmd, printlines=False)
-        check_cmd_status(exit_status=exit_status, cmd=curl_cmd, err_msg='Unable to fetch the Docker tags')
+        curl_result, _ = os_cmd(cmd=curl_cmd, err_msg='Unable to fetch the Docker tags', 
+            printlines=False)
             
         tags = []
         for t in json.loads(curl_result):
@@ -752,27 +751,35 @@ def createConfigFilefromEnv(options):
   config.writeEnvFile()
 
 #####################################################################
-def os_cmd(cmd, printlines=True):
+def os_cmd(cmd, err_msg=None, printlines=True):
     """
-    Run a shell command. The return value a tuple. 
+    Run a shell command. The return value is a tuple. 
     [0] is a single string, containing the command output, 
     with each line delimited by a newline. 
     [1] is the exit status of the command.
+    If err is specified, it should contain an error message,
+    and chk_cmd_status() will be called.
     """
     if verbose:
         print ' '.join(str(x) for x in cmd)
-
+    
     try:
         proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        lines = proc.communicate()[0]
-        exit_code = proc.wait()
-        output_lines = lines.split("\n")
-        for line in output_lines:
-          if line != '' and printlines:
-            print line.rstrip()
-        return (lines, exit_code)
+        lines = ''
+        while True:
+            output = proc.stdout.readline()
+            lines = lines + output
+            if output == '' and proc.poll() is not None:
+                break
+            if output != '' and printlines:
+                print output.rstrip()
+        exit_status = proc.poll()
     except Exception as e:
         print str(e) + ': ' + ' '.join(str(x) for x in cmd)
+
+    if err_msg:
+        check_cmd_status(exit_status=exit_status, err_msg=err_msg, cmd=cmd)
+    return (lines, exit_status)
 
 
 #####################################################################
