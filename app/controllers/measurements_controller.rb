@@ -8,7 +8,6 @@ class MeasurementsController < ApplicationController
   # sensor_id
   # shortname=val
   # at=iso8061
-  # var_at=iso801
   def url_create
     save_ok = false
     auth = false
@@ -39,70 +38,55 @@ class MeasurementsController < ApplicationController
     end
 
     # sensor_id may be used to find an instrument easier for embedded devices, prefer this over an instrument_id
+    # will return nil if the instrument is not found
     instrument = if params[:sensor_id]
                    Instrument.where(sensor_id: params[:sensor_id]).first
                  else
-                   nil
+                   Instrument.where(id: params[:instrument_id].to_i).first
                  end
 
-    # some CHORDS users had an extra '0' on the beginnig of their instrument_id.
-    # cleans this dirty input so that the create still works
-    # Use the instrument found from the sensor_id param, if one exists
-    cleansed_instrument_id = if instrument
-                               instrument.id
-                             else
-                               params[:instrument_id].to_i
-                             end
-
-    if Instrument.exists?(id: cleansed_instrument_id)
-      # Are the data submitted in this query a test?
-      is_test_value = false
-
-      if params.key?(:test)
-        is_test_value = true
-      end
-
+    if instrument
       # Save the url that invoked us
-      Instrument.update(cleansed_instrument_id,
-                        last_url: InstrumentsHelper.sanitize_url(request.original_url.html_safe))
+      instrument.update_attributes!(last_url: InstrumentsHelper.sanitize_url(request.original_url.html_safe))
 
-      # Create an array containing the names of legitimate variable names
-      measured_at_parameters = Array.new
-      variable_shortnames = Array.new
+      measured_at = if params[:at]
+                      params[:at]
+                    else
+                      Time.now.iso8601
+                    end
 
-      Instrument.find(cleansed_instrument_id).vars.each do |var|
-        measured_at_parameters.push(var.measured_at_parameter)
-        variable_shortnames.push(var.shortname)
+      timestamp = begin
+                    ConvertIsoToMs.call(measured_at)
+                  rescue ArgumentError, e
+                    create_err_msg = "Time format error, please ensure time is formatted using ISO8601."
+                    nil
+                  end
 
-        # see if the parameter was submitted
-        if params.include? var.shortname
-          if params.key?(var.measured_at_parameter)
-            measured_at = params[var.measured_at_parameter]
-          elsif params.key?(var.at_parameter)
-            measured_at = params[var.at_parameter]
-          elsif params[:at]
-            measured_at = params[:at]
-          else
-            measured_at = Time.now.iso8601
-          end
+      if timestamp
+        var_count = 0
+        is_test_value = params.key?(:test)
 
-          instrument = Instrument.find(cleansed_instrument_id)
+        tags = instrument.influxdb_tags_hash
+        tags[:site] = instrument.site_id
+        tags[:inst] = instrument.id
+        tags[:test] = is_test_value
 
-          begin
-            timestamp = ConvertIsoToMs.call(measured_at)
-          rescue ArgumentError
-            create_err_msg = "Time error."
-          else
+        instrument.vars.each do |var|
+          if params[var.shortname]
             value = params[var.shortname].to_f
-
-            tags = influxdb_tags = instrument.influxdb_tags_hash
-            tags[:site] = instrument.site_id
-            tags[:inst] = instrument.id
             tags[:var]  = var.id
-            tags[:test] = params.has_key?(:test)
 
             SaveTsPoint.call(timestamp, value, tags)
             save_ok = true
+            var_count += 1
+          end
+        end
+
+        if var_count > 0
+          if is_test_value
+            instrument.update_attributes!(measurement_test_count: instrument.measurement_test_count + var_count)
+          else
+            instrument.update_attributes!(measurement_count: instrument.measurement_count + var_count)
           end
         end
       end
@@ -128,6 +112,9 @@ class MeasurementsController < ApplicationController
 
       if Instrument.exists?(inst_id)
         DeleteTestTsPoints.call(TsPoint, inst_id)
+
+        inst = Instrument.find(inst_id)
+        inst.update_attributes!(measurement_test_count: 0)
       end
     end
 
@@ -140,6 +127,6 @@ class MeasurementsController < ApplicationController
 private
   def measurement_params
     params.require(:measurement).permit(:instrument_id, :sensor_id, :parameter, :value, :unit, :measured_at, :test,
-                                        :end, :trim_id)
+                                        :end, :trim_id, :at)
   end
 end
