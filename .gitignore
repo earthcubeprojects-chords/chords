@@ -37,6 +37,9 @@ bower.json
 # Ignore eclipse project files
 .project
 
+# Ignore Visual Studio settings
+/.vscode
+
 # Ignore the OSX directory store
 .DS_Store
 
