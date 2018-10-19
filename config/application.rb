@@ -22,7 +22,9 @@ module ChordTestbed
 
     require "#{Rails.root}/app/models/tspoint.rb"
 
-    config.active_record.belongs_to_required_by_default = true
+    # Leave false for now and add validations to these relationships, setting defaults via migration when it's done
+    # If this is set to true before that, weird errors can happen when trying to update objects without those relationships set
+    config.active_record.belongs_to_required_by_default = false
 
     config.autoload_paths += %W(#{config.root}/lib)
 
