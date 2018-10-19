@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,187 +10,184 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180807200025) do
+ActiveRecord::Schema.define(version: 20181016201123) do
 
-  create_table "archive_jobs", force: :cascade do |t|
-    t.string   "archive_name", limit: 255
+  create_table "archive_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "archive_name"
     t.datetime "start_at"
     t.datetime "end_at"
-    t.string   "status",       limit: 255
-    t.text     "message",      limit: 65535
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.string "status"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "archives", force: :cascade do |t|
-    t.string   "name",             limit: 255
-    t.string   "base_url",         limit: 255
-    t.string   "send_frequency",   limit: 255
+  create_table "archives", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.string "base_url"
+    t.string "send_frequency"
     t.datetime "last_archived_at"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
-    t.boolean  "enabled",                      default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "enabled", default: false
   end
 
-  create_table "influxdb_tags", force: :cascade do |t|
-    t.string   "name",          limit: 255
-    t.string   "value",         limit: 255
-    t.integer  "instrument_id", limit: 4
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+  create_table "influxdb_tags", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.string "value"
+    t.integer "instrument_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["instrument_id"], name: "index_influxdb_tags_on_instrument_id"
   end
 
-  add_index "influxdb_tags", ["instrument_id"], name: "index_influxdb_tags_on_instrument_id", using: :btree
-
-  create_table "instruments", force: :cascade do |t|
-    t.string   "name",                limit: 255
-    t.integer  "site_id",             limit: 4
-    t.datetime "created_at",                                          null: false
-    t.datetime "updated_at",                                          null: false
-    t.integer  "display_points",      limit: 4,     default: 120
-    t.integer  "sample_rate_seconds", limit: 4,     default: 60
-    t.text     "last_url",            limit: 65535
-    t.text     "description",         limit: 65535
-    t.integer  "plot_offset_value",   limit: 4,     default: 1
-    t.string   "plot_offset_units",   limit: 255,   default: "weeks"
-    t.integer  "topic_category_id",   limit: 4
-    t.integer  "cuahsi_method_id",    limit: 4
-    t.boolean  "is_active",                         default: true
-    t.string   "sensor_id",           limit: 255
+  create_table "instruments", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.integer "site_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "display_points", default: 120
+    t.integer "sample_rate_seconds", default: 60
+    t.text "last_url"
+    t.text "description"
+    t.integer "plot_offset_value", default: 1
+    t.string "plot_offset_units", default: "weeks"
+    t.integer "topic_category_id"
+    t.integer "cuahsi_method_id"
+    t.boolean "is_active", default: true
+    t.string "sensor_id"
+    t.bigint "measurement_count", default: 0, null: false
+    t.bigint "measurement_test_count", default: 0, null: false
+    t.index ["sensor_id"], name: "index_instruments_on_sensor_id", unique: true
+    t.index ["site_id"], name: "index_instruments_on_site_id"
   end
 
-  add_index "instruments", ["sensor_id"], name: "index_instruments_on_sensor_id", unique: true, using: :btree
-  add_index "instruments", ["site_id"], name: "index_instruments_on_site_id", using: :btree
-
-  create_table "linked_data", force: :cascade do |t|
-    t.text     "name",        limit: 65535, null: false
-    t.text     "description", limit: 65535, null: false
-    t.text     "keywords",    limit: 65535, null: false
-    t.string   "dataset_url", limit: 255
-    t.string   "license",     limit: 255
-    t.string   "doi",         limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+  create_table "linked_data", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.text "name", null: false
+    t.text "description", null: false
+    t.text "keywords", null: false
+    t.string "dataset_url"
+    t.string "license"
+    t.string "doi"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "measured_properties", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.string   "label",      limit: 255
-    t.string   "url",        limit: 255
-    t.text     "definition", limit: 65535
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.string   "source",     limit: 255,   default: "SensorML"
+  create_table "measured_properties", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.string "label"
+    t.string "url"
+    t.text "definition"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "source", default: "SensorML"
   end
 
-  create_table "profiles", force: :cascade do |t|
-    t.string   "project",                  limit: 255
-    t.string   "affiliation",              limit: 255
-    t.text     "description",              limit: 65535
-    t.binary   "logo",                     limit: 16777215
-    t.datetime "created_at",                                                                 null: false
-    t.datetime "updated_at",                                                                 null: false
-    t.string   "timezone",                 limit: 255
-    t.boolean  "secure_administration",                     default: false
-    t.boolean  "secure_data_viewing",                       default: true
-    t.boolean  "secure_data_download",                      default: true
-    t.boolean  "secure_data_entry",                         default: true
-    t.string   "data_entry_key",           limit: 255
-    t.string   "google_maps_key",          limit: 255,      default: "none"
-    t.string   "page_title",               limit: 255,      default: "CHORDS Portal"
-    t.text     "doi",                      limit: 65535
-    t.string   "contact_name",             limit: 255,      default: "Contact Name",         null: false
-    t.string   "contact_phone",            limit: 255,      default: "Contact Phone",        null: false
-    t.string   "contact_email",            limit: 255,      default: "Contact Email",        null: false
-    t.string   "contact_address",          limit: 255,      default: "Contact Address",      null: false
-    t.string   "contact_city",             limit: 255,      default: "Contact City",         null: false
-    t.string   "contact_state",            limit: 255,      default: "Contact State",        null: false
-    t.string   "contact_country",          limit: 255,      default: "Contact Country",      null: false
-    t.string   "contact_zipcode",          limit: 255,      default: "Contact Zipcode",      null: false
-    t.string   "domain_name",              limit: 255,      default: "example.chordsrt.com", null: false
-    t.integer  "cuahsi_source_id",         limit: 4
-    t.string   "unit_source",              limit: 255,      default: "CUAHSI"
-    t.string   "measured_property_source", limit: 255,      default: "SensorML"
+  create_table "profiles", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "project"
+    t.string "affiliation"
+    t.text "description"
+    t.binary "logo", limit: 16777215
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "timezone"
+    t.boolean "secure_administration", default: false
+    t.boolean "secure_data_viewing", default: true
+    t.boolean "secure_data_download", default: true
+    t.boolean "secure_data_entry", default: true
+    t.string "data_entry_key"
+    t.string "google_maps_key", default: "none"
+    t.string "page_title", default: "CHORDS Portal"
+    t.text "doi"
+    t.string "contact_name", default: "Contact Name", null: false
+    t.string "contact_phone", default: "Contact Phone", null: false
+    t.string "contact_email", default: "Contact Email", null: false
+    t.string "contact_address", default: "Contact Address", null: false
+    t.string "contact_city", default: "Contact City", null: false
+    t.string "contact_state", default: "Contact State", null: false
+    t.string "contact_country", default: "Contact Country", null: false
+    t.string "contact_zipcode", default: "Contact Zipcode", null: false
+    t.string "domain_name", default: "example.chordsrt.com", null: false
+    t.integer "cuahsi_source_id"
+    t.string "unit_source", default: "CUAHSI"
+    t.string "measured_property_source", default: "SensorML"
   end
 
-  create_table "site_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.text     "definition", limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+  create_table "site_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.text "definition"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "sites", force: :cascade do |t|
-    t.string   "name",             limit: 255
-    t.decimal  "lat",                            precision: 12, scale: 9
-    t.decimal  "lon",                            precision: 12, scale: 9
-    t.datetime "created_at",                                                            null: false
-    t.datetime "updated_at",                                                            null: false
-    t.text     "description",      limit: 65535
-    t.decimal  "elevation",                      precision: 12, scale: 6, default: 0.0
-    t.integer  "site_type_id",     limit: 4
-    t.integer  "cuahsi_site_code", limit: 4
-    t.integer  "cuahsi_site_id",   limit: 4
+  create_table "sites", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.decimal "lat", precision: 12, scale: 9
+    t.decimal "lon", precision: 12, scale: 9
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "description"
+    t.decimal "elevation", precision: 12, scale: 6, default: "0.0"
+    t.integer "site_type_id"
+    t.integer "cuahsi_site_code"
+    t.integer "cuahsi_site_id"
+    t.index ["site_type_id"], name: "index_sites_on_site_type_id"
   end
 
-  add_index "sites", ["site_type_id"], name: "index_sites_on_site_type_id", using: :btree
-
-  create_table "topic_categories", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.text     "definition", limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+  create_table "topic_categories", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.text "definition"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "units", force: :cascade do |t|
-    t.string   "name",         limit: 255
-    t.string   "abbreviation", limit: 255
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "id_num",       limit: 4
-    t.string   "unit_type",    limit: 255
-    t.string   "source",       limit: 255
+  create_table "units", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.string "abbreviation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "id_num"
+    t.string "unit_type"
+    t.string "source"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer "sign_in_count", default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",     limit: 255
-    t.string   "last_sign_in_ip",        limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.string   "api_key",                limit: 255
-    t.integer  "roles_mask",             limit: 4
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "api_key"
+    t.integer "roles_mask"
+    t.index ["api_key"], name: "index_users_on_api_key", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_index "users", ["api_key"], name: "index_users_on_api_key", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-
-  create_table "vars", force: :cascade do |t|
-    t.string   "name",                 limit: 255
-    t.integer  "instrument_id",        limit: 4
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.string   "shortname",            limit: 255
-    t.string   "units",                limit: 255, default: "C",       null: false
-    t.integer  "measured_property_id", limit: 4,   default: 795,       null: false
-    t.float    "minimum_plot_value",   limit: 24
-    t.float    "maximum_plot_value",   limit: 24
-    t.integer  "unit_id",              limit: 4,   default: 1
-    t.integer  "cuahsi_variable_id",   limit: 4
-    t.string   "general_category",     limit: 255, default: "Unknown"
+  create_table "vars", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
+    t.string "name"
+    t.integer "instrument_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "shortname"
+    t.string "units", default: "C", null: false
+    t.integer "measured_property_id", default: 795, null: false
+    t.float "minimum_plot_value", limit: 24
+    t.float "maximum_plot_value", limit: 24
+    t.integer "unit_id", default: 1
+    t.integer "cuahsi_variable_id"
+    t.string "general_category", default: "Unknown"
+    t.index ["instrument_id"], name: "index_vars_on_instrument_id"
+    t.index ["measured_property_id"], name: "index_vars_on_measured_property_id"
+    t.index ["unit_id"], name: "index_vars_on_unit_id"
   end
-
-  add_index "vars", ["instrument_id"], name: "index_vars_on_instrument_id", using: :btree
-  add_index "vars", ["measured_property_id"], name: "index_vars_on_measured_property_id", using: :btree
-  add_index "vars", ["unit_id"], name: "index_vars_on_unit_id", using: :btree
 
   add_foreign_key "instruments", "sites"
   add_foreign_key "sites", "site_types"
