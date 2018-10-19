@@ -9,14 +9,6 @@ class Var < ApplicationRecord
 
   before_destroy :delete_ts_points
 
-  def measured_at_parameter
-    return self.shortname + '_measured_at'
-  end
-
-  def at_parameter
-    return self.shortname + '_at'
-  end
-
   def random_value(previous_value = nil)
     # the maximum percent a previous value can change
     maximum_percent_change = 0.05

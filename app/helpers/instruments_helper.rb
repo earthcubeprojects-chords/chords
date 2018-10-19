@@ -96,7 +96,7 @@ module InstrumentsHelper
       end
     end
 
-    return url_fragment
+    return url_fragment.html_safe
   end
 
 end
