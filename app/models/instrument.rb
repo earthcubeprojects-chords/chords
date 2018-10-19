@@ -89,10 +89,13 @@ class Instrument < ApplicationRecord
   end
 
   def sample_count(sample_type)
-    if defined? TsPoint
-      return GetTsCount.call(TsPoint, "value", self.id, sample_type)
+    case sample_type
+    when :not_test
+      measurement_count
+    when :test
+      measurement_test_count
     else
-      return 0
+      measurement_count + measurement_test_count
     end
   end
 
