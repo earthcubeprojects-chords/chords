@@ -32,8 +32,6 @@ class Ability
     profile = Profile.first
 
     if !user || user.role?(:guest)
-      guest_user
-
       if !profile.secure_data_viewing
         registered_user(nil)
       end
@@ -41,6 +39,12 @@ class Ability
       if !profile.secure_data_download
         data_downloader(nil)
       end
+    end
+
+    if !user
+      guest_user(nil)
+    elsif user.role?(:guest)
+      guest_user(user)
     end
 
     if user.role?(:registered_user)
@@ -68,8 +72,12 @@ class Ability
     end
   end
 
-  def guest_user
+  def guest_user(user)
     can :read, :about
+
+    if user
+      can [:read, :update], User, id: user.id
+    end
   end
 
   def registered_user(user)

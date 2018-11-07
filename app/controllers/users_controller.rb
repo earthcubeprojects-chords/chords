@@ -32,6 +32,8 @@ class UsersController < ApplicationController
         if !(params[:user][:roles].include?('admin') || params[:user][:roles].include?(:admin))
           params[:user][:roles] << :admin
         end
+      elsif params[:user][:roles].include?('guest') || params[:user][:roles].include?(:guest)
+        params[:user][:roles] = [:guest]
       end
 
       if @user.update(user_params)

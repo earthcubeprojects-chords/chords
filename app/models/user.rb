@@ -50,7 +50,7 @@ class User < ApplicationRecord
 private
   def set_default_roles
     if roles_mask.nil? && self.roles.blank?
-      self.roles = [:registered_user]
+      self.roles = [:guest]
     end
   end
 end
