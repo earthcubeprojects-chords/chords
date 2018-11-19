@@ -423,11 +423,11 @@ Resources:
           packages:
             yum:
               docker: []
-          services:
-            sysvinit:
-              docker:
-                enabled: 'true'
-                ensureRunning: 'true'
+          commands:
+            01_enable:
+              command: "systemctl enable docker"
+            02_start:
+              command: "systemctl start docker"
 
         # Install docker-compose
         install_docker_compose:
@@ -480,86 +480,35 @@ Resources:
         # Install and enable the chords service
         chords_service:
           files:
-            /etc/init.d/chords:
+            /var/lib/chords/chords.service:
               content: |
-                #!/bin/sh
-                #
-                # chkconfig:   2345 96 20
-                # description: Daemon for chords
-                #
-                # based on https://gist.github.com/samalba/8bc1f848b4fa2db6f12e
-                #
-                ### BEGIN INIT INFO
-                # Provides:   chords
-                # Required-Start: docker
-                # Required-Stop:  docker
-                # Default-Start:  2 3 4 5
-                # Default-Stop:   0 1 6
-                # Short-Description: Docker Compose for CHORDS
-                # Description: Docker Compose for CHORDS
-                ### END INIT INFO
-                #
-                set -e
-                #
-                DOCKER_COMPOSE_PROJECT_NAME=chords
-                DOCKER_COMPOSE_YAMLFILE=/var/lib/chords/docker-compose.yml
-                #
-                OPTS="-f $DOCKER_COMPOSE_YAMLFILE -p $DOCKER_COMPOSE_PROJECT_NAME"
-                UPOPTS="-d"
-                LABEL="docker-compose for CHORDS"
-                DC=/bin/docker-compose
-                #
-                #. /etc/rc.d/init.d/functions
-                #
-                #
-                cd /var/lib/chords
-                #
-                start () {
-                  echo "Starting $LABEL"
-                  cd /var/lib/chords && python chords_control --run
-                }
-                #
-                stop () {
-                  echo "Stopping $LABEL"
-                  cd /var/lib/chords && python chords_control --stop
-                  $DC $OPTS stop
-                }
-                #
-                case "$1" in
-                  up|start)
-                    start
-                    ;;
-                #
-                  stop)
-                    stop
-                    ;;
-                #
-                  status)
-                  cd /var/lib/chords && python chords_control --status
-                    ;;
-                #
-                  restart)
-                    stop
-                    start
-                    ;;
-                #
-                  *)
-                    echo "Usage: /etc/init.d/chords {up/start|stop|status}" || true
-                    exit 1
-                    ;;
-                esac
-                #
-                exit 0                                
+                [Unit]
+                Description=CHORDS Portal
+                After=docker.service
+                Requires=docker.service
+
+                [Service]
+                Type=simple
+                WorkingDirectory=/var/lib/chords
+                ExecStartPre=/bin/docker-compose -p chords down
+                ExecStart=/bin/docker-compose    -p chords up
+                ExecStop=/bin/docker-compose     -p chords down
+                Restart=always
+                RestartSec=60
+
+                [Install]
+                WantedBy=multi-user.target
               group: root
               mode: '000755'
               owner: root
             
           commands:
             # Enable the chords service
-            01_chkconfig:
-              command: "chkconfig chords --add && chkconfig chords on"  
+            01_enable:
+              command: "systemctl enable /var/lib/chords/chords.service" 
+            # Start the chords service 
             02_startchords:
-              command: "service chords up"
+              command: "systemctl start chords"
 
   ChordsServerSecurityGroup:
     Properties:
