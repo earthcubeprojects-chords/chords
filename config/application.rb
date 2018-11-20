@@ -30,5 +30,10 @@ module ChordTestbed
 
     # To get rid of console complaints in docker deployment
     #config.web_console.whitelisted_ips = '192.168.0.0/16'
+
+    config.generators do |g|
+        g.test_framework :rspec
+        g.integration_tool :rspec
+    end
   end
 end
