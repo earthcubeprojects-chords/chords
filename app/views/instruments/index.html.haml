@@ -75,7 +75,7 @@
                 copies
                 = hidden_field_tag('instrument_id', instrument.id)
                 &nbsp;
-                = button_tag type: :submit, class: 'transparent_button' do
+                = button_tag type: :submit, title: 'Duplicate', class: 'transparent_button' do
                   %span.glyphicon.glyphicon-duplicate
 
           - if can?(:delete_test, :measurement)
