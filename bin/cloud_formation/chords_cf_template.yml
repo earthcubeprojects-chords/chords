@@ -16,10 +16,11 @@ Parameters:
 
   ChordsVersion:
     AllowedValues:
+      - "0.9.7.1"
       - latest
       - development
-    Default: latest
-    Description: The version of CHORDS to deploy (E.g. the dockerhub tag)
+    Default: "0.9.7.1"
+    Description: The version of CHORDS to deploy (matches the Docker Hub tags)
     Type: String
 
   GitBranch:
