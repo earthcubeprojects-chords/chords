@@ -160,7 +160,7 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: ncareol/grafana:5.2.1
+    image: ncareol/grafana:5.3.4
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
