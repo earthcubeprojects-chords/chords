@@ -1,5 +1,5 @@
 FROM grafana/grafana:5.3.4
-MAINTAINER martinc@ucar.edu
+LABEL maintainer="martinc@ucar.edu
 USER root
 
 RUN apt-get update
