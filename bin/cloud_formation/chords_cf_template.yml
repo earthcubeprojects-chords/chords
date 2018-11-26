@@ -21,10 +21,9 @@ Parameters:
 
   ChordsVersion:
     AllowedValues:
-      - "0.9.7.1"
       - latest
       - development
-    Default: "0.9.7.1"
+    Default: "latest"
     Description: The version of CHORDS to deploy (matches the Docker Hub tags)
     Type: String
 
@@ -35,32 +34,32 @@ Parameters:
     Default: master
     Description: CHORDS git branch
     Type: String
-    
+
   GrafanaAdminPw:
     Default: admin
-    Description: The password for admin access to Grafana. Once Grafana is initialized with this password, it can only be changed from the Grafana admin web page. Replace this with a secure password.    
+    Description: The password for admin access to Grafana. Once Grafana is initialized with this password, it can only be changed from the Grafana admin web page. Replace this with a secure password.
     Type: String
-  
+
   ChordsEmailAddress:
     Default: unknown@gmail.com
     Description: An email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail).
     Type: String
-  
+
   ChordsEmailPassword:
     Default: unknown
     Description: The password for the email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail).
     Type: String
-  
+
   ChordsEmailServer:
     Default: smtp.gmail.com
     Description: The email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service.
     Type: String
-  
+
   ChordsEmailPort:
     Default: 587
     Description: The SERVER PORT for the email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service.
     Type: String
-                
+
   SecretKeyBase:
     Default: 9a9c4d7e7bed3d85a53bfaaee9cefd338c2ab5fda573cd933dfd3fea4178004425cb50a06df00a0c59a1d353defb9bd3e49fb5f47a791dec7daff95b2a6d080d
     Description: SECRET_KEY_BASE for Rails. This MUST be a randomly generated and 256 bits long.
@@ -85,7 +84,7 @@ Parameters:
     Default: false
     Description: Enable kapacitor (WARNING, opens a security hole)
     Type: String
-    
+
   InstanceType:
     AllowedValues:
     - t2.micro
@@ -146,8 +145,8 @@ Parameters:
     Type: String
 
 #####################################################################
-    
-    
+
+
 Mappings:
   AWSInstanceType2Arch:
     c3.2xlarge:
@@ -300,7 +299,7 @@ Resources:
           Ref: AWS::StackName
       - Key: ChordsType
         Value: Portal
-      # ChordsServer::Properties::UserData instructs cfn to install and 
+      # ChordsServer::Properties::UserData instructs cfn to install and
       # run CHORDS via full_install.
       UserData:
         Fn::Base64:
@@ -333,7 +332,7 @@ Resources:
               '
     Metadata:
       AWS::CloudFormation::Init:
-        # configSets specifies the order that cfn_init runs 
+        # configSets specifies the order that cfn_init runs
         # the other AWS::CloudFormation::Init: types.
         configSets:
           full_install:
@@ -404,13 +403,13 @@ Resources:
                 files:
                 - /etc/cfn/cfn-hup.conf
                 - /etc/cfn/hooks.d/cfn-auto-reloader.conf
-        
+
         # Perform a yum update for the system.
         sys_update:
           commands:
             01_update:
               command: yum update -y
-        
+
         # Install some useful packages.
         yum_extras:
           packages:
@@ -418,7 +417,7 @@ Resources:
               emacs: []
               sysstat: []
               git: []
-        
+
         # Install docker as a service.
         install_docker:
           packages:
@@ -452,7 +451,7 @@ Resources:
           files:
             # Create the basic configuration in .env:
             /var/lib/chords/.env:
-              content: !Sub |     
+              content: !Sub |
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
                 CHORDS_GUEST_PW=${ChordsGuestPw}
                 CHORDS_EMAIL_ADDRESS=${ChordsEmailAddress}
@@ -470,7 +469,7 @@ Resources:
             # Create chords.yml from .env. The .env file will also be updated.
             01_create_chords_yml:
               command: "cd /var/lib/chords && python chords_control -b"
- 
+
         # Install docker-compose.yml and get the CHORDS images.
         docker_pull:
           commands:
@@ -502,12 +501,12 @@ Resources:
               group: root
               mode: '000755'
               owner: root
-            
+
           commands:
             # Enable the chords service
             01_enable:
-              command: "systemctl enable /var/lib/chords/chords.service" 
-            # Start the chords service 
+              command: "systemctl enable /var/lib/chords/chords.service"
+            # Start the chords service
             02_startchords:
               command: "systemctl start chords"
 
@@ -537,7 +536,7 @@ Resources:
         IpProtocol: tcp
         ToPort: '9092'
     Type: AWS::EC2::SecurityGroup
-    
+
 #####################################################################
 Outputs:
   WebsiteURL:
