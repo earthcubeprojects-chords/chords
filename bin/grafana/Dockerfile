@@ -1,4 +1,4 @@
-FROM grafana/grafana:5.2.1
+FROM grafana/grafana:5.3.4
 MAINTAINER martinc@ucar.edu
 USER root
 
