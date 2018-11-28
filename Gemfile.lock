@@ -46,6 +46,8 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.2)
+      public_suffix (>= 2.0.2, < 4.0)
     anyway_config (1.3.1)
     arel (8.0.0)
     ast (2.4.0)
@@ -79,6 +81,10 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.3)
+    email_spec (2.2.0)
+      htmlentities (~> 4.3.3)
+      launchy (~> 2.1)
+      mail (~> 2.7)
     erubi (1.7.1)
     erubis (2.7.0)
     execjs (2.7.0)
@@ -106,6 +112,7 @@ GEM
       haml (>= 4.0, < 6)
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
+    htmlentities (4.3.4)
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
     influxdb (0.6.1)
@@ -124,7 +131,11 @@ GEM
       railties (>= 3.2.16)
     json (1.8.6)
     kgio (2.11.2)
-    loofah (2.2.2)
+    launchy (2.4.3)
+      addressable (~> 2.3)
+    letter_opener (1.6.0)
+      launchy (~> 2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)
@@ -143,8 +154,9 @@ GEM
     parser (2.5.1.0)
       ast (~> 2.4.0)
     powerpack (0.1.1)
+    public_suffix (3.0.3)
     puma (3.11.4)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.1.6)
@@ -280,6 +292,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   database_cleaner
   devise (~> 4.5)
+  email_spec
   factory_bot_rails
   faker!
   ffi (~> 1.9.25)
@@ -290,9 +303,12 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jquery-rails (~> 4.3)
   jquery-ui-rails
+  letter_opener
+  loofah (>= 2.2.3)
   mini_portile2
   mysql2 (~> 0.5)
   puma
+  rack (>= 2.0.6)
   rails (~> 5.1.0)
   rails4-autocomplete
   rails_layout
