@@ -57,6 +57,6 @@ Rails.application.configure do
 
 
   # Rotate log files
-  config.logger = Logger.new(config.paths['log'].first, 10, 5242880)
+  config.logger = Logger.new(config.paths['log'].first, 10, 25.megabytes)
 
 end
