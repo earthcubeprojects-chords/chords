@@ -10,7 +10,7 @@
 # If RAILS_ENV=production, SECRET_KEY_BASE must be set.
 #
 # Many environment variables will be used by the CHORDS Rails app
-# to show system characteristics (e.g O/S type, source code 
+# to show system characteristics (e.g O/S type, source code
 # hash tag, etc.)
 
 # default to production mode
@@ -85,11 +85,11 @@ export CHORDS_HARDWARE_PLATFORM=`uname --hardware-platform`
 export CHORDS_OPERATING_SYSTEM=`uname --operating-system`
 export CHORDS_RELEASE=$DOCKER_TAG
 
-echo "echo CHORDS environment settings:"               
+echo "echo CHORDS environment settings:"
 env
 
 # See if there is an existing mysql database
-if [ ! -e $mysql_seeded_flag ] 
+if [ ! -e $mysql_seeded_flag ]
 then
   echo "**** $mysql_seeded_flag not found. We will attempt to create the database."
 
@@ -100,13 +100,13 @@ then
       echo
       break
     fi
-    
+
     if [ $count -eq 60 ]; then
       echo
       echo "Could not contact the database server $mysql_host, aborting CHORDS app startup."
       exit 1
     fi
-    
+
     sleep 1
   done
 
@@ -115,6 +115,7 @@ then
 
   echo "Creating rails database."
   bundle exec rake db:create
+  bundle exec rake db:schema:load
 else
   echo "**** $mysql_seeded_flag was found. Database will not be created."
 fi
@@ -129,7 +130,7 @@ else
   echo "**** $mysql_seeded_flag was found. Database will not be seeded."
 fi
 
-# poplate empty ontologies 
+# poplate empty ontologies
 # this is only relevant to existing portals that have been upgraded
 bundle exec rake db:populate_ontologies
 
@@ -141,7 +142,7 @@ set -x
 # Create the influxdb admin account, used for database writes etc.
 curl -s http://$influxdb_host:8086/query --data-urlencode "q=create user $influxdb_admin_user with password '$influxdb_admin_pw' with all privileges"
 
-# Make sure that the influxdb database exists. 
+# Make sure that the influxdb database exists.
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create database $influxdb_dbname"
 
 # Set the retention policy

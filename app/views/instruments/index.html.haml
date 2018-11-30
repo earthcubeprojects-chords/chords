@@ -70,15 +70,16 @@
 
           - if can?(:create, Instrument)
             %td.col-sm-1
-              = form_tag(duplicate_instruments_path, method: :get) do
+              = form_tag(duplicate_instruments_path, method: :get, id: "duplicate_instrument_form_#{instrument.id}") do
                 = select_tag "number_of_duplicates", options_for_select((1..100).to_a , "1")
                 copies
-                = hidden_field_tag('instrument_id', instrument.id )
+                = hidden_field_tag('instrument_id', instrument.id)
                 &nbsp;
-                = link_to '', '', :onclick => "$('#form_id').submit()", class: 'glyphicon glyphicon-duplicate', style: 'text-decoration: none; color: black;', title: 'Duplicate'
+                = button_tag type: :submit, title: 'Duplicate', class: 'transparent_button' do
+                  %span.glyphicon.glyphicon-duplicate
 
           - if can?(:delete_test, :measurement)
-            %td= render partial: "delete_test_measurements_form", locals: {instrument: instrument}
+            %td= render partial: "delete_test_measurements_form", locals: { instrument: instrument }
 
           %td
             - if can?(:edit, instrument)

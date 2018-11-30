@@ -96,5 +96,6 @@
   .hidden-xs.col-sm-1
 %br/
 
-- if @json_ld_data
+- if @linked_data
+  = render 'json_ld_organization'
   = render 'json_ld_dataset'

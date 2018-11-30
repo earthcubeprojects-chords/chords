@@ -263,6 +263,6 @@ private
   def instrument_params
     params.require(:instrument).permit(:name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description,
                                        :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id,
-                                       :sensor_id)
+                                       :sensor_id, :number_of_duplicates)
   end
 end
