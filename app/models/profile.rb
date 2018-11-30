@@ -14,7 +14,7 @@ class Profile < ApplicationRecord
      message: "The domain name is not in a valid format. (Expecting subdomain.domain.com format. Do not include http/https.)"
   }
 
-  validates :data_archive_url, format: {
+  validates :data_archive_url, allow_blank: true, format: {
      with: /^http(s)?\:\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z0-9]{1,5}(:[0-9]{1,5})?(\/.*)?$/ix,
      multiline: true,
      message: "The data archive url is not in a valid format. (Expecting subdomain.domain.com format. Include http/https.)"
