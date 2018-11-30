@@ -50,7 +50,7 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Rotate log files
-  config.logger = Logger.new(config.paths['log'].first, 10, 5242880)
+  config.logger = Logger.new(config.paths['log'].first, 10, 25.megabytes)
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -64,7 +64,9 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
-  # config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:               ENV['CHORDS_EMAIL_SERVER'],
@@ -93,9 +95,4 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.assets.precompile += %w( *.js *.css )
-
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
-
 end

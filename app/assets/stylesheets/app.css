@@ -126,3 +126,9 @@
   border-color: #d6e9c6;
   color: #468847;
 }
+
+.transparent_button {
+  background: transparent;
+  border: none;
+  padding: 0;
+}

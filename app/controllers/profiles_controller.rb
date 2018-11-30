@@ -13,7 +13,7 @@ class ProfilesController < ApplicationController
       @profile = Profile.first
     end
 
-    @email = Rails.application.config.action_mailer.smtp_settings[:user_name]
+    @email = Rails.application.config.action_mailer.smtp_settings.try(:user_name)
   end
 
   def create
@@ -192,7 +192,8 @@ private
       :secure_administration, :secure_data_viewing, :secure_data_download,
       :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
       :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country,
-      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :cuahsi_source_id
+      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :cuahsi_source_id,
+      :data_archive_url
       )
   end
 end
