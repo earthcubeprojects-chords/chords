@@ -50,7 +50,7 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Rotate log files
-  config.logger = Logger.new(config.paths['log'].first, 7, 'daily')
+  config.logger = Logger.new(config.paths['log'].first, 10, 25.megabytes)
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
