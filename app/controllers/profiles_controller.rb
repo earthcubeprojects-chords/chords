@@ -13,7 +13,7 @@ class ProfilesController < ApplicationController
       @profile = Profile.first
     end
 
-    @email = Rails.application.config.action_mailer.smtp_settings[:user_name]
+    @email = Rails.application.config.action_mailer.smtp_settings.try(:user_name)
   end
 
   def create

@@ -46,6 +46,14 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
+  config.action_mailer.smtp_settings = {
+    address:               ENV['CHORDS_EMAIL_SERVER'],
+    port:                  ENV['CHORDS_EMAIL_PORT'],
+    user_name:             ENV['CHORDS_EMAIL_ADDRESS'],
+    password:              ENV['CHORDS_EMAIL_PASSWORD'],
+    authentication:        'plain',
+    enable_starttls_auto:  true
+  }
 
 
   # Rotate log files

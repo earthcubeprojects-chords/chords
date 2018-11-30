@@ -4,7 +4,7 @@ class AdminMailer < Devise::Mailer
 
   def new_user_waiting_for_approval(email)
     @email = email
-    @domain = Profile.first.domain_name
+    @domain = Profile.first.try(:domain_name)
 
     emails = User.with_role(:admin).map{|user| user.email}.join(',')
 
