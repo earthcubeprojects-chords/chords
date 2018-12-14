@@ -1,6 +1,6 @@
 {% highlight sh %}
-mkdir <chords_dir>
-cd <chords_dir>
+mkdir -p /var/lib/chords
+cd /var/lib/chords
 
 # Fetch the control script:
 curl -O -k https://raw.githubusercontent.com/NCAR/chords/master/chords_control
@@ -16,7 +16,7 @@ python chords_control --run
 python chords_control --stop
 
 # To reconfigure and update:
-cd <chords_dir>
+cd /var/lib/chords
 curl -O -k  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
 python chords_control --config
 python chords_control --update
