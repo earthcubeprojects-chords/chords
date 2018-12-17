@@ -11,11 +11,11 @@ class User < ApplicationRecord
   #######################################################################################
 
   before_create :set_default_roles
-  after_create :send_admin_new_user_email
 
   # find users with a particular role
   # ex: User.with_role(:admin) => ActiveRecordRelation[user1, user2, ...]
   scope :with_role, -> (role) { where("roles_mask & #{2**ROLES.index(role)} > 0") }
+  scope :with_only_role, -> (role) { where("roles_mask = #{2**ROLES.index(role)}") }
 
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
@@ -57,9 +57,5 @@ private
     if roles_mask.nil? && self.roles.blank?
       self.roles = [:guest]
     end
-  end
-
-  def send_admin_new_user_email
-    AdminMailer.new_user_waiting_for_approval(email).deliver
   end
 end
