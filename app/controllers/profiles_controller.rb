@@ -191,11 +191,13 @@ class ProfilesController < ApplicationController
       AdminMailer.test_sending_email(@current_user.email).deliver
     rescue Net::SMTPAuthenticationError, e
       flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
+      Rails.logger.warn(e.message)
     rescue Errno::ECONNREFUSED, e
       flash[:alert] = 'Connection to the SMTP server was refused. If using GMail, you may need to log into your email account to allow this activity.'
+      Rails.logger.warn(e.message)
     end
 
-    render :index
+    redirect_to action: :index
   end
 
 private

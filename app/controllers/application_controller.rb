@@ -110,6 +110,7 @@ private
 
   rescue_from "Net::SMTPAuthenticationError" do |exception|
     flash.now[:alert] = "Cannot send email, please contact the site administrator at: #{Profile.first.try(:contact_email)}"
+    Rails.logger.warn(exception.message)
     render :about
   end
 end
