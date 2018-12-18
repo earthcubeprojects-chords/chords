@@ -14,6 +14,7 @@ class ProfilesController < ApplicationController
     end
 
     @email = Rails.application.config.action_mailer.smtp_settings.try(:user_name)
+    @email = 'SMTP is not currently configured, please use chords_control!' if @email.nil?
   end
 
   def create
@@ -183,6 +184,18 @@ class ProfilesController < ApplicationController
         profile.get_cuahsi_sourceid(data["link"])
       end
     end
+  end
+
+  def test_sending_email
+    begin
+      AdminMailer.test_sending_email(@current_user.email).deliver
+    rescue Net::SMTPAuthenticationError, e
+      flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
+    rescue Errno::ECONNREFUSED, e
+      flash[:alert] = 'Connection to the SMTP server was refused. If using GMail, you may need to log into your email account to allow this activity.'
+    end
+
+    render :index
   end
 
 private
