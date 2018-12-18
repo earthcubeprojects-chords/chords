@@ -81,6 +81,8 @@ Rails.application.routes.draw do
       get :export_influxdb
       get :import_influxdb
       post :import_influxdb
+
+      get :test_sending_email
     end
   end
 
