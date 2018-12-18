@@ -189,12 +189,17 @@ class ProfilesController < ApplicationController
   def test_sending_email
     begin
       AdminMailer.test_sending_email(@current_user.email).deliver
-    rescue Net::SMTPAuthenticationError, e
-      flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
-      Rails.logger.warn(e.message)
-    rescue Errno::ECONNREFUSED, e
+    rescue Net::SMTPAuthenticationError => e
+      if e.to_s.include?('accounts.google.com/signin/continue')
+        flash[:alert] = 'Problem with SMTP settings. If using GMail, you may need to log into your email account to allow this activity.'
+      else
+        flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
+      end
+
+      Rails.logger.warn(e)
+    rescue Errno::ECONNREFUSED => e
       flash[:alert] = 'Connection to the SMTP server was refused. If using GMail, you may need to log into your email account to allow this activity.'
-      Rails.logger.warn(e.message)
+      Rails.logger.warn(e)
     end
 
     redirect_to action: :index
