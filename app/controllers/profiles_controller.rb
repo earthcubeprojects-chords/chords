@@ -13,8 +13,8 @@ class ProfilesController < ApplicationController
       @profile = Profile.first
     end
 
-    @email = Rails.application.config.action_mailer.smtp_settings.try(:user_name)
-    @email = 'SMTP is not currently configured, please use chords_control!' if @email.nil?
+    @email = Rails.application.config.action_mailer.smtp_settings[:user_name]
+    @email = 'SMTP is not currently configured, please use chords_control!' if @email.blank?
   end
 
   def create
