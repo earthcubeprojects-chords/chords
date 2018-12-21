@@ -15,7 +15,7 @@
               = user.roles_pretty_printed
             %td
               - if !user.api_key.nil?
-                - if user == current_user || @current_user.role?(:admin)
+                - if user == current_user || current_user.role?(:admin)
                   = user.api_key
                 - elsif !user.api_key.nil?
                   Yes
