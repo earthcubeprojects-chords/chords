@@ -188,7 +188,7 @@ class ProfilesController < ApplicationController
 
   def test_sending_email
     begin
-      AdminMailer.test_sending_email(@current_user.email).deliver
+      AdminMailer.test_sending_email(current_user.email).deliver
     rescue Net::SMTPAuthenticationError => e
       if e.to_s.include?('accounts.google.com/signin/continue')
         flash[:alert] = 'Problem with SMTP settings. If using GMail, you may need to log into your email account to allow this activity.'
