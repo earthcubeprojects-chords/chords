@@ -42,7 +42,13 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # email config
-  config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
+  from_email = if Rails.application.config.action_mailer.smtp_settings
+                 Rails.application.config.action_mailer.smtp_settings[:user_name]
+               else
+                 'admin@chordsrt.com'
+               end
+
+  config.action_mailer.default_options = {from: from_email}
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
