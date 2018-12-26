@@ -190,7 +190,7 @@ class ProfilesController < ApplicationController
     begin
       AdminMailer.test_sending_email(current_user.email).deliver
     rescue Net::SMTPAuthenticationError => e
-      if e.message.include?('accounts.google.com')
+      if e.message.include?('accounts.google.com') || e.message.include?('Learn more at')
         flash[:alert] = 'Problem with SMTP settings. If using GMail, you may need to log into your email account to allow this activity.'
       else
         flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
