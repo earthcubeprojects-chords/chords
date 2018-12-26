@@ -64,9 +64,15 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
+  from_email = if Rails.application.config.action_mailer.smtp_settings
+                 Rails.application.config.action_mailer.smtp_settings[:user_name]
+               else
+                 'admin@chordsrt.com'
+               end
+
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
+  config.action_mailer.default_options = {from: from_email}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:               ENV['CHORDS_EMAIL_SERVER'],

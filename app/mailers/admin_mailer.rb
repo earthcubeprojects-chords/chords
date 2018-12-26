@@ -1,5 +1,5 @@
 class AdminMailer < Devise::Mailer
-  default from: 'admin@chordsrt.com'
+  default from: Rails.application.config.action_mailer.smtp_settings[:user_name]
   layout 'mailer'
 
   def test_sending_email(email)

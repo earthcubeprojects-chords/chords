@@ -202,6 +202,7 @@ class ProfilesController < ApplicationController
       Rails.logger.warn(e)
     end
 
+    flash[:notice] = 'Congrats, your SMTP settings appear in order. Check your username/email for receipt.'
     redirect_to action: :index
   end
 
