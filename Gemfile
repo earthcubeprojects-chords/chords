@@ -23,6 +23,8 @@ gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
 gem 'ffi', '~> 1.9.25'
+gem 'loofah', '>= 2.2.3'
+gem 'rack', '>= 2.0.6'
 
 gem 'mini_portile2'
 gem 'whenever', "~>0.9.7", :require => false
@@ -44,11 +46,13 @@ group :test do
   gem 'rspec-rails'
 
   gem 'database_cleaner'
+  gem 'email_spec'
 end
 
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'letter_opener'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'

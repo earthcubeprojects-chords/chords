@@ -31,9 +31,17 @@
   .line
   .line
     .title
-      Email account for password resets
+      Data Archive URL
+    .field
+      #{f.text_field('data_archive_url', size: 60, class: 'form-control')}
+  .line
+  .line
     .title
+      Email account for password resets
+    .field
       = @email
+    .field
+      = link_to 'Test Sending Email', test_sending_email_profiles_url, method: :post, class: 'btn btn-md btn-primary', style: 'text-decoration: none; color: white;', title: 'Test Sending Email'
   .line
   .line
     .title
