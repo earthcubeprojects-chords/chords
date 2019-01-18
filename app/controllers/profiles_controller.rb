@@ -14,6 +14,7 @@ class ProfilesController < ApplicationController
     end
 
     @email = Rails.application.config.action_mailer.smtp_settings[:user_name]
+    @email = 'SMTP is not currently configured, please use chords_control!' if @email.blank?
   end
 
   def create
@@ -185,6 +186,26 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def test_sending_email
+    begin
+      AdminMailer.test_sending_email(current_user.email).deliver
+    rescue Net::SMTPAuthenticationError => e
+      if e.message.include?('accounts.google.com') || e.message.include?('Learn more at')
+        flash[:alert] = 'Problem with SMTP settings. If using GMail, you may need to log into your email account to allow this activity.'
+      else
+        flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
+      end
+
+      Rails.logger.warn(e)
+    rescue Errno::ECONNREFUSED => e
+      flash[:alert] = 'Connection to the SMTP server was refused. If using GMail, you may need to log into your email account to allow this activity.'
+      Rails.logger.warn(e)
+    end
+
+    flash[:notice] = 'Congrats, your SMTP settings appear in order. Check your username/email for receipt.' if flash[:alert].blank?
+    redirect_to action: :index
+  end
+
 private
   def profile_params
     params.require(:profile).permit(
@@ -192,7 +213,8 @@ private
       :secure_administration, :secure_data_viewing, :secure_data_download,
       :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
       :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country,
-      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :cuahsi_source_id
+      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :cuahsi_source_id,
+      :data_archive_url
       )
   end
 end

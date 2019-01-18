@@ -12,6 +12,15 @@ class LinkedDatum < ApplicationRecord
     })
   end
 
+  def organization
+    {
+      "@context": "http://schema.org",
+      "@type": "Organization",
+      "url": dataset_url,
+      "logo": dataset_url[0..-2] + ActionController::Base.helpers.image_url("CHORDS_logo_144.png")
+    }.to_json
+  end
+
   def to_json_ld
     data = {}
 
@@ -77,7 +86,6 @@ class LinkedDatum < ApplicationRecord
     data['name'] = data_name
     data['description'] = description
     data['url'] = dataset_url
-    data['logo'] = dataset_url[0..-2] + ActionController::Base.helpers.image_url("CHORDS_full_50.png")
     data['version'] = version
     data['keywords'] = keywords
     data['spatialCoverage'] = spatial_coverage

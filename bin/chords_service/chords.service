@@ -5,8 +5,9 @@
 #
 # To install:
 # Fetch the service definition
-#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/chords_service/chords.service > /var/lib/chords/chords.service
-# Enable the service. (You will get complaints about [Install] missing)
+#  sudo curl -L https://github.com/NCAR/chords/raw/master/bin/chords_service/chords.service > /var/lib/chords/chords.service
+#
+# Enable the service.
 #  sudo systemctl enable /var/lib/chords/chords.service
 #
 # When you make a change to a service file:
@@ -20,6 +21,9 @@
 #
 # To restart chords:
 #  sudo systemctl restart chords
+#
+# To see service status:
+#  sudo systemctl status chords
 #
 # "sudo docker ps" is a good way to see if the portal is running.
 #
