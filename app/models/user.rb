@@ -12,6 +12,11 @@ class User < ApplicationRecord
 
   before_create :set_default_roles
 
+  # find users with a particular role
+  # ex: User.with_role(:admin) => ActiveRecordRelation[user1, user2, ...]
+  scope :with_role, -> (role) { where("roles_mask & #{2**ROLES.index(role)} > 0") }
+  scope :with_only_role, -> (role) { where("roles_mask = #{2**ROLES.index(role)}") }
+
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
     self.roles_mask = (roles & ROLES).map { |r| 2**ROLES.index(r) }.inject(0, :+)
@@ -50,7 +55,7 @@ class User < ApplicationRecord
 private
   def set_default_roles
     if roles_mask.nil? && self.roles.blank?
-      self.roles = [:registered_user]
+      self.roles = [:guest]
     end
   end
 end
