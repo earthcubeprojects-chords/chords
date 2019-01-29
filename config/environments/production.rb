@@ -74,14 +74,18 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_options = {from: from_email}
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:               ENV['CHORDS_EMAIL_SERVER'],
-    port:                  ENV['CHORDS_EMAIL_PORT'],
-    user_name:             ENV['CHORDS_EMAIL_ADDRESS'],
-    password:              ENV['CHORDS_EMAIL_PASSWORD'],
-    authentication:        'plain',
-    enable_starttls_auto:  true
-  }
+
+  config.action_mailer.smtp_settings = {}
+  smtp_settings = config.action_mailer.smtp_settings
+  smtp_settings[:address] = ENV['CHORDS_EMAIL_SERVER'] unless ENV['CHORDS_EMAIL_SERVER'].blank?
+  smtp_settings[:port] = ENV['CHORDS_EMAIL_PORT'] unless ENV['CHORDS_EMAIL_PORT'].blank?
+  smtp_settings[:user_name] = ENV['CHORDS_EMAIL_ADDRESS'] unless ENV['CHORDS_EMAIL_ADDRESS'].blank?
+  smtp_settings[:password] = ENV['CHORDS_EMAIL_PASSWORD'] unless ENV['CHORDS_EMAIL_PASSWORD'].blank?
+
+  if smtp_settings[:address] && smtp_settings[:password]
+    smtp_settings[:authentication] = 'plain'
+    smtp_settings[:enable_starttls_auto] = true
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
