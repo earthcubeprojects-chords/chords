@@ -18,7 +18,7 @@
 
       if (startdate < enddate) {
         var url = '';
-        url += '/instruments/'
+        url += '/api/v1/data/'
         url += id;
         url += '.' + datatype + '?';
         url += 'start=' + startdate.toISOString();
@@ -32,11 +32,6 @@
 
     $('.geoCsvButton').click(function(){
       send_download_url(this.value, 'csv');
-    });
-
-
-    $('.xmlButton').click(function(){
-      send_download_url(this.value, 'xml');
     });
 
     $('.geoJsonButton').click(function(){
@@ -63,28 +58,22 @@
     %tr
       %th Instrument Name
       %th Site
-      %th{:align => "center"}
-        \#
-        %br/
-        measurements
-      %th{:align => "center"}
-        Fetch/Ingest
+      %th # measurements
+      %th
+        Fetch/
         %br>/
-        Data
-      %th{:align => "center", :colspan => "3"} Download As
+        Ingest Data
+      %th Download As
   %tbody
     - @instruments.each do |instrument|
       %tr
         %td= link_to(instrument.name, instrument_url(:id => instrument.id) )
         %td= @sites.find(instrument.site_id).name
-        %td{:align => "center"}
-          = instrument.sample_count(:either)
-        %td{:align => "center"}= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
-        %td{:align => "center"}
-
+        %td= instrument.sample_count(:either)
+        %td= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
+        %td
           %button.geoCsvButton{:value => "#{instrument.id}"}  GeoCSV
           %button.geoJsonButton{:value => "#{instrument.id}"} GeoJSON
-          %button.xmlButton{:value => "#{instrument.id}"}     XML
 
 %p
   See the
