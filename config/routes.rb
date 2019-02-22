@@ -21,12 +21,13 @@ Rails.application.routes.draw do
   namespace :api, :defaults => {format: :json} do
     namespace :v1 do
       resources :sites
+      resources :data, only: [:index, :show]
     end
   end
 
 
   resources :dashboard
-  resources :data
+  resources :data, only: :index
   resources :influxdb_tags
   resources :linked_data, only: [:index, :edit, :update, :show]
   resources :measured_properties

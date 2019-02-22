@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181121175434) do
+ActiveRecord::Schema.define(version: 20190215160532) do
 
   create_table "archive_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string "archive_name"
@@ -96,7 +96,6 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.boolean "secure_data_download", default: true
     t.boolean "secure_data_entry", default: true
     t.string "data_entry_key"
-    t.string "google_maps_key", default: "none"
     t.string "page_title", default: "CHORDS Portal"
     t.text "doi"
     t.string "contact_name", default: "Contact Name", null: false
@@ -112,6 +111,7 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.string "unit_source", default: "CUAHSI"
     t.string "measured_property_source", default: "SensorML"
     t.string "data_archive_url"
+    t.integer "max_download_points"
   end
 
   create_table "site_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
