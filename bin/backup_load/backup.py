@@ -19,10 +19,9 @@ if __name__ == '__main__':
     ]
     mysql_file = open(mysql_dump_file, 'w')
     print(sh.docker(docker_cmds[0].split(), _out=mysql_file).stdout)
-    print("*********************")
     print("")
 
-    print("***Dump influxdb ***")
+    print("*** Dump influxdb ***")
     influx_dump_dir = '/tmp/influxdb-'+time_stamp
     docker_cmds = [
         'exec -t chords_influxdb ls -l /tmp',
@@ -34,9 +33,9 @@ if __name__ == '__main__':
     ]
     for cmd in docker_cmds:
         print(sh.docker(cmd.split()).stdout)
-    print("*********************")
     print("")
 
+    print("*** Package ***")
     print(sh.tar('-cvf', chords_dump_file, mysql_dump_file, influx_dump_file))
     print(sh.rm(mysql_dump_file, influx_dump_file))
 
