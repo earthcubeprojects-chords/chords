@@ -14,11 +14,8 @@ if __name__ == '__main__':
     chords_dump_file = 'chords-'+time_stamp+'.tgz'
 
     print("*** Dump mysql ***")
-    docker_cmds = [
-        'exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'
-    ]
     mysql_file = open(mysql_dump_file, 'w')
-    print(sh.docker(docker_cmds[0].split(), _out=mysql_file).stdout)
+    print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(), _out=mysql_file).stdout)
     print("")
 
     print("*** Dump influxdb ***")
