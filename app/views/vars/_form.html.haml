@@ -17,7 +17,11 @@
       = f.label :shortname
     .field
       = f.text_field :shortname, class: 'form-control'
-      = f.hidden_field :instrument_id, value: @instrument.id
+
+      - if @instrument
+        = f.hidden_field :instrument_id, value: @instrument.id
+      - else
+        = f.hidden_field :instrument_id, value: @var.instrument.id
   .line
     .title
       = link_to 'Units', :units
