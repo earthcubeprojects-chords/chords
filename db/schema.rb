@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190215160532) do
+ActiveRecord::Schema.define(version: 20190226184145) do
 
   create_table "archive_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string "archive_name"
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(version: 20190215160532) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "timezone"
-    t.boolean "secure_administration", default: false
-    t.boolean "secure_data_viewing", default: true
+    t.boolean "secure_administration", default: true
+    t.boolean "secure_data_viewing", default: false
     t.boolean "secure_data_download", default: true
     t.boolean "secure_data_entry", default: true
     t.string "data_entry_key"
