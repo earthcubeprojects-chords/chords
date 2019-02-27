@@ -24,11 +24,15 @@ module API
           return
         end
 
-        if params[:instruments]
-          instruments = Instrument.accessible_by(current_ability).where(id: params[:instruments].split(',').map(&:to_i))
-        else
-          instruments = Instrument.accessible_by(current_ability)
-        end
+        instruments = Instrument.accessible_by(current_ability)
+
+        instruments = if params[:sensors]
+                        instruments.where(sensor_id: params[:sensors].split(','))
+                      elsif params[:instruments]
+                        instruments.where(id: params[:instruments].split(',').map(&:to_i))
+                      else
+                        instruments
+                      end
 
         # Determine the time range. Default to the most recent day
         end_time = Time.now

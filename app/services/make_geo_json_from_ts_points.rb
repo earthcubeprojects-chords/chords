@@ -46,14 +46,40 @@ class MakeGeoJsonFromTsPoints
     feature[:properties][:site_id] = instrument.site.id
     feature[:properties][:instrument] = instrument.name
     feature[:properties][:instrument_id] = instrument.id
+    feature[:properties][:sensor_id] = instrument.sensor_id
+    feature[:properties][:variables] = MakeGeoJsonFromTsPoints.make_vars(instrument)
 
     return feature
+  end
+
+  def self.make_vars(instrument)
+    data = []
+    vars = instrument.vars
+
+    vars.each do |var|
+      temp = {}
+      temp[:name] = var.try(:name).to_s
+      temp[:shortname] = var.try(:shortname).to_s
+      temp[:measured_property] = var.try(:measured_property).try(:label)
+      temp[:measured_property_definition] = var.try(:measured_property).try(:definition)
+      temp[:measured_property_source] = var.try(:measured_property).try(:source)
+      temp[:measured_property_url] = var.try(:measured_property).try(:url)
+      temp[:units_name] = var.try(:unit).try(:name)
+      temp[:units_abbreviation] = var.try(:unit).try(:abbreviation)
+      temp[:units_type] = var.try(:unit).try(:unit_type)
+      temp[:units_source] = var.try(:unit).try(:source)
+
+      data << temp
+    end
+
+    data
   end
 
   def self.make_properties(ts_data, vars_by_id)
     data = {}
     properties = {}
     properties[:data] = []
+    properties[:timestamps_in_feature] = 0
     properties[:measurements_in_feature] = 0
 
     # aggregate tspoints by timestamp
@@ -62,19 +88,18 @@ class MakeGeoJsonFromTsPoints
       timestamp = point['time']
 
       temp = {}
-      temp[:variable_name] = vars_by_id[var_id].try(:name).to_s
-      temp[:variable_shortname] = vars_by_id[var_id].try(:shortname).to_s
-      temp[:units] = vars_by_id[var_id].try(:units).to_s
+      temp[:shortname] = vars_by_id[var_id].try(:shortname).to_s
       temp[:value] = point['value']
 
-      data[timestamp] = {time: timestamp, test: point['test'], vars: []} unless data.key?(timestamp)
-      data[timestamp][:vars] << temp
+      data[timestamp] = {time: timestamp, test: point['test'], measurements: []} unless data.key?(timestamp)
+      data[timestamp][:measurements] << temp
+      properties[:measurements_in_feature] += 1
     end
 
     # put aggregated points into data array
     data.keys.sort.each do |key|
       properties[:data] << data[key]
-      properties[:measurements_in_feature] += 1
+      properties[:timestamps_in_feature] += 1
     end
 
     return properties
