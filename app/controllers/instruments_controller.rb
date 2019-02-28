@@ -16,7 +16,8 @@ class InstrumentsController < ApplicationController
       start_time_ms = @instrument.point_time_in_ms("last") - eval(time_offset)
     end
 
-    livedata = { points: [],
+    livedata = {
+                 points: [],
                  multivariable_points: {},
                  multivariable_names: [],
                  display_points: 0,
@@ -40,7 +41,7 @@ class InstrumentsController < ApplicationController
     # otherwise we return data for all variables
     else
       @instrument.vars.each do |variable|
-        livedata[:multivariable_names].push  variable.shortname
+        livedata[:multivariable_names] << variable.shortname
         livedata[:multivariable_points][variable.shortname] = []
 
         # Fetch the data

@@ -14,7 +14,7 @@
   = @var.unit.try(:name)
 %p
   %strong Display Units:
-  = @var.units
+  = @var.unit.try(:abbreviation)
 %p
   %strong Measured Property:
   = @var.measured_property.try(:label)
