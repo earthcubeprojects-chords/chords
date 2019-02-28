@@ -148,6 +148,10 @@ class Instrument < ApplicationRecord
     return link
   end
 
+  def current_day_download_link(type)
+    '/api/v1/data/' + self.id.to_s + ".#{type.to_s}"
+  end
+
   def create_cuahsi_method
     data = {
       "user" => Rails.application.config.x.archive['username'],

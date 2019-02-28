@@ -87,12 +87,11 @@ class MakeGeoJsonFromTsPoints
       var_id = point['var'].to_i
       timestamp = point['time']
 
-      temp = {}
-      temp[:shortname] = vars_by_id[var_id].try(:shortname).to_s
-      temp[:value] = point['value']
+      data[timestamp] = {time: timestamp, test: point['test'], measurements: {}} unless data.key?(timestamp)
 
-      data[timestamp] = {time: timestamp, test: point['test'], measurements: []} unless data.key?(timestamp)
-      data[timestamp][:measurements] << temp
+      shortname = vars_by_id[var_id].try(:shortname).to_s
+      data[timestamp][:measurements][shortname] = point['value']
+
       properties[:measurements_in_feature] += 1
     end
 

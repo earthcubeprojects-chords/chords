@@ -38,18 +38,12 @@ module API
         end_time = Time.now
         start_time = end_time - 1.day
 
-        if params[:last]
-          start_time = @instrument.point_time_in_ms("last")
-          end_time = start_time
-        else
-          # See if we have the start and end parameters
-          if params[:start]
-            start_time = Time.parse(params[:start])
-          end
+        if params[:start]
+          start_time = Time.parse(params[:start])
+        end
 
-          if params[:end]
-            end_time = Time.parse(params[:end])
-          end
+        if params[:end]
+          end_time = Time.parse(params[:end])
         end
 
         # Check whether to include test data
