@@ -1,6 +1,7 @@
 """
 Backup CHORDS databases.
 """
+import sys
 import datetime
 import sh
 
@@ -9,10 +10,10 @@ import sh
 if __name__ == '__main__':
 
     time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
-
+    time_stamp = time_stamp.replace(":","-")
     mysql_dump_file = 'mysql-'+time_stamp+'.sql'
     influx_dump_file = 'influxdb-'+time_stamp+'.tar'
-    chords_dump_file = 'chords-'+time_stamp+'.tgz'
+    chords_dump_file = 'chords-'+time_stamp+'.tar.gz'
 
     print("*** Saving mysql ***")
     mysql_file = open(mysql_dump_file, 'w')
@@ -37,6 +38,7 @@ if __name__ == '__main__':
     print("")
 
     print("*** Packaging files ***")
-    print(sh.tar('-cvf', chords_dump_file, mysql_dump_file, influx_dump_file))
+    tar_params = ['-cvf', chords_dump_file, mysql_dump_file, influx_dump_file]
+    print(sh.tar(tar_params, _err_to_out=True).stdout)
     print(sh.rm(mysql_dump_file, influx_dump_file))
     print("%s has ben created." % (chords_dump_file))
