@@ -10,17 +10,17 @@ Rails.application.routes.draw do
   end
 
   # send guest user to the about page
-  if ActiveRecord::Base.connection.table_exists? 'profile'
-    profile = Profile.first
+  # if ActiveRecord::Base.connection && ActiveRecord::Base.connection.table_exists?('profile')
+  #   profile = Profile.first
 
-    if profile && profile.secure_data_viewing
-      root 'about#index'
-    else
-      root 'dashboard#index'
-    end
-  else
-    root 'about#index'
-  end
+  #   if profile && profile.secure_data_viewing
+  root 'about#index'
+  #   else
+  #     root 'dashboard#index'
+  #   end
+  # else
+  #   root 'about#index'
+  # end
 
   post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
   post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
