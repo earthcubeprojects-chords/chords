@@ -43,6 +43,9 @@ class Profile < ApplicationRecord
     ',
     logo: nil,
     secure_administration: true,
+    secure_data_download: true,
+    secure_data_viewing: false,
+    secure_data_entry: true,
     data_entry_key: 'key'
 
     }])
