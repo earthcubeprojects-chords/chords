@@ -51,7 +51,7 @@ module InstrumentsHelper
   end
 
   def data_file_download_url(file_extension, range = nil)
-    url = url_for(:only_path => false, :host => request.host, :controller => 'instruments', :action => 'show', :id => @instrument.id)
+    url = url_for(:only_path => false, :host => request.host, :controller => 'api/v1/data', :action => 'show', :id => @instrument.id)
     url += ".#{file_extension}"
 
     if range

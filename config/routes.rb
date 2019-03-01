@@ -10,15 +10,34 @@ Rails.application.routes.draw do
   end
 
   # send guest user to the about page
-  root 'about#index'
+  if ActiveRecord::Base.connection.table_exists? 'profile'
+    profile = Profile.first
+
+    if profile && profile.secure_data_viewing
+      root 'about#index'
+    else
+      root 'dashboard#index'
+    end
+  else
+    root 'about#index'
+  end
 
   post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
   post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
   post 'archive/push_cuahsi_sites' => 'archives#push_cuahsi_sites', as: :push_cuahsi_sites
   post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
 
+
+  namespace :api, :defaults => {format: :json} do
+    namespace :v1 do
+      resources :sites
+      resources :data, only: [:index, :show]
+    end
+  end
+
+
   resources :dashboard
-  resources :data
+  resources :data, only: :index
   resources :influxdb_tags
   resources :linked_data, only: [:index, :edit, :update, :show]
   resources :measured_properties
