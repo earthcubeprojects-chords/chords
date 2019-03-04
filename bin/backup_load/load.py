@@ -8,8 +8,15 @@ import glob
 from collections import namedtuple
 import sh
 import docker
+import json
 
-class LoadChords:
+class ChordsLoadError(Exception):
+    """
+    raise ChordsLoadError("error msg")
+    """
+    pass
+
+class ChordsLoad:
     """
     Doc.
     """
@@ -20,20 +27,51 @@ class LoadChords:
         self.dump_file = dump_file
         self.tmp_dir = tempfile.mkdtemp(prefix="chords_load-", dir=os.path.normpath(tmp_dir))
         self.file_paths = {}
+        self.docker_containers = {}
+
+        print("*** Dump file unpacking ***")
         self.backup_unpack()
-        self.valid = self.validate()
-        if self.valid:
-            return
-        
+
+        print("*** Docker ***")
+        self.docker_check()
+        self.docker_container_status()
+
+        print("*** Loading mysql ***")
         self.load_mysql()
 
+        print("*** Loading influxdb ***")
         self.load_influxdb()
+
+        print("*** Cleanup ***")
+        self.docker_container_status()
+
+    def docker_check(self):
+        """
+        Verify that a CHORDS instance is running correctly.
+        """
+        self.docker_containers = {}
+        self.docker_containers = \
+            {c.name: c for c in docker.from_env().containers.list(all=True)}
+
+        err_msg = ""
+        for container_name in ["chords_app", "chords_influxdb", "chords_mysql"]:
+            if container_name not in self.docker_containers.keys():
+                err_msg += "The %s docker container is not present.\n" % (container_name)
+
+        if err_msg:
+            raise ChordsLoadError(err_msg)
+
+    def docker_container_status(self):
+        """
+        Docs.
+        """
+        for name, container in self.docker_containers.items():
+            print(name + ": " + container.status)
 
     def load_mysql(self, container="chords_mysql", database_name="chords_demo_production"):
         """
         Load the mysql database.
         """
-        print("*** Loading mysql ***")
         print ("Container:%s, database:%s" % (container, database_name))
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         print(sh.docker(sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True).stdout)
@@ -42,28 +80,19 @@ class LoadChords:
         """
         Load the influxdb database.
         """
-        print("*** Loading influxdb ***")
         print ("Container:%s, database:%s" % (container, database_name))
         #docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         #print(sh.docker(sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True).stdout)
 
-    def err(self):
+
+    def backup_unpack(self):
         """
         Docs.
         """
-        return self.valid
-
-    def validate(self):
-        """
-        Perform validation checks.
-
-         - Verify that the docker apps are correct
-         - Verify that one and only one valid dump file exists for each database.
-        """
-        retval = ""
-        retval += self.docker_check()
-        retval += self.file_check()
-        return retval
+        print("*** Unpacking chords files ***")
+        print("Temporary directory: " + self.tmp_dir)
+        print(sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout)
+        self.file_check()
 
     def file_check(self):
         """
@@ -71,7 +100,7 @@ class LoadChords:
 
         Return an empty string if valid, or an error message if not.
         """
-        retval = ""
+        err_msg = ""
         FileSpec = namedtuple('FileSpec', ['prefix', 'ext'])
         file_types = [FileSpec('mysql', 'sql'),
                       FileSpec('influxdb', 'tar')]
@@ -81,35 +110,22 @@ class LoadChords:
                 self.file_paths[file_type.prefix] = files[0]
             else:
                 if len(files) > 1:
-                    if retval:
-                        retval += "\n"
-                    retval += "More than one %s dump file was found: " % (file_type.prefix) + \
+                    if err_msg:
+                        err_msg += "\n"
+                    err_msg += "More than one %s dump file was found: " % (file_type.prefix) + \
                         " ".join([os.path.basename(f) for f in files]) + "."
                 else:
-                    if retval:
-                        retval += "\n"
-                    retval += "No %s dump file was found." % (file_type.prefix)
-        return retval
+                    if err_msg:
+                        err_msg += "\n"
+                    err_msg += "No %s dump file was found." % (file_type.prefix)
+        if err_msg:
+            raise ChordsLoadError(err_msg)
 
-    def docker_check(self):
+    def report(self):
         """
-        Verify that a CHORDS instance is running correctly.
+        Provide a report.
         """
-        client = docker.from_env()
-        our_containers = [c.name for c in client.containers.list()]
-        msg = ""
-        for c in ["chords_app", "chords_influxdb", "chords_mysql"]:
-            if c not in our_containers:
-                msg += "The %s docker container is not present.\n" % (c)
-        return msg
-
-    def backup_unpack(self):
-        """
-        Docs.
-        """
-        print("*** Unpacking chords files ***")
-        print("Temporary directory: " + self.tmp_dir)
-        print(sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout)
+        return "Ok"
 
 
 if __name__ == "__main__":
@@ -117,12 +133,16 @@ if __name__ == "__main__":
         print("Usage: load <file_name>")
         exit(1)
 
-    chords_dump_file = sys.argv[1]
-    load_chords = LoadChords(chords_dump_file)
+    CHORDS_DUMP_FILE = sys.argv[1]
 
-
-    err_msg = load_chords.err()
-    if err_msg:
-        print(err_msg)
+    try:
+        load_chords = ChordsLoad(CHORDS_DUMP_FILE)
+    except ChordsLoadError as load_exception:
+        print("Error processing %s" % (CHORDS_DUMP_FILE))
+        print(load_exception)
         exit(1)
+
+    print(load_chords.report())
+
+    exit(0)
 
