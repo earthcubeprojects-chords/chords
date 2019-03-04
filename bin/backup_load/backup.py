@@ -12,8 +12,9 @@ if __name__ == '__main__':
     time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
     time_stamp = time_stamp.replace(":","-")
     mysql_dump_file = 'mysql-'+time_stamp+'.sql'
-    influx_dump_file = 'influxdb-'+time_stamp+'.tar'
-    chords_dump_file = 'chords-'+time_stamp+'.tar.gz'
+    influx_dump_dir = 'influxdb-'+time_stamp
+    influx_tar_file = 'influxdb-'+time_stamp+'.tar'
+    chords_tar_file = 'chords-'+time_stamp+'.tar.gz'
 
     print("*** Saving mysql ***")
     mysql_file = open(mysql_dump_file, 'w')
@@ -22,23 +23,24 @@ if __name__ == '__main__':
     print("")
 
     print("*** Saving influxdb ***")
-    influx_dump_dir = '/tmp/influxdb-'+time_stamp
-    docker_cmds = [
-        'exec -t chords_influxdb ls -l /tmp',
-        'exec -t chords_influxdb influxd backup -database chords_ts_production %s' % \
-            (influx_dump_dir),
-        'exec -t chords_influxdb tar --force-local -cvf %s %s' % \
-            (influx_dump_file, influx_dump_dir),
-        'cp chords_influxdb:%s .' % (influx_dump_file),
-        'exec -t chords_influxdb rm %s' % (influx_dump_file),
-        'exec -t chords_influxdb rm -rf %s' % (influx_dump_dir)
-    ]
-    for cmd in docker_cmds:
-        print(sh.docker(cmd.split(), _err_to_out=True).stdout)
-    print("")
+    print(sh.docker('exec', '-t', 'chords_influxdb',
+                    'ls', '-l', '/tmp',
+                    _err_to_out=True).stdout)
+    print(sh.docker('exec', '-t', 'chords_influxdb',
+                    '/bin/bash', '-c', "cd /tmp && influxd backup -portable %s" % (influx_dump_dir),
+                    _err_to_out=True).stdout)
+    print(sh.docker('exec', '-t', 'chords_influxdb',
+                    '/bin/bash', '-c', "cd /tmp && tar -cvf %s %s" % (influx_tar_file, influx_dump_dir),
+                    _err_to_out=True).stdout)
+    print(sh.docker('cp',
+                    'chords_influxdb:%s' % ("/tmp/"+influx_tar_file), '.',
+                    _err_to_out=True).stdout)
+    print(sh.docker('exec', '-t', 'chords_influxdb',
+                    '/bin/bash', '-c', "cd /tmp && rm -rf %s %s" % (influx_tar_file, influx_dump_dir),
+                    _err_to_out=True).stdout)
 
     print("*** Packaging files ***")
-    tar_params = ['-cvf', chords_dump_file, mysql_dump_file, influx_dump_file]
+    tar_params = ['-cvf', chords_tar_file, mysql_dump_file, influx_tar_file]
     print(sh.tar(tar_params, _err_to_out=True).stdout)
-    print(sh.rm(mysql_dump_file, influx_dump_file))
-    print("%s has ben created." % (chords_dump_file))
+    print(sh.rm(mysql_dump_file, influx_tar_file))
+    print("%s has ben created." % (chords_tar_file))
