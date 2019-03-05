@@ -50,7 +50,7 @@ class ChordsLoad:
         Cleanup.
         """
         print("Removing the temporary directory " + self.tmp_dir)
-        sh.rm('-rf', self.tmp_dir)
+        print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout)
 
     def docker_check(self):
         """
@@ -70,7 +70,7 @@ class ChordsLoad:
 
     def docker_container_status(self):
         """
-        Docs.
+        Print the status of all containers.
         """
         for name, container in self.docker_containers.items():
             print(name + ": " + container.status)
@@ -108,7 +108,7 @@ class ChordsLoad:
 
     def backup_unpack(self):
         """
-        Docs.
+        Unpack the backup file.
         """
         print("*** Unpacking chords files ***")
         print("Temporary directory: " + self.tmp_dir)
