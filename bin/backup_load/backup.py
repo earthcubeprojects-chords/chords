@@ -14,7 +14,7 @@ def docker_bash(container, script):
 
 def docker_cp(src, dest):
     """
-    Copy file to/from ontainer.
+    Copy file to/from container.
     """
     print(sh.docker('cp', src, dest, _err_to_out=True).stdout)
     
