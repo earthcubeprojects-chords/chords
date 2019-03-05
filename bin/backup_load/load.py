@@ -43,7 +43,14 @@ class ChordsLoad:
         self.load_influxdb()
 
         print("*** Cleanup ***")
-        self.docker_container_status()
+        self.cleanup()
+
+    def cleanup(self):
+        """
+        Cleanup.
+        """
+        print("Removing the temporary directory " + self.tmp_dir)
+        sh.rm('-rf', self.tmp_dir)
 
     def docker_check(self):
         """
@@ -76,14 +83,28 @@ class ChordsLoad:
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         print(sh.docker(sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True).stdout)
 
-    def load_influxdb(self, container="chords_influxdb", database_name="chords_ts_production"):
+    def load_influxdb(self, container="chords_influxdb"):
         """
         Load the influxdb database.
         """
-        print ("Container:%s, database:%s" % (container, database_name))
-        #docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
-        #print(sh.docker(sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True).stdout)
+        admin_pw = "chords_ec_demo"
+        influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
 
+        print("Loading from " + self.file_paths["influxdb"])
+        self.docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
+        self.docker_bash("chords_influxdb",
+                         "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
+        print("Dropping influxdb database chords_ts_production")
+        self.docker_bash("chords_influxdb",
+                         "influx -username admin -password %s -execute 'drop database chords_ts_production'"
+                         % (admin_pw))
+        print("Loading databases")
+        self.docker_bash("chords_influxdb",
+                         "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", "")))
+        print("Curent influxdb databases:")
+        self.docker_bash("chords_influxdb",
+                         "influx -username admin -password %s -execute 'show databases'"
+                         % (admin_pw))
 
     def backup_unpack(self):
         """
@@ -125,7 +146,27 @@ class ChordsLoad:
         """
         Provide a report.
         """
-        return "Ok"
+        msg = """
+CHORDS databases have been restored.
+
+CHORDS must be restarted by running:
+python chords_control --stop
+python chords_control --run
+"""
+        return msg
+
+    def docker_bash(self, container, script):
+        """
+        Run shell comands in bash. This allows multiple
+        commands to be &&'ed together
+        """
+        print(sh.docker('exec', '-t', container, '/bin/bash', '-c', script, _err_to_out=True).stdout)
+
+    def docker_cp(self, src, dest):
+        """
+        Copy file to/from container.
+        """
+        print(sh.docker('cp', src, dest, _err_to_out=True).stdout)
 
 
 if __name__ == "__main__":
