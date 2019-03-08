@@ -2,7 +2,21 @@
 Backup CHORDS databases.
 """
 import datetime
+import os
+import getpass
 import sh
+
+class ChordsBackupError(Exception):
+    """ Raise ChordsBackupError("error msg"). """
+    pass
+
+
+def id_check():
+    """ Verify that the user is running with the correct permissions. """
+
+    if os.name == "posix":
+        if getpass.getuser() != 'root':
+            raise ChordsBackupError("CHORDS load must be run as root user on posix systems.")
 
 def docker_bash(container, script):
     """
@@ -22,6 +36,7 @@ def main():
     """
     Main.
     """
+    id_check()
 
     time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
     time_stamp = time_stamp.replace(":", "-")
@@ -48,5 +63,10 @@ def main():
     print("%s has ben created." % (chords_tar_file))
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except ChordsBackupError as error:
+        print(error)
+        exit(1)
+
     exit(0)
