@@ -8,11 +8,10 @@ import glob
 from collections import namedtuple
 import sh
 import docker
-import json
 
 class ChordsLoadError(Exception):
     """
-    raise ChordsLoadError("error msg")
+    Raise ChordsLoadError("error msg")
     """
     pass
 
@@ -79,11 +78,15 @@ class ChordsLoad:
         """
         Load the mysql database.
         """
-        print ("Container:%s, database:%s" % (container, database_name))
+        print("Container:%s, database:%s" % (container, database_name))
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
-        print(sh.docker(sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True).stdout)
+        print(
+            sh.docker(
+                sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
+            ).stdout
+        )
 
-    def load_influxdb(self, container="chords_influxdb"):
+    def load_influxdb(self):
         """
         Load the influxdb database.
         """
@@ -95,12 +98,16 @@ class ChordsLoad:
         self.docker_bash("chords_influxdb",
                          "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
         print("Dropping influxdb database chords_ts_production")
-        self.docker_bash("chords_influxdb",
-                         "influx -username admin -password %s -execute 'drop database chords_ts_production'"
-                         % (admin_pw))
+        self.docker_bash(
+            "chords_influxdb",
+            "influx -username admin -password %s -execute 'drop database chords_ts_production'"
+            % (admin_pw)
+        )
         print("Loading databases")
-        self.docker_bash("chords_influxdb",
-                         "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", "")))
+        self.docker_bash(
+            "chords_influxdb",
+            "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
+        )
         print("Curent influxdb databases:")
         self.docker_bash("chords_influxdb",
                          "influx -username admin -password %s -execute 'show databases'"
@@ -112,7 +119,9 @@ class ChordsLoad:
         """
         print("*** Unpacking chords files ***")
         print("Temporary directory: " + self.tmp_dir)
-        print(sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout)
+        print(
+            sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
+        )
         self.file_check()
 
     def file_check(self):
@@ -126,7 +135,9 @@ class ChordsLoad:
         file_types = [FileSpec('mysql', 'sql'),
                       FileSpec('influxdb', 'tar')]
         for file_type in file_types:
-            files = glob.glob(self.tmp_dir + "/" + file_type.prefix + "*." + file_type.ext)
+            files = glob.glob(
+                self.tmp_dir + "/" + file_type.prefix + "*." + file_type.ext
+            )
             if len(files) == 1:
                 self.file_paths[file_type.prefix] = files[0]
             else:
@@ -160,30 +171,52 @@ python chords_control --run
         Run shell comands in bash. This allows multiple
         commands to be &&'ed together
         """
-        print(sh.docker('exec', '-t', container, '/bin/bash', '-c', script, _err_to_out=True).stdout)
+        print(
+            sh.docker(
+                'exec', '-t', container, '/bin/bash', '-c', script, _err_to_out=True
+            ).stdout
+        )
 
     def docker_cp(self, src, dest):
         """
         Copy file to/from container.
         """
-        print(sh.docker('cp', src, dest, _err_to_out=True).stdout)
+        print(
+            sh.docker('cp', src, dest, _err_to_out=True).stdout
+        )
 
 
-if __name__ == "__main__":
+def docker_sh(*args):
+    """
+    run docker command with the args, and print stdout and stderr.
+    """
+    print(
+        sh.docker(args, _err_to_out=True).stdout
+    )
+
+
+def main():
+    """
+    Main.
+    """
+
     if len(sys.argv) != 2:
         print("Usage: load <file_name>")
         exit(1)
 
-    CHORDS_DUMP_FILE = sys.argv[1]
+    chords_dump_file = sys.argv[1]
 
     try:
-        load_chords = ChordsLoad(CHORDS_DUMP_FILE)
+        load_chords = ChordsLoad(chords_dump_file)
     except ChordsLoadError as load_exception:
-        print("Error processing %s" % (CHORDS_DUMP_FILE))
+        print("Error processing %s" % (chords_dump_file))
         print(load_exception)
         exit(1)
 
     print(load_chords.report())
 
-    exit(0)
 
+if __name__ == "__main__":
+
+    main()
+    exit(0)
