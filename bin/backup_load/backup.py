@@ -23,7 +23,7 @@ def docker_cp(src, dest):
 if __name__ == '__main__':
 
     time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
-    time_stamp = time_stamp.replace(":","-")
+    time_stamp = time_stamp.replace(":", "-")
     mysql_dump_file = 'mysql-'+time_stamp+'.sql'
     influx_dump_dir = 'influxdb-'+time_stamp
     influx_tar_file = 'influxdb-'+time_stamp+'.tar'
