@@ -2,8 +2,8 @@
 Backup CHORDS databases.
 """
 import datetime
-import os
 import getpass
+import platform
 import sh
 
 class ChordsBackupError(Exception):
@@ -14,9 +14,9 @@ class ChordsBackupError(Exception):
 def id_check():
     """ Verify that the user is running with the correct permissions. """
 
-    if os.name == "posix":
+    if platform.system() == "Linux":
         if getpass.getuser() != 'root':
-            raise ChordsBackupError("CHORDS load must be run as root user on posix systems.")
+            raise ChordsBackupError("CHORDS load must be run as root user on Linux systems.")
 
 def docker_bash(container, script):
     """

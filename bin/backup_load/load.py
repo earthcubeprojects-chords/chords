@@ -6,6 +6,7 @@ import sys
 import tempfile
 import glob
 import getpass
+import platform
 from collections import namedtuple
 import sh
 import docker
@@ -58,9 +59,9 @@ class ChordsLoad:
     def id_check(self):
         """ Verify that the user is running with the correct permissions. """
 
-        if os.name == "posix":
+        if platform.system() == "Linux":
             if getpass.getuser() != 'root':
-                raise ChordsLoadError("CHORDS load must be run as root user on posix systems.")
+                raise ChordsLoadError("CHORDS load must be run as root user on Linux systems.")
 
     def cleanup(self):
         """ Cleanup temporary files. """
