@@ -71,8 +71,10 @@ class ChordsLoad:
         """
         Print the status of all containers.
         """
+        print("Docker containers:")
         for name, container in self.docker_containers.items():
             print(name + ": " + container.status)
+        print("")
 
     def load_mysql(self, container="chords_mysql", database_name="chords_demo_production"):
         """
@@ -171,28 +173,20 @@ python chords_control --run
         Run shell comands in bash. This allows multiple
         commands to be &&'ed together
         """
-        print(
-            sh.docker(
-                'exec', '-t', container, '/bin/bash', '-c', script, _err_to_out=True
-            ).stdout
-        )
+        docker_sh('exec', '-t', container, '/bin/bash', '-c', script)
 
     def docker_cp(self, src, dest):
         """
         Copy file to/from container.
         """
-        print(
-            sh.docker('cp', src, dest, _err_to_out=True).stdout
-        )
+        docker_sh('cp', src, dest)
 
 
 def docker_sh(*args):
     """
     run docker command with the args, and print stdout and stderr.
     """
-    print(
-        sh.docker(args, _err_to_out=True).stdout
-    )
+    print(sh.docker(args, _err_to_out=True).stdout)
 
 
 def main():
