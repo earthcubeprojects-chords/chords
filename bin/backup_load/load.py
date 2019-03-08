@@ -5,6 +5,7 @@ import os
 import sys
 import tempfile
 import glob
+import getpass
 from collections import namedtuple
 import sh
 import docker
@@ -26,10 +27,12 @@ class ChordsLoad:
 
     def __init__(self, dump_file, tmp_dir="/tmp"):
         """
-        The constructor will perform the complet load process.
+        The constructor will perform the complete load process.
 
         If there are errors, ChordsLoadError wil be thrown.
         """
+
+        self.id_check()
 
         self.dump_file = dump_file
         self.tmp_dir = tempfile.mkdtemp(prefix="chords_load-", dir=os.path.normpath(tmp_dir))
@@ -51,6 +54,13 @@ class ChordsLoad:
 
         print("*** Cleanup ***")
         self.cleanup()
+
+    def id_check(self):
+        """ Verify that the user is running with the correct permissions. """
+
+        if os.name == "posix":
+            if getpass.getuser() != 'root':
+                raise ChordsLoadError("CHORDS load must be run as root user on posix systems.")
 
     def cleanup(self):
         """ Cleanup temporary files. """
@@ -123,9 +133,12 @@ class ChordsLoad:
 
         print("*** Unpacking chords files ***")
         print("Temporary directory: " + self.tmp_dir)
-        print(
-            sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
-        )
+        try:
+            print(
+                sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
+            )
+        except Exception as sh_err:
+            raise ChordsLoadError(sh_err)
         self.file_check()
 
     def file_check(self):
@@ -193,7 +206,10 @@ python chords_control --run
 def docker_sh(*args):
     """ Run a docker command with the args, printing stdout and stderr. """
 
-    print(sh.docker(args, _err_to_out=True).stdout)
+    try:
+        print(sh.docker(args, _err_to_out=True).stdout)
+    except Exception as sh_err:
+        raise ChordsLoadError(sh_err)
 
 
 def main():
