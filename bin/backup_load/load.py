@@ -10,19 +10,27 @@ import sh
 import docker
 
 class ChordsLoadError(Exception):
-    """
-    Raise ChordsLoadError("error msg")
-    """
+    """ Raise ChordsLoadError("error msg"). """
     pass
 
 class ChordsLoad:
     """
-    Doc.
+    Load a runing CHORDS instance for a backup file.
+
+    The CHORDS backup file was created by the ChordsBackup class.
+
+    Requirements:
+     - On Linux systems, you must have root privileges in order to access docker.
+
     """
 
     def __init__(self, dump_file, tmp_dir="/tmp"):
         """
+        The constructor will perform the complet load process.
+
+        If there are errors, ChordsLoadError wil be thrown.
         """
+
         self.dump_file = dump_file
         self.tmp_dir = tempfile.mkdtemp(prefix="chords_load-", dir=os.path.normpath(tmp_dir))
         self.file_paths = {}
@@ -45,16 +53,14 @@ class ChordsLoad:
         self.cleanup()
 
     def cleanup(self):
-        """
-        Cleanup.
-        """
+        """ Cleanup temporary files. """
+
         print("Removing the temporary directory " + self.tmp_dir)
         print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout)
 
     def docker_check(self):
-        """
-        Verify that a CHORDS instance is running correctly.
-        """
+        """ Verify that a CHORDS instance is running correctly. """
+
         self.docker_containers = {}
         self.docker_containers = \
             {c.name: c for c in docker.from_env().containers.list(all=True)}
@@ -68,18 +74,16 @@ class ChordsLoad:
             raise ChordsLoadError(err_msg)
 
     def docker_container_status(self):
-        """
-        Print the status of all containers.
-        """
+        """ Print the status of all containers. """
+
         print("Docker containers:")
         for name, container in self.docker_containers.items():
             print(name + ": " + container.status)
         print("")
 
     def load_mysql(self, container="chords_mysql", database_name="chords_demo_production"):
-        """
-        Load the mysql database.
-        """
+        """ Load the mysql database into the database in the chords_ysql container. """
+
         print("Container:%s, database:%s" % (container, database_name))
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         print(
@@ -89,9 +93,8 @@ class ChordsLoad:
         )
 
     def load_influxdb(self):
-        """
-        Load the influxdb database.
-        """
+        """ Load the influxdb database into the database in the chords_influxdb container. """
+
         admin_pw = "chords_ec_demo"
         influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
 
@@ -116,9 +119,8 @@ class ChordsLoad:
                          % (admin_pw))
 
     def backup_unpack(self):
-        """
-        Unpack the backup file.
-        """
+        """ Unpack the ChordsBackup created backup file to a temporary directoy. """
+
         print("*** Unpacking chords files ***")
         print("Temporary directory: " + self.tmp_dir)
         print(
@@ -132,6 +134,7 @@ class ChordsLoad:
 
         Return an empty string if valid, or an error message if not.
         """
+
         err_msg = ""
         FileSpec = namedtuple('FileSpec', ['prefix', 'ext'])
         file_types = [FileSpec('mysql', 'sql'),
@@ -155,10 +158,9 @@ class ChordsLoad:
         if err_msg:
             raise ChordsLoadError(err_msg)
 
-    def report(self):
-        """
-        Provide a report.
-        """
+    def summary(self):
+        """ Provide an activity summary with further instructions. """
+
         msg = """
 CHORDS databases have been restored.
 
@@ -170,29 +172,32 @@ python chords_control --run
 
     def docker_bash(self, container, script):
         """
-        Run shell comands in bash. This allows multiple
-        commands to be &&'ed together
+        Run shell comands in a docker bash instance.
+
+        This allows multiple commands to be &&'ed together.
         """
+
         docker_sh('exec', '-t', container, '/bin/bash', '-c', script)
 
     def docker_cp(self, src, dest):
         """
-        Copy file to/from container.
+        Copy a file to/from container.
+
+        src and/or dest will specify a container prefix when appropriate, e.g.
+           docker_cp(database.sql chords_mysql:/tmp)
         """
+
         docker_sh('cp', src, dest)
 
 
 def docker_sh(*args):
-    """
-    run docker command with the args, and print stdout and stderr.
-    """
+    """ Run a docker command with the args, printing stdout and stderr. """
+
     print(sh.docker(args, _err_to_out=True).stdout)
 
 
 def main():
-    """
-    Main.
-    """
+    """ Main. """
 
     if len(sys.argv) != 2:
         print("Usage: load <file_name>")
@@ -207,7 +212,7 @@ def main():
         print(load_exception)
         exit(1)
 
-    print(load_chords.report())
+    print(load_chords.summary())
 
 
 if __name__ == "__main__":
