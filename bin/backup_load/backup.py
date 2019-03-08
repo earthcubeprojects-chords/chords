@@ -1,7 +1,6 @@
 """
 Backup CHORDS databases.
 """
-import sys
 import datetime
 import sh
 
@@ -17,10 +16,12 @@ def docker_cp(src, dest):
     Copy file to/from container.
     """
     print(sh.docker('cp', src, dest, _err_to_out=True).stdout)
-    
-#####################################################################
 
-if __name__ == '__main__':
+#####################################################################
+def main():
+    """
+    Main.
+    """
 
     time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
     time_stamp = time_stamp.replace(":", "-")
@@ -45,3 +46,7 @@ if __name__ == '__main__':
     print(sh.tar(tar_params, _err_to_out=True).stdout)
     print(sh.rm(mysql_dump_file, influx_tar_file))
     print("%s has ben created." % (chords_tar_file))
+
+if __name__ == '__main__':
+    main()
+    exit(0)
