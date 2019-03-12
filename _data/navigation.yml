@@ -1,0 +1,100 @@
+###########################################################################################################
+
+# main Menu
+#     Needs a drop down menu including specific pages
+#     - title: "Admin"
+#        url: /page-archive/
+
+#     Needs a drop down menu including specific pages
+#   - title: "User"
+#     url: /page-archive/
+
+main:
+  - title: "About"
+    url: /whatis/
+
+  - title: "News"
+    url: /news/
+
+  - title: "Get Started"
+    url: /gettingstarted/
+
+  - title: "Users"
+    url: #""
+
+  - title: "Admin"
+    url: #""
+
+  - title: "Advanced"
+    url: #""
+
+  - title: "Partners"
+    url: /partners/
+
+  - title: "Live Portals"
+    url: /portals/
+
+  - title: "3D Paws"
+    url: http://3d.chordsrt.com/
+
+
+
+# #Sidebar for the homepage
+sidebar-sample:
+  - title: "Menu"
+    children:
+        - title: "About"
+          url: /whatis/
+
+        - title: "News"
+          url: /post-archive-feature-rows/
+
+        - title: "3D Paws"
+          url: http://3d.chordsrt.com
+
+# #Sidebar for Admin pages
+# sidebar-admin:
+#   - title: "Site Configuration"
+#     children:
+#         - title: "Sites"
+#           url: 
+#
+#         - title: "Instruments"
+#           url: 
+#
+#         - title: "Variables"
+#           url: 
+#
+#         - title: "Metadata"
+#           url:
+#
+#         - title: "Email"
+#           url:
+#
+#         - title: "Archive"
+#           url:
+
+
+# #Sidebar for User pages
+# sidebar-user:
+#   - title: "User"
+#     children:
+#         - title: "Sending a URL from Unix"
+#           url: 
+#
+#         - title: "Arduino"
+#           url: 
+#
+#         - title: "Particle"
+#           url: 
+#
+#         - title: "Campbell Datalogger"
+#           url: 
+#
+#   - title: "Retrieving Data"
+#     children:
+#         - title: "Download Data"
+#           url: 
+#
+#         - title: "View via Grafana"
+#           url: 
