@@ -20,13 +20,13 @@ main:
     url: /gettingstarted/
 
   - title: "Users"
-    url: #""
+    url: /users/
 
   - title: "Admin"
-    url: #""
+    url: /admin/
 
   - title: "Advanced"
-    url: #""
+    url: /advanced/
 
   - title: "Partners"
     url: /partners/
