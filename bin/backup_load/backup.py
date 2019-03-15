@@ -100,6 +100,8 @@ def main():
 
     print("*** Success ***")
     print("%s has ben created." % (chords_tar_file))
+    print("For details on the CHORDS backup, examine the file: %s (contained in the tar file)."
+          % (manifest_file))
 
 if __name__ == '__main__':
     try:
