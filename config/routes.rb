@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
 
 
-  namespace :api, :defaults => {format: :json} do
+  namespace :api, :defaults => {format: 'json'} do
     namespace :v1 do
       resources :sites
       resources :data, only: [:index, :show]
