@@ -65,11 +65,11 @@ module InstrumentsHelper
     return url
   end
 
-  def multi_inst_data_file_download_url(file_extension, range = nil, ids = nil, test = false, auth = false)
+  def multi_inst_data_file_download_url(file_extension, range = nil, ids = nil, test_data = false, auth = false)
     url = url_for(only_path: false, host: request.host, controller: 'api/v1/data', action: :index)
-    url += ".#{file_extension}"
+    url += ".#{file_extension}" if file_extension
 
-    if range || ids || test || auth
+    if range || ids || test_data || auth
       url += "?"
     end
 
@@ -89,14 +89,14 @@ module InstrumentsHelper
       url += "start=2015-08-01T00:30&end=2015-08-20T12:30"
     end
 
-    if test
+    if test_data
       url += '&' if (range || ids)
       url += 'test'
     end
 
     if auth
-      url += '&' if (range || ids || test)
-      url += "&email=[USER_EMAIL]&api_key=[API_KEY]"
+      url += '&' if (range || ids || test_data)
+      url += "email=[USER_EMAIL]&api_key=[API_KEY]"
     end
 
     return url

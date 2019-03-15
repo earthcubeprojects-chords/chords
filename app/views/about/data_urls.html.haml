@@ -67,37 +67,41 @@
         %td GET
         %td
         %td
+          = multi_inst_data_file_download_url(nil, nil, nil, false, false)
+          %br
+          = multi_inst_data_file_download_url('json', nil, nil, false, false)
+          %br
           = multi_inst_data_file_download_url('geojson', nil, nil, false, false)
       %tr
         %td Download all instruments for past 24 hours with authentication
         %td GET
         %td email, api_key
         %td
-          = multi_inst_data_file_download_url('geojson', nil, nil, false, true)
+          = multi_inst_data_file_download_url(nil, nil, nil, false, true)
       %tr
         %td Download all instruments w/date range
         %td GET
         %td start, end
         %td
-          = multi_inst_data_file_download_url('geojson', 'start_end', nil, false, false)
+          = multi_inst_data_file_download_url(nil, 'start_end', nil, false, false)
       %tr
         %td Download all instruments w/date range test data only
         %td GET
         %td start, end, test
         %td
-          = multi_inst_data_file_download_url('geojson', 'start_end', nil, true, false)
+          = multi_inst_data_file_download_url(nil, 'start_end', nil, true, false)
       %tr
         %td Download multiple instruments w/instrument ids
         %td GET
         %td instruments, start, end
         %td
-          = multi_inst_data_file_download_url('geojson', 'start_end', 'instruments')
+          = multi_inst_data_file_download_url(nil, 'start_end', 'instruments')
       %tr
         %td Download multiple instruments w/sensor ids
         %td GET
         %td sensors, start, end
         %td
-          = multi_inst_data_file_download_url('geojson', 'start_end', 'sensors')
+          = multi_inst_data_file_download_url(nil, 'start_end', 'sensors')
 
   %br
   %h4 Optional Parameters
