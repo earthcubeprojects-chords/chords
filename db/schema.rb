@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 20190306170801) do
     t.string "unit_source", default: "CUAHSI"
     t.string "measured_property_source", default: "SensorML"
     t.string "data_archive_url"
-    t.integer "max_download_points", default: 10000, null: false
+    t.integer "max_download_points", default: 100000, null: false
   end
 
   create_table "site_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
