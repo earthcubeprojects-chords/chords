@@ -20,6 +20,7 @@ to get your portal running, and for additional information.
 <div id="ub" class="tab-pane active">
 {% highlight sh %}
 sudo -i
+apt-get update
 apt-get install docker.io docker-compose git
 {% endhighlight %}
 {% include chords_control.md %}
