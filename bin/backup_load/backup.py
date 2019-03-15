@@ -29,9 +29,12 @@ def manifest(time_stamp, influx_file, mysql_file):
     manifest_file = open(file_name, "w")
 
     manifest_file.write("# CHORDS backup\n")
-    manifest_file.write("# Project: " + mysql_value(table="profiles", column="project") + "\n")
-    manifest_file.write("# Affiliation: " + mysql_value(table="profiles", column="affiliation") + "\n")
-    manifest_file.write("# Domain name: " + mysql_value(table="profiles", column="domain_name") + "\n")
+    manifest_file.write(
+        "# Project: " + mysql_value(table="profiles", column="project") + "\n")
+    manifest_file.write(
+        "# Affiliation: " + mysql_value(table="profiles", column="affiliation") + "\n")
+    manifest_file.write(
+        "# Domain name: " + mysql_value(table="profiles", column="domain_name") + "\n")
     manifest_file.write(
         "# MYQSL database dump file: %s\n" % (mysql_file)
     )
@@ -50,7 +53,8 @@ def mysql_value(table, column):
     """ Fetch a mysql field. """
     value = docker_bash(
         "chords_mysql",
-        '/usr/bin/mysql -s -N -e "use chords_demo_production; select %s from %s;"' % (column, table))
+        '/usr/bin/mysql -s -N -e "use chords_demo_production; select %s from %s;"'
+        % (column, table))
     value = value.strip()
     return value
 
