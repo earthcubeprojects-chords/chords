@@ -55,7 +55,12 @@ import subprocess
 import json
 import platform
 import tempfile
+import sh
+import glob
+import docker
 from collections import OrderedDict
+from collections import namedtuple
+
 
 # The definitions of standard configuration items. These are tri-tuples:
 # [0]: The configuration item description. This will be printed as a prompt
@@ -280,9 +285,11 @@ to set the configuration to default values.
 """
         
         epilog = """
-At least one and only one of --config, --env, --backwards, --run, --stop, --update 
-or --renew can be specified. --default must be accompanied by --config. 
-To create an initial default configuration: 'python chords_control --config --default'
+At least one and only one of --config, --env, --backwards, --run, --stop, 
+--update, --backup, --restore or --renew can be specified. 
+--default must be accompanied by --config. 
+To create an initial default configuration: 
+   'python chords_control --config --default'
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
         
@@ -294,6 +301,8 @@ To create an initial default configuration: 'python chords_control --config --de
         parser.add_argument("-c", "--config",  help="prompt for configuration and write config/.env files", default=False,        action="store_true")
         parser.add_argument("-d", "--default", help="set all configuration values to defaults",             default=False,        action="store_true")
         parser.add_argument("-t", "--status",  help="status",                                               default=False,        action="store_true")
+        parser.add_argument(      "--backup",  help="Dump a CHORDS portal to a backup file",                default=False,        action="store_true")
+        parser.add_argument(      "--restore", help="Restore a portal from a CHORDS backup file",           default=None,         action="store")
         parser.add_argument("-e", "--env",     help="read config file and write CHORDS .env file",          default=False,        action="store_true")
         parser.add_argument("-b", "--backwards", help="read CHORDS .env file and write config file (use with caution!)", default=False, action="store_true")
         parser.add_argument("-x", "--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
@@ -312,8 +321,8 @@ To create an initial default configuration: 'python chords_control --config --de
         
         # Make sure that at most only one of these args was specified
         o = self.options
-        
-        if [o['config'], o['run'], o['stop'], o['update'], o['env'], o['backwards'], o['renew']].count(True) > 1:
+        if [o['config'], o['run'], o['stop'], o['update'], 
+            o['env'], o['backwards'], o['renew'], o['backup'], o['restore']].count(True) > 1:
             print epilog
             exit(1)
             
@@ -718,6 +727,346 @@ class Docker:
         return tags
 
 #####################################################################
+class ChordsBackupError(Exception):
+    """ Raise ChordsBackupError("error msg"). """
+    pass
+
+class ChordsBackup:
+    """
+    Perform a CHORDS backup.
+
+    The backup is performed when the class is instantiated.
+    """
+
+    def __init__(self):
+        """
+        Perform the backup.
+        """
+        self.id_check()
+
+        time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
+        time_stamp = time_stamp.replace(":", "-")
+
+        mysql_dump_file = 'mysql-'+time_stamp+'.sql'
+        influx_dump_dir = 'influxdb-'+time_stamp
+        influx_tar_file = 'influxdb-'+time_stamp+'.tar'
+        chords_tar_file = 'chords-'+time_stamp+'.tar.gz'
+
+        print("*** Saving mysql ***")
+        mysql_file = open(mysql_dump_file, 'w')
+        print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
+                        _out=mysql_file).stdout)
+
+        print("*** Saving influxdb ***")
+        print(docker_bash(
+            "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir)))
+        print(docker_bash(
+            "chords_influxdb", "cd /tmp && tar -cvf %s %s" % (influx_tar_file, influx_dump_dir)))
+        docker_cp('chords_influxdb:%s' % ("/tmp/"+influx_tar_file), '.')
+        print(docker_bash(
+            "chords_influxdb", "cd /tmp && rm -rf %s %s" % (influx_tar_file, influx_dump_dir)))
+
+        print("*** Manifest ***:")
+        manifest_file = self.manifest(
+            time_stamp=time_stamp, influx_file=influx_tar_file, mysql_file=mysql_dump_file)
+        print("%s has been created." % (manifest_file))
+        print("")
+
+        print("*** Packaging files ***")
+        tar_params = ['-cvf', chords_tar_file, manifest_file, mysql_dump_file, influx_tar_file]
+        print(sh.tar(tar_params, _err_to_out=True).stdout)
+        print(sh.rm(manifest_file, mysql_dump_file, influx_tar_file))
+
+        print("*** Success ***")
+        print("%s has ben created." % (chords_tar_file))
+        print("For details on the CHORDS backup, examine the file: %s (contained in the tar file)."
+              % (manifest_file))
+
+    def id_check(self):
+        """ Verify that the user is running with the correct permissions. """
+
+        if platform.system() == "Linux":
+            if getpass.getuser() != 'root':
+                raise ChordsBackupError("CHORDS load must be run as root user on Linux systems.")
+
+    def manifest(self, time_stamp, influx_file, mysql_file):
+        """
+        Create a manifest file.
+        """
+
+        file_name = "manifest-" + time_stamp + ".txt"
+        manifest_file = open(file_name, "w")
+
+        manifest_file.write("# CHORDS backup\n")
+        manifest_file.write(
+            "# Project: " + self.mysql_value(table="profiles", column="project") + "\n")
+        manifest_file.write(
+            "# Affiliation: " + self.mysql_value(table="profiles", column="affiliation") + "\n")
+        manifest_file.write(
+            "# Domain name: " + self.mysql_value(table="profiles", column="domain_name") + "\n")
+        manifest_file.write(
+            "# MYQSL database dump file: %s\n" % (mysql_file)
+        )
+        manifest_file.write(
+            "# InfluxDB database dump file: %s\n" % (influx_file)
+        )
+        manifest_file.write("# Environment:\n")
+        env_vars = docker_bash("chords_app", "grep export chords_env.sh | sed -e 's/export //'")
+        manifest_file.write(env_vars)
+        docker_tag = "DOCKER_TAG=" + docker_bash("chords_app", "printenv DOCKER_TAG")
+        manifest_file.write(docker_tag)
+        manifest_file.close()
+        return file_name
+
+    def mysql_value(self, table, column):
+        """ Fetch a mysql field. """
+        value = docker_bash(
+            "chords_mysql",
+            '/usr/bin/mysql -s -N -e "use chords_demo_production; select %s from %s;"'
+            % (column, table))
+        value = value.strip()
+        return value
+
+#####################################################################
+class ChordsLoadError(Exception):
+    """ Raise ChordsLoadError("error msg"). """
+    pass
+
+class ChordsLoad:
+    """
+    Load a runing CHORDS instance for a backup file.
+
+    The CHORDS backup file was created by the ChordsBackup class.
+
+    Requirements:
+     - On Linux systems, you must have root privileges in order to access docker.
+
+    """
+
+    def __init__(self, dump_file, tmp_dir="/tmp"):
+        """
+        The constructor will perform the complete load process.
+
+        If there are errors, ChordsLoadError wil be thrown.
+        """
+
+        self.msg = ""
+
+        self.id_check()
+
+        print("*** Warning: this action will overwrite ALL data in the running portal.")
+        print 'Are you sure that you want restore from %s [Y/y]? ' % (dump_file),
+        l = sys.stdin.readline().strip()
+        if l not in ['Y', 'y']:
+            self.msg = "CHORDS restore aborted."
+            return
+
+        self.dump_file = dump_file
+        self.tmp_dir = tempfile.mkdtemp(prefix="chords_load-", dir=os.path.normpath(tmp_dir))
+        self.file_paths = {}
+        self.docker_containers = {}
+
+        print("*** Dump file unpacking ***")
+        self.backup_unpack()
+
+        print("*** Docker ***")
+        self.docker_check()
+        self.docker_container_status()
+
+        print("*** Loading mysql ***")
+        self.load_mysql()
+
+        print("*** Loading influxdb ***")
+        self.load_influxdb()
+
+        print("*** Cleanup ***")
+        self.cleanup()
+
+        self.msg = """
+CHORDS databases have been restored.
+
+CHORDS must be restarted by running:
+python chords_control --stop
+python chords_control --run
+"""
+
+    def id_check(self):
+        """ Verify that the user is running with the correct permissions. """
+
+        if platform.system() == "Linux":
+            if getpass.getuser() != 'root':
+                raise ChordsLoadError("CHORDS load must be run as root user on Linux systems.")
+
+    def cleanup(self):
+        """ Cleanup temporary files. """
+
+        print("Removing the temporary directory " + self.tmp_dir)
+        print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout)
+
+    def docker_check(self):
+        """ Verify that a CHORDS instance is running correctly. """
+
+        self.docker_containers = {}
+        self.docker_containers = \
+            {c.name: c for c in docker.from_env().containers.list(all=True)}
+
+        err_msg = ""
+        for container_name in ["chords_app", "chords_influxdb", "chords_mysql"]:
+            if container_name not in self.docker_containers.keys():
+                err_msg += "The %s docker container is not present.\n" % (container_name)
+
+        if err_msg:
+            raise ChordsLoadError(err_msg)
+
+    def docker_container_status(self):
+        """ Print the status of all containers. """
+
+        print("Docker containers:")
+        for name, container in self.docker_containers.items():
+            print(name + ": " + container.status)
+        print("")
+
+    def load_mysql(self, container="chords_mysql", database_name="chords_demo_production"):
+        """ Load the mysql database into the database in the chords_ysql container. """
+
+        print("Container:%s, database:%s" % (container, database_name))
+        docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
+        print(
+            sh.docker(
+                sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
+            ).stdout
+        )
+
+    def load_influxdb(self):
+        """ Load the influxdb database into the database in the chords_influxdb container. """
+
+        admin_pw = "chords_ec_demo"
+        influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
+
+        print("Loading from " + self.file_paths["influxdb"])
+        docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
+        docker_bash("chords_influxdb",
+                    "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
+        print("Dropping influxdb database chords_ts_production")
+        docker_bash(
+            "chords_influxdb",
+            "influx -username admin -password %s -execute 'drop database chords_ts_production'"
+            % (admin_pw)
+        )
+        print("Loading databases")
+        docker_bash(
+            "chords_influxdb",
+            "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
+        )
+        print("Curent influxdb databases:")
+        docker_bash("chords_influxdb",
+                    "influx -username admin -password %s -execute 'show databases'"
+                    % (admin_pw))
+
+    def backup_unpack(self):
+        """ Unpack the ChordsBackup created backup file to a temporary directoy. """
+
+        print("*** Unpacking chords files ***")
+        print("Temporary directory: " + self.tmp_dir)
+        try:
+            print(
+                sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
+            )
+        except Exception as sh_err:
+            raise ChordsLoadError(sh_err)
+        self.file_check()
+
+    def file_check(self):
+        """
+        Determine the dump file names for each database.
+
+        Return an empty string if valid, or an error message if not.
+        """
+
+        err_msg = ""
+        FileSpec = namedtuple('FileSpec', ['prefix', 'ext'])
+        file_types = [FileSpec('mysql', 'sql'),
+                      FileSpec('influxdb', 'tar')]
+        for file_type in file_types:
+            files = glob.glob(
+                self.tmp_dir + "/" + file_type.prefix + "*." + file_type.ext
+            )
+            if len(files) == 1:
+                self.file_paths[file_type.prefix] = files[0]
+            else:
+                if len(files) > 1:
+                    if err_msg:
+                        err_msg += "\n"
+                    err_msg += "More than one %s dump file was found: " % (file_type.prefix) + \
+                        " ".join([os.path.basename(f) for f in files]) + "."
+                else:
+                    if err_msg:
+                        err_msg += "\n"
+                    err_msg += "No %s dump file was found." % (file_type.prefix)
+        if err_msg:
+            raise ChordsLoadError(err_msg)
+
+    def summary(self):
+        """ Provide an activity summary with further instructions. """
+
+        return self.msg
+
+#####################################################################
+class ChordsDockerError(Exception):
+    """ Raise ChordsLoadError("error msg"). """
+    pass
+
+def docker_bash(container, script):
+    """
+    Run shell comands in a docker bash instance.
+
+    This allows multiple commands to be &&'ed together.
+    """
+
+    return docker_sh('exec', '-t', container, '/bin/bash', '-c', script)
+
+def docker_sh(*args):
+    """ Run a docker command with the args, printing stdout and stderr. """
+
+    try:
+        result = sh.docker(args, _err_to_out=True).stdout
+        return str(result)
+    except Exception as sh_err:
+        raise ChordsDockerError(sh_err)
+
+def docker_cp(src, dest):
+    """
+    Copy a file to/from container.
+
+    src and/or dest will specify a container prefix when appropriate, e.g.
+        docker_cp(database.sql chords_mysql:/tmp)
+    """
+
+    docker_sh('cp', src, dest)
+
+#####################################################################
+def backup():
+    """ Backup a CHORDS portal """
+    try:
+        ChordsBackup()
+    except ChordsBackupError as error:
+        print(error)
+        exit(1)
+
+#####################################################################
+def load(backup_file):
+    """ Load a portal from a backup file. """
+
+    try:
+        load_chords = ChordsLoad(backup_file)
+    except ChordsLoadError as load_exception:
+        print("Error processing %s" % (backup_file))
+        print(load_exception)
+        exit(1)
+
+    print(load_chords.summary())
+
+#####################################################################
 def createConfigFilefromEnv(options):
   """
   Read the .env file, and convert it into a configuration file.
@@ -968,4 +1317,12 @@ if __name__ == '__main__':
     if options["renew"] == True:
         renew_script(proxy=options['proxy'])
         
+    # Create a backup file
+    if options["backup"] == True:
+        backup()
+
+    # Load from a backup file
+    if options["restore"]:
+        load(options['restore'])
+  
 
