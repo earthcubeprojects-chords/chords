@@ -11,7 +11,11 @@ from collections import namedtuple
 import sh
 import docker
 
-from docker_util import docker_bash, docker_cp, ChordsLoadError
+from docker_util import docker_bash, docker_cp
+
+class ChordsLoadError(Exception):
+    """ Raise ChordsLoadError("error msg"). """
+    pass
 
 class ChordsLoad:
     """

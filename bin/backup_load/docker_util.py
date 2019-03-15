@@ -2,7 +2,7 @@
 
 import sh
 
-class ChordsLoadError(Exception):
+class ChordsDockerError(Exception):
     """ Raise ChordsLoadError("error msg"). """
     pass
 
@@ -22,7 +22,7 @@ def docker_sh(*args):
         result = sh.docker(args, _err_to_out=True).stdout
         return str(result)
     except Exception as sh_err:
-        raise ChordsLoadError(sh_err)
+        raise ChordsDockerError(sh_err)
 
 def docker_cp(src, dest):
     """
