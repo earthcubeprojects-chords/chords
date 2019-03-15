@@ -20,13 +20,22 @@ def id_check():
         if getpass.getuser() != 'root':
             raise ChordsBackupError("CHORDS load must be run as root user on Linux systems.")
 
-def manifest(time_stamp):
+def manifest(time_stamp, influx_file, mysql_file):
     """
     Create a manifest file.
     """
 
     file_name = "manifest-" + time_stamp + ".txt"
     manifest_file = open(file_name, "w")
+
+    manifest_file.write("# CHORDS backup\n")
+    manifest_file.write(
+        "# MYQSL database dump: %s\n" % (mysql_file)
+    )
+    manifest_file.write(
+        "# InfluxDB database dump: %s\n" % (influx_file)
+    )
+    manifest_file.write("# Environment:\n")
     env_vars = docker_bash("chords_app", "grep export chords_env.sh | sed -e 's/export //'")
     manifest_file.write(env_vars)
     docker_tag = "DOCKER_TAG=" + docker_bash("chords_app", "printenv DOCKER_TAG")
@@ -55,20 +64,26 @@ def main():
                     _out=mysql_file).stdout)
 
     print("*** Saving influxdb ***")
-    print(docker_bash("chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir)))
-    print(docker_bash("chords_influxdb", "cd /tmp && tar -cvf %s %s" % (influx_tar_file, influx_dump_dir)))
+    print(docker_bash(
+        "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir)))
+    print(docker_bash(
+        "chords_influxdb", "cd /tmp && tar -cvf %s %s" % (influx_tar_file, influx_dump_dir)))
     docker_cp('chords_influxdb:%s' % ("/tmp/"+influx_tar_file), '.')
-    print(docker_bash("chords_influxdb", "cd /tmp && rm -rf %s %s" % (influx_tar_file, influx_dump_dir)))
+    print(docker_bash(
+        "chords_influxdb", "cd /tmp && rm -rf %s %s" % (influx_tar_file, influx_dump_dir)))
 
     print("*** Manifest ***:")
-    manifest_file = manifest(time_stamp)
+    manifest_file = manifest(
+        time_stamp=time_stamp, influx_file=influx_tar_file, mysql_file=mysql_dump_file)
     print("%s has been created." % (manifest_file))
-    print()
+    print("")
 
     print("*** Packaging files ***")
     tar_params = ['-cvf', chords_tar_file, manifest_file, mysql_dump_file, influx_tar_file]
     print(sh.tar(tar_params, _err_to_out=True).stdout)
-    print(sh.rm(mysql_dump_file, influx_tar_file))
+    print(sh.rm(manifest_file, mysql_dump_file, influx_tar_file))
+
+    print("*** Success ***")
     print("%s has ben created." % (chords_tar_file))
 
 if __name__ == '__main__':
