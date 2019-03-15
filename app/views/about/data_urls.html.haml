@@ -11,6 +11,8 @@
   measurement value. All of the qualifiers (i.e. the fields following "?" and "") are order independent.
   %br/
   %br/
+  %h4 Download Single Instrument Data
+  %br
   .table-responsive
     %table.table.table-striped
       %tr
@@ -36,20 +38,70 @@
         %td .csv
         %td start, end, last
         %td
-          = data_file_download_url("csv", 'start_end')
+          = data_file_download_url('csv', 'start_end')
           %br/
-          = data_file_download_url("csv", 'last')
+          = data_file_download_url('csv', 'last')
       %tr
         %td Fetch a GeoJSON file
         %td .geojson
         %td start, end, last
         %td
-          = data_file_download_url("geojson")
+          = data_file_download_url('geojson')
           %br/
-          = data_file_download_url("geojson", 'start_end')
+          = data_file_download_url('geojson', 'start_end')
           %br/
-          = data_file_download_url("geojson", 'last')
+          = data_file_download_url('geojson', 'last')
 
+  %br
+  %h4 Download Multiple Instrument Data
+  %br
+  .table-responsive
+    %table.table.table-striped
+      %tr
+        %th Action
+        %th URL format
+        %th Qualifiers
+        %th Example
+      %tr
+        %td Download all instruments for past 24 hours
+        %td GET
+        %td
+        %td
+          = multi_inst_data_file_download_url('geojson', nil, nil, false, false)
+      %tr
+        %td Download all instruments for past 24 hours with authentication
+        %td GET
+        %td email, api_key
+        %td
+          = multi_inst_data_file_download_url('geojson', nil, nil, false, true)
+      %tr
+        %td Download all instruments w/date range
+        %td GET
+        %td start, end
+        %td
+          = multi_inst_data_file_download_url('geojson', 'start_end', nil, false, false)
+      %tr
+        %td Download all instruments w/date range test data only
+        %td GET
+        %td start, end, test
+        %td
+          = multi_inst_data_file_download_url('geojson', 'start_end', nil, true, false)
+      %tr
+        %td Download multiple instruments w/instrument ids
+        %td GET
+        %td instruments, start, end
+        %td
+          = multi_inst_data_file_download_url('geojson', 'start_end', 'instruments')
+      %tr
+        %td Download multiple instruments w/sensor ids
+        %td GET
+        %td sensors, start, end
+        %td
+          = multi_inst_data_file_download_url('geojson', 'start_end', 'sensors')
+
+  %br
+  %h4 Optional Parameters
+  %br
   .table-responsive
     %table.table.table-striped
       %tr
@@ -108,5 +160,5 @@
     %li
       The optional qualifier section begins with a "?", followed by one or more qualifiers. Each is separated by "".
       Some qualifiers (e.g. at, start and end) have an associated value.
-      %li Time qualifiers (at, start and end) are in ISO8601 format.
+      %li Time qualifiers (at, start, and end) are in ISO8601 format.
       %li If none of the time qualifiers are present for a data fetch, measurements for the current day are returned.
