@@ -11,9 +11,7 @@ from collections import namedtuple
 import sh
 import docker
 
-class ChordsLoadError(Exception):
-    """ Raise ChordsLoadError("error msg"). """
-    pass
+from docker_util import docker_bash, docker_cp, ChordsLoadError
 
 class ChordsLoad:
     """
@@ -110,24 +108,24 @@ class ChordsLoad:
         influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
 
         print("Loading from " + self.file_paths["influxdb"])
-        self.docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
-        self.docker_bash("chords_influxdb",
-                         "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
+        docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
+        docker_bash("chords_influxdb",
+                    "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
         print("Dropping influxdb database chords_ts_production")
-        self.docker_bash(
+        docker_bash(
             "chords_influxdb",
             "influx -username admin -password %s -execute 'drop database chords_ts_production'"
             % (admin_pw)
         )
         print("Loading databases")
-        self.docker_bash(
+        docker_bash(
             "chords_influxdb",
             "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
         )
         print("Curent influxdb databases:")
-        self.docker_bash("chords_influxdb",
-                         "influx -username admin -password %s -execute 'show databases'"
-                         % (admin_pw))
+        docker_bash("chords_influxdb",
+                    "influx -username admin -password %s -execute 'show databases'"
+                    % (admin_pw))
 
     def backup_unpack(self):
         """ Unpack the ChordsBackup created backup file to a temporary directoy. """
@@ -183,35 +181,6 @@ python chords_control --stop
 python chords_control --run
 """
         return msg
-
-    def docker_bash(self, container, script):
-        """
-        Run shell comands in a docker bash instance.
-
-        This allows multiple commands to be &&'ed together.
-        """
-
-        docker_sh('exec', '-t', container, '/bin/bash', '-c', script)
-
-    def docker_cp(self, src, dest):
-        """
-        Copy a file to/from container.
-
-        src and/or dest will specify a container prefix when appropriate, e.g.
-           docker_cp(database.sql chords_mysql:/tmp)
-        """
-
-        docker_sh('cp', src, dest)
-
-
-def docker_sh(*args):
-    """ Run a docker command with the args, printing stdout and stderr. """
-
-    try:
-        print(sh.docker(args, _err_to_out=True).stdout)
-    except Exception as sh_err:
-        raise ChordsLoadError(sh_err)
-
 
 def main():
     """ Main. """
