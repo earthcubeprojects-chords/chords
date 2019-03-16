@@ -835,11 +835,11 @@ class ChordsBackup:
         return value
 
 #####################################################################
-class ChordsLoadError(Exception):
-    """ Raise ChordsLoadError("error msg"). """
+class ChordsRestoreError(Exception):
+    """ Raise ChordsRestoreError("error msg"). """
     pass
 
-class ChordsLoad:
+class ChordsRestore:
     """
     Load a runing CHORDS instance for a backup file.
 
@@ -854,7 +854,7 @@ class ChordsLoad:
         """
         The constructor will perform the complete load process.
 
-        If there are errors, ChordsLoadError wil be thrown.
+        If there are errors, ChordsRestoreError wil be thrown.
         """
 
         self.msg = ""
@@ -902,7 +902,7 @@ python chords_control --run
 
         if platform.system() == "Linux":
             if getpass.getuser() != 'root':
-                raise ChordsLoadError("CHORDS load must be run as root user on Linux systems.")
+                raise ChordsRestoreError("CHORDS load must be run as root user on Linux systems.")
 
     def cleanup(self):
         """ Cleanup temporary files. """
@@ -923,7 +923,7 @@ python chords_control --run
                 err_msg += "The %s docker container is not present.\n" % (container_name)
 
         if err_msg:
-            raise ChordsLoadError(err_msg)
+            raise ChordsRestoreError(err_msg)
 
     def docker_container_status(self):
         """ Print the status of all containers. """
@@ -980,7 +980,7 @@ python chords_control --run
                 sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
             )
         except Exception as sh_err:
-            raise ChordsLoadError(sh_err)
+            raise ChordsRestoreError(sh_err)
         self.file_check()
 
     def file_check(self):
@@ -1011,7 +1011,7 @@ python chords_control --run
                         err_msg += "\n"
                     err_msg += "No %s dump file was found." % (file_type.prefix)
         if err_msg:
-            raise ChordsLoadError(err_msg)
+            raise ChordsRestoreError(err_msg)
 
     def summary(self):
         """ Provide an activity summary with further instructions. """
@@ -1020,7 +1020,7 @@ python chords_control --run
 
 #####################################################################
 class ChordsDockerError(Exception):
-    """ Raise ChordsLoadError("error msg"). """
+    """ Raise ChordsDockerError("error msg"). """
     pass
 
 def docker_bash(container, script):
@@ -1061,14 +1061,14 @@ def backup():
         exit(1)
 
 #####################################################################
-def load(backup_file):
+def restore(backup_file):
     """ Load a portal from a backup file. """
 
     try:
-        load_chords = ChordsLoad(backup_file)
-    except ChordsLoadError as load_exception:
+        load_chords = ChordsRestore(backup_file)
+    except ChordsRestoreError as restore_exception:
         print("Error processing %s" % (backup_file))
-        print(load_exception)
+        print(restore_exception)
         exit(1)
 
     print(load_chords.summary())
@@ -1330,6 +1330,6 @@ if __name__ == '__main__':
 
     # Load from a backup file
     if options["restore"]:
-        load(options['restore'])
+        restore(options['restore'])
   
 
