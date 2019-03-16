@@ -58,6 +58,7 @@ import tempfile
 import sh
 import glob
 import docker
+import getpass
 from collections import OrderedDict
 from collections import namedtuple
 
