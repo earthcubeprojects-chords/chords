@@ -13,21 +13,21 @@ will be passed to docker-compose. In most cases, .env is created from
 the configuration file. However, the "backwards" command allows the configuration
 file to be created from .env.
 
-In configuration mode (-c), the existing configuration will be 
+In configuration mode (-c), the existing configuration will be
 read from the configuration file, the user will be prompted for changes,
 and the configuration file will be re-written. For each configuration item,
 the user may select the current value (hit enter), select the default
 value (enter a period), or change the value (enter a new value). The configuration
 may be initialized to complete default vaues by using the -d switch in conjunction
-with -c. 
+with -c.
 
 If the CHORDs configuration file does not exist, then it will be created. Thus,
 to create an initial default configuration, use:
    ./chords_control -c -d
 
 A .env file is also created by the configuration mode. It contains
- environment variable commands, with one for each configuration item. 
-This .env file is used by docker-compose. The non-standard options will 
+ environment variable commands, with one for each configuration item.
+This .env file is used by docker-compose. The non-standard options will
 be included in .env, allowing developers to test additional environment variables,
 without having to edit the standardoptions specified in this script.
 
@@ -40,7 +40,7 @@ Use -t to see the current portal status.
 The devmode (-m) enables development mode, where the current directory
 is mounted as the CHORDS Rails source.
 
-The the --renew option makes a backup copy of this script, and pulls down 
+The the --renew option makes a backup copy of this script, and pulls down
 a new version from github.
 """
 
@@ -64,21 +64,21 @@ from collections import namedtuple
 
 # The definitions of standard configuration items. These are tri-tuples:
 # [0]: The configuration item description. This will be printed as a prompt
-#      during configuration, and included in the configuration file as a description. 
+#      during configuration, and included in the configuration file as a description.
 # [1]: The name of the environment variable to be set in the .env file.
 # [2]: The default value.
 # [3]: Verify:True or False. If True, the user response is compared to the choices available,
 #      verifying that an valid response was entered.
 # [4]: If [3] is true, this is a list of valid choices. It may be modified/populated
 #      dynamically by the script
-# 
+#
 # When you need to add required keys to the configuration, just define them here.
 stdConfigItems = [
     [
         "The PASSWORD for sysadmin access to CHORDS, mysql and influxdb in docker.\n"
         "(NOTE: This not the CHORDS website admin login)\n"
         "Replace this with a secure password.",
-        "CHORDS_ADMIN_PW",  
+        "CHORDS_ADMIN_PW",
         "chords_ec_demo",
         False,
         []
@@ -129,7 +129,7 @@ stdConfigItems = [
         "Once Grafana is initialized with this password,\n"
         "it can only be changed from the Grafana admin web page.\n"
         "Replace this with a secure password.",
-        "GRAFANA_ADMIN_PW",  
+        "GRAFANA_ADMIN_PW",
         "admin",
         False,
         []
@@ -226,12 +226,12 @@ stdConfigItems = [
 verbose = False
 
 # Terminal control characters
-termBoldOn  = '\033[1m'
+termBoldOn = '\033[1m'
 termBoldOff = '\033[0m'
 if os.name == 'nt':
-    termBoldOn  = ''
+    termBoldOn = ''
     termBoldOff = ''
-    
+
 # Platform characteristics
 os_name = os.name
 os_arch = platform.uname()[4]
@@ -239,25 +239,25 @@ os_arch = platform.uname()[4]
 #####################################################################
 def createBackupFile(filename, print_note=True):
     """
-    Create a backup copy of the file. A timestamp is included 
+    Create a backup copy of the file. A timestamp is included
     in the new file name. If print_note is True, print
     out a  friendly message indicating that a backup copy was made.
     """
     # No need to backup a file that doesn't already exist or is zero size
     if not os.path.isfile(filename):
         return
-    
+
     if os.stat(filename).st_size == 0:
         return
-    
+
     # Create the backup file name
     fsplit = os.path.splitext(filename)
     backupfile = fsplit[0] + "-" + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S')
     if fsplit[1]:
-        backupfile = backupfile + fsplit[1]     
+        backupfile = backupfile + fsplit[1]
     # Copy the existing foile to the backup
-    shutil.copyfile(filename, backupfile)   
-    
+    shutil.copyfile(filename, backupfile)
+
     # Make it accesible only to the use
     os.chmod(backupfile, stat.S_IRUSR | stat.S_IWUSR)
 
@@ -274,8 +274,8 @@ class CommandArgs:
     def __init__(self):
         global os_name
         global os_arch
-        
-        description="""
+
+        description = """
 CHORDS configuration and operation management.
         
 In configuration mode, you are prompted for configuration options. These will be
@@ -283,7 +283,7 @@ saved in the configuration file (default chords.yml) and in a corresponding .env
 Backup copies will be made of the existing configuration files. Use the --defalut option
 to set the configuration to default values.
 """
-        
+
         epilog = """
 At least one and only one of --config, --env, --backwards, --run, --stop, 
 --update, --backup, --restore or --renew can be specified. 
@@ -292,7 +292,7 @@ To create an initial default configuration:
    'python chords_control --config --default'
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
-        
+
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("-r", "--run",     help="run",                                                  default=False,        action="store_true")
         parser.add_argument("-s", "--stop",    help="stop",                                                 default=False,        action="store_true")
@@ -311,28 +311,28 @@ To create an initial default configuration:
         parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
 
         # If no switches, print the help.
-        if len(sys.argv[1:])==0:
+        if len(sys.argv[1:]) == 0:
             parser.print_help()
             parser.exit()
 
-        # Parse the command line. 
+        # Parse the command line.
         args = parser.parse_args()
         self.options = vars(args)
-        
+
         # Make sure that at most only one of these args was specified
         o = self.options
-        if [o['config'], o['run'], o['stop'], o['update'], 
+        if [o['config'], o['run'], o['stop'], o['update'],
             o['env'], o['backwards'], o['renew'], o['backup'], o['restore']].count(True) > 1:
             print epilog
             exit(1)
-            
+
         if o['default'] and not o['config']:
             print epilog
             exit(1)
-            
+
     def get_options(self):
         # return the dictionary of existing options.
-        return self.options 
+        return self.options
 
 #####################################################################
 class ChordsConfig(OrderedDict):
@@ -343,24 +343,24 @@ class ChordsConfig(OrderedDict):
     """
     def __init__(self, configfile):
         OrderedDict.__init__(self)
-        
-        # Initialize the configuration item descriptions. These are 
+
+        # Initialize the configuration item descriptions. These are
         # used as comments in the output configuration file.
         self.initConfigItems()
 
         # Fetch the configuration key:value pairs from the configuration file.
         # Add them to self.
         self.getPairs(configfile)
-                
+
     def getPairs(self, configfile):
-        
+
         items = dict()
         # Get the current configuration file
         if not os.path.isfile(configfile):
             f = open(options["file"], 'w')
             f.close()
             print configfile, 'has been created'
-        
+
         f = open(configfile)
         lines = f.readlines()
         f.close()
@@ -389,15 +389,15 @@ class ChordsConfig(OrderedDict):
             config[key] = items[key]
         for key in config.keys():
             self[key] = config[key]
-        
+
     def initConfigItems(self):
         """
         Create a collection of config items which must be in the final configuration.
         These items define the default values which will be used if they haven't already been
         set in a configuration.
         """
-        self.configItems  = OrderedDict()
-        
+        self.configItems = OrderedDict()
+
         for i in stdConfigItems:
             self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2], verify=i[3], choices=i[4])
 
@@ -418,10 +418,10 @@ class ChordsConfig(OrderedDict):
             if key not in self.configItems.keys():
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         return yml
-    
+
     def queryValues(self, usedefault):
         """
-        Go through the configuration, asking the user if they want to 
+        Go through the configuration, asking the user if they want to
         change the values. The response can be a return, to accept the
         value, a new value to replace the value, or a period to use the default value.
         The items found in configItems are done first, followed by all other
@@ -433,7 +433,7 @@ class ChordsConfig(OrderedDict):
         for key in self.keys():
             print
             if key in self.configItems.keys():
-                description=self.configItems[key]['description']
+                description = self.configItems[key]['description']
                 print
                 # If verify is enabled for this item, then we need to populate the valid choices.
                 if self.configItems[key]['verify']:
@@ -441,10 +441,10 @@ class ChordsConfig(OrderedDict):
                     for choice in self.configItems[key]['choices']:
                         description = description + '\'' + choice + '\' '
                 while True:
-                    self.queryValue(key=key, 
+                    self.queryValue(key=key,
                                     usedefault = usedefault,
-                                    description=description,
-                                    defaultval =self.configItems[key]['default'])
+                                    description = description,
+                                    defaultval = self.configItems[key]['default'])
                     if not self.configItems[key]['verify']:
                         break
                     else:
@@ -456,8 +456,8 @@ class ChordsConfig(OrderedDict):
         # Process items that extras which are not part of the standard configuration
         for key in self.keys():
             if key not in self.configItems.keys():
-                self.queryValue(key=key, usedefault = usedefault)
-                
+                self.queryValue(key=key, usedefault=usedefault)
+
     def queryValue(self, key, usedefault, description=None, defaultval=None):
         """
         Query the user for a replacement value.
@@ -467,7 +467,7 @@ class ChordsConfig(OrderedDict):
             print description
         print key,
         if defaultval:
-            print "(default: " + str(defaultval) + ")" ,
+            print "(default: " + str(defaultval) + ")",
         print termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ',
         if not usedefault:
             l = sys.stdin.readline().strip()
@@ -484,13 +484,13 @@ class ChordsConfig(OrderedDict):
                 self[key] = l
         if usedefault:
             print
-            
+
     def writeYMLFile(self, configfile):
         """
         Write the configuration to the file. The whole configuration is written,
         starting with the elements listed in the configItems. Configuration items
         are prefixed with the comments provided in the configItems.
-        
+
         If specified, a backup copy of the original file is created.
         """
 
@@ -507,18 +507,18 @@ class ChordsConfig(OrderedDict):
         """
         Write the configuration to the .env file, in environment
         notation.
-        
+
         A backup copy of the original file is created.
         """
         createBackupFile(".env")
-        
+
         f = open(".env", 'w')
         for key in self.keys():
             f.write(key + "=" + str(self[key])+"\n")
         f.close()
         os.chmod(".env", stat.S_IRUSR | stat.S_IWUSR)
         print "*** .env has been written with the new configuration."
-        
+
 
 #####################################################################
 class ConfigItem(OrderedDict):
@@ -532,7 +532,7 @@ class ConfigItem(OrderedDict):
         self["description"] = description
         self["verify"] = verify
         self["choices"] = choices
-    
+
 #####################################################################
 class ChordsGit:
     """
@@ -541,14 +541,14 @@ class ChordsGit:
     def __init__(self, proxy=""):
         # The path for the docker-compose configuration.
         self.proxy = proxy
-        
+
     def fetch(self, git_branch, files):
         """
         Fetch files from the CHORDS git repository.
         git_branch - the source brance
         files - a single file or a list of files
         """
-        
+
         if not isinstance(files, list):
             files = [files]
 
@@ -556,21 +556,21 @@ class ChordsGit:
             file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + '/' + file
 #            if os_arch[:3] == 'arm':
 #                docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/' + git_branch + '/rpi-docker-compose.yml'
-    
+
             proxy_switch = []
             if self.proxy != '':
                 proxy_switch = ['-xxx', self.proxy]
-                    
+
             print 'Downloading ' + file_url + '.',
             curl_cmd = [
                 'curl', '-O', '-s', file_url
                 ]
             if os_name == 'nt':
-              curl_cmd[1:1] = ['-k']
-    
+                curl_cmd[1:1] = ['-k']
+
             # Insert proxy switch
             curl_cmd[1:1] = proxy_switch
-    
+
             os_cmd(cmd=curl_cmd)
 
             print
@@ -582,20 +582,20 @@ class ChordsGit:
         heads = [e.replace('refs/heads/','') for e in os_cmd(cmd=git_cmd, printlines=False)[0].split()[1::2]]
         heads.remove('gh-pages')
         return heads
-        
+
 #####################################################################
 class Docker:
     """
-    Manage docker activities. docker-compose.yml and docker-compose-dev.yml are 
+    Manage docker activities. docker-compose.yml and docker-compose-dev.yml are
     expected in the working directory.
     """
 
     def __init__(self, proxy=""):
         global os_name
         global os_arch
-        
+
         self.docker_compose_yml = 'docker-compose.yml'
-        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"        
+        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
         if os_arch[:3] == 'arm':
             self.docker_compose_yml = 'rpi-docker-compose.yml'
             self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/rpi-chords/tags"
@@ -615,12 +615,12 @@ class Docker:
                 print 'docker-compose was not found in', cmd_choices
                 print 'You must install docker-compose before proceeding.'
                 exit(1)
-    
+
         if not checkFileExists(self.docker_compose_yml, exit_on_failure=False):
             git_branch = choose_branch(self.docker_compose_yml)
             print git_branch
-            ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml) 
-        
+            ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml)
+
     def ps(self):
         """
         Return an array containing a dictionary for each currently running container.
@@ -632,10 +632,11 @@ class Docker:
             image
         """
 
-        ps_cmd = ['docker',
-              'ps', 
-              '--format', 
-              '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
+        ps_cmd = [
+            'docker',
+            'ps',
+            '--format',
+            '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
 
         ps_result, _ = os_cmd(cmd=ps_cmd, printlines=False)
 
@@ -647,10 +648,10 @@ class Docker:
                 if not re.search("WARNING", p):
                     p = '{' + p + '}'
                     containers.append(json.loads(p))
-        
+
         # Convert the json unicode to bytes
         return byteify(containers)
-    
+
     def up(self, devmode=False):
         """
         Bring the containers up with docker-compose.
@@ -659,7 +660,7 @@ class Docker:
         if not os.path.isfile('.env'):
             print '*** The environment file .env is missing. Use chords_control to create it.'
             exit (1)
-            
+
         # Find out the release that we are running
         d = grep('DOCKER_TAG', '.env')
         d = d[0].split('=')
@@ -672,37 +673,41 @@ class Docker:
         else:
             print '.env file is incorrectly formatted (DOCKER_TAG is missing)'
             exit (1)
-        
+
         if devmode == False:
-            up_cmd = [self.docker_compose_cmd,
-              '-f', self.docker_compose_yml, '-p', 'chords', 'up', '-d']
+            up_cmd = [
+                self.docker_compose_cmd,
+                '-f', self.docker_compose_yml, '-p', 'chords', 'up', '-d']
         else:
-            up_cmd = [self.docker_compose_cmd,
-              '-p', 'chords', 
-              '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml', 
-              'up', '-d']
-            
+            up_cmd = [
+                self.docker_compose_cmd,
+                '-p', 'chords',
+                '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml',
+                'up', '-d']
+
         os_cmd(cmd=up_cmd, err_msg='Unable to start containers')
-    
+
     def down(self):
         """
         Take the containers down with docker-compose.
         """
-        dn_cmd = [self.docker_compose_cmd,
-              '-f', self.docker_compose_yml, '-p', 'chords', 'down']
+        dn_cmd = [
+            self.docker_compose_cmd,
+            '-f', self.docker_compose_yml, '-p', 'chords', 'down']
         os_cmd(cmd=dn_cmd, err_msg='Unable to stop containers')
 
     def pull(self):
         """
         Pull docker images.
         """
-        
+
         # We need docker-compose.yml
         checkFileExists(self.docker_compose_yml)
-        
+
         print "*** Pulling Docker images. This may take awhile..."
-        pull_cmd = [self.docker_compose_cmd,
-              '-f', self.docker_compose_yml, 'pull']
+        pull_cmd = [
+            self.docker_compose_cmd,
+            '-f', self.docker_compose_yml, 'pull']
         os_cmd(cmd=pull_cmd, err_msg='Unable to pull Docker images')
         print "*** ...Docker pull is finished."
 
@@ -710,20 +715,22 @@ class Docker:
         """
         Return an array of tag names for dockerhub images.
         """
-          
+
         curl_cmd = [
             'curl', '-f', '-s', self.dockerhub_tags_uri
             ]
         if os_name == 'nt':
-          curl_cmd[1:1] = ['-k']
-        
-        curl_result, _ = os_cmd(cmd=curl_cmd, err_msg='Unable to fetch the Docker tags', 
+            curl_cmd[1:1] = ['-k']
+
+        curl_result, _ = os_cmd(
+            cmd=curl_cmd,
+            err_msg='Unable to fetch the Docker tags',
             printlines=False)
-            
+
         tags = []
         for t in json.loads(curl_result):
             tags.append(byteify(t["name"]))
-            
+
         return tags
 
 #####################################################################
@@ -1068,47 +1075,47 @@ def load(backup_file):
 
 #####################################################################
 def createConfigFilefromEnv(options):
-  """
-  Read the .env file, and convert it into a configuration file.
-  options["file"] is the name of the new configuration file.
-  If the named configuration file already exists, a backup copy is 
-  made when the new configuration is saved.
-  Since we are using the ChordsConfig class, any values
-  not present in .env will be given default values.
-  """
-  
-  # create a new temporary configuration file.
-  tfile = tempfile.mkstemp(prefix="chords_control_", text=True)[1]
-  cfile = open(tfile, "w")
-  if os.path.isfile(".env") == True:
-    efile = open(".env")
-    lines = efile.readlines()
-    for l in lines:
-      l = l.replace("=", ":")
-      cfile.write(l)
-  cfile.close()
-  
-  # Process the temporary configuration file, which will
-  # merge in default values for variables that weren't in .env.
-  config = ChordsConfig(configfile=tfile)
-  
-  # Save the new configuration file and update the .env file.
-  config.writeYMLFile(options["file"])
-  config.writeEnvFile()
+    """
+    Read the .env file, and convert it into a configuration file.
+    options["file"] is the name of the new configuration file.
+    If the named configuration file already exists, a backup copy is
+    made when the new configuration is saved.
+    Since we are using the ChordsConfig class, any values
+    not present in .env will be given default values.
+    """
+
+    # create a new temporary configuration file.
+    tfile = tempfile.mkstemp(prefix="chords_control_", text=True)[1]
+    cfile = open(tfile, "w")
+    if os.path.isfile(".env") == True:
+        efile = open(".env")
+        lines = efile.readlines()
+        for l in lines:
+            l = l.replace("=", ":")
+        cfile.write(l)
+    cfile.close()
+
+    # Process the temporary configuration file, which will
+    # merge in default values for variables that weren't in .env.
+    config = ChordsConfig(configfile=tfile)
+
+    # Save the new configuration file and update the .env file.
+    config.writeYMLFile(options["file"])
+    config.writeEnvFile()
 
 #####################################################################
 def os_cmd(cmd, err_msg=None, printlines=True):
     """
-    Run a shell command. The return value is a tuple. 
-    [0] is a single string, containing the command output, 
-    with each line delimited by a newline. 
+    Run a shell command. The return value is a tuple.
+    [0] is a single string, containing the command output,
+    with each line delimited by a newline.
     [1] is the exit status of the command.
     If err is specified, it should contain an error message,
     and chk_cmd_status() will be called.
     """
     if verbose:
         print ' '.join(str(x) for x in cmd)
-    
+
     try:
         proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         lines = ''
@@ -1142,7 +1149,7 @@ def byteify(input):
         return input.encode('utf-8')
     else:
         return input
-    
+
 #####################################################################
 def addChoicesToDOCKER_TAG(proxy=""):
     """
@@ -1154,11 +1161,11 @@ def addChoicesToDOCKER_TAG(proxy=""):
             tags = Docker(proxy=proxy).tags()
             for t in tags:
                 s[4].append(t)
-    
+
 #####################################################################
 def addChoicesToGIT_BRANCH(proxy=""):
     """
-    Get the avaiable branches and and them to the GIT_BRANCH valid choices. 
+    Get the avaiable branches and and them to the GIT_BRANCH valid choices.
     Modifies stdConfigItems.
     """
     for s in stdConfigItems:
@@ -1166,7 +1173,7 @@ def addChoicesToGIT_BRANCH(proxy=""):
             branches = ChordsGit(proxy=proxy).branches()
             for b in branches:
                 s[4].append(b)
-    
+
 #####################################################################
 def checkFileExists(file, writeable=False, print_warning=True, exit_on_failure=True):
     """
@@ -1182,7 +1189,7 @@ def checkFileExists(file, writeable=False, print_warning=True, exit_on_failure=T
         else:
             return False
     return True
-  
+
 #####################################################################
 def grep(expression, file):
     """
@@ -1194,8 +1201,8 @@ def grep(expression, file):
 
     matches = []
     for line in file:
-       if re.search(expression, line):
-           matches.append(line.strip())
+        if re.search(expression, line):
+            matches.append(line.strip())
 
     return matches
     
@@ -1206,17 +1213,17 @@ def renew_script(proxy):
     A github branch will be requested.
     """
     script_name = 'chords_control'
-    
+
     if not checkFileExists(script_name, writeable=True, print_warning=False, exit_on_failure=False):
         print "Either " + script_name + " isn't located in this directory, or it is not writeable."
         exit(1)
-        
+
     git_branch = choose_branch(script_name)
-            
+
     files = [script_name, "docker-compose.yml", "docker-compose-dev.yml"]
     for file in files:
         createBackupFile(file)
-            
+     
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
 
 #####################################################################
