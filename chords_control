@@ -841,7 +841,7 @@ class ChordsRestoreError(Exception):
 
 class ChordsRestore:
     """
-    Load a runing CHORDS instance for a backup file.
+    Load a backup file into a running CHORDS instance.
 
     The CHORDS backup file was created by the ChordsBackup class.
 
