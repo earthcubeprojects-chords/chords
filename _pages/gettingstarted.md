@@ -7,62 +7,55 @@ toc_sticky: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 ---
-# Creation
+
 
 ## Option 1: Run CHORDS on Amazon Web Services
 
-  <div class="row" style="margin-bottom: 20px">
-    <div class="col-sm-4">
-      <br/>
-      <a class="btn btn-success pull-right" href="aws.html">
-      <!-- <img src="images/cloud.svg" width="30" /> --> Open an AWS account</a>
-    </div>
-    <div class="col-sm-8">
-      <h3>Amazon Web Services</h3>
-      <p>If you don't have an AWS account, it's easy
-      to create one. The standard CHORDS portal uses an Amazon
-      "micro instance", which can be free for the first year.</p>
-    </div>
-  </div>
+### Amazon Web Services
 
-  <div class="row" style="margin-bottom: 20px">
-    <div class="col-sm-4">
-      <br/>
-      <a class="btn btn-success pull-right" href="create.html">
-      <!-- <img src="images/chevron-left.svg" width="30" /> --> Create on AWS</a>
-    </div>
-    <div class="col-sm-8">
-      <h3>CHORDS Portal</h3>
-      <p>Once you have an AWS account, you can create a CHORDS Portal
-      instance (server) in just a few steps.</p>
-    </div>
-  </div>
-  
-## Option 2: Run CHORDS in other compute environments
-
-  <div class="row" style="margin-bottom: 20px">
-    <div class="col-sm-4">
-      <br/>
-      <a class="btn btn-success pull-right" href="os.html">
-      <!-- <img src="images/chevron-left.svg" width="30" /> --> Create a Portal</a>
-    </div>
-    <div class="col-sm-8">
-      <h3>CHORDS Portal</h3>
-      <p>CHORDS can be run on a cloud service of your choice, or just a local machine, running Linux, MacOS or Windows.
-      Configure the operating system, and then run the CHORDS control script to create a CHORDS Portal instance.</p>
-    </div>
-  </div>
-
-### Configuration
-  <div class="row" style="margin-bottom: 20px">
-    <div class="col-sm-4">
-     <br/>
-     <a class="btn btn-success pull-right" href="config.html">
-     <!-- <img src="images/cog.svg" width="30" /> --> Configure the Portal</a>
-    </div>
-    <div class="col-sm-8">
-      <h3>Configure</h3>
-      <p>After the Portal is created, you will use your browser to configure and manage it.</p>
-    </div>
-  </div>
+If you don't have an AWS account, it's easy to create one. The standard CHORDS portal uses an Amazon "micro instance", which can be free for the first year.
  
+<a href="{{site.baseurl}}/gettingstarted/aws" class="btn btn--primary">Open an AWS account</a>
+
+### AWS CHORDS Portal
+
+Create an amazon account and set up your server through amazon. The standard server is a “Micro Instance” which is free for the first year of use.
+
+<a href="{{site.baseurl}}/gettingstarted/create" class="btn btn--primary">Create AWS Portal</a>
+
+
+## Option 2: Run CHORDS on Jetstream
+    
+### Jetstream
+
+If you are NSF funded then you can use a Jestream instance free! If you aren't that's still ok. You can apply for a trial account similar Amazon and request more allocations later while contributing to the scientific community!
+
+<a href="{{site.baseurl}}/gettingstarted/jetstream" class="btn btn--primary">Create a Jetstream Server</a>
+
+### Configure
+
+Once you've created your Jetstream server and portal you'll need to configure it through your browser.
+
+<a href="{{site.baseurl}}/gettingstarted/config" class="btn btn--primary">Configure the Portal</a>
+
+
+## Option 3: Run CHORDS locally
+
+### CHORDS Portal
+
+CHORDS can be run on a cloud service of your choice, or just a local machine, running Linux, MacOS or Windows. Configure the operating system, and then run the CHORDS control script to create a CHORDS Portal instance.
+
+<a href="{{site.baseurl}}/gettingstarted/os" class="btn btn--primary">Create a Portal</a>
+
+### Configure
+
+After the Portal is created, you will use your browser to configure and manage it.
+
+<a href="{{site.baseurl}}/gettingstarted/config" class="btn btn--primary">Configure the Portal</a>
+
+
+## Option 4: Other
+    
+Sadly our crystal ball broke before we could foresee all of your needs. If you aren’t able to find an option that suits your projects needs there are many options for virtual machines (vm’s) and servers out there. 
+
+<a href="{{site.baseurl}}/gettingstarted/other" class="btn btn--primary">More</a>

@@ -1,7 +1,7 @@
 ---
 layout: single
 title: Install CHORDS For Various Operating Systems
-permalink: /os/
+permalink: /gettingstarted/os/
 ---
 
 See the [detailed instructions](control.html) if the Quick Start recipes are not adequate

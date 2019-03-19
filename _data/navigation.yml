@@ -1,14 +1,6 @@
 ###########################################################################################################
 
 # main Menu
-#     Needs a drop down menu including specific pages
-#     - title: "Admin"
-#        url: /page-archive/
-
-#     Needs a drop down menu including specific pages
-#   - title: "User"
-#     url: /page-archive/
-
 main:
   - title: "About"
     url: /whatis/
@@ -47,7 +39,7 @@ sidebar-sample:
           url: /whatis/
 
         - title: "News"
-          url: /post-archive-feature-rows/
+          url: /news/
 
         - title: "3D Paws"
           url: http://3d.chordsrt.com

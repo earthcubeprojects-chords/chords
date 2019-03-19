@@ -1,7 +1,7 @@
 ---
 layout: single
 title: Create a Portal
-permalink: /create/
+permalink: /gettingstarted/create/
 ---
 
 If someone else has already created a Portal for you, you can skip Portal creation. Just point

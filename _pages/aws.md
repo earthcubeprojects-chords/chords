@@ -1,7 +1,7 @@
 ---
 layout: single
-title: Getting Started with Amazon Web Services
-permalink: /aws/
+title: Amazon
+permalink: /gettingstarted/aws/
 ---
 
 If you already have an AWS account, just go to [Portal creation](http://ncar.github.io/chords/create.html).
