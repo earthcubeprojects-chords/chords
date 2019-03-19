@@ -764,6 +764,7 @@ class ChordsBackup(object):
 
         self.id_check()
         self.config_files_check(files=["./.env", "chords.yml", "docker-compose.yml"])
+        self.docker_check()
 
         time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
         time_stamp = time_stamp.replace(":", "-")
@@ -825,6 +826,14 @@ class ChordsBackup(object):
 Required configuration files are missing.
 Are you in a CHORDS home directory (typically /var/lib/chords/)?
 """)
+
+    def docker_check(self):
+        """ Verify that a CHORDS instance is running correctly. """
+
+        if docker_check():
+            raise ChordsBackupError("""
+It appears that CHORDS is not running correctly.
+A CHORDS backup cannot be performed.""")
 
     def manifest(self):
         """
@@ -937,7 +946,7 @@ python chords_control --run
         """
         Verify that required configuration files are present.
 
-        If not, raise ChordsretoreError.
+        If not, raise ChordsRestoreError.
         """
 
         error = False
@@ -950,26 +959,20 @@ Required configuration files are missing.
 Are you in a CHORDS home directory (typically /var/lib/chords/)?
 """)
 
+    def docker_check(self):
+        """ Verify that a CHORDS instance is running correctly. """
+
+        if docker_check():
+            raise ChordsRestoreError("""
+It appears that CHORDS is not running correctly.
+A CHORDS restore cannot be performed.""")
+
+
     def cleanup(self):
         """ Cleanup temporary files. """
 
         print "Removing the temporary directory " + self.tmp_dir
         print sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout
-
-    def docker_check(self):
-        """ Verify that a CHORDS instance is running correctly. """
-
-        self.docker_containers = {}
-        self.docker_containers = \
-            {c.name: c for c in docker.from_env().containers.list(all=True)}
-
-        err_msg = ""
-        for container_name in ["chords_app", "chords_influxdb", "chords_mysql"]:
-            if container_name not in self.docker_containers.keys():
-                err_msg += "The %s docker container is not present.\n" % (container_name)
-
-        if err_msg:
-            raise ChordsRestoreError(err_msg)
 
     def docker_container_status(self):
         """ Print the status of all containers. """
@@ -1012,9 +1015,9 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
             "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
         )
         print "Curent influxdb databases:"
-        docker_bash("chords_influxdb",
-                    "influx -username admin -password %s -execute 'show databases'"
-                    % (admin_pw))
+        print docker_bash("chords_influxdb",
+                          "influx -username admin -password %s -execute 'show databases'"
+                          % (admin_pw))
 
     def backup_unpack(self):
         """ Unpack the ChordsBackup created backup file to a temporary directoy. """
@@ -1082,7 +1085,11 @@ def docker_sh(*args):
     """ Run a docker command with the args, printing stdout and stderr. """
 
     try:
+        if verbose:
+            print "Executing: docker", " ".join(args)
         result = sh.docker(args, _err_to_out=True).stdout
+        if verbose:
+            print "Result:", str(result)
         return str(result)
     except Exception as sh_err:
         raise ChordsDockerError(sh_err)
@@ -1118,6 +1125,30 @@ def restore(backup_file):
         exit(1)
 
     print load_chords.summary()
+
+def docker_check():
+    """
+    Verify that a CHORDS instance is running correctly.
+
+    Print out a list of containers that are not running.
+    Return the error message.
+
+    A return string containing text indicates an error,
+    which can thus be tested as a boolean, where True will indicate
+    an error.
+    """
+
+    docker_containers = {}
+    docker_containers = \
+        {c.name: c for c in docker.from_env().containers.list(all=True)}
+
+    err_msg = ""
+    for container_name in ["chords_app", "chords_influxdb", "chords_mysql"]:
+        if container_name not in docker_containers.keys():
+            err_msg += "The %s docker container is not present.\n" % (container_name)
+
+    print err_msg
+    return err_msg
 
 #####################################################################
 def createConfigFilefromEnv(optionsIn):
