@@ -761,18 +761,21 @@ class ChordsBackup(object):
         """
         Perform the backup.
         """
+
         self.id_check()
+        self.config_files_check(files=["./.env", "chords.yml", "docker-compose.yml"])
 
         time_stamp = datetime.datetime.now().replace(microsecond=0).isoformat()
         time_stamp = time_stamp.replace(":", "-")
 
-        mysql_dump_file = 'mysql-'+time_stamp+'.sql'
-        influx_dump_dir = 'influxdb-'+time_stamp
-        influx_tar_file = 'influxdb-'+time_stamp+'.tar'
-        chords_tar_file = 'chords-'+time_stamp+'.tar.gz'
+        self.mysql_sql_file = 'mysql-' + time_stamp + '.sql'
+        influx_dump_dir = 'influxdb-' + time_stamp
+        self.influx_tar_file = 'influxdb-' + time_stamp + '.tar'
+        self.chords_tar_file = 'chords-' + time_stamp + '.tar.gz'
+        self.manifest_file = "manifest-" + time_stamp + ".txt"
 
         print "*** Saving mysql ***"
-        mysql_file = open(mysql_dump_file, 'w')
+        mysql_file = open(self.mysql_sql_file, 'w')
         print sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
                         _out=mysql_file).stdout
 
@@ -780,25 +783,24 @@ class ChordsBackup(object):
         print docker_bash(
             "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir))
         print(docker_bash(
-            "chords_influxdb", "cd /tmp && tar -cvf %s %s" % (influx_tar_file, influx_dump_dir)))
-        docker_cp('chords_influxdb:%s' % ("/tmp/"+influx_tar_file), '.')
+            "chords_influxdb", "cd /tmp && tar -cvf %s %s" % (self.influx_tar_file, influx_dump_dir)))
+        docker_cp('chords_influxdb:%s' % ("/tmp/"+self.influx_tar_file), '.')
         print(docker_bash(
-            "chords_influxdb", "cd /tmp && rm -rf %s %s" % (influx_tar_file, influx_dump_dir)))
+            "chords_influxdb", "cd /tmp && rm -rf %s %s" % (self.influx_tar_file, influx_dump_dir)))
 
         print "*** Manifest ***:"
-        manifest_file = self.manifest(
-            time_stamp=time_stamp, influx_file=influx_tar_file, mysql_file=mysql_dump_file)
-        print "%s has been created." % (manifest_file)
+        self.manifest()
+        print "%s has been created." % (self.manifest_file)
         print ""
 
         print "*** Packaging files ***"
-        tar_params = ['-cvf', chords_tar_file, manifest_file, mysql_dump_file, influx_tar_file]
+        tar_params = ['-cvf', self.chords_tar_file, ".env", "chords.yml", self.manifest_file, self.mysql_sql_file, self.influx_tar_file]
         print sh.tar(tar_params, _err_to_out=True).stdout
-        print sh.rm(manifest_file, mysql_dump_file, influx_tar_file)
+        print sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file)
 
         print "*** Success ***"
-        print "%s has been created." % (chords_tar_file)
-        print "For details on the CHORDS backup, examine the file: %s (contained in the tar file)." % (manifest_file)
+        print "%s has been created." % (self.chords_tar_file)
+        print "For details on the CHORDS backup, examine the file: %s (contained in the tar file)." % (self.manifest_file)
 
     def id_check(self):
         """ Verify that the user is running with the correct permissions. """
@@ -807,13 +809,29 @@ class ChordsBackup(object):
             if getpass.getuser() != 'root':
                 raise ChordsBackupError("CHORDS load must be run as root user on Linux systems.")
 
-    def manifest(self, time_stamp, influx_file, mysql_file):
+    def config_files_check(self, files):
+        """
+        Verify that required configuration files are present.
+
+        If not, raise ChordsretoreError.
+        """
+
+        error = False
+        for f in files:
+            if not checkFileExists(aFile=f, exit_on_failure=False):
+                error = True
+        if error:
+            raise ChordsBackupError("""
+Required configuration files are missing.
+Are you in a CHORDS home directory (typically /var/lib/chords/)?
+""")
+
+    def manifest(self):
         """
         Create a manifest file.
         """
 
-        file_name = "manifest-" + time_stamp + ".txt"
-        manifest_file = open(file_name, "w")
+        manifest_file = open(self.manifest_file, "w")
 
         manifest_file.write("# CHORDS backup\n")
         manifest_file.write(
@@ -822,19 +840,17 @@ class ChordsBackup(object):
             "# Affiliation: " + self.mysql_value(table="profiles", column="affiliation") + "\n")
         manifest_file.write(
             "# Domain name: " + self.mysql_value(table="profiles", column="domain_name") + "\n")
-        manifest_file.write(
-            "# MYQSL database dump file: %s\n" % (mysql_file)
-        )
-        manifest_file.write(
-            "# InfluxDB database dump file: %s\n" % (influx_file)
-        )
+        manifest_file.write("# CHORDS configuration file: chords.yml\n")
+        manifest_file.write("# Docker environment file: .env\n")
+        manifest_file.write("# MYQSL database dump file: %s\n" % (self.mysql_sql_file))
+        manifest_file.write("# InfluxDB database dump file: %s\n" % (self.influx_tar_file))
         manifest_file.write("# Environment:\n")
         env_vars = docker_bash("chords_app", "grep export chords_env.sh | sed -e 's/export //'")
         manifest_file.write(env_vars)
         docker_tag = "DOCKER_TAG=" + docker_bash("chords_app", "printenv DOCKER_TAG")
         manifest_file.write(docker_tag)
         manifest_file.close()
-        return file_name
+        return
 
     def mysql_value(self, table, column):
         """ Fetch a mysql field. """
@@ -870,6 +886,8 @@ class ChordsRestore(object):
 
         self.msg = ""
 
+        self.config_files_check(files=["./.env", "chords.yml", "docker-compose.yml"])
+
         self.id_check()
 
         print "*** Warning: this action will overwrite ALL data in the running portal."
@@ -884,12 +902,12 @@ class ChordsRestore(object):
         self.file_paths = {}
         self.docker_containers = {}
 
-        print "*** Dump file unpacking ***"
-        self.backup_unpack()
-
         print "*** Docker ***"
         self.docker_check()
         self.docker_container_status()
+
+        print "*** Dump file unpacking ***"
+        self.backup_unpack()
 
         print "*** Loading mysql ***"
         self.load_mysql()
@@ -913,7 +931,24 @@ python chords_control --run
 
         if platform.system() == "Linux":
             if getpass.getuser() != 'root':
-                raise ChordsRestoreError("CHORDS load must be run as root user on Linux systems.")
+                raise ChordsRestoreError("CHORDS restore must be run as root user on Linux systems.")
+
+    def config_files_check(self, files):
+        """
+        Verify that required configuration files are present.
+
+        If not, raise ChordsretoreError.
+        """
+
+        error = False
+        for f in files:
+            if not checkFileExists(aFile=f, exit_on_failure=False):
+                error = True
+        if error:
+            raise ChordsRestoreError("""
+Required configuration files are missing.
+Are you in a CHORDS home directory (typically /var/lib/chords/)?
+""")
 
     def cleanup(self):
         """ Cleanup temporary files. """
