@@ -893,20 +893,12 @@ class ChordsRestore(object):
         If there are errors, ChordsRestoreError wil be thrown.
         """
 
-        self.msg = ""
+        self.dump_file = dump_file
 
         self.config_files_check(files=["./.env", "chords.yml", "docker-compose.yml"])
-
         self.id_check()
+        self.are_you_sure()
 
-        print "*** Warning: this action will overwrite ALL data in the running portal."
-        print 'Are you sure that you want restore from %s [Y/y]? ' % (dump_file),
-        l = sys.stdin.readline().strip()
-        if l not in ['Y', 'y']:
-            self.msg = "CHORDS restore aborted."
-            return
-
-        self.dump_file = dump_file
         self.tmp_dir = tempfile.mkdtemp(prefix="chords_load-", dir=os.path.normpath(tmp_dir))
         self.file_paths = {}
         self.docker_containers = {}
@@ -927,13 +919,18 @@ class ChordsRestore(object):
         print "*** Cleanup ***"
         self.cleanup()
 
-        self.msg = """
-CHORDS databases have been restored.
+    def are_you_sure(self):
+        """
+        Verify that the user really wants to do a restore.
 
-CHORDS must be restarted by running:
-python chords_control --stop
-python chords_control --run
-"""
+        If not, raise ChordsRestoreError.
+        """
+
+        print "*** Warning: this action will overwrite ALL data in the running portal."
+        print 'Are you sure that you want restore from %s [Y/y]? ' % (self.dump_file),
+        l = sys.stdin.readline().strip()
+        if l not in ['Y', 'y']:
+            raise ChordsRestoreError("Restore cancelled.")
 
     def id_check(self):
         """ Verify that the user is running with the correct permissions. """
@@ -966,7 +963,6 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
             raise ChordsRestoreError("""
 It appears that CHORDS is not running correctly.
 A CHORDS restore cannot be performed.""")
-
 
     def cleanup(self):
         """ Cleanup temporary files. """
@@ -1062,11 +1058,6 @@ A CHORDS restore cannot be performed.""")
         if err_msg:
             raise ChordsRestoreError(err_msg)
 
-    def summary(self):
-        """ Provide an activity summary with further instructions. """
-
-        return self.msg
-
 #####################################################################
 class ChordsDockerError(Exception):
     """ Raise ChordsDockerError("error msg"). """
@@ -1123,8 +1114,14 @@ def restore(backup_file):
         print "Error processing %s" % (backup_file)
         print restore_exception
         exit(1)
+    
+    print """
+CHORDS databases have been restored.
 
-    print load_chords.summary()
+CHORDS must be restarted by running:
+python chords_control --stop
+python chords_control --run
+"""
 
 def docker_check():
     """
