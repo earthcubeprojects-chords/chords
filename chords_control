@@ -1,4 +1,4 @@
- #!/usr/local/bin/python
+#!/usr/local/bin/python
 
 """
 The CHORDS management script. Use to manage the CHORDS portal configuration,
@@ -55,13 +55,12 @@ import subprocess
 import json
 import platform
 import tempfile
-import sh
 import glob
-import docker
 import getpass
 from collections import OrderedDict
 from collections import namedtuple
-
+import docker
+import sh
 
 # The definitions of standard configuration items. These are tri-tuples:
 # [0]: The configuration item description. This will be printed as a prompt
@@ -266,15 +265,13 @@ def createBackupFile(filename, print_note=True):
         print "*** " + filename + " has been backed up to " + backupfile + "."
 
 #####################################################################
-class CommandArgs:
+class CommandArgs(object):
     """
     Manage the command line options.
     The options are collated in a dictionary keyed on the option long name.
     The option dictionary will have None for options that aren't present.
     """
     def __init__(self):
-        global os_name
-        global os_arch
 
         description = """
 CHORDS configuration and operation management.
@@ -312,7 +309,7 @@ To create an initial default configuration:
         parser.add_argument("-v", "--verbose", help="enable verbose",                                       default=False,        action="store_true")
 
         # If no switches, print the help.
-        if len(sys.argv[1:]) == 0:
+        if not sys.argv[1:]:
             parser.print_help()
             parser.exit()
 
@@ -322,8 +319,16 @@ To create an initial default configuration:
 
         # Make sure that at most only one of these args was specified
         o = self.options
-        if [o['config'], o['run'], o['stop'], o['update'],
-            o['env'], o['backwards'], o['renew'], o['backup'], o['restore']].count(True) > 1:
+        if [o['config'],
+                o['run'],
+                o['stop'],
+                o['update'],
+                o['env'],
+                o['backwards'],
+                o['renew'],
+                o['backup'],
+                o['restore']
+           ].count(True) > 1:
             print epilog
             exit(1)
 
@@ -332,7 +337,10 @@ To create an initial default configuration:
             exit(1)
 
     def get_options(self):
-        # return the dictionary of existing options.
+        """
+        Return the dictionary of existing options.
+        """
+
         return self.options
 
 #####################################################################
@@ -353,22 +361,25 @@ class ChordsConfig(OrderedDict):
         # Add them to self.
         self.getPairs(configfile)
 
-    def getPairs(self, configfile):
+    def getPairs(self, configFile):
+        """
+        Return the configuration key:value pairs from the configuration file.
+        """
 
         items = dict()
         # Get the current configuration file
-        if not os.path.isfile(configfile):
+        if not os.path.isfile(configFile):
             f = open(options["file"], 'w')
             f.close()
-            print configfile, 'has been created'
+            print configFile, 'has been created'
 
-        f = open(configfile)
+        f = open(configFile)
         lines = f.readlines()
         f.close()
         i = 1
         for l in lines:
             l = l.strip()
-            if len(l):
+            if l:
                 if l[0] != "#":
                     tokens = l.split(":")
                     if len(tokens) != 2:
@@ -376,20 +387,20 @@ class ChordsConfig(OrderedDict):
                     items[tokens[0].strip()] = tokens[1].strip()
             i = i + 1
 
-        config = OrderedDict()
+        tmpConfig = OrderedDict()
         # Collect all of the standard items. Add them if they
         # weren't in the file
         for key in self.configItems.keys():
             if key in items.keys():
-                config[key] = items[key]
+                tmpConfig[key] = items[key]
                 del items[key]
             else:
-                config[key] = self.configItems[key]['default']
-        for key in items.keys():
+                tmpConfig[key] = self.configItems[key]['default']
+        for key, value in items.iteritems():
             # Append any remaining items that aren't in the standard list
-            config[key] = items[key]
+            tmpConfig[key] = value
         for key in config.keys():
-            self[key] = config[key]
+            self[key] = tmpConfig[key]
 
     def initConfigItems(self):
         """
@@ -463,7 +474,6 @@ class ChordsConfig(OrderedDict):
         """
         Query the user for a replacement value.
         """
-        global termBoldOn, termBoldOff
         if description:
             print description
         print key,
@@ -535,7 +545,7 @@ class ConfigItem(OrderedDict):
         self["choices"] = choices
 
 #####################################################################
-class ChordsGit:
+class ChordsGit(object):
     """
     Manage CHORDS git activities.
     """
@@ -553,8 +563,8 @@ class ChordsGit:
         if not isinstance(files, list):
             files = [files]
 
-        for file in files:
-            file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + '/' + file
+        for fileName in files:
+            file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + '/' + fileName
 #            if os_arch[:3] == 'arm':
 #                docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/' + git_branch + '/rpi-docker-compose.yml'
 
@@ -577,6 +587,9 @@ class ChordsGit:
             print
 
     def branches(self):
+        """
+        Return the avaiable branches for github.com/ncar/chords.
+        """
         git_cmd = [
             'git', 'ls-remote', '--heads', 'https://github.com/ncar/chords'
             ]
@@ -585,15 +598,13 @@ class ChordsGit:
         return heads
 
 #####################################################################
-class Docker:
+class Docker(object):
     """
     Manage docker activities. docker-compose.yml and docker-compose-dev.yml are
     expected in the working directory.
     """
 
     def __init__(self, proxy=""):
-        global os_name
-        global os_arch
 
         self.docker_compose_yml = 'docker-compose.yml'
         self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
@@ -675,7 +686,7 @@ class Docker:
             print '.env file is incorrectly formatted (DOCKER_TAG is missing)'
             exit (1)
 
-        if devmode == False:
+        if not devmode:
             up_cmd = [
                 self.docker_compose_cmd,
                 '-f', self.docker_compose_yml, '-p', 'chords', 'up', '-d']
@@ -739,7 +750,7 @@ class ChordsBackupError(Exception):
     """ Raise ChordsBackupError("error msg"). """
     pass
 
-class ChordsBackup:
+class ChordsBackup(object):
     """
     Perform a CHORDS backup.
 
@@ -760,35 +771,34 @@ class ChordsBackup:
         influx_tar_file = 'influxdb-'+time_stamp+'.tar'
         chords_tar_file = 'chords-'+time_stamp+'.tar.gz'
 
-        print("*** Saving mysql ***")
+        print "*** Saving mysql ***"
         mysql_file = open(mysql_dump_file, 'w')
         print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
                         _out=mysql_file).stdout)
 
-        print("*** Saving influxdb ***")
-        print(docker_bash(
-            "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir)))
+        print "*** Saving influxdb ***"
+        print docker_bash(
+            "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir))
         print(docker_bash(
             "chords_influxdb", "cd /tmp && tar -cvf %s %s" % (influx_tar_file, influx_dump_dir)))
         docker_cp('chords_influxdb:%s' % ("/tmp/"+influx_tar_file), '.')
         print(docker_bash(
             "chords_influxdb", "cd /tmp && rm -rf %s %s" % (influx_tar_file, influx_dump_dir)))
 
-        print("*** Manifest ***:")
+        print "*** Manifest ***:"
         manifest_file = self.manifest(
             time_stamp=time_stamp, influx_file=influx_tar_file, mysql_file=mysql_dump_file)
-        print("%s has been created." % (manifest_file))
-        print("")
+        print "%s has been created." % (manifest_file)
+        print ""
 
-        print("*** Packaging files ***")
+        print "*** Packaging files ***"
         tar_params = ['-cvf', chords_tar_file, manifest_file, mysql_dump_file, influx_tar_file]
-        print(sh.tar(tar_params, _err_to_out=True).stdout)
-        print(sh.rm(manifest_file, mysql_dump_file, influx_tar_file))
+        print sh.tar(tar_params, _err_to_out=True).stdout
+        print sh.rm(manifest_file, mysql_dump_file, influx_tar_file)
 
-        print("*** Success ***")
-        print("%s has been created." % (chords_tar_file))
-        print("For details on the CHORDS backup, examine the file: %s (contained in the tar file)."
-              % (manifest_file))
+        print "*** Success ***"
+        print "%s has been created." % (chords_tar_file)
+        print "For details on the CHORDS backup, examine the file: %s (contained in the tar file)." % (manifest_file)
 
     def id_check(self):
         """ Verify that the user is running with the correct permissions. """
@@ -840,7 +850,7 @@ class ChordsRestoreError(Exception):
     """ Raise ChordsRestoreError("error msg"). """
     pass
 
-class ChordsRestore:
+class ChordsRestore(object):
     """
     Load a backup file into a running CHORDS instance.
 
@@ -862,7 +872,7 @@ class ChordsRestore:
 
         self.id_check()
 
-        print("*** Warning: this action will overwrite ALL data in the running portal.")
+        print "*** Warning: this action will overwrite ALL data in the running portal."
         print 'Are you sure that you want restore from %s [Y/y]? ' % (dump_file),
         l = sys.stdin.readline().strip()
         if l not in ['Y', 'y']:
@@ -874,20 +884,20 @@ class ChordsRestore:
         self.file_paths = {}
         self.docker_containers = {}
 
-        print("*** Dump file unpacking ***")
+        print "*** Dump file unpacking ***"
         self.backup_unpack()
 
-        print("*** Docker ***")
+        print "*** Docker ***"
         self.docker_check()
         self.docker_container_status()
 
-        print("*** Loading mysql ***")
+        print "*** Loading mysql ***"
         self.load_mysql()
 
-        print("*** Loading influxdb ***")
+        print "*** Loading influxdb ***"
         self.load_influxdb()
 
-        print("*** Cleanup ***")
+        print "*** Cleanup ***"
         self.cleanup()
 
         self.msg = """
@@ -908,8 +918,8 @@ python chords_control --run
     def cleanup(self):
         """ Cleanup temporary files. """
 
-        print("Removing the temporary directory " + self.tmp_dir)
-        print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout)
+        print "Removing the temporary directory " + self.tmp_dir
+        print sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout
 
     def docker_check(self):
         """ Verify that a CHORDS instance is running correctly. """
@@ -929,15 +939,15 @@ python chords_control --run
     def docker_container_status(self):
         """ Print the status of all containers. """
 
-        print("Docker containers:")
+        print "Docker containers:"
         for name, container in self.docker_containers.items():
-            print(name + ": " + container.status)
-        print("")
+            print name + ": " + container.status
+        print ""
 
     def load_mysql(self, container="chords_mysql", database_name="chords_demo_production"):
         """ Load the mysql database into the database in the chords_ysql container. """
 
-        print("Container:%s, database:%s" % (container, database_name))
+        print "Container:%s, database:%s" % (container, database_name)
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         print(
             sh.docker(
@@ -951,22 +961,22 @@ python chords_control --run
         admin_pw = "chords_ec_demo"
         influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
 
-        print("Loading from " + self.file_paths["influxdb"])
+        print "Loading from " + self.file_paths["influxdb"]
         docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
         docker_bash("chords_influxdb",
                     "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
-        print("Dropping influxdb database chords_ts_production")
+        print "Dropping influxdb database chords_ts_production"
         docker_bash(
             "chords_influxdb",
             "influx -username admin -password %s -execute 'drop database chords_ts_production'"
             % (admin_pw)
         )
-        print("Loading databases")
+        print "Loading databases"
         docker_bash(
             "chords_influxdb",
             "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
         )
-        print("Curent influxdb databases:")
+        print "Curent influxdb databases:"
         docker_bash("chords_influxdb",
                     "influx -username admin -password %s -execute 'show databases'"
                     % (admin_pw))
@@ -974,8 +984,8 @@ python chords_control --run
     def backup_unpack(self):
         """ Unpack the ChordsBackup created backup file to a temporary directoy. """
 
-        print("*** Unpacking chords files ***")
-        print("Temporary directory: " + self.tmp_dir)
+        print "*** Unpacking chords files ***"
+        print "Temporary directory: " + self.tmp_dir
         try:
             print(
                 sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
@@ -1058,7 +1068,7 @@ def backup():
     try:
         ChordsBackup()
     except ChordsBackupError as error:
-        print(error)
+        print error
         exit(1)
 
 #####################################################################
@@ -1068,14 +1078,14 @@ def restore(backup_file):
     try:
         load_chords = ChordsRestore(backup_file)
     except ChordsRestoreError as restore_exception:
-        print("Error processing %s" % (backup_file))
-        print(restore_exception)
+        print "Error processing %s" % (backup_file)
+        print restore_exception
         exit(1)
 
-    print(load_chords.summary())
+    print load_chords.summary()
 
 #####################################################################
-def createConfigFilefromEnv(options):
+def createConfigFilefromEnv(optionsIn):
     """
     Read the .env file, and convert it into a configuration file.
     options["file"] is the name of the new configuration file.
@@ -1088,21 +1098,21 @@ def createConfigFilefromEnv(options):
     # create a new temporary configuration file.
     tfile = tempfile.mkstemp(prefix="chords_control_", text=True)[1]
     cfile = open(tfile, "w")
-    if os.path.isfile(".env") == True:
+    if os.path.isfile(".env"):
         efile = open(".env")
         lines = efile.readlines()
         for l in lines:
             l = l.replace("=", ":")
-        cfile.write(l)
+            cfile.write(l)
     cfile.close()
 
     # Process the temporary configuration file, which will
     # merge in default values for variables that weren't in .env.
-    config = ChordsConfig(configfile=tfile)
+    configTmp = ChordsConfig(configfile=tfile)
 
     # Save the new configuration file and update the .env file.
-    config.writeYMLFile(options["file"])
-    config.writeEnvFile()
+    configTmp.writeYMLFile(optionsIn["file"])
+    configTmp.writeEnvFile()
 
 #####################################################################
 def os_cmd(cmd, err_msg=None, printlines=True):
@@ -1128,7 +1138,7 @@ def os_cmd(cmd, err_msg=None, printlines=True):
             if output != '' and printlines:
                 print output.rstrip()
         exit_status = proc.poll()
-    except Exception as e:
+    except (OSError, ValueError) as e:
         print str(e) + ': ' + ' '.join(str(x) for x in cmd)
 
     if err_msg:
@@ -1137,19 +1147,19 @@ def os_cmd(cmd, err_msg=None, printlines=True):
 
 
 #####################################################################
-def byteify(input):
+def byteify(inputStr):
     """
     Convert unicode to a byte strings
     """
-    if isinstance(input, dict):
+    if isinstance(inputStr, dict):
         return {byteify(key): byteify(value)
-                for key, value in input.iteritems()}
-    elif isinstance(input, list):
-        return [byteify(element) for element in input]
-    elif isinstance(input, unicode):
-        return input.encode('utf-8')
+                for key, value in inputStr.iteritems()}
+    elif isinstance(inputStr, list):
+        return [byteify(element) for element in inputStr]
+    elif isinstance(inputStr, unicode):
+        return inputStr.encode('utf-8')
     else:
-        return input
+        return inputStr
 
 #####################################################################
 def addChoicesToDOCKER_TAG(proxy=""):
@@ -1176,13 +1186,13 @@ def addChoicesToGIT_BRANCH(proxy=""):
                 s[4].append(b)
 
 #####################################################################
-def checkFileExists(file, writeable=False, print_warning=True, exit_on_failure=True):
+def checkFileExists(aFile, writeable=False, print_warning=True, exit_on_failure=True):
     """
     Make sure that the file is readable. If not, print error message
     and exit.
     """
 
-    if not os.path.isfile(file) or not os.access(file, os.R_OK if not writeable else os.W_OK):
+    if not os.path.isfile(aFile) or not os.access(aFile, os.R_OK if not writeable else os.W_OK):
         if print_warning:
             print "File " + file +  " doesn't exist or isn't readable."
         if exit_on_failure:
@@ -1192,21 +1202,21 @@ def checkFileExists(file, writeable=False, print_warning=True, exit_on_failure=T
     return True
 
 #####################################################################
-def grep(expression, file):
+def grep(expression, aFile):
     """
     Find a lines in a file containing the expression.
     Return ass an array of strings. White space is
     removed.
     """
-    file = open(file, "r")
+    ourFile = open(aFile, "r")
 
     matches = []
-    for line in file:
+    for line in ourFile:
         if re.search(expression, line):
             matches.append(line.strip())
 
     return matches
-    
+
 #####################################################################
 def renew_script(proxy):
     """
@@ -1222,15 +1232,15 @@ def renew_script(proxy):
     git_branch = choose_branch(script_name)
 
     files = [script_name, "docker-compose.yml", "docker-compose-dev.yml"]
-    for file in files:
-        createBackupFile(file)
-     
+    for ourFile in files:
+        createBackupFile(ourFile)
+
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
 
 #####################################################################
 def check_cmd_status(exit_status, cmd, err_msg):
     """
-    Check the exit_status. 
+    Check the exit_status.
     If it is non-zero, the error message will be printed
     along with the command, and exit(1) will be called.
     cmd is a list, such as used with the subrocess command.
@@ -1240,11 +1250,14 @@ def check_cmd_status(exit_status, cmd, err_msg):
         exit(1)
 
 #####################################################################
-def choose_branch(script_name):
+def choose_branch(aFile):
+    """
+    Prompt the user to choose which git branch to fetch the file from.
+    """
     git_branches = ChordsGit().branches()
     git_branch = ''
     while True:
-        print "Which branch do you want to pull "+script_name+" from (usually master) (",
+        print "Which branch do you want to pull " + aFile + " from (usually master) (",
         for b in git_branches:
             print '\''+b+'\'',
         print ')? ',
@@ -1254,63 +1267,63 @@ def choose_branch(script_name):
         else:
             print "The", git_branch, "branch is not available."
     return git_branch
-            
+
 #####################################################################
 #####################################################################
 
 if __name__ == '__main__':
-    
+
     # Get the command line options
     options = CommandArgs().get_options()
     verbose = options['verbose']
-    
+
     # Adjust the available releases
     addChoicesToDOCKER_TAG()
-    
+
     # Adjust the available branches
     addChoicesToGIT_BRANCH()
-    
+
     # --- Command procesing ---
-    
+
     # Run the CHORDS portal
-    if options["run"] == True:
-        if options['devmode'] == True:
+    if options["run"]:
+        if options['devmode']:
             checkFileExists('docker-compose-dev.yml')
-        
+
         Docker(proxy=options['proxy']).up(options['devmode'])
-        
+
     # Stop the currently running CHORDS portal
-    if options["stop"] == True:
+    if options["stop"]:
         Docker(proxy=options['proxy']).down()
-    
+
     # Show the current CHORDS status
-    if options["status"] == True:
+    if options["status"]:
         for c in Docker(proxy=options['proxy']).ps():
             print c['name'] + ': ' + str(c)
-    
+
     # Prompt and update the configuration
-    if options["config"] == True:
+    if options["config"]:
         config = ChordsConfig(configfile=options['file'])
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
         config.writeEnvFile()
         print
         print "*** Don't forget to run 'python chords_control --update' if you have changed the configuration."
-    
+
     # Create the .env file from the configuration file
-    if options["env"] == True:
+    if options["env"]:
         if not os.path.isfile(options["file"]):
             print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
             exit(1)
         config = ChordsConfig(configfile=options['file'])
         config.writeEnvFile()
-        
+
     # Create the configuration file from the .env file
-    if options["backwards"] == True:
+    if options["backwards"]:
         createConfigFilefromEnv(options)
 
     # Update the docker images
-    if options["update"] == True:
+    if options["update"]:
         if not os.path.isfile(options["file"]):
             print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
             exit(1)
@@ -1320,17 +1333,15 @@ if __name__ == '__main__':
         ChordsGit(proxy=options['proxy']).fetch(git_branch=config["GIT_BRANCH"], files="docker-compose.yml")
         # Pull the images.
         Docker(proxy=config['PROXY']).pull()
-      
+
     # Replace this script with one from the repository
-    if options["renew"] == True:
+    if options["renew"]:
         renew_script(proxy=options['proxy'])
-        
+
     # Create a backup file
-    if options["backup"] == True:
+    if options["backup"]:
         backup()
 
     # Load from a backup file
     if options["restore"]:
         restore(options['restore'])
-  
-
