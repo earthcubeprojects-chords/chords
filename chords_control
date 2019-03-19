@@ -773,8 +773,8 @@ class ChordsBackup(object):
 
         print "*** Saving mysql ***"
         mysql_file = open(mysql_dump_file, 'w')
-        print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
-                        _out=mysql_file).stdout)
+        print sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
+                        _out=mysql_file).stdout
 
         print "*** Saving influxdb ***"
         print docker_bash(
@@ -1194,7 +1194,7 @@ def checkFileExists(aFile, writeable=False, print_warning=True, exit_on_failure=
 
     if not os.path.isfile(aFile) or not os.access(aFile, os.R_OK if not writeable else os.W_OK):
         if print_warning:
-            print "File " + file +  " doesn't exist or isn't readable."
+            print "File " + aFile +  " doesn't exist or isn't readable."
         if exit_on_failure:
             exit(1)
         else:
@@ -1277,12 +1277,6 @@ if __name__ == '__main__':
     options = CommandArgs().get_options()
     verbose = options['verbose']
 
-    # Adjust the available releases
-    addChoicesToDOCKER_TAG()
-
-    # Adjust the available branches
-    addChoicesToGIT_BRANCH()
-
     # --- Command procesing ---
 
     # Run the CHORDS portal
@@ -1303,6 +1297,8 @@ if __name__ == '__main__':
 
     # Prompt and update the configuration
     if options["config"]:
+        addChoicesToDOCKER_TAG()
+        addChoicesToGIT_BRANCH()
         config = ChordsConfig(configfile=options['file'])
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
@@ -1336,6 +1332,8 @@ if __name__ == '__main__':
 
     # Replace this script with one from the repository
     if options["renew"]:
+        addChoicesToDOCKER_TAG()
+        addChoicesToGIT_BRANCH()
         renew_script(proxy=options['proxy'])
 
     # Create a backup file
