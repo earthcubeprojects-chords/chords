@@ -1,5 +1,5 @@
 class VarsController < ApplicationController
-  include ArchiveHelper
+  # include ArchiveHelper
 
   load_and_authorize_resource except: :get_autocomplete_items
 

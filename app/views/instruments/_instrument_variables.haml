@@ -24,10 +24,6 @@
     %td
       = link_to 'Measured Property', :measured_properties
 
-    - if Archive.first.try(:name) == "CUAHSI"
-      %td
-        General Category
-
     %td
       &nbsp;
 
@@ -54,10 +50,6 @@
 
         %td
           = variable.measured_property.try(:label)
-
-        - if Archive.first.try(:name) == "CUAHSI"
-          %td
-            = variable.general_category
 
         %td.col-sm-1
           - if can?(:edit, variable)
