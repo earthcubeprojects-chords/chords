@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user_from_token!
   before_action :authenticate_user!
-  before_action :load_archive_configuration
 
   def set_access_control_header
     headers['Access-Control-Allow-Origin'] = '*'
@@ -87,12 +86,6 @@ private
     end
 
     user
-  end
-
-  def load_archive_configuration
-    # TO DO: THIS IS A HACK AND NEED TO BE REFACTORED!!!
-    # Re-run the initializer to set the config
-    load "#{Rails.root}/config/initializers/archive.rb"
   end
 
   # Access denied redirect

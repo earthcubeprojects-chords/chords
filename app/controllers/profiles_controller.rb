@@ -59,8 +59,6 @@ class ProfilesController < ApplicationController
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
 
-    @archives = Archive.all
-    @archive_jobs = ArchiveJob.all
     @site_types = SiteType.all
     @topic_categories = TopicCategory.all
     @units = Unit.all
@@ -68,7 +66,7 @@ class ProfilesController < ApplicationController
     file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf_"  + Date.today.to_s + ".json"
 
     data_to_export = [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars,
-                      measured_properties: @measured_properties, archives: @archives, archive_jobs: @archive_jobs,
+                      measured_properties: @measured_properties,
                       site_types: @site_types, topic_categories: @topic_categories, units: @units]
 
     send_data data_to_export.to_json, filename: file_name
@@ -86,7 +84,7 @@ class ProfilesController < ApplicationController
       backup_hash = JSON.parse(file_content)
 
       # The order is important here, as there are foreign keys in place
-      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, Archive, ArchiveJob, SiteType, TopicCategory, Unit]
+      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, SiteType, TopicCategory, Unit]
 
       # delete the existing configuration
       # BUT ONLY FOR THE MODELS PRESENT IN THE CONFIG FILE
