@@ -33,6 +33,18 @@ class MakeGeoJsonFromTsPoints
   end
 
   def self.make_feature(instrument, profile)
+    chords_version = begin
+                       ENV.fetch('DOCKER_TAG')
+                     rescue Exception => e
+                       'unknown'
+                     end
+
+    chords_revision = begin
+                        ENV.fetch('CHORDS_GIT_SHA')[0..6]
+                      rescue Exception => e
+                        'unknown'
+                      end
+
     feature = {}
     feature[:type] = 'Feature'
     feature[:geometry] = {}
@@ -42,6 +54,10 @@ class MakeGeoJsonFromTsPoints
     feature[:properties] = {}
     feature[:properties][:project] = profile.project
     feature[:properties][:affiliation] = profile.affiliation
+    feature[:properties][:doi] = "https://doi.org/#{profile.doi}" if profile.doi
+    feature[:properties][:doi_citation] = "https://citation.crosscite.org/?doi=#{profile.doi}" if profile.doi
+    feature[:properties][:chords_version] = chords_version
+    feature[:properties][:chords_version_sha] = chords_revision
     feature[:properties][:site] = instrument.site.name
     feature[:properties][:site_id] = instrument.site.id
     feature[:properties][:instrument] = instrument.name
