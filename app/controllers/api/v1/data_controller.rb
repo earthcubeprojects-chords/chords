@@ -143,7 +143,7 @@ module API
           format.csv do
             varnames_by_id = {}
             Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-            ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
+            ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host, Profile.first)
             send_data ts_csv, filename: file_root + '.csv'
           end
 

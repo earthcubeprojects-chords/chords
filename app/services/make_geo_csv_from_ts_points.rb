@@ -17,17 +17,33 @@ class MakeGeoCsvFromTsPoints
   #    ...
   #    N: "Temperature
   #  }
-  def self.call(ts_points, metadata, varnames_by_id, instrument, host)
+  def self.call(ts_points, metadata, varnames_by_id, instrument, host, profile)
 
     # geocsv header
     units_of_measure = instrument.vars.map { |v| v.unit.try(:abbreviation) }.join(', ')
     field_types = instrument.vars.map { |v| 'float' }.join(', ')
+
+    chords_version = begin
+                       ENV.fetch('DOCKER_TAG')
+                     rescue Exception => e
+                       'unknown'
+                     end
+
+    chords_revision = begin
+                        ENV.fetch('CHORDS_GIT_SHA')[0..6]
+                      rescue Exception => e
+                        'unknown'
+                      end
 
     header_lines = Array.new
     header_lines.push("# dataset: GeoCSV 2.0")
     header_lines.push("# field_unit: ISO_8601, #{units_of_measure}")
     header_lines.push("# field_type: datetime, #{field_types}")
     header_lines.push("# attribution: #{host}")
+    header_lines.push("# doi: https://doi.org/#{profile.doi}") if profile.doi
+    header_lines.push("# doi_citation: https://citation.crosscite.org/?doi=#{profile.doi}") if profile.doi
+    header_lines.push("# chords_version: #{chords_version}")
+    header_lines.push("# chords_version_sha: #{chords_revision}")
     header_lines.push("# delimiter: ,")
     header_lines.push("# instrument_name: #{instrument.name}")
     header_lines.push("# sensor_id: #{instrument.sensor_id}")
