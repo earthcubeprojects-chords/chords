@@ -7,32 +7,32 @@ module DashboardHelper
   #
   # If by_inst is false,  the samples will not be broken ot by instrument.
   #
-  # A structured object is returned that is suitable for using as the 
-  # series atribute in a highchart chart. It will be an array of hashes. 
-  # Each hash contains attributes for one trace, including the data for 
+  # A structured object is returned that is suitable for using as the
+  # series atribute in a highchart chart. It will be an array of hashes.
+  # Each hash contains attributes for one trace, including the data for
   # that trace.
   #
   # The returned object can be turned into json, using .to_json.
   # This can then be translated to javascript using the javascript
-  # function JSON.parse(). 
+  # function JSON.parse().
   #
   # E.g., if you called make_highchart_series as:
   #     @series_by_minute = highcharts_series(:minute, 4.hour)
   # you can import this into the javascript with:
   # series = JSON.parse('<%= @series_by_minute.to_json.html_safe %>')
-  #  
+  #
   def self.highcharts_series(time_resolution, end_time)
- 
+
     # Get all of our instrument ids and names.
     instrument_ids = []
     instrument_names = {}
     Instrument.all.each do |i|
       if i.is_active
         instrument_ids << i.id
-        instrument_names[i.id] = i.name
+        instrument_names[i.id] = self.clean_name(i.name)
       end
     end
-    
+
     # Get the timeseries counts for the data field
     minute_s = 60
     hour_s   = minute_s*60
@@ -46,7 +46,7 @@ module DashboardHelper
       else
         counts = GetTsCountsByInterval.call(TsPoint, end_time, 60*day_s,  "1d", field, instrument_ids)
     end
-    
+
     # The return data will be an array of hashes, each one corresponding
     # to an instrument. Reconfigure these to be used as the highcharts series
     # attribute.
@@ -54,8 +54,12 @@ module DashboardHelper
     counts.each do |id, data|
       series << { name: instrument_names[id], data: data }
     end
-    
+
     return series
+  end
+
+  def self.clean_name(name)
+    name.gsub("'", '').gsub('"', '')
   end
 
 end
