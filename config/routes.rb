@@ -6,32 +6,11 @@ Rails.application.routes.draw do
 
   # send logged in user to the dashboard
   authenticated :user do
-    root 'dashboard#index', as: :authenticated_root
+    root to: 'dashboard#index', as: :authenticated_root
   end
 
-  # send guest user to the about page
-  begin
-    if ActiveRecord::Base.connection && ActiveRecord::Base.connection.table_exists?('profile')
-      profile = Profile.first
-
-      if profile && profile.secure_data_viewing
-        root 'about#index'
-      else
-        root 'dashboard#index'
-      end
-    else
-      root 'about#index'
-    end
-  rescue ActiveRecord::ActiveRecordError => e
-    Rails.logger.warn('ActiveRecord database error when setting root route')
-  rescue Mysql2::Error => e
-    Rails.logger.warn('MySQL error when setting root route')
-  end
-
-  post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
-  post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
-  post 'archive/push_cuahsi_sites' => 'archives#push_cuahsi_sites', as: :push_cuahsi_sites
-  post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
+  root to: 'dashboard#index', constraints: lambda { |request| Profile.first && !Profile.first.secure_data_viewing }
+  root to: 'about#index', as: :unauthenticated_root
 
 
   namespace :api, :defaults => {format: 'json'} do
@@ -55,20 +34,6 @@ Rails.application.routes.draw do
   resources :about, only: :index do
     collection do
       get :data_urls
-    end
-  end
-
-  resources :archives do
-    collection do
-      post :update_credentials
-      post :enable_archiving
-      post :disable_archiving
-    end
-  end
-
-  resources :archive_jobs do
-    collection do
-      post :delete_completed_jobs
     end
   end
 
