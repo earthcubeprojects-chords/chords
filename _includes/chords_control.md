@@ -1,4 +1,6 @@
 {% highlight sh %}
+pip uninstall docker-py
+pip install docker
 mkdir -p /var/lib/chords
 cd /var/lib/chords
 
