@@ -115,4 +115,15 @@ When you are done click **“Update User”**
 
 ## Data Backup
 
-When you run python chords_control --config a backup copy of your configuration files is created
+There are many ways to backup your data and configuration on your CHORDS portal. First you should note that when you run ``python chords_control --config`` a backup copy of your configuration files is created.
+You can also manually back up your portal by saving your configuration and database once everything is set up.  
+
+To save Configuration:
+1. Go to Configuration tab
+2. Click on **Export Configuration**  
+
+To save Influxdb data:
+1. Go to Configuration tab
+2. Click on either **Export Influxdb data**
+
+You can also upload previous information from an old portal to a new one by using the **Import** buttons located at the top of the configuration page.
