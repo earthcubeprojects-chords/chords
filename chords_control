@@ -399,7 +399,7 @@ class ChordsConfig(OrderedDict):
         for key, value in items.iteritems():
             # Append any remaining items that aren't in the standard list
             tmpConfig[key] = value
-        for key in config.keys():
+        for key in tmpConfig.keys():
             self[key] = tmpConfig[key]
 
     def initConfigItems(self):
