@@ -772,7 +772,7 @@ class ChordsBackup(object):
         self.mysql_sql_file = 'mysql-' + time_stamp + '.sql'
         influx_dump_dir = 'influxdb-' + time_stamp
         self.influx_tar_file = 'influxdb-' + time_stamp + '.tar'
-        self.chords_tar_file = 'chords-' + time_stamp + '.tar.gz'
+        self.chords_tar_file = 'chords-backup-' + time_stamp + '.tar.gz'
         self.manifest_file = "manifest-" + time_stamp + ".txt"
 
         print "*** Saving mysql ***"
