@@ -2,12 +2,16 @@
 layout: single
 title: Create a Portal
 permalink: /gettingstarted/create/
+toc: true
+toc_sticky: true
+toc_label: "Table of Contents"
+toc_icon: "cog"
 ---
 
 If someone else has already created a Portal for you, you can skip Portal creation. Just point
 your browser at the new Portal and perform the initial login as user: <em>admin@chordsrt.com</em>, 
 password: <em>realtimedata</em>. You will be prompted to change the password during this first login.
-You can then proceed to [Portal configuration](http://ncar.github.io/chords/config.html).
+You can then proceed to [Portal configuration](http://ncar.github.io/chords/config.html).<!--This will need updated to the new website -->
 
 The Portal runs as a standalone web server on Amazon Web Services (AWS). 
 The interface to AWS can seem a bit overwhelming (currently offering 52
