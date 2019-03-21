@@ -892,7 +892,6 @@ class ChordsRestore(object):
 
         If there are errors, ChordsRestoreError wil be thrown.
         """
-
         self.dump_file = dump_file
 
         self.config_files_check(files=["./.env", "chords.yml", "docker-compose.yml"])
@@ -909,6 +908,9 @@ class ChordsRestore(object):
 
         print "*** Dump file unpacking ***"
         self.backup_unpack()
+
+        print "*** Environment restore ***"
+        self.env_restore()
 
         print "*** Loading mysql ***"
         self.load_mysql()
@@ -964,12 +966,6 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
 It appears that CHORDS is not running correctly.
 A CHORDS restore cannot be performed.""")
 
-    def cleanup(self):
-        """ Cleanup temporary files. """
-
-        print "Removing the temporary directory " + self.tmp_dir
-        print sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout
-
     def docker_container_status(self):
         """ Print the status of all containers. """
 
@@ -978,16 +974,47 @@ A CHORDS restore cannot be performed.""")
             print name + ": " + container.status
         print ""
 
-    def load_mysql(self, container="chords_mysql", database_name="chords_demo_production"):
+    def env_restore(self):
+        """
+        Restore the local environment and configuration files, if desired.
+
+        The user may, or may not, wish to restore .env and chords.yml.
+        Prompt and restore if desired.
+        """
+
+        config_files = (".env", "chords.yml")
+        print "Since we are in a CHORDS home directory, you have already configured"
+        print "CHORDS with items such as system passwords, email access and software versions."
+        print "However, we can restore the CHORDS configuration files %s" % (str(config_files))
+        print "from %s. Backup copies of your current files" % (self.dump_file)
+        print "will be made, in case you need to reverse this action."
+        print 'Would you like to restore these files [Y/y]? '
+        l = sys.stdin.readline().strip()
+        if l not in ['Y', 'y']:
+            print "%s WERE NOT restored." % (str(config_files))
+            return
+        for f in config_files:
+            createBackupFile(f)
+            src_file = os.path.abspath(self.tmp_dir + "/" + f)
+            dst_file = os.path.abspath("./" + f)
+            print "Restoring %s to %s" % (src_file, dst_file)
+            sh.cp(src_file, dst_file)
+        print " "
+
+    def load_mysql(self, database_name="chords_demo_production"):
         """ Load the mysql database into the database in the chords_ysql container. """
 
+        container="chords_mysql"
         print "Container:%s, database:%s" % (container, database_name)
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
-        print(
-            sh.docker(
-                sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
-            ).stdout
-        )
+        try:
+            print(
+                sh.docker(
+                    sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
+                ).stdout
+            )
+        except sh.ErrorReturnCode_1 as error:
+            raise ChordsRestoreError(error)
 
     def load_influxdb(self):
         """ Load the influxdb database into the database in the chords_influxdb container. """
@@ -1058,6 +1085,13 @@ A CHORDS restore cannot be performed.""")
         if err_msg:
             raise ChordsRestoreError(err_msg)
 
+    def cleanup(self):
+        """ Cleanup temporary files. """
+
+        print "Removing the temporary directory " + self.tmp_dir
+        print sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout
+
+
 #####################################################################
 class ChordsDockerError(Exception):
     """ Raise ChordsDockerError("error msg"). """
@@ -1109,12 +1143,12 @@ def restore(backup_file):
     """ Load a portal from a backup file. """
 
     try:
-        load_chords = ChordsRestore(backup_file)
+        ChordsRestore(backup_file)
     except ChordsRestoreError as restore_exception:
         print "Error processing %s" % (backup_file)
         print restore_exception
         exit(1)
-    
+
     print """
 CHORDS databases have been restored.
 
@@ -1123,6 +1157,7 @@ python chords_control --stop
 python chords_control --run
 """
 
+#####################################################################
 def docker_check():
     """
     Verify that a CHORDS instance is running correctly.
