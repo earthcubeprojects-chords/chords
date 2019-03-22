@@ -36,9 +36,6 @@
           - if can? :manage, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
 
-          - if can? :manage, Archive
-            %li= link_to 'Archive', '/archives'
-
           - if can? :manage, Profile
             %li= link_to 'Configure', profiles_path
 

@@ -10,34 +10,34 @@
 
 
 :javascript
-  var live_chart; 
+  var live_chart;
   var last_time = 0;
   var pause = false;
-  
-  function requestData() 
+
+  function requestData()
   {
-  
+
     // If the manual datetime input fields are meing modified (in focus) then don't don't redraw the chart
     if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
       pause = true;
     } else {
       pause = false;
     }
-    
+
     // Retrieve the latest points to plot and plot them
     $.getJSON(
     '/instruments/#{@instrument.id}/live?var=#{@var_to_plot.shortname}&after='+last_time,
-    function(live_data) 
+    function(live_data)
       {
         var points         = live_data["points"]
         var display_points = live_data["display_points"]
         var refresh_msecs  = live_data["refresh_msecs"];
-        
+
         // Trim the graph if the display width is decreased
         while (live_chart.series[0].data.length > display_points) {
           live_chart.series[0].removePoint(0, false);
         }
-  
+
         // add the new points
         var i;
         for (i = 0; i < points.length; i++) {
@@ -47,27 +47,27 @@
             last_time = points[i][0];
           }
         }
-  
+
         // Don't redraw the chart if live updating is paused
         if (pause == false) {
-          live_chart.redraw();        
+          live_chart.redraw();
         }
-        
+
         // retrieve new data points after a pause
         setTimeout(requestData, refresh_msecs);
       }
     );
   }
-  
+
   $(document).ready(function () {
 
     // Adjust the global timezone offset
     Highcharts.setOptions({
-      global: { 
+      global: {
         timezoneOffset: #{@tz_offset_mins}
       },
     });
-  
+
     live_chart = new Highcharts.stockChart(
     {
       chart: {
@@ -97,29 +97,29 @@
                 parseInt(minutes, 10),
                 parseInt(seconds, 10)
             );
-            
+
             // Compensate for the timezone offset
             // This is NOT taken in to account by highcharts and is likely a bug in their code
             tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
             ms = ms + tz_offset_ms;
-            
+
             return(ms);
           },
           allButtonsEnabled: false
-      },      
-      credits: { enabled: false, }, 
+      },
+      credits: { enabled: false, },
       title: { text: #{title} },
-      xAxis: {             
+      xAxis: {
         title: {
           text: '#{@tz_name.html_safe}'
         },
-        type: 'datetime', 
-        tickPixelInterval: 150 
+        type: 'datetime',
+        tickPixelInterval: 150
       },
-      yAxis: { 
+      yAxis: {
         #{min_y_axis_json}
         #{max_y_axis_json}
-        title: { text: '#{@var_to_plot.name} (#{@var_to_plot.units})' },
+        title: { text: '#{@var_to_plot.name} (#{@var_to_plot.unit.try(:abbreviation)})' },
         opposite: false,
         plotLines: [{
           value: 0,
@@ -138,9 +138,9 @@
       exporting: { enabled: false },
       series: #{series},
     });
-      
+
     // Make first data request
     requestData();
-    
+
     }
   );

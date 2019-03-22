@@ -1,7 +1,7 @@
 class Site < ApplicationRecord
   require 'task_helpers/cuahsi_helper'
   include CuahsiHelper
-  include ArchiveHelper
+  # include ArchiveHelper
 
   has_many :instruments, :dependent => :destroy
   belongs_to :site_type

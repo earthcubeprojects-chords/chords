@@ -43,7 +43,11 @@ class Profile < ApplicationRecord
     ',
     logo: nil,
     secure_administration: true,
-    data_entry_key: 'key'
+    secure_data_download: true,
+    secure_data_viewing: false,
+    secure_data_entry: true,
+    data_entry_key: 'key',
+    doi: '10.5065/d6v1236q'
 
     }])
   end

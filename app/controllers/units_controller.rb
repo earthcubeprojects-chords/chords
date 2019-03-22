@@ -3,8 +3,8 @@ class UnitsController < ApplicationController
 
   def index
     @data = {}
-    @sources = @units.where('source IS NOT NULL').map{|unit| unit.source}.uniq.sort_by{|source| source.downcase}
-    @unit_types = @units.where('unit_type IS NOT NULL').map{|unit| unit.unit_type}.uniq.sort_by{|type| type.downcase}
+    @sources = @units.where('source IS NOT NULL').map(&:source).uniq.sort_by{|source| source.downcase}
+    @unit_types = @units.where('unit_type IS NOT NULL').map(&:unit_type).uniq.sort_by{|type| type.downcase}
 
     @sources.each do |source|
       @data[source] = {}
