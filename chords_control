@@ -1170,13 +1170,10 @@ def docker_check():
     an error.
     """
 
-    docker_containers = {}
-    docker_containers = \
-        {c.name: c for c in docker.from_env().containers.list(all=True)}
-
+    names = [c['Names'][0].replace("/","") for c in docker.from_env().containers()]
     err_msg = ""
     for container_name in ["chords_app", "chords_influxdb", "chords_mysql"]:
-        if container_name not in docker_containers.keys():
+        if container_name not in names:
             err_msg += "The %s docker container is not present.\n" % (container_name)
 
     print err_msg
@@ -1390,8 +1387,8 @@ if __name__ == '__main__':
 
     # Show the current CHORDS status
     if options["status"]:
-        for c in Docker(proxy=options['proxy']).ps():
-            print c['name'] + ': ' + str(c)
+        for container in Docker(proxy=options['proxy']).ps():
+            print container['name'] + ': ' + str(container)
 
     # Prompt and update the configuration
     if options["config"]:
