@@ -439,6 +439,8 @@ Resources:
         # Set up CHORDS
         chords_setup:
           commands:
+            00_python_modules:
+              comand: "pip install docker-py"
             01_var_lib_chords:
               command: "mkdir -p /var/lib/chords"
             02_get_chords_control:
