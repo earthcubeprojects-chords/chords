@@ -986,8 +986,8 @@ A CHORDS restore cannot be performed.""")
         print "Since we are in a CHORDS home directory, you have already configured"
         print "CHORDS with items such as system passwords, email access and software versions."
         print "However, we can restore the CHORDS configuration files %s" % (str(config_files))
-        print "from %s. Backup copies of your current files" % (self.dump_file)
-        print "will be made, in case you need to reverse this action."
+        print "from %s." % (self.dump_file)
+        print "Backup copies of these files will be made, in case you need to reverse this action."
         print 'Would you like to restore these files [Y/y]? '
         l = sys.stdin.readline().strip()
         if l not in ['Y', 'y']:
@@ -1128,6 +1128,14 @@ def docker_cp(src, dest):
     """
 
     docker_sh('cp', src, dest)
+
+#####################################################################
+def status():
+    """
+    Show the docker status for the running containers.
+    """
+    for container in Docker(proxy=options['proxy']).ps():
+        print container['name'] + ': ' + str(container)
 
 #####################################################################
 def backup():
@@ -1387,8 +1395,7 @@ if __name__ == '__main__':
 
     # Show the current CHORDS status
     if options["status"]:
-        for container in Docker(proxy=options['proxy']).ps():
-            print container['name'] + ': ' + str(container)
+        status()
 
     # Prompt and update the configuration
     if options["config"]:
