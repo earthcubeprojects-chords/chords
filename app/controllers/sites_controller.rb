@@ -3,7 +3,6 @@ class SitesController < ApplicationController
 
   def index
     @instruments = Instrument.accessible_by(current_ability)
-    @google_maps_key = Profile.first.google_maps_key
   end
 
   def show

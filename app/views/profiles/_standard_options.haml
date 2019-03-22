@@ -69,13 +69,11 @@
         Reset to default image: #{check_box_tag :reset_logo}
 
   .line
+  .line
     .title
-      Google Maps
-      %br/
-      %strong JavaScript API Key
+      Max Download Points
     .field
-      #{f.text_field('google_maps_key', size: 50, class: 'form-control')}
-
+      #{f.number_field('max_download_points', in: 1000..1e6, step: 1000)}
 
   .line
   .line

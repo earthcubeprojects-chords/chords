@@ -8,6 +8,7 @@
         %th Short Name
         %th Instrument
         %th Units
+        %th Abbreviation
         %th Measured Property
 
       - @vars.each do |v|
@@ -16,6 +17,7 @@
           %td= v.shortname
           %td= link_to v.instrument, v.instrument
           %td= v.unit.try(:name)
+          %td= v.unit.try(:abbreviation)
           %td= v.measured_property.try(:label)
           %td.col-sm-1= link_to '', edit_var_path(v, return: 'edit'), class: 'glyphicon glyphicon-pencil', style: 'text-decoration: none; color: black;', title: 'Edit'
           %td.col-sm-1= link_to '', v, method: :delete, data: { confirm: 'Are you sure?' }, class: 'glyphicon glyphicon-trash', style: 'text-decoration: none; color: black;', title: 'Delete'

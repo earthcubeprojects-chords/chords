@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user_from_token!
   before_action :authenticate_user!
-  before_action :load_archive_configuration
 
   def set_access_control_header
     headers['Access-Control-Allow-Origin'] = '*'
@@ -89,19 +88,13 @@ private
     user
   end
 
-  def load_archive_configuration
-    # TO DO: THIS IS A HACK AND NEED TO BE REFACTORED!!!
-    # Re-run the initializer to set the config
-    load "#{Rails.root}/config/initializers/archive.rb"
-  end
-
   # Access denied redirect
   rescue_from "CanCan::AccessDenied" do |exception|
     respond_to do |format|
       format.html { redirect_to '/about', alert: "You don't have permission to access this page. Do you need to sign in?" }
       format.sensorml { head :forbidden, content_type: 'text/sensorml' }
-      format.json { head :forbidden, content_type: 'application/json' }
-      format.geojson { head :forbidden, content_type: 'application/json' }
+      format.json { render json: { errors: ['Access Denied, user authentication required.'] }, status: :forbidden }
+      format.geojson { render json: { errors: ['Access Denied, user authentication required.'] }, status: :forbidden }
       format.js { head :forbidden, content_type: 'text/js' }
       format.csv { head :forbidden, content_type: 'text/csv' }
       format.xml { head :forbidden, content_type: 'text/xml' }

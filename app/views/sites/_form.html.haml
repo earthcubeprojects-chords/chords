@@ -36,12 +36,6 @@
       = f.label :elevation
     .field
       = f.text_field :elevation, class: 'form-control'
-  - if Archive.first.name == "CUAHSI"
-    .line
-      .title
-        = f.label :cuahsi_site_code
-      .field
-        = f.text_field :cuahsi_site_code, class: 'form-control'
   .actions
     = f.submit class: 'btn btn-md btn-primary'
 

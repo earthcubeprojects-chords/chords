@@ -9,6 +9,8 @@ class Var < ApplicationRecord
 
   before_destroy :delete_ts_points
 
+  validate :check_plot_range_valid
+
   def random_value(previous_value = nil)
     # the maximum percent a previous value can change
     maximum_percent_change = 0.05
@@ -133,5 +135,16 @@ class Var < ApplicationRecord
       "NoDataValue" => -9999
       }
     return data
+  end
+
+  private
+
+  def check_plot_range_valid
+    if minimum_plot_value && maximum_plot_value
+      if minimum_plot_value > maximum_plot_value
+        errors.add(:minimum_plot_value, 'must be less than maximum_plot_value')
+        errors.add(:maximum_plot_value, 'must be greater than minimum_plot_value')
+      end
+    end
   end
 end
