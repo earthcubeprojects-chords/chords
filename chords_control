@@ -778,7 +778,8 @@ class ChordsBackup(object):
 
         print "** Saving grafana ***"
         print(docker_bash(
-            "chords_grafana", "cd / && tar -cvf /tmp/%s etc/grafana/grafana.ini var/lib/grafana/"%(self.grafana_tar_file)))
+            "chords_grafana", "cd / && tar -cvf /tmp/%s etc/grafana/grafana.ini var/lib/grafana/ /opt/grafana-plugins" %
+            (self.grafana_tar_file)))
         docker_cp('chords_grafana:%s' % ("/tmp/"+self.grafana_tar_file), '.')
         print(docker_bash(
             "chords_grafana", "cd /tmp && rm %s" % (self.grafana_tar_file)))
@@ -919,6 +920,9 @@ class ChordsRestore(object):
         print "*** Loading influxdb ***"
         self.load_influxdb()
 
+        print "*** Loading grafana ***"
+        self.load_grafana()
+
         print "*** Cleanup ***"
         self.cleanup()
 
@@ -1043,6 +1047,19 @@ A CHORDS restore cannot be performed.""")
                           "influx -username admin -password %s -execute 'show databases'"
                           % (self.current_admin_pw))
 
+    def load_grafana(self):
+        """ Load the grafana files into the grafana container. """
+
+        grafana_tar_file_base = os.path.basename(self.file_paths["grafana"])
+
+        print "Loading from " + self.file_paths["grafana"]
+        docker_cp(self.file_paths["grafana"], "chords_grafana:/tmp/")
+        docker_bash("chords_grafana",
+                    "cd / && tar -xvpf /tmp/%s" % (grafana_tar_file_base), user='0')
+        docker_bash("chords_grafana",
+                    "rm /tmp/%s" % (grafana_tar_file_base), user='0')
+        print " "
+
     def backup_unpack(self):
         """ Unpack the ChordsBackup created backup file to a temporary directoy. """
 
@@ -1060,13 +1077,17 @@ A CHORDS restore cannot be performed.""")
         """
         Determine the dump file names for each database.
 
+        The dictionary self.file_paths is initialized with the file name
+        for each dataset type.
+
         Return an empty string if valid, or an error message if not.
         """
 
         err_msg = ""
         FileSpec = namedtuple('FileSpec', ['prefix', 'ext'])
         file_types = [FileSpec('mysql', 'sql'),
-                      FileSpec('influxdb', 'tar')]
+                      FileSpec('influxdb', 'tar'),
+                      FileSpec('grafana', 'tar')]
         for file_type in file_types:
             files = glob.glob(
                 self.tmp_dir + "/" + file_type.prefix + "*." + file_type.ext
@@ -1086,6 +1107,8 @@ A CHORDS restore cannot be performed.""")
         if err_msg:
             raise ChordsRestoreError(err_msg)
 
+        print self.file_paths
+
     def cleanup(self):
         """ Cleanup temporary files. """
 
@@ -1098,14 +1121,21 @@ class ChordsDockerError(Exception):
     """ Raise ChordsDockerError("error msg"). """
     pass
 
-def docker_bash(container, script):
+def docker_bash(container, script, user=None):
     """
     Run shell comands in a docker bash instance.
 
     This allows multiple commands to be &&'ed together.
+
+    The user parameter must be a string, but it can be a uid such as '0'
     """
 
-    return docker_sh('exec', '-t', container, '/bin/bash', '-c', script)
+    if not user:
+        retval = docker_sh('exec', '-t', container, '/bin/bash', '-c', script)
+    else:
+        retval = docker_sh('exec', '-t',  '-u', user, container, '/bin/bash', '-c', script)
+
+    return retval
 
 def docker_sh(*args):
     """ Run a docker command with the args, printing stdout and stderr. """
