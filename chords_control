@@ -758,8 +758,9 @@ class ChordsBackup(object):
         self.mysql_sql_file = 'mysql-' + time_stamp + '.sql'
         influx_dump_dir = 'influxdb-' + time_stamp
         self.influx_tar_file = 'influxdb-' + time_stamp + '.tar'
-        self.chords_tar_file = 'chords-backup-' + time_stamp + '.tar.gz'
+        self.grafana_tar_file = 'grafana-' + time_stamp + '.tar'
         self.manifest_file = "manifest-" + time_stamp + ".txt"
+        self.chords_tar_file = 'chords-backup-' + time_stamp + '.tar.gz'
 
         print "*** Saving mysql ***"
         mysql_file = open(self.mysql_sql_file, 'w')
@@ -775,13 +776,25 @@ class ChordsBackup(object):
         print(docker_bash(
             "chords_influxdb", "cd /tmp && rm -rf %s %s" % (self.influx_tar_file, influx_dump_dir)))
 
+        print "** Saving grafana ***"
+        print(docker_bash(
+            "chords_grafana", "cd / && tar -cvf /tmp/%s etc/grafana/grafana.ini var/lib/grafana/"%(self.grafana_tar_file)))
+        docker_cp('chords_grafana:%s' % ("/tmp/"+self.grafana_tar_file), '.')
+        print(docker_bash(
+            "chords_grafana", "cd /tmp && rm %s" % (self.grafana_tar_file)))
+
         print "*** Manifest ***:"
         self.manifest()
         print "%s has been created." % (self.manifest_file)
         print ""
 
         print "*** Packaging files ***"
-        tar_params = ['-cvf', self.chords_tar_file, ".env", "chords.yml", self.manifest_file, self.mysql_sql_file, self.influx_tar_file]
+        tar_params = [
+            '-cvf', self.chords_tar_file, ".env", "chords.yml",
+            self.manifest_file,
+            self.mysql_sql_file,
+            self.influx_tar_file,
+            self.grafana_tar_file]
         print sh.tar(tar_params, _err_to_out=True).stdout
         print sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file)
 
@@ -839,6 +852,7 @@ A CHORDS backup cannot be performed.""")
         manifest_file.write("# Docker environment file: .env\n")
         manifest_file.write("# MYQSL database dump file: %s\n" % (self.mysql_sql_file))
         manifest_file.write("# InfluxDB database dump file: %s\n" % (self.influx_tar_file))
+        manifest_file.write("# Grafana configuration file: %s\n" % (self.grafana_tar_file))
         manifest_file.write("# Environment:\n")
         env_vars = docker_bash("chords_app", "grep export chords_env.sh | sed -e 's/export //'")
         manifest_file.write(env_vars)
@@ -1167,7 +1181,7 @@ def docker_check():
 
     names = [c['name'].split("/")[-1] for c in Docker(proxy=options['proxy']).ps()]
     err_msg = ""
-    for container_name in ["chords_app", "chords_influxdb", "chords_mysql"]:
+    for container_name in ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]:
         if container_name not in names:
             err_msg += "The %s docker container is not present.\n" % (container_name)
 
