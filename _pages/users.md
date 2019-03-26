@@ -55,8 +55,8 @@ Measurement Creator:
 ## Storing Measurements
 
 ### Sending a URL from UNIX
-<!-- To post data to your chords portal
-``curl --data "param1=value1&param2=value2" http://hostname/resource`` -->
+To post data to your chords portal
+``curl --data "param1=value1&param2=value2" http://hostname/resource``
 
 
 ### Arduino
@@ -99,6 +99,7 @@ For this next step make sure you have the following from your CHORDS portal
 - Log into your [Particle Cloud Console](https://login.particle.io/login?redirect=https://console.particle.io/devices)
 - On the left hand side select **“Integrations”** then **“New Integration”**
 - Click **"Webhook"**
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Webhook.png">
 - For **event name** type in the name of the Particle Publish event Title (eg. if your code has Particle.publish(“Full Data”, datum); then the event name would be “Data”)
 - For the **URL** paste in the URL from “DataURLs” found in CHORDS up to and including the “?”
 - For **Request Type** select **"GET"**
@@ -107,8 +108,11 @@ For this next step make sure you have the following from your CHORDS portal
 - Under **"Form Fields"** select **"Custom"**
 - In the first two fields type **“instrument_id”** and the number of your instrument id from CHORDS
 - Click **"Add Row"**
-- In the rows first field type the **“short_name”** from your CHORDS and in the second field enter the **“JSON Key Name”** within a set of two braces (eg. {{short_name}} )
-
+- In the rows first field type the **“short_name”** from your CHORDS and in the second field enter the **“JSON Key Name”** within a set of two braces (eg. {{short_name}} )  
+Chords Short Name
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ChordsVariables.png">
+JSON Key Name
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JSONKeyName.png">
 <font color="red">Note:</font>short_name from CHORDS and the JSON key name should MATCH. 
 - Continue to add rows for all of your variables
 - Click **“Create Webhook”**

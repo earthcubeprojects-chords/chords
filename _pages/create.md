@@ -27,23 +27,21 @@ Log onto your AWS account to begin.
 
 * First click on <em>“Services”</em> and then click on <em>“Cloud Formation”</em> 
 
-<img class="img-responsive" src="images/Portal_Step1_pt1.PNG" alt="Services">
-
-<img class="img-responsive" src="images/Portal_Step1_pt2.PNG" alt="Cloud Formation">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step1.png">
       
 ## 2. Start stack creation and Specify template 
 
-<img class="img-responsive" src="images/Portal_Step2_pt1.PNG" alt="Create Stack">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step2.png">
 
 * Click **Create new stack**
 
 * Click on **Specify Amazon S3 template URL** and Copy and Paste the following link in the box:
-````
+
+``
 https://s3-us-west-2.amazonaws.com/chords-template/chords_cf_template.yml
-````
+``
 
-<img class="img-responsive" src="images/Portal_Step2_pt2.PNG" alt="Cloud Formation Template">
-
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step3.png">
 * Click **Next**
 
 
@@ -56,20 +54,23 @@ Then select an EC2 KeyPair that you created for *KeyName*. This will allow you t
 For demonstrations and simple, low-bandwidth streaming feeds, select a _t2.micro_ instance type which are free of charge for the first
 year. Otherwise, use the default.
 
-<img class="img-responsive" src="images/Portal_Step3.PNG" alt="Specify">
+<!--<img class="img-responsive" src="images/Portal_Step3.PNG" alt="Specify"> --> 
+<!--Get Picture of portal configuration information-->
+
 
 * Hit **Next**
 
 ## 4. Options (if needed)
 * Hit **Next**.
 
-<img class="img-responsive" src="images/Portal_Step4.PNG" alt="Options">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step5.png"><!-- Add step talking about terminal protection -->
 
 ## 5. Review
 
 * Verify that everything looks good and then click **Create**
 
-<img class="img-responsive" src="images/Portal_Step5.PNG" alt="Review">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step6.png">
 
 ## 6. Wait for the portal to be created
 * After the creation has started, you will be taken 

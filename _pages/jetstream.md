@@ -5,8 +5,10 @@ permalink: /gettingstarted/jetstream/
 ---
 If you are working in academia then you are eligible to use a jetstream server.
 You will need to submit a request for an allocation on the system.
-If you are NSF funded you can create a jetstream instance for free and use the larger sizes without worry. Allocations are available to faculty members and researchers, including postdoctoral researchers, at a U.S.-based institution. Eligible institutions include federal research labs or commercial organizations; however, special rules may apply if your institution is not a university or a two- or four-year college. Investigators with support from any funding source, not just NSF, are encouraged to apply. You can still set up a Trial Access account but you be able to use an account with the same resources as the amazon t1 server. 
-For more information please visit [XSEDE](https://portal.xsede.org/allocations/startup#eligibility) to check their eligibility requirements.  
+
+If you are NSF funded you can create a jetstream instance for free and use the larger sizes without worry. Allocations are available to faculty members and researchers, including postdoctoral researchers, at a U.S.-based institution. Eligible institutions include federal research labs or commercial organizations; however, special rules may apply if your institution is not a university or a two- or four-year college. Investigators with support from any funding source, not just NSF, are encouraged to apply. You can still set up a Trial Access account but you won’t be able to use an account with the same resources as the amazon t1 server. 
+For more information please visit
+ [XSEDE](https://portal.xsede.org/allocations/startup#eligibility) to check their eligibility requirements.  
 
 The trial resources include  
 
