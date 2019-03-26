@@ -17,38 +17,47 @@ The trial resources include
 
 ## How to enroll in the Jetstream Trial Allocation:  
 
-1. Go to the XSEDE portal https://portal.xsede.org  
-2. Click "Create Account" on the left side of your screen.   
-<!-- [insert picture: picture showing where create account is] -->
+1. Go to the [XSEDE portal](https://portal.xsede.org) 
+
+2. Click "Create Account" on the left side of your screen.
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamCreateAccount.png">
+
 3. Fill out the form and click Submit. 
-<!-- [insert picture: show pic form & submit button] -->
+
 4. Upon receipt of the email notification click the link in the email to verify your account and set your username and password. 
-<!-- [insert picture: picture of entering username and password] -->
-5. Following account verification, if not already logged in, go to https://portal.xsede.org/, click "Sign In" and sign in with the username and password set in the verification step.
+
+5. Following account verification, if not already logged in, go to [https://portal.xsede.org/](https://portal.xsede.org/), click "Sign In" and sign in with the username and password set in the verification step.
 You will be asked to read and accept the User Responsibilities form. This form outlines acceptable use to protect shared resources and intellectual property.
+
 6. Click on "MyXSEDE" tab in the XSEDE User Portal
-<!-- [insert picture: show where MyXSEDE tab is on portal] -->
-7. In the lower left bar, Click “Enroll”  
-<!-- [insert picture: show where to click “Enroll”] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamMyXsede.png">
+
+7. On the lower left side of your screen there is an area called **Trial Allocations**. Under it Click “Enroll”
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamEnroll.png">  
 This will take you to a page describing Trial Access and allowing you to Enroll or Unenroll in a Trial account.
+
 8. Click the “Enroll Trial Access Button”  
-<!-- [insert picture: show enroll trial access button. Before and after clicking] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamTrialAccess.png">  
+
 A Successful Enrollment will show:
-<!-- [insert picture: successful enrollment] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamSuccess.png">
 Wait approximately 4 hours for your allocation to propagate through the authentication system.
-9. Once you’ve set up your Jetstream account go to https://use.jetstream-cloud.org/application/images
+
+9. Once you’ve set up your account go to [Jetstream](https://use.jetstream-cloud.org/application/images)
+
 10. Select XSEDE and hit continue 
-<!-- [insert picture: jetstream login and then selecting XSEDE] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamOrganization.png">
+
 11. Sign in with your XSEDE credentials
-<!-- [insert picture: show credentials page] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamCredentials.png">
 You are now in your jetstream account!
 
 ## Setting up Jetstream Image
 Before you can get started with CHORDS you will need to get an Image running.
 1. Click launch Image
-<!-- [insert picture: show launch image button] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamImage.png">
 2. Since you’re set up with a trial account you can use Matlab Minimal and it will cover your temporary needs.
-<!-- [insert picture:show matlab minimal image as example] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamMatlab.png">
 3. Click Launch and a window will pop up
 4. Enter your:
   - project name
@@ -56,20 +65,19 @@ Before you can get started with CHORDS you will need to get an Image running.
   - Create new project
   - Select Indiana or TACC for your provider
   - Select your size (for trial accounts you will use a small or tiny size)
-	<!-- [insert picture: Show set up window] -->
 5. Go to your projects tab
 6. Click on your project
-<!-- [insert picture: show picture of projects tab and project] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamProject.png">
 7. Click on the image you selected for your project
 8. On the right side of your screen under “Links” click Open Web Shell 
-<!-- [insert picture: show specifically which shell since there are multiple options] -->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamShell.png">
 9. Follow CHORDS Get Started instructions.
 10. Once you’ve finished the instructions go back to your Jetstream page.
 11. Copy the IP address 
-<!-- [insert picture: show where the IP address is] -->
-12. Paste it in your search bar and your CHORDS instance will pop up.
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamIP.png">
+12. Paste it in your browser and your CHORDS instance will pop up.
 
-You now have a chords portal that can be accessed from any computer! Congratulations! Use your newfound power wisely.
+You now have a CHORDS portal that can be accessed from any computer! Congratulations! Use your newfound power wisely.
 
 
 

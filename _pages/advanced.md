@@ -25,10 +25,10 @@ There are several main ways to use chords_control
 - Updates your portal's software
 
 ``python chords_control --run``
-- Starts your chords portal
+- Starts your CHORDS portal
 
 ``python chords_control --stop``
-- Stops your chords portal
+- Stops your CHORDS portal
 
 ``python chords_control -t``
 - Lets you check your portal's current status
