@@ -169,7 +169,7 @@ Extra credit: once you have been able to make a simple Grafana graph, see this [
     <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_110.png">
     Use the Display tab to change the appearance:
     <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_100.png">
-    The variable identifires are obtained from the CHORDS Instruments page: 
+    The variable identifires are obtained from the CHORDS Instruments page: <!--Need to grab a picture from chords for this-->
     <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_120.png">
     Use the Metrics tab to configure the database access. Close when you see plotted data:
     <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_095.png">

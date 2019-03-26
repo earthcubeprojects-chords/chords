@@ -19,9 +19,10 @@ title                    : "CHORDS Portal"
 title_separator          : "-"
 name                     : "NCAR"
 description              : "Cloud Hosted Online Realtime Data"
-url                      : https://mademoiselleprogrammer.github.io #"http://ncar.github.io" # the base hostname & protocol for your site e.g. "https://mmistakes.github.io" 
+url                      : https://mademoiselleprogrammer.github.io #If you change sites or github repos change this to match. It connects all across the website
 baseurl                  : /chords # the subpath of your site, e.g. "/chords"
-#url                      : "http://mademoiselleprogrammer.github.io/chords-website"
+downloadurl              : https://raw.githubusercontent.com #starting piece of the link for users to curl CHORDS
+downloadbaseurl          : /NCAR/chords/master/chords_control #setting the path for users to download chords_control in the event of a repo change adjust this accordingly as it connects across the website.
 repository               : # GitHub username/repo-name e.g. "NCAR/chords"
 teaser                   : #"assets/images/banner_02.jpg"
 logo                     : "/assets/images/chords_logo_text.png"
