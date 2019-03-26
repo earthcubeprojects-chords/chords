@@ -140,27 +140,40 @@ Extra credit: once you have been able to make a simple Grafana graph, see this [
 
 1. **Open Grafana**
   The visualization link will open a new browser window which provides access to the Grafana time-series visualization system.
-
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_011.png">
 2. **Login**
   - Sign in to Grafana
-
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_010.png">
 3. **Creating a datasource**
   - Add a data source:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_030.png">
   - Configure the data source:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_040.png">
   - When configured correctly, success will be indicated:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_041.png">
   - If something is not configured correctly, you may see a message: **"Unknown error":**
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_042.png">
     - Make changes, and mash **Save & Test** again.
 
 4. **Add a dashboard**
   - Select New dashboard:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_050.png">
   - A new dashboard is created, with an empty panel. Add a graph by pressing Graph:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_051.png">
   - Click in the bar at the top of the graph, to pop up a menu:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_060.png">
   - And select Edit:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_070.png">
   - Configure the panel: 
     Use the General tab to set a title:
+    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_110.png">
     Use the Display tab to change the appearance:
-    The variable identifires are obtained from the CHORDS Instruments page:
+    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_100.png">
+    The variable identifires are obtained from the CHORDS Instruments page: <!--Need to grab a picture from chords for this-->
+    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_120.png">
     Use the Metrics tab to configure the database access. Close when you see plotted data:
+    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_095.png">
 
 5. **Change the admin password**
   - Finally, be sure to change (and remember) the admin password for grafana. This is accessed through Admin->Profile:
+  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_020.png">
