@@ -30,6 +30,7 @@ You will find buttons that will allow you to
 - Export/Import previous InfluxDB Data
 - Configure JSON-LD Options
 - Configure InfluxDB Tags
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Configure.png">
 
 2. Fill out the following under Standard Options: 
 Project name
@@ -56,6 +57,14 @@ Note: Do NOT make this blank
 
 Select Security options: Default security options enable others to view data. If you don’t want to let guests or others view your data check “Restrict view of data”.
 Do NOT modify the Measurement Security Key
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureFields.png">
+
+3. Select Metadata Ontology Vocabularies.
+4. Enter CUAHSI Data Services, if desired.
+5. Fill out contact information.
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureContact.png">
+6. Press Save.
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureSave.png">
 
 ### Sites
 
@@ -63,13 +72,21 @@ Create a new site by clicking on Sites in the middle left part of the menu.
 
 Click the **Add a New Site** button
 
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Site.png">
+
 Fill out the empty fields and click **Create Site Instruments**
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/SiteFields.png">
 
 Click on the **Instruments** button in the middle left part of the screen
 
 Click **New Instrument**
 
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Instruments.png">
+
 Fill out the blank spaces and click **Create Instrument**
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/InstrumentFields.png">
 
 Definitions
 Name: Name you gave the instrument
@@ -90,9 +107,15 @@ Sample Rate: How often you are sampling data, in seconds (fastest is 1 second).
 
 ### Variables
 
-Click on **Add New Variable**
+Click on your Instrument
+
+Scroll down and click on **Add New Variable**
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Variables.png">
 
 Change the *short name*, *name*, *units*, *the minimum and maximum for plotting*, *the measured property*, *and general measurement category* to match what your Instrument will be measuring.
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/VariableFields.png">
 
 ### Metadata
 There are two key places you will want to make sure to include a little extra metadata (description of data). 
@@ -102,8 +125,17 @@ First, your measured properties and units are part of the metadata, but don’t 
 Second, under your configuration page there is a section for entering JSON-LD metadata. Metadata from your entries create a JSON-LD record that is encapsulated within your Portal instance. These records allow Google (through its [Data Set Search tool](https://toolbox.google.com/datasetsearch)) and other harvesters to discover the existence of your server. This increases the visibility of your data on the web.
 
 ### Email 
-1. To change an email address simply click on **“Users”** and then click **“Edit”**
+1. To change an email address simply click on **“Users”** and then click **“Edit”**  
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Email.png">  
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUser.png">
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailEdit.png">
+
 2. Type email into the Email Box and click **“Update User”**
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUpdate.png">
+
 
 ## User Management
 To change a User’s information or permissions simply click on **“Users”** and then click **“Edit”**.
@@ -111,12 +143,17 @@ To change a User’s information or permissions simply click on **“Users”** 
 <font color="red">Note:</font> if you’re going to update a user make SURE to uncheck the “guest” box before saving your changes. If you don’t “guest” will uncheck all your previous updates and the user will have NO permissions. 
 
 When you are done click **“Update User”**
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/UserManagement.png">
+
 
 
 ## Data Backup
 
 There are many ways to backup your data and configuration on your CHORDS portal. First you should note that when you run ``python chords_control --config`` a backup copy of your configuration files is created.
 You can also manually back up your portal by saving your configuration and database once everything is set up.  
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/DataBackup.png">
+
 
 To save Configuration:
 1. Go to Configuration tab
