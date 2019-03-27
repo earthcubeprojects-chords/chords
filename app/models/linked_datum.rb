@@ -14,7 +14,7 @@ class LinkedDatum < ApplicationRecord
 
   def organization
     {
-      "@context": "http://schema.org",
+      "@context": "http://schema.org/",
       "@type": "Organization",
       "url": dataset_url,
       "logo": dataset_url[0..-2] + ActionController::Base.helpers.image_url("CHORDS_logo_144.png")
@@ -25,7 +25,7 @@ class LinkedDatum < ApplicationRecord
     data = {}
 
     context = {
-      '@vocab': 'http://schema.org',
+      '@vocab': 'http://schema.org/',
       'datacite': 'http://purl.org/spar/datacite/',
       'earthcollab': 'https://library.ucar.edu/earthcollab/schema#',
       'geolink': 'http://schema.geolink.org/1.0/base/main#',
