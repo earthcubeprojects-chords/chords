@@ -170,20 +170,6 @@ class ProfilesController < ApplicationController
     authorize! :update, Profile
   end
 
-  def push_cuahsi_sources
-    authorize! :update, Profile
-
-    Profile.all.each do |profile|
-      data = profile.create_cuahsi_source
-
-      if profile.get_cuahsi_sourceid(data["link"]).nil?
-        uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
-        CuahsiHelper::send_request(uri_path, data)
-        profile.get_cuahsi_sourceid(data["link"])
-      end
-    end
-  end
-
   def test_sending_email
     begin
       AdminMailer.test_sending_email(current_user.email).deliver
@@ -211,8 +197,7 @@ private
       :secure_administration, :secure_data_viewing, :secure_data_download,
       :secure_data_entry, :data_entry_key, :backup_file, :doi, :max_download_points,
       :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country,
-      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :cuahsi_source_id,
-      :data_archive_url
+      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :data_archive_url
       )
   end
 end
