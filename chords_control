@@ -894,7 +894,6 @@ class ChordsRestore(object):
         If there are errors, ChordsRestoreError wil be thrown.
         """
         self.dump_file = dump_file
-        self.current_admin_pw = config_items(".env", delimiter="=")["CHORDS_ADMIN_PW"]
 
         self.config_files_check(files=["./.env", "chords.yml", "docker-compose.yml"])
         self.id_check()
@@ -1005,13 +1004,31 @@ A CHORDS restore cannot be performed.""")
                 print "Restoring %s to %s" % (src_file, dst_file)
                 sh.cp(src_file, dst_file)
         print " "
-        self.new_admin_pw = config_items(".env", delimiter="=")["CHORDS_ADMIN_PW"]
+        # get the admin password, which will be needed to access the databases,etc.
+        self.env_admin_pw = config_items(".env", delimiter="=")["CHORDS_ADMIN_PW"]
 
     def load_mysql(self, database_name="chords_demo_production"):
         """ Load the mysql database into the database in the chords_ysql container. """
 
         container="chords_mysql"
+        mysql_user = "chords_demo_user"
         print "Container:%s, database:%s" % (container, database_name)
+
+        print "Setting the user password for %s." % (mysql_user)
+        docker_args = ['exec', '-t', container, '/usr/bin/mysql', '-e',
+                       "set password for '%s' = '%s';"%(mysql_user, self.env_admin_pw)]
+        try:
+            print(
+                sh.docker(
+                    sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
+                ).stdout
+            )
+        except sh.ErrorReturnCode_1 as error:
+            raise ChordsRestoreError(error)
+
+        # Load the mysql database simply by streaming the database spl file into
+        # the mysql app on the container.
+        print "Restoring the database."
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         try:
             print(
@@ -1025,27 +1042,52 @@ A CHORDS restore cannot be performed.""")
     def load_influxdb(self):
         """ Load the influxdb database into the database in the chords_influxdb container. """
 
+
+        try:
+            print "Setting the database password."
+            print docker_bash("chords_influxdb",
+                              "influx -username admin -password chords_ec_demo -execute \"set password for admin = \'%s\'\""
+                              % (self.env_admin_pw))
+        except ChordsDockerError as error:
+            try:
+                print docker_bash("chords_influxdb",
+                                  "influx -username admin -password %s -execute \"set password for admin = \'%s\'\""
+                                  % (self.env_admin_pw, self.env_admin_pw))
+            except ChordsDockerError as error:
+                raise ChordsRestoreError(error)
+
+        try:
+            print "Current influxdb databases:"
+            print docker_bash("chords_influxdb",
+                              "influx -username admin -password %s -execute 'show databases'"
+                              % (self.env_admin_pw))
+        except ChordsDockerError as error:
+            raise ChordsRestoreError(error)
+
         influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
 
         print "Loading from " + self.file_paths["influxdb"]
         docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
-        docker_bash("chords_influxdb",
-                    "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
-        print "Dropping influxdb database chords_ts_production"
-        docker_bash(
-            "chords_influxdb",
-            "influx -username admin -password %s -execute 'drop database chords_ts_production'"
-            % (self.current_admin_pw)
-        )
-        print "Loading databases"
-        docker_bash(
-            "chords_influxdb",
-            "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
-        )
-        print "Curent influxdb databases:"
-        print docker_bash("chords_influxdb",
-                          "influx -username admin -password %s -execute 'show databases'"
-                          % (self.current_admin_pw))
+        try:
+            docker_bash("chords_influxdb",
+                        "cd /tmp && tar -xvf %s" % (influx_tar_file_base))
+        except ChordsDockerError as error:
+            raise ChordsRestoreError(error)
+
+        try:
+            print "Dropping influxdb database chords_ts_production"
+            docker_bash(
+                "chords_influxdb",
+                "influx -username admin -password %s -execute 'drop database chords_ts_production'"
+                % (self.env_admin_pw)
+            )
+            print "Loading databases"
+            docker_bash(
+                "chords_influxdb",
+                "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
+            )
+        except ChordsDockerError as error:
+            raise ChordsRestoreError(error)
 
     def load_grafana(self):
         """ Load the grafana files into the grafana container. """
