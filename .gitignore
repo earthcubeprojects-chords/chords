@@ -1,4 +1,5 @@
 *.rbc
+*.pyc
 capybara-*.html
 .rspec
 /log
@@ -56,6 +57,7 @@ chords-*.yml
 docker-compose-*.yml
 chords_control-*
 chords.yml
+bin/*.tgz
 
 #archive configuration
 config/archive.yml
