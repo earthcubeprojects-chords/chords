@@ -33,22 +33,22 @@ class Ability
 
     if !user || user.role?(:guest)
       if !profile.secure_data_viewing
-        registered_user(nil)
+        registered_user(profile, nil)
       end
 
       if !profile.secure_data_download
-        data_downloader(nil)
+        data_downloader(profile, nil)
       end
     end
 
     if !user
-      guest_user(nil)
+      guest_user(profile, nil)
     elsif user.role?(:guest)
-      guest_user(user)
+      guest_user(profile, user)
     end
 
     if user.role?(:registered_user)
-      registered_user(user)
+      registered_user(profile, user)
 
       if !profile.secure_data_download
         can :download, Instrument
@@ -56,34 +56,34 @@ class Ability
     end
 
     if user.role?(:downloader)
-      data_downloader(user)
+      data_downloader(profile, user)
     end
 
     if user.role?(:measurements)
-      measurement_creator(user)
+      measurement_creator(profile, user)
     end
 
     if user.role?(:site_config)
-      site_configurator(user)
+      site_configurator(profile, user)
     end
 
     if user.role?(:admin)
-      admin(user)
+      admin(profile, user)
     end
   end
 
-  def guest_user(user)
+  def guest_user(profile, user)
     can :read, :about
 
     cannot :read, User
-    cannot :read, :data
+    cannot :read, :data if profile.secure_data_download
 
     if user
       can [:read, :update], User, id: user.id
     end
   end
 
-  def registered_user(user)
+  def registered_user(profile, user)
     can :read, :all
 
     can :map, Site
@@ -93,7 +93,7 @@ class Ability
     can :live, Instrument
 
     cannot :read, User
-    cannot :read, :data
+    cannot :read, :data if profile.secure_data_download
 
     if user
       can [:read, :update], User, id: user.id
@@ -104,14 +104,14 @@ class Ability
     cannot :read, LinkedDatum
   end
 
-  def data_downloader(user)
-    registered_user(user)
+  def data_downloader(profile, user)
+    registered_user(profile, user)
 
     can :download, Instrument
     can :read, :data
   end
 
-  def measurement_creator(user)
+  def measurement_creator(profile, user)
     cannot :read, User
     cannot :read, :data
 
@@ -124,7 +124,7 @@ class Ability
     can :create, :measurement
   end
 
-  def site_configurator(user)
+  def site_configurator(profile, user)
     can :manage, :all
 
     can :map, Site
@@ -152,8 +152,8 @@ class Ability
     cannot :create, :measurement
   end
 
-  def admin(user)
-    site_configurator(user)
+  def admin(profile, user)
+    site_configurator(profile, user)
 
     can :manage, :all
 
