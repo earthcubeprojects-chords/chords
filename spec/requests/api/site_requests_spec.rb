@@ -58,8 +58,6 @@ describe 'Sites API', type: :request do
       expect(json['elevation'].try(:to_f)).to eq site.elevation
       expect(json['description']).to eq site.description
       expect(json['site_type_id']).to eq site.site_type_id
-      expect(json['cuahsi_site_code']).to eq site.cuahsi_site_code
-      expect(json['cuahsi_site_id']).to eq site.cuahsi_site_id
     end
 
     it 'returns status code 200' do
