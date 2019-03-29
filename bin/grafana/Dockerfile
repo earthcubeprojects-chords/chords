@@ -1,4 +1,4 @@
-FROM grafana/grafana:5.3.4
+FROM grafana/grafana:6.0.2
 LABEL maintainer="martinc@ucar.edu"
 USER root
 
