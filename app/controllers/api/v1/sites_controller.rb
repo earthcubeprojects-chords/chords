@@ -42,7 +42,7 @@ module API
 
     private
       def site_params
-        params.require(:site).permit(:name, :lat, :lon, :elevation, :description, :site_type_id, :cuahsi_site_code)
+        params.require(:site).permit(:name, :lat, :lon, :elevation, :description, :site_type_id)
       end
     end
   end

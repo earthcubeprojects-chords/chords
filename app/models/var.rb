@@ -1,8 +1,4 @@
-require 'task_helpers/cuahsi_helper'
-
 class Var < ApplicationRecord
-  include CuahsiHelper
-
   belongs_to :instrument
   belongs_to :measured_property
   belongs_to :unit
@@ -94,47 +90,6 @@ class Var < ApplicationRecord
     general_categories = Hash[category_names.map {|name| [name, name]}]
 
     return general_categories
-  end
-
-  def get_cuahsi_variables
-    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetVariablesJSON"
-    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
-  end
-
-  def get_cuahsi_variableid(variable_code)
-    if self.cuahsi_variable_id
-      return self.cuahsi_variable_id
-    else
-      variables = get_cuahsi_variables
-      id = variables.find {|variable| variable['VariableCode']==variable_code.to_s}
-      if id != nil
-        self.cuahsi_variable_id = id["VariableID"]
-        self.save
-        return self.cuahsi_variable_id
-      end
-      return id
-    end
-  end
-
-
-  def create_cuahsi_variable
-    data = {
-      "user" => Rails.application.config.x.archive['username'],
-      "password" => Rails.application.config.x.archive['password'],
-      "VariableCode" => Profile.first.domain_name + ':' + self.instrument.site.id.to_s + ":" + self.instrument.id.to_s + ":" + self.id.to_s,
-      "VariableName" => self.measured_property.name,
-      "Speciation" => "Not Applicable",
-      "VariableUnitsID" => self.unit.id_num,
-      "SampleMedium"=> "Unknown",
-      "ValueType" => "Sample",
-      "IsRegular" => 1,
-      "TimeSupport" => self.instrument.sample_rate_seconds,
-      "TimeUnitsID" => 100,
-      "DataType" => "Unknown",
-      "GeneralCategory" => self.general_category,
-      "NoDataValue" => -9999
-      }
-    return data
   end
 
   private
