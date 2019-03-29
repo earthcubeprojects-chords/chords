@@ -797,7 +797,7 @@ class ChordsBackup(object):
             self.influx_tar_file,
             self.grafana_tar_file]
         print sh.tar(tar_params, _err_to_out=True).stdout
-        print sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file)
+        print sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file, self.grafana_tar_file)
 
         print "*** Success ***"
         print "%s has been created." % (self.chords_tar_file)
@@ -1041,7 +1041,6 @@ A CHORDS restore cannot be performed.""")
 
     def load_influxdb(self):
         """ Load the influxdb database into the database in the chords_influxdb container. """
-
 
         try:
             print "Setting the database password."
