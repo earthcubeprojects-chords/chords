@@ -31,6 +31,12 @@ class Ability
 
     profile = Profile.first
 
+    if !user
+      guest_user(profile, nil)
+    elsif user.role?(:guest)
+      guest_user(profile, user)
+    end
+
     if !user || user.role?(:guest)
       if !profile.secure_data_viewing
         registered_user(profile, nil)
@@ -39,12 +45,6 @@ class Ability
       if !profile.secure_data_download
         data_downloader(profile, nil)
       end
-    end
-
-    if !user
-      guest_user(profile, nil)
-    elsif user.role?(:guest)
-      guest_user(profile, user)
     end
 
     if user.role?(:registered_user)
