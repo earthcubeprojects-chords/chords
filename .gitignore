@@ -64,3 +64,4 @@ config/archive.yml
 # this is created dynamically!
 config/schedule.rb
 .byebug_history
+pylintrc
