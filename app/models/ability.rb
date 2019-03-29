@@ -75,6 +75,9 @@ class Ability
   def guest_user(user)
     can :read, :about
 
+    cannot :read, User
+    cannot :read, :data
+
     if user
       can [:read, :update], User, id: user.id
     end
@@ -109,6 +112,15 @@ class Ability
   end
 
   def measurement_creator(user)
+    cannot :read, User
+    cannot :read, :data
+
+    if user
+      can [:read, :update], User, id: user.id
+    end
+
+    can :read, :about
+
     can :create, :measurement
   end
 
@@ -122,10 +134,10 @@ class Ability
     can :live, Instrument
 
     cannot :manage, User
-    cannot :read, User
+    can :read, User
 
     if user
-      can [:read, :update], User, id: user.id
+      can [:update], User, id: user.id
       can :assign_api_key, User, id: user.id
     end
 
@@ -136,12 +148,16 @@ class Ability
 
     can :export, Profile
     can :import, Profile
+
+    cannot :create, :measurement
   end
 
   def admin(user)
     site_configurator(user)
 
     can :manage, :all
+
+    cannot :create, :measurement
 
     if user
       cannot :destroy, User, id: user.id
