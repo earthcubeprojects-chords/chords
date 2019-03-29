@@ -145,6 +145,34 @@ To change a User’s information or permissions simply click on **“Users”** 
 When you are done click **“Update User”**
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/UserManagement.png">
 
+<font color="red">Note:</font> IF you select Guest in user configuration it will unselect ALL other options. Please make sure to unselect Guest before you save User Permissions.
+
+**Guest:** The Default for any new user except Admins. It has the minimum permissions and users should request that their Admin upgrade them to a Registered user at the least.
+
+A Guest User Can
+- Read About page
+- View self information
+
+
+**Registered User:** This option is better than Guest but still limited in use. Combining it with Data Downloader or Measurement Creator will enable extra functionality in CHORDS giving your Registered User’s more POWER.  Just make sure to use your powers for good and not evil, ok?
+
+A Registered User Can
+- Read About page and view data
+- View Site
+- View Instruments
+- Can View and edit self information
+
+**Data Downloader:** You guessed it. This option lets Registered Users view and download data from instruments.
+
+A Data Downloader Can
+- Download data
+- View Instruments
+
+**Measurement Creator:** Behold! The power of creation! This option let’s Registered Users view and create instruments and variables.
+
+Measurement Creator Can
+- Create instruments
+- Create test measurements
 
 
 ## Data Backup

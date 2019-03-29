@@ -6,10 +6,10 @@ permalink: /gettingstarted/os/
 
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-Ubuntu">Ubuntu</a></li> <!-- names on the tabs -->
-    <li><a href="#tabs-RHEL">RHEL & Centos</a></li>
-    <li><a href="#tabs-Macos">Mac</a></li>
-    <li><a href="#tabs-W10">W10</a></li>
+    <li><a href="#tabs-Ubuntu" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Ubuntu</a></li> <!-- names on the tabs -->
+    <li><a href="#tabs-RHEL" style="background: none repeat scroll 0% 0% rgb(176,224,230);" >RHEL & Centos</a></li>
+    <li><a href="#tabs-Macos" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Mac</a></li>
+    <li><a href="#tabs-W10" style="background: none repeat scroll 0% 0% rgb(176,224,230);">W10</a></li>
   </ul>
 
   <div id="tabs-Ubuntu"> <!-- content under tab -->

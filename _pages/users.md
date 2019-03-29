@@ -10,10 +10,7 @@ toc_icon: "cog"
 
 ## What can users do?
 
- Users can create, view, and download data from CHORDS. However a person’s access level will determine the functions available.
-
-<font color="red">Note: IF you select Guest in user configuration it will unselect ALL other options. Please make sure to unselect Guest before you save User Permissions.</font>
-
+Users can create, view, and download data from CHORDS. However a person’s access level will determine the functions available. Permissions such as data downloader and measurement creator are enhancements on a registered user, while the guest user is equivalent to not being logged in.
 
 ### Guest
 
