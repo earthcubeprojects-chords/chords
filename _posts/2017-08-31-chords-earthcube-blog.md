@@ -1,9 +1,7 @@
 ---
 layout: single
 title: New EarthCube blog article featuring CHORDS
-sidebar:
-  title: "Sample Title"
-  nav: sidebar-sample
+author_profile: true
 ---
 
 A new [EarthCube blog article](https://earthcube.wordpress.com/2017/08/31/chords-expanded-project/) entitled

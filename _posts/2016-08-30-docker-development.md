@@ -1,9 +1,7 @@
 ---
 layout: single
 title: CHORDS is being adapted to run under Docker
-sidebar:
-  title: "Sample Title"
-  nav: sidebar-sample
+author_profile: true
 ---
 
 We are working on making a CHORDS portal available using [Docker](https://www.docker.com/). 

@@ -1,9 +1,7 @@
 ---
 layout: single
 title: Docker Advances
-sidebar:
-  title: "Sample Title"
-  nav: sidebar-sample
+author_profile: true
 ---
 
 The [Docker](https://www.docker.com/) version 
