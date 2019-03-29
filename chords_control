@@ -55,6 +55,7 @@ import subprocess
 import json
 import platform
 import tempfile
+import string
 import glob
 import getpass
 from collections import OrderedDict
@@ -760,7 +761,7 @@ class ChordsBackup(object):
         self.influx_tar_file = 'influxdb-' + time_stamp + '.tar'
         self.grafana_tar_file = 'grafana-' + time_stamp + '.tar'
         self.manifest_file = "manifest-" + time_stamp + ".txt"
-        self.chords_tar_file = 'chords-backup-' + time_stamp + '.tar.gz'
+        self.chords_tar_file = 'chords-backup-' + self.nice_project_name() + '-' + time_stamp + '.tar.gz'
 
         print "*** Saving mysql ***"
         mysql_file = open(self.mysql_sql_file, 'w')
@@ -802,6 +803,19 @@ class ChordsBackup(object):
         print "*** Success ***"
         print "%s has been created." % (self.chords_tar_file)
         print "For details on the CHORDS backup, examine the file: %s (contained in the tar file)." % (self.manifest_file)
+
+    def nice_project_name(self):
+        """ Return a nicely behaved project name for use in file name construction."""
+
+        project_name = self.mysql_value(table="profiles", column="project")
+
+        project_name = ''.join(ch for ch in project_name if ch not in set(string.punctuation))
+        project_name = project_name.strip()
+        project_name = " ".join(project_name.split())
+        project_name = project_name.replace(' ','-')
+        project_name = project_name.lower()
+
+        return project_name
 
     def id_check(self):
         """ Verify that the user is running with the correct permissions. """
