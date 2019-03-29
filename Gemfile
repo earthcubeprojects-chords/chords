@@ -18,7 +18,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 
-gem 'devise', '~> 4.5'
+gem 'devise', '~> 4.6'
 gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
