@@ -52,25 +52,28 @@ https://s3-us-west-2.amazonaws.com/chords-template/chords_cf_template.yml
 Then select an EC2 KeyPair that you created for *KeyName*. This will allow you to ssh into the instance, if ever needed.
 
 For demonstrations and simple, low-bandwidth streaming feeds, select a _t2.micro_ instance type which are free of charge for the first
-year. Otherwise, use the default.
-
-<!--<img class="img-responsive" src="images/Portal_Step3.PNG" alt="Specify"> --> 
-<!--Get Picture of portal configuration information-->
+year. Otherwise, use the default.  
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png">
 
 
 * Hit **Next**
 
-## 4. Options (if needed)
-* Hit **Next**.
+## 4. Options
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png">
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step5.png"><!-- Add step talking about terminal protection -->
+* Click **Advanced**
+* Scroll down to **Terminal Protection** and select **Enabled**
+* Scroll down to **Rollback on Failure** and select **no**
+
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step5.png"><
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step6.png">
+
+* Hit **Next**.
 
 ## 5. Review
 
 * Verify that everything looks good and then click **Create**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step6.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step7.png">
 
 ## 6. Wait for the portal to be created
 * After the creation has started, you will be taken 
@@ -79,19 +82,19 @@ of the stack creation. It usually takes about 6 minutes to complete, but it can 
 much longer (even 30 minutes), depending upon AWS performance.
 
 
-<img class="img-responsive" src="images/Portal_Step6.PNG" alt="Creation">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step8.png">
 
 ## 7. Accessing the new portal
 
-Once your portal is created click on the **“Outputs”** tab. Below it will show a URL for the new portal, **click** on the URL to access your new portal.
+Once your portal is created click on your **Stack Name** then the **“Outputs”** tab. Below it will show a URL for the new portal, **click** on the URL to access your new portal.
 
-<img class="img-responsive" src="images/Portal_Step7.PNG" alt="Accessing">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step9.png">
 
 ## 8. Log Into to Your Brand-New CHORDS Portal!
 * Click on the **“Sign in”** 
 
 
-<img class="img-responsive" src="images/Portal_Step8.PNG" alt="Portal URL">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step10.png">
 
 Once the Portal is running, you will want to immediately change the admin acount and password to your
 own email and password.
