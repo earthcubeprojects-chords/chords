@@ -2,6 +2,7 @@
 layout: single
 title: Install CHORDS For Various Operating Systems
 permalink: /gettingstarted/os/
+classes: wide
 ---
 
 <div id="tabs">
@@ -60,7 +61,7 @@ permalink: /gettingstarted/os/
   <li>Download <a href="https://curl.haxx.se/download.html">curl.</a> into a directory of your choice.</li>
   <li>Add C:\Python to the Path environment variable.</li>
   <li>Add the curl directory to the Path environment variable.</li>
-  <li>For help with curl visit this<a href="https://www.youtube.com/watch?v=8f9DfgRGOBo">video</li>
+  <li>For help with curl visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo"> video </a></li>
   <li>Open a PowerShell or Command Line, and type:{% include chords_control.md %}</li>
   </ul>
 

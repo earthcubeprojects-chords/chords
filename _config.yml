@@ -12,7 +12,6 @@
 
 theme                  : "minimal-mistakes-jekyll"
 minimal_mistakes_skin    : "mint"
-
 # Site Settings
 locale                   : "en-US"
 title                    : "CHORDS Portal"

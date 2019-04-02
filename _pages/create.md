@@ -36,12 +36,12 @@ Log onto your AWS account to begin.
 * Click **Create new stack**
 
 * Click on **Specify Amazon S3 template URL** and Copy and Paste the following link in the box:
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step3.png">
 
 ``
 https://s3-us-west-2.amazonaws.com/chords-template/chords_cf_template.yml
 ``
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step3.png">
 * Click **Next**
 
 
