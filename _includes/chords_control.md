@@ -3,6 +3,7 @@ mkdir -p /var/lib/chords
 cd /var/lib/chords
 
 # Fetch the control script:
+pip install sh
 curl -O -k https://raw.githubusercontent.com/NCAR/chords/master/chords_control
 
 # Initial installation:
