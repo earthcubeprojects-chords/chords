@@ -417,6 +417,7 @@ Resources:
               emacs: []
               sysstat: []
               git: []
+              python2-pip: []
 
         # Install docker as a service.
         install_docker:
@@ -439,6 +440,8 @@ Resources:
         # Set up CHORDS
         chords_setup:
           commands:
+            00_python_pip:
+              command: "pip install sh"
             01_var_lib_chords:
               command: "mkdir -p /var/lib/chords"
             02_get_chords_control:
