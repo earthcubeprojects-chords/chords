@@ -6,6 +6,40 @@ toc: true
 toc_sticky: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
+
+gallery:
+  - url: /assets/images/Step1.png
+    image_path: /assets/images/Step1.png
+    alt: "placeholder image 1"
+
+  - url: /assets/images/Step2.png
+    image_path: /assets/images/Step2.png
+    alt: "placeholder image 2"
+
+  - url: /assets/images/Step3.png
+    image_path: /assets/images/Step3.png
+
+  - url: /assets/images/Step4.png
+    image_path: /assets/images/Step4.png
+    
+  - url: /assets/images/Step5.png
+    image_path: /assets/images/Step5.png
+
+  - url: /assets/images/Step6.png
+    image_path: /assets/images/Step6.png
+    
+  - url: /assets/images/Step7.png
+    image_path: /assets/images/Step7.png
+    
+  - url: /assets/images/Step8.png
+    image_path: /assets/images/Step8.png
+   
+  - url: /assets/images/Step9.png
+    image_path: /assets/images/Step9.png
+  
+  - url: /assets/images/Step10.png
+    image_path: /assets/images/Step10.png
+
 ---
 
 If someone else has already created a Portal for you, you can skip Portal creation. Just point
@@ -19,6 +53,9 @@ services!).
 
 We use the **AWS CloudFormation** service to create a new portal. The steps are
 simple.
+
+<!--Gallery of picture instructions. This can be moved anywhere.-->
+{% include gallery %}
 
 
 Log onto your AWS account to begin.
