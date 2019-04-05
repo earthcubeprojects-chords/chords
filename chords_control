@@ -1162,8 +1162,6 @@ A CHORDS restore cannot be performed.""")
         if err_msg:
             raise ChordsRestoreError(err_msg)
 
-        print self.file_paths
-
     def cleanup(self):
         """ Cleanup temporary files. """
 
