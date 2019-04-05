@@ -11,7 +11,7 @@ toc_icon: "cog"
 ## Site Configuration
 To configure the site you either have to have Site Configuration or Admin privileges. Configuration is used for managing many (but not all) of the portal characteristics. Sites, instruments, and variables are configured on their own specific pages.
 
-Portal config - done {% include video id="A6OuVPBnb5w" provider="youtube" %}
+{% include video id="A6OuVPBnb5w" provider="youtube" %}
 
 ### Editing User Permissions
 

@@ -26,11 +26,18 @@
   //     padding-right: $right-sidebar-width-narrow;
   //   }
   
-    @include breakpoint($x-large) {
-      width: calc(100% - #{$right-sidebar-width});
-      padding-right: $right-sidebar-width;
+    // @include breakpoint($x-large) {
+    //   width: calc(100% - #{$right-sidebar-width});
+    //   padding-right: $right-sidebar-width;
+    // }
+
+    @include breakpoint($large) {
+      padding-right: 0;
     }
-  
+    @include breakpoint($x-large) {
+      padding-right: 0;
+    }
+    
     .page__inner-wrap {
       float: left;
       margin-top: 1em;
