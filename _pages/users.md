@@ -146,7 +146,7 @@ Measurements for variables are specified by *shortname=value* pairs. You do not 
 
   <div id="tabs-Python"> <!-- content under tab -->
   <div id="python" class="tab-pane active">
-  {% highlight sh %}
+  {% highlight python %}
   #!/usr/bin/python
 
   #Put a collection of measurements into the portal
@@ -165,7 +165,7 @@ Measurements for variables are specified by *shortname=value* pairs. You do not 
 
   This example uses the <a href="https://curl.haxx.se/libcurl/c/libcurl.html">libCurl</a> library in a C program to send a measurement URL to a portal.
 
-  {% highlight sh %}
+  {% highlight c %}
   #include <stdio.h>
   #include <curl/curl.h>
 
@@ -216,7 +216,7 @@ How to create a JSON string using Particle
 
 <font color="red">Note:</font> the items that say ``leaf.<something>`` are pulling data from sensors.
 
-```c
+```java
 DynamicJsonBuffer jBuffer; 
 //create a new JSON object to send the sensor data
 JsonObject& jsondata = jBuffer.createObject();
