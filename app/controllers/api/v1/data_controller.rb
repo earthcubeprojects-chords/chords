@@ -1,3 +1,5 @@
+require 'zip'
+
 module API
   module V1
     class DataController < ApplicationController
@@ -7,7 +9,7 @@ module API
         auth = false
         instruments = nil
 
-        if ['json', 'geojson'].include?(params[:format])
+        if ['json', 'geojson', 'csv'].include?(params[:format])
           if @profile.secure_data_download
             authorize! :download, Instrument
             auth = true
@@ -15,7 +17,7 @@ module API
             auth = true
           end
         else
-          render json: {errors: ['FAIL: Invalid format requested. JSON and GEOJSON are supported.']}, status: :not_acceptable
+          render json: {errors: ['FAIL: Invalid format requested. JSON, GEOJSON, and CSV are supported.']}, status: :not_acceptable
           return
         end
 
@@ -73,6 +75,31 @@ module API
           format.geojson do
             ts_json = MakeGeoJsonFromTsPoints.call(ts_points, @profile, instruments)
             send_data ts_json, filename: file_root + '.geojson'
+          end
+
+          format.csv do
+            if instruments.count == 1
+              varnames_by_id = {}
+              instrument = instruments.first
+              Var.all.where("instrument_id = #{instruments}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+              ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, instrument, request.host, Profile.first)
+              send_data ts_csv, filename: file_root + '.csv'
+            else
+              compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new('')) do |zos|
+                instruments.each do |instrument|
+                  zos.put_next_entry "instrument_#{instrument.id}.csv"
+
+                  varnames_by_id = {}
+                  Var.all.where("instrument_id = #{instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+                  csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, instrument, request.host, Profile.first)
+
+                  zos.print csv
+                end
+              end
+
+              compressed_filestream.rewind
+              send_data compressed_filestream.read, filename: "#{@profile.project}_multi_instrument_download.zip"
+            end
           end
         end
       end
