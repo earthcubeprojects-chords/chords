@@ -41,6 +41,10 @@
       send_download_url('geojson');
     });
 
+    $('.geoCsvButton').click(function(){
+      send_download_url('csv');
+    });
+
     $('#select_all').click(function(){
       $(':checkbox').each(function() {
         this.checked = true;
@@ -73,6 +77,7 @@
   %button#select_all Select All
   %button#select_none Clear All
   %button.btn-primary.geoJsonButton Download GeoJSON
+  %button.btn-primary.geoCsvButton Download GeoCSV
 
 %p Select instruments for download. If none are checked, all instruments will be downloaded. It is generally recommended to download a month of data at a time. If you select a date range resulting in too much data, you will receive an error message. Reduce the date range selected and try again.
 
@@ -106,6 +111,7 @@
   %button#select_all Select All
   %button#select_none Clear All
   %button.btn-primary.geoJsonButton Download GeoJSON
+  %button.btn-primary.geoCsvButton Download GeoCSV
 
 %p
   See the
