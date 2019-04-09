@@ -22,6 +22,8 @@ to get your portal running, and for additional information.
 sudo -i
 apt-get update
 apt-get install docker.io docker-compose git
+mkdir -p /var/lib/chords
+cd /var/lib/chords
 {% endhighlight %}
 {% include chords_control.md %}
 </div>
@@ -34,6 +36,8 @@ yum -y install docker docker-compose
 yum -y install git
 systemctl enable docker
 systemctl start docker
+mkdir -p /var/lib/chords
+cd /var/lib/chords
 {% endhighlight %}
 {% include chords_control.md %}
 </div>
