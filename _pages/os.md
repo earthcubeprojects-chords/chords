@@ -17,7 +17,7 @@ classes: wide
   <div id="ub" class="tab-pane active">
   {% highlight sh %}
   sudo -i
-  apt-get install docker.io docker-compose git
+  apt-get install docker.io docker-compose git python-pip
   {% endhighlight %}
   {% include chords_control.md %}
   </div>
@@ -30,6 +30,7 @@ classes: wide
   yum -y install epel-release
   yum -y install docker docker-compose
   yum -y install git
+  yum -y install python2-pip
   systemctl enable docker
   systemctl start docker
   {% endhighlight %}

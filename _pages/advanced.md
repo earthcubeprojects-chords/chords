@@ -33,7 +33,7 @@ There are several main ways to use chords_control
 ``python chords_control -t``
 - Lets you check your portal's current status
 
-If you have difficulties with your chords) control you can always type ``python chords_control --help``
+If you have difficulties with your chords_control you can always type ``python chords_control --help``
 
 ## Docker
 
