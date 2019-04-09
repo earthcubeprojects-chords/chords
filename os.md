@@ -12,7 +12,6 @@ to get your portal running, and for additional information.
   <li><a data-toggle="tab" href="#centos7">RHEL/CentOS 7</a></li>
   <li><a data-toggle="tab" href="#macos">MacOS</a></li>
   <li><a data-toggle="tab" href="#w10">W10</a></li>
-  <li><a data-toggle="tab" href="#w7">W7</a></li>
 </ul>
 
 <div class="tab-content">
@@ -64,14 +63,6 @@ cd /var/lib/chords
 {% include chords_control.md %} </li>
 </ul>
 </div>
-  
-<div id="w7" class="tab-pane">
-{% highlight sh %}
-Docker engine
-{% endhighlight %}
-</div>
-
-<ul><li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li></ul>
 
 </div>
 
