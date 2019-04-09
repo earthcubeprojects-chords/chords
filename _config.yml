@@ -178,8 +178,8 @@ defaults:
     values:
       layout: single
       read_time: false
-      author_profile: false
-      share: false
+      author_profile: true
+      share: true
       comments: false
       sidebar:
         nav: "docs"
