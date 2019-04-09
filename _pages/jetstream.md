@@ -22,7 +22,7 @@ The trial resources include
 1. Go to the [XSEDE portal](https://portal.xsede.org) 
 
 2. Click "Create Account" on the left side of your screen.
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamCreateAccount.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamCreateAccount.png"><!--Using liquid to set path for images.-->
 
 3. Fill out the form and click Submit. 
 
@@ -32,34 +32,34 @@ The trial resources include
 You will be asked to read and accept the User Responsibilities form. This form outlines acceptable use to protect shared resources and intellectual property.
 
 6. Click on "MyXSEDE" tab in the XSEDE User Portal
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamMyXsede.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamMyXsede.png"><!--Using liquid to set path for images.-->
 
 7. On the lower left side of your screen there is an area called **Trial Allocations**. Under it Click “Enroll”
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamEnroll.png">  
 This will take you to a page describing Trial Access and allowing you to Enroll or Unenroll in a Trial account.
 
 8. Click the “Enroll Trial Access Button”  
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamTrialAccess.png">  
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamTrialAccess.png">  <!--Using liquid to set path for images.-->
 
 A Successful Enrollment will show:
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamSuccess.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamSuccess.png"><!--Using liquid to set path for images.-->
 Wait approximately 4 hours for your allocation to propagate through the authentication system.
 
 9. Once you’ve set up your account go to [Jetstream](https://use.jetstream-cloud.org/application/images)
 
 10. Select XSEDE and hit continue 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamOrganization.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamOrganization.png"><!--Using liquid to set path for images.-->
 
 11. Sign in with your XSEDE credentials
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamCredentials.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamCredentials.png"><!--Using liquid to set path for images.-->
 You are now in your jetstream account!
 
 ## Setting up Jetstream Image
 Before you can get started with CHORDS you will need to get an Image running.
 1. Click launch Image
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamImage.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamImage.png"><!--Using liquid to set path for images.-->
 2. Since you’re set up with a trial account you can use Matlab Minimal and it will cover your temporary needs.
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamMatlab.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamMatlab.png"><!--Using liquid to set path for images.-->
 3. Click Launch and a window will pop up
 4. Enter your:
   - project name
@@ -69,14 +69,14 @@ Before you can get started with CHORDS you will need to get an Image running.
   - Select your size (for trial accounts you will use a small or tiny size)
 5. Go to your projects tab
 6. Click on your project
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamProject.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamProject.png"><!--Using liquid to set path for images.-->
 7. Click on the image you selected for your project
 8. On the right side of your screen under “Links” click Open Web Shell 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamShell.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamShell.png"><!--Using liquid to set path for images.-->
 9. Follow CHORDS Get Started instructions.
 10. Once you’ve finished the instructions go back to your Jetstream page.
 11. Copy the IP address 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamIP.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamIP.png"><!--Using liquid to set path for images.-->
 12. Paste it in your browser and your CHORDS instance will pop up.
 
 You now have a CHORDS portal that can be accessed from any computer! Congratulations! Use your newfound power wisely.

@@ -26,7 +26,7 @@ classes: wide
 
 <!-- <span class="badge center-block">This web site is about the CHORDS Portal</span> -->
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/overview.png" alt="CHORDS Portal Cartoon">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/overview.png" alt="CHORDS Portal Cartoon"><!--Using liquid to set path for images.-->
 
 
 ## The CHORDS Portal:

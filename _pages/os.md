@@ -7,7 +7,7 @@ classes: wide
 
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-Ubuntu" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Ubuntu</a></li> <!-- names on the tabs -->
+    <li><a href="#tabs-Ubuntu" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Ubuntu</a></li> <!-- Using JqueryUI to set names and colors on the tabs -->
     <li><a href="#tabs-RHEL" style="background: none repeat scroll 0% 0% rgb(176,224,230);" >RHEL & Centos</a></li>
     <li><a href="#tabs-Macos" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Mac</a></li>
     <li><a href="#tabs-W10" style="background: none repeat scroll 0% 0% rgb(176,224,230);">W10</a></li>
@@ -47,7 +47,7 @@ classes: wide
   <li>Then in a terminal window:{% include chords_control.md %} </li>
   <li> Once the above script has been run all you need to do to start chords on your computer again is open the terminal and type </li>
   {% highlight sh %}
-  cd /var/lib/chords
+  cd var/lib/chords
   python chords_control -- run
   {% endhighlight %}
   </ul>

@@ -15,13 +15,13 @@ toc_icon: "cog"
 
 If you don't have an AWS account, it's easy to create one. The standard CHORDS portal uses an Amazon "micro instance", which can be free for the first year.
  
-<a href="{{site.baseurl}}/gettingstarted/aws" class="btn btn--primary">Open an AWS account</a>
+<a href="{{site.baseurl}}/gettingstarted/aws" class="btn btn--primary">Open an AWS account</a><!--Using liquid to set path for button.-->
 
 ### AWS CHORDS Portal
 
 Create an amazon account and set up your server through amazon. The standard server is a “Micro Instance” which is free for the first year of use.
 
-<a href="{{site.baseurl}}/gettingstarted/create" class="btn btn--primary">Create AWS Portal</a>
+<a href="{{site.baseurl}}/gettingstarted/create" class="btn btn--primary">Create AWS Portal</a><!--Using liquid to set path for button.-->
 
 
 ## Option 2: Run CHORDS on Jetstream
@@ -30,7 +30,7 @@ Create an amazon account and set up your server through amazon. The standard ser
 
 If you are NSF funded then you can use a Jestream instance free! If you aren't that's still ok. You can apply for a trial account similar Amazon and request more allocations later while contributing to the scientific community!
 
-<a href="{{site.baseurl}}/gettingstarted/jetstream" class="btn btn--primary">Create a Jetstream Server</a>
+<a href="{{site.baseurl}}/gettingstarted/jetstream" class="btn btn--primary">Create a Jetstream Server</a><!--Using liquid to set path for button.-->
 
 <!-- ### Configure
 
@@ -45,7 +45,7 @@ Once you've created your Jetstream server and portal you'll need to configure it
 
 CHORDS can be run on a cloud service of your choice, or just a local machine, running Linux, MacOS or Windows. Configure the operating system, and then run the CHORDS control script to create a CHORDS Portal instance.
 
-<a href="{{site.baseurl}}/gettingstarted/os" class="btn btn--primary">Create a Portal</a>
+<a href="{{site.baseurl}}/gettingstarted/os" class="btn btn--primary">Create a Portal</a><!--Using liquid to set path for button.-->
 
 <!-- ### Configure
 
@@ -58,4 +58,4 @@ After the Portal is created, you will use your browser to configure and manage i
     
 Sadly our crystal ball broke before we could foresee all of your needs. If you aren’t able to find an option that suits your projects needs there are many options for virtual machines (vm’s) and servers out there. 
 
-<a href="{{site.baseurl}}/gettingstarted/other" class="btn btn--primary">More</a>
+<a href="{{site.baseurl}}/gettingstarted/other" class="btn btn--primary">More</a><!--Using liquid to set path for button-->

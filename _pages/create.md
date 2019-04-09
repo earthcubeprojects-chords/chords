@@ -45,7 +45,7 @@ gallery:
 If someone else has already created a Portal for you, you can skip Portal creation. Just point
 your browser at the new Portal and perform the initial login as user: <em>admin@chordsrt.com</em>, 
 password: <em>realtimedata</em>. You will be prompted to change the password during this first login.
-You can then proceed to [Portal configuration](http://ncar.github.io/chords/config.html).<!--This will need updated to the new website -->
+You can then proceed to [Portal configuration]({{site.baseurl}}/admin).
 
 The Portal runs as a standalone web server on Amazon Web Services (AWS). 
 The interface to AWS can seem a bit overwhelming (currently offering 52
@@ -64,16 +64,16 @@ Log onto your AWS account to begin.
 
 * First click on <em>“Services”</em> and then click on <em>“Cloud Formation”</em> 
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step1.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step1.png"> <!--Using liquid to set path for images.-->
       
 ## 2. Start stack creation and Specify template 
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step2.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step2.png"><!--Using liquid to set path for images.-->
 
 * Click **Create new stack**
 
 * Click on **Specify Amazon S3 template URL** and Copy and Paste the following link in the box:
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step3.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step3.png"><!--Using liquid to set path for images.-->
 
 ``
 https://s3-us-west-2.amazonaws.com/chords-template/chords_cf_template.yml
@@ -90,7 +90,7 @@ Then select an EC2 KeyPair that you created for *KeyName*. This will allow you t
 
 For demonstrations and simple, low-bandwidth streaming feeds, select a _t2.micro_ instance type which are free of charge for the first
 year. Otherwise, use the default.  
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png"> <!--Using liquid to set path for images.-->
 
 
 * Hit **Next**
@@ -101,8 +101,8 @@ year. Otherwise, use the default.
 * Scroll down to **Terminal Protection** and select **Enabled**
 * Scroll down to **Rollback on Failure** and select **no**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step5.png"><
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step6.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step5.png"><!--Using liquid to set path for images.-->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step6.png"><!--Using liquid to set path for images.-->
 
 * Hit **Next**.
 
@@ -110,7 +110,7 @@ year. Otherwise, use the default.
 
 * Verify that everything looks good and then click **Create**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step7.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step7.png"><!--Using liquid to set path for images.-->
 
 ## 6. Wait for the portal to be created
 * After the creation has started, you will be taken 
@@ -119,19 +119,19 @@ of the stack creation. It usually takes about 6 minutes to complete, but it can 
 much longer (even 30 minutes), depending upon AWS performance.
 
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step8.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step8.png"><!--Using liquid to set path for images.-->
 
 ## 7. Accessing the new portal
 
 Once your portal is created click on your **Stack Name** then the **“Outputs”** tab. Below it will show a URL for the new portal, **click** on the URL to access your new portal.
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step9.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step9.png"><!--Using liquid to set path for images.-->
 
 ## 8. Log Into to Your Brand-New CHORDS Portal!
 * Click on the **“Sign in”** 
 
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step10.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step10.png"><!--Using liquid to set path for images.-->
 
 Once the Portal is running, you will want to immediately change the admin acount and password to your
 own email and password.

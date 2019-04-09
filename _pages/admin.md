@@ -32,7 +32,7 @@ You will find buttons that will allow you to
 - Export/Import previous InfluxDB Data
 - Configure JSON-LD Options
 - Configure InfluxDB Tags
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Configure.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Configure.png"> <!--Using liquid to set path for images.-->
 
 2. Fill out the following under Standard Options: 
 Project name
@@ -59,14 +59,14 @@ Note: Do NOT make this blank
 
 Select Security options: Default security options enable others to view data. If you don’t want to let guests or others view your data check “Restrict view of data”.
 Do NOT modify the Measurement Security Key
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureFields.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureFields.png"><!--Using liquid to set path for images.-->
 
 3. Select Metadata Ontology Vocabularies.
 4. Enter CUAHSI Data Services, if desired.
 5. Fill out contact information.
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureContact.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureContact.png"><!--Using liquid to set path for images.-->
 6. Press Save.
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureSave.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/ConfigureSave.png"><!--Using liquid to set path for images.-->
 
 ### Sites
 
@@ -74,21 +74,21 @@ Create a new site by clicking on Sites in the middle left part of the menu.
 
 Click the **Add a New Site** button
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Site.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Site.png"><!--Using liquid to set path for images.-->
 
 Fill out the empty fields and click **Create Site Instruments**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/SiteFields.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/SiteFields.png"><!--Using liquid to set path for images.-->
 
 Click on the **Instruments** button in the middle left part of the screen
 
 Click **New Instrument**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Instruments.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Instruments.png"><!--Using liquid to set path for images.-->
 
 Fill out the blank spaces and click **Create Instrument**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/InstrumentFields.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/InstrumentFields.png"><!--Using liquid to set path for images.-->
 
 Definitions
 Name: Name you gave the instrument
@@ -113,11 +113,11 @@ Click on your Instrument
 
 Scroll down and click on **Add New Variable**
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Variables.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Variables.png"><!--Using liquid to set path for images.-->
 
 Change the *short name*, *name*, *units*, *the minimum and maximum for plotting*, *the measured property*, *and general measurement category* to match what your Instrument will be measuring.
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/VariableFields.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/VariableFields.png"><!--Using liquid to set path for images.-->
 
 ### Metadata
 There are two key places you will want to make sure to include a little extra metadata (description of data). 
@@ -129,14 +129,14 @@ Second, under your configuration page there is a section for entering JSON-LD me
 ### Email 
 1. To change an email address simply click on **“Users”** and then click **“Edit”**  
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Email.png">  
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Email.png">  <!--Using liquid to set path for images.-->
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUser.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUser.png"><!--Using liquid to set path for images.-->
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailEdit.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailEdit.png"><!--Using liquid to set path for images.-->
 
 2. Type email into the Email Box and click **“Update User”**
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUpdate.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUpdate.png"><!--Using liquid to set path for images.-->
 
 
 ## User Management
@@ -145,7 +145,7 @@ To change a User’s information or permissions simply click on **“Users”** 
 <font color="red">Note:</font> if you’re going to update a user make SURE to uncheck the “guest” box before saving your changes. If you don’t “guest” will uncheck all your previous updates and the user will have NO permissions. 
 
 When you are done click **“Update User”**
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/UserManagement.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/UserManagement.png"><!--Using liquid to set path for images.-->
 
 <font color="red">Note:</font> IF you select Guest in user configuration it will unselect ALL other options. Please make sure to unselect Guest before you save User Permissions.
 
@@ -182,7 +182,7 @@ Measurement Creator Can
 There are many ways to backup your data and configuration on your CHORDS portal. First you should note that when you run ``python chords_control --config`` a backup copy of your configuration files is created.
 You can also manually back up your portal by saving your configuration and database once everything is set up.  
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/DataBackup.png">
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/DataBackup.png"><!--Using liquid to set path for images.-->
 
 
 To save Configuration:
