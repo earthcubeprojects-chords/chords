@@ -69,8 +69,9 @@ cd /var/lib/chords
 {% highlight sh %}
 Docker engine
 {% endhighlight %}
-<ul><li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li></ul>
 </div>
+
+<ul><li> Now point your browser at the IP of the the system. <strong>Be sure to use http:// (not https://)</strong>.</li></ul>
 
 </div>
 
