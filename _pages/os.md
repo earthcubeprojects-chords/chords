@@ -44,10 +44,37 @@ classes: wide
   <li>Install <a href="https://docs.docker.com/v17.09/docker-for-mac/install/">Docker for Mac</a>.</li>
   <li>Run Docker. Configure its preferences to start Docker automatically. </li>
   <li>Note when you see the whale in the menu bar (upper right corner of your screen) docker is up and running!</li>
-  <li>Then in a terminal window:{% include chords_control.md %} </li>
+  <li>Then in a terminal window:
+  {% highlight sh %}
+  mkdir chords
+  cd chords
+
+  # Fetch the control script:
+  pip install sh
+  curl -O -k https://raw.githubusercontent.com/NCAR/chords/master/chords_control
+
+  # Initial installation:
+  python chords_control --config
+  python chords_control --update
+
+  # To run CHORDS:
+  python chords_control --run
+
+  # To stop CHORDS:
+  python chords_control --stop
+
+  # To reconfigure and update:
+  cd chords
+  curl -O -k  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
+  python chords_control --config
+  python chords_control --update
+  python chords_control --stop
+  python chords_control --run
+  {% endhighlight %} 
+  </li>
   <li> Once the above script has been run all you need to do to start chords on your computer again is open the terminal and type </li>
   {% highlight sh %}
-  cd var/lib/chords
+  cd chords
   python chords_control -- run
   {% endhighlight %}
   </ul>
@@ -63,7 +90,40 @@ classes: wide
   <li>Add C:\Python to the Path environment variable.</li>
   <li>Add the curl directory to the Path environment variable.</li>
   <li>For help with curl visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo"> video </a></li>
-  <li>Open a PowerShell or Command Line, and type:{% include chords_control.md %}</li>
+  <li>Open Command Line, and type:
+  {% highlight sh %} 
+  mkdir chords
+  cd chords
+
+  # Fetch the control script:
+  pip install sh
+  curl -O -k https://raw.githubusercontent.com/NCAR/chords/master/chords_control
+
+  # Initial installation:
+  python chords_control --config
+  python chords_control --update
+
+  # To run CHORDS:
+  python chords_control --run
+
+  # To stop CHORDS:
+  python chords_control --stop
+
+  # To reconfigure and update:
+  cd chords
+  curl -O -k  https://raw.githubusercontent.com/NCAR/chords/master/chords_control
+  python chords_control --config
+  python chords_control --update
+  python chords_control --stop
+  python chords_control --run
+  {% endhighlight %} 
+  </li>
+  <li> Once the above script has been run all you need to do to start chords on your computer again is open the terminal and type </li>
+  {% highlight sh %}
+  cd chords
+  python chords_control -- run
+  {% endhighlight %}
+  </li>
   </ul>
 
 
