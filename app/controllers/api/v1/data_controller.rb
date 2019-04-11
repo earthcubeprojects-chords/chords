@@ -81,24 +81,22 @@ module API
             if instruments.count == 1
               varnames_by_id = {}
               instrument = instruments.first
-              Var.all.where("instrument_id = #{instruments}").each {|v| varnames_by_id[v[:id]] = v[:name]}
+              Var.all.where("instrument_id = #{instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
               ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, instrument, request.host, Profile.first)
               send_data ts_csv, filename: file_root + '.csv'
             else
               compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new('')) do |zos|
                 instruments.each do |instrument|
-                  zos.put_next_entry "instrument_#{instrument.id}.csv"
-
                   varnames_by_id = {}
                   Var.all.where("instrument_id = #{instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-                  csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, instrument, request.host, Profile.first)
+                  csv = MakeGeoCsvFromTsPoints.call(ts_points.select{|point| point['inst'] == "#{instrument.id}"}, Array.new, varnames_by_id, instrument, request.host, Profile.first)
 
-                  zos.print csv
+                  zos.put_next_entry "instrument_#{instrument.id}.csv"
+                  zos.write csv
                 end
               end
 
-              compressed_filestream.rewind
-              send_data compressed_filestream.read, filename: "#{@profile.project}_multi_instrument_download.zip"
+              send_data compressed_filestream.string, filename: "#{file_root}.zip"
             end
           end
         end
