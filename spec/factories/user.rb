@@ -14,11 +14,11 @@ FactoryBot.define do
 
     factory :data_creator do
       roles [:measurements]
-      api_key { self.generate_api_key }
+      api_key { User.generate_api_key }
     end
 
     factory :site_configurator do
-      roles [:site_config, :registered_user]
+      roles [:site_config]
     end
   end
 end

@@ -1,5 +1,5 @@
 .row
-  - if current_user && current_user.role?(:admin) && User.find_by(email: 'admin@chordsrt.com').valid_password?('realtimedata')
+  - if current_user && current_user.role?(:admin) && User.find_by(email: 'admin@chordsrt.com').try(:valid_password?, 'realtimedata')
     = content_tag :div, "Admin Password Set To Default...PLEASE CHANGE IMMEDIATELY!!!", class: "flash_alert"
 
   - if current_user && current_user.role?(:admin) && User.with_only_role(:guest).count > 0
