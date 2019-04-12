@@ -761,7 +761,7 @@ class ChordsBackup(object):
         self.influx_tar_file = 'influxdb-' + time_stamp + '.tar'
         self.grafana_tar_file = 'grafana-' + time_stamp + '.tar'
         self.manifest_file = "manifest-" + time_stamp + ".txt"
-        self.chords_tar_file = 'chords-backup-' + self.nice_project_name() + '-' + time_stamp + '.tar.gz'
+        self.chords_tar_file = 'chords-backup-' + self.nice_project_name() + '-' + time_stamp + '.tar'
 
         print "*** Saving mysql ***"
         mysql_file = open(self.mysql_sql_file, 'w')
@@ -792,7 +792,7 @@ class ChordsBackup(object):
 
         print "*** Packaging files ***"
         tar_params = [
-            '-cvf', self.chords_tar_file, ".env", "chords.yml",
+            '-czvf', self.chords_tar_file, ".env", "chords.yml",
             self.manifest_file,
             self.mysql_sql_file,
             self.influx_tar_file,
@@ -913,7 +913,7 @@ class ChordsRestore(object):
         self.id_check()
         self.are_you_sure()
 
-        self.tmp_dir = tempfile.mkdtemp(prefix="chords_load-", dir=os.path.normpath(tmp_dir))
+        self.tmp_dir = tempfile.mkdtemp(prefix="chords_restore-", dir=os.path.normpath(tmp_dir))
         self.file_paths = {}
         self.docker_containers = {}
 
