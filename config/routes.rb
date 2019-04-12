@@ -29,7 +29,6 @@ Rails.application.routes.draw do
   resources :site_types
   resources :topic_categories
   resources :units
-  resources :urlbuilder
 
   resources :about, only: :index do
     collection do

@@ -47,20 +47,20 @@ class Ability
       end
     end
 
-    if user.role?(:registered_user)
-      registered_user(profile, user)
-
-      if !profile.secure_data_download
-        can :download, Instrument
-      end
+    if user.role?(:measurements)
+      measurement_creator(profile, user)
     end
 
     if user.role?(:downloader)
       data_downloader(profile, user)
     end
 
-    if user.role?(:measurements)
-      measurement_creator(profile, user)
+    if user.role?(:registered_user)
+      registered_user(profile, user)
+
+      if !profile.secure_data_download
+        data_downloader(profile, user)
+      end
     end
 
     if user.role?(:site_config)
@@ -93,7 +93,7 @@ class Ability
     can :live, Instrument
 
     cannot :read, User
-    cannot :read, :data if profile.secure_data_download
+    cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
 
     if user
       can [:read, :update], User, id: user.id
@@ -105,15 +105,20 @@ class Ability
   end
 
   def data_downloader(profile, user)
-    registered_user(profile, user)
-
     can :download, Instrument
     can :read, :data
+
+    cannot :read, User
+
+    if user
+      can [:read, :update], User, id: user.id
+      can :assign_api_key, User, id: user.id
+    end
   end
 
   def measurement_creator(profile, user)
     cannot :read, User
-    cannot :read, :data
+    cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
 
     if user
       can [:read, :update], User, id: user.id
