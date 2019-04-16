@@ -6,7 +6,7 @@ toc: true
 toc_sticky: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
-# classes: "wide"
+classes: "wide"
 ---
 
 ## Site Configuration
