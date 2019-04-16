@@ -83,7 +83,7 @@ classes: wide
 
   <div id="tabs-W10"> <!-- content under tab -->
   <ul>
-  <li>Install <a href="https://docs.docker.com/docker-for-windows/">Docker for Windows</a></li>
+  <li>Install <a href="https://docs.docker.com/docker-for-windows/install/">Docker for Windows</a>. (You will be required to a free docker hub account, and log into it.)</li>
   <li>Run Docker  (it may take a minute to start up).</li>
   <li>Install the latest <a href="https://www.python.org/downloads/windows/">Python 2 release </a></li>
   <li>Download <a href="https://curl.haxx.se/download.html">curl.</a> into a directory of your choice.</li>
