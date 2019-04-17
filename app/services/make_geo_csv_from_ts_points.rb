@@ -52,9 +52,6 @@ class MakeGeoCsvFromTsPoints
     header_lines.push("# data collection longitude: #{instrument.site.lon}")
     header_lines.push("# data collection latitude: #{instrument.site.lat}")
     header_lines.push("# data collection elevation: #{instrument.site.elevation} meters")
-    header_lines.push("# Units of Measure: milliseconds, #{units_of_measure}")
-
-
 
     # Create column arrays of data points
     ts_columns = MakeColumnsFromTsPoints.call(ts_points, "value", varnames_by_id)
@@ -102,6 +99,7 @@ class MakeGeoCsvFromTsPoints
     end
 
     header_lines.push("# Measurements in File: #{measurement_count}")
+    header_lines.push("# Units of Measure: milliseconds, #{units_of_measure}")
 
     header = header_lines.join("\n")
 
