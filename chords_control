@@ -60,7 +60,9 @@ import glob
 import getpass
 from collections import OrderedDict
 from collections import namedtuple
-import sh
+# sh is not available on Windows, and the Linux commands are not there either!
+if platform.system() != "Windows":
+    import sh
 
 # The definitions of standard configuration items. These are tri-tuples:
 # [0]: The configuration item description. This will be printed as a prompt
@@ -288,6 +290,7 @@ At least one and only one of --config, --env, --backwards, --run, --stop,
 --default must be accompanied by --config. 
 To create an initial default configuration: 
    'python chords_control --config --default'
+Backup and restore are not currently available on Windows.
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
 
@@ -1545,8 +1548,14 @@ if __name__ == '__main__':
 
     # Create a backup file
     if options["backup"]:
-        backup()
+        if platform.system() != "Windows":
+            backup()
+        else:
+            print "Backup is not available on Windows."
 
     # Load from a backup file
     if options["restore"]:
-        restore(options['restore'])
+        if platform.system() != "Windows":
+            restore(options['restore'])
+        else:
+            print "Restore is not available on Windows."
