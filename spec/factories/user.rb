@@ -6,6 +6,7 @@ FactoryBot.define do
 
     factory :data_downloader do
       roles [:downloader, :registered_user]
+      api_key { User.generate_api_key }
     end
 
     factory :admin do
@@ -14,11 +15,15 @@ FactoryBot.define do
 
     factory :data_creator do
       roles [:measurements]
-      api_key { self.generate_api_key }
+      api_key { User.generate_api_key }
     end
 
     factory :site_configurator do
-      roles [:site_config, :registered_user]
+      roles [:site_config]
+    end
+
+    factory :guest do
+      roles [:guest]
     end
   end
 end

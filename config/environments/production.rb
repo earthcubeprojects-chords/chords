@@ -105,4 +105,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.assets.precompile += %w( *.js *.css )
+
+  # Port that Grafana is using, normally configured with enviroment variables
+  config.grafana_http_port = ENV['GRAFANA_HTTP_PORT'] || 3000
 end
