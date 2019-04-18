@@ -70,13 +70,14 @@ python chords_control --config
 python chords_control --update
 python chords_control --stop
 python chords_control --run
-  {% endhighlight %} 
-  </li>
-  <li> Once the above script has been run all you need to do to start chords on your computer again is open the terminal and type </li>
-  {% highlight sh %}
+{% endhighlight %} 
+</li>
+<li> Once the above script has been run all you need to do to start chords on your computer again is open the terminal and type </li>
+{% highlight sh %}
 cd chords
 python chords_control -- run
-  {% endhighlight %}
+{% endhighlight %}
+<embed src="https://www.youtube.com/embed/jR_XToKChYI" allowfullscreen="true" width="425" height="344">
   </ol>
   </div>
   </div>
