@@ -87,14 +87,14 @@ python chords_control -- run
 
   <li>Download  and extract <a href="https://curl.haxx.se/windows/" target="_blank">curl</a>. Copy the files (curl.exe, etc.) in the 'bin' directory to your chords directory. For help with curl, visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo">video</a>.</li>
 
-  <li>Install the latest <a href="https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi">Windows Python 2 release.</a></li>
+  <li>Download the<a href="https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi">Windows Python 2 installer</a>. Double click on the downloaded .msi file to install it.</li>
 
-  <li>Add C:\Python paths to the Path environment variable. Hints:
+  <li>Add Python paths to the Path environment variable. Hints:
   <ul>
     <li>Open the Start Search, type in “env”, and choose “Edit the system environment variables”: Click the “Environment Variables…” button.</li>
     <li>Under the "User Variables” section (the upper half), find the row with “Path” in the first column, and click edit. “Edit environment variable”will appear.</li>
-    <li>Select "New", and enter the Python directory. This will typically be C:\Python27.</li>
-    <li>Select "New", and enter the Python scripts directory. This will typically be C:\Python27\scripts.</li>
+    <li>Select "New", and enter the Python directory. This will usually be C:\Python27.</li>
+    <li>Select "New", and enter the Python scripts directory. This will usually be C:\Python27\scripts.</li>
     <li>Ok->Ok->Ok.</li>
   </ul>
   </li>
