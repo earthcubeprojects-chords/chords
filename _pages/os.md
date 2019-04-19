@@ -84,12 +84,12 @@ classes: wide
 
   <div id="tabs-W10"> <!-- content under tab -->
   <ol>
-  <li>Create a directory for chords files. The name and location are not important, but we suggest that you name it 'chords', and create it in your home directory.</li>
+  <li>Open a command window and create a directory for chords files. The name and location are not important, but we suggest that you name it 'chords', and create it in your home directory.</li>
   {% highlight sh %}
   mkdir chords
   {% endhighlight %}
 
-  <li>Download  and extract <a href="https://curl.haxx.se/windows/" target="_blank">curl</a>. Copy the files (curl.exe, etc.) in the 'bin' directory to your chords directory. For help with curl, visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo">video</a>.</li>
+  <li>Download  and extract <a href="https://curl.haxx.se/windows/" target="_blank">curl</a>. Copy the files (curl.exe, etc.) in the 'bin/' directory to your chords directory. For help with curl, visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo">video</a>.</li>
 
   <li>Download the<a href="https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi">Windows Python 2 installer</a>. Double click on the downloaded .msi file to install it.</li>
 
@@ -104,7 +104,7 @@ classes: wide
   </ul>
   </li>
 
-  <li>Open a command window, verify that python is working, and install sh:
+  <li>Verify that python is working:
   {% highlight python %} 
   python
   Python 2.7.16 (v2.7.16:413a49145e, Mar  4 2019, 01:37:19) [MSC v.1500 64 bit (AMD64)] on win32
