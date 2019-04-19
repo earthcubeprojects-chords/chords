@@ -3,7 +3,6 @@ layout: single
 title: Active CHORDS Portals
 permalink: /portals/
 ---
-(Be sure to hit the "Visualization" button for graphical presentation of real-time data.)
 
 ### Actively collecting data across a range of science interests
 [NCAR](http://portal.chordsrt.com){:target="_blank"} (weather station data in the Boulder, Colorado and Cheyenne, Wyoming areas)
@@ -25,6 +24,8 @@ permalink: /portals/
 [csu-hail](http://csu-hail.chordsrt.com){:target="_blank"} (hail sensors used for verification of radar hail estimates in the Dallas/Fort Worth region)
 
 [IS-GEO](http://is-geo.chordsrt.com){:target="_blank"} (Sensor network from the IS-GEO 2018 RCN on the big island of Hawaii)
+
+[GLOBE](http://chords.globedata.ws/){:target="_blank"} (Global Learning and Obeservations to benefit the Environment)
 
 ### In the works and/or awaiting configuration for a future deployment
 canary.chordsrt.com
