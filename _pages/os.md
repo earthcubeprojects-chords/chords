@@ -152,7 +152,6 @@ python chords_control --run
   cd chords
   python chords_control -- run
   {% endhighlight %}
-  </li>
   </ol>
 
   </div>

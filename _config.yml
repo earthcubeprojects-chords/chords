@@ -178,7 +178,7 @@ defaults:
     values:
       layout: single
       read_time: false
-      author_profile: true
+      author_profile: false
       share: true
       comments: false
       sidebar:
@@ -191,7 +191,7 @@ defaults:
       #include: ["_pages"]
     values:
       layout: single
-      author_profile: true
+      author_profile: false
 
 # Reading Files
 include:
@@ -231,7 +231,7 @@ markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
 
 # Conversion
-markdown: kramdown
+markdown: kramdown #creates the table of contents menu. 
 highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"

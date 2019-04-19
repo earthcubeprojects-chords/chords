@@ -2,14 +2,19 @@
 layout: single
 title: Admin
 permalink: /admin/
-toc: true
-toc_sticky: true
-toc_label: "Table of Contents"
-toc_icon: "cog"
-# classes: "wide"
+# toc: true
+# toc_sticky: true
+# toc_label: "Table of Contents"
+# toc_icon: "cog"
+# Table of contents for Admin Page. Can be found and edited under navigation.yml
+sidebar:  
+  title: "Table of Contents"
+  nav: sidebar-adminToc
+
+classes: "wide" # this expands the page to the right. Making it easier to read for users.
 ---
 
-## Site Configuration
+## Site Configuration <a name="siteconfig"></a>
 To configure the site you either have to have Site Configuration or Admin privileges. Configuration is used for managing many (but not all) of the portal characteristics. Sites, instruments, and variables are configured on their own specific pages.
 
 {% include video id="A6OuVPBnb5w" provider="youtube" %}
