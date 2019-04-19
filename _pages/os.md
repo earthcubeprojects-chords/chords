@@ -89,9 +89,9 @@ classes: wide
   mkdir chords
   {% endhighlight %}
 
-  <li>Download  and extract <a href="https://curl.haxx.se/windows/" target="_blank">curl</a>. Copy the files (curl.exe, etc.) in the 'bin/' directory to your chords directory. For help with curl, visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo">video</a>.</li>
+  <li>Download  and extract <a href="https://curl.haxx.se/windows/" target="_blank">curl</a>. Copy the files (curl.exe, etc.) in the 'curl.xxx/bin/' directory to your chords directory. For help with curl, visit this <a href="https://www.youtube.com/watch?v=8f9DfgRGOBo">video</a>.</li>
 
-  <li>Download the<a href="https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi">Windows Python 2 installer</a>. Double click on the downloaded .msi file to install it.</li>
+  <li>Download the <a href="https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi">Windows Python 2 installer</a>. Double click on the downloaded .msi file to install it.</li>
 
   <li>Add Python paths to the Path environment variable. Hints:
   <ul>
