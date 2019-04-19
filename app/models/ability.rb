@@ -39,11 +39,11 @@ class Ability
 
     if !user || user.role?(:guest)
       if !profile.secure_data_viewing
-        registered_user(profile, nil)
+        registered_user(profile, user)
       end
 
       if !profile.secure_data_download
-        data_downloader(profile, nil)
+        data_downloader(profile, user)
       end
     end
 
@@ -105,6 +105,7 @@ class Ability
   end
 
   def data_downloader(profile, user)
+    can :read, :about
     can :download, Instrument
     can :read, :data
 
