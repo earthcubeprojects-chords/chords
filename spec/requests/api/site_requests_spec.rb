@@ -7,6 +7,13 @@ describe 'Sites API', type: :request do
   let(:site) { sites.first }
   let(:user) { FactoryBot.create(:site_configurator) }
 
+  before do
+    profile = Profile.first || Profile.initialize.first
+    profile.secure_data_download = true
+    profile.secure_data_viewing = true
+    profile.save!
+  end
+
   # index
   describe 'GET /api/v1/sites Authenticated' do
     before do
