@@ -2,24 +2,11 @@
 layout: single
 title: Admin
 permalink: /admin/
-<<<<<<< HEAD
-# toc: true
-# toc_sticky: true
-# toc_label: "Table of Contents"
-# toc_icon: "cog"
-# Table of contents for Admin Page. Can be found and edited under navigation.yml
-sidebar:  
-  title: "Table of Contents"
-  nav: sidebar-adminToc
-
-classes: "wide" # this expands the page to the right. Making it easier to read for users.
-=======
 toc: true
 toc_sticky: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 classes: "wide"
->>>>>>> 5c4077f0563a4137b3edb0f9557d1d4885828305
 ---
 
 ## Site Configuration <a name="siteconfig"></a>
