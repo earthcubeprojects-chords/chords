@@ -2,6 +2,9 @@
 layout: single
 title: Getting Started
 permalink: /gettingstarted/
+header:
+  overlay_color: "#000"
+  overlay_filter: "0.5"
 toc: true
 toc_sticky: true
 toc_label: "Table of Contents"

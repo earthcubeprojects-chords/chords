@@ -77,13 +77,8 @@ classes: wide
   cd chords
   python chords_control -- run
   {% endhighlight %}
-<<<<<<< HEAD
-  <iframe width="420" height="250" src="https://www.youtube.com/embed/jR_XToKChYI" frameborder="0" allowfullscreen></iframe>
-  </ul>
-=======
   <embed src="https://www.youtube.com/embed/jR_XToKChYI" width="425" height="344">
   </ol>
->>>>>>> cb4c72afffe874780e56282db158a58fe65ee9fa
   </div>
   </div>
 

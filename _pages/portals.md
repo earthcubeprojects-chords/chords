@@ -2,6 +2,9 @@
 layout: single
 title: Active CHORDS Portals
 permalink: /portals/
+header:
+  overlay_color: "#11999e"
+  overlay_filter: "1.0"
 ---
 
 ### Actively collecting data across a range of science interests

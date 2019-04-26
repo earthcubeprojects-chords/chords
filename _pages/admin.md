@@ -1,6 +1,9 @@
 ---
-# layout: single
+layout: single
 title: Admin
+header:
+  overlay_color: "#000"
+  overlay_filter: "0.5"
 permalink: /admin/
 toc: true
 toc_sticky: true

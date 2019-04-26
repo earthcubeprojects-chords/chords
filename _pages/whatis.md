@@ -2,7 +2,8 @@
 layout: single
 title: What is CHORDS?
 header:
-  overlay_color: "#999"
+  overlay_color: "#000"
+  overlay_filter: "0.5"
 permalink: /whatis/
 classes: wide
 ---

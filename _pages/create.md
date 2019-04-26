@@ -90,7 +90,7 @@ Then select an EC2 KeyPair that you created for *KeyName*. This will allow you t
 
 For demonstrations and simple, low-bandwidth streaming feeds, select a _t2.micro_ instance type which are free of charge for the first
 year. Otherwise, use the default.  
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png"> <!--Using liquid to set path for images.-->
+<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Step4.png"><!--Using liquid to set path for images.-->
 
 
 * Hit **Next**
