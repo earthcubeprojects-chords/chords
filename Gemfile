@@ -49,6 +49,7 @@ group :test do
   gem 'database_cleaner'
   gem 'email_spec'
   gem 'rails-controller-testing'
+  gem 'timecop'
 end
 
 group :development do

@@ -49,7 +49,7 @@ class MakeGeoJsonFromTsPoints
     feature[:type] = 'Feature'
     feature[:geometry] = {}
     feature[:geometry][:type] = 'Point'
-    feature[:geometry][:coordinates] = [instrument.site.lon, instrument.site.lat, instrument.site.elevation]
+    feature[:geometry][:coordinates] = [instrument.site.lon.to_f, instrument.site.lat.to_f, instrument.site.elevation.to_f]
 
     feature[:properties] = {}
     feature[:properties][:project] = profile.project
