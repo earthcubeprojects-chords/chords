@@ -182,7 +182,7 @@ module API
 
           format.geojson do
             ts_json = MakeGeoJsonFromTsPoints.call(ts_points, @profile, @instrument)
-            send_data ts_json, filename: file_root + '.geojson'
+            send_data ts_json, filename: file_root + '.geojson', type: 'application/json'
           end
         end
       end

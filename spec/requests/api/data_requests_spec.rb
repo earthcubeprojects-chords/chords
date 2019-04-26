@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'json'
 
 describe 'Data Download API', type: :request do
   # initialize test data
@@ -7,11 +8,13 @@ describe 'Data Download API', type: :request do
   let(:downloader) { FactoryBot.create(:data_downloader) }
   let(:user) { FactoryBot.create(:user) }
   let(:admin) { FactoryBot.create(:admin) }
+  let(:creator) { FactoryBot.create(:data_creator) }
 
   describe 'GET /api/v1/data Unsecure Data Download' do
     before do
       profile = Profile.first || Profile.initialize.first
       profile.secure_data_download = false
+      profile.secure_data_entry = false
       profile.save!
     end
 
@@ -44,6 +47,8 @@ describe 'Data Download API', type: :request do
 
     describe 'GET /api/v1/data#show' do
       let(:instrument) { Instrument.first }
+      let(:var) { Var.first || FactoryBot.create(:var, instrument: instrument) }
+      let(:profile) { Profile.first }
 
       it 'returns status code 200' do
         get "/api/v1/data/#{instrument.id}"
@@ -68,6 +73,56 @@ describe 'Data Download API', type: :request do
       it 'returns status code 406 with HTML' do
         get "/api/v1/data/#{instrument.id}.html"
         expect(response).to have_http_status(406)
+      end
+
+      it 'returns proper metadata' do
+        pending 'Still unsure why the composable matchers are not working correctly'
+        get "/api/v1/data/#{instrument.id}.geojson"
+
+        expected = {
+          features: a_collection_including(
+            a_hash_including(
+              geometry: a_hash_including(
+              coordinates: a_collection_including(
+                instrument.site.lat.to_f,
+                instrument.site.lon.to_f,
+                instrument.site.elevation.to_f
+              ),
+              type: "Point"
+            ),
+            properties: a_hash_including(
+              affiliation: profile.affiliation,
+              data: [],
+              doi: profile.doi,
+              doi_citation: "https://citation.crosscite.org/?doi=#{profile.doi}",
+              instrument: instrument.name,
+              instrument_id: instrument.id,
+              project: profile.project,
+              sensor_id: instrument.sensor_id,
+              site: instrument.site.name,
+              site_id: instrument.site.id,
+              variables: a_collection_including(
+                a_hash_including(
+                  name: var.name,
+                  shortname: var.shortname,
+                  measured_property: var.measured_property.try(:label),
+                  measured_property_definition: var.measured_property.try(:definition),
+                  measured_property_source: var.measured_property.try(:source),
+                  measured_property_url: var.measured_property.try(:url),
+                  units_name: var.unit.try(:name),
+                  units_abbreviation: var.unit.try(:abbreviation),
+                  units_type: var.unit.try(:type),
+                  units_source: var.unit.try(:source),
+                )
+              )
+            ),
+            type: "Feature"
+          )),
+          type: "FeatureCollection"
+        }
+
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json).to include(expected)
       end
     end
   end
