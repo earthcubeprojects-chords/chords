@@ -64,4 +64,7 @@ Rails.application.configure do
 
   # Rotate log files
   config.logger = Logger.new(config.paths['log'].first, 10, 25.megabytes)
+
+  # Port that Grafana is using, normally configured with enviroment variables
+  config.grafana_http_port = ENV['GRAFANA_HTTP_PORT'] || 3001
 end

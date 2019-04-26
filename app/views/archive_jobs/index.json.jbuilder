@@ -1,1 +1,0 @@
-json.array! @archive_jobs, partial: 'archive_jobs/archive_job', as: :archive_job

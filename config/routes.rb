@@ -6,44 +6,33 @@ Rails.application.routes.draw do
 
   # send logged in user to the dashboard
   authenticated :user do
-    root 'dashboard#index', as: :authenticated_root
+    root to: 'dashboard#index', as: :authenticated_root
   end
 
-  # send guest user to the about page
-  root 'about#index'
+  root to: 'dashboard#index', constraints: lambda { |request| Profile.first && !Profile.first.secure_data_viewing }
+  root to: 'about#index', as: :unauthenticated_root
 
-  post 'archive/push_cuahsi_variables' => 'archives#push_cuahsi_variables', as: :push_cuahsi_variables
-  post 'archive/push_cuahsi_methods' => 'archives#push_cuahsi_methods', as: :push_cuahsi_methods
-  post 'archive/push_cuahsi_sites' => 'archives#push_cuahsi_sites', as: :push_cuahsi_sites
-  post 'archive/push_cuahsi_sources' => 'archives#push_cuahsi_sources', as: :push_cuahsi_sources
+
+  namespace :api, :defaults => {format: 'json'} do
+    namespace :v1 do
+      resources :sites
+      resources :data, only: [:index, :show]
+    end
+  end
+
 
   resources :dashboard
-  resources :data
+  resources :data, only: :index
   resources :influxdb_tags
   resources :linked_data, only: [:index, :edit, :update, :show]
   resources :measured_properties
   resources :site_types
   resources :topic_categories
   resources :units
-  resources :urlbuilder
 
   resources :about, only: :index do
     collection do
       get :data_urls
-    end
-  end
-
-  resources :archives do
-    collection do
-      post :update_credentials
-      post :enable_archiving
-      post :disable_archiving
-    end
-  end
-
-  resources :archive_jobs do
-    collection do
-      post :delete_completed_jobs
     end
   end
 

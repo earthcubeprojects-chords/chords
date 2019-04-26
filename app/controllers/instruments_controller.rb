@@ -1,5 +1,5 @@
 class InstrumentsController < ApplicationController
-  load_and_authorize_resource except: :show
+  load_and_authorize_resource
 
   before_action :set_instrument, only: [:show, :live]
 
@@ -16,7 +16,8 @@ class InstrumentsController < ApplicationController
       start_time_ms = @instrument.point_time_in_ms("last") - eval(time_offset)
     end
 
-    livedata = { points: [],
+    livedata = {
+                 points: [],
                  multivariable_points: {},
                  multivariable_names: [],
                  display_points: 0,
@@ -40,7 +41,7 @@ class InstrumentsController < ApplicationController
     # otherwise we return data for all variables
     else
       @instrument.vars.each do |variable|
-        livedata[:multivariable_names].push  variable.shortname
+        livedata[:multivariable_names] << variable.shortname
         livedata[:multivariable_points][variable.shortname] = []
 
         # Fetch the data
@@ -110,19 +111,7 @@ class InstrumentsController < ApplicationController
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
-
-    if ['csv', 'xml', 'json', 'geojson', 'sensorml'].include?(params[:format])
-      authorize! :download, @instrument
-    else
-      authorize! :read, @instrument
-    end
-
     @last_url = InstrumentsHelper.sanitize_url(GetLastUrl.call(TsPoint, @instrument.id))
-
-    metadata = { "Project": @profile.project,
-                 "Site": @instrument.site.name,
-                 "Affiliation": @profile.affiliation,
-                 "Instrument": @instrument.name }
 
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
@@ -157,10 +146,6 @@ class InstrumentsController < ApplicationController
     # Get the time series points from the database
     ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, start_time, end_time)
 
-    # File name root
-    file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
-    file_root = file_root.split.join
-
     respond_to do |format|
       format.html
 
@@ -168,26 +153,6 @@ class InstrumentsController < ApplicationController
         topic_category = @instrument.topic_category ? @instrument.topic_category.name : ''
 
         render file: "app/views/instruments/sensorml.xml.haml", layout: false, locals: { topic_category: topic_category }
-      end
-
-      format.csv do
-        varnames_by_id = {}
-        Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-        ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
-        send_data ts_csv, filename: file_root+'.csv'
-      end
-
-      format.json do
-        render json: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-      end
-
-      format.geojson do
-        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-        send_data ts_json, filename: file_root + '.geojson'
-      end
-
-      format.xml do
-        send_data MakeXmlFromTsPoints.call(ts_points, metadata), filename: file_root+'.xml'
       end
     end
   end

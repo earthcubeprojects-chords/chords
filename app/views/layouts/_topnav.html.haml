@@ -30,14 +30,11 @@
             %li= link_to 'Map', map_sites_path
 
           - if can? :read, Instrument
-            %li= link_to 'Visualization', "http://#{request.host}:"+ENV['GRAFANA_HTTP_PORT'], :target => "_blank"
+            %li= link_to 'Visualization', "http://#{request.host}:#{Rails.configuration.grafana_http_port}", :target => "_blank"
 
         %ul.nav.navbar-nav.navbar-right
           - if can? :manage, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
-
-          - if can? :manage, Archive
-            %li= link_to 'Archive', '/archives'
 
           - if can? :manage, Profile
             %li= link_to 'Configure', profiles_path
