@@ -29,64 +29,25 @@ main:
   - title: "3D Paws"
     url: http://3d.chordsrt.com/
 
-
-
-# #Sidebar for the homepage
-sidebar-sample:
-  - title: "Menu"
+#testing for custom toc
+sidebar-adminToc:
+  - title: "Site Configuration"
+    text: "WHY YOU NO WORK"
     children:
-        - title: "About"
-          url: /whatis/
+      - title: "Editing User Permissions"
+        text: 
+      - title: "Portal Configuration"
+        url: /
+      - title: "Sites"
+        url: /
+      - title: "Variables"
+        url: /
+      - title: "Metadata"
+        url: /
+      - title: "Email"
+        url: /
+  - title: "User Management"
+    url: /
+  - title: "Data Backup"
+    text: /
 
-        - title: "News"
-          url: /news/
-
-        - title: "3D Paws"
-          url: http://3d.chordsrt.com
-
-# #Sidebar for Admin pages
-# sidebar-admin:
-#   - title: "Site Configuration"
-#     children:
-#         - title: "Sites"
-#           url: 
-#
-#         - title: "Instruments"
-#           url: 
-#
-#         - title: "Variables"
-#           url: 
-#
-#         - title: "Metadata"
-#           url:
-#
-#         - title: "Email"
-#           url:
-#
-#         - title: "Archive"
-#           url:
-
-
-# #Sidebar for User pages
-# sidebar-user:
-#   - title: "User"
-#     children:
-#         - title: "Sending a URL from Unix"
-#           url: 
-#
-#         - title: "Arduino"
-#           url: 
-#
-#         - title: "Particle"
-#           url: 
-#
-#         - title: "Campbell Datalogger"
-#           url: 
-#
-#   - title: "Retrieving Data"
-#     children:
-#         - title: "Download Data"
-#           url: 
-#
-#         - title: "View via Grafana"
-#           url: 

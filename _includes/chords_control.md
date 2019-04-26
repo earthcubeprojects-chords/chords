@@ -1,4 +1,5 @@
-{% highlight sh %} <!--Using Liquid to highlight syntax-->
+ <!--Using Liquid to highlight syntax-->
+ {% highlight sh %}
 mkdir -p /var/lib/chords
 cd /var/lib/chords
 

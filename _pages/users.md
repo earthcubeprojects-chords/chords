@@ -64,6 +64,7 @@ To find your api key:
 ## Storing Measurements
 
 ### Sending a URL from UNIX
+
 #### Data In
 It is easy to submit new data to a Portal, simply using standard HTTP URLs. The URL can be submitted directly from the address bar of your browser (but of course this would get tedious).
 We will first describe the URL syntax, and follow this with examples that demonstrate how easy it is to feed your data to a CHORDS Portal, using Python, C, a browser or the command line. These are only a few of the languages that work, and you should be able to figure out a similar method for your own particular language. Almost all programming languages have functions for submitting HTTP requests.
@@ -120,6 +121,7 @@ Measurements for variables are specified by *shortname=value* pairs. You do not 
     </tr>
   </tbody>
 </table>
+
 
 #### Programming Examples
 
@@ -201,13 +203,117 @@ Measurements for variables are specified by *shortname=value* pairs. You do not 
 $("#tabs").tabs();
 </script>
 
+#### Data Out
+It's just as easy to get data out of a Portal as it is to put data in. This can
+be done directly from the Portal web page. Or you can use HTTP URL's to
+fetch data. The URL can be submitted directly from the address bar of your browser, which will
+deliver the data in standard formats such as CSV files, JSON files, or plain JSON.
+
+You can also retrieve data using your favorite programming language to construct
+a program to send URLs and receive data, letting you build
+analysis and visulaization apps that can process your real-time observations. Using JavaScipt,
+you can even build widgets and pages that display your data on your own web site.
+
+We will first describe the URL syntax for retrieving data, and follow this with examples that
+demonstrate how easy it is to integrate your analysis activities with a CHORDS Portal using
+Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
+
+###  URL Syntax
+
+Sample URLs for fetching data from the Portal:
+
+    http://myportal.org/instruments/1.csv
+    http://myportal.org/instruments/1.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
+    http://myportal.org/instruments/4.geojson?email=[USER_EMAIL]&api_key=[API_KEY]
+    http://myportal.org/instruments/3.xml
+    http://myportal.org/instruments/3.json?last
+
+_myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
+separated by "&".
+
+The number following _instruments/_ is the instrument identifier.
+
+Following the instrument identifier is the format that the data will be returned in (_csv, geojson, json or xml_).
+
+Some formats result in a data file being returned to you browser, which can be saved
+in a directory. The other formats directly return text, which can
+be easily ingested into programs.
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Format</th>
+      <th>File or Text</th>
+      <th>Data Product</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>.csv</td>
+      <td>File</td>
+      <td>Data in a comma-separated-value GeoCSV (CSV) file. CSV files can be opened automatically
+          by spreadsheet programs such as MS Excel.</td>
+    </tr>
+    <tr>
+      <td>.geojson</td>
+      <td>File</td>
+      <td>Data in a GeoJSON structured file, following RFC 7946. Most scripting programs can easily read JSON
+          into a structured variable.</td>
+    </tr>
+    <tr>
+      <td>.xml</td>
+      <td>File</td>
+      <td>Data in an eXtensible-Markup-Language (XML) structured file.</td>
+    </tr>
+    <tr>
+      <td>.json</td>
+      <td>Text</td>
+      <td>Data in straight JSON format. This format is used to bring data directly into a
+          processing program.</td>
+    </tr>
+  </tbody>
+</table>
+
+Fields after "?" are quallifier pairs, with each separated by "&". The qualifiers are
+optional, and are used to refine the data request.
+
+If time qualifiers are not specified, data for the curent day are returned.
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Qualifier</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start=time</td>
+      <td>Start time of the data span, in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a> format.</td>
+    </tr>
+    <tr>
+      <td>end=time</td>
+      <td>Start time of the data span, in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a> format.</td>
+    </tr>
+    <tr>
+      <td>email=[USER_EMAIL]</td>
+      <td>If the Portal has been configured to require a security key for downloading data, the user email must also be specified with the <em>email</em> qualifier.</td>
+    </tr>
+    <tr>
+      <td>api_key=[API_KEY]</td>
+      <td>If the Portal has been configured to require a security key for downloading data, it
+      is specified with the <em>api_key</em> qualifier. Keys are case sensitive and must be paired with the user email associated with the api key.</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Programming Examples
 
 
 
 
-
-
-### Particle
+## Particle
 How to create a JSON string using Particle
 
 1. In the beginning of your program add the line: ``#define ARDUINOJSON_ENABLE_ARDUINO_STRING 1``

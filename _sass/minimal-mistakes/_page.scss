@@ -21,12 +21,23 @@
   
   .page {
     @include breakpoint($large) {
+<<<<<<< HEAD
       padding-left: 0;
     }
   
     @include breakpoint($x-large) {
       width: $x-large;
       padding-left: 0;
+=======
+      float: right;
+      width: calc(100% - #{$right-sidebar-width-narrow});
+      padding-right: $right-sidebar-width-narrow;
+    }
+  
+    @include breakpoint($x-large) {
+      width: calc(100% - #{$right-sidebar-width});
+      padding-right: $right-sidebar-width;
+>>>>>>> cb4c72afffe874780e56282db158a58fe65ee9fa
     }
   
     .page__inner-wrap {
@@ -428,7 +439,7 @@
     border-radius: 50%;
   
     @include breakpoint($large) {
-      width: 80px;
+      width: 0px;
       height: 80px;
       padding: 5px;
       border: 1px solid $border-color;
@@ -473,11 +484,12 @@
     border-top: 1px solid $border-color;
   
     @include breakpoint($large) {
-      padding-right: 0;
+      float: right;
+      width: calc(100% - #{$right-sidebar-width-narrow});
     }
   
     @include breakpoint($x-large) {
-      padding-right: 0;
+      width: calc(100% - #{$right-sidebar-width});
     }
   
     a {
