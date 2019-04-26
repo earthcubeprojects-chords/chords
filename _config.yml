@@ -157,20 +157,33 @@ defaults:
     values:
       layout: single
 
+
+
+# _portfolio 
+collections:
+  portfolio:
+    output: true
+    permalink: /:collection/:path/
+
+        
+
 defaults:
-  # _posts
+  # _pages
   - scope:
       path: ""
-      type: posts
+      type: pages
+      #include: ["_pages"]
     values:
       layout: single
-      author_profile: true
-      sidebar: true
-      read_time: true
-      comments: true
+      author_profile: false
+  # _portfolio
+  - scope:
+      path: ""
+      type: portfolio
+    values:
+      layout: single
+      author_profile: false
       share: true
-      related: true
-
   # _docs
   - scope:
       path: ""
@@ -183,16 +196,19 @@ defaults:
       comments: false
       sidebar:
         nav: "docs"
-defaults:
-  # _pages
+  # _posts
   - scope:
       path: ""
-      type: pages
-      #include: ["_pages"]
+      type: posts
     values:
       layout: single
-      author_profile: false
-
+      author_profile: true
+      sidebar: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
+      
 # Reading Files
 include:
   - .htaccess

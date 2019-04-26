@@ -26,6 +26,9 @@ main:
   - title: "Live Portals"
     url: /portals/
 
+  - title: "Grafana"
+    url: /grafana/
+    
   - title: "3D Paws"
     url: http://3d.chordsrt.com/
 

@@ -290,41 +290,27 @@ Extra credit: once you have been able to make a simple Grafana graph, see this [
 1. **Open Grafana**
   The visualization link will open a new browser window which provides access to the Grafana time-series visualization system.
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_011.png"><!--Using liquid to set path for images.-->
+
 2. **Login**
   - Sign in to Grafana
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_010.png"><!--Using liquid to set path for images.-->
-3. **Creating a datasource**
-  - Add a data source:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_030.png"><!--Using liquid to set path for images.-->
-  - Configure the data source:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_040.png"><!--Using liquid to set path for images.-->
-  - When configured correctly, success will be indicated:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_041.png"><!--Using liquid to set path for images.-->
-  - If something is not configured correctly, you may see a message: **"Unknown error":**
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_042.png"><!--Using liquid to set path for images.-->
-    - Make changes, and mash **Save & Test** again.
-
-4. **Add a dashboard**
-  - Select New dashboard:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_050.png"><!--Using liquid to set path for images.-->
-  - A new dashboard is created, with an empty panel. Add a graph by pressing Graph:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_051.png"><!--Using liquid to set path for images.-->
-  - Click in the bar at the top of the graph, to pop up a menu:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_060.png"><!--Using liquid to set path for images.-->
-  - And select Edit:
-  <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_070.png"><!--Using liquid to set path for images.-->
-  - Configure the panel: 
-    Use the General tab to set a title:
-    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_110.png"><!--Using liquid to set path for images.-->
-    Use the Display tab to change the appearance:
-    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_100.png"><!--Using liquid to set path for images.-->
-    The variable identifires are obtained from the CHORDS Instruments page: 
-    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_120.png"><!--Using liquid to set path for images.-->
-    Use the Metrics tab to configure the database access. Close when you see plotted data:
-    <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_095.png"><!--Using liquid to set path for images.-->
-
-5. **Change the admin password**
-  - Finally, be sure to change (and remember) the admin password for grafana. This is accessed through Admin->Profile:
+  - Once you've signed in you will be required to change your password.
+  - If you need to change your password again or edit permissions go through Admin->Profile:
   <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/grafsetup_020.png"><!--Using liquid to set path for images.-->
+
+3. **Add a new panel to a dashboard**
+  - Your grafana is already set up with a dashport but you can set up different panels to suit your needs.
+  - Click on the "add a new panel" button in the upper middle part of the screen. 
+  - Select your desired panel
+
+4. **Connect data to new panel**
+  - Click on the title of the new panel and select "edit"
+  - Fill out the content
+    **NOTE:**The variable number will relate to the instrument_id **NOT** sensor_id (var = instrument_id)
+    <!--add picture here--> 
+    “autogen” “tsdata” “var” “(variable number)”
+    “field(value)” “mean()”
+    “time($_interval)” “fill(null)”
+    “(enter legend)”
 
 
