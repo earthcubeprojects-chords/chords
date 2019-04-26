@@ -7,10 +7,10 @@ classes: wide
 
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-Ubuntu" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Ubuntu</a></li> <!-- Using JqueryUI to set names and colors on the tabs -->
-    <li><a href="#tabs-RHEL" style="background: none repeat scroll 0% 0% rgb(176,224,230);" >RHEL & Centos</a></li>
-    <li><a href="#tabs-Macos" style="background: none repeat scroll 0% 0% rgb(176,224,230);">Mac</a></li>
-    <li><a href="#tabs-W10" style="background: none repeat scroll 0% 0% rgb(176,224,230);">W10</a></li>
+    <li><a href="#tabs-Ubuntu">Ubuntu</a></li> <!-- Using JqueryUI to set names and colors on the tabs -->
+    <li><a href="#tabs-RHEL">RHEL & Centos</a></li>
+    <li><a href="#tabs-Macos">Mac</a></li>
+    <li><a href="#tabs-W10">W10</a></li>
   </ul>
 
   <div id="tabs-Ubuntu"> <!-- content under tab -->
@@ -77,8 +77,13 @@ classes: wide
   cd chords
   python chords_control -- run
   {% endhighlight %}
+<<<<<<< HEAD
+  <iframe width="420" height="250" src="https://www.youtube.com/embed/jR_XToKChYI" frameborder="0" allowfullscreen></iframe>
+  </ul>
+=======
   <embed src="https://www.youtube.com/embed/jR_XToKChYI" width="425" height="344">
   </ol>
+>>>>>>> cb4c72afffe874780e56282db158a58fe65ee9fa
   </div>
   </div>
 
@@ -159,7 +164,7 @@ python chords_control --run
   </ol>
   </div>
 </div>
-See the [detailed instructions](control.html) if the Quick Start recipes are not adequate
+See the [detailed instructions]({{site.baseurl}}/os/control/) if the Quick Start recipes are not adequate
 to get your portal running, and for additional information.
 <script>
 $("#tabs").tabs();
