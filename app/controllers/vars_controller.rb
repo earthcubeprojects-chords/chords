@@ -1,10 +1,5 @@
 class VarsController < ApplicationController
-  include ArchiveHelper
-
   load_and_authorize_resource except: :get_autocomplete_items
-
-  autocomplete :measured_property, :label, :full => true
-  autocomplete :unit, :name, :full => true
 
   def index
   end
@@ -15,11 +10,17 @@ class VarsController < ApplicationController
   def new
     @instrument = Instrument.find(params[:instrument_id])
     @return = params[:return]
+
+    @units = get_units
+    @measured_properties = get_measured_properties
   end
 
   def edit
     @instrument = @var.instrument
     @return = params[:return]
+
+    @units = get_units
+    @measured_properties = get_measured_properties
   end
 
   def create
@@ -65,20 +66,16 @@ class VarsController < ApplicationController
     end
   end
 
-  def get_autocomplete_items (parameters)
-    authorize! :read, Var
-
-    if(params[:search_mode].eql? 'unit_source')
-      items = Unit.where("source = :source and name LIKE :term", {source: Profile.first.unit_source, term: '%' + params[:term] + '%'})
-    elsif(params[:search_mode].eql? 'measured_property_source')
-      items = MeasuredProperty.where("source = :source and name LIKE :term", {source: Profile.first.measured_property_source, term: '%' + params[:term] + '%'})
-    else
-      items = super(parameters)
-    end
-  end
-
 private
   def var_params
-    params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category, :return)
+    params.require(:var).permit(:name, :shortname, :instrument_id, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category, :return)
+  end
+
+  def get_units
+    Unit.where(source: Profile.first.unit_source).order(:name)
+  end
+
+  def get_measured_properties
+    MeasuredProperty.where(source: Profile.first.measured_property_source).order(:label)
   end
 end

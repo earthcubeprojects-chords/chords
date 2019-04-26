@@ -1,2 +1,0 @@
-class ArchiveJob < ApplicationRecord
-end

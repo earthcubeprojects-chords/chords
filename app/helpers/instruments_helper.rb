@@ -23,7 +23,7 @@ module InstrumentsHelper
   end
 
   def put_data_url
-    url = url_for(:only_path => false, :host => request.host, :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id)
+    url = url_for(only_path: false, host: request.host, controller: 'measurements', action: 'url_create', instrument_id: @instrument.id)
 
     @instrument.vars.each do |var|
       url +=  "&#{var.shortname}=#{var.name}"
@@ -36,8 +36,6 @@ module InstrumentsHelper
   end
 
   def put_data_url_with_sensor_id
-    url = url_for(:only_path => false, :host => request.host, :controller => 'measurements', :action => 'url_create', :instrument_id => @instrument.id)
-
     url = "#{root_url}measurements/url_create?sensor_id=#{@instrument.sensor_id}"
 
     @instrument.vars.each do |var|
@@ -51,7 +49,7 @@ module InstrumentsHelper
   end
 
   def data_file_download_url(file_extension, range = nil)
-    url = url_for(:only_path => false, :host => request.host, :controller => 'instruments', :action => 'show', :id => @instrument.id)
+    url = url_for(only_path: false, host: request.host, controller: 'api/v1/data', action: :show, id: @instrument.id)
     url += ".#{file_extension}"
 
     if range
@@ -62,6 +60,43 @@ module InstrumentsHelper
       url += "last"
     elsif range == 'start_end'
       url += "start=2015-08-01T00:30&end=2015-08-20T12:30"
+    end
+
+    return url
+  end
+
+  def multi_inst_data_file_download_url(file_extension, range = nil, ids = nil, test_data = false, auth = false)
+    url = url_for(only_path: false, host: request.host, controller: 'api/v1/data', action: :index)
+    url += ".#{file_extension}" if file_extension
+
+    if range || ids || test_data || auth
+      url += "?"
+    end
+
+    case ids
+    when 'sensors'
+      url += 'sensors=sen1,sen2,sen3'
+    when 'instruments'
+      url += 'instruments=1,2,3'
+    end
+
+    if ids && range
+      url += '&'
+    end
+
+    case range
+    when 'start_end'
+      url += "start=2015-08-01T00:30&end=2015-08-20T12:30"
+    end
+
+    if test_data
+      url += '&' if (range || ids)
+      url += 'test'
+    end
+
+    if auth
+      url += '&' if (range || ids || test_data)
+      url += "email=[USER_EMAIL]&api_key=[API_KEY]"
     end
 
     return url

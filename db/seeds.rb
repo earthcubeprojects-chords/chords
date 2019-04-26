@@ -20,4 +20,3 @@ MeasuredProperty.populate
 TopicCategory.populate
 Unit.populate
 SiteType.populate
-Archive.populate

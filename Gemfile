@@ -18,7 +18,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 
-gem 'devise', '~> 4.5'
+gem 'devise', '~> 4.6'
 gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
@@ -27,7 +27,8 @@ gem 'loofah', '>= 2.2.3'
 gem 'rack', '>= 2.0.6'
 
 gem 'mini_portile2'
-gem 'whenever', "~>0.9.7", :require => false
+gem 'whenever', '~> 0.9.7', :require => false
+gem 'rubyzip', '~> 1.2.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -47,6 +48,8 @@ group :test do
 
   gem 'database_cleaner'
   gem 'email_spec'
+  gem 'rails-controller-testing'
+  gem 'timecop'
 end
 
 group :development do

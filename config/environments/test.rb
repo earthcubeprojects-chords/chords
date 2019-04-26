@@ -54,4 +54,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Port that Grafana is using, normally configured with enviroment variables
+  config.grafana_http_port = ENV['GRAFANA_HTTP_PORT'] || 3001
 end

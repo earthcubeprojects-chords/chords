@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181121175434) do
+ActiveRecord::Schema.define(version: 20190327160743) do
 
   create_table "archive_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string "archive_name"
@@ -53,7 +53,6 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.integer "plot_offset_value", default: 1
     t.string "plot_offset_units", default: "weeks"
     t.integer "topic_category_id"
-    t.integer "cuahsi_method_id"
     t.boolean "is_active", default: true
     t.string "sensor_id"
     t.bigint "measurement_count", default: 0, null: false
@@ -91,12 +90,11 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "timezone"
-    t.boolean "secure_administration", default: false
-    t.boolean "secure_data_viewing", default: true
+    t.boolean "secure_administration", default: true
+    t.boolean "secure_data_viewing", default: false
     t.boolean "secure_data_download", default: true
     t.boolean "secure_data_entry", default: true
     t.string "data_entry_key"
-    t.string "google_maps_key", default: "none"
     t.string "page_title", default: "CHORDS Portal"
     t.text "doi"
     t.string "contact_name", default: "Contact Name", null: false
@@ -108,10 +106,10 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.string "contact_country", default: "Contact Country", null: false
     t.string "contact_zipcode", default: "Contact Zipcode", null: false
     t.string "domain_name", default: "example.chordsrt.com", null: false
-    t.integer "cuahsi_source_id"
     t.string "unit_source", default: "CUAHSI"
     t.string "measured_property_source", default: "SensorML"
     t.string "data_archive_url"
+    t.integer "max_download_points", default: 100000, null: false
   end
 
   create_table "site_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
@@ -130,8 +128,6 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.text "description"
     t.decimal "elevation", precision: 12, scale: 6, default: "0.0"
     t.integer "site_type_id"
-    t.integer "cuahsi_site_code"
-    t.integer "cuahsi_site_id"
     t.index ["site_type_id"], name: "index_sites_on_site_type_id"
   end
 
@@ -178,12 +174,10 @@ ActiveRecord::Schema.define(version: 20181121175434) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "shortname"
-    t.string "units", default: "C", null: false
     t.integer "measured_property_id", default: 795, null: false
     t.float "minimum_plot_value", limit: 24
     t.float "maximum_plot_value", limit: 24
     t.integer "unit_id", default: 1
-    t.integer "cuahsi_variable_id"
     t.string "general_category", default: "Unknown"
     t.index ["instrument_id"], name: "index_vars_on_instrument_id"
     t.index ["measured_property_id"], name: "index_vars_on_measured_property_id"
