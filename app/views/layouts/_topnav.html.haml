@@ -33,7 +33,7 @@
             %li= link_to 'Visualization', "http://#{request.host}:#{Rails.configuration.grafana_http_port}", :target => "_blank"
 
         %ul.nav.navbar-nav.navbar-right
-          - if can? :manage, Instrument
+          - if can? :simulator, Instrument
             %li= link_to 'Simulator', '/instruments/simulator'
 
           - if can? :manage, Profile

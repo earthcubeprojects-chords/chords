@@ -63,8 +63,12 @@ class InstrumentsController < ApplicationController
       flash[:notice] = 'An API Key is necessary to use the simulator. Please add one by editing the user in the Users section.'
     end
 
-    @sites = Site.accessible_by(current_ability)
-    @instruments = Instrument.accessible_by(current_ability)
+    if @profile.secure_data_entry && (current_user.role?(:admin) || current_user.role?(:site_config))
+      flash[:alert] = 'Admin and Site Config users cannot create measurements, please sign in as a regular user with the Measurements ability enabled.'
+    end
+
+    @sites = Site.all     # if group permissions ever applied, this should be used Site.accessible_by(current_ability)
+    @instruments = Instrument.all   # if group permissions ever applied, this should be used Instrument.accessible_by(current_ability)
   end
 
   # GET /instruments/duplicate?instrument_id=1
