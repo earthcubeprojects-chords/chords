@@ -130,7 +130,7 @@ First, your measured properties and units are part of the metadata, but don’t 
 
 Second, under your configuration page there is a section for entering JSON-LD metadata. Metadata from your entries create a JSON-LD record that is encapsulated within your Portal instance. These records allow Google (through its [Data Set Search tool](https://toolbox.google.com/datasetsearch)) and other harvesters to discover the existence of your server. This increases the visibility of your data on the web.
 
-### Email 
+### Email
 1. To change an email address simply click on **“Users”** and then click **“Edit”**  
 
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Email.png">  <!--Using liquid to set path for images.-->
@@ -142,6 +142,8 @@ Second, under your configuration page there is a section for entering JSON-LD me
 2. Type email into the Email Box and click **“Update User”**
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUpdate.png"><!--Using liquid to set path for images.-->
 
+### Creating and Sending Data
+Admins do not have permission to create test data or send data to CHORDS for security purposes. We recommend having a designated Measurement Creator to send either test data or real data into the portal. 
 
 ## User Management
 To change a User’s information or permissions simply click on **“Users”** and then click **“Edit”**.
