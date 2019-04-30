@@ -48,10 +48,22 @@ class Ability
     end
 
     if user.role?(:measurements)
+      if !profile.secure_data_viewing
+        registered_user(profile, user)
+      end
+
+      if !profile.secure_data_download
+        data_downloader(profile, user)
+      end
+
       measurement_creator(profile, user)
     end
 
     if user.role?(:downloader)
+      if !profile.secure_data_viewing
+        registered_user(profile, user)
+      end
+
       data_downloader(profile, user)
     end
 
@@ -128,6 +140,7 @@ class Ability
     can :read, :about
 
     can :create, :measurement
+    can :simulator, Instrument
   end
 
   def site_configurator(profile, user)
