@@ -159,7 +159,7 @@ python chords_control --run
   </ol>
   </div>
 </div>
-See the [detailed instructions]({{site.baseurl}}/os/control/) if the Quick Start recipes are not adequate
+See the [detailed instructions]({{site.baseurl}}/gettingstarted/os/control/) if the Quick Start recipes are not adequate
 to get your portal running, and for additional information.
 <script>
 $("#tabs").tabs();

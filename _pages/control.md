@@ -1,7 +1,7 @@
 ---
 layout: single
 title: CHORDS Setup and Control
-permalink: /os/control/
+permalink: /gettingstarted/os/control/
 ---
 
 CHORDS is packaged as a collection of [Docker containers](https://hub.docker.com/r/ncareol/chords/). 

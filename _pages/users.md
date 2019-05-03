@@ -388,6 +388,10 @@ To download data first go to the Data tab in your CHORDS portal. From here you c
 4. You can select "Data URLs" then select the generated url. Combine this with custom code to continue to pull specific data types.
 
 ### Grafana
+
+{% include video id="B02M7pXEybM" provider="youtube" %}
+
+
 [Grafana](https://grafana.com) is an open-source visualization system that allows you to create powerful data dashboards, right from the browser. The dashboards are very responsive because they fetch data directly from the CHORDS database. The extensive [Grafana documentation](http://docs.grafana.org) explains how to unleash the full capability of the system.
 
 However, the following tutorial explains quickly how to configure Grafana to interact with CHORDS, and how to create a simple dashboard.
