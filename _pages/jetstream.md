@@ -2,6 +2,10 @@
 layout: single
 title: How to Jetstream
 permalink: /gettingstarted/jetstream/
+toc: true
+toc_sticky: true
+toc_label: "Table of Contents"
+toc_icon: "cog"
 ---
 If you are working in academia then you are eligible to use a jetstream server.
 You will need to submit a request for an allocation on the system.
@@ -17,7 +21,7 @@ The trial resources include
 - 1 VM backup snapshot per instance,
 - 1 small 10 GB disk external storage volume.
 
-## How to enroll in the Jetstream Trial Allocation:  
+## How to enroll in the Jetstream Trial Allocation  
 
 1. Go to the [XSEDE portal](https://portal.xsede.org) 
 
@@ -73,7 +77,7 @@ Before you can get started with CHORDS you will need to get an Image running.
 7. Click on the image you selected for your project
 8. On the right side of your screen under “Links” click Open Web Shell 
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamShell.png"><!--Using liquid to set path for images.-->
-9. Follow CHORDS Get Started instructions.
+9. Follow  [Run CHORDS Locally]({{site.baseurl}}/gettingstarted/os/) instructions for Ubuntu.
 10. Once you’ve finished the instructions go back to your Jetstream page.
 11. Copy the IP address 
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/JetstreamIP.png"><!--Using liquid to set path for images.-->

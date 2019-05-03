@@ -19,8 +19,13 @@ There are several main ways to use chords_control
 
 ``python chords_control --config``
 - Lets you configure your CHORDS portal.
-  - Set your password
-  - Set email for password reset
+  - Set your 
+    Database Password
+    Grafana Password
+    Portal Password
+  - Set email
+    Port connects to that email to use for emailing purposes
+    allows for password reset
   - Set guest password
   - Configure portal port
 
@@ -44,7 +49,7 @@ Docker is used as a tool to make it easier to create, deploy and run CHORDS by u
 
 ### Docker logs
 
-``docker logs -f chords_app`` command shows information logged by a running chords container.
+``docker exec -it chords_app tail -f log/production.rb`` command shows information logged by a running chords container.
 
 
 ### Removing old docker images
@@ -58,7 +63,7 @@ To remove a specific Image
 
 ``docker system prune -a`` Lets you remove stopped containers as well as the resources listed above. (Use with CAUTION)
 
-``Docker exec -it (containername) /bin/bash``
+``docker exec -it (containername) /bin/bash``
 
 ### Save disk space
 

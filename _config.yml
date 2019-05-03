@@ -64,7 +64,7 @@ words_per_minute         : 200
 atom_feed:
   path                   : " " # blank (default) uses feed.xml
 search                   : true #search bar only searches for posts NOT pages.
-search_full_content      : true # Searches for posts only
+#search_full_content      : true # Searches for posts only
 # search_provider          : # lunr (default), algolia, google
 # algolia:
 #   application_id         : # YOUR_APPLICATION_ID
@@ -79,7 +79,6 @@ search_full_content      : true # Searches for posts only
 # bing_site_verification   :
 # yandex_site_verification :
 # naver_site_verification  :
-
 # Social Sharing
 # twitter:
 #   username               :

@@ -15,8 +15,7 @@ toc_icon: "cog"
 ## Site Configuration
 To configure the site you either have to have Site Configuration or Admin privileges. Configuration is used for managing many (but not all) of the portal characteristics. Sites, instruments, and variables are configured on their own specific pages.
 
-{% include video id="A6OuVPBnb5w" provider="youtube" %}
-
+<!--TO DO: make new configuration video with sound!-->
 ### Editing User Permissions
 
 1. To edit users go to the Users tab
@@ -76,13 +75,17 @@ Do NOT modify the Measurement Security Key
 
 Create a new site by clicking on Sites in the middle left part of the menu.
 
-Click the **Add a New Site** button
+Click the **New Site** button
 
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/Site.png"><!--Using liquid to set path for images.-->
 
-Fill out the empty fields and click **Create Site Instruments**
+Fill out the empty fields
+
+Click **Create Site**
 
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/SiteFields.png"><!--Using liquid to set path for images.-->
+
+### Instruments
 
 Click on the **Instruments** button in the middle left part of the screen
 
@@ -99,7 +102,7 @@ Name: Name you gave the instrument
 
 Sensor_Id: ID for a specific sensor. This takes priority over Instrument_ID and creates a unique key. This allows the sensor to be moved from one instrument to another if need be and still retain the same URL format for uploading data. 
 
-Topic Category: Pull down menu of categories and instruments/
+Topic Category: Pull down menu of categories and instruments
 
 Description: (Add additional information you feel necessary here. Like location, website, or purpose.)
 
@@ -109,7 +112,7 @@ Display Points: How many points are shown on the graph.
 
 Plot offset: Time the plot for display.
 
-Sample Rate: How often you are sampling data, in seconds (fastest is 1 second).
+Sample Rate: How often you are sampling data, in seconds (fastest is 1 second). It is also used for visual purposes as this determines when the little circle next to the instrument is green or red. 
 
 ### Variables
 
@@ -143,7 +146,11 @@ Second, under your configuration page there is a section for entering JSON-LD me
 <img  class="img-responsive" src="{{ site.baseurl }}/assets/images/EmailUpdate.png"><!--Using liquid to set path for images.-->
 
 ### Creating and Sending Data
-Admins do not have permission to create test data or send data to CHORDS for security purposes. We recommend having a designated Measurement Creator to send either test data or real data into the portal. 
+Admins and Site Configs do not have permission to create test data or send data to CHORDS for security purposes. Any Registered user with Measurement Creator checked can create test data and send data to CHORDS. However Admins will have to give that user an API key. To create an API key for a user: 
+* Click **Users**
+* Click the Measurement User
+* Click **Edit**
+* Click **Renew API Key** 
 
 ## User Management
 To change a User’s information or permissions simply click on **“Users”** and then click **“Edit”**.
@@ -174,13 +181,274 @@ A Registered User Can
 
 A Data Downloader Can
 - Download data
-- View Instruments
+- View Instruments, (only if combined with Registered user)
 
 **Measurement Creator:** Behold! The power of creation! This option let’s Registered Users view and create instruments and variables.
 
 Measurement Creator Can
-- Create instruments
+- Create test data
 - Create test measurements
+
+**Site Config:** This user is similar to an Admin. They can do everything except editing users and creating test data.
+
+A Site Config Can
+
+- Edit Site Configuration
+- Read About page and view data
+- View Site
+- View Instruments
+- Can View and edit self information
+- Download data
+- View Instruments
+- Create Instruments
+
+## Storing Measurements
+
+### Sending a URL from UNIX
+
+#### Data In
+It is easy to submit new data to a Portal, simply using standard HTTP URLs. The URL can be submitted directly from the address bar of your browser (but of course this would get tedious).
+We will first describe the URL syntax, and follow this with examples that demonstrate how easy it is to feed your data to a CHORDS Portal, using Python, C, a browser or the command line. These are only a few of the languages that work, and you should be able to figure out a similar method for your own particular language. Almost all programming languages have functions for submitting HTTP requests.
+
+#### URL Syntax
+Sample URLs for submitting measurements to the Portal:
+
+```
+http://myportal.org/measurements/url_create?instrument_id=[INST_ID]&wdir=038&wspd=3.2&at=2015-08-20T19:50:28
+http://myportal.org/measurements/url_create?instrument_id=[INST_ID]&p=981.2&email=[USER_EMAIL]&api_key=[API_KEY]
+http://myportal.org/measurements/url_create?instrument_id=[INST_ID]&p=981.2&email=[USER_EMAIL]&api_key=[API_KEY]&at=2015-08-20T19:50:28&test
+```
+
+*myportal.org* is the hostname of your Portal. The fields after “?” are qualifiers, each separated by “&”.
+Measurements for variables are specified by *shortname=value* pairs. You do not need to include measurements for all variables defined for the instrument, if they are not available.
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Qualifier</th>
+      <th>Optional</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>instrument_id=id</td>
+      <td>No</td>
+      <td>The Portal assigned instrument identifier.</td>
+    </tr>
+    <tr>
+      <td>at=time</td>
+      <td>Yes</td>
+      <td>Specify a timestamp to be applied to the measurements. If <em>at</em> is not specified,
+      the measurement will be stamped with the time that it was received by the Portal (often
+      quite adequate). The time format is <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a>.</td>
+    </tr>
+    <tr>
+      <td>email=[USER_EMAIL]</td>
+      <td>Yes</td>
+      <td>If the Portal has been configured to require a security key for incoming measurements, the user email, <em>email</em> qualifier is needed.</td>
+    </tr>
+    <tr>
+      <td>api_key=[API_KEY]</td>
+      <td>Yes</td>
+      <td>If the Portal has been configured to require a security key for incoming measurements, it
+      is specified with the <em>api_key</em> qualifier. Keys are case sensitive and specific for a given user with the measurements permission enabled.</td>
+    </tr>
+    <tr>
+      <td>test</td>
+      <td>Yes</td>
+      <td>Add the <em>test</em> qualifier to signify that the measurements are to be marked as test
+      values. Test measurements may be easily deleted using the Portal interface.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+#### Programming Examples
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-Browser">Browser and Sh</a></li> <!-- names on the tabs -->
+    <li><a href="#tabs-Python" >Python</a></li>
+    <li><a href="#tabs-C">C</a></li>
+  </ul>
+  <div id="tabs-Browser"> <!-- content under tab -->
+  <div id="browser" class="tab-pane active">
+  Data can be submitted to a portal just by typing the URL into the address bar of a browser. It's unlikely that you would use this method for any serious data collection!
+  <!-- Add picture here -->
+  {% highlight sh %}
+  wget http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&email=[USER_EMAIL]&api_key=[API_KEY]
+
+  curl http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&email=[USER_EMAIL]&api_key=[API_KEY]
+  {% endhighlight %}
+
+  The <i>wget</i> and <i>curl</i> commands, available in Linux and OSX, can accomplish the same thing from a console.
+
+  </div>
+  </div>
+
+  <div id="tabs-Python"> <!-- content under tab -->
+  <div id="python" class="tab-pane active">
+  {% highlight python %}
+  #!/usr/bin/python
+
+  #Put a collection of measurements into the portal
+  import requests
+  url = 'http://my-chords-portal.com/measurements/url_create?instrument_id=3&t=27.1&rh=55&p=983.1&ws=4.1&wd=213.5&email=[USER_EMAIL]&api_key=[API_KEY]'
+  response = requests.get(url=url)
+  print response
+  ...
+  <Response [200]>
+  {% endhighlight %}
+  </div>
+  </div>
+
+  <div id="tabs-C"> <!-- content under tab -->
+  <div id="c" class="tab-pane active">
+
+  This example uses the <a href="https://curl.haxx.se/libcurl/c/libcurl.html">libCurl</a> library in a C program to send a measurement URL to a portal.
+
+  {% highlight c %}
+  #include <stdio.h>
+  #include <curl/curl.h>
+
+  int main(void)
+  {
+    CURL *curl;
+    CURLcode res;
+
+    curl = curl_easy_init();
+    if(curl) {
+      char* url = "http://chords.dyndns.org/measurements/url_create?instrument_id=25&wdir=121&wspd=21.4&wmax=25.3&tdry=14.3&rh=55&pres=985.3&raintot=0&batv=12.4&at=2015-08-20T19:50:28&email=[USER_EMAIL]&api_key=[API_KEY]";
+      curl_easy_setopt(curl, CURLOPT_URL, url);
+      /* example.com is redirected, so we tell libcurl to follow redirection */
+      curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+      /* Perform the request, res will get the return code */
+      res = curl_easy_perform(curl);
+      /* Check for errors */
+      if(res != CURLE_OK)
+        fprintf(stderr, "curl_easy_perform() failed: %s\n",
+                curl_easy_strerror(res));
+
+      /* always cleanup */
+      curl_easy_cleanup(curl);
+    }
+    return 0;
+  }
+  {% endhighlight %}
+  </div>
+  </div>
+</div>
+<script>
+$("#tabs").tabs();
+</script>
+
+#### Data Out
+It's just as easy to get data out of a Portal as it is to put data in. This can
+be done directly from the Portal web page. Or you can use HTTP URL's to
+fetch data. The URL can be submitted directly from the address bar of your browser, which will
+deliver the data in standard formats such as CSV files, JSON files, or plain JSON.
+
+You can also retrieve data using your favorite programming language to construct
+a program to send URLs and receive data, letting you build
+analysis and visulaization apps that can process your real-time observations. Using JavaScipt,
+you can even build widgets and pages that display your data on your own web site.
+
+We will first describe the URL syntax for retrieving data, and follow this with examples that
+demonstrate how easy it is to integrate your analysis activities with a CHORDS Portal using
+Python, HTML, IDL, Matlab, R, sh, etc. You get the idea.
+
+###  URL Syntax
+
+Sample URLs for fetching data from the Portal:
+
+    http://myportal.org/instruments/1.csv
+    http://myportal.org/instruments/1.csv?start=2015-08-01T00:30&end=2015-08-20T12:30
+    http://myportal.org/instruments/4.geojson?email=[USER_EMAIL]&api_key=[API_KEY]
+    http://myportal.org/instruments/3.xml
+    http://myportal.org/instruments/3.json?last
+
+_myportal.org_ is the hostname of your Portal. The fields after "?" are quallifiers, each
+separated by "&".
+
+The number following _instruments/_ is the instrument identifier.
+
+Following the instrument identifier is the format that the data will be returned in (_csv, geojson, json or xml_).
+
+Some formats result in a data file being returned to you browser, which can be saved
+in a directory. The other formats directly return text, which can
+be easily ingested into programs.
+
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Format</th>
+      <th>File or Text</th>
+      <th>Data Product</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>.csv</td>
+      <td>File</td>
+      <td>Data in a comma-separated-value GeoCSV (CSV) file. CSV files can be opened automatically
+          by spreadsheet programs such as MS Excel.</td>
+    </tr>
+    <tr>
+      <td>.geojson</td>
+      <td>File</td>
+      <td>Data in a GeoJSON structured file, following RFC 7946. Most scripting programs can easily read JSON
+          into a structured variable.</td>
+    </tr>
+    <tr>
+      <td>.xml</td>
+      <td>File</td>
+      <td>Data in an eXtensible-Markup-Language (XML) structured file.</td>
+    </tr>
+    <tr>
+      <td>.json</td>
+      <td>Text</td>
+      <td>Data in straight JSON format. This format is used to bring data directly into a
+          processing program.</td>
+    </tr>
+  </tbody>
+</table>
+
+Fields after "?" are quallifier pairs, with each separated by "&". The qualifiers are
+optional, and are used to refine the data request.
+
+If time qualifiers are not specified, data for the curent day are returned.
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Qualifier</th>
+      <th>Meaning</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>start=time</td>
+      <td>Start time of the data span, in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a> format.</td>
+    </tr>
+    <tr>
+      <td>end=time</td>
+      <td>Start time of the data span, in <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO8061</a> format.</td>
+    </tr>
+    <tr>
+      <td>email=[USER_EMAIL]</td>
+      <td>If the Portal has been configured to require a security key for downloading data, the user email must also be specified with the <em>email</em> qualifier.</td>
+    </tr>
+    <tr>
+      <td>api_key=[API_KEY]</td>
+      <td>If the Portal has been configured to require a security key for downloading data, it
+      is specified with the <em>api_key</em> qualifier. Keys are case sensitive and must be paired with the user email associated with the api key.</td>
+    </tr>
+  </tbody>
+</table>
+
 
 
 ## Data Backup

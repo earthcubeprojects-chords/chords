@@ -14,7 +14,7 @@ classes: wide
 </div>
 
 <div class="well" style="text-align: center;">
-  You get data out of CHORDS like this:<br/>http://myportal.org/instruments/25.csv
+  You get data out of CHORDS like this:<br/>http://myportal/api/v1/data/3.csv?last
 </div>
 
 **C**loud.**HO**sted.**R**eal-time.**D**ata.**S**ervices or **CHORDS** is a masterpiece of the [NSF EarthCube project](http://earthcube.org/group/chords). It is a real-time data service for the geosciences that provides an easy-to-use system to acquire, navigate, and distribute real-time data via cloud services and the Internet. CHORDS aims to lower the barrier to these services, especially for small instrument teams, and broaden access to real-time data for the geosciences community. 

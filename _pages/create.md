@@ -55,7 +55,7 @@ We use the **AWS CloudFormation** service to create a new portal. The steps are
 simple.
 
 <!--Gallery of picture instructions. This can be moved anywhere.-->
-{% include gallery %}
+<!-- {% include gallery %} -->
 
 
 Log onto your AWS account to begin.
@@ -136,13 +136,12 @@ Once your portal is created click on your **Stack Name** then the **â€œOutputsâ€
 Once the Portal is running, you will want to immediately change the admin acount and password to your
 own email and password.
 
-* Log into your new portal, as user: **admin@chordsrt.com**, and password: **realtimedata**.
-* Go to the Users link, and change the user name from *admin@chordsrt.com* 
-  to your *email address*.
-* Logout of the Portal.
-* Select **Forgot your password?**
-* Enter your email and punch **send me reset password instructions**. 
-* An email will be sent, containing a link that you can use to change the password on your account. **It's very likely that this email will go into your spam folder. Use the link to change your password to something secure.**
+* Log into your new portal, as user: **admin@chordsrt.com**, and password: **realtimedata**
+* Click on **Users**, then click on **admin@chordsrt.com**
+* Click **Edit User**
+* Change your email and then click **Change Password**
+* Enter your new password and use **realtimedata** as your old password to confirm the change
+* Click **Update**
 
 # If something breaks
 * If the provisioning fails, the instance will be stopped, and you won\'t know why. You can redo the process, 
