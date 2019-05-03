@@ -16,7 +16,7 @@ minimal_mistakes_skin    : "mint"
 locale                   : "en-US"
 title                    : "CHORDS Portal"
 title_separator          : "-"
-name                     : "NCAR"
+name                     : "EarthCubes"
 description              : "Cloud Hosted Online Realtime Data"
 url                      : https://mademoiselleprogrammer.github.io #If you change sites or github repos change this to match. It connects all across the website
 baseurl                  : /chords # the subpath of your site, e.g. "/chords"
@@ -107,7 +107,7 @@ author:
   name             : "Sharing is Caring!"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : "CHORDS"
-  location         : "NCAR"
+  location         : "EarthCubes"
   email            : "chords@ucar.edu"
   links:
     - label: "Facebook"
