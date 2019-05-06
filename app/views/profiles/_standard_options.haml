@@ -4,36 +4,44 @@
     .title
       Project Name
     .field
-      #{f.text_field('project', size: 60)}
+      #{f.text_field('project', size: 60, class: 'form-control')}
   .line
     .title
       DOI
     .field
-      #{f.text_field('doi', size: 60)}
+      #{f.text_field('doi', size: 60, class: 'form-control')}
   .line
     .title
       Affiliation
     .field
-      #{f.text_field('affiliation', size: 60)}
+      #{f.text_field('affiliation', size: 60, class: 'form-control')}
   .line
     .title
       Page Title
       (will appear in tab titles)
     .field
-      #{f.text_field('page_title', size: 60)}
+      #{f.text_field('page_title', size: 60, class: 'form-control')}
   .line
   .line
     .title
       Domain Name
       (Used in metadata generation)
     .field
-      #{f.text_field('domain_name', size: 60)}
+      #{f.text_field('domain_name', size: 60, class: 'form-control')}
+  .line
+  .line
+    .title
+      Data Archive URL
+    .field
+      #{f.text_field('data_archive_url', size: 60, class: 'form-control')}
   .line
   .line
     .title
       Email account for password resets
-    .title
+    .field
       = @email
+    .field
+      = link_to 'Test Sending Email', test_sending_email_profiles_url, method: :post, class: 'btn btn-md btn-primary', style: 'text-decoration: none; color: white;', title: 'Test Sending Email'
   .line
   .line
     .title
@@ -47,7 +55,7 @@
       (HTML markup may be used)
       %br/
     .field
-      #{f.text_area('description', size: "60x20")}
+      #{f.text_area('description', size: "60x20", class: 'form-control')}
   .line
     .title
       Logo File
@@ -61,13 +69,11 @@
         Reset to default image: #{check_box_tag :reset_logo}
 
   .line
+  .line
     .title
-      Google Maps
-      %br/
-      %strong JavaScript API Key
+      Max Download Points
     .field
-      #{f.text_field('google_maps_key', size: 50)}
-
+      #{f.number_field('max_download_points', in: 1000..1e6, step: 1000)}
 
   .line
   .line
@@ -87,4 +93,4 @@
           Require the security key in order to submit a measurement
         %div
           Measurement security key (Deprecated: In the future, create a user with the measurement role and use an api_key)
-          #{f.text_field(:data_entry_key, size: 30)}
+          #{f.text_field(:data_entry_key, size: 30, class: 'form-control')}

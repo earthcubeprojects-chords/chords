@@ -3,7 +3,6 @@ class SitesController < ApplicationController
 
   def index
     @instruments = Instrument.accessible_by(current_ability)
-    @google_maps_key = Profile.first.google_maps_key
   end
 
   def show
@@ -73,10 +72,6 @@ class SitesController < ApplicationController
   end
 
   def create
-    if Archive.first.name == 'CUAHSI'
-      @site.cuahsi_site_code = @site.get_cuahsi_sitecode
-    end
-
     respond_to do |format|
       if @site.save
         format.html { redirect_to '/sites', notice: 'Site was successfully created.' }
@@ -114,6 +109,6 @@ class SitesController < ApplicationController
 
 private
   def site_params
-    params.require(:site).permit(:name, :lat, :lon, :elevation, :description, :site_type_id, :cuahsi_site_code)
+    params.require(:site).permit(:name, :lat, :lon, :elevation, :description, :site_type_id)
   end
 end

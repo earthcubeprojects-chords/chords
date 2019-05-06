@@ -1,10 +1,5 @@
 class VarsController < ApplicationController
-  include ArchiveHelper
-
   load_and_authorize_resource except: :get_autocomplete_items
-
-  autocomplete :measured_property, :label, :full => true
-  autocomplete :unit, :name, :full => true
 
   def index
   end
@@ -13,15 +8,25 @@ class VarsController < ApplicationController
   end
 
   def new
+    @instrument = Instrument.find(params[:instrument_id])
+    @return = params[:return]
+
+    @units = get_units
+    @measured_properties = get_measured_properties
   end
 
   def edit
+    @instrument = @var.instrument
+    @return = params[:return]
+
+    @units = get_units
+    @measured_properties = get_measured_properties
   end
 
   def create
     respond_to do |format|
       if @var.save
-        format.html { redirect_to Instrument.find(@var.instrument_id), notice: 'Variable was successfully created' }
+        format.html { redirect_to instrument_path(@var.instrument), notice: 'Variable was successfully created' }
         format.json { render :show, status: :created, location: @var }
       else
         format.html { render :new }
@@ -33,7 +38,7 @@ class VarsController < ApplicationController
   def update
     respond_to do |format|
       if @var.update(var_params)
-        format.html { redirect_to @var, notice: 'Var was successfully updated' }
+        format.html { redirect_to instrument_path(@var.instrument), notice: 'Variable was successfully updated' }
         format.json { render :show, status: :ok, location: @var }
       else
         format.html { render :edit }
@@ -47,8 +52,12 @@ class VarsController < ApplicationController
 
     respond_to do |format|
       if @var.destroy
-        format.html { redirect_to instrument, notice: 'Variable was deleted' }
-        # format.html { redirect_to vars_url, notice: 'Var was successfully destroyed.' }
+        if instrument
+          format.html { redirect_to instrument, notice: 'Variable was deleted' }
+        else
+          format.html { redirect_to vars_path, notice: 'Variable was deleted' }
+        end
+
         format.json { head :no_content, status: :success }
       else
         format.html { render :show, alert: 'Could not destroy variable' }
@@ -57,20 +66,16 @@ class VarsController < ApplicationController
     end
   end
 
-  def get_autocomplete_items (parameters)
-    authorize! :read, Var
-
-    if(params[:search_mode].eql? 'unit_source')
-      items = Unit.where("source = :source and name LIKE :term", {source: Profile.first.unit_source, term: '%' + params[:term] + '%'})
-    elsif(params[:search_mode].eql? 'measured_property_source')
-      items = MeasuredProperty.where("source = :source and name LIKE :term", {source: Profile.first.measured_property_source, term: '%' + params[:term] + '%'})
-    else
-      items = super(parameters)
-    end
-  end
-
 private
   def var_params
-    params.require(:var).permit(:name, :shortname, :instrument_id, :units, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category)
+    params.require(:var).permit(:name, :shortname, :instrument_id, :measured_property_id, :minimum_plot_value, :maximum_plot_value, :unit_id, :general_category, :return)
+  end
+
+  def get_units
+    Unit.where(source: Profile.first.unit_source).order(:name)
+  end
+
+  def get_measured_properties
+    MeasuredProperty.where(source: Profile.first.measured_property_source).order(:label)
   end
 end

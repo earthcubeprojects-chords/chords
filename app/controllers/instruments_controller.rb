@@ -1,5 +1,5 @@
 class InstrumentsController < ApplicationController
-  load_and_authorize_resource except: :show
+  load_and_authorize_resource
 
   before_action :set_instrument, only: [:show, :live]
 
@@ -23,7 +23,8 @@ class InstrumentsController < ApplicationController
       end_time_ms = nil
     end
 
-    livedata = { points: [],
+    livedata = {
+                 points: [],
                  multivariable_points: {},
                  multivariable_names: [],
                  display_points: 0,
@@ -53,69 +54,25 @@ class InstrumentsController < ApplicationController
         if live_points
           livedata[:multivariable_points][variable.shortname] = live_points
         end
-
       end
     end
 
     render json: ActiveSupport::JSON.encode(livedata)
   end
 
-  # # GET /instruments/1/derivative?var=varshortname&start=time&end=time
-  # # Return derivative data for given instrument, var, and time period.
-  # def derivative
-  #   # Verify the parameters and convert times
-  #   # if start and end time defined
-  #   if (params[:start]) && (params[:start].to_i != 0) && (params[:end]) && (params[:end].to_i != 0)
-  #     start_time_ms = Time.strptime(params[:start], '%Q')
-  #     end_time_ms = Time.strptime(params[:end], '%Q')
-  #   # if only start time defined
-  #   elsif (params[:start]) && (params[:start].to_i != 0)
-  #     start_time_ms = Time.strptime(params[:start], '%Q')
-  #     end_time_ms = nil
-  #   else
-  #     time_offset = "#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}"
-  #     start_time_ms = @instrument.deriv_time_in_ms("last") - eval(time_offset)
-  #     end_time_ms = nil
-  #   end
-
-  #   deriv_data = { points: [],
-  #                 multivariable_points: {},
-  #                 multivariable_names: [],
-  #                 display_points: 0,
-  #                 refresh_msecs: 1000 }
-
-  #   deriv_data[:display_points] = @instrument.maximum_plot_points
-  #   deriv_data[:refresh_msecs] = @instrument.refresh_rate_ms
-
-  #   if (params[:var])
-  #     variable = @instrument.find_var_by_shortname(params[:var])
-
-  #     derivatives = variable.get_tsderivatives(start_time_ms, end_time_ms)
-
-  #     if derivatives
-  #       deriv_data[:points] = derivatives
-  #     end
-  #   else
-  #     @instrument.vars.each do |variable|
-  #       deriv_data[:multivariable_names] << variable.shortname
-  #       deriv_data[:multivariable_points][variable.shortname] = []
-
-  #       derivatives = variable.get_tsderivatives(start_time_ms, end_time_ms)
-
-  #       if derivatives
-  #         deriv_data[:multivariable_points][variable.shortname] = derivatives
-  #       end
-  #     end
-  #   end
-
-  #   render json: ActiveSupport::JSON.encode(deriv_data)
-  # end
-
 
   # GET instruments/simulator
   def simulator
-    @sites = Site.accessible_by(current_ability)
-    @instruments = Instrument.accessible_by(current_ability)
+    if @profile.secure_data_entry && current_user.api_key.blank?
+      flash[:notice] = 'An API Key is necessary to use the simulator. Please add one by editing the user in the Users section.'
+    end
+
+    if @profile.secure_data_entry && (current_user.role?(:admin) || current_user.role?(:site_config))
+      flash[:alert] = 'Admin and Site Config users cannot create measurements, please sign in as a regular user with the Measurements ability enabled.'
+    end
+
+    @sites = Site.all     # if group permissions ever applied, this should be used Site.accessible_by(current_ability)
+    @instruments = Instrument.all   # if group permissions ever applied, this should be used Instrument.accessible_by(current_ability)
   end
 
   # GET /instruments/duplicate?instrument_id=1
@@ -130,6 +87,7 @@ class InstrumentsController < ApplicationController
         # TODO: note this is shallow copy...make sure that is valid in this context
         #       should do this in a transaction as well
         new_instrument = old_instrument.dup
+        new_instrument.sensor_id = nil  # this value is unique, so we can't clone it
 
         if !new_instrument.name.include? "clone"
           new_instrument.name = new_instrument.name + " clone"
@@ -161,19 +119,7 @@ class InstrumentsController < ApplicationController
     #  @tz_name        - the timezone name
     #  @tz_offset_mins - the timezone offset, in minutes
     #  @last_url       - the last url
-
-    if ['csv', 'xml', 'json', 'geojson', 'sensorml'].include?(params[:format])
-      authorize! :download, @instrument
-    else
-      authorize! :read, @instrument
-    end
-
     @last_url = InstrumentsHelper.sanitize_url(GetLastUrl.call(TsPoint, @instrument.id))
-
-    metadata = { "Project": @profile.project,
-                 "Site": @instrument.site.name,
-                 "Affiliation": @profile.affiliation,
-                 "Instrument": @instrument.name }
 
     # Get the timezone name and offset in minutes from UTC.
     @tz_name, @tz_offset_mins = ProfileHelper::tz_name_and_tz_offset
@@ -208,10 +154,6 @@ class InstrumentsController < ApplicationController
     # Get the time series points from the database
     ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, start_time, end_time)
 
-    # File name root
-    file_root = "#{@profile.project}_#{@instrument.site.name}_#{@instrument.name}"
-    file_root = file_root.split.join
-
     respond_to do |format|
       format.html
 
@@ -220,26 +162,6 @@ class InstrumentsController < ApplicationController
 
         render file: "app/views/instruments/sensorml.xml.haml", layout: false, locals: { topic_category: topic_category }
       end
-
-      format.csv do
-        varnames_by_id = {}
-        Var.all.where("instrument_id = #{@instrument.id}").each {|v| varnames_by_id[v[:id]] = v[:name]}
-        ts_csv = MakeGeoCsvFromTsPoints.call(ts_points, Array.new, varnames_by_id, @instrument, request.host)
-        send_data ts_csv, filename: file_root+'.csv'
-      end
-
-      format.json do
-        render json: MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-      end
-
-      format.geojson do
-        ts_json = MakeGeoJsonFromTsPoints.call(ts_points, metadata, @profile, @instrument)
-        send_data ts_json, filename: file_root + '.geojson'
-      end
-
-      format.xml do
-        send_data MakeXmlFromTsPoints.call(ts_points, metadata), filename: file_root+'.xml'
-      end
     end
   end
 
@@ -247,6 +169,10 @@ class InstrumentsController < ApplicationController
   end
 
   def create
+    if @instrument.sensor_id.blank?
+      @instrument.sensor_id = nil
+    end
+
     respond_to do |format|
       if @instrument.save
         format.html { redirect_to @instrument, notice: 'Instrument was successfully created.' }
@@ -262,8 +188,14 @@ class InstrumentsController < ApplicationController
   end
 
   def update
+    data = instrument_params
+
+    if data[:sensor_id].blank?
+      data[:sensor_id] = nil
+    end
+
     respond_to do |format|
-      if @instrument.update(instrument_params)
+      if @instrument.update(data)
         format.html { redirect_to @instrument, notice: 'Instrument was successfully updated.' }
         format.json { render :show, status: :ok, location: @instrument }
       else
@@ -288,11 +220,22 @@ class InstrumentsController < ApplicationController
 private
   def set_instrument
     # using a where.first clause prevents an exception being thrown if the instrument is not present or not visible to the user
-    @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
+    @instrument = if !params[:sensor_id].blank?
+                    Instrument.accessible_by(current_ability).where(sensor_id: params[:sensor_id]).first
+                  else
+                    nil
+                  end
+
+    if @instrument.nil?
+      @instrument = Instrument.accessible_by(current_ability).where(id: params[:id]).first
+    end
+
+    @instrument
   end
 
   def instrument_params
     params.require(:instrument).permit(:name, :site_id, :is_active, :display_points, :sample_rate_seconds, :description,
-                                       :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id)
+                                       :instrument_id, :plot_offset_value, :plot_offset_units, :topic_category_id,
+                                       :sensor_id, :number_of_duplicates)
   end
 end

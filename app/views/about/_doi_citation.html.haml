@@ -1,7 +1,12 @@
 - citation = ""
 - if !(@profile.doi.blank?)
-	- citation = get_citation(@profile.doi)
-	- if citation[0...9] == "<!DOCTYPE"
-		- citation = "DOI citation could not be found."
+  - citation = get_citation(@profile.doi)
 
-= citation
+  - if citation[0...9] == "<!DOCTYPE"
+    - citation = "DOI citation could not be found"
+
+- if citation == "DOI citation could not be found"
+  = "#{citation}, please click here: "
+  = link_to "https://citation.crosscite.org/?doi=#{@profile.doi}", "https://citation.crosscite.org/?doi=#{@profile.doi}", target: :_blank
+- else
+  = citation

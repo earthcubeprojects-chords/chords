@@ -13,7 +13,8 @@ class ProfilesController < ApplicationController
       @profile = Profile.first
     end
 
-    @email = Rails.application.config.action_mailer.smtp_settings[:user_name]
+    @email = Rails.application.config.action_mailer.smtp_settings[:user_name] if Rails.application.config.action_mailer.smtp_settings
+    @email = 'SMTP is not currently configured, please use chords_control!' if @email.blank?
   end
 
   def create
@@ -58,8 +59,6 @@ class ProfilesController < ApplicationController
     @vars = Var.all
     @measured_properties = MeasuredProperty.all
 
-    @archives = Archive.all
-    @archive_jobs = ArchiveJob.all
     @site_types = SiteType.all
     @topic_categories = TopicCategory.all
     @units = Unit.all
@@ -67,7 +66,7 @@ class ProfilesController < ApplicationController
     file_name = @profiles[0].project.downcase.gsub(/\s/,"_").gsub(/\W/, '') + "_chords_conf_"  + Date.today.to_s + ".json"
 
     data_to_export = [profiles: @profiles, sites: @sites, instruments: @instruments, vars: @vars,
-                      measured_properties: @measured_properties, archives: @archives, archive_jobs: @archive_jobs,
+                      measured_properties: @measured_properties,
                       site_types: @site_types, topic_categories: @topic_categories, units: @units]
 
     send_data data_to_export.to_json, filename: file_name
@@ -85,7 +84,7 @@ class ProfilesController < ApplicationController
       backup_hash = JSON.parse(file_content)
 
       # The order is important here, as there are foreign keys in place
-      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, Archive, ArchiveJob, SiteType, TopicCategory, Unit]
+      models = [Var, InfluxdbTag, Instrument, Site, Profile, MeasuredProperty, SiteType, TopicCategory, Unit]
 
       # delete the existing configuration
       # BUT ONLY FOR THE MODELS PRESENT IN THE CONFIG FILE
@@ -171,18 +170,24 @@ class ProfilesController < ApplicationController
     authorize! :update, Profile
   end
 
-  def push_cuahsi_sources
-    authorize! :update, Profile
-
-    Profile.all.each do |profile|
-      data = profile.create_cuahsi_source
-
-      if profile.get_cuahsi_sourceid(data["link"]).nil?
-        uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/sources"
-        CuahsiHelper::send_request(uri_path, data)
-        profile.get_cuahsi_sourceid(data["link"])
+  def test_sending_email
+    begin
+      AdminMailer.test_sending_email(current_user.email).deliver
+    rescue Net::SMTPAuthenticationError => e
+      if e.message.include?('accounts.google.com') || e.message.include?('Learn more at')
+        flash[:alert] = 'Problem with SMTP settings. If using GMail, you may need to log into your email account to allow this activity.'
+      else
+        flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
       end
+
+      Rails.logger.warn(e)
+    rescue Errno::ECONNREFUSED => e
+      flash[:alert] = 'Connection to the SMTP server was refused. If using GMail, you may need to log into your email account to allow this activity.'
+      Rails.logger.warn(e)
     end
+
+    flash[:notice] = 'Congrats, your SMTP settings appear in order. Check your username/email for receipt.' if flash[:alert].blank?
+    redirect_to action: :index
   end
 
 private
@@ -190,9 +195,9 @@ private
     params.require(:profile).permit(
       :project, :affiliation, :page_title, :description, :logo, :created_at, :updated_at, :timezone,
       :secure_administration, :secure_data_viewing, :secure_data_download,
-      :secure_data_entry, :data_entry_key, :google_maps_key, :backup_file, :doi,
+      :secure_data_entry, :data_entry_key, :backup_file, :doi, :max_download_points,
       :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country,
-      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :cuahsi_source_id
+      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :data_archive_url
       )
   end
 end

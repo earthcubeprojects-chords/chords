@@ -1,4 +1,5 @@
 *.rbc
+*.pyc
 capybara-*.html
 .rspec
 /log
@@ -37,6 +38,9 @@ bower.json
 # Ignore eclipse project files
 .project
 
+# Ignore Visual Studio settings
+/.vscode
+
 # Ignore the OSX directory store
 .DS_Store
 
@@ -53,6 +57,7 @@ chords-*.yml
 docker-compose-*.yml
 chords_control-*
 chords.yml
+bin/*.tgz
 
 #archive configuration
 config/archive.yml
@@ -61,3 +66,4 @@ config/archive.yml
 # this is created dynamically!
 config/schedule.rb
 .byebug_history
+pylintrc

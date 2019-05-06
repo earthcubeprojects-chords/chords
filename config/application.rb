@@ -20,14 +20,20 @@ module ChordTestbed
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    require "#{Rails.root}/app/models/tspoint.rb" 
+    require "#{Rails.root}/app/models/tspoint.rb"
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
+    # Leave false for now and add validations to these relationships, setting defaults via migration when it's done
+    # If this is set to true before that, weird errors can happen when trying to update objects without those relationships set
+    config.active_record.belongs_to_required_by_default = false
 
     config.autoload_paths += %W(#{config.root}/lib)
 
     # To get rid of console complaints in docker deployment
     #config.web_console.whitelisted_ips = '192.168.0.0/16'
+
+    config.generators do |g|
+        g.test_framework :rspec
+        g.integration_tool :rspec
+    end
   end
 end

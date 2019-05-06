@@ -31,48 +31,71 @@ class Ability
 
     profile = Profile.first
 
+    if !user
+      guest_user(profile, nil)
+    elsif user.role?(:guest)
+      guest_user(profile, user)
+    end
+
     if !user || user.role?(:guest)
-      guest_user
-
       if !profile.secure_data_viewing
-        registered_user(nil)
+        registered_user(profile, user)
       end
 
       if !profile.secure_data_download
-        data_downloader(nil)
+        data_downloader(profile, user)
       end
-    end
-
-    if user.role?(:registered_user)
-      registered_user(user)
-
-      if !profile.secure_data_download
-        can :download, Instrument
-      end
-    end
-
-    if user.role?(:downloader)
-      data_downloader(user)
     end
 
     if user.role?(:measurements)
-      measurement_creator(user)
+      if !profile.secure_data_viewing
+        registered_user(profile, user)
+      end
+
+      if !profile.secure_data_download
+        data_downloader(profile, user)
+      end
+
+      measurement_creator(profile, user)
+    end
+
+    if user.role?(:downloader)
+      if !profile.secure_data_viewing
+        registered_user(profile, user)
+      end
+
+      data_downloader(profile, user)
+    end
+
+    if user.role?(:registered_user)
+      registered_user(profile, user)
+
+      if !profile.secure_data_download
+        data_downloader(profile, user)
+      end
     end
 
     if user.role?(:site_config)
-      site_configurator(user)
+      site_configurator(profile, user)
     end
 
     if user.role?(:admin)
-      admin(user)
+      admin(profile, user)
     end
   end
 
-  def guest_user
+  def guest_user(profile, user)
     can :read, :about
+
+    cannot :read, User
+    cannot :read, :data if profile.secure_data_download
+
+    if user
+      can [:read, :update], User, id: user.id
+    end
   end
 
-  def registered_user(user)
+  def registered_user(profile, user)
     can :read, :all
 
     can :map, Site
@@ -82,7 +105,7 @@ class Ability
     can :live, Instrument
 
     cannot :read, User
-    cannot :read, :data
+    cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
 
     if user
       can [:read, :update], User, id: user.id
@@ -93,20 +116,49 @@ class Ability
     cannot :read, LinkedDatum
   end
 
-  def data_downloader(user)
-    registered_user(user)
-
+  def data_downloader(profile, user)
+    can :read, :about
     can :download, Instrument
     can :read, :data
+
+    cannot :read, User
+
+    if user
+      can [:read, :update], User, id: user.id
+      can :assign_api_key, User, id: user.id
+    end
   end
 
-  def measurement_creator(user)
+  def measurement_creator(profile, user)
+    cannot :read, User
+    cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
+
+    if user
+      can [:read, :update], User, id: user.id
+    end
+
+    can :read, :about
+
     can :create, :measurement
+    can :simulator, Instrument
   end
 
-  def site_configurator(user)
-    registered_user(user)
+  def site_configurator(profile, user)
     can :manage, :all
+
+    can :map, Site
+    can :map_markers_geojson, Site
+    can :map_balloon_json, Site
+
+    can :live, Instrument
+
+    cannot :manage, User
+    can :read, User
+
+    if user
+      can [:update], User, id: user.id
+      can :assign_api_key, User, id: user.id
+    end
 
     can :duplicate, Instrument
     can :simulator, Instrument
@@ -116,12 +168,18 @@ class Ability
     can :export, Profile
     can :import, Profile
 
-    cannot :manage, User
+    cannot :create, :measurement
   end
 
-  def admin(user)
-    site_configurator(user)
+  def admin(profile, user)
+    site_configurator(profile, user)
 
     can :manage, :all
+
+    cannot :create, :measurement
+
+    if user
+      cannot :destroy, User, id: user.id
+    end
   end
 end

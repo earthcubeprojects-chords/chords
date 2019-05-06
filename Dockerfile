@@ -1,5 +1,5 @@
-FROM ruby:2.2-slim
-MAINTAINER martinc@ucar.edu
+FROM ruby:2.5-slim
+LABEL maintainer="martinc@ucar.edu"
 
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
   build-essential \
   nodejs \
   mysql-client \
-  libmysqlclient-dev \
+  default-libmysqlclient-dev \
   dos2unix \
   nginx \
   cron \

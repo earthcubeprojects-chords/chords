@@ -1,4 +1,7 @@
 - if can?(:delete_test, :measurement)
-  = form_tag(delete_test_measurements_path, :method => 'post') do
-    = hidden_field_tag('instrument_id', instrument.id )
-    = submit_tag("Delete Test Data", data: { confirm: "Are you sure you want to delete the test data for \n#{instrument.name}}?\n\nALL TEST DATA WILL BE LOST" })
+  = link_to content_tag(:i, '', class: "glyphicon glyphicon-remove-circle"),
+    delete_test_measurements_path(instrument_id: instrument.id),
+    method: :post,
+    style: 'text-decoration: none; color: red;',
+    title: 'Delete Test Data',
+    data: { confirm: "Are you sure you want to delete the test data for \n#{instrument.name}?\n\nALL TEST DATA WILL BE LOST" }

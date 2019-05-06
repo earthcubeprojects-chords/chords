@@ -3,6 +3,8 @@ require 'rails_helper'
 describe 'Unauthenticated instrument data requests', type: :request do
   it 'returns 403 when unauthorized' do
     profile = Profile.first || Profile.initialize.first
+    profile.secure_data_viewing = true
+    profile.secure_data_download = true
     profile.save!
 
     instrument = FactoryBot.create(:instrument)

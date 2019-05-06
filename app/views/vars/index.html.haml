@@ -1,21 +1,23 @@
-%p#notice= notice
-%h1 Listing Vars
-.table-responsive
-  %table
-    %thead
+%h1 Variables
+%br
+%div.row
+  %div.col-lg-10.col-md-11
+    %table.table.table-striped
       %tr
         %th Name
-        %th Shortname
+        %th Short Name
         %th Instrument
-        %th{:colspan => "3"}
-    %tbody
-      - @vars.each do |var|
+        %th Units
+        %th Abbreviation
+        %th Measured Property
+
+      - @vars.each do |v|
         %tr
-          %td= var.name
-          %td= var.shortname
-          %td= var.instrument
-          %td= link_to 'Show', var
-          %td= link_to 'Edit', edit_var_path(var)
-          %td= link_to 'Destroy', var, method: :delete, data: { confirm: 'Are you sure?' }
-%br/
-= link_to 'New Var', new_var_path
+          %td= link_to v.name, v
+          %td= v.shortname
+          %td= link_to v.instrument, v.instrument
+          %td= v.unit.try(:name)
+          %td= v.unit.try(:abbreviation)
+          %td= v.measured_property.try(:label)
+          %td.col-sm-1= link_to '', edit_var_path(v, return: 'edit'), class: 'glyphicon glyphicon-pencil', style: 'text-decoration: none; color: black;', title: 'Edit'
+          %td.col-sm-1= link_to '', v, method: :delete, data: { confirm: 'Are you sure?' }, class: 'glyphicon glyphicon-trash', style: 'text-decoration: none; color: black;', title: 'Delete'

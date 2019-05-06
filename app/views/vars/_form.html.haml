@@ -7,30 +7,44 @@
       %ul
         - @var.errors.full_messages.each do |message|
           %li= message
-  .field
-    = f.label :name
-    %br/
-    = f.text_field :name
-  .field
-    = f.label :shortname
-    %br/
-    = f.text_field :shortname
-  .field
-    = f.label :instrument_id
-    %br/
-    = f.text_field :instrument_id
-  .field
-    = f.label :unit_id
-    %br/
-    / = f.text_field :units
-    = f.collection_select :unit_id, Unit.order(:name),:id,:name, include_blank: false
-  .field
-    = f.label :units
-    %br/
-    = f.text_field :units
-  .field
-    = f.label :measured_property_id
-    %br/
-    = f.collection_select :measured_property_id, MeasuredProperty.order(:label),:id,:label, include_blank: false
+  .line
+    .title
+      = f.label :name
+    .field
+      = f.text_field :name, class: 'form-control'
+  .line
+    .title
+      = f.label :shortname
+    .field
+      = f.text_field :shortname, class: 'form-control'
+
+      - if @instrument
+        = f.hidden_field :instrument_id, value: @instrument.id
+      - else
+        = f.hidden_field :instrument_id, value: @var.instrument.id
+  .line
+    .title
+      = link_to 'Units', :units
+    %br
+    .field
+      = f.collection_select :unit_id, @units, :id, :name, include_blank: false
+  .line
+    .title
+      = link_to 'Measured Properties', :measured_properties
+    %br
+    .field
+      = f.collection_select :measured_property_id, @measured_properties, :id, :label, include_blank: false
+  .line
+    .title
+      = f.label :minimum_plot_value
+    .field
+      =f.text_field :minimum_plot_value, class: 'form-control'
+  .line
+    .title
+      = f.label :maximum_plot_value
+    .field
+      =f.text_field :maximum_plot_value, class: 'form-control'
+
   .actions
-    = f.submit
+    %br
+    = f.submit class: 'btn btn-md btn-primary'
