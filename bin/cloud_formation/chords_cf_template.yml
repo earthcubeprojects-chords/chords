@@ -4,6 +4,11 @@ Description: AWS CloudFormation Template for a CHORDS Portal.
 
 #####################################################################
 Parameters:
+  01KeyName:
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Type: AWS::EC2::KeyPair::KeyName
+
   ChordsAdminPw:
     Default: chords_ec_demo
     Description: CHORDS database admin password (this is not the portal admin password). Choose carefully.
@@ -18,8 +23,8 @@ Parameters:
     AllowedValues:
       - latest
       - development
-    Default: latest
-    Description: The version of CHORDS to deploy (E.g. the dockerhub tag)
+    Default: "latest"
+    Description: The version of CHORDS to deploy (matches the Docker Hub tags)
     Type: String
 
   GitBranch:
@@ -29,32 +34,32 @@ Parameters:
     Default: master
     Description: CHORDS git branch
     Type: String
-    
+
   GrafanaAdminPw:
     Default: admin
-    Description: The password for admin access to Grafana. Once Grafana is initialized with this password, it can only be changed from the Grafana admin web page. Replace this with a secure password.    
+    Description: The password for admin access to Grafana. Once Grafana is initialized with this password, it can only be changed from the Grafana admin web page. Replace this with a secure password.
     Type: String
-  
+
   ChordsEmailAddress:
     Default: unknown@gmail.com
     Description: An email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail).
     Type: String
-  
+
   ChordsEmailPassword:
     Default: unknown
     Description: The password for the email account that will send CHORDS password reset instructions, Grafana alerts, etc. DO NOT use a personal or business account for this; instead set up an account specifically for CHORDS (e.g. at gmail).
     Type: String
-  
+
   ChordsEmailServer:
     Default: smtp.gmail.com
     Description: The email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service.
     Type: String
-  
+
   ChordsEmailPort:
     Default: 587
     Description: The SERVER PORT for the email server that can relay CHORDS password reset instructions, Grafana alerts, etc. You must have an account on this service.
     Type: String
-                
+
   SecretKeyBase:
     Default: 9a9c4d7e7bed3d85a53bfaaee9cefd338c2ab5fda573cd933dfd3fea4178004425cb50a06df00a0c59a1d353defb9bd3e49fb5f47a791dec7daff95b2a6d080d
     Description: SECRET_KEY_BASE for Rails. This MUST be a randomly generated and 256 bits long.
@@ -79,7 +84,7 @@ Parameters:
     Default: false
     Description: Enable kapacitor (WARNING, opens a security hole)
     Type: String
-    
+
   InstanceType:
     AllowedValues:
     - t2.micro
@@ -125,11 +130,6 @@ Parameters:
     Description: CHORDS EC2 instance type
     Type: String
 
-  KeyName:
-    ConstraintDescription: must be the name of an existing EC2 KeyPair.
-    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
-    Type: AWS::EC2::KeyPair::KeyName
-
   SSHLocation:
     AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
@@ -145,8 +145,8 @@ Parameters:
     Type: String
 
 #####################################################################
-    
-    
+
+
 Mappings:
   AWSInstanceType2Arch:
     c3.2xlarge:
@@ -226,27 +226,43 @@ Mappings:
 
   AWSRegionArch2AMI:
     ap-northeast-1:
-      HVM64: ami-3bd3c45c
+      HVM64: ami-0997de1cd272740c8
+    ap-northeast-2:
+      HVM64: ami-014a7f23cc23439fb
+    ap-northeast-3:
+      HVM64: ami-0b31fb2289bb92d80
+    ap-south-1:
+      HVM64: ami-0688537d4903f3e1b
     ap-southeast-1:
-      HVM64: ami-77af2014
+      HVM64: ami-0332cf924587fe3fc
     ap-southeast-2:
-      HVM64: ami-10918173
-    ca-north-1:
-      HVM64: ami-a7aa15c3
+      HVM64: ami-0cd28cf56b0b47a85
+    ca-central-1:
+      HVM64: ami-0477364f56fb51193
+    cn-north-1:
+      HVM64: ami-05a64eb2faa4afbe2
+    cn-northwest-1:
+      HVM64: ami-03bdbb9c6fa74d555
     eu-central-1:
-      HVM64: ami-82be18ed 
+      HVM64: ami-04a99c28815f4a706
     eu-west-1:
-      HVM64: ami-d7b9a2b1
+      HVM64: ami-01c855eb410b05de7
+    eu-west-2:
+      HVM64: ami-06d954f8e6d94f918
+    eu-west-3:
+      HVM64: ami-0d86dbb596eeae4f7
     sa-east-1:
-      HVM64: ami-87dab1eb
+      HVM64: ami-0fd70fc6265d130e1
     us-east-1:
-      HVM64: ami-a4c7edb2
+      HVM64: ami-020635c16bf5a82ad
     us-east-2:
-      HVM64: ami-8a7859ef
+      HVM64: ami-0ea8f8e0d477657eb
+    us-gov-west-1:
+      HVM64: ami-a768f2c6
     us-west-1:
-      HVM64: ami-327f5352
+      HVM64: ami-0ff42bc1b2ce9d50d
     us-west-2:
-      HVM64: ami-6df1e514
+      HVM64: ami-092015093621866d2
 
 #####################################################################
 Resources:
@@ -274,7 +290,7 @@ Resources:
       InstanceType:
         Ref: InstanceType
       KeyName:
-        Ref: KeyName
+        Ref: 01KeyName
       SecurityGroups:
       - Ref: ChordsServerSecurityGroup
       Tags:
@@ -283,7 +299,7 @@ Resources:
           Ref: AWS::StackName
       - Key: ChordsType
         Value: Portal
-      # ChordsServer::Properties::UserData instructs cfn to install and 
+      # ChordsServer::Properties::UserData instructs cfn to install and
       # run CHORDS via full_install.
       UserData:
         Fn::Base64:
@@ -316,7 +332,7 @@ Resources:
               '
     Metadata:
       AWS::CloudFormation::Init:
-        # configSets specifies the order that cfn_init runs 
+        # configSets specifies the order that cfn_init runs
         # the other AWS::CloudFormation::Init: types.
         configSets:
           full_install:
@@ -387,13 +403,13 @@ Resources:
                 files:
                 - /etc/cfn/cfn-hup.conf
                 - /etc/cfn/hooks.d/cfn-auto-reloader.conf
-        
+
         # Perform a yum update for the system.
         sys_update:
           commands:
             01_update:
               command: yum update -y
-        
+
         # Install some useful packages.
         yum_extras:
           packages:
@@ -401,17 +417,18 @@ Resources:
               emacs: []
               sysstat: []
               git: []
-        
+              python2-pip: []
+
         # Install docker as a service.
         install_docker:
           packages:
             yum:
               docker: []
-          services:
-            sysvinit:
-              docker:
-                enabled: 'true'
-                ensureRunning: 'true'
+          commands:
+            01_enable:
+              command: "systemctl enable docker"
+            02_start:
+              command: "systemctl start docker"
 
         # Install docker-compose
         install_docker_compose:
@@ -423,6 +440,8 @@ Resources:
         # Set up CHORDS
         chords_setup:
           commands:
+            00_python_pip:
+              command: "pip install sh"
             01_var_lib_chords:
               command: "mkdir -p /var/lib/chords"
             02_get_chords_control:
@@ -435,7 +454,7 @@ Resources:
           files:
             # Create the basic configuration in .env:
             /var/lib/chords/.env:
-              content: !Sub |     
+              content: !Sub |
                 CHORDS_ADMIN_PW=${ChordsAdminPw}
                 CHORDS_GUEST_PW=${ChordsGuestPw}
                 CHORDS_EMAIL_ADDRESS=${ChordsEmailAddress}
@@ -453,7 +472,7 @@ Resources:
             # Create chords.yml from .env. The .env file will also be updated.
             01_create_chords_yml:
               command: "cd /var/lib/chords && python chords_control -b"
- 
+
         # Install docker-compose.yml and get the CHORDS images.
         docker_pull:
           commands:
@@ -464,86 +483,35 @@ Resources:
         # Install and enable the chords service
         chords_service:
           files:
-            /etc/init.d/chords:
+            /var/lib/chords/chords.service:
               content: |
-                #!/bin/sh
-                #
-                # chkconfig:   2345 96 20
-                # description: Daemon for chords
-                #
-                # based on https://gist.github.com/samalba/8bc1f848b4fa2db6f12e
-                #
-                ### BEGIN INIT INFO
-                # Provides:   chords
-                # Required-Start: docker
-                # Required-Stop:  docker
-                # Default-Start:  2 3 4 5
-                # Default-Stop:   0 1 6
-                # Short-Description: Docker Compose for CHORDS
-                # Description: Docker Compose for CHORDS
-                ### END INIT INFO
-                #
-                set -e
-                #
-                DOCKER_COMPOSE_PROJECT_NAME=chords
-                DOCKER_COMPOSE_YAMLFILE=/var/lib/chords/docker-compose.yml
-                #
-                OPTS="-f $DOCKER_COMPOSE_YAMLFILE -p $DOCKER_COMPOSE_PROJECT_NAME"
-                UPOPTS="-d"
-                LABEL="docker-compose for CHORDS"
-                DC=/bin/docker-compose
-                #
-                #. /etc/rc.d/init.d/functions
-                #
-                #
-                cd /var/lib/chords
-                #
-                start () {
-                  echo "Starting $LABEL"
-                  cd /var/lib/chords && python chords_control --run
-                }
-                #
-                stop () {
-                  echo "Stopping $LABEL"
-                  cd /var/lib/chords && python chords_control --stop
-                  $DC $OPTS stop
-                }
-                #
-                case "$1" in
-                  up|start)
-                    start
-                    ;;
-                #
-                  stop)
-                    stop
-                    ;;
-                #
-                  status)
-                  cd /var/lib/chords && python chords_control --status
-                    ;;
-                #
-                  restart)
-                    stop
-                    start
-                    ;;
-                #
-                  *)
-                    echo "Usage: /etc/init.d/chords {up/start|stop|status}" || true
-                    exit 1
-                    ;;
-                esac
-                #
-                exit 0                                
+                [Unit]
+                Description=CHORDS Portal
+                After=docker.service
+                Requires=docker.service
+
+                [Service]
+                Type=simple
+                WorkingDirectory=/var/lib/chords
+                ExecStartPre=/bin/docker-compose -p chords down
+                ExecStart=/bin/docker-compose    -p chords up
+                ExecStop=/bin/docker-compose     -p chords down
+                Restart=always
+                RestartSec=60
+
+                [Install]
+                WantedBy=multi-user.target
               group: root
               mode: '000755'
               owner: root
-            
+
           commands:
             # Enable the chords service
-            01_chkconfig:
-              command: "chkconfig chords --add && chkconfig chords on"  
+            01_enable:
+              command: "systemctl enable /var/lib/chords/chords.service"
+            # Start the chords service
             02_startchords:
-              command: "service chords up"
+              command: "systemctl start chords"
 
   ChordsServerSecurityGroup:
     Properties:
@@ -571,7 +539,7 @@ Resources:
         IpProtocol: tcp
         ToPort: '9092'
     Type: AWS::EC2::SecurityGroup
-    
+
 #####################################################################
 Outputs:
   WebsiteURL:

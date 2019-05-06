@@ -29,6 +29,6 @@
 
 %br
 - if can? :edit, LinkedDatum
-  = button_to 'Edit', edit_linked_datum_path(@linked_datum), method: :get
+  = button_to 'Edit', edit_linked_datum_path(@linked_datum), method: :get, class: 'btn btn-default btn-md'
 %br
 = link_to 'Back', profiles_path

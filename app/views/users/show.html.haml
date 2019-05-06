@@ -18,7 +18,7 @@
         %strong API Key
       %td
         - if !@user.api_key.nil?
-          - if @user == current_user
+          - if @user == current_user || current_user.role?(:admin)
             = @user.api_key
           - elsif !@user.api_key.nil?
             Yes
@@ -27,6 +27,6 @@
 
 %p
 -if can? :edit, @user
-  %p= button_to 'Edit User', edit_user_path(@user), method: :get
+  %p= button_to 'Edit User', edit_user_path(@user), method: :get, class: 'btn btn-default btn-md'
 
 %p= link_to 'Back', users_path

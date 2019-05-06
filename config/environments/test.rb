@@ -36,9 +36,15 @@ Rails.application.configure do
   #   location: '/usr/sbin/sendmail',
   #   arguments: '-i -t'
   # }
+  from_email = if Rails.application.config.action_mailer.smtp_settings
+                 Rails.application.config.action_mailer.smtp_settings[:user_name]
+               else
+                 'admin@chordsrt.com'
+               end
+
+  config.action_mailer.default_options = {from: from_email}
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
@@ -48,4 +54,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Port that Grafana is using, normally configured with enviroment variables
+  config.grafana_http_port = ENV['GRAFANA_HTTP_PORT'] || 3001
 end

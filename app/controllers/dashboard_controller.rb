@@ -6,17 +6,13 @@ class DashboardController < ApplicationController
     @instruments = Instrument.accessible_by(current_ability)
 
     # Collect some summary metrics
-    counts = TsPoint.select("count(value)")
-    big_count = 0
-
-    counts.each do |c|
-      big_count = c["count"]
-    end
+    measurement_count = Instrument.sum(:measurement_count)
+    measurement_test_count = Instrument.sum(:measurement_test_count)
 
     @metrics = {}
     @metrics["db_size_mb"] = ApplicationHelper.total_db_size_mb
     @metrics["db_expiry_time"] = ApplicationHelper.db_expiry_time
-    @metrics["measurement_count"] = big_count
+    @metrics["measurement_count"] = measurement_count + measurement_test_count
     @metrics["site_count"] = Site.accessible_by(current_ability).count
     @metrics["instrument_count"] = @instruments.length
     @metrics["uptime"] = ApplicationHelper.server_uptime

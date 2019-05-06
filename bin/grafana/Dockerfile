@@ -1,5 +1,6 @@
-FROM grafana/grafana:5.0.4
-MAINTAINER martinc@ucar.edu
+FROM grafana/grafana:6.0.2
+LABEL maintainer="martinc@ucar.edu"
+USER root
 
 RUN apt-get update
 
@@ -12,7 +13,6 @@ RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install satellogic-3d-glo
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install ryantxu-ajax-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install neocat-cal-heatmap-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install petrslavotinek-carpetplot-panel
-RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install digrich-bubblechart-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install briangann-gauge-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install jdbranham-diagram-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install mtanda-histogram-panel

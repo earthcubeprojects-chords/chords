@@ -47,9 +47,7 @@
 %h2
   Citing CHORDS
 %p
-  CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org. See the
-  %a{:href=>"http://data.datacite.org/10.5065/D6V1236Q", :target => "_blank"} DataCite reference
-  to view the relevant DOI metadata fields.
+  CHORDS has been issued a Digital Object Identifier (DOI) from DataCite.org.
 %p
   We request that researchers cite
   CHORDS usage in any relevant publication or other context as follows:
@@ -98,5 +96,6 @@
   .hidden-xs.col-sm-1
 %br/
 
-- if @json_ld_data
+- if @linked_data
+  = render 'json_ld_organization'
   = render 'json_ld_dataset'

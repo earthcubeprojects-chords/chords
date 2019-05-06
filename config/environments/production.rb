@@ -49,8 +49,8 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :debug
 
-  # Rotate log files 
-  config.logger = Logger.new(config.paths['log'].first, 10, 5242880)
+  # Rotate log files
+  config.logger = Logger.new(config.paths['log'].first, 10, 25.megabytes)
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -64,16 +64,28 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
 
-  # config.action_mailer.delivery_method = :sendmail
+  from_email = if Rails.application.config.action_mailer.smtp_settings
+                 Rails.application.config.action_mailer.smtp_settings[:user_name]
+               else
+                 'admin@chordsrt.com'
+               end
+
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_options = {from: from_email}
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address:               ENV['CHORDS_EMAIL_SERVER'],
-    port:                  ENV['CHORDS_EMAIL_PORT'],
-    user_name:             ENV['CHORDS_EMAIL_ADDRESS'],
-    password:              ENV['CHORDS_EMAIL_PASSWORD'],
-    authentication:        'plain',
-    enable_starttls_auto:  true
-  }  
+
+  config.action_mailer.smtp_settings = {}
+  smtp_settings = config.action_mailer.smtp_settings
+  smtp_settings[:address] = ENV['CHORDS_EMAIL_SERVER'] unless ENV['CHORDS_EMAIL_SERVER'].blank?
+  smtp_settings[:port] = ENV['CHORDS_EMAIL_PORT'] unless ENV['CHORDS_EMAIL_PORT'].blank?
+  smtp_settings[:user_name] = ENV['CHORDS_EMAIL_ADDRESS'] unless ENV['CHORDS_EMAIL_ADDRESS'].blank?
+  smtp_settings[:password] = ENV['CHORDS_EMAIL_PASSWORD'] unless ENV['CHORDS_EMAIL_PASSWORD'].blank?
+
+  if smtp_settings[:address] && smtp_settings[:password]
+    smtp_settings[:authentication] = 'plain'
+    smtp_settings[:enable_starttls_auto] = true
+  end
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -91,11 +103,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
+
   config.assets.precompile += %w( *.js *.css )
 
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_options = {from: 'admin@chordsrt.com'}
-
+  # Port that Grafana is using, normally configured with enviroment variables
+  config.grafana_http_port = ENV['GRAFANA_HTTP_PORT'] || 3000
 end

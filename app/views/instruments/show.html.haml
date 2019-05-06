@@ -6,46 +6,40 @@
     = image_tag('button_green_50.png', size:"16")
   - else
     = image_tag('button_red_50.png', size:"16")
-  - if can?(:update, Instrument)
-    = best_in_place @instrument, :name, :as => :input
-  - else
-    = @instrument.name
+
+  = @instrument.name
   = "(id: #{@instrument.id})"
-  located at
-  - if can?(:update, Instrument)
-    = best_in_place @instrument, :site_id, :as => :select, :collection => Site::list_site_options
+
+  - if !@instrument.sensor_id.blank?
+    = "(sensor_id: #{@instrument.sensor_id})"
   - else
-    = @instrument.site.name
+    = "(sensor_id: n/a)"
+
+  located at
+  = @instrument.site.name
 
 .instrument_description
   Description:
-  - if can?(:update, Instrument)
-    = best_in_place @instrument,                              |
-      :description,                                           |
-      :as => :input,                                          |
-      :type => :textarea,                                     |
-      :html_attrs => {:style => 'width:800px; height:100px;'} |
-  - else
-    = @instrument.description
+  = @instrument.description
   %br
-  This instrument is designated as active:
-  - if can?(:update, Instrument)
-    = best_in_place @instrument, :is_active, :as => :checkbox
+  This instrument is designated as:
+  - if @instrument.is_active
+    = "ACTIVE"
   - else
-    - if @instrument.is_active
-      = "Yes"
-    - else
-      = "No"
+    = "INACTIVE"
   %br
-  (If 'No', the instrument will not appear in the dashboard.)
+  (If 'INACTIVE', the instrument will not appear in the dashboard.)
+
+%br
+- if can? :edit, @instrument
+  = button_to 'Edit Instrument', edit_instrument_path(@instrument), method: :get, class: 'btn btn-primary btn-md'
+  %br
 
 .instrument_configuration
   .left
     .instrument_measurements
       = render partial: "instrument_measurements", locals: {instrument: @instrument}
 
-    .instrument_metadata
-      = render partial: "instrument_metadata", locals: {instrument: @instrument}
   .right
     - if can?(:download, @instrument)
       .instrument_download
@@ -58,23 +52,9 @@
 .instrument_plot_time_window
   .left
     %strong Plot measurements for the last
-
-    - if can?(:update, Instrument)
-      = best_in_place @instrument, :plot_offset_value, :as => :input, :html_attrs => { size: 3 }, :classes => 'plot_offset_value'
-      = best_in_place @instrument, :plot_offset_units, :as => :select, :collection => { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :classes => 'plot_offset_units'
-    - else
-      = @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
+    %strong= @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
 
 = (render 'multivariable_graph').html_safe
-
-:javascript
-  $('.best_in_place.plot_offset_value').bind("ajax:success", function(){
-    location.reload();
-  });
-
-  $('.best_in_place.plot_offset_units').bind("ajax:success", function(){
-    location.reload();
-  });
 
 .clear
 %br
@@ -82,3 +62,6 @@
 .full_width
   .instrument_variables
     = render partial: "instrument_variables", locals: {instrument: @instrument}
+
+%br
+= link_to 'Back', instruments_path

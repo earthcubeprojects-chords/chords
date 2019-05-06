@@ -1,8 +1,5 @@
-require 'task_helpers/cuahsi_helper'
-
-class Instrument < ActiveRecord::Base
+class Instrument < ApplicationRecord
   include Rails.application.routes.url_helpers
-  include CuahsiHelper
 
   belongs_to :site
 
@@ -14,6 +11,14 @@ class Instrument < ActiveRecord::Base
   accepts_nested_attributes_for :vars
 
   def self.initialize
+  end
+
+  def to_s
+    name
+  end
+
+  def select_label
+    "#{site.name}: #{name}"
   end
 
   def find_var_by_shortname (shortname)
@@ -125,10 +130,13 @@ class Instrument < ActiveRecord::Base
   end
 
   def sample_count(sample_type)
-    if defined? TsPoint
-      return GetTsCount.call(TsPoint, "value", self.id, sample_type)
+    case sample_type
+    when :not_test
+      measurement_count
+    when :test
+      measurement_test_count
     else
-      return 0
+      measurement_count + measurement_test_count
     end
   end
 
@@ -153,41 +161,13 @@ class Instrument < ActiveRecord::Base
     return influxdb_tags
   end
 
-  def get_cuahsi_methods
-    uri_path = Rails.application.config.x.archive['base_url'] + "/default/services/api/GetMethodsJSON"
-    return JSON.parse(CuahsiHelper::send_request(uri_path, "").body)
-  end
-
-  def get_cuahsi_methodid(method_link)
-    if self.cuahsi_method_id
-      return self.cuahsi_method_id
-    else
-      methods = get_cuahsi_methods
-      id = methods.find {|method| method['MethodLink']==method_link}
-
-      if id != nil
-        self.cuahsi_method_id = id["MethodID"]
-        self.save
-        return self.cuahsi_method_id
-      end
-
-      return id
-    end
-  end
-
   def instrument_url
     p = Profile.first
     link = p.domain_name + "/instruments/" + self.id.to_s
     return link
   end
 
-  def create_cuahsi_method
-    data = {
-      "user" => Rails.application.config.x.archive['username'],
-      "password" => Rails.application.config.x.archive['password'],
-      "MethodDescription" => self.name,
-      "MethodLink" => instrument_url
-      }
-    return data
+  def current_day_download_link(type)
+    '/api/v1/data/' + self.id.to_s + ".#{type.to_s}"
   end
 end

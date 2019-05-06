@@ -32,16 +32,16 @@ class UsersController < ApplicationController
         if !(params[:user][:roles].include?('admin') || params[:user][:roles].include?(:admin))
           params[:user][:roles] << :admin
         end
+      elsif params[:user][:roles].include?('guest') || params[:user][:roles].include?(:guest)
+        params[:user][:roles] = [:guest]
       end
 
       if @user.update(user_params)
         format.html{ redirect_to @user, notice: 'User was successfully updated' }
-        # format.json { render :show, status: :ok, location: @user }
-        format.json{ respond_with_bip(@user) }
+        format.json{ render :show, status: :ok, location: @user }
       else
         format.html{ render :edit }
-        # format.json { render json: @user.errors, status: :unprocessable_entity }
-        format.json{ respond_with_bip(@user) }
+        format.json{ render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end

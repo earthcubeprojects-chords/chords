@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -11,6 +11,11 @@ class User < ActiveRecord::Base
   #######################################################################################
 
   before_create :set_default_roles
+
+  # find users with a particular role
+  # ex: User.with_role(:admin) => ActiveRecordRelation[user1, user2, ...]
+  scope :with_role, -> (role) { where("roles_mask & #{2**ROLES.index(role)} > 0") }
+  scope :with_only_role, -> (role) { where("roles_mask = #{2**ROLES.index(role)}") }
 
   def roles=(roles)
     roles = [*roles].map { |r| r.to_sym }
@@ -50,7 +55,7 @@ class User < ActiveRecord::Base
 private
   def set_default_roles
     if roles_mask.nil? && self.roles.blank?
-      self.roles = [:registered_user]
+      self.roles = [:guest]
     end
   end
 end
