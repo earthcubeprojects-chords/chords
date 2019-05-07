@@ -27,8 +27,9 @@ classes: wide
 
 <!-- <span class="badge center-block">This web site is about the CHORDS Portal</span> -->
 
-<img  class="img-responsive" src="{{ site.baseurl }}/assets/images/overview.png" alt="CHORDS Portal Cartoon"><!--Using liquid to set path for images.-->
-
+<figure>
+  <a href="{{ site.baseurl }}/assets/images/overview.png"><img  class="img-responsive" src="{{ site.baseurl }}/assets/images/overview.png" alt="CHORDS Portal Cartoon"></a><!--Using liquid to set path for images.-->
+</figure>
 
 ## The CHORDS Portal:
 * **web server and database** that accepts real-time data from distributed instruments and serves the measurements to anyone on the Internet. The data streams are pushed to and pulled from the portal using simple HTTP requests.
