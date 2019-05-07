@@ -2,6 +2,7 @@
 layout: single
 title: Amazon
 permalink: /gettingstarted/aws/
+classes: wide
 ---
 
 If you already have an AWS account, just go to [Portal creation](http://ncar.github.io/chords/create.html).
