@@ -7,6 +7,9 @@ toc_sticky: true
 toc_label: "Table of Contents"
 toc_icon: "cog"
 ---
+
+<embed src="https://www.youtube.com/embed/1fKdFjAQU8U" width="425" height="344">
+
 If you are working in academia then you are eligible to use a jetstream server.
 You will need to submit a request for an allocation on the system.
 

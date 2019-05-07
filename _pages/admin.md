@@ -27,6 +27,8 @@ To configure the site you either have to have Site Configuration or Admin privil
 **Tip for Admins** If you want to check user permissions while using two windows in your browser either make one browser incognito mode or open a new window in another web browser. Otherwise you will mix up the sites cookies and have to clear your browser cache.
 
 ### Portal Configuration
+  <embed src="https://www.youtube.com/embed/EnAhjU7vVAc" width="425" height="344">
+
 Admins can edit the portal configuration as well as users with Site Configuration permission.
 
 1. Click on “Configure” selection in the upper right part of the screen. It will take you to a page called Configuration
@@ -131,7 +133,7 @@ There are two key places you will want to make sure to include a little extra me
 
 First, your measured properties and units are part of the metadata, but don’t just call them T or I. One letter doesn’t count for metadata as it’s needed to describe what the data is showing. So give it a more descriptive name (temp, WaterPr). Your data users will appreciate this as metadata is downloaded with your data. 
 
-Second, under your configuration page there is a section for entering JSON-LD metadata. Metadata from your entries create a JSON-LD record that is encapsulated within your Portal instance. These records allow Google (through its [Data Set Search tool](https://toolbox.google.com/datasetsearch)) and other harvesters to discover the existence of your server. This increases the visibility of your data on the web.
+Second, under your configuration page there is a section for entering JSON-LD metadata. Metadata from your entries create a JSON-LD record that is encapsulated within your Portal instance. These records allow Google (through its [Data Set Search tool](https://toolbox.google.com/datasetsearch)) and other harvesters to discover the existence of your server. This increases the visibility of your data on the web. For more information visit [Project 418](https://www.earthcube.org/p418)
 
 ### Email
 1. To change an email address simply click on **“Users”** and then click **“Edit”**  
