@@ -48,23 +48,6 @@ class Instrument < ApplicationRecord
     return latest_time_ms
   end
 
-  # # Returns the time of the first or last derivative calculation given parmeter point ("first" or "last")
-  # def deriv_time_in_ms(point)
-  #   if point == "last"
-  #     latest_deriv = GetLastDerivPoint.call(TsPoint, 'value', self.id)
-  #   else
-  #     first_deriv = GetFirstDerivPoint.call(TsPoint, 'value', self.id)
-  #   end
-
-  #   if (defined? latest_deriv.to_a.first['time'])
-  #     latest_deriv_time = Time.parse(latest_deriv.to_a.first['time'])
-  #   else
-  #     latest_deriv_time = "None"
-  #   end
-
-  #   return latest_deriv_time
-  # end
-
   # get the downsampling rate for influx query
   def downsample_rate (starttime, endtime, var_id)
     max_points = self.maximum_plot_points

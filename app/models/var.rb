@@ -96,36 +96,6 @@ class Var < ApplicationRecord
     return live_points
   end
 
-# def get_tsderivatives (starttime, endtime, display_points = self.instrument.display_points)
-
-#   if (endtime == nil)
-#     ts_derivatives = TsPoint \
-#       .select('derivative("value")') \
-#       .where(inst: self.instrument.id) \
-#       .where(var: self.id) \
-#       .order("desc") \
-#       .since(starttime)
-#   else 
-#     ts_derivatives = TsPoint \
-#       .select('derivative("value")') \
-#       .where(inst: self.instrument.id) \
-#       .where(var: self.id) \
-#       .where(time: starttime..endtime) \
-#       .order("desc")
-#   end
-
-#   ts_derivatives = ts_derivatives.to_a
-#   derivatives = []
-#   if ts_derivatives
-#     ts_derivatives.reverse_each do |p|
-#       derivatives << [ConvertIsoToMs.call(p["time"]), p["derivative"].to_f]
-#     end
-#   end
-
-#   return derivatives
-# end
-
-
   def delete_ts_points
     DeleteVariableTsPoints.call(TsPoint, self)
   end
