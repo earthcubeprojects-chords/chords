@@ -133,26 +133,11 @@ class InstrumentsController < ApplicationController
       end
     end
 
-    # Determine the time range. Default to the most recent day
-    end_time = Time.now
-    start_time = end_time - 1.day
+    @variables = []
 
-    if params.key?(:last)
-      start_time = @instrument.point_time_in_ms("last")
-      end_time = start_time
-    else
-      # See if we have the start and end parameters
-      if params.key?(:start)
-        start_time = Time.parse(params[:start])
-      end
-
-      if params.key?(:end)
-        end_time = Time.parse(params[:end])
-      end
+    @instrument.vars.joins(:unit).each do |v|
+      @variables << {name: v.name.html_safe, shortname: v.shortname.html_safe, units: v.unit.try(:abbreviation).html_safe}
     end
-
-    # Get the time series points from the database
-    ts_points  = GetTsPoints.call(TsPoint, "value", @instrument.id, start_time, end_time)
 
     respond_to do |format|
       format.html
