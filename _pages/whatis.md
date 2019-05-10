@@ -26,9 +26,14 @@ classes: wide
 * a collection of higher level web-services that provide advanced, standards based processing (_Services_).
 
 <!-- <span class="badge center-block">This web site is about the CHORDS Portal</span> -->
+<<<<<<< HEAD
 
 <figure>
   <a href="{{ site.baseurl }}/assets/images/overview.png"><img  class="img-responsive" src="{{ site.baseurl }}/assets/images/overview.png" alt="CHORDS Portal Cartoon"></a><!--Using liquid to set path for images.-->
+=======
+<figure>
+  <a href = "{{ site.baseurl }}/assets/images/overview.png"><img  class="img-responsive" src="{{ site.baseurl }}/assets/images/overview.png" alt="CHORDS Portal Cartoon"></a><!--Using liquid to set path for images.-->
+>>>>>>> fd6f7963734cacb5e789e318897831d0c6daaff8
 </figure>
 
 ## The CHORDS Portal:
