@@ -57,28 +57,44 @@ class Var < ApplicationRecord
   end
 
 
-  def get_tspoints (since, display_points = self.instrument.display_points)
-    # Get the measurements
-    # TODO: use the :after parameter. It did not interact correctly with
-    # the highchart during prototyping. The problem may be on the javascript side.
-    ts_points = TsPoint \
-      .where("inst = '#{self.instrument.id}'") \
-      .where("var  = '#{self.id}'") \
-      .order("desc") \
-      .since(since)
+  def get_tspoints (starttime, endtime, display_points = self.instrument.display_points)
+    if (endtime == nil)
+    # if there is no end time, get downsampled data from start to most recent data
+      downsample_rate = self.instrument.downsample_rate(starttime, nil, self.id)
+      ts_points = TsPoint \
+        .mean(:value) \
+        .where(inst: self.instrument.id) \
+        .where(var: self.id) \
+        .time(downsample_rate.to_s + "s") \
+        .order("desc") \
+        .since(starttime)
+    else
+    # otherwise, get data from start to end
+      downsample_rate = self.instrument.downsample_rate(starttime, endtime, self.id)
+      ts_points = TsPoint \
+        .mean(:value) \
+        .where(inst: self.instrument.id) \
+        .where(var: self.id) \
+        .where(time: starttime..endtime) \
+        .time(downsample_rate.to_s + "s") \
+        .order("desc")
+    end
 
     ts_points = ts_points.to_a
     live_points = []
     if ts_points
       # Collect the times and values for the measurements
       ts_points.reverse_each do |p|
-        live_points  << [ConvertIsoToMs.call(p["time"]), p["value"].to_f]
+        if (p["mean"]) && (p["mean"].to_f != 0.0)
+          live_points  << [ConvertIsoToMs.call(p["time"]), p["mean"].to_f]
+        elsif (p["value"])
+          live_points  << [ConvertIsoToMs.call(p["time"]), p["value"].to_f]
+        end
       end
     end
 
     return live_points
   end
-
 
   def delete_ts_points
     DeleteVariableTsPoints.call(TsPoint, self)

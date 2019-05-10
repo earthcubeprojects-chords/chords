@@ -1,179 +1,260 @@
+%script{type:'text/javascript', src: "https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.js"}
+%link{type: 'text/css', rel: "stylesheet", href: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.css'}
 
 :javascript
-  var series = [];
+  //////////////////////////////////////////////////
+  ////////// Initialization of Variables ///////////
+  //////////////////////////////////////////////////
 
+  // intialize series array that contain hashes corresponding to each variable
+  var live_series = [];
+
+  // intialize varaible to hold Highchart
   var live_chart;
-  var last_time = 0;
-  var last_times = [];
-  var pause = false;
 
-  var variables = #{@instrument.vars.to_json.html_safe};
+  // initialize variable that holds last time of last recorded measurement for any variable
 
-- title = "\"#{@instrument.name} - Live Data\""
-- title  = title.as_json.html_safe
+  // initialze array that holds time of last recorded measurement for each variable
+  var live_last_times = [];
 
-- if @var_to_plot.minimum_plot_value
-  - min_y_axis_json = "min: #{@var_to_plot.minimum_plot_value},"
-- else
-  - min_y_axis_json = ""
+  // initialize variable that determines how often to fetch new data
+  var live_refresh_msecs;
 
-- if @var_to_plot.maximum_plot_value
-  - max_y_axis_json = "max: #{@var_to_plot.maximum_plot_value},"
-- else
-  - max_y_axis_json = ""
+  // array that holds all variables of current instrument
+  var variables = #{@variables.to_json.html_safe};
 
-- y_axis_js_parts = Array.new
+  // Craft a title for the charts
+  var live_title = "#{@instrument.name.html_safe}" + " - Live Data";
 
-- variable_index = 0
-- visible_by_default = true
+  // array that holds y axis information
+  var y_axis_js = [];
 
-- @instrument.vars.each do |v|
-  - y_axis_js_part = ""
-  - y_axis_js_part += "{  "
-  - y_axis_js_part += "  labels: {\n"
-  - y_axis_js_part += "      format: '{value.html_safe}#{v.unit.try(:abbreviation).html_safe}',\n"
-  - y_axis_js_part += "       style: {color: Highcharts.getOptions().colors[#{variable_index}]},\n"
-  - y_axis_js_part += "  },\n"
+  // populate y_axis_js and live_series array
+  var visible_by_default = true;
+  var variable_index = 0;
+  variables.forEach (function(v) {
 
-  - y_axis_js_part += "  title: { \n "
-  - y_axis_js_part += "   text: '#{v.name.html_safe} (#{v.unit.try(:abbreviation).html_safe})',\n"
-  - y_axis_js_part += "       style: {color: Highcharts.getOptions().colors[#{variable_index}]},\n"
+    var y_axis_js_part = '';
+    y_axis_js_part += '{\n';
+    y_axis_js_part += '  "labels": {\n';
+    y_axis_js_part += '      "format": "{value} ' + v.units + '"' +  ',\n';
+    y_axis_js_part += '       "style": { "color": "' + Highcharts.getOptions().colors[variable_index].toString() + '" }\n';
+    y_axis_js_part += '  },\n';
 
-  - y_axis_js_part += "  },\n"
+    y_axis_js_part += '  "title": {\n ';
+    y_axis_js_part += '   "text": "' + v.name + ' (' + v.units + ')",\n';
+    y_axis_js_part += '   "style": { "color": "' + Highcharts.getOptions().colors[variable_index].toString() + '" }\n';
+    y_axis_js_part += '  },\n';
 
-  - y_axis_js_part += "  opposite: false  ,\n"
-  - y_axis_js_part += "  plotLines: [{\n"
-  - y_axis_js_part += "   width: .5,\n"
-  - y_axis_js_part += "  }]\n"
+    y_axis_js_part += '  "opposite": false,\n';
+    y_axis_js_part += '  "showEmpty": false,\n';
+    y_axis_js_part += '  "plotLines": [{\n';
+    y_axis_js_part += '   "width": 0.5\n';
+    y_axis_js_part += '  }]\n';
 
-  - y_axis_js_part += "}"
-  - y_axis_js_parts.push(y_axis_js_part)
+    y_axis_js_part += '}';
 
-  :javascript
-    var temp_hash = {name:"#{v.name.html_safe}", visible: #{visible_by_default}, data: [], yAxis: #{variable_index}, lineWidth: 1.3};
+    y_axis_js.push(JSON.parse(y_axis_js_part));
 
-    series.push(temp_hash);
-    last_times.push(0);
-  - variable_index += 1
-  - visible_by_default = false
+    var temp_live_hash = {name: v.shortname, visible: visible_by_default, data: [], yAxis: variable_index, lineWidth: 1.3};
 
-- y_axis_js = y_axis_js_parts.join(", \n")
+    live_series.push(temp_live_hash);
 
-:javascript
+    live_last_times.push(0);
 
-  function requestData()
-  {
-    // If the manual datetime input fields are meing modified (in focus) then don't don't redraw the chart
-    if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
-      pause = true;
-    } else {
-      pause = false;
-    }
+    variable_index += 1;
+    visible_by_default = false;
+  });
 
-    // Retrieve the latest points to plot and plot them
-    $.getJSON(
-    '/instruments/#{@instrument.id}/live?after='+last_time,
-    function(live_data) {
-        // Adjust the mix/max y axis bounds
-        // only set a min/max value if the series is visible
-        var minimum_plot_value = null;
-        var maximum_plot_value = null;
+  ///////////////////////////////////////////////////////////////
+  ////////// Functions for Data Requests and Plotting ///////////
+  ///////////////////////////////////////////////////////////////
 
-        for (var series_index = 0; series_index < series.length; series_index++) {
-
-          if (series[series_index].visible) {
-
-            if (variables[series_index].minimum_plot_value) {
-              if (minimum_plot_value == null) {
-                minimum_plot_value = variables[series_index].minimum_plot_value;
-              } else if (variables[series_index].minimum_plot_value < minimum_plot_value) {
-                minimum_plot_value = variables[series_index].minimum_plot_value;
-              }
-            }
-
-            if (variables[series_index].maximum_plot_value) {
-              if (maximum_plot_value == null) {
-                maximum_plot_value = variables[series_index].maximum_plot_value;
-              } else if (variables[series_index].maximum_plot_value > maximum_plot_value) {
-                maximum_plot_value = variables[series_index].maximum_plot_value;
-              }
-            }
-          }
-        }
-
-        var display_points = live_data["display_points"];
-        var multivariable_points = live_data["multivariable_points"];
-        var multivariable_names = live_data["multivariable_names"];
-
-        var refresh_msecs  = live_data["refresh_msecs"];
-
-        for (i = 0; i < multivariable_names.length; i++) {
-          // set the min/max for the visible series
-          if (series[i].visible) {
-            live_chart.yAxis[i].setExtremes(minimum_plot_value, maximum_plot_value, false);
-            live_chart.yAxis[i].startOnTick = true;
-            live_chart.yAxis[i].endOnTick = true;
-          } else {
-            live_chart.yAxis[i].setExtremes(null, null, false);
-          }
-
-          var points = multivariable_points[multivariable_names[i]];
-
-          // add the new points
-          var point_index;
-
-          for (point_index = 0; point_index < points.length; point_index++) {
-            if (points[point_index][0] > last_times[i]) {
-              var shift = live_chart.series[0].data.length >= display_points;
-              live_chart.series[i].addPoint(points[point_index], false, shift);
-              last_time = points[point_index][0];
-              last_times[i] = points[point_index][0];
-            }
-          }
-
-        }
-
-        // Don't redraw the chart if live updating is paused
-        if (pause == false) {
-          live_chart.redraw();
-        }
-
-        // retrieve new data points after a pause
-        setTimeout(requestData, refresh_msecs);
+  // function that requests the data within start to end time range and plots data
+  // if 'reset' is true, then data should replace current data
+  // if 'endtime' is 0, then data retrieved from start to most recent data
+  function requestAllLiveData(starttime, endtime, reset) {
+    $.getJSON('/instruments/#{@instrument.id}/' + 'live' + '?start=' + starttime + '&end=' + endtime, function (data) {
+      if (reset) {
+        plotNewData(data);
+      } else {
+        addNewData(data);
       }
-    );
+    });
   }
 
+  // function that requests the data within start to end time range and plots data for specific variable
+  // used for refreshing data after initial call
+  // if 'endtime' is null, then data retrieved from start to most recent data
+  function requestVarLiveData(starttime, endtime, currVar) {
+    $.getJSON('/instruments/#{@instrument.id}/live?var=' + currVar + '&start=' + starttime + '&end=' + endtime, function (data) {
+      addNewVarData(data, currVar);
+    });
+  }
+
+  // function that clears current chart data and replots with new data
+  function plotNewData(data) {
+    // parse through data
+    var display_points = data["display_points"];
+    var multivariable_points = data["multivariable_points"];
+    var multivariable_names = data["multivariable_names"];
+    var live_refresh_msecs = data["refresh_msecs"];
+
+    // loop through all variables
+    for (i = 0; i < multivariable_names.length; i++) {
+      // get data corresponding to current variable
+      var points = multivariable_points[multivariable_names[i]];
+
+      // clear current chart data for variable and load in new data
+      live_chart.series[i].setData([]);
+      live_chart.series[i].setData(points);
+
+      // update last times array for current variable
+      live_last_times[i] = points[points.length - 1][0];
+    }
+    live_chart.redraw();
+  }
+
+  // function that adds new data points to current data in chart
+  function addNewData(data) {
+    // parse through data
+    var display_points = data["display_points"];
+    var multivariable_points = data["multivariable_points"];
+    var multivariable_names = data["multivariable_names"];
+    var live_refresh_msecs = data["refresh_msecs"];
+
+    // loop through all variables
+    for (i = 0; i < multivariable_names.length; i++) {
+      // get data corresponding to current variable
+      var points = multivariable_points[multivariable_names[i]];
+
+      // loop through points
+      for (p = 0; p < points.length; p++) {
+        live_chart.series[i].addPoint(points[p], false);
+      }
+
+      // update last times array for current variable
+      live_last_times[i] = points[points.length - 1][0];
+    }
+    live_chart.redraw();
+  }
+
+  // function that adds new data points to current data in chart for specific variable
+  function addNewVarData(data, currVar) {
+    // parse through data
+    var display_points = data["display_points"];
+    var points = data["points"];
+
+    // determine index of series corresponding to variable
+    var series_index = 0;
+    for (i = 0; i < variables.length; i++) {
+      if (variables[i].shortname == currVar) {
+        break;
+      }
+      series_index++;
+    }
+
+    // loop through points and add data
+    for (p = 0; p < points.length; p++) {
+      live_chart.series[series_index].addPoint(points[p], false);
+    }
+    live_chart.redraw();
+
+    // update last times array for specific variable
+    live_last_times[series_index] = points[points.length - 1][0];
+  }
+
+  ////////////////////////////////////////////////////////////////
+  ////////// Functions for Actions/Selections of Graph ///////////
+  ////////////////////////////////////////////////////////////////
+
+  // function that gets higher resolution data when user selects region to zoom in
+  function zoomSelection(starttime, endtime) {
+    // get higher resolution data and re plot chart
+    requestAllLiveData(starttime, endtime, true);
+  }
+
+  // function that resets zoom back to range/resolution set when page initially rendered
+  function resetZoom() {
+    // get initial zoom min and max
+    var max = #{@instrument.point_time_in_ms("last").to_time.to_i}
+    var offset = parseInt(#{eval("#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}")});
+    var min = max - offset;
+
+    // reset date range selector
+    document.getElementById('start').value = new Date(min * 1000).toISOString().slice(0, -1);
+    document.getElementById('end').value = new Date(max * 1000).toISOString().slice(0, -1);
+
+    // request downsampled data and plot
+    requestAllLiveData(0, 0, true);
+    live_chart.xAxis[0].setExtremes(min, max);
+    live_chart.redraw();
+  }
+
+  function rangeSelection() {
+    // get initial rendering min and max
+    var initMin = live_chart.xAxis[0].getExtremes().min;
+    var initMax = live_chart.xAxis[0].getExtremes().max;
+
+    // get new inputted min and max
+    var selectMin = document.getElementById('start').value;
+    selectMin = (new Date(selectMin)).getTime();
+    var selectMax = document.getElementById('end').value;
+    selectMax = (new Date(selectMax)).getTime();
+
+    // different scenarios
+    if (initMin < selectMin && initMax > selectMax) {
+      zoomSelection(selectMin, selectMax);
+    } else if (initMax > selectMax) {
+      requestAllLiveData(selectMin, initMax, false);
+      live_chart.xAxis[0].setExtremes(selectMin, selectMax);
+    } else if (initMin < selectMin) {
+      requestAllLiveData(initMax, selectMax);
+      live_chart.xAxis[0].setExtremes(selectMin, selectMax);
+    } else if (initMin > selectMin && initMax < selectMax) {
+      requestAllLiveData(selectMin, selectMax);
+    }
+  }
+
+  ////////////////////////////////////////
+  ////////// Rendering of Page ///////////
+  ////////////////////////////////////////
+
   $(document).ready(function () {
-    // Adjust the global timezone offset
+    // adjust the global timezone offset
     Highcharts.setOptions({
       global: {
         timezoneOffset: #{@tz_offset_mins}
-      },
+      }
     });
 
-    live_chart = new Highcharts.stockChart(
-    {
+    // create live_chart
+    live_chart = new Highcharts.stockChart({
       chart: {
         renderTo: 'instrument_live_chart',
         type: 'line',
         zoomType: 'x',
-        animation: Highcharts.svg, // don't animate in old IE
+        events: {
+          selection: function(event) {
+            zoomSelection(event.xAxis[0].min, event.xAxis[0].max);
+          }
+        },
+        animation: Highcharts.svg,
         marginRight: 10
       },
       rangeSelector: {
-          buttons: [],
-          inputBoxWidth: 180,
-          enabled: true,
-          inputEnabled: true,
-          inputDateFormat: '%b %e, %Y %H:%M:%S',
-          inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
-          inputDateParser: function (value) {
-            [date, time] = value.split(/[\s]/);
-            [year, month, day] = date.split(/[\-]/);
-            [hours, minutes, seconds] = time.split(/[\:]/);
+        buttons: [],
+        inputBoxWidth: 180,
+        enabled: true,
+        inputEnabled: false,
+        inputDateFormat: '%b %e, %Y %H:%M:%S',
+        inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
+        inputDateParser: function (value) {
+          [date, time] = value.split(/[\s]/);
+          [year, month, day] = date.split(/[\-]/);
+          [hours, minutes, seconds] = time.split(/[\:]/);
 
-            ms =  Date.UTC(
+          ms =  Date.UTC(
                 parseInt(year, 10),
                 parseInt(month-1, 10),
                 parseInt(day, 10),
@@ -182,17 +263,15 @@
                 parseInt(seconds, 10)
             );
 
-            // Compensate for the timezone offset
-            // This is NOT taken in to account by highcharts and is likely a bug in their code
-            tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
-            ms = ms + tz_offset_ms;
+          tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
+          ms = ms + tz_offset_ms;
 
-            return(ms);
-          },
-          allButtonsEnabled: false
+          return(ms);
+        },
+        allButtonsEnabled: false
       },
-      credits: { enabled: false, },
-      title: { text: #{title} },
+      credits: { enabled: false },
+      title: { text: live_title },
       xAxis: {
         title: {
           text: '#{@tz_name.html_safe}'
@@ -200,19 +279,38 @@
         type: 'datetime',
         tickPixelInterval: 150
       },
-      yAxis: [
-        #{y_axis_js.html_safe}
-      ],
+      yAxis: y_axis_js,
       tooltip: {
         split: true,
       },
       legend: { enabled: true },
       exporting: { enabled: false },
-      series: series,
+      series: live_series,
     });
 
-    // Make first data request
-    requestData();
+    // make initial data request
+    requestAllLiveData(0, 0, true);
 
-    }
-  );
+    // refresh  data source for each variable
+    // setInterval(function() {
+      // for (i = 0; i < variables.length; i++) {
+        // requestVarLiveData(live_last_times[i], 0, variables[i].shortname);
+      // }
+    // }, live_refresh_msecs);
+
+    // reset zoom button
+    $('#resetZoom').click(function() {
+      resetZoom();
+    });
+
+    // adjust range button
+    $('#adjustRange').click(function() {
+      rangeSelection();
+    });
+
+    var max = #{@instrument.point_time_in_ms("last").to_time.to_i}
+    var offset = parseInt(#{eval("#{@instrument.plot_offset_value}.#{@instrument.plot_offset_units}")});
+    var min = max - offset;
+    document.getElementById('start').defaultValue = new Date(min * 1000).toISOString().slice(0, -1);
+    document.getElementById('end').defaultValue = new Date(max * 1000).toISOString().slice(0, -1);
+  });

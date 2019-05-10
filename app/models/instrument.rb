@@ -48,11 +48,38 @@ class Instrument < ApplicationRecord
     return latest_time_ms
   end
 
-  def maximum_plot_points
-    time_offset_seconds = eval("#{self.plot_offset_value}.#{self.plot_offset_units}")
-    points_to_plot = time_offset_seconds / self.sample_rate_seconds
+  # get the downsampling rate for influx query
+  def downsample_rate (starttime, endtime, var_id)
+    max_points = self.maximum_plot_points
 
-    return points_to_plot.to_i
+    if endtime == nil
+      count = TsPoint \
+        .count("value") \
+        .where(inst: self.id) \
+        .where(var: var_id) \
+        .since(starttime)
+    else
+      count = TsPoint \
+        .count("value") \
+        .where(inst: self.id) \
+        .where(var: var_id) \
+        .where(time: starttime..endtime)
+    end
+
+    num_points = count.to_a[0]["count"].to_i
+
+    if num_points > max_points
+      rate = (num_points.to_f / max_points).ceil * self.sample_rate_seconds
+      return rate
+    else
+      return self.sample_rate_seconds
+    end
+  end
+
+  # return the maximum number of points per variable to render => 180
+  # TODO: add option for user input when setting env variables
+  def maximum_plot_points
+    return 180
   end
 
   def self.to_csv(options = {})
