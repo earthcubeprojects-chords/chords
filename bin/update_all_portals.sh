@@ -6,7 +6,7 @@
 
 
 echo "updating portal.chordsrt.com"
-ssh -i $1 ec2-user@tzvolcano.chordsrt.com 'cd /home/ec2-user/chords_portal ; git pull '
+ssh -i $1 ec2-user@tzvolcano.chordsrt.com 'cd /home/ec2-user/chords ; git pull '
 echo ""
 
 
@@ -14,4 +14,4 @@ echo "all update finished"
 
 
 
- # sudo chown -R ec2-user:ec2-user ./chords_portal
+ # sudo chown -R ec2-user:ec2-user ./chords

@@ -445,9 +445,9 @@ Resources:
             01_var_lib_chords:
               command: "mkdir -p /var/lib/chords"
             02_get_chords_control:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/chords_control > /var/lib/chords/chords_control"
+              command: !Sub "curl -L https://raw.github.com/earthcubeprojects-chords/chords/${GitBranch}/chords_control > /var/lib/chords/chords_control"
             03_get_docker_compose_yml:
-              command: !Sub "curl -L https://raw.github.com/NCAR/chords_portal/${GitBranch}/docker-compose.yml > /var/lib/chords/docker-compose.yml"
+              command: !Sub "curl -L https://raw.github.com/earthcubeprojects-chords/chords/${GitBranch}/docker-compose.yml > /var/lib/chords/docker-compose.yml"
 
         # Create the CHORDS and docker-compose configuration files.
         chords_config:
