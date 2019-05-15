@@ -28,7 +28,7 @@ version: '2'
 # CHORDS configuration values. See chords_env_template for a description of values.
 # 
 # To deploy/start/stop CHORDS:
-#   curl -L https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
+#   curl -L https://github.com/earthcubeprojects-chords/chords/raw/<branch>/docker-compose.yml > docker-compose.yml
 #   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down

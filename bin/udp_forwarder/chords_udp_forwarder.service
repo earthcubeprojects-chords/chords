@@ -11,16 +11,16 @@
 #
 # To install:
 # Install udp_forwarder.rb
-#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.rb
+#  sudo curl -L https://github.com/earthcubeprojects-chords/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.rb
 #  sudo chmod a+x /var/lib/chords/udp_forwarder.rb
 #
 # Fetch the service definition
-#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
+#  sudo curl -L https://github.com/earthcubeprojects-chords/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
 #
 # If you are making a fresh configuration, create the configuration file for for udp_forwarder.rb 
 # (Don't do this if you have an existing configuration. And note that the configuration file name
 #  must match what is specified in ExecStart below. Feel free to change both of these)
-#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/ncar_wx.json > /var/lib/chords/ncar_wx.json
+#  sudo curl -L https://github.com/earthcubeprojects-chords/chords/raw/development/bin/udp_forwarder/ncar_wx.json > /var/lib/chords/ncar_wx.json
 #
 # Enable the service. (You will get complaints about [Install] missing)
 #  sudo systemctl enable /var/lib/chords/udp_forwarder.service

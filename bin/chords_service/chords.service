@@ -5,7 +5,7 @@
 #
 # To install:
 # Fetch the service definition
-#  sudo curl -L https://github.com/NCAR/chords/raw/master/bin/chords_service/chords.service > /var/lib/chords/chords.service
+#  sudo curl -L https://github.com/earthcubeprojects-chords/chords/raw/master/bin/chords_service/chords.service > /var/lib/chords/chords.service
 #
 # Enable the service.
 #  sudo systemctl enable /var/lib/chords/chords.service

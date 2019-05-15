@@ -16,7 +16,7 @@
 #
 # The variable values will be paired with the CHORDS short_names.
 # All of the timestamp/short_name/value triples will be used to build a CHORDS URL which will then
-# be submitted to a chords_portal. If different timestamps are encountered, a URL for
+# be submitted to a chords. If different timestamps are encountered, a URL for
 # each unique timestamp will be submitted.
 #
 # The data lines in a file are formatted with whitespace separated variable values as follows:

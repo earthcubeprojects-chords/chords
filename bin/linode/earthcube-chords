@@ -80,7 +80,7 @@ def service_install():
         os.system('ln -s /usr/bin/docker-compose')
 
     os.chdir(chords_basedir)
-    chords_service_url = 'https://github.com/NCAR/chords/raw/' + os.environ['GIT_BRANCH'] + '/bin/chords_service/chords.service'    
+    chords_service_url = 'https://github.com/earthcubeprojects-chords/chords/raw/' + os.environ['GIT_BRANCH'] + '/bin/chords_service/chords.service'    
     os.system('curl -L ' + chords_service_url + ' > chords.service')
     os.system('systemctl enable /var/lib/chords/chords.service')
     os.system('systemctl daemon-reload')
@@ -99,10 +99,10 @@ def chords_install():
     f.close()
 
     # Fetch chords_control and docker-compose.yml
-    file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/chords_control'
+    file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ os.environ['GIT_BRANCH'] + '/chords_control'
     curl_cmd = 'curl -O -s ' + file_url
     os.system(curl_cmd)
-    file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ os.environ['GIT_BRANCH'] + '/docker-compose.yml'
+    file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ os.environ['GIT_BRANCH'] + '/docker-compose.yml'
     curl_cmd = 'curl -O -s ' + file_url
     os.system(curl_cmd)
 

@@ -3,9 +3,9 @@
 The [CHORDS website](http://chordsrt.com) is the offical documentation for CHORDS.
 
 There are also condensed instructions for running the
-[CHORDS Docker containers](https://github.com/NCAR/chords/wiki/Running-CHORDS).
+[CHORDS Docker containers](https://github.com/earthcubeprojects-chords/chords/wiki/Running-CHORDS).
 
-The [CHORDS wiki](https://github.com/NCAR/chords_portal/wiki) has lots of nitty-gritty information.
+The [CHORDS wiki](https://github.com/earthcubeprojects-chords/chords/wiki) has lots of nitty-gritty information.
 
 # What is CHORDS
 A testbed for CHORDS developer and user experiences. It will allow us

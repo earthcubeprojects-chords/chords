@@ -554,9 +554,9 @@ class ChordsGit(object):
             files = [files]
 
         for fileName in files:
-            file_url = 'https://raw.githubusercontent.com/NCAR/chords/'+ git_branch + '/' + fileName
+            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ git_branch + '/' + fileName
 #            if os_arch[:3] == 'arm':
-#                docker_compose_yml = 'https://raw.githubusercontent.com/NCAR/chords/' + git_branch + '/rpi-docker-compose.yml'
+#                docker_compose_yml = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/' + git_branch + '/rpi-docker-compose.yml'
 
             proxy_switch = []
             if self.proxy != '':
@@ -578,10 +578,10 @@ class ChordsGit(object):
 
     def branches(self):
         """
-        Return the avaiable branches for github.com/ncar/chords.
+        Return the avaiable branches for github.com/earthcubeprojects-chords/chords.
         """
         git_cmd = [
-            'git', 'ls-remote', '--heads', 'https://github.com/ncar/chords'
+            'git', 'ls-remote', '--heads', 'https://github.com/earthcubeprojects-chords/chords'
             ]
         heads = [e.replace('refs/heads/','') for e in os_cmd(cmd=git_cmd, printlines=False)[0].split()[1::2]]
         heads.remove('gh-pages')
