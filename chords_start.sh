@@ -111,7 +111,7 @@ then
   done
 
   echo "Granting mysql permissions."
-  bundle exec mysql -h mysql -e "GRANT ALL ON *.* TO 'chords_demo_user';"
+  bundle exec mysql -h $mysql_host -e "GRANT ALL ON *.* TO 'chords_demo_user';"
 
   echo "Creating rails database."
   bundle exec rake db:create
