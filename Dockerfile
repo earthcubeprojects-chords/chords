@@ -40,7 +40,10 @@ RUN gem install bundler && bundle install --jobs $BUNDLE_JOBS --retry 5
 COPY . ./
 
 # Bake the assets (for production mode) into the image
-RUN mkdir -p /chords/log && RAILS_ENV=production bundle exec rake assets:precompile
+RUN mkdir -p /chords/log && RAILS_ENV=production SECRET_KEY_BASE=`bundle exec rake secret` bundle exec rake assets:precompile
+
+
+
 
 # Customize the nginx configuration and log rotation
 COPY ./nginx_default.conf /etc/nginx/sites-available/default
