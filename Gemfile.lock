@@ -309,6 +309,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jquery-rails (~> 4.3)
   jquery-ui-rails
+  json (~> 1.8.6)
   letter_opener
   loofah (>= 2.2.3)
   mini_portile2
@@ -335,4 +336,4 @@ DEPENDENCIES
   whenever (~> 0.9.7)
 
 BUNDLED WITH
-   1.16.2
+   1.17.3

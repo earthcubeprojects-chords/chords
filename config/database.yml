@@ -22,7 +22,7 @@ development:
   <<: *default
   database: chords_demo_development
   password: chords_ec_demo
-  host: localhost
+  host: mysql
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -31,7 +31,7 @@ test:
   <<: *default
   database: chords_demo_test
   password: chords_ec_demo
-  host: localhost
+  host: mysql
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
