@@ -111,7 +111,7 @@ then
   done
 
   echo "Granting mysql permissions."
-  bundle exec mysql -h mysql -e "GRANT ALL ON *.* TO 'chords_demo_user';"
+  bundle exec mysql -h $mysql_host -e "GRANT ALL ON *.* TO 'chords_demo_user';"
 
   echo "Creating rails database."
   bundle exec rake db:create
@@ -144,6 +144,10 @@ curl -s http://$influxdb_host:8086/query --data-urlencode "q=create user $influx
 
 # Make sure that the influxdb database exists.
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create database $influxdb_dbname"
+
+if [ "$RAILS_ENV" = "development" ]; then
+  curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=create database chords_ts_test"
+fi
 
 # Set the retention policy
 curl -s http://$influxdb_host:8086/query -u $influxdb_admin_user:$influxdb_admin_pw --data-urlencode "q=alter retention policy autogen on $influxdb_dbname duration $influxdb_retention"

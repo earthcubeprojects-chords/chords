@@ -8,14 +8,14 @@ default: &default
 development:
   <<: *default
   database: chords_ts_development
-  host: localhost
+  host: influxdb
   username: admin
   password: chords_ec_demo
   
 test:
   <<: *default
   database: chords_ts_test
-  host: localhost
+  host: influxdb
   username: admin
   password: chords_ec_demo
 
