@@ -13,3 +13,6 @@ services:
     build: .
     volumes:
       - ./:/chords
+  mysql:
+    ports:
+      - 3306:3306

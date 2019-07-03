@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2.3'
 gem 'mysql2', '~> 0.5'
 gem 'influxdb', '~> 0.6'
 gem "influxer", "~> 1.1"
@@ -32,6 +32,8 @@ gem 'whenever', '~> 0.9.7', :require => false
 gem 'rubyzip', '~> 1.2.2'
 
 gem 'json', '~> 1.8.6'
+
+gem 'bootsnap', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
