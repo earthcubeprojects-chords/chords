@@ -4,6 +4,8 @@ gem 'rails', '~> 5.2.3'
 gem 'mysql2', '~> 0.5'
 gem 'influxdb', '~> 0.6'
 gem "influxer", "~> 1.1"
+gem 'rspec'
+gem 'rspec-rails'
 gem 'rswag'
 
 gem 'uglifier', '~> 4.1'
@@ -48,9 +50,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec'
-  gem 'rspec-rails'
-
   gem 'database_cleaner'
   gem 'email_spec'
   gem 'rails-controller-testing'
