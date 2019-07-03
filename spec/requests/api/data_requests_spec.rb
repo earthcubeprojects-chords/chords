@@ -1,7 +1,10 @@
+# spec/requests/api/data_requests_spec.rb
+require 'swagger_helper'
 require 'rails_helper'
 require 'json'
 
 describe 'Data Download API', type: :request do
+
   # initialize test data
   let!(:instruments) { create_list(:instrument, 2) }
   let(:configurator) { FactoryBot.create(:site_configurator) }

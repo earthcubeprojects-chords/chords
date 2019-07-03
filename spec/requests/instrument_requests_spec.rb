@@ -1,3 +1,5 @@
+# spec/requests/instrument_requests_spec.rb
+require 'swagger_helper'
 require 'rails_helper'
 
 describe 'Unauthenticated instrument data requests', type: :request do

@@ -1,3 +1,4 @@
+require 'swagger_helper'
 require 'rails_helper'
 
 describe 'User ability specs', type: :request do

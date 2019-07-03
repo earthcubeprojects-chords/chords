@@ -1,3 +1,4 @@
+require 'swagger_helper'
 require 'rails_helper'
 
 describe 'about page requests', type: :request do

@@ -4,6 +4,7 @@ gem 'rails', '~> 5.1.0'
 gem 'mysql2', '~> 0.5'
 gem 'influxdb', '~> 0.6'
 gem "influxer", "~> 1.1"
+gem 'rswag'
 
 gem 'uglifier', '~> 4.1'
 gem 'coffee-rails', '~> 4.2'

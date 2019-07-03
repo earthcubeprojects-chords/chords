@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'swagger_helper'
 
 describe 'Sites API', type: :request do
   # initialize test data

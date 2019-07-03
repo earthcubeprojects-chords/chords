@@ -130,6 +130,8 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (1.8.6)
+    json-schema (2.8.1)
+      addressable (>= 2.4)
     kgio (2.11.2)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -220,6 +222,19 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
+    rswag (2.0.5)
+      rswag-api (= 2.0.5)
+      rswag-specs (= 2.0.5)
+      rswag-ui (= 2.0.5)
+    rswag-api (2.0.5)
+      railties (>= 3.1, < 6.0)
+    rswag-specs (2.0.5)
+      activesupport (>= 3.1, < 6.0)
+      json-schema (~> 2.2)
+      railties (>= 3.1, < 6.0)
+    rswag-ui (2.0.5)
+      actionpack (>= 3.1, < 6.0)
+      railties (>= 3.1, < 6.0)
     rubocop (0.52.1)
       parallel (~> 1.10)
       parser (>= 2.4.0.2, < 3.0)
@@ -322,6 +337,7 @@ DEPENDENCIES
   rails_layout
   rspec
   rspec-rails
+  rswag
   rubocop (~> 0.52.1)
   rubyzip (~> 1.2.2)
   sass-rails (~> 5.0)
@@ -336,4 +352,4 @@ DEPENDENCIES
   whenever (~> 0.9.7)
 
 BUNDLED WITH
-   1.17.3
+   2.0.2
