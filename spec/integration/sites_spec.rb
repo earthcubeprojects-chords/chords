@@ -7,14 +7,6 @@ describe 'Sites API' do
     get 'List sites' do
       tags 'Sites'
       consumes 'application/json', 'application/xml'
-#      parameter name: :blog, in: :body, schema: {
-#        type: :object,
-#        properties: {
-#          title: { type: :string },
-#          content: { type: :string }
-#        },
-#        required: [ 'title', 'content' ]
-#      }
 
       response '200', 'sites found' do
         let(:site) { }
@@ -36,7 +28,7 @@ describe 'Sites API' do
             id: { type: :integer }
           },
           required: ['id']
-        #let(:id) { Sites.create(title: 'foo', content: 'bar').id }
+        let(:id) { Sites.create(title: 'foo', content: 'bar').id }
         run_test!
       end
 
