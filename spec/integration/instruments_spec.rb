@@ -14,6 +14,22 @@ describe 'Instruments API' do
         run_test!
       end
     end
+    post 'Creates a instrument' do
+        tags 'Instruments'
+        consumes 'application/json', 'application/xml'
+        parameter name: :blog, in: :body, schema: {
+          type: :object,
+          properties: {
+            title: { type: :string },
+            content: { type: :string }
+          },
+          required: [ 'title', 'content' ]
+        }
+        response '200', 'instruments found' do
+            let(:instrument) { }
+            run_test!
+          end
+    end
   end
 
   path '/api/v1/instruments/{id}' do

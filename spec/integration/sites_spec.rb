@@ -14,6 +14,7 @@ describe 'Sites API' do
       end
     end
   end
+  
 
   path '/api/v1/sites/{id}' do
 

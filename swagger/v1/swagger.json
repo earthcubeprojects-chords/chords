@@ -20,11 +20,47 @@
             "description": "instruments found"
           }
         }
+      },
+      "post": {
+        "summary": "Creates a instrument",
+        "tags": [
+          "Instruments"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "blog",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "content"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "instruments found"
+          }
+        }
       }
     },
     "/api/v1/instruments/{id}": {
       "get": {
-        "summary": "Retrieves a instruments",
+        "summary": "Retrieves instruments",
         "tags": [
           "Instruments"
         ],
