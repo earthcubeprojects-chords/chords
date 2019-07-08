@@ -58,14 +58,13 @@
         }
       }
     },
-    "/api/v1/instruments/{id}": {
+    "/instruments/{id}": {
       "get": {
         "summary": "Retrieves instruments",
         "tags": [
           "Instruments"
         ],
         "produces": [
-          "application/json",
           "application/xml"
         ],
         "parameters": [

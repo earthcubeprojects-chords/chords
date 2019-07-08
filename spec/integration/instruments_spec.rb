@@ -32,11 +32,10 @@ describe 'Instruments API' do
     end
   end
 
-  path '/api/v1/instruments/{id}' do
-
+  path '/instruments/{id}' do
     get 'Retrieves instruments' do
       tags 'Instruments'
-      produces 'application/json', 'application/xml'
+      produces 'application/xml'
       parameter name: :id, :in => :path, :type => :string
 
       response '200', 'instrument found' do
