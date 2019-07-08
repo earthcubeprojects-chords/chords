@@ -44,7 +44,6 @@ describe 'Instruments API' do
             id: { type: :integer }
           },
           required: ['id']
-        let(:id) { Instruments.create(title: 'foo', content: 'bar').id }
         run_test!
       end
 
