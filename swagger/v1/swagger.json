@@ -5,6 +5,65 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/instruments": {
+      "get": {
+        "summary": "List instruments",
+        "tags": [
+          "Instruments"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "instruments found"
+          }
+        }
+      }
+    },
+    "/api/v1/instruments/{id}": {
+      "get": {
+        "summary": "Retrieves a instruments",
+        "tags": [
+          "Instruments"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "instrument found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "instrument not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
     "/api/v1/sites": {
       "get": {
         "summary": "List sites",
