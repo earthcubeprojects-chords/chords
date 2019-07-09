@@ -115,12 +115,12 @@ describe 'Sites API' do
     end
   end
 
-  #GET for /sites/new !!!!!!!!!!! NOT WORKING YET
+  #GET for /sites/new - WORKING
   path '/sites/new' do
 
-    post 'create a new site' do
+    get 'create a new site' do
       tags 'Sites'
-      consumes 'application'
+      produces 'application'
 
       response '200', 'sites found' do
         let(:site) { }
@@ -182,7 +182,61 @@ describe 'Sites API' do
     end
   end
 
-  #PATCH PUT DELETE?
+  ##################### Site_Types below #####################
+  #GET for /site_types - WORKING
+  path '/site_types' do
+
+    get 'Shows all the site types' do
+      tags 'Sites'
+      produces 'application'
+
+      response '200', 'sites found' do
+        let(:site) { }
+        run_test!
+      end
+    end
+  end
 
 
+  #POST for /site_types !!!!!!!! NOT WORKING YET
+  path '/site_types' do
+
+    post 'posts all site types' do
+      tags 'Sites'
+      produces 'application'
+
+      response '200', 'sites found' do
+        let(:site) { }
+        run_test!
+      end
+    end
+  end
+  
+
+  #GET for /site_types/{id} - WORKING
+  path '/site_types/{id}' do
+
+    get 'show a specific site type' do
+      tags 'Sites'
+      produces 'application'
+      parameter name: :id, :in => :path, :type => :string
+
+      response '200', 'site found' do
+         schema type: :object,
+          required: ['id']
+        run_test!
+      end
+
+      response '404', 'site not found' do
+        let(:id) { 'invalid' }
+        run_test!
+      end
+
+      response '403', 'unsupported accept header' do
+        let(:'Accept') { 'application/foo' }
+        run_test!
+      end
+    end
+  end
+  
 end

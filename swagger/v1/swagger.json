@@ -5,6 +5,124 @@
     "version": "v1"
   },
   "paths": {
+    "/influxdb_tags": {
+      "get": {
+        "summary": "lists all influxdb tags",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      },
+      "post": {
+        "summary": "lists all influxdb tags",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/influxdb_tags/new": {
+      "get": {
+        "summary": "goes to new influxdb tag page",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/influxdb_tags/{id}/edit": {
+      "get": {
+        "summary": "show a specific influxdb",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/influxdb_tags/{id}": {
+      "get": {
+        "summary": "show a description of a specific influxdb",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
     "/instruments/{id}/live": {
       "get": {
         "summary": "Shows specific live instruments",
@@ -360,12 +478,12 @@
       }
     },
     "/sites/new": {
-      "post": {
+      "get": {
         "summary": "create a new site",
         "tags": [
           "Sites"
         ],
-        "consumes": [
+        "produces": [
           "application"
         ],
         "responses": {
@@ -444,6 +562,136 @@
           },
           "403": {
             "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/site_types": {
+      "get": {
+        "summary": "Shows all the site types",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      },
+      "post": {
+        "summary": "posts all site types",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/site_types/{id}": {
+      "get": {
+        "summary": "show a specific site type",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/users/sign_out": {
+      "get": {
+        "summary": "Signs you out",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/users/password/new": {
+      "get": {
+        "summary": "Takes you to the page to change your password",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/users/edit": {
+      "get": {
+        "summary": "to the users password edit page",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "post to users page",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
           }
         }
       }
