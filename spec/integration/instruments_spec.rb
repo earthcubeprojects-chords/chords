@@ -3,59 +3,8 @@
 require 'swagger_helper'
 
 describe 'Instruments API' do
-    #GET for /instruments/:id/live(.:format) !!!!!!!!!NOT WORKING YET
-    path '/instruments/{id}/live' do
-        get 'Shows specific live instruments' do
-        tags 'Instruments'
-        produces 'application/xml'
-        parameter name: :id, :in => :path, :type => :string
 
-        response '200', 'instrument found' do
-            schema type: :object,
-            properties: {
-                id: { type: :integer }
-            },
-            required: ['id']
-            run_test!
-        end
 
-        response '404', 'instrument not found - Entered invalid instrument ID' do
-            let(:id) { 'invalid' }
-            run_test!
-        end
-
-        response '403', 'unsupported accept header' do
-            let(:'Accept') { 'application/foo' }
-            run_test!
-        end
-        end
-    end
-    #GET for /instruments/duplicate !!!!!!!!!NOT WORKING YET
-    path '/instruments/duplicate' do
-
-        get 'Duplicate instruments' do
-        tags 'Instruments'
-        consumes 'application/json', 'application/xml'
-    
-        response '200', 'instruments found' do
-            let(:instrument) { }
-            run_test!
-        end
-        end
-    end
-    #GET for /instruments/live !!!!!!!!!NOT WORKING YET
-    path '/instruments/live' do
-
-        get 'Show live instruments' do
-        tags 'Instruments'
-        consumes 'application/json', 'application/xml'
-    
-        response '200', 'instruments found' do
-            let(:instrument) { }
-            run_test!
-        end
-        end
-    end
     #GET for /instruments/simulator - WORKING
     path '/instruments/simulator' do
 
