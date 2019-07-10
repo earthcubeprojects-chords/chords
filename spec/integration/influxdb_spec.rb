@@ -18,19 +18,6 @@ describe 'Influxdb API' do
     end
   end
 
-  #POST for /influxdb_tags !!!!!!!! NOT WORKING YET
-  path '/influxdb_tags' do
-
-    post 'lists all influxdb tags' do
-      tags 'Influxdb'
-      produces 'application'
-
-      response '200', 'sites found' do
-        let(:site) { }
-        run_test!
-      end
-    end
-  end
 
   #GET for /influxdb_tags/new - WORKING
   path '/influxdb_tags/new' do

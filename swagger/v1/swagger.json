@@ -5,7 +5,7 @@
     "version": "v1",
     "contact": {
       "name": "CHORDS",
-      "url": "http://localhost"
+      "url": "/"
     }
   },
   "paths": {
@@ -27,20 +27,6 @@
     },
     "/influxdb_tags": {
       "get": {
-        "summary": "lists all influxdb tags",
-        "tags": [
-          "Influxdb"
-        ],
-        "produces": [
-          "application"
-        ],
-        "responses": {
-          "200": {
-            "description": "sites found"
-          }
-        }
-      },
-      "post": {
         "summary": "lists all influxdb tags",
         "tags": [
           "Influxdb"
@@ -249,21 +235,6 @@
             "description": "instruments found"
           }
         }
-      },
-      "post": {
-        "summary": "posts to list of instruments",
-        "tags": [
-          "Instruments"
-        ],
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "responses": {
-          "200": {
-            "description": "instruments found"
-          }
-        }
       }
     },
     "/instruments/new": {
@@ -430,20 +401,6 @@
             "description": "sites found"
           }
         }
-      },
-      "post": {
-        "summary": "checks Measured Properties page",
-        "tags": [
-          "Measured Properties"
-        ],
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "sites found"
-          }
-        }
       }
     },
     "/measured_properties/new": {
@@ -549,21 +506,6 @@
             "description": "sites found"
           }
         }
-      },
-      "post": {
-        "summary": "post to sites",
-        "tags": [
-          "Sites"
-        ],
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "responses": {
-          "200": {
-            "description": "sites found"
-          }
-        }
       }
     },
     "/api/v1/sites/{id}": {
@@ -638,21 +580,6 @@
     "/sites": {
       "get": {
         "summary": "List all sites",
-        "tags": [
-          "Sites"
-        ],
-        "consumes": [
-          "application/json",
-          "application/xml"
-        ],
-        "responses": {
-          "200": {
-            "description": "sites found"
-          }
-        }
-      },
-      "post": {
-        "summary": "post to sites",
         "tags": [
           "Sites"
         ],
@@ -759,20 +686,6 @@
     "/site_types": {
       "get": {
         "summary": "Shows all the site types",
-        "tags": [
-          "Sites"
-        ],
-        "produces": [
-          "application"
-        ],
-        "responses": {
-          "200": {
-            "description": "sites found"
-          }
-        }
-      },
-      "post": {
-        "summary": "posts all site types",
         "tags": [
           "Sites"
         ],

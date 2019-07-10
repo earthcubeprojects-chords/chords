@@ -17,19 +17,6 @@ describe 'Sites API' do
     end
   end
 
-  #POST for /api/v1/sites !!!!!! NOT WORKING YET
-  path '/api/v1/sites' do
-
-    post 'post to sites' do
-      tags 'Sites'
-      consumes 'application/json', 'application/xml'
-
-      response '200', 'sites found' do
-        let(:site) { }
-        run_test!
-      end
-    end
-  end
 
 
   #GET for /api/v1/sites/{id} - WORKING
@@ -101,19 +88,6 @@ describe 'Sites API' do
     end
   end
 
-  #POST for /sites !!!!!!!! NOT WORKING YET
-  path '/sites' do
-
-    post 'post to sites' do
-      tags 'Sites'
-      consumes 'application/json', 'application/xml'
-
-      response '200', 'sites found' do
-        let(:site) { }
-        run_test!
-      end
-    end
-  end
 
   #GET for /sites/new - WORKING
   path '/sites/new' do
@@ -197,20 +171,6 @@ describe 'Sites API' do
     end
   end
 
-
-  #POST for /site_types !!!!!!!! NOT WORKING YET
-  path '/site_types' do
-
-    post 'posts all site types' do
-      tags 'Sites'
-      produces 'application'
-
-      response '200', 'sites found' do
-        let(:site) { }
-        run_test!
-      end
-    end
-  end
   
 
   #GET for /site_types/{id} - WORKING

@@ -83,19 +83,7 @@ describe 'Instruments API' do
         end
         end
     end
-    #POST for /instruments !!!!!!!!!NOT WORKING YET
-    path '/instruments' do
 
-        post 'posts to list of instruments' do
-        tags 'Instruments'
-        consumes 'application/json', 'application/xml'
-    
-        response '200', 'instruments found' do
-            let(:instrument) { }
-            run_test!
-        end
-        end
-    end
 
     #GET for /instruments/new - WORKING 
     path '/instruments/new' do

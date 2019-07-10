@@ -18,19 +18,7 @@ describe 'Measured Properties API' do
     end
   end
 
-  #POST for /measured_properties !!!!!!! NOT WORKING YET
-  path '/measured_properties' do
 
-    post 'checks Measured Properties page' do
-      tags 'Measured Properties'
-      consumes 'application/json'
-
-      response '200', 'sites found' do
-        let(:site) { }
-        run_test!
-      end
-    end
-  end
 
   #GET for /measured_properties/new - WORKING
   path '/measured_properties/new' do
