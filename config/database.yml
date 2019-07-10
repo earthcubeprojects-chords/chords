@@ -31,7 +31,7 @@ test:
   <<: *default
   database: chords_demo_test
   password: chords_ec_demo
-  host: mysql
+  host: 127.0.0.1
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
