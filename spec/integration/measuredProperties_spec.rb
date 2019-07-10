@@ -62,7 +62,7 @@ describe 'Measured Properties API' do
         run_test!
       end
 
-      response '404', 'site not found' do
+      response '404', 'site not found - Entered invalid instrument ID' do
         let(:id) { 'invalid' }
         run_test!
       end
@@ -88,7 +88,7 @@ describe 'Measured Properties API' do
         run_test!
       end
 
-      response '404', 'site not found' do
+      response '404', 'site not found - Entered invalid instrument ID' do
         let(:id) { 'invalid' }
         run_test!
       end

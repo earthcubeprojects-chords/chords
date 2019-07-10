@@ -32,7 +32,7 @@ describe 'Variables API' do
         run_test!
       end
 
-      response '404', 'site not found' do
+      response '404', 'site not found - Entered invalid instrument ID' do
         let(:id) { 'invalid' }
         run_test!
       end
@@ -43,7 +43,7 @@ describe 'Variables API' do
       end
     end
   end 
-  
+
   #GET for /vars/{id} - WORKING
   path '/vars/{id}' do
 
@@ -58,7 +58,7 @@ describe 'Variables API' do
         run_test!
       end
 
-      response '404', 'site not found' do
+      response '404', 'site not found - Entered invalid instrument ID' do
         let(:id) { 'invalid' }
         run_test!
       end

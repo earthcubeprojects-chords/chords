@@ -19,7 +19,7 @@ describe 'Instruments API' do
             run_test!
         end
 
-        response '404', 'instrument not found' do
+        response '404', 'instrument not found - Entered invalid instrument ID' do
             let(:id) { 'invalid' }
             run_test!
         end
@@ -128,7 +128,7 @@ describe 'Instruments API' do
             run_test!
         end
 
-        response '404', 'instrument not found' do
+        response '404', 'instrument not found - Entered invalid instrument ID' do
             let(:id) { 'invalid' }
             run_test!
         end
@@ -156,7 +156,7 @@ describe 'Instruments API' do
             run_test!
         end
 
-        response '404', 'instrument not found' do
+        response '404', 'instrument not found - Entered invalid instrument ID' do
             let(:id) { 'invalid' }
             run_test!
         end
