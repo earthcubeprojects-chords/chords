@@ -344,6 +344,176 @@
         }
       }
     },
+    "/linked_data": {
+      "get": {
+        "summary": "checks JSON-LD page",
+        "tags": [
+          "Json-LD"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/linked_data/{id}/edit": {
+      "get": {
+        "summary": "checks a specific JSON-LD",
+        "tags": [
+          "Json-LD"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/measured_properties": {
+      "get": {
+        "summary": "checks Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      },
+      "post": {
+        "summary": "checks Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/measured_properties/new": {
+      "get": {
+        "summary": "checks create new Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/measured_properties/{id}/edit": {
+      "get": {
+        "summary": "checks edit Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/measured_properties/{id}": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
     "/api/v1/sites": {
       "get": {
         "summary": "List all sites",
@@ -601,6 +771,58 @@
         "summary": "show a specific site type",
         "tags": [
           "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/topic_categories": {
+      "get": {
+        "summary": "checks Measured Properties page",
+        "tags": [
+          "Topic Categories"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/topic_categories/{id}": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Topic Categories"
         ],
         "produces": [
           "application"
