@@ -17,7 +17,10 @@ RSpec.configure do |config|
       swagger: '2.0',
       info: {
         title: 'API V1',
-        version: 'v1'
+        version: 'v1',
+        contact: {
+          url: 'http://localhost'
+        }
       },
       paths: {}
     }
