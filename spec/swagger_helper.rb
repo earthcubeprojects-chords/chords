@@ -20,9 +20,9 @@ RSpec.configure do |config|
         title: 'CHORDS API V1',
         version: 'v1',
         contact: {
-          name: 'CHORDS',
+          name: 'back to CHORDS',
           url: '/'
-        }
+        },
       },
       paths: {}
     }
