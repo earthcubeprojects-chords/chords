@@ -1,0 +1,920 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "CHORDS API V1",
+    "version": "v1",
+    "contact": {
+      "name": "back to CHORDS",
+      "url": "/"
+    }
+  },
+  "paths": {
+    "/dashboard": {
+      "get": {
+        "summary": "checks Dashboard page",
+        "tags": [
+          "Dashboard"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/influxdb_tags": {
+      "get": {
+        "summary": "lists all influxdb tags",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/influxdb_tags/new": {
+      "get": {
+        "summary": "goes to new influxdb tag page",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/influxdb_tags/{id}/edit": {
+      "get": {
+        "summary": "show a specific influxdb",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/influxdb_tags/{id}": {
+      "get": {
+        "summary": "show a description of a specific influxdb",
+        "tags": [
+          "Influxdb"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/instruments/simulator": {
+      "get": {
+        "summary": "Show instruments data simulator",
+        "tags": [
+          "Instruments"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "page found"
+          }
+        }
+      }
+    },
+    "/instruments": {
+      "get": {
+        "summary": "List instruments",
+        "tags": [
+          "Instruments"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "instruments found"
+          }
+        }
+      }
+    },
+    "/instruments/new": {
+      "get": {
+        "summary": "show new instrument",
+        "tags": [
+          "Instruments"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "instruments found"
+          }
+        }
+      }
+    },
+    "/instruments/{id}/edit": {
+      "get": {
+        "summary": "Shows the edit page for a specific instrument",
+        "tags": [
+          "Instruments"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "instrument found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "instrument not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/instruments/{id}": {
+      "get": {
+        "summary": "Shows specific instrument",
+        "tags": [
+          "Instruments"
+        ],
+        "produces": [
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "instrument found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "instrument not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/linked_data": {
+      "get": {
+        "summary": "checks JSON-LD page",
+        "tags": [
+          "Json-LD"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/linked_data/{id}/edit": {
+      "get": {
+        "summary": "checks a specific JSON-LD",
+        "tags": [
+          "Json-LD"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/measured_properties": {
+      "get": {
+        "summary": "checks Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/measured_properties/new": {
+      "get": {
+        "summary": "checks create new Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/measured_properties/{id}/edit": {
+      "get": {
+        "summary": "checks edit Measured Properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/measured_properties/{id}": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Measured Properties"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/api/v1/sites": {
+      "get": {
+        "summary": "List all sites",
+        "tags": [
+          "Sites"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/api/v1/sites/{id}": {
+      "get": {
+        "summary": "Retrieve a specific site",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/sites/map": {
+      "get": {
+        "summary": "retrieves map with site markers",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/sites/map_markers_geojson": {
+      "get": {
+        "summary": "shows geojson for map markers",
+        "tags": [
+          "Sites"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/sites": {
+      "get": {
+        "summary": "List all sites",
+        "tags": [
+          "Sites"
+        ],
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/sites/new": {
+      "get": {
+        "summary": "create a new site",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/sites/{id}/edit": {
+      "get": {
+        "summary": "Retrieve a specific site",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/sites/{id}": {
+      "get": {
+        "summary": "Retrieve a specific site",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/site_types": {
+      "get": {
+        "summary": "Shows all the site types",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/site_types/{id}": {
+      "get": {
+        "summary": "show a specific site type",
+        "tags": [
+          "Sites"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/topic_categories": {
+      "get": {
+        "summary": "checks Measured Properties page",
+        "tags": [
+          "Topic Categories"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/topic_categories/{id}": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Topic Categories"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/units": {
+      "get": {
+        "summary": "checks unit page",
+        "tags": [
+          "Units"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/units/{id}": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Units"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/users/sign_out": {
+      "get": {
+        "summary": "Signs you out",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/users/password/new": {
+      "get": {
+        "summary": "Takes you to the page to change your password",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/users/edit": {
+      "get": {
+        "summary": "to the users password edit page",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "post to users page",
+        "tags": [
+          "Users"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/vars": {
+      "get": {
+        "summary": "checks variables page",
+        "tags": [
+          "Variables"
+        ],
+        "produces": [
+          "application"
+        ],
+        "responses": {
+          "200": {
+            "description": "sites found"
+          }
+        }
+      }
+    },
+    "/vars/{id}/edit": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Variables"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    },
+    "/vars/{id}": {
+      "get": {
+        "summary": "checks specific measured properties page",
+        "tags": [
+          "Variables"
+        ],
+        "produces": [
+          "application"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "site found",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "404": {
+            "description": "site not found - Entered invalid instrument ID"
+          },
+          "403": {
+            "description": "unsupported accept header"
+          }
+        }
+      }
+    }
+  }
+}

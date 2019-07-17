@@ -1,0 +1,8 @@
+specFileName: /Users/robync/chords/swagger/v1/swagger.json
+apiTitle: CHORDS API
+splitSpec: false
+codeSamples: false
+swaggerUI: true
+travis: true
+repo: earthcubeprojects-chords/chords
+oasVersion: '2.0'

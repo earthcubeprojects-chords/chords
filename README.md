@@ -1,40 +1,40 @@
-# Summary
+# CHORDS API OpenAPI Specification
+[![Build Status](https://travis-ci.com/earthcubeprojects-chords/chords.svg?branch=master)](https://travis-ci.com/earthcubeprojects-chords/chords)
+## Steps to finish
 
-The [CHORDS website](http://chordsrt.com) is the offical documentation for CHORDS.
+1. Enable [Travis](https://docs.travis-ci.com/user/getting-started/#To-get-started-with-Travis-CI%3A) for your repository (**note**: you already have `.travis.yml` file)
+1. [Create GitHub access token](https://help.github.com/articles/creating-an-access-token-for-command-line-use/); select `public_repo` on `Select scopes` section.
+1. Use the token value as a value for [Travis environment variable](https://docs.travis-ci.com/user/environment-variables/#Defining-Variables-in-Repository-Settings) with the name `GH_TOKEN`
+1. Make a test commit to trigger CI: `git commit --allow-empty -m "Test Travis CI" && git push`
+1. Wait until Travis build is finished. You can check progress by clicking on the `Build Status` badge at the top
+1. **[Optional]** You can setup [custom domain](https://help.github.com/articles/using-a-custom-domain-with-github-pages/) (just create `web/CNAME` file)
+1. **[Optional]** If your API is public consider adding it into [APIs.guru](https://APIs.guru) directory using [this form](https://apis.guru/add-api/).
+1. Delete this section ❌
 
-There are also condensed instructions for running the
-[CHORDS Docker containers](https://github.com/earthcubeprojects-chords/chords/wiki/Running-CHORDS).
+## Links
 
-The [CHORDS wiki](https://github.com/earthcubeprojects-chords/chords/wiki) has lots of nitty-gritty information.
+- [Reference Documentation (ReDoc)](https://earthcubeprojects-chords.github.io/chords/)
+- [SwaggerUI](https://earthcubeprojects-chords.github.io/chords/swagger-ui/)
+- OpenAPI Raw Files: [JSON](https://earthcubeprojects-chords.github.io/chords/openapi.json) [YAML](https://earthcubeprojects-chords.github.io/chords/openapi.yaml)
 
-# What is CHORDS
-A testbed for CHORDS developer and user experiences. It will allow us
-to explore technical and usabilty aspects of CHORDS. It can be used
-to demonstrate CHORDS design and operational concepts.
+**Warning:** All above links are updated only after Travis CI finishes deployment
 
-The goal is to demonstrate that:
-* The development and deployment workflow can be rational and organized,
-  allowing multiple developers to contribute to a simple, robust and maintainable system.
-* The user experience allows novices to deploy a new CHORDS Portal instance with a minimum
-  web infrastructure knowledge. This instance allows them to immediately receive and serve real-time
-  data from simple instruments.
+## Working on specification
+### Install
 
-This project will provide experience in:
-* DevOps (in general) for the CHORDS developers.
-* Design, provisioning and deployment of the CHORDS "appliance".
-* User interface requirements and usability.
+1. Install [Node JS](https://nodejs.org/)
+2. Clone repo and run `npm install` in the repo root
 
-The CHORDS Portal web application will provide limited but immediately useful
-functionality:
-* A home page, with a logo and some areas for project definition
-  and customization.
-* A query that can receive a tupple of data, and ingest it into the database.
-* A query that can return data from the database.
-* A webpage that can navigate and show data in a tabular form, and perhaps
-  deliver a CSV file.
-* A webpage that provides a URL builder, than can be used immediately, and used
-  as a template for client applications.
-* A webpage which provides a summary of the current data holdings and
-  ingest activity.
+### Usage
 
-This project is sponsored by funding from the National Science Foundation under ICER awards 1639750, 1639640, 1639570, 1639554 and 1639720.
+#### `npm start`
+Starts the development server.
+
+#### `npm run build`
+Bundles the spec and prepares web_deploy folder with static assets.
+
+#### `npm test`
+Validates the spec.
+
+#### `npm run gh-pages`
+Deploys docs to GitHub Pages. You don't need to run it manually if you have Travis CI configured.

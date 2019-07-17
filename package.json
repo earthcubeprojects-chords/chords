@@ -1,0 +1,14 @@
+{
+  "name": "chords-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "swagger-repo": "^2.0.0-rc.13"
+  },
+  "private": true,
+  "scripts": {
+    "start": "swagger-repo serve",
+    "build": "swagger-repo build -o web_deploy",
+    "test": "swagger-repo validate",
+    "gh-pages": "swagger-repo gh-pages"
+  }
+}
