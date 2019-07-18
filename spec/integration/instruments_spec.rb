@@ -3,7 +3,58 @@
 require 'swagger_helper'
 
 describe 'Instruments API' do
+    
+    #GET for /data - WORKING
+    path '/data' do
 
+        get 'Check the data download page' do
+        tags 'Instruments'
+        produces 'application'
+    
+        response '200', 'page found' do
+            let(:instrument) { }
+            run_test!
+        end
+        end
+    end
+    #GET for /api/v1/data - WORKING
+    path '/api/v1/data' do
+
+        get 'checks all available data on the website ' do
+        tags 'Instruments'
+        produces 'application'
+    
+        response '200', 'page found' do
+            let(:instrument) { }
+            run_test!
+        end
+        end
+    end
+    #GET for /api/v1/data/{id} - WORKING
+    path '/api/v1/data/{id}' do
+
+        get 'checks data for instrument (id)' do
+        tags 'Instruments'
+        produces 'application/json', 'application/xml'
+        parameter name: :id, :in => :path, :type => :string
+
+        response '200', 'site found' do
+            schema type: :object,
+            required: ['id']
+            run_test!
+        end
+
+        response '404', 'site not found - Entered invalid instrument ID' do
+            let(:id) { 'invalid' }
+            run_test!
+        end
+
+        response '403', 'unsupported accept header' do
+            let(:'Accept') { 'application/foo' }
+            run_test!
+        end
+        end
+    end
 
     #GET for /instruments/simulator - WORKING
     path '/instruments/simulator' do
