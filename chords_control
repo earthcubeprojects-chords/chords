@@ -584,7 +584,8 @@ class ChordsGit(object):
             'git', 'ls-remote', '--heads', 'https://github.com/earthcubeprojects-chords/chords'
             ]
         heads = [e.replace('refs/heads/','') for e in os_cmd(cmd=git_cmd, printlines=False)[0].split()[1::2]]
-        heads.remove('gh-pages')
+        if 'gh-pages' in heads:
+            heads.remove('gh-pages')
         return heads
 
 #####################################################################
