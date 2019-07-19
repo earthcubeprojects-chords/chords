@@ -1,0 +1,19 @@
+{
+    "id": 1,
+    "orgId": 1,
+    "name": "CHORDS",
+    "type": "influxdb",
+    "access": "proxy",
+    "url": "http://chords_influxdb:8086",
+    "password": "guest",
+    "user": "guest",
+    "database": "chords_ts_production",
+    "basicAuth": false,
+    "basicAuthUser": "",
+    "basicAuthPassword": "",
+    "withCredentials": false,
+    "isDefault": true,
+    "jsonData": { },
+    "secureJsonFields": null
+  }
+  

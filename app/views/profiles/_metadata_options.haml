@@ -1,0 +1,14 @@
+%h2 Metadata Ontology Vocabularies
+
+.configuration
+  .line
+    .title
+      Unit Ontology
+    .field
+      #{f.select :unit_source, options_for_select(Unit.select('DISTINCT(source)').map(&:source).sort, @profile.unit_source)}
+
+  .line
+    .title
+      Measured Property Ontology
+    .field
+      #{f.select :measured_property_source, options_for_select(MeasuredProperty.select('DISTINCT(source)').map(&:source).sort, @profile.measured_property_source)}

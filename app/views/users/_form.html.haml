@@ -1,0 +1,63 @@
+= form_for(@user, html: {class: "new_or_edit_form" }) do |f|
+  - if @user.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@user.errors.count, "error")
+        prohibited this site from being saved:
+      %ul
+        - @user.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :email
+    %p= f.text_field :email, style: "width: 30%", class: 'form-control'
+
+  .field
+    = f.label :api_key, 'API Key'
+    - if !@user.api_key.nil?
+      - if @user == current_user || current_user.role?(:admin)
+        = @user.api_key
+      - elsif !@user.api_key.nil?
+        Yes
+    - else
+      n/a
+
+    - if can? :assign_api_key, @user
+      %p= link_to 'Renew API Key', user_assign_api_key_path(@user), data: { confirm: 'Are you sure you want to renew the API Key?' }, class: 'btn btn-md btn-warning', style: 'text-decoration: none; color: white;', title: 'Renew API Key'
+
+  - if current_user.role?(:admin)
+    %br
+
+    .field
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:admin)}, 'admin', nil
+      = f.label :roles, 'Admin'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:site_config)}, 'site_config', nil
+      = f.label :roles, 'Site Config'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:measurements)}, 'measurements', nil
+      = f.label :roles, 'Measurements'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:downloader)}, 'downloader', nil
+      = f.label :roles, 'Downloader'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:registered_user)}, 'registered_user', nil
+      = f.label :roles, 'Registered User'
+
+      %br
+      = f.check_box :roles, {multiple: true, checked: @user.role?(:guest)}, 'guest', nil
+      = f.label :roles, 'Guest (no permissions / supersedes other options)'
+
+      %br
+
+  - if @user == current_user
+    %p= link_to 'Change Password', edit_user_registration_path(@user), class: 'btn btn-md btn-warning', style: 'text-decoration: none; color: white;', title: 'Change Password'
+
+  .actions
+    = f.submit class: 'btn btn-md btn-primary'
+
+-if can? :destroy, @user
+  %p= button_to 'Delete User', @user, method: :delete, data: { confirm: "Are you sure you want to delete user: #{@user.email}?" }, class: 'btn btn-md btn-danger'

@@ -1,0 +1,83 @@
+= form_for(@instrument, html: {class: "new_or_edit_form" }) do |f|
+  - if @instrument.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@instrument.errors.count, "error")
+        prohibited this instrument from being saved:
+      %ul
+        - @instrument.errors.full_messages.each do |message|
+          %li= message
+  .field
+    = f.label :name
+    %br/
+    = f.text_field :name, class: 'form-control'
+  .field
+    = f.label :sensor_id, "Sensor ID"
+    %br/
+    = f.text_field :sensor_id, class: 'form-control'
+  .field
+    = f.label :is_active, 'Active'
+    &nbsp;
+    = f.check_box :is_active
+  .field
+    = f.label :topic_category
+    %br/
+    = f.collection_select :topic_category_id, TopicCategory.order(:name),:id,:name, include_blank: false
+  .field
+    = f.label :description
+    %br/
+    = f.text_area :description, class: 'form-control'
+  .field
+    = f.label :site
+    %br/
+    = f.collection_select :site_id, Site.order(:name),:id,:name, include_blank: false
+  .field
+    = f.label :display_points
+    %br/
+    = f.text_field :display_points, class: 'form-control'
+    %br/
+  .field
+    = f.label :plot_offset
+    %br/
+    = f.text_field :plot_offset_value, :default => '1', class: 'form-control'
+    = f.select(:plot_offset_units,  { years: 'years', months: 'months', weeks: 'weeks', days: 'days', hours: 'hours', minutes: 'minutes', seconds: 'seconds' }, :selected => :weeks)
+
+
+    %br/
+  .field
+    = f.label :sample_rate_seconds
+    %br/
+    = f.text_field :sample_rate_seconds, class: 'form-control'
+  .field
+    %br
+    %br
+    %b Variables
+    %div.row
+      %div.col-lg-10.col-md-11
+        .row-fluid
+          .col-sm-1
+            - if can?(:create, Var) && params[:action] == 'edit'
+              %br
+              = link_to 'Add New Variable', new_var_path(instrument_id: @instrument.id, return: 'edit'), class: 'btn btn-default btn-md', style: 'text-decoration: none; color: black;', title: 'Add New Variable'
+              %br
+              %br
+        %table.table.table-striped
+          %tr
+            %th Name
+            %th Short Name
+            %th Units
+            %th Abbreviation
+            %th Measured Property
+
+          - @instrument.vars.each do |v|
+            %tr
+              %td= v.name
+              %td= v.shortname
+              %td= v.unit.try(:name)
+              %td= v.unit.try(:abbreviation)
+              %td= v.measured_property.try(:label)
+              %td.col-sm-1= link_to '', edit_var_path(v, return: 'edit'), class: 'glyphicon glyphicon-pencil', style: 'text-decoration: none; color: black;', title: 'Edit'
+              %td.col-sm-1= link_to '', v, method: :delete, data: { confirm: 'Are you sure?' }, class: 'glyphicon glyphicon-trash', style: 'text-decoration: none; color: black;', title: 'Delete'
+
+  .actions
+    = f.submit class: 'btn btn-md btn-primary'

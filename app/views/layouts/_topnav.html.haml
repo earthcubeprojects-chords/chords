@@ -1,0 +1,46 @@
+.row
+  %nav.navbar.navbar-default
+    .container-fluid
+      .navbar-header
+        %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+      #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        %ul.nav.navbar-nav.navbar-left
+          - if user_signed_in?
+            / li><haml_loud> current_user.email </haml_loud></li
+          %li= link_to 'About', '/about'
+          %li= link_to 'Help', 'http://chordsrt.com', :target => "_blank"
+
+          - if can? :read, :dashboard
+            %li= link_to 'Dashboard', '/dashboard'
+
+          - if can? :download, Instrument
+            %li= link_to 'Data', '/data'
+
+          - if can? :read, Site
+            %li= link_to 'Sites', sites_path
+
+          - if can? :read, Instrument
+            %li= link_to 'Instruments', instruments_path
+
+          - if can? :map, Site
+            %li= link_to 'Map', map_sites_path
+
+          - if can? :read, Instrument
+            %li= link_to 'Visualization', "http://#{request.host}:#{Rails.configuration.grafana_http_port}", :target => "_blank"
+
+        %ul.nav.navbar-nav.navbar-right
+          - if can? :simulator, Instrument
+            %li= link_to 'Simulator', '/instruments/simulator'
+
+          - if can? :manage, Profile
+            %li= link_to 'Configure', profiles_path
+
+          - if user_signed_in?
+            %li= link_to 'Users', users_path
+            %li= link_to 'Sign Out', destroy_user_session_path
+          - else
+            %li= link_to 'Sign In', new_user_session_path

@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%h1
+  .center
+    Units
+%br
+
+.accordion
+  - @sources.each do |source|
+    %h3= source
+    .accordion
+      - @data[source].keys.sort_by{|x| x.downcase if !x.nil?}.each do |unit_type|
+        %h3= unit_type.nil? ? 'Unknown' : unit_type.titlecase
+        %div
+          .row-fluid.variable
+            .col-sm-4
+              %strong Name
+            .col-sm-2
+              %strong Abbreviation
+
+            - @data[source][unit_type].sort_by{|x| x[:name].downcase}.each do |unit|
+              %br
+              .row-fluid.variable
+                .col-sm-4= unit[:name]
+                .col-sm-2= unit[:abbreviation]
+
+.clear
+%br
+
+:javascript
+  $(function() {
+    $('.accordion').accordion({
+      heightStyle: "content",
+      collapsible: true
+    });
+  });

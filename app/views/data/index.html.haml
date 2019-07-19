@@ -1,0 +1,12 @@
+%h1 Data Functions
+%p
+  Observations prior to
+  %b= @db_expiry_time
+  are automatically removed from the database.
+
+- if @profile.data_archive_url
+  %p
+    Archived data may be found at:
+    = link_to nil, @profile.data_archive_url
+
+= render partial: "download_by_day"

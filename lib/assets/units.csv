@@ -1,0 +1,1001 @@
+Term,UnitsName,UnitsTypeCV,UnitsAbbreviation,UnitsLink
+gray,Gray,Absorbed dose,Gy,http://qudt.org/vocab/unit#Gray; http://unitsofmeasure.org/ucum.html#para-30
+rad,RAD,Absorbed dose,rad,http://qudt.org/vocab/unit#Rad; http://unitsofmeasure.org/ucum.html#para-33
+grayPerSecond,Gray per Second,Absorbed dose rate,Gy/s,http://qudt.org/vocab/unit#GrayPerSecond
+ban,Ban,Amount of information,ban,http://qudt.org/vocab/unit#Ban
+bit,Bit,Amount of information,bit,http://qudt.org/vocab/unit#Bit; http://unitsofmeasure.org/ucum.html#para-48
+byte,Byte,Amount of information,By,http://qudt.org/vocab/unit#Byte; http://unitsofmeasure.org/ucum.html#para-48
+nat,Nat,Amount of information,nat,http://qudt.org/vocab/unit#Nat
+octet,Octet,Amount of information,octet,http://www.unidata.ucar.edu/software/udunits/
+arcMinute,Arc Minute,Angle,arcMin,http://qudt.org/vocab/unit#ArcMinute; http://qudt.org/vocab/unit#MinuteAngle; http://unitsofmeasure.org/ucum.html#para-31; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-accepted.xml; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+arcSecond,Arc Second,Angle,arcSec,http://qudt.org/vocab/unit#ArcSecond; http://qudt.org/vocab/unit#SecondAngle; http://unitsofmeasure.org/ucum.html#para-31; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-accepted.xml; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+circle,Circle,Angle,circ,http://unitsofmeasure.org/ucum.html#para-47; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+cycle,Cycle,Angle,cycle,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+degree,Degree,Angle,deg,http://qudt.org/vocab/unit#DegreeAngle; http://unitsofmeasure.org/ucum.html#para-31; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-accepted.xml; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+degreeEast,Degree East,Angle,degE,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+degreeMinuteSecond,Degree Minute Second,Angle,dddmmss,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+degreeNorth,Degree North,Angle,degN,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+degreeSouth,Degree South,Angle,degS,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+degreeTrue,Degree True,Angle,degT,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+degreeWest,Degree West,Angle,degW,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+gon,Gon,Angle,gon,http://qudt.org/vocab/unit#Gon; http://unitsofmeasure.org/ucum.html#para-31
+grad,Grad,Angle,grad,http://qudt.org/vocab/unit#Grad
+milAngle(Nato),Mil Angle (Nato),Angle,mil,http://qudt.org/vocab/unit#MilAngle
+radian,Radian,Angle,rad,http://qudt.org/vocab/unit#Radian; http://unitsofmeasure.org/ucum.html#para-28; http://www.unidata.ucar.edu/software/udunits/
+revolution,Revolution,Angle,rev,http://qudt.org/vocab/unit#Revolution; http://www.unidata.ucar.edu/software/udunits/
+rotation,Rotation,Angle,,http://www.unidata.ucar.edu/software/udunits/
+turn,Turn,Angle,,http://www.unidata.ucar.edu/software/udunits/
+degreePerSecondSquared,Degree per Second Squared,Angular acceleration,deg/(s^2),http://qudt.org/vocab/unit#DegreePerSecondSquared
+radianPerSecondSquared,Radian per Second Squared,Angular acceleration,rad/s^2,http://qudt.org/vocab/unit#RadianPerSecondSquared
+revolutionPerSecondSquared,Revolution per Second Squared,Angular acceleration,,http://qudt.org/vocab/unit#RevolutionPerSecondSquared
+kilogramMeterSquared,Kilogram Meter Squared,Angular mass,kg-m^2,http://qudt.org/vocab/unit#KilogramMeterSquared
+electronvoltSecond,ElectronVolt Second,Angular momentum,eV s,http://qudt.org/vocab/unit#ElectronVoltSecond
+ergSecond,Erg Second,Angular momentum,erg s,http://qudt.org/vocab/unit#ErgSecond
+footPoundForceSecond,Foot Pound Force Second,Angular momentum,lbf*s,http://qudt.org/vocab/unit#FootPoundForceSecond
+jouleSecond,Joule Second,Angular momentum,J s,http://qudt.org/vocab/unit#JouleSecond
+newtonMeterSecond,Newton Meter Second,Angular momentum,Nms,
+degreePerHour,Degree per Hour,Angular velocity or frequency,deg/h,http://qudt.org/vocab/unit#DegreePerHour
+degreePerMinute,Degree per Minute,Angular velocity or frequency,deg/min,http://qudt.org/vocab/unit#DegreePerMinute
+degreePerSecond,Degree per Second,Angular velocity or frequency,deg/s,http://qudt.org/vocab/unit#DegreePerSecond
+radianPerHour,Radian per Hour,Angular velocity or frequency,rad/h,http://qudt.org/vocab/unit#RadianPerHour
+radianPerMinute,Radian per Minute,Angular velocity or frequency,rad/m,http://qudt.org/vocab/unit#RadianPerMinute
+radianPerSecond,Radian per Second,Angular velocity or frequency,rad/s,http://qudt.org/vocab/unit#RadianPerSecond
+revolutionPerHour,Revolution per Hour,Angular velocity or frequency,rev/h,http://qudt.org/vocab/unit#RevolutionPerHour
+revolutionPerMinute,Revolution per Minute,Angular velocity or frequency,rev/min,http://qudt.org/vocab/unit#RevolutionPerMinute
+revolutionPerSecond,Revolution per Second,Angular velocity or frequency,rev/s,http://qudt.org/vocab/unit#RevolutionPerSecond
+rotationPerMinute,Rotation per Minute,Angular velocity or frequency,rpm,http://www.unidata.ucar.edu/software/udunits/
+rotationPerSecond,Rotation per Second,Angular velocity or frequency,rps,http://www.unidata.ucar.edu/software/udunits/
+acre,Acre,Area,acr_us,http://qudt.org/vocab/unit#Acre
+"acre,British","Acre, British",Area,acr_br,http://unitsofmeasure.org/ucum.html#para-36
+are,Are,Area,ar,http://qudt.org/vocab/unit#Are
+barn,Barn,Area,b,http://qudt.org/vocab/unit#Barn
+circularMil,Circular Mil,Area,cml_i,http://qudt.org/vocab/unit#CircularMil
+darcy,Darcy,Area,D,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+hectare,Hectare,Area,ha,http://qudt.org/vocab/unit#Hectare
+planckArea,Planck Area,Area,,http://qudt.org/vocab/unit#PlanckArea
+section,Section,Area,sct,http://unitsofmeasure.org/ucum.html#para-35
+squareCentimeter,Square Centimeter,Area,cm^2,http://qudt.org/vocab/unit#SquareCentimeter
+squareFoot,Square Foot,Area,sft_i,http://qudt.org/vocab/unit#SquareFoot; http://unitsofmeasure.org/ucum.html#para-34
+squareInch,Square Inch,Area,sin_i,http://qudt.org/vocab/unit#SquareInch; http://unitsofmeasure.org/ucum.html#para-34
+squareKilometer,Square Kilometer,Area,km^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+squareMeter,Square Meter,Area,m^2,http://qudt.org/vocab/unit#SquareMeter
+squareMile,Square Mile,Area,smi_us,http://qudt.org/vocab/unit#SquareMile; http://unitsofmeasure.org/ucum.html#para-35
+squareRod,Square Rod,Area,srd_us,http://unitsofmeasure.org/ucum.html#para-35
+squareYard,Square Yard,Area,syd_i,http://qudt.org/vocab/unit#SquareYard; http://unitsofmeasure.org/ucum.html#para-34
+township,Township,Area,twp,http://unitsofmeasure.org/ucum.html#para-35
+squareMeterSteradian,Square Meter Steradian,Area angle,m^2-sr,http://qudt.org/vocab/unit#SquareMeterSteradian
+squareMeterPerKilometer,Square Meter per Kilometer,Area per length,m^2/km,
+squareMeterPerMeter,Square Meter per Meter,Area per length,m^2/m,
+squareFootDegreeFahrenheit,Square Foot Degree Fahrenheit,Area temperature,ft^2-degF,http://qudt.org/vocab/unit#SquareFootDegreeFahrenheit
+squareMeterKelvin,Square Meter Kelvin,Area temperature,m^2-K,http://qudt.org/vocab/unit#SquareMeterKelvin
+squareMeterPerKelvin,Square Meter per Kelvin,Area thermal expansion,m^2/K,http://qudt.org/vocab/unit#SquareMeterPerKelvin
+hourSquareFoot,Hour Square Foot,Area time,hr-ft^2,http://qudt.org/vocab/unit#HourSquareFoot
+secondSquareFoot,Second Square Foot,Area time,s-ft^2,http://qudt.org/vocab/unit#SecondSquareFoot
+squareCentimeterMinute,Square Centimeter Minute,Area time,cm^2-m,http://qudt.org/vocab/unit#SquareCentimeterMinute
+squareCentimeterSecond,Square Centimeter Second,Area time,cm^2-s,http://qudt.org/vocab/unit#SquareCentimeterSecond
+squareFootHourDegreeFahrenheit,Square Foot Hour Degree Fahrenheit,Area time temperature,ft^2-hr-degF,http://qudt.org/vocab/unit#SquareFootHourDegreeFahrenheit
+squareFootSecondDegreeFahrenheit,Square Foot Second Degree Fahrenheit,Area time temperature,ft^2-s-degF,http://qudt.org/vocab/unit#SquareFootSecondDegreeFahrenheit
+katal,Katal,Catalytic activity,kat,http://qudt.org/vocab/unit#Katal; http://unitsofmeasure.org/ucum.html#para-45; http://www.unidata.ucar.edu/software/udunits/
+unit,Unit,Catalytic activity,U,http://unitsofmeasure.org/ucum.html#para-45
+admiColorUnit,Admi Color Unit,Color,ADMI,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+hazen,Hazen,Color,HU,http://environment.data.gov.au/def/unit/Hazen
+platinumCobaltUnit,Platinum Cobalt Unit,Color,PCU,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+micromolePerMole,Micromole per Mole,Concentration count per count,umol/mol,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimolePerMole,Millimole per Mole,Concentration count per count,mmol/mol,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+molePercent,Mole percent,Concentration count per count,mol%,http://environment.data.gov.au/def/unit/MolPercent; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+molePerMole,Mole per Mole,Concentration count per count,mol/mol,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+centimolePerKilogram,Centimole per Kilogram,Concentration count per mass,cmol/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPerGram,Count per Gram,Concentration count per mass,#/g,
+micromolePerKilogram,Micromole per Kilogram,Concentration count per mass,µmol/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimolePerKilogram,Millimole per Kilogram,Concentration count per mass,mmol/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milliosmolePerKilogram,Milliosmole per Kilogram,Concentration count per mass,mOsm/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+molePerKilogram,Mole per Kilogram,Concentration count per mass,mol/kg,http://qudt.org/vocab/unit#MolePerKilogram
+molePerTonne,Mole per Tonne,Concentration count per mass,mol/tonne,http://environment.data.gov.au/def/unit/MolePerTonne
+mostProbableNumberPerGram,Most Probable Number per Gram,Concentration count per mass,MPN/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanomolePerKilogram,Nanomole per Kilogram,Concentration count per mass,nmol/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPer100Gallon,Count per 100 Gallon,Concentration count per volume,#/100 gal,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPer100Liter,Count per 100 Liter,Concentration count per volume,#/100 L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+countPer100Milliliter,Count per 100 Milliliter,Concentration count per volume,#/100 mL,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPer10Liter,Count per 10 Liter,Concentration count per volume,#/10 L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+countPer500Milliliter,Count per 500 Milliliter,Concentration count per volume,#/500 ml,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPerCubicMeter,Count per Cubic Meter,Concentration count per volume,#/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+countPerDeciliter,Count per Deciliter,Concentration count per volume,#/dl,
+countPerHalfCubicFoot,Count per Half Cubic Foot,Concentration count per volume,#/((ft^3)/2),http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPerLiter,Count per Liter,Concentration count per volume,#/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPerMilliliter,Count per Milliliter,Concentration count per volume,#/ml,
+internationalUnitPerLiter,International Unit per Liter,Concentration count per volume,IU/L,http://qudt.org/vocab/unit#InternationalUnitPerLiter
+micromolePerLiter,Micromole per Liter,Concentration count per volume,µmol/L; µM,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+millimolar,Millimolar,Concentration count per volume,mM,http://environment.data.gov.au/def/unit/MilliMolar; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimolePerCubicMeter,Millimole per Cubic Meter,Concentration count per volume,mmol/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+molar,Molar,Concentration count per volume,M,
+molePerCubicMeter,Mole per Cubic Meter,Concentration count per volume,mol/m^3,http://qudt.org/vocab/unit#MolePerCubicMeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+molePerLiter,Mole per Liter,Concentration count per volume,mol/L,
+mostProbableNumberPer100Liter,Most Probable Number per 100 Liter,Concentration count per volume,MPN/100 L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+mostProbableNumberPer100Milliliter,Most Probable Number per 100 Milliliter,Concentration count per volume,MPN/100 ml,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanomolePerLiter,Nanomole per Liter,Concentration count per volume,nmol/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+normal,Normal,Concentration count per volume,N,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+grainPerGallon,Grain per Gallon,Concentration or density mass per volume,gr/gal,http://qudt.org/vocab/unit#GrainPerGallon
+gramPerCubicCentimeter,Gram per Cubic Centimeter,Concentration or density mass per volume,g/cm^3,http://environment.data.gov.au/def/unit/GramsPerCubicCentimeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+gramPerCubicMeter,Gram per Cubic Meter,Concentration or density mass per volume,g/m3,
+gramPerLiter,Gram per Liter,Concentration or density mass per volume,g/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+gramPerMilliliter,Gram per Milliliter,Concentration or density mass per volume,g/mL,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramPerCubicMeter,Kilogram per Cubic Meter,Concentration or density mass per volume,kg/m^3,http://qudt.org/vocab/unit#KilogramPerCubicMeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+longTonPerCubicYard,Long Ton per Cubic Yard,Concentration or density mass per volume,ton/yd^3,http://qudt.org/vocab/unit#TonLongPerCubicYard
+microgramPerCubicMeter,Microgram per Cubic Meter,Concentration or density mass per volume,µg/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+microgramPerLiter,Microgram per Liter,Concentration or density mass per volume,µg/L,http://environment.data.gov.au/def/unit/MicrogramsPerLitre; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+microgramPerMilliliter,Microgram per Milliliter,Concentration or density mass per volume,µg/mL,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milligramPerCubicMeter,Milligram per Cubic Meter,Concentration or density mass per volume,mg/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milligramPerLiter,Milligram per Liter,Concentration or density mass per volume,mg/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+milligramPerMilliliter,Milligram per Milliliter,Concentration or density mass per volume,mg/mL,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+nanogramPerCubicMeter,Nanogram per Cubic Meter,Concentration or density mass per volume,ng/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanogramPerLiter,Nanogram per Liter,Concentration or density mass per volume,ng/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanogramPerMilliliter,Nanogram per Milliliter,Concentration or density mass per volume,ng/mL,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+ouncePerCubicInch,Ounce per Cubic Inch,Concentration or density mass per volume,oz/in^3,http://qudt.org/vocab/unit#OuncePerCubicInch
+ouncePerGallon,Ounce per Gallon,Concentration or density mass per volume,oz/gal,http://qudt.org/vocab/unit#OuncePerGallon
+picogramPerCubicMeter,Picogram per Cubic Meter,Concentration or density mass per volume,pg/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+picogramPerLiter,Picogram per Liter,Concentration or density mass per volume,pg/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+picogramPerMilliliter,Picogram per Milliliter,Concentration or density mass per volume,pg/ml,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+planckDensity,Planck Density,Concentration or density mass per volume,,http://qudt.org/vocab/unit#PlanckDensity
+poundPerCubicFoot,Pound per Cubic Foot,Concentration or density mass per volume,lb/ft^3,http://qudt.org/vocab/unit#PoundPerCubicFoot
+poundPerCubicInch,Pound per Cubic Inch,Concentration or density mass per volume,lb/in^3,http://qudt.org/vocab/unit#PoundPerCubicInch
+poundPerCubicMeter,Pound per Cubic Meter,Concentration or density mass per volume,lb/m^3,http://qudt.org/vocab/unit#PoundPerCubicMeter
+poundPerCubicYard,Pound per Cubic Yard,Concentration or density mass per volume,lb/yd^3,http://qudt.org/vocab/unit#PoundPerCubicYard
+poundPerGallon,Pound per Gallon,Concentration or density mass per volume,lb/gal,http://qudt.org/vocab/unit#PoundPerGallon
+shortTonPerAcreFoot,Short Ton per Acre Foot,Concentration or density mass per volume,ton/ac ft,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+shortTonPerCubicYard,Short Ton per Cubic Yard,Concentration or density mass per volume,ton/yd,http://qudt.org/vocab/unit#TonShortPerCubicYard
+slugPerCubicFoot,Slug per Cubic Foot,Concentration or density mass per volume,slug/ft^3,http://qudt.org/vocab/unit#SlugPerCubicFoot
+cubicFootPerBarrel,Cubic Foot per Barrel,Concentration volume per volume,ft^3/bbl,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+cubicMeterPerCubicMeter,Cubic Meter per Cubic Meter,Concentration volume per volume,m^3/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milliliterPerLiter,Milliliter per Liter,Concentration volume per volume,mL/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+percentByVolume,Percent By Volume,Concentration volume per volume,% by vol,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+perMilleByVolume,Per Mille By Volume,Concentration volume per volume,‰ by vol,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+count,Count,Count,,http://www.unidata.ucar.edu/software/udunits/
+event,Event,Count,,
+internationalUnit,International Unit,Count,IU; iU,http://qudt.org/vocab/unit#InternationalUnit; http://unitsofmeasure.org/ucum.html#para-45
+micromole,Micromole,Count,µmol,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimole,Millimole,Count,mmol,
+mole,Mole,Count,mol,http://qudt.org/vocab/unit#Mole; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+mostProbableNumber,Most Probable Number,Count,MPN,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+number,Number,Count,#,http://qudt.org/vocab/unit#Number
+osmole,Osmole,Count,osm,http://unitsofmeasure.org/ucum.html#para-45
+countPer0.1SquareMeter,Count per 0.1 Square Meter,Count per area,#/0.1 m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPer1000SquareMeter,Count per 1000 Square Meter,Count per area,#/1000 m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPerSquareMeter,Count per Square Meter,Count per area,#/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countPerSquareMillimeter,Count per Square Millimeter,Count per area,#/mm^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+countsPerSquareCentimeter,Counts per Square Centimeter,Count per area,#/cm^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+dobson,Dobson,Count per area,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+microeinsteinPerSquareMeter,Microeinstein per Square Meter,Count per area,µE/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimoleOfPhotonPerSquareMeter,Millimole of Photon per Square Meter,Count per area,mmol/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+lilangeni,Lilangeni,Currency,SZL,http://qudt.org/vocab/unit#Lilangeni
+lithuanianLitas,Lithuanian Litas,Currency,LTL,http://qudt.org/vocab/unit#LithuanianLitas
+loti,Loti,Currency,LSL,http://qudt.org/vocab/unit#Loti
+malagasyAriary,Malagasy Ariary,Currency,MGA,http://qudt.org/vocab/unit#MalagasyAriary
+malawiKwacha,Malawi Kwacha,Currency,MWK,http://qudt.org/vocab/unit#MalawiKwacha
+malaysianRinggit,Malaysian Ringgit,Currency,MYR,http://qudt.org/vocab/unit#MalaysianRinggit
+malteseLira,Maltese Lira,Currency,MTL,http://qudt.org/vocab/unit#MalteseLira
+manat,Manat,Currency,TMM,http://qudt.org/vocab/unit#Manat
+mauritiusRupee,Mauritius Rupee,Currency,MUR,http://qudt.org/vocab/unit#MauritiusRupee
+metical,Metical,Currency,MZN,http://qudt.org/vocab/unit#Metical
+mexicanPeso,Mexican Peso,Currency,MXN,http://qudt.org/vocab/unit#MexicanPeso
+mexicanUnidadDeInversion(Udi)(FundsCode),Mexican Unidad De Inversion (Udi) (Funds Code),Currency,MXV,http://qudt.org/vocab/unit#MexicanUnidadDeInversion
+millionUsDollars,Million Us Dollars,Currency,Million USD,http://qudt.org/vocab/unit#MillionUSDollars
+moldovanLeu,Moldovan Leu,Currency,MDL,http://qudt.org/vocab/unit#MoldovanLeu
+moroccanDirham,Moroccan Dirham,Currency,MAD,http://qudt.org/vocab/unit#MoroccanDirham
+naira,Naira,Currency,NGN,http://qudt.org/vocab/unit#Naira
+nakfa,Nakfa,Currency,ERN,http://qudt.org/vocab/unit#Nakfa
+namibianDollar,Namibian Dollar,Currency,NAD,http://qudt.org/vocab/unit#NamibianDollar
+nepaleseRupee,Nepalese Rupee,Currency,NPR,http://qudt.org/vocab/unit#NepaleseRupee
+netherlandsAntillianGuilder,Netherlands Antillian Guilder,Currency,ANG,http://qudt.org/vocab/unit#NetherlandsAntillianGuilder
+newIsraeliShekel,New Israeli Shekel,Currency,ILS,http://qudt.org/vocab/unit#NewIsraeliShekel
+newTaiwanDollar,New Taiwan Dollar,Currency,TWD,http://qudt.org/vocab/unit#NewTaiwanDollar
+newTurkishLira,New Turkish Lira,Currency,TRY,http://qudt.org/vocab/unit#NewTurkishLira
+newZealandDollar,New Zealand Dollar,Currency,NZD,http://qudt.org/vocab/unit#NewZealandDollar
+ngultrum,Ngultrum,Currency,BTN,http://qudt.org/vocab/unit#Ngultrum
+northKoreanWon,North Korean Won,Currency,KPW,http://qudt.org/vocab/unit#NorthKoreanWon
+norwegianKrone,Norwegian Krone,Currency,NOK,http://qudt.org/vocab/unit#NorwegianKrone
+nuevoSol,Nuevo Sol,Currency,PEN,http://qudt.org/vocab/unit#NuevoSol
+ouguiya,Ouguiya,Currency,MRO,http://qudt.org/vocab/unit#Ouguiya
+pa'Anga,Pa'Anga,Currency,TOP,http://qudt.org/vocab/unit#Paanga
+pakistanRupee,Pakistan Rupee,Currency,PKR,http://qudt.org/vocab/unit#PakistanRupee
+palladium(OneTroyOunce),Palladium (One Troy Ounce),Currency,XPD,http://qudt.org/vocab/unit#Palladium-OunceTroy
+pataca,Pataca,Currency,MOP,http://qudt.org/vocab/unit#Pataca
+pesoUruguayo,Peso Uruguayo,Currency,UYU,http://qudt.org/vocab/unit#UruguayPeso
+philippinePeso,Philippine Peso,Currency,PHP,http://qudt.org/vocab/unit#PhilippinePeso
+platinum(OneTroyOunce),Platinum (One Troy Ounce),Currency,XPT,http://qudt.org/vocab/unit#Platinum-OunceTroy
+poundSterling,Pound Sterling,Currency,GBP,http://qudt.org/vocab/unit#PoundSterling
+pula,Pula,Currency,BWP,http://qudt.org/vocab/unit#Pula
+qatariRial,Qatari Rial,Currency,QAR,http://qudt.org/vocab/unit#QatariRial
+quetzal,Quetzal,Currency,GTQ,http://qudt.org/vocab/unit#Quetzal
+rialOmani,Rial Omani,Currency,OMR,http://qudt.org/vocab/unit#OmaniRial
+riel,Riel,Currency,KHR,http://qudt.org/vocab/unit#Riel
+romanianNewLeu,Romanian New Leu,Currency,RON,http://qudt.org/vocab/unit#RomanianNeLeu
+rufiyaa,Rufiyaa,Currency,MVR,http://qudt.org/vocab/unit#Rufiyaa
+rupiah,Rupiah,Currency,IDR,http://qudt.org/vocab/unit#Rupiah
+russianRuble,Russian Ruble,Currency,RUB,http://qudt.org/vocab/unit#RussianRuble
+rwandaFranc,Rwanda Franc,Currency,RWF,http://qudt.org/vocab/unit#RwandaFranc
+saintHelenaPound,Saint Helena Pound,Currency,SHP,http://qudt.org/vocab/unit#SaintHelenaPound
+samoanTala,Samoan Tala,Currency,WST,http://qudt.org/vocab/unit#SamoanTala
+saudiRiyal,Saudi Riyal,Currency,SAR,http://qudt.org/vocab/unit#SaudiRiyal
+serbianDinar,Serbian Dinar,Currency,RSD,http://qudt.org/vocab/unit#SerbianDinar
+seychellesRupee,Seychelles Rupee,Currency,SCR,http://qudt.org/vocab/unit#SeychellesRupee
+silver(OneTroyOunce),Silver (One Troy Ounce),Currency,XAG,http://qudt.org/vocab/unit#Silver-OunceTroy
+singaporeDollar,Singapore Dollar,Currency,SGD,http://qudt.org/vocab/unit#SingaporeDollar
+slovakKoruna,Slovak Koruna,Currency,SKK,http://qudt.org/vocab/unit#SlovakKoruna
+solomonIslandsDollar,Solomon Islands Dollar,Currency,SBD,http://qudt.org/vocab/unit#SolomonIslandsDollar
+som,Som,Currency,KGS,http://qudt.org/vocab/unit#Som
+somaliShilling,Somali Shilling,Currency,SOS,http://qudt.org/vocab/unit#SomaliShilling
+somoni,Somoni,Currency,TJS,http://qudt.org/vocab/unit#Somoni
+southAfricanRand,South African Rand,Currency,ZAR,http://qudt.org/vocab/unit#SouthAfricanRand
+southKoreanWon,South Korean Won,Currency,KRW,http://qudt.org/vocab/unit#SouthKoreanWon
+specialDrawingRights,Special Drawing Rights,Currency,XDR,http://qudt.org/vocab/unit#SpecialDrawingRights
+sriLankaRupee,Sri Lanka Rupee,Currency,LKR,http://qudt.org/vocab/unit#SriLankaRupee
+sudanesePound,Sudanese Pound,Currency,SDG,http://qudt.org/vocab/unit#SudanesePound
+surinamDollar,Surinam Dollar,Currency,SRD,http://qudt.org/vocab/unit#SurinamDollar
+swedishKrona,Swedish Krona,Currency,SEK,http://qudt.org/vocab/unit#SwedishKrona
+swissFranc,Swiss Franc,Currency,CHF,http://qudt.org/vocab/unit#SwissFranc
+syrianPound,Syrian Pound,Currency,SYP,http://qudt.org/vocab/unit#SyrianPound
+tanzanianShilling,Tanzanian Shilling,Currency,TZS,http://qudt.org/vocab/unit#TanzanianShilling
+tenge,Tenge,Currency,KZT,http://qudt.org/vocab/unit#Tenge
+trinidadAndTobagoDollar,Trinidad And Tobago Dollar,Currency,TTD,http://qudt.org/vocab/unit#TrinidadAndTobagoDollar
+tugrik,Tugrik,Currency,MNT,http://qudt.org/vocab/unit#Tugrik
+tunisianDinar,Tunisian Dinar,Currency,TND,http://qudt.org/vocab/unit#TunisianDinar
+ugandaShilling,Uganda Shilling,Currency,UGX,http://qudt.org/vocab/unit#UgandaShilling
+uicFranc(SpecialSettlementCurrency),Uic Franc (Special Settlement Currency),Currency,XFU,http://qudt.org/vocab/unit#UICFranc
+unidadDeValorReal,Unidad De Valor Real,Currency,COU,http://qudt.org/vocab/unit#UnidadDeValorReal
+unidadesDeFormento(FundsCode),Unidades De Formento (Funds Code),Currency,CLF,http://qudt.org/vocab/unit#UnidadesDeFormento
+unitedArabEmiratesDirham,United Arab Emirates Dirham,Currency,AED,http://qudt.org/vocab/unit#UAEDirham
+unitedStatesDollar(NextDay)(FundsCode),United States Dollar (Next Day) (Funds Code),Currency,USN,http://qudt.org/vocab/unit#USDollar-NextDay
+unitedStatesDollar(SameDay)(FundsCode),United States Dollar (Same Day) (Funds Code),Currency,,http://qudt.org/vocab/unit#USDollar-SameDay
+usDollar,US Dollar,Currency,USD,http://qudt.org/vocab/unit#USDollar
+uzbekistanSom,Uzbekistan Som,Currency,UZS,http://qudt.org/vocab/unit#UzbekistanSom
+vatu,Vatu,Currency,VUV,http://qudt.org/vocab/unit#Vatu
+venezuelanBolivar,Venezuelan Bolivar,Currency,VEB,http://qudt.org/vocab/unit#VenezuelanBolvar
+vietnamese??Ng,Vietnamese ??Ng,Currency,VND,http://qudt.org/vocab/unit#VietnameseDong
+wirEuro(ComplementaryCurrency),Wir Euro (Complementary Currency),Currency,CHE,http://qudt.org/vocab/unit#WIREuro
+wirFranc(ComplementaryCurrency),Wir Franc (Complementary Currency),Currency,CHW,http://qudt.org/vocab/unit#WIRFranc
+yemeniRial,Yemeni Rial,Currency,YER,http://qudt.org/vocab/unit#YemeniRial
+yuanRenminbi,Yuan Renminbi,Currency,CNY,http://qudt.org/vocab/unit#YuanRenminbi
+zambianKwacha,Zambian Kwacha,Currency,ZMK,http://qudt.org/vocab/unit#ZambianKwacha
+zimbabweDollar,Zimbabwe Dollar,Currency,ZWD,http://qudt.org/vocab/unit#ZimbabweDollar
+zloty,Zloty,Currency,PLN,http://qudt.org/vocab/unit#Zloty
+afghani,Afghani,Currency,AFN,http://qudt.org/vocab/unit#Afghani
+algerianDinar,Algerian Dinar,Currency,DZD,http://qudt.org/vocab/unit#AlgerianDinar
+argentinePeso,Argentine Peso,Currency,ARS,http://qudt.org/vocab/unit#ArgentinePeso
+armenianDram,Armenian Dram,Currency,AMD,http://qudt.org/vocab/unit#ArmenianDram
+arubanGuilder,Aruban Guilder,Currency,AWG,http://qudt.org/vocab/unit#ArubanGuilder
+australianDollar,Australian Dollar,Currency,AUD,http://qudt.org/vocab/unit#AustralianDollar
+azerbaijanianManat,Azerbaijanian Manat,Currency,AZN,http://qudt.org/vocab/unit#AzerbaijanianManat
+bahamianDollar,Bahamian Dollar,Currency,BSD,http://qudt.org/vocab/unit#BahamianDollar
+bahrainiDinar,Bahraini Dinar,Currency,BHD,http://qudt.org/vocab/unit#BahrainiDinar
+baht,Baht,Currency,THB,http://qudt.org/vocab/unit#Baht
+balboa,Balboa,Currency,PAB,http://qudt.org/vocab/unit#Balboa
+bangladeshiTaka,Bangladeshi Taka,Currency,BDT,http://qudt.org/vocab/unit#BangladeshiTaka
+barbadosDollar,Barbados Dollar,Currency,BBD,http://qudt.org/vocab/unit#BarbadosDollar
+belarussianRuble,Belarussian Ruble,Currency,BYR,http://qudt.org/vocab/unit#BelarussianRuble
+belizeDollar,Belize Dollar,Currency,BZD,http://qudt.org/vocab/unit#BelizeDollar
+bermudaDollar,Bermuda Dollar,Currency,BMD,http://qudt.org/vocab/unit#BermudaDollar
+bolivianMvdol(FundsCode),Bolivian Mvdol (Funds Code),Currency,BOV,http://qudt.org/vocab/unit#BolivianMvdol
+boliviano,Boliviano,Currency,BOB,http://qudt.org/vocab/unit#Boliviano
+brazilianReal,Brazilian Real,Currency,BRL,http://qudt.org/vocab/unit#BrazilianReal
+bruneiDollar,Brunei Dollar,Currency,BND,http://qudt.org/vocab/unit#BruneiDollar
+bulgarianLev,Bulgarian Lev,Currency,BGN,http://qudt.org/vocab/unit#BulgarianLev
+burundianFranc,Burundian Franc,Currency,BIF,http://qudt.org/vocab/unit#BurundianFranc
+canadianDollar,Canadian Dollar,Currency,CAD,http://qudt.org/vocab/unit#CanadianDollar
+capeVerdeEscudo,Cape Verde Escudo,Currency,CVE,http://qudt.org/vocab/unit#CapeVerdeEscudo
+caymanIslandsDollar,Cayman Islands Dollar,Currency,KYD,http://qudt.org/vocab/unit#CaymanIslandsDollar
+cedi,Cedi,Currency,GHS,http://qudt.org/vocab/unit#Cedi
+cfaFrancBceao,Cfa Franc Bceao,Currency,XOF,http://qudt.org/vocab/unit#CFAFrancBCEAO
+cfaFrancBeac,Cfa Franc Beac,Currency,XAF,http://qudt.org/vocab/unit#CFAFrancBEAC
+cfpFranc,Cfp Franc,Currency,XPF,http://qudt.org/vocab/unit#CFPFranc
+chileanPeso,Chilean Peso,Currency,CLP,http://qudt.org/vocab/unit#ChileanPeso
+colombianPeso,Colombian Peso,Currency,COP,http://qudt.org/vocab/unit#ColombianPeso
+comoroFranc,Comoro Franc,Currency,KMF,http://qudt.org/vocab/unit#ComoroFranc
+convertibleMarks,Convertible Marks,Currency,BAM,http://qudt.org/vocab/unit#ConvertibleMark
+cordobaOro,Cordoba Oro,Currency,NIO,http://qudt.org/vocab/unit#CordobaOro
+costaRicanColon,Costa Rican Colon,Currency,CRC,http://qudt.org/vocab/unit#CostaRicanColon
+croatianKuna,Croatian Kuna,Currency,HRK,http://qudt.org/vocab/unit#CroatianKuna
+cubanPeso,Cuban Peso,Currency,CUP,http://qudt.org/vocab/unit#CubanPeso
+cyprusPound,Cyprus Pound,Currency,CYP,http://qudt.org/vocab/unit#CyprusPound
+czechKoruna,Czech Koruna,Currency,CZK,http://qudt.org/vocab/unit#CzechKoruna
+dalasi,Dalasi,Currency,GMD,http://qudt.org/vocab/unit#Dalasi
+danishKrone,Danish Krone,Currency,DKK,http://qudt.org/vocab/unit#DanishKrone
+denar,Denar,Currency,MKD,http://qudt.org/vocab/unit#Denar
+djiboutiFranc,Djibouti Franc,Currency,DJF,http://qudt.org/vocab/unit#DjiboutiFranc
+dobra,Dobra,Currency,STD,http://qudt.org/vocab/unit#Dobra
+dominicanPeso,Dominican Peso,Currency,DOP,http://qudt.org/vocab/unit#DominicanPeso
+eastCaribbeanDollar,East Caribbean Dollar,Currency,XCD,http://qudt.org/vocab/unit#EastCaribbeanDollar
+egyptianPound,Egyptian Pound,Currency,EGP,http://qudt.org/vocab/unit#EgyptianPound
+ethiopianBirr,Ethiopian Birr,Currency,ETB,http://qudt.org/vocab/unit#EthiopianBirr
+euro,Euro,Currency,EUR,http://qudt.org/vocab/unit#Euro
+europeanCompositeUnit(Eurco)(BondsMarketUnit),European Composite Unit (Eurco) (Bonds Market Unit),Currency,XBA,http://qudt.org/vocab/unit#EuropeanCompositeUnit
+europeanMonetaryUnit(E.M.U.-6)(BondsMarketUnit),European Monetary Unit (E.M.U.-6) (Bonds Market Unit),Currency,XBB,http://qudt.org/vocab/unit#EuropeanMonetaryUnit
+europeanUnitOfAccount17(E.U.A.-17)(BondsMarketUnit),European Unit of Account 17 (E.U.A.-17) (Bonds Market Unit),Currency,XBD,http://qudt.org/vocab/unit#EuropeanUnitOfAccount17
+europeanUnitOfAccount9(E.U.A.-9)(BondsMarketUnit),European Unit of Account 9 (E.U.A.-9) (Bonds Market Unit),Currency,XBC,http://qudt.org/vocab/unit#EuropeanUnitOfAccount9
+falklandIslandsPound,Falkland Islands Pound,Currency,FKP,http://qudt.org/vocab/unit#FalklandIslandsPound
+fijiDollar,Fiji Dollar,Currency,FJD,http://qudt.org/vocab/unit#FijiDollar
+forint,Forint,Currency,HUF,http://qudt.org/vocab/unit#Forint
+francCongolais,Franc Congolais,Currency,CDF,http://qudt.org/vocab/unit#FrancCongolais
+gibraltarPound,Gibraltar Pound,Currency,GIP,http://qudt.org/vocab/unit#GibraltarPound
+gold(OneTroyOunce),Gold (One Troy Ounce),Currency,XAU,http://qudt.org/vocab/unit#Gold-OunceTroy
+goldFranc(SpecialSettlementCurrency),Gold Franc (Special Settlement Currency),Currency,XFO,http://qudt.org/vocab/unit#GoldFranc
+guarani,Guarani,Currency,PYG,http://qudt.org/vocab/unit#Guarani
+guineaFranc,Guinea Franc,Currency,GNF,http://qudt.org/vocab/unit#GuineaFranc
+guyanaDollar,Guyana Dollar,Currency,GYD,http://qudt.org/vocab/unit#GuyanaDollar
+haitiGourde,Haiti Gourde,Currency,HTG,http://qudt.org/vocab/unit#HaitiGourde
+hongKongDollar,Hong Kong Dollar,Currency,HKD,http://qudt.org/vocab/unit#HongKongDollar
+hryvnia,Hryvnia,Currency,UAH,http://qudt.org/vocab/unit#Hryvnia
+icelandKrona,Iceland Krona,Currency,ISK,http://qudt.org/vocab/unit#IcelandKrona
+indianRupee,Indian Rupee,Currency,INR,http://qudt.org/vocab/unit#IndianRupee
+iranianRial,Iranian Rial,Currency,IRR,http://qudt.org/vocab/unit#IranianRial
+iraqiDinar,Iraqi Dinar,Currency,IQD,http://qudt.org/vocab/unit#IraqiDinar
+jamaicanDollar,Jamaican Dollar,Currency,JMD,http://qudt.org/vocab/unit#JamaicanDollar
+japaneseYen,Japanese Yen,Currency,JPY,http://qudt.org/vocab/unit#JapaneseYen
+jordanianDinar,Jordanian Dinar,Currency,JOD,http://qudt.org/vocab/unit#JordanianDinar
+kenyanShilling,Kenyan Shilling,Currency,KES,http://qudt.org/vocab/unit#KenyanShilling
+kina,Kina,Currency,PGK,http://qudt.org/vocab/unit#Kina
+kroon,Kroon,Currency,EEK,http://qudt.org/vocab/unit#Kroon
+kuwaitiDinar,Kuwaiti Dinar,Currency,KWD,http://qudt.org/vocab/unit#KuwaitiDinar
+kwanza,Kwanza,Currency,AOA,http://qudt.org/vocab/unit#Kwanza
+kyat,Kyat,Currency,MMK,http://qudt.org/vocab/unit#Kyat
+laosKip,Laos Kip,Currency,LAK,http://qudt.org/vocab/unit#LaosKip
+lari,Lari,Currency,GEL,http://qudt.org/vocab/unit#Lari
+latvianLats,Latvian Lats,Currency,LVL,http://qudt.org/vocab/unit#LatvianLats
+lebanesePound,Lebanese Pound,Currency,LBP,http://qudt.org/vocab/unit#LebanesePound
+lek,Lek,Currency,ALL,http://qudt.org/vocab/unit#Lek
+lempira,Lempira,Currency,HNL,http://qudt.org/vocab/unit#Lempira
+leone,Leone,Currency,SLL,http://qudt.org/vocab/unit#Leone
+liberianDollar,Liberian Dollar,Currency,LRD,http://qudt.org/vocab/unit#LiberianDollar
+libyanDinar,Libyan Dinar,Currency,LYD,http://qudt.org/vocab/unit#LibyanDinar
+bitsPerSecond,Bits per Second,Data rate,bps,http://qudt.org/vocab/unit#BitsPerSecond
+kilobitPerSecond,Kilobit per Second,Data rate,kbps,http://qudt.org/vocab/unit#KilobitsPerSecond
+megabitPerSecond,Megabit per Second,Data rate,mbps,http://qudt.org/vocab/unit#MegabitsPerSecond
+centistokes,Centistokes,Diffusivity,cSt,http://qudt.org/vocab/unit#Centistokes
+squareFootPerHour,Square Foot per Hour,Diffusivity,ft^2/hr,http://qudt.org/vocab/unit#SquareFootPerHour
+squareFootPerSecond,Square Foot per Second,Diffusivity,ft^2/s,http://qudt.org/vocab/unit#SquareFootPerSecond
+squareMeterPerSecond,Square Meter per Second,Diffusivity,m^2 s^-1,http://qudt.org/vocab/unit#SquareMeterPerSecond
+stoke,Stoke,Diffusivity,St,http://qudt.org/vocab/unit#Stokes; http://unitsofmeasure.org/ucum.html#para-33; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+code,Code,Dimensionless,code,USGS
+dimensionless,Dimensionless,Dimensionless,-,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+hounsfieldUnit,Hounsfield Unit,Dimensionless,hnsf'U,http://unitsofmeasure.org/ucum.html#para-44
+mach,Mach,Dimensionless,,http://qudt.org/vocab/unit#Mach
+partPerBillion,Part per Billion,Dimensionless,ppb,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-29; http://www.unidata.ucar.edu/software/udunits/
+partPerMillion,Part per Million,Dimensionless,ppm,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-29; http://www.unidata.ucar.edu/software/udunits/
+partPerQuadrillion,Part per Quadrillion,Dimensionless,ppq,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/
+partPerQuintillion,Part per Quintillion,Dimensionless,ppqt,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+partPerThousand,Part per Thousand,Dimensionless,ppth,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-29; http://qwwebservices.usgs.gov/service-domains.html
+partPerTrillion,Part per Trillion,Dimensionless,ppt,http://environment.data.gov.au/def/unit/PerTrillion; http://unitsofmeasure.org/ucum.html#para-29; http://www.unidata.ucar.edu/software/udunits/
+percent,Percent,Dimensionless,%,http://qudt.org/vocab/unit#Percent; http://unitsofmeasure.org/ucum.html#para-29; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/; http://qwwebservices.usgs.gov/service-domains.html
+perMille,Per Mille,Dimensionless,per mil,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://environment.data.gov.au/def/unit/PerMil; http://qwwebservices.usgs.gov/service-domains.html
+presenceOrAbsence,Presence or Absence,Dimensionless,PrsAbs,http://qwwebservices.usgs.gov/service-domains.html
+standardUnit,Standard Unit,Dimensionless,std units,http://qwwebservices.usgs.gov/service-domains.html
+thresholdOdorNumber,Threshold Odor Number,Dimensionless,TON,http://qwwebservices.usgs.gov/service-domains.html
+tritiumUnit,Tritium Unit,Dimensionless,TU,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://environment.data.gov.au/def/unit/Tritium_Unit; http://qwwebservices.usgs.gov/service-domains.html
+unitedStatesPharmacopeiaUnit,United States Pharmacopeia Unit,Dimensionless,USP'U,http://unitsofmeasure.org/ucum.html#para-45
+rem,REM,Dose equivalent,REM,http://qudt.org/vocab/unit#Rem; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+sievert,Sievert,Dose equivalent,Sv,http://qudt.org/vocab/unit#Sievert; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+centipoise,Centipoise,Dynamic viscosity,cP,http://qudt.org/vocab/unit#Centipoise
+pascalSecond,Pascal Second,Dynamic viscosity,Pa-s,http://qudt.org/vocab/unit#PascalSecond
+poise,Poise,Dynamic viscosity,P,http://qudt.org/vocab/unit#Poise; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+poundForceSecondPerSquareFoot,Pound Force Second per Square Foot,Dynamic viscosity,lbf-s/ft^2,http://qudt.org/vocab/unit#PoundForceSecondPerSquareFoot
+poundForceSecondPerSquareInch,Pound Force Second per Square Inch,Dynamic viscosity,lbf-s/in^2,http://qudt.org/vocab/unit#PoundForceSecondPerSquareInch
+poundPerFootHour,Pound per Foot Hour,Dynamic viscosity,lb/(ft-hr),http://qudt.org/vocab/unit#PoundPerFootHour
+poundPerFootSecond,Pound per Foot Second,Dynamic viscosity,lb/(ft-s),http://qudt.org/vocab/unit#PoundPerFootSecond
+slugPerFootSecond,Slug per Foot Second,Dynamic viscosity,slug/(ft-s),http://qudt.org/vocab/unit#SlugPerFootSecond
+abfarad,Abfarad,Electrical capacitance,abF,http://qudt.org/vocab/unit#Abfarad
+farad,Farad,Electrical capacitance,F,http://qudt.org/vocab/unit#Farad; http://unitsofmeasure.org/ucum.html#para-30
+microfarad,Microfarad,Electrical capacitance,microF,http://qudt.org/vocab/unit#MicroFarad
+nanofarad,Nanofarad,Electrical capacitance,nF,http://qudt.org/vocab/unit#NanoFarad
+picofarad,Picofarad,Electrical capacitance,pF,http://qudt.org/vocab/unit#PicoFarad
+statfarad,Statfarad,Electrical capacitance,statF,http://qudt.org/vocab/unit#Statfarad; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+abcoulomb,Abcoulomb,Electrical charge,abC,http://qudt.org/vocab/unit#Abcoulomb
+ampereHour,Ampere Hour,Electrical charge,A-hr,http://qudt.org/vocab/unit#AmpereHour
+c12Faraday,C12 Faraday,Electrical charge,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+chemicalEquivalent,Chemical Equivalent,Electrical charge,eq,http://unitsofmeasure.org/ucum.html#para-45
+chemicalFaraday,Chemical Faraday,Electrical charge,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+coulomb,Coulomb,Electrical charge,C,http://qudt.org/vocab/unit#Coulomb
+faraday,Faraday,Electrical charge,F,http://qudt.org/vocab/unit#Faraday
+franklin,Franklin,Electrical charge,Fr,http://qudt.org/vocab/unit#Franklin
+milliequivalent,Milliequivalent,Electrical charge,meq,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+physicalFaraday,Physical Faraday,Electrical charge,,http://www.unidata.ucar.edu/software/udunits/
+planckCharge,Planck Charge,Electrical charge,Q_p,http://qudt.org/vocab/unit#PlanckCharge
+statcoulomb,Statcoulomb,Electrical charge,statC,http://qudt.org/vocab/unit#Statcoulomb; http://www.unidata.ucar.edu/software/udunits/
+coulombPerMeter,Coulomb per Meter,Electrical charge line density,C/m,http://qudt.org/vocab/unit#CoulombPerMeter
+coulombPerMole,Coulomb per Mole,Electrical charge per count,,http://qudt.org/vocab/unit#CoulombPerMole
+statcoulombPerMole,Statcoulomb per Mole,Electrical charge per count,statC/mol,http://qudt.org/vocab/unit#StatcoulombPerMole
+coulombPerKilogram,Coulomb per Kilogram,Electrical charge per mass,C/kg,http://qudt.org/vocab/unit#CoulombPerKilogram
+hertzPerTesla,Hertz per Tesla,Electrical charge per mass,Hz T^-1,http://qudt.org/vocab/unit#HertzPerTesla
+megahertzPerTesla,Megahertz per Tesla,Electrical charge per mass,MHz T^-1,http://qudt.org/vocab/unit#MegaHertzPerTesla
+milliequivalentPer100Gram,Milliequivalent per 100 Gram,Electrical charge per mass,meq/100 g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+milliequivalentPerHectogram,Milliequivalent per Hectogram,Electrical charge per mass,meq/hg,http://environment.data.gov.au/def/unit/MilliEquivalentPerHectoGram
+milliequivalentPerKilogram,Milliequivalent per Kilogram,Electrical charge per mass,meq/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+perTeslaSecond,Per Tesla Second,Electrical charge per mass,s^-1 T^-1,http://qudt.org/vocab/unit#PerTeslaSecond
+roentgen,Roentgen,Electrical charge per mass,R,http://qudt.org/vocab/unit#Roentgen; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+coulombPerCubicMeter,Coulomb per Cubic Meter,Electrical charge volume density,C/m^3,http://qudt.org/vocab/unit#CoulombPerCubicMeter
+microequivalentPerLiter,Microequivalent per Liter,Electrical charge volume density,ueq/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+milliequivalentPerLiter,Milliequivalent per Liter,Electrical charge volume density,meq/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+abmho,Abmho,Electrical conductance,,http://www.unidata.ucar.edu/software/udunits/
+absiemen,Absiemen,Electrical conductance,aS,http://qudt.org/vocab/unit#Absiemen
+mho,Mho,Electrical conductance,mho,http://qudt.org/vocab/unit#Mho; http://unitsofmeasure.org/ucum.html#para-47
+siemen,Siemen,Electrical conductance,S,http://qudt.org/vocab/unit#Siemens; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+statmho,Statmho,Electrical conductance,statS,http://qudt.org/vocab/unit#Statmho; http://www.unidata.ucar.edu/software/udunits/
+decisiemenPerCentimeter,Decisiemen per Centimeter,Electrical conductivity,dS/cm,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+decisiemenPerMeter,Decisiemen per Meter,Electrical conductivity,dS/m,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+micromhoPerCentimeter,Micromho per Centimeter,Electrical conductivity,µMhos/cm,
+microsiemenPerCentimeter,Microsiemen per Centimeter,Electrical conductivity,uS/cm,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+millimhoPerCentimeter,Millimho per Centimeter,Electrical conductivity,mMhos/cm,
+millisiemenPerCentimeter,Millisiemen per Centimeter,Electrical conductivity,mS/cm,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+siemenPerCentimeter,Siemen per Centimeter,Electrical conductivity,S/cm,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+siemenPerMeter,Siemen per Meter,Electrical conductivity,S/m,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+abampere,Abampere,Electrical current,abA,http://qudt.org/vocab/unit#Abampere
+ampere,Ampere,Electrical current,A,http://qudt.org/vocab/unit#Ampere
+biot,Biot,Electrical current,Bi,http://qudt.org/vocab/unit#Biot
+planckCurrent,Planck Current,Electrical current,,http://qudt.org/vocab/unit#PlanckCurrent
+statampere,Statampere,Electrical current,statA,http://qudt.org/vocab/unit#Statampere; http://www.unidata.ucar.edu/software/udunits/
+abamperePerSquareCentimeter,Abampere per Square Centimeter,Electrical current density,abA / cm^2,http://qudt.org/vocab/unit#AbamperePerSquareCentimeter
+amperePerSquareMeter,Ampere per Square Meter,Electrical current density,A/m^2,http://qudt.org/vocab/unit#AmperePerSquareMeter
+planckCurrentDensity,Planck Current Density,Electrical current density,,http://qudt.org/vocab/unit#PlanckCurrentDensity
+statamperePerSquareCentimeter,Statampere per Square Centimeter,Electrical current density,statA / cm^2,http://qudt.org/vocab/unit#StatamperePerSquareCentimeter
+amperePerDegree,Ampere per Degree,Electrical current per angle,A/deg,http://qudt.org/vocab/unit#AmperePerDegree
+amperePerRadian,Ampere per Radian,Electrical current per angle,,http://qudt.org/vocab/unit#AmperePerRadian
+amperePerJoule,Ampere per Joule,Electrical current per energy,A/J,http://qudt.org/vocab/unit#AmperePerJoule
+coulombMeter,Coulomb Meter,Electrical dipole moment,C m,http://qudt.org/vocab/unit#CoulombMeter
+debye,Debye,Electrical dipole moment,D,http://qudt.org/vocab/unit#Debye
+abvoltPerCentimeter,Abvolt per Centimeter,Electrical field strength,,http://qudt.org/vocab/unit#AbvoltPerCentimeter
+newtonPerCoulomb,Newton per Coulomb,Electrical field strength,N/C,http://qudt.org/vocab/unit#NewtonPerCoulomb
+statvoltPerCentimeter,Statvolt per Centimeter,Electrical field strength,,http://qudt.org/vocab/unit#StatvoltPerCentimeter
+voltPerMeter,Volt per Meter,Electrical field strength,V/m,http://qudt.org/vocab/unit#VoltPerMeter
+abvoltCentimeter,Abvolt Centimeter,Electrical flux,abV cm,http://qudt.org/vocab/unit#AbvoltCentimeter
+statvoltCentimeter,Statvolt Centimeter,Electrical flux,statV cm,http://qudt.org/vocab/unit#StatvoltCentimeter
+voltMeter,Volt Meter,Electrical flux,m V,http://qudt.org/vocab/unit#VoltMeter
+abcoulombPerSquareCentimeter,Abcoulomb per Square Centimeter,Electrical flux density,,http://qudt.org/vocab/unit#AbcoulombPerSquareCentimeter
+coulombPerSquareMeter,Coulomb per Square Meter,Electrical flux density,C/m^2,http://qudt.org/vocab/unit#CoulombPerSquareMeter
+statcoulombPerSquareCentimeter,Statcoulomb per Square Centimeter,Electrical flux density,,http://qudt.org/vocab/unit#StatcoulombPerSquareCentimeter
+abfaradPerCentimeter,Abfarad per Centimeter,Electrical permittivity,,http://qudt.org/vocab/unit#AbfaradPerCentimeter
+faradPerMeter,Farad per Meter,Electrical permittivity,F/m,http://qudt.org/vocab/unit#FaradPerMeter
+coulombSquareMeter,Coulomb Square Meter,Electrical quadrupole moment,C m^2,http://qudt.org/vocab/unit#CoulombSquareMeter
+abohm,Abohm,Electrical resistance,abOhm,http://qudt.org/vocab/unit#Abohm
+ohm,Ohm,Electrical resistance,Ohm,http://qudt.org/vocab/unit#Ohm; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+planckImpedance,Planck Impedance,Electrical resistance,,http://qudt.org/vocab/unit#PlanckResistance
+planckResistance,Planck Resistance,Electrical resistance,,http://qudt.org/vocab/unit#PlanckResistance
+statohm,Statohm,Electrical resistance,statOhm,http://qudt.org/vocab/unit#Statohm; http://www.unidata.ucar.edu/software/udunits/
+kiloohmCentimeter,Kiloohm Centimeter,Electrical resistivity,kOhm-cm,
+ohmMeter,Ohm Meter,Electrical resistivity,ohm m,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+abvolt,Abvolt,Electromotive force,abV,http://qudt.org/vocab/unit#Abvolt
+millivolt,Millivolt,Electromotive force,mV,http://environment.data.gov.au/def/unit/MilliVolt; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+planckVolt,Planck Volt,Electromotive force,,http://qudt.org/vocab/unit#PlanckVolt
+statvolt,Statvolt,Electromotive force,statV,http://qudt.org/vocab/unit#Statvolt; http://www.unidata.ucar.edu/software/udunits/
+volt,Volt,Electromotive force,V,http://qudt.org/vocab/unit#Volt; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+bev,Bev,Energy,,http://www.unidata.ucar.edu/software/udunits/
+britishThermalUnit,British Thermal Unit,Energy,Btu,http://qudt.org/vocab/unit#BritishThermalUnitThermochemical; http://unitsofmeasure.org/ucum.html#para-43
+"britishThermalUnit,InternationalSteamTable","British Thermal Unit, International Steam Table",Energy,BtuIT,http://qudt.org/vocab/unit#BritishThermalUnitInternationalTable; http://unitsofmeasure.org/ucum.html#para-43; http://www.unidata.ucar.edu/software/udunits/
+"britishThermalUnit,Mean","British Thermal Unit, Mean",Energy,Btu_m,http://unitsofmeasure.org/ucum.html#para-43
+"britishThermalUnit,ThermochemicalCalorie","British Thermal Unit, Thermochemical Calorie",Energy,"Btu, BtuTC, Btu_th",http://qudt.org/vocab/unit#BritishThermalUnitThermochemical; http://unitsofmeasure.org/ucum.html#para-43
+britishThermalUnitAt39 °F,British Thermal Unit At 39 °F,Energy,Btu_39,http://unitsofmeasure.org/ucum.html#para-43
+britishThermalUnitAt59 °F,British Thermal Unit At 59 °F,Energy,Btu_59,http://unitsofmeasure.org/ucum.html#para-43
+britishThermalUnitAt60 °F,British Thermal Unit At 60 °F,Energy,Btu_60,http://unitsofmeasure.org/ucum.html#para-43
+calorie,Calorie,Energy,cal,http://qudt.org/vocab/unit#CalorieThermochemical; http://unitsofmeasure.org/ucum.html#para-43; http://www.unidata.ucar.edu/software/udunits/; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+"calorie,InternationalTable","Calorie, International Table",Energy,cal_IT,http://unitsofmeasure.org/ucum.html#para-43; http://www.unidata.ucar.edu/software/udunits/
+"calorie,Mean","Calorie, Mean",Energy,cal_m,http://unitsofmeasure.org/ucum.html#para-43
+"calorie,Thermochemical","Calorie, Thermochemical",Energy,cal,http://qudt.org/vocab/unit#CalorieThermochemical; http://unitsofmeasure.org/ucum.html#para-43; http://www.unidata.ucar.edu/software/udunits/; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+calorieAt15 °C,Calorie At 15 °C,Energy,cal_15,http://unitsofmeasure.org/ucum.html#para-43
+calorieAt20 °C,Calorie At 20 °C,Energy,cal_20,http://unitsofmeasure.org/ucum.html#para-43
+electronvolt,ElectronVolt,Energy,eV,http://qudt.org/vocab/unit#ElectronVolt
+erg,Erg,Energy,erg,http://qudt.org/vocab/unit#Erg; http://unitsofmeasure.org/ucum.html#para-33
+footPoundal,Foot Poundal,Energy,ft-pdl,http://qudt.org/vocab/unit#FootPoundal
+footPoundForce,Foot Pound Force,Energy,ft-lbf,http://qudt.org/vocab/unit#FootPoundForce
+gigaelectronvolt,GigaElectronVolt,Energy,GeV,http://qudt.org/vocab/unit#GigaElectronVolt
+gigajoule,Gigajoule,Energy,GJ,
+hartree,Hartree,Energy,E_h,http://qudt.org/vocab/unit#Hartree
+inchPoundForce,Inch Pound Force,Energy,in-lbf,http://qudt.org/vocab/unit#InchPoundForce
+joule,Joule,Energy,J,http://qudt.org/vocab/unit#Joule; http://unitsofmeasure.org/ucum.html#para-30http://www.unidata.ucar.edu/software/udunits/;
+kilocalorie,Kilocalorie,Energy,kcal,http://qudt.org/vocab/unit#Kilocalorie
+kiloelectronvolt,KiloElectronVolt,Energy,keV,http://qudt.org/vocab/unit#KiloElectronVolt
+kilowattHour,Kilowatt Hour,Energy,kW-hr,http://qudt.org/vocab/unit#Kilowatthour
+megaelectronvolt,MegaElectronVolt,Energy,MeV,http://qudt.org/vocab/unit#MegaElectronVolt
+megajoule,Megajoule,Energy,MJ,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+megawattHour,Megawatt Hour,Energy,MW-hr,
+nutritionalCalorie,Nutritional Calorie,Energy,Cal,http://qudt.org/vocab/unit#CalorieNutritional; http://unitsofmeasure.org/ucum.html#para-43
+planckEnergy,Planck Energy,Energy,,http://qudt.org/vocab/unit#PlanckEnergy
+quad,Quad,Energy,quad,http://qudt.org/vocab/unit#Quad
+thermEc,Therm EC,Energy,therm (EC),http://qudt.org/vocab/unit#ThermEEC
+thermUs,Therm US,Energy,therm (US),http://qudt.org/vocab/unit#ThermUS; http://www.unidata.ucar.edu/software/udunits/
+tonOfOilEquivalent,Ton of Oil Equivalent,Energy,toe,http://qudt.org/vocab/unit#TonOfOilEquivalent
+tonTnt,Ton TNT,Energy,t/lbf,http://qudt.org/vocab/unit#TonEnergy; http://www.unidata.ucar.edu/software/udunits/
+wattHour,Watt Hour,Energy,W-hr,http://qudt.org/vocab/unit#Watthour; http://www.unidata.ucar.edu/software/udunits/
+ergPerCubicCentimeter,Erg per Cubic Centimeter,Energy density,,http://qudt.org/vocab/unit#ErgPerCubicCentimeter
+joulePerCubicMeter,Joule per Cubic Meter,Energy density,J/m^3,http://qudt.org/vocab/unit#JoulePerCubicMeter
+planckEnergyDensity,Planck Energy Density,Energy density,,
+kilocaloriePerSquareCentimeter,Kilocalorie per Square Centimeter,Energy per area,kcal/cm^2,http://qudt.org/vocab/unit#KilocaloriePerSquareCentimeter
+langley,Langley,Energy per area,Ly,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/
+megajoulePerSquareMeter,Megajoule per Square Meter,Energy per area,MJ/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+btuPerSquareFoot,Btu per Square Foot,Energy per area,Btu/ft^2,http://qudt.org/vocab/unit#BtuPerSquareFoot
+footPoundForcePerSquareFoot,Foot Pound Force per Square Foot,Energy per area,ft-lbf/ft^2,http://qudt.org/vocab/unit#FootPoundForcePerSquareFoot
+footPoundForcePerSquareMeter,Foot Pound Force per Square Meter,Energy per area,ft-lbf/m^2,http://qudt.org/vocab/unit#FootPoundForcePerSquareMeter
+joulePerSquareCentimeter,Joule per Square Centimeter,Energy per area,J/cm^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+joulePerSquareMeter,Joule per Square Meter,Energy per area,J/m^2,http://qudt.org/vocab/unit#JoulePerSquareMeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+voltPerSquareMeter,Volt per Square Meter,Energy per area electrical charge,V m^-2,http://qudt.org/vocab/unit#VoltPerSquareMeter
+joulePerSquareTesla,Joule per Square Tesla,Energy per square magnetic flux density,J T^-2,http://qudt.org/vocab/unit#JoulePerSquareTesla
+kilogramPerPascalPerSecondPerMeterSquared,Kilogram per Pascal per Second per Meter Squared,Fluid permeance,kg/(Pa.s.m^2),
+perm0C,Perm 0C,Fluid permeance,Perm 0C,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+perm23C,Perm 23C,Fluid permeance,Perm 23C,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+peripheralVascularResistanceUnit,Peripheral Vascular Resistance Unit,Fluid resistance,PRU,http://unitsofmeasure.org/ucum.html#para-44
+woodUnit,Wood Unit,Fluid resistance,wood'U,http://unitsofmeasure.org/ucum.html#para-44
+rhe,Rhe,Fluidity,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+inVivoFluorescenceUnit,In Vivo Fluorescence Unit,Fluorescence,IVFU,http://qwwebservices.usgs.gov/service-domains.html
+relativeFluorescenceUnit,Relative Fluorescence Unit,Fluorescence,RFU,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+dyne,Dyne,Force,dyn,http://qudt.org/vocab/unit#Dyne; http://unitsofmeasure.org/ucum.html#para-33
+gramForce,Gram Force,Force,gf,http://unitsofmeasure.org/ucum.html#para-32; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+kilogramForce,Kilogram Force,Force,kgf,http://qudt.org/vocab/unit#KilogramForce; http://www.unidata.ucar.edu/software/udunits/
+kilopond,Kilopond,Force,kp,http://qudt.org/vocab/unit#KiloPond
+kip,Kip,Force,kip,http://qudt.org/vocab/unit#Kip; http://www.unidata.ucar.edu/software/udunits/; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+newton,Newton,Force,N,http://qudt.org/vocab/unit#Newton; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+ounceForce,Ounce Force,Force,ozf,http://qudt.org/vocab/unit#OunceForce; http://www.unidata.ucar.edu/software/udunits/
+planckForce,Planck Force,Force,,http://qudt.org/vocab/unit#PlanckForce
+pond,Pond,Force,,http://www.unidata.ucar.edu/software/udunits/
+poundal,Poundal,Force,pdl,http://qudt.org/vocab/unit#Poundal; http://www.unidata.ucar.edu/software/udunits/
+poundForce,Pound Force,Force,lbf_av,http://qudt.org/vocab/unit#PoundForce; http://unitsofmeasure.org/ucum.html#para-32; http://www.unidata.ucar.edu/software/udunits/
+tonForce,Ton Force,Force,,http://www.unidata.ucar.edu/software/udunits/
+newtonPerMeter,Newton per Meter,Force per length,N/m,http://qudt.org/vocab/unit#NewtonPerMeter
+poundForcePerFoot,Pound Force per Foot,Force per length,lbf/ft,http://qudt.org/vocab/unit#PoundForcePerFoot
+poundForcePerInch,Pound Force per Inch,Force per length,lbf/in,http://qudt.org/vocab/unit#PoundForcePerInch
+baud,Baud,Frequency,Bd,http://unitsofmeasure.org/ucum.html#para-48; http://www.unidata.ucar.edu/software/udunits/
+countPerMinute,Count per Minute,Frequency,#/min,
+countPerSecond,Count per Second,Frequency,#/s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+countPerYear,Count per Year,Frequency,#/yr,http://qudt.org/vocab/unit#NumberPerYear
+gigahertz,Gigahertz,Frequency,GHz,http://qudt.org/vocab/unit#GigaHertz
+hertz,Hertz,Frequency,Hz,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-30
+inverseSecond,Inverse Second,Frequency,s^-1,http://qudt.org/vocab/unit#PerSecond
+kilohertz,Kilohertz,Frequency,KHz,http://qudt.org/vocab/unit#KiloHertz
+megahertz,Megahertz,Frequency,MHz,http://qudt.org/vocab/unit#MegaHertz
+perDay,Per Day,Frequency,1/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+planckFrequency,Planck Frequency,Frequency,,http://qudt.org/vocab/unit#PlanckFrequency
+cubicMeterPerKilogramSecondSquared,Cubic Meter per Kilogram Second Squared,Gravitational attraction,m^3 kg^-1 s^-2,http://qudt.org/vocab/unit#CubicMeterPerKilogramSecondSquared
+btuPerDegreeFahrenheit,Btu per Degree Fahrenheit,Heat capacity,Btu/degF,http://qudt.org/vocab/unit#BtuPerDegreeFahrenheit
+btuPerDegreeRankine,Btu per Degree Rankine,Heat capacity,Btu/degR,http://qudt.org/vocab/unit#BtuPerDegreeRankine
+electronvoltPerKelvin,ElectronVolt per Kelvin,Heat capacity,eV K^-1,http://qudt.org/vocab/unit#ElectronVoltPerKelvin
+joulePerKelvin,Joule per Kelvin,Heat capacity,J/K,http://qudt.org/vocab/unit#JoulePerKelvin
+btuPerSquareFootHourDegreeFahrenheit,Btu per Square Foot Hour Degree Fahrenheit,Heat transfer coefficient,Btu/(hr-ft^2-degF),http://qudt.org/vocab/unit#BtuPerSquareFootHourDegreeFahrenheit
+btuPerSquareFootSecondDegreeFahrenheit,Btu per Square Foot Second Degree Fahrenheit,Heat transfer coefficient,Btu/(ft^2-s-degF),http://qudt.org/vocab/unit#BtuPerSquareFootSecondDegreeFahrenheit
+wattPerSquareMeterKelvin,Watt per Square Meter Kelvin,Heat transfer coefficient,W/(m^2-K),http://qudt.org/vocab/unit#WattPerSquareMeterKelvin
+cubicCoulombMeterPerSquareJoule,Cubic Coulomb Meter per Square Joule,Hyperpolarizability,C^3 m^3 J^-2,http://qudt.org/vocab/unit#CubicCoulombMeterPerSquareJoule
+footcandle,Footcandle,Illuminance,fc,http://qudt.org/vocab/unit#FootCandle; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+lumenPerSquareFoot,Lumen per Square Foot,Illuminance,lm/ft^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+lux,Lux,Illuminance,lx,http://qudt.org/vocab/unit#Lux; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+phot,Phot,Illuminance,ph,http://qudt.org/vocab/unit#Phot; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+abhenry,Abhenry,Inductance,abH,http://qudt.org/vocab/unit#Abhenry
+henry,Henry,Inductance,H,http://qudt.org/vocab/unit#Henry; http://unitsofmeasure.org/ucum.html#para-30
+microhenry,Microhenry,Inductance,microH,http://qudt.org/vocab/unit#MicroHenry
+millihenry,Millihenry,Inductance,milliH,http://qudt.org/vocab/unit#MilliHenry
+stathenry,Stathenry,Inductance,statH,http://qudt.org/vocab/unit#Stathenry; http://www.unidata.ucar.edu/software/udunits/
+perMole,Per Mole,Inverse count,mol^-1,http://qudt.org/vocab/unit#PerMole
+absorbanceUnitPerCentimeter,Absorbance Unit per Centimeter,Inverse length,AU/cm,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+diopter,Diopter,Inverse length,diop,http://qudt.org/vocab/unit#Diopter
+kayser,Kayser,Inverse length,Ky,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://unitsofmeasure.org/ucum.html#para-33
+mesh,Mesh,Inverse length,mesh_i,http://unitsofmeasure.org/ucum.html#para-44
+perMeter,Per Meter,Inverse length,/m,http://qudt.org/vocab/unit#PerMeter; http://environment.data.gov.au/def/unit/Reciprocal_Meter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+reciprocalMeter,Reciprocal Meter,Inverse length,m^-1,
+unitPerCentimeter,Unit per Centimeter,Inverse length,units/cm,http://qwwebservices.usgs.gov/service-domains.html
+perMeterKelvin,Per Meter Kelvin,Inverse length temperature,m^-1 K^-1,http://qudt.org/vocab/unit#PerMeterKelvin
+hertzPerVolt,Hertz per Volt,Inverse magnetic flux,Hz V^-1,http://qudt.org/vocab/unit#HertzPerVolt
+meterPerFarad,Meter per Farad,Inverse permittivity,,http://qudt.org/vocab/unit#MeterPerFarad
+perSquareGigaElectronvolt,Per Square Giga ElectronVolt,Inverse square energy,GeV^-2,http://qudt.org/vocab/unit#PerSquareGigaElectronVolt
+hertzPerKelvin,Hertz per Kelvin,Inverse time temperature,Hz K^-1,http://qudt.org/vocab/unit#HertzPerKelvin
+megahertzPerKelvin,Megahertz per Kelvin,Inverse time temperature,MHz K^-1,http://qudt.org/vocab/unit#MegaHertzPerKelvin
+perCubicMeter,Per Cubic Meter,Inverse volume,/m^3,http://qudt.org/vocab/unit#PerCubicMeter
+perLiter,Per Liter,Inverse volume,1/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+meterPerSecondCubed,Meter per Second Cubed,Jerk,m/s^3,
+angstrom,Angstrom,Length,Ao,http://qudt.org/vocab/unit#Angstrom
+arpentlin,Arpentlin,Length,,http://www.unidata.ucar.edu/software/udunits/
+astronomicalUnit,Astronomical Unit,Length,AU,http://qudt.org/vocab/unit#AstronomicalUnit; http://unitsofmeasure.org/ucum.html#para-31
+barleycorn,Barleycorn,Length,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+bigPoint,Big Point,Length,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+centimeter,Centimeter,Length,cm,http://qudt.org/vocab/unit#Centimeter
+charrièreFrench,Charrière French,Length,Ch,http://unitsofmeasure.org/ucum.html#para-44
+cicero,Cicero,Length,cicero,http://unitsofmeasure.org/ucum.html#para-42
+decimeter,Decimeter,Length,decimeter,http://qudt.org/vocab/unit#Decimeter
+didot,Didot,Length,didot,http://unitsofmeasure.org/ucum.html#para-42
+fathom,Fathom,Length,fth_i,http://qudt.org/vocab/unit#Fathom; http://unitsofmeasure.org/ucum.html#para-34
+"fathom,British","Fathom, British",Length,fth_br,http://unitsofmeasure.org/ucum.html#para-36
+"fathom,UsSurvey","Fathom, US Survey",Length,fth_us,http://unitsofmeasure.org/ucum.html#para-35
+femtometer,Femtometer,Length,fm,http://qudt.org/vocab/unit#Femtometer
+fermi,Fermi,Length,fm,http://qudt.org/vocab/unit#Fermi
+foot,Foot,Length,ft_i,http://qudt.org/vocab/unit#Foot; http://unitsofmeasure.org/ucum.html#para-34; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://qwwebservices.usgs.gov/service-domains.html
+"foot,British","Foot, British",Length,ft_br,http://unitsofmeasure.org/ucum.html#para-36
+"foot,UsSurvey","Foot, US Survey ",Length,ft_us,http://unitsofmeasure.org/ucum.html#para-35; http://qudt.org/vocab/unit#FootUSSurvey; http://www.unidata.ucar.edu/software/udunits/
+"furlong,UsSurvey","Furlong, US Survey",Length,fur_us,http://qudt.org/vocab/unit#Furlong; http://unitsofmeasure.org/ucum.html#para-35
+"gunter'SChain,British","Gunter's Chain, British",Length,ch_br,http://unitsofmeasure.org/ucum.html#para-36
+"gunter'SChain,UsSurveyor'SChain","Gunter's Chain, US Surveyor's Chain",Length,ch_us,http://unitsofmeasure.org/ucum.html#para-35; http://qudt.org/vocab/unit#Chain
+hand,Hand,Length,hd_i,http://unitsofmeasure.org/ucum.html#para-34
+inch,Inch,Length,in_i,http://qudt.org/vocab/unit#Inch; http://unitsofmeasure.org/ucum.html#para-34; http://qwwebservices.usgs.gov/service-domains.html
+"inch,British","Inch, British",Length,in_br,http://unitsofmeasure.org/ucum.html#para-36
+"inch,UsSurvey","Inch, US Survey",Length,in_us,http://unitsofmeasure.org/ucum.html#para-35
+kilometer,Kilometer,Length,km,http://qudt.org/vocab/unit#Kilometer
+lightYear,Light Year,Length,ly,http://qudt.org/vocab/unit#LightYear; http://www.unidata.ucar.edu/software/udunits/; http://unitsofmeasure.org/ucum.html#para-32
+ligne,Ligne,Length,ligne,http://unitsofmeasure.org/ucum.html#para-42
+line,Line,Length,lne,http://unitsofmeasure.org/ucum.html#para-42
+"linkForGunter'SChain,British","Link for Gunter's Chain, British",Length,lk_br,http://unitsofmeasure.org/ucum.html#para-36
+"linkForGunter'SChain,UsSurvey","Link for Gunter's Chain, US Survey",Length,lk_us,http://unitsofmeasure.org/ucum.html#para-35
+linkForRamden'SChain,Link for Ramden's Chain,Length,rlk_us,http://unitsofmeasure.org/ucum.html#para-35
+meter,Meter,Length,m,http://qudt.org/vocab/unit#Meter; mhttp://unitsofmeasure.org/ucum.html#para-28; http://www.unidata.ucar.edu/software/udunits/; http://qwwebservices.usgs.gov/service-domains.html
+microinch,Microinch,Length,in^-6,http://qudt.org/vocab/unit#MicroInch
+micrometer,Micrometer,Length,µm,http://qudt.org/vocab/unit#Micrometer
+micron,Micron,Length,um,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/
+mil,Mil,Length,mil_i,http://unitsofmeasure.org/ucum.html#para-34; http://qudt.org/vocab/unit#MilLength; http://www.unidata.ucar.edu/software/udunits/
+"mil,UsSurvey","Mil, US Survey",Length,mil_us,http://unitsofmeasure.org/ucum.html#para-35
+mile,Mile,Length,mi_i,http://qudt.org/vocab/unit#MileInternational; http://unitsofmeasure.org/ucum.html#para-34; http://www.unidata.ucar.edu/software/udunits/
+"mile,British","Mile, British",Length,mi_br,http://unitsofmeasure.org/ucum.html#para-36
+"mile,UsSurvey","Mile, US Survey ",Length,mi_us,http://qudt.org/vocab/unit#MileUSStatute; http://unitsofmeasure.org/ucum.html#para-35
+millimeter,Millimeter,Length,mm,http://qudt.org/vocab/unit#Millimeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanometer,Nanometer,Length,nm,
+nauticalMile,Nautical Mile,Length,nmi_i,http://qudt.org/vocab/unit#NauticalMile; http://unitsofmeasure.org/ucum.html#para-34; http://www.unidata.ucar.edu/software/udunits/
+"nauticalMile,British","Nautical Mile, British",Length,nmi_br,http://unitsofmeasure.org/ucum.html#para-36
+pace,Pace,Length,pc_br,http://unitsofmeasure.org/ucum.html#para-36
+parsec,Parsec,Length,pc,http://qudt.org/vocab/unit#Parsec; http://unitsofmeasure.org/ucum.html#para-31; http://www.unidata.ucar.edu/software/udunits/
+perch,Perch,Length,,http://www.unidata.ucar.edu/software/udunits/
+pica,Pica,Length,pca,http://qudt.org/vocab/unit#Pica; http://unitsofmeasure.org/ucum.html#para-42; http://www.unidata.ucar.edu/software/udunits/
+pied,Pied,Length,pied,http://unitsofmeasure.org/ucum.html#para-42
+planckLength,Planck Length,Length,,http://qudt.org/vocab/unit#PlanckLength
+point,Point,Length,pnt,http://qudt.org/vocab/unit#Point; http://unitsofmeasure.org/ucum.html#para-42
+pole,Pole,Length,,http://www.unidata.ucar.edu/software/udunits/
+pouce,Pouce,Length,pouce,http://unitsofmeasure.org/ucum.html#para-42
+printersPica,Printers Pica,Length,pca_pr,http://unitsofmeasure.org/ucum.html#para-42; http://www.unidata.ucar.edu/software/udunits/
+printersPoint,Printers Point,Length,pnt_pr,http://unitsofmeasure.org/ucum.html#para-42; http://www.unidata.ucar.edu/software/udunits/
+ramden'SChain,Ramden's Chain,Length,rch_us,http://unitsofmeasure.org/ucum.html#para-35
+rod,Rod,Length,rd,http://qudt.org/vocab/unit#Rod; http://unitsofmeasure.org/ucum.html#para-35; http://www.unidata.ucar.edu/software/udunits/
+"rod,British","Rod, British",Length,rd_br,http://unitsofmeasure.org/ucum.html#para-36
+smoot,Smoot,Length,smoot,http://unitsofmeasure.org/ucum.html#para-47
+yard,Yard,Length,yd_i,http://qudt.org/vocab/unit#Yard; http://unitsofmeasure.org/ucum.html#para-34; http://www.unidata.ucar.edu/software/udunits/
+"yard,British","Yard, British",Length,yd_br,http://unitsofmeasure.org/ucum.html#para-36
+"yard,UsSurvey","Yard, US Survey ",Length,yd_us,http://unitsofmeasure.org/ucum.html#para-35; http://www.unidata.ucar.edu/software/udunits/
+btuFoot,Btu Foot,Length energy,Btu-ft,http://qudt.org/vocab/unit#BtuFoot
+btuInch,Btu Inch,Length energy,Btu-in,http://qudt.org/vocab/unit#BtuInch
+megaelectronvoltFemtometer,Megaelectronvolt Femtometer,Length energy,MeV fm,http://qudt.org/vocab/unit#MegaElectronVoltFemtometer
+meterPerMeter,Meter per Meter,Length fraction,-,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+percentSlope,Percent Slope,Length fraction,%slope,http://unitsofmeasure.org/ucum.html#para-44
+microgramMeterPerLiter,Microgram Meter per Liter,Length integrated mass concentration,µg m/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+meterKilogram,Meter Kilogram,Length mass,m-kg,http://qudt.org/vocab/unit#MeterKilogram
+jouleMeterPerMole,Joule Meter per Mole,Length molar energy,J m mol^-1,http://qudt.org/vocab/unit#JouleMeterPerMole
+perTeslaMeter,Per Tesla Meter,Length per magnetic flux,m^-1 T^-1,http://qudt.org/vocab/unit#PerTeslaMeter
+degreeCelsiusCentimeter,Degree Celsius Centimeter,Length temperature,cm-degC,http://qudt.org/vocab/unit#DegreeCelsiusCentimeter
+meterKelvin,Meter Kelvin,Length temperature,m K,http://qudt.org/vocab/unit#MeterKelvin
+centimeterSecondDegreeCelsius,Centimeter Second Degree Celsius,Length temperature time,cm-s-degC,http://qudt.org/vocab/unit#CentimeterSecondDegreeCelsius
+bel,Bel,Level,B,http://unitsofmeasure.org/ucum.html#para-46
+bel10Nanovolt,Bel 10 Nanovolt,Level,B10.nV,http://unitsofmeasure.org/ucum.html#para-46
+belKilowatt,Bel Kilowatt,Level,BkW,http://unitsofmeasure.org/ucum.html#para-46
+belMicrovolt,Bel Microvolt,Level,BuV,http://unitsofmeasure.org/ucum.html#para-46
+belMillivolt,Bel Millivolt,Level,BmV,http://unitsofmeasure.org/ucum.html#para-46
+belSoundPressure,Bel Sound Pressure,Level,BSPL,http://unitsofmeasure.org/ucum.html#para-46; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+belVolt,Bel Volt,Level,BV,http://unitsofmeasure.org/ucum.html#para-46; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+belWatt,Bel Watt,Level,BW,http://unitsofmeasure.org/ucum.html#para-46; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+bm,Bm,Level,,http://www.unidata.ucar.edu/software/udunits/
+bv,Bv,Level,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+bz,Bz,Level,,http://www.unidata.ucar.edu/software/udunits/
+decibel,Decibel,Level,dB,http://qudt.org/vocab/unit#Decibel
+decibelCarrierUnit,Decibel Carrier Unit,Level,dBc,http://qudt.org/vocab/unit#DecibelCarrier
+decibelMiliwatt,Decibel miliWatt,Level,dBm,http://qudt.org/vocab/unit#DecibelReferredToOneMilliwatt
+neper,Neper,Level,Np,http://unitsofmeasure.org/ucum.html#para-46
+centimeterPerSecondSquared,Centimeter per Second Squared,Linear acceleration,,http://qudt.org/vocab/unit#CentimeterPerSecondSquared
+footPerSecondSquared,Foot per Second Squared,Linear acceleration,ft/s^2,http://qudt.org/vocab/unit#FootPerSecondSquared
+gal,Gal,Linear acceleration,Gal,http://qudt.org/vocab/unit#Gal; http://unitsofmeasure.org/ucum.html#para-33
+gravity,Gravity,Linear acceleration,g,http://qudt.org/vocab/unit#Gravity; http://unitsofmeasure.org/ucum.html#para-32; http://www.unidata.ucar.edu/software/udunits/
+inchPerSecondSquared,Inch per Second Squared,Linear acceleration,in/s^2,http://qudt.org/vocab/unit#InchPerSecondSquared
+knotPerSecond,Knot per Second,Linear acceleration,kt/s,http://qudt.org/vocab/unit#KnotPerSecond
+meterPerSecondSquared,Meter per Second Squared,Linear acceleration,m/s^2,http://qudt.org/vocab/unit#MeterPerSecondSquared
+microgravity,Microgravity,Linear acceleration,microG,http://qudt.org/vocab/unit#Microgravity
+milligravity,Milligravity,Linear acceleration,mG,http://qudt.org/vocab/unit#Milligravity
+kiloelectronvoltPerMicrometer,KiloelectronVolt per Micrometer,Linear energy transfer,keV/microM,http://qudt.org/vocab/unit#KiloElectronVoltPerMicrometer
+megaelectronvoltPerCentimeter,Megaelectronvolt per Centimeter,Linear energy transfer,MeV/cm,http://qudt.org/vocab/unit#MegaElectronVoltPerCentimeter
+kilogramMeterPerSecond,Kilogram Meter per Second,Linear momentum,kg-m/s,http://qudt.org/vocab/unit#KilogramMeterPerSecond
+newtonSeconds,Newton Seconds,Linear momentum,N-s,
+planckMomentum,Planck Momentum,Linear momentum,,http://qudt.org/vocab/unit#PlanckMomentum
+meterPerKelvin,Meter per Kelvin,Linear thermal expansion,,http://qudt.org/vocab/unit#MeterPerKelvin
+centimeterPerHour,Centimeter per Hour,Linear velocity,cm/hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+centimeterPerSecond,Centimeter per Second,Linear velocity,,http://qudt.org/vocab/unit#CentimeterPerSecond; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+footPerHour,Foot per Hour,Linear velocity,ft/hr,http://qudt.org/vocab/unit#FootPerHour
+footPerMinute,Foot per Minute,Linear velocity,ft/min,http://qudt.org/vocab/unit#FootPerMinute
+footPerSecond,Foot per Second,Linear velocity,ft/s,http://qudt.org/vocab/unit#FootPerSecond; http://qwwebservices.usgs.gov/service-domains.html
+inchPerDay,Inch per Day,Linear velocity,in/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+inchPerHour,Inch per Hour,Linear velocity,in/hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+inchPerSecond,Inch per Second,Linear velocity,,http://qudt.org/vocab/unit#InchPerSecond
+inchPerWeek,Inch per Week,Linear velocity,in/week,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilometerPerHour,Kilometer per Hour,Linear velocity,km/hr,http://qudt.org/vocab/unit#KilometerPerHour; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilometerPerSecond,Kilometer per Second,Linear velocity,km/s,http://qudt.org/vocab/unit#KilometerPerSecond
+knot,Knot,Linear velocity,kn_i,http://qudt.org/vocab/unit#Knot; http://unitsofmeasure.org/ucum.html#para-34; http://www.unidata.ucar.edu/software/udunits/
+"knot,British","Knot, British",Linear velocity,kn_br,http://unitsofmeasure.org/ucum.html#para-36
+meterPerDay,Meter per Day,Linear velocity,m/d,http://environment.data.gov.au/def/unit/MeterPerDay
+meterPerHour,Meter per Hour,Linear velocity,m/h,http://qudt.org/vocab/unit#MeterPerHour
+meterPerMinute,Meter per Minute,Linear velocity,m/min,http://qudt.org/vocab/unit#MeterPerMinute
+meterPerSecond,Meter per Second,Linear velocity,m/s,http://qudt.org/vocab/unit#MeterPerSecond; http://qwwebservices.usgs.gov/service-domains.html
+milePerHour,Mile per Hour,Linear velocity,mph,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qudt.org/vocab/unit#MilePerHour
+milePerMinute,Mile per Minute,Linear velocity,mi/min,http://qudt.org/vocab/unit#MilePerMinute
+millimeterPerDay,Millimeter per Day,Linear velocity,mm/day,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimeterPerHour,Millimeter per Hour,Linear velocity,mm/hr,http://environment.data.gov.au/def/unit/MillimeterPerHour
+millimeterPerSecond,Millimeter per Second,Linear velocity,mm/s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+nauticalMilePerHour,Nautical Mile per Hour,Linear velocity,knot,http://qudt.org/vocab/unit#NauticalMilePerHour; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+nauticalMilePerMinute,Nautical Mile per Minute,Linear velocity,nmi/min,http://qudt.org/vocab/unit#NauticalMilePerMinute
+apostilb,Apostilb,Luminance,,http://www.unidata.ucar.edu/software/udunits/
+blondel,Blondel,Luminance,,http://www.unidata.ucar.edu/software/udunits/
+candelaPerSquareInch,Candela per Square Inch,Luminance,cd/in^2,http://qudt.org/vocab/unit#CandelaPerSquareInch
+candelaPerSquareMeter,Candela per Square Meter,Luminance,cd/m^2,http://qudt.org/vocab/unit#CandelaPerSquareMeter
+footLambert,Foot Lambert,Luminance,ft-L,http://qudt.org/vocab/unit#FootLambert; http://www.unidata.ucar.edu/software/udunits/
+lambert,Lambert,Luminance,Lmb,http://qudt.org/vocab/unit#Lambert; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-33http://www.unidata.ucar.edu/software/udunits/; https://en.wikipedia.org/wiki/Lambert_%28unit%29
+nit,Nit,Luminance,nt,http://www.unidata.ucar.edu/software/udunits/
+stilb,Stilb,Luminance,sb,http://qudt.org/vocab/unit#Stilb; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+lumenPerWatt,Lumen per Watt,Luminous efficacy,,http://qudt.org/vocab/unit#LumenPerWatt
+lumenSecond,Lumen Second,Luminous energy,lm s,http://qudt.org/vocab/unit#LumenSecond
+lumen,Lumen,Luminous flux,lm,http://qudt.org/vocab/unit#Lumen; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+candela,Candela,Luminous intensity,cd,http://qudt.org/vocab/unit#Candela
+candle,Candle,Luminous intensity,cd,http://qudt.org/vocab/unit#Candle
+candlepower,Candlepower,Luminous intensity,cd,http://qudt.org/vocab/unit#Candlepower
+electronvoltPerTesla,ElectronVolt per Tesla,Magnetic dipole moment,eV T^-1,http://qudt.org/vocab/unit#ElectronVoltPerTesla
+joulePerTesla,Joule per Tesla,Magnetic dipole moment,J/T,http://qudt.org/vocab/unit#JoulePerTesla
+amperePerMeter,Ampere per Meter,Magnetic field strength,A/m,http://qudt.org/vocab/unit#AmperePerMeter
+ampereTurnPerInch,Ampere Turn per Inch,Magnetic field strength,At/in,http://qudt.org/vocab/unit#AmpereTurnPerInch
+ampereTurnPerMeter,Ampere Turn per Meter,Magnetic field strength,At/m,http://qudt.org/vocab/unit#AmpereTurnPerMeter
+oersted,Oersted,Magnetic field strength,Oe,http://qudt.org/vocab/unit#Oersted; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+abvoltSecond,Abvolt Second,Magnetic flux,,http://qudt.org/vocab/unit#AbvoltSecond
+maxwell,Maxwell,Magnetic flux,Mx,http://qudt.org/vocab/unit#Maxwell; http://unitsofmeasure.org/ucum.html#para-33; http://www.unidata.ucar.edu/software/udunits/
+unitPole,Unit Pole,Magnetic flux,U/nWb,http://qudt.org/vocab/unit#UnitPole; http://www.unidata.ucar.edu/software/udunits/
+weber,Weber,Magnetic flux,Wb,http://qudt.org/vocab/unit#Weber; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+abtesla,Abtesla,Magnetic flux density,,http://qudt.org/vocab/unit#Abtesla
+gamma,Gamma,Magnetic flux density,gamma,http://qudt.org/vocab/unit#Gamma
+gauss,Gauss,Magnetic flux density,G,http://qudt.org/vocab/unit#Gauss; http://unitsofmeasure.org/ucum.html#para-33
+tesla,Tesla,Magnetic flux density,T,http://qudt.org/vocab/unit#Tesla; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+teslaMeter,Tesla Meter,Magnetic flux per length,m T,http://qudt.org/vocab/unit#TeslaMeter
+henryPerMeter,Henry per Meter,Magnetic permeability,H/m,http://qudt.org/vocab/unit#HenryPerMeter
+stathenryPerCentimeter,Stathenry per Centimeter,Magnetic permeability,,http://qudt.org/vocab/unit#StathenryPerCentimeter
+ampereTurn,Ampere Turn,Magnetomotive force,At,http://qudt.org/vocab/unit#AmpereTurn
+gilbert,Gilbert,Magnetomotive force,Gi; Gb,http://qudt.org/vocab/unit#Gilbert; http://unitsofmeasure.org/ucum.html#para-33
+oerstedCentimeter,Oersted Centimeter,Magnetomotive force,Oe-cm,http://qudt.org/vocab/unit#OerstedCentimeter
+"ounce,UsApothecary","Ounce, US Apothecary",Mass,oz_ap,http://unitsofmeasure.org/ucum.html#para-41; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+pennyweight,Pennyweight,Mass,pwt_tr,http://qudt.org/vocab/unit#PennyWeight; http://unitsofmeasure.org/ucum.html#para-40; http://www.unidata.ucar.edu/software/udunits/
+picogram,Picogram,Mass,pg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+planckMass,Planck Mass,Mass,,http://qudt.org/vocab/unit#PlanckMass
+pound,Pound,Mass,lb_av,http://unitsofmeasure.org/ucum.html#para-39; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://qudt.org/vocab/unit#PoundMass; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+"pound,Troy","Pound, Troy",Mass,lb_tr,http://qudt.org/vocab/unit#PoundTroy; http://unitsofmeasure.org/ucum.html#para-40; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+"pound,UsApothecary","Pound, US Apothecary",Mass,lb_ap,http://unitsofmeasure.org/ucum.html#para-41; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+scruple,Scruple,Mass,sc_ap,http://unitsofmeasure.org/ucum.html#para-41; http://www.unidata.ucar.edu/software/udunits/
+shortHundredweight,Short Hundredweight,Mass,scwt_av,http://unitsofmeasure.org/ucum.html#para-39; http://www.unidata.ucar.edu/software/udunits/
+shortTon,Short Ton,Mass,ston_av,http://unitsofmeasure.org/ucum.html#para-39; http://www.unidata.ucar.edu/software/udunits/; http://qudt.org/vocab/unit#TonShort
+slug,Slug,Mass,slug,http://qudt.org/vocab/unit#Slug; http://www.unidata.ucar.edu/software/udunits/
+stone,Stone,Mass,stone_av,http://unitsofmeasure.org/ucum.html#para-39
+tonne,Tonne,Mass,t,http://unitsofmeasure.org/ucum.html#para-31; http://qudt.org/vocab/unit#TonMetric; http://qudt.org/vocab/unit#MetricTon; http://www.unidata.ucar.edu/software/udunits/
+unifiedAtomicMassUnit,Unified Atomic Mass Unit,Mass,u,http://qudt.org/vocab/unit#UnifiedAtomicMassUnit; http://unitsofmeasure.org/ucum.html#para-31; http://www.unidata.ucar.edu/software/udunits/
+assayTon,Assay Ton,Mass,AT,http://qudt.org/vocab/unit#TonAssay; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+atomicMassUnit,Atomic Mass Unit,Mass,amu,http://qudt.org/vocab/unit#AtomicMassUnit
+bag,Bag,Mass,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+carat,Carat,Mass,car_m,"http://qudt.org/vocab/unit#Carat, http://unitsofmeasure.org/ucum.html#para-47"
+dalton,Dalton,Mass,Da,http://qudt.org/vocab/unit#Dalton
+drachm,Drachm,Mass,dr_ap,http://unitsofmeasure.org/ucum.html#para-41; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+"dram,Avoirdupois","Dram, Avoirdupois",Mass,dr_av,http://unitsofmeasure.org/ucum.html#para-39
+grain,Grain,Mass,gr,http://qudt.org/vocab/unit#Grain; http://unitsofmeasure.org/ucum.html#para-39
+gram,Gram,Mass,g,http://qudt.org/vocab/unit#Gram; http://unitsofmeasure.org/ucum.html#para-28
+kilogram,Kilogram,Mass,kg,http://qudt.org/vocab/unit#Kilogram; http://www.unidata.ucar.edu/software/udunits/
+longHundredweight,Long Hundredweight,Mass,lcwt_av,http://unitsofmeasure.org/ucum.html#para-39; http://www.unidata.ucar.edu/software/udunits/; http://qudt.org/vocab/unit#HundredWeightLong
+longTon,Long Ton,Mass,lton_av,http://unitsofmeasure.org/ucum.html#para-39; http://www.unidata.ucar.edu/software/udunits/; http://qudt.org/vocab/unit#TonLong
+metricTon,Metric Ton,Mass,mT,http://qudt.org/vocab/unit#MetricTon; http://www.unidata.ucar.edu/software/udunits/
+microgram,Microgram,Mass,µg,http://environment.data.gov.au/def/unit/Microgram; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milligram,Milligram,Mass,mg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+nanogram,Nanogram,Mass,ng,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+"ounce,Avoirdupois","Ounce, Avoirdupois",Mass,oz_av,http://qudt.org/vocab/unit#OunceMass; http://unitsofmeasure.org/ucum.html#para-39; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+"ounce,Metric","Ounce, Metric",Mass,oz_m,http://unitsofmeasure.org/ucum.html#para-41
+"ounce,Troy","Ounce, Troy",Mass,oz_tr,http://qudt.org/vocab/unit#OunceTroy; http://unitsofmeasure.org/ucum.html#para-40; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+kilogramMole,Kilogram Mole,Mass count,kg-mol,
+poundMole,Pound Mole,Mass count,lb-mol,http://qudt.org/vocab/unit#PoundMole
+kilogramMoleKelvin,Kilogram Mole Kelvin,Mass count temperature,kg-mol-K,
+poundMoleDegreeFahrenheit,Pound Mole Degree Fahrenheit,Mass count temperature,lb-mol-degF,http://qudt.org/vocab/unit#PoundMoleDegreeFahrenheit
+gramPerSquareMeterPerDay,Gram per Square Meter per Day,Mass flux,g/m2/day,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+gramPerSquareMeterPerHour,Gram per Square Meter per Hour,Mass flux,g/m^2 hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramPerHectarePerDay,Kilogram per Hectare per Day,Mass flux,kg/ha d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramPerSquareMeterPerSecond,Kilogram per Square Meter per Second,Mass flux,kg/m^2/s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milligramPerSquareMeterPerDay,Milligram per Square Meter per Day,Mass flux,mg/m^2 d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+milligramPerSquareMeterPerSecond,Milligram per Square Meter per Second,Mass flux,mg/m^2/s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+nanogramPerSquareMeterPerHour,Nanogram per Square Meter per Hour,Mass flux,ng/m^2 hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanogramPerSquareMeterPerWeek,Nanogram per Square Meter per Week,Mass flux,ng/m^2 week,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+caratOfGoldAlloys,Carat of Gold Alloys,Mass fraction,car_Au,http://unitsofmeasure.org/ucum.html#para-47
+femtogramPerKilogram,Femtogram per Kilogram,Mass fraction,fg/kg,
+gramPercent,Gram percent,Mass fraction,g%,http://unitsofmeasure.org/ucum.html#para-45
+gramPerKilogram,Gram per Kilogram,Mass fraction,g/kg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+microgramPerGram,Microgram per Gram,Mass fraction,µg/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+microgramPerKilogram,Microgram per Kilogram,Mass fraction,µg/kg,http://environment.data.gov.au/def/unit/MicrogramsPerKilogram; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+microgramPerMilligram,Microgram per Milligram,Mass fraction,µg/mg,http://qwwebservices.usgs.gov/service-domains.html
+milligramPerKilogram,Milligram per Kilogram,Mass fraction,mg/kg,http://environment.data.gov.au/def/unit/MilligramsPerKilogram; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanogramPerGram,Nanogram per Gram,Mass fraction,ng/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+nanogramPerKilogram,Nanogram per Kilogram,Mass fraction,ng/kg,
+percentByWeight,Percent by Weight,Mass fraction,% by wt,http://qwwebservices.usgs.gov/service-domains.html
+picogramPerGram,Picogram per Gram,Mass fraction,pg/g,http://qwwebservices.usgs.gov/service-domains.html
+picogramPerKilogram,Picogram per Kilogram,Mass fraction,pg/kg,http://qwwebservices.usgs.gov/service-domains.html
+tonPerKiloton,Ton per Kiloton,Mass fraction,tCaCO3/Kt,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+nanomolePerMinutePerMilligram,Nanomole per Minute per Milligram,Mass normalized particle loading,nmol/min mg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+picomolePerMinutePerMilligram,Picomole per Minute per Milligram,Mass normalized particle loading,pmol/min mg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+superoxideDismutaseUnitPerMinutePerMilligram,Superoxide Dismutase Unit per Minute per Milligram,Mass normalized particle loading,U/min mg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+gramPer0.1SquareMeter,Gram per 0.1 Square Meter,Mass per area,g/0.1 m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+gramPerSquareMeter,Gram per Square Meter,Mass per area,g/m2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+kilogramPer1000SquareMeter,Kilogram per 1000 Square Meter,Mass per area,kg/1000 m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramPerHectare,Kilogram per Hectare,Mass per area,kg/ha,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://environment.data.gov.au/def/unit/KilogramsPerHectare
+kilogramPerSquareMeter,Kilogram per Square Meter,Mass per area,kg/m^2,http://qudt.org/vocab/unit#KilogramPerSquareMeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+microgramPerSquareMeter,Microgram per Square Meter,Mass per area,µg/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+milligramPerSquareMeter,Milligram per Square Meter,Mass per area,mg/m^2,http://environment.data.gov.au/def/unit/MilligramsPerSquareMeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+ouncePerSquareFoot,Ounce per Square Foot,Mass per area,oz/ft^2,http://qudt.org/vocab/unit#OuncePerSquareFoot
+ouncePerSquareYard,Ounce per Square Yard,Mass per area,oz/yd^2,http://qudt.org/vocab/unit#OuncePerSquareYard
+poundPerSquareFoot,Pound per Square Foot,Mass per area,lb/ft^2,http://qudt.org/vocab/unit#PoundPerSquareFoot
+slugPerSquareFoot,Slug per Square Foot,Mass per area,slug/ft^2,http://qudt.org/vocab/unit#SlugPerSquareFoot
+tonnesPerHectare,Tonnes per Hectare,Mass per area,t/ha,http://environment.data.gov.au/def/unit/TonnesPerHectare
+teslaSecond,Tesla Second,Mass per electrical charge,s T,http://qudt.org/vocab/unit#TeslaSecond
+denier,Denier,Mass per length,den,http://qudt.org/vocab/unit#Denier
+kilogramPerMeter,Kilogram per Meter,Mass per length,kg/m,http://qudt.org/vocab/unit#KilogramPerMeter
+poundPerFoot,Pound per Foot,Mass per length,lb/ft,http://qudt.org/vocab/unit#PoundPerFoot
+poundPerInch,Pound per Inch,Mass per length,lb/in,http://qudt.org/vocab/unit#PoundPerInch
+poundPerMile,Pound per Mile,Mass per length,lb/mi,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+slugPerFoot,Slug per Foot,Mass per length,slug/ft,http://qudt.org/vocab/unit#SlugPerFoot
+tex,Tex,Mass per length,tex,http://qudt.org/vocab/unit#Tex; http://unitsofmeasure.org/ucum.html#para-43; http://www.unidata.ucar.edu/software/udunits/
+gramPerDay,Gram per Day,Mass per time,g/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+gramPerMinute,Gram per Minute,Mass per time,g/min,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+gramPerSecond,Gram per Second,Mass per time,g/s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramPerHour,Kilogram per Hour,Mass per time,kg/h,http://qudt.org/vocab/unit#KilogramPerHour
+kilogramPerMonth,Kilogram per Month,Mass per time,kg/month,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramPerSecond,Kilogram per Second,Mass per time,kg/s,http://qudt.org/vocab/unit#KilogramPerSecond
+metricTonPerDay,Metric ton per day,Mass per time,tonne/day,
+metricTonPerSecond,Metric ton per Second,Mass per time,tonne/s,
+milligramPerDay,Milligram per Day,Mass per time,mg/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+poundPerDay,Pound per Day,Mass per time,lb/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+poundPerHour,Pound per Hour,Mass per time,lb/hr,http://qudt.org/vocab/unit#PoundPerHour
+poundPerMinute,Pound per Minute,Mass per time,lb/min,http://qudt.org/vocab/unit#PoundPerMinute
+shortTonPerDay,Short Ton per Day,Mass per time,ton/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+shortTonPerHour,Short Ton per Hour,Mass per time,ton/hr,http://qudt.org/vocab/unit#TonShortPerHour
+shortTonPerMonth,Short Ton per Month,Mass per time,ton/month,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+slugPerSecond,Slug per Second,Mass per time,slug/s,http://qudt.org/vocab/unit#SlugPerSecond
+gramDegreeCelsius,Gram Degree Celsius,Mass temperature,g-degC,http://qudt.org/vocab/unit#GramDegreeCelsius
+kilogramKelvin,Kilogram Kelvin,Mass temperature,kg-K,http://qudt.org/vocab/unit#KilogramKelvin
+poundDegreeFahrenheit,Pound Degree Fahrenheit,Mass temperature,lb-degF,http://qudt.org/vocab/unit#PoundDegreeFahrenheit
+poundDegreeRankine,Pound Degree Rankine,Mass temperature,lb-degR,http://qudt.org/vocab/unit#PoundDegreeRankine
+jouleSecondPerMole,Joule Second per Mole,Molar angular momentum,J s mol^-1,http://qudt.org/vocab/unit#JouleSecondPerMole
+siemensSquareMeterPerMole,Siemens Square Meter per Mole,Molar conductivity,Sm^2/mol,
+btuPerPoundMole,BTU per Pound Mole,Molar energy,Btu/(lb-mol),http://qudt.org/vocab/unit#BtuPerPoundMole
+joulePerMole,Joule per Mole,Molar energy,J/mol,http://qudt.org/vocab/unit#JoulePerMole
+kilocaloriePerMole,Kilocalorie per Mole,Molar energy,kcal/mol,http://qudt.org/vocab/unit#KilocaloriePerMole
+btuPerPoundMoleDegreeFahrenheit,Btu per Pound Mole Degree Fahrenheit,Molar heat capacity,Btu/(lb-mol-degF),http://qudt.org/vocab/unit#BtuPerPoundMoleDegreeFahrenheit
+joulePerMoleKelvin,Joule per Mole Kelvin,Molar heat capacity,J/(mol-K),http://qudt.org/vocab/unit#JoulePerMoleKelvin
+kilocaloriePerMoleDegreeCelsius,Kilocalorie per Mole Degree Celsius,Molar heat capacity,kcal/(mol-degC),http://qudt.org/vocab/unit#KilocaloriePerMoleDegreeCelsius
+kilogramPerMole,Kilogram per Mole,Molar mass,kg mol^-1,http://qudt.org/vocab/unit#KilogramPerMole
+cubicMeterPerMole,Cubic Meter per Mole,Molar volume,m^3 mol^-1,http://qudt.org/vocab/unit#CubicMeterPerMole
+degreeCelsiusMillimolePerCubicMeter,Degree Celsius Millimole per Cubic Meter,Other,DegC mmol/m^3,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+kilogramSecondSquared,Kilogram Second Squared,Other,,http://qudt.org/vocab/unit#KilogramSecondSquared
+meterPerSecondDegreeCelsius,Meter per Second Degree Celsius,Other,m/s DegC,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+micromolePerLiterPerHour,Micromole per Liter per Hour,Other,µmol/L hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milligramPerCubicMeterSquared,Milligram per Cubic Meter Squared,Other,(mg/m^3)^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+milliliterPerLiterPerHour,Milliliter per Liter per Hour,Other,mL/L/hr,http://qwwebservices.usgs.gov/service-domains.html
+millimolePerCubicMeterSquared,Millimole per Cubic Meter Squared,Other,(mmol/m^3)^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+shortTonPerDayPerFoot,Short Ton per Day per Foot,Other,ton/d/ft,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+squaredDegreeCelsius,Squared Degree Celsius,Other,(DegC)^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+microeinsteinPerSquareMeterPerDay,Microeinstein per Square Meter per Day,Particle flux,uE/m^2 d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+microeinsteinPerSquareMeterPerSecond,Microeinstein per Square Meter per Second,Particle flux,uE/m^2 s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+micromolePerSquareMeterPerSecond,Micromole per Square Meter per Second,Particle flux,µmol/m^2 s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://environment.data.gov.au/def/unit/MicroMolPerSecondPerMetreSquared; http://qwwebservices.usgs.gov/service-domains.html
+millimolePerSquareMeterPerDay,Millimole per Square Meter per Day,Particle flux,mmol/m^2 d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimolePerSquareMeterPerHour,Millimole per Square Meter per Hour,Particle flux,mmol/m^2 hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millimolePerSquareMeterPerSecond,Millimole per Square Meter per Second,Particle flux,mmol/m^2 s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+ph,pH,pH,pH,"http://environment.data.gov.au/def/unit/pH"";""http://environment.data.gov.au/def/unit/pH; http://unitsofmeasure.org/ucum.html#para-45"
+squareCoulombMeterPerJoule,Square Coulomb Meter per Joule,Polarizability,C^2 m^2 J^-1,http://qudt.org/vocab/unit#SquareCoulombMeterPerJoule
+potentialVorticityUnit,Potential Vorticity Unit,Potential vorticity,,http://www.unidata.ucar.edu/software/udunits/
+btuPerHour,Btu per Hour,Power,Btu/hr,http://qudt.org/vocab/unit#BtuPerHour
+btuPerSecond,Btu per Second,Power,Btu/s,http://qudt.org/vocab/unit#BtuPerSecond
+ergPerSecond,Erg per Second,Power,erg/s,http://qudt.org/vocab/unit#ErgPerSecond
+footPoundForcePerHour,Foot Pound Force per Hour,Power,ft-lbf/hr,http://qudt.org/vocab/unit#FootPoundForcePerHour
+footPoundForcePerMinute,Foot Pound Force per Minute,Power,ft-lbf/min,http://qudt.org/vocab/unit#FootPoundForcePerMinute
+footPoundForcePerSecond,Foot Pound Force per Second,Power,ft-lbf/s,http://qudt.org/vocab/unit#FootPoundForcePerSecond
+gigawatt,Gigawatt,Power,GW,
+horsepower,Horsepower,Power,HP,http://qudt.org/vocab/unit#Horsepower; http://unitsofmeasure.org/ucum.html#para-43; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+"horsepower,Boiler","Horsepower, Boiler",Power,hp/boiler,http://qudt.org/vocab/unit#HorsepowerBoiler; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+"horsepower,British","Horsepower, British",Power,,http://www.unidata.ucar.edu/software/udunits/
+"horsepower,Electric","Horsepower, Electric",Power,hp/V,http://qudt.org/vocab/unit#HorsepowerElectric; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+"horsepower,Imperial","Horsepower, Imperial",Power,HP,http://unitsofmeasure.org/ucum.html#para-43
+"horsepower,Metric","Horsepower, Metric",Power,hp/m,http://qudt.org/vocab/unit#HorsepowerMetric; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+"horsepower,Water","Horsepower, Water",Power,hp/H2O,http://qudt.org/vocab/unit#HorsepowerWater; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+kilocaloriePerMinute,Kilocalorie per Minute,Power,kcal/min,http://qudt.org/vocab/unit#KilocaloriePerMinute
+kilocaloriePerSecond,Kilocalorie per Second,Power,kcal/s,http://qudt.org/vocab/unit#KilocaloriePerSecond
+kilovolt-Ampere,Kilovolt-ampere,Power,kVA,
+kilowatt,Kilowatt,Power,kW,http://qudt.org/vocab/unit#Kilowatt; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+megavolt-Ampere,Megavolt-ampere,Power,MVA,
+megawatt,Megawatt,Power,MW,
+planckPower,Planck Power,Power,,http://qudt.org/vocab/unit#PlanckPower
+tonOfRefrigeration,Ton of Refrigeration,Power,t/fg,http://qudt.org/vocab/unit#TonOfRefrigeration; http://www.unidata.ucar.edu/software/udunits/
+volt-Ampere,Volt-ampere,Power,VA,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/
+watt,Watt,Power,W,http://qudt.org/vocab/unit#Watt; http://unitsofmeasure.org/ucum.html#para-30;http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/
+wattSquareMeter,Watt Square Meter,Power area,W m^2,http://qudt.org/vocab/unit#WattSquareMeter
+wattSquareMeterPerSteradian,Watt Square Meter per Steradian,Power area per solid angle,W m^2 sr^-1,http://qudt.org/vocab/unit#WattSquareMeterPerSteradian
+btuPerHourSquareFoot,Btu per Hour Square Foot,Power per area,,http://qudt.org/vocab/unit#BtuPerHourSquareFoot
+btuPerSecondSquareFoot,Btu per Second Square Foot,Power per area,Btu/(s-ft^2),http://qudt.org/vocab/unit#BtuPerSecondSquareFoot
+caloriePerSquareCentimeterPerDay,Calorie per Square Centimeter per Day,Power per area,cal/cm^2 d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+caloriePerSquareCentimeterPerMinute,Calorie per Square Centimeter per Minute,Power per area,cal/cm^2 min,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+ergPerSquareCentimeterSecond,Erg per Square Centimeter Second,Power per area,erg/(cm^2-s),http://qudt.org/vocab/unit#ErgPerSquareCentimeterSecond
+footPoundForcePerSquareFootSecond,Foot Pound Force per Square Foot Second,Power per area,ft-lbf(ft^2-s),http://qudt.org/vocab/unit#FootPoundForcePerSquareFootSecond
+kilocaloriePerSquareCentimeterMinute,Kilocalorie per Square Centimeter Minute,Power per area,kcal/(cm^2-min),http://qudt.org/vocab/unit#KilocaloriePerSquareCentimeterMinute
+kilocaloriePerSquareCentimeterSecond,Kilocalorie per Square Centimeter Second,Power per area,kcal/(cm^2-s),http://qudt.org/vocab/unit#KilocaloriePerSquareCentimeterSecond
+kilowattPerSquareMeter,Kilowatt per Square Meter,Power per area,kW/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+langleyPerDay,Langley per Day,Power per area,Ly/d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+langleyPerHour,Langley per Hour,Power per area,Ly/hr,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+langleyPerMinute,Langley per Minute,Power per area,Ly/min,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+langleyPerSecond,Langley per Second,Power per area,Ly/s,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+megajoulePerSquareMeterPerDay,Megajoule per Square Meter per Day,Power per area,MJ/m^2 d,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+planckIntensity,Planck Intensity,Power per area,,
+wattPerSquareCentimeter,Watt per Square Centimeter,Power per area,W/cm^2,http://qudt.org/vocab/unit#WattPerSquareCentimeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+wattPerSquareFoot,Watt per Square Foot,Power per area,W/ft^2,http://qudt.org/vocab/unit#WattPerSquareFoot
+wattPerSquareInch,Watt per Square Inch,Power per area,W/in^2,http://qudt.org/vocab/unit#WattPerSquareInch
+wattPerSquareMeter,Watt per Square Meter,Power per area,W/m^2,http://qudt.org/vocab/unit#WattPerSquareMeter; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+wattPerSquareMeterQuarticKelvin,Watt per Square Meter Quartic Kelvin,Power per area quartic temperature,W m^-2 K^-4,http://qudt.org/vocab/unit#WattPerSquareMeterQuarticKelvin
+voltPerSecond,Volt per Second,Power per electrical charge,V / sec,http://qudt.org/vocab/unit#VoltPerSecond
+atmosphere,Atmosphere,Pressure or stress,,http://www.unidata.ucar.edu/software/udunits/
+bar,Bar,Pressure or stress,bar,http://qudt.org/vocab/unit#Bar
+barie,Barie,Pressure or stress,barie,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+centimeterOfMercury,Centimeter of Mercury,Pressure or stress,cm Hg,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+centimeterOfWater,Centimeter of Water,Pressure or stress,cmH2O,http://qudt.org/vocab/unit#CentimeterOfWater; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+decibar,Decibar,Pressure or stress,dbar,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+dynePerSquareCentimeter,Dyne per Square Centimeter,Pressure or stress,dyn/cm^2,http://qudt.org/vocab/unit#DynePerSquareCentimeter
+footOfWater,Foot of Water,Pressure or stress,ftH2O,http://qudt.org/vocab/unit#FootOfWater; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+hectopascal,Hectopascal,Pressure or stress,hPa,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+inchOfMercury,Inch of Mercury,Pressure or stress,in_i'Hg,http://qudt.org/vocab/unit#InchOfMercury; http://unitsofmeasure.org/ucum.html#para-44; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://qwwebservices.usgs.gov/service-domains.html
+inchOfMercury(60F),Inch of Mercury (60F),Pressure or stress,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+inchOfWater,Inch of Water,Pressure or stress,in_i'H2O,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-44; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://qwwebservices.usgs.gov/service-domains.html
+inchOfWater(60F),Inch of Water (60F),Pressure or stress,,https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml
+kilogramForcePerSquareCentimeter,Kilogram Force per Square Centimeter,Pressure or stress,kgf/cm^2,http://qudt.org/vocab/unit#KilogramForcePerSquareCentimeter
+kilopascal,Kilopascal,Pressure or stress,KPa,http://qudt.org/vocab/unit#KiloPascal; http://qudt.org/vocab/unit#KiloPascalAbsolute; http://qwwebservices.usgs.gov/service-domains.html
+kipPerSquareInch,Kip per Square Inch,Pressure or stress,kip/in^2,http://qudt.org/vocab/unit#KipPerSquareInch
+ksi,ksi,Pressure or stress,,http://www.unidata.ucar.edu/software/udunits/
+megapascal,Megapascal,Pressure or stress,MPa,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+meterOfMercury,Meter of Mercury,Pressure or stress,mHg,http://unitsofmeasure.org/ucum.html#para-44
+meterOfWater,Meter of Water,Pressure or stress,m H2O; mH2O,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://unitsofmeasure.org/ucum.html#para-44
+microtorr,Microtorr,Pressure or stress,µtorr,http://qudt.org/vocab/unit#MicroTorr
+millibar,Millibar,Pressure or stress,mbar,http://qudt.org/vocab/unit#Millibar; http://qwwebservices.usgs.gov/service-domains.html
+millimeterOfMercury,Millimeter of Mercury,Pressure or stress,mmHg,http://qudt.org/vocab/unit#MillimeterOfMercury; http://qudt.org/vocab/unit#MillimeterOfMercuryAbsolute; https://www.unidata.ucar.edu/software/udunits/udunits-current/udunits/udunits2-common.xml; http://qwwebservices.usgs.gov/service-domains.html
+millimeterOfWater,Millimeter of Water,Pressure or stress,mm H2O,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+millitorr,Millitorr,Pressure or stress,utorr,http://qudt.org/vocab/unit#MilliTorr
+newtonPerSquareMeter,Newton per Square Meter,Pressure or stress,Newton/m^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+pascal,Pascal,Pressure or stress,Pa,http://qudt.org/vocab/unit#Pascal; http://unitsofmeasure.org/ucum.html#para-30; http://www.unidata.ucar.edu/software/udunits/
+planckPressure,Planck Pressure,Pressure or stress,,http://qudt.org/vocab/unit#PlanckPressure
+poundalPerSquareFoot,Poundal per Square Foot,Pressure or stress,pdl/ft^2,http://qudt.org/vocab/unit#PoundalPerSquareFoot
+poundForcePerSquareFoot,Pound Force per Square Foot,Pressure or stress,lbf/ft^2,http://qudt.org/vocab/unit#PoundForcePerSquareFoot
+poundForcePerSquareInch,Pound Force per Square Inch,Pressure or stress,psi,http://qudt.org/vocab/unit#PoundForcePerSquareInch; http://unitsofmeasure.org/ucum.html#para-47
+psi,psi,Pressure or stress,psi,http://www.unidata.ucar.edu/software/udunits/
+standardAtmosphere,Standard Atmosphere,Pressure or stress,atm,http://qudt.org/vocab/unit#AtmosphereStandard; http://unitsofmeasure.org/ucum.html#para-32
+technicalAtmosphere,Technical Atmosphere,Pressure or stress,at,http://qudt.org/vocab/unit#AtmosphereTechnical; http://unitsofmeasure.org/ucum.html#para-47; http://www.unidata.ucar.edu/software/udunits/
+torr,Torr,Pressure or stress,torr,http://qudt.org/vocab/unit#Torr; http://www.unidata.ucar.edu/software/udunits/
+pascalPerHour,Pascal per Hour,Pressure or stress rate,P / hr,http://qudt.org/vocab/unit#PascalPerHour
+pascalPerMinute,Pascal per Minute,Pressure or stress rate,P / min,http://qudt.org/vocab/unit#PascalPerMinute
+pascalPerSecond,Pascal per Second,Pressure or stress rate,P / s,http://qudt.org/vocab/unit#PascalPerSecond
+poundForcePerSquareInchSecond,Pound Force per Square Inch Second,Pressure or stress rate,lbf / in^2-s,http://qudt.org/vocab/unit#PoundForcePerSquareInchSecond
+quarticCoulombMeterPerCubicEnergy,Quartic Coulomb Meter per Cubic Energy,Quartic electrical dipole moment per cubic energy,C^4 m^4 J^-3,http://qudt.org/vocab/unit#QuarticCoulombMeterPerCubicEnergy
+wattPerSquareMeterSteradian,Watt per Square Meter Steradian,Radiance,W/(m^2-sr),http://qudt.org/vocab/unit#WattPerSquareMeterSteradian
+wattPerSteradian,Watt per Steradian,Radiant intensity,W sr^-1,http://qudt.org/vocab/unit#WattPerSteradian
+becquerel,Becquerel,Radioactivity,Bq,http://qudt.org/vocab/unit#Becquerel
+curie,Curie,Radioactivity,Ci,http://qudt.org/vocab/unit#Curie
+picocurie,Picocurie,Radioactivity,pCi,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+becquerelPerLiter,Becquerel per Liter,Radioactivity per volume,Bq/L,http://environment.data.gov.au/def/unit/BecquerelPerLitre
+disintegrationPerMinutePerLiter,Disintegration per Minute per Liter,Radioactivity per volume,dpm/l,http://qwwebservices.usgs.gov/service-domains.html
+millibecquerelPerLiter,Millibecquerel per Liter,Radioactivity per volume,mBq/L,http://environment.data.gov.au/def/unit/MilliBecquerelPerLitre
+picocuriePerLiter,Picocurie per Liter,Radioactivity per volume,pCi/L,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+picocuriePerMilliliter,Picocurie per Milliliter,Radioactivity per volume,pCi/ml,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+practicalSalinityScale,Practical Salinity Scale,Salinity,pss,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+practicalSalinityUnit,Practical Salinity Unit,Salinity,PSU,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://environment.data.gov.au/def/unit/PSU
+meterPerPixel,Meter per Pixel,Satellite resolution,meters per pixel,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+meterPerQuarticSecond,Meter per Quartic Second,Snap,m/s^4,
+fractionalArea,Fractional Area,Solid angle,fa,http://qudt.org/vocab/unit#FractionalArea
+sphere,Sphere,Solid angle,sph,http://unitsofmeasure.org/ucum.html#para-47
+squareDegree,Square Degree,Solid angle,deg^2,http://qudt.org/vocab/unit#SquareDegree
+steradian,Steradian,Solid angle,sr,http://qudt.org/vocab/unit#Steradian; http://unitsofmeasure.org/ucum.html#para-30; http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://www.unidata.ucar.edu/software/udunits/
+btuPerPound,Btu per Pound,Specific energy,Btu/lb,http://qudt.org/vocab/unit#BtuPerPound
+ergPerGram,Erg per Gram,Specific energy,,http://qudt.org/vocab/unit#ErgPerGram
+geopotential,Geopotential,Specific energy,,http://www.unidata.ucar.edu/software/udunits/
+joulePerKilogram,Joule per Kilogram,Specific energy,J/kg,http://qudt.org/vocab/unit#JoulePerKilogram
+kilocaloriePerGram,Kilocalorie per Gram,Specific energy,kcal/gm,http://qudt.org/vocab/unit#KilocaloriePerGram
+meterSquaredPerSecondSquared,Meter Squared per Second Squared,Specific energy,m^2/s^2,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048
+btuPerPoundDegreeFahrenheit,Btu per Pound Degree Fahrenheit,Specific heat capacity,Btu/(lb-degF),http://qudt.org/vocab/unit#BtuPerPoundDegreeFahrenheit
+btuPerPoundDegreeRankine,Btu per Pound Degree Rankine,Specific heat capacity,Btu/(lb-degR),http://qudt.org/vocab/unit#BtuPerPoundDegreeRankine
+caloriePerGramDegreeCelsius,Calorie per Gram Degree Celsius,Specific heat capacity,kcal/(gm-degC),http://qudt.org/vocab/unit#KilocaloriePerGramDegreeCelsius
+joulePerKilogramKelvin,Joule per Kilogram Kelvin,Specific heat capacity,J/(kg-K),http://qudt.org/vocab/unit#JoulePerKilogramKelvin
+joulePerKilogramKelvinPerPascal,Joule per Kilogram Kelvin per Pascal,Specific heat pressure,,http://qudt.org/vocab/unit#JoulePerKilogramKelvinPerPascal
+joulePerKilogramKelvinPerCubicMeter,Joule per Kilogram Kelvin per Cubic Meter,Specific heat volume,,http://qudt.org/vocab/unit#JoulePerKilogramKelvinPerCubicMeter
+becquerelPerGram,Becquerel per Gram,Specific radioactivity,Bq/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+disintegrationPerMinutePerGram,Disintegration per Minute per Gram,Specific radioactivity,dpm/g,http://qwwebservices.usgs.gov/service-domains.html
+picocuriePerGram,Picocurie per Gram,Specific radioactivity,pCi/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+squareMeterPerGram,Square Meter per Gram,Specific surface area,m^2/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048; http://qwwebservices.usgs.gov/service-domains.html
+cubicCentimeterPerGram,Cubic Centimeter per Gram,Specific volume,cm^3/g,http://his.cuahsi.org/mastercvreg/edit_cv11.aspx?tbl=Units&id=1125579048

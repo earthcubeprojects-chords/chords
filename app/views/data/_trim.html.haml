@@ -1,0 +1,90 @@
+-# This functionality is deprecated, becuase data deletion is not feasible with 
+-# influxdb. It may be useful later with other types of datastore.
+:javascript
+  $(document).ready(function() { 
+  
+  	$(function() {
+  		$("#trimpicker").datepicker({
+  			altField: "#end",
+  			altFormat: "yy-mm-dd"
+  		});
+  	});
+  
+  
+  	$( "#trim_data_form" ).submit(function( event ) {
+  
+  		var trimdate = $("#trimpicker").datepicker("getDate");
+  
+      var radios = document.getElementsByName('trim_id');
+      var labels = document.getElementsByName('instrument_radio_label');
+      var trim_id = "";
+      var trim_name = "";
+  
+      for (var i = 0, length = radios.length; i < length; i++) {
+          if (radios[i].checked) {
+              // get the radio button value and label text
+              trim_id = radios[i].value;
+              trim_name = labels[i].innerHTML;
+              // only one radio can be logically checked, don't check the rest
+              break;
+          }
+      }
+      
+  		if (trim_id == "") {
+    		alert ("You must select an instrument.");
+  		} else {
+    		var minDays = 5;
+    		var oldest = new Date();
+    		oldest.setDate(oldest.getDate() - minDays);
+    		if (trimdate > oldest) {
+    			var msg = trimdate + "\nis too recent.\nYou must retain at least " + minDays + " days of data.";
+    			alert(msg);
+    			event.preventDefault();
+    		} else {
+    			var now = new Date();
+    			var days = Math.floor((now - trimdate) / (1000 * 60 *60 * 24));
+    			var msg = "Are you sure that you want to erase data before\n" + trimdate + ",\n"
+    			if (trim_id == "all") {
+            msg = msg + "for ALL instruments? ";
+    			} else {
+            msg = msg + "for instrument " + trim_name + "? ";
+          }
+    			msg = msg + "This is " + days + " days ago.";
+    
+    			var response = confirm(msg);
+    			if (response == false) {
+    				event.preventDefault();
+    			}
+    		}
+  		}
+  	});
+  
+  });
+%h2 Trim Database
+%p
+  Remove all measurements before this date from the database.
+%p
+  %strong Use this carefully. It will permanently erase data from your database!
+%table.table
+  %thead
+    %tr
+      %td{:align => "center"} End Date (from the start of this day)
+  %tbody
+    %tr
+      %td
+        #trimpicker{:align => "center"}
+    = form_tag(measurements_trim_path, :method => 'post', :id => 'trim_data_form') do
+      %tr
+        %td{:align => "center"}
+          .instrumentstrip
+            .instrumentstatus
+              = radio_button_tag(:trim_id, "all", :checked=>true)
+              = label_tag(:trim_id, "All", name: 'instrument_radio_label')
+            - @instruments.each do |instrument|
+              .instrumentstatus
+                = radio_button_tag(:trim_id, instrument.id)
+                = label_tag(:trim_id, instrument.name, name: 'instrument_radio_label')
+      %tr
+        %td{:align => "center"}
+          = hidden_field_tag('end')
+          = submit_tag("Erase Data!", :id => 'trim_data_submit')

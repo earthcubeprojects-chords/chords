@@ -1,0 +1,39 @@
+$Project
+[1] "CHORDS Testbed"
+
+$Site
+[1] "NCAR Mesa Lab"
+
+$Affiliation
+[1] "NSF EarthCube"
+
+$Instrument
+[1] "ML Wx Station"
+
+$Data
+$Data$Time
+[1] "2015-07-28T21:35:51.000Z"
+
+$Data$wdir
+[1] 80
+
+$Data$wspd
+[1] 3
+
+$Data$wmax
+[1] 5.8
+
+$Data$tdry
+[1] 25.7
+
+$Data$rh
+[1] 24.4
+
+$Data$pres
+[1] 814.4
+
+$Data$raintot
+[1] 453.7
+
+$Data$batv
+[1] 13.9

@@ -1,0 +1,27 @@
+>> url='http://chords.dyndns.org/instruments/26.json?last';
+>> json_data = urlread(url);
+>> inst_data
+
+inst_data = 
+
+        Project: 'CHORDS Testbed'
+           Site: 'NCAR Mesa Lab'
+    Affiliation: 'NSF EarthCube'
+     Instrument: 'ML Wx Station'
+           Data: [1x1 struct]
+
+>> inst_data.Data
+
+ans = 
+
+       Time: {'2015-07-28T21:00:51.000Z'}
+       wdir: 135
+       wspd: 1.4000
+       wmax: 4.3000
+       tdry: 26.3000
+         rh: 24.7000
+       pres: 814.6000
+    raintot: 453.7000
+       batv: 13.9000
+
+>> 

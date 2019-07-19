@@ -1,0 +1,67 @@
+- if @last_url.presence
+  .last_url
+    = @last_url
+.instrument_name
+  - if @instrument.is_receiving_data
+    = image_tag('button_green_50.png', size:"16")
+  - else
+    = image_tag('button_red_50.png', size:"16")
+
+  = @instrument.name
+  = "(id: #{@instrument.id})"
+
+  - if !@instrument.sensor_id.blank?
+    = "(sensor_id: #{@instrument.sensor_id})"
+  - else
+    = "(sensor_id: n/a)"
+
+  located at
+  = @instrument.site.name
+
+.instrument_description
+  Description:
+  = @instrument.description
+  %br
+  This instrument is designated as:
+  - if @instrument.is_active
+    = "ACTIVE"
+  - else
+    = "INACTIVE"
+  %br
+  (If 'INACTIVE', the instrument will not appear in the dashboard.)
+
+%br
+- if can? :edit, @instrument
+  = button_to 'Edit Instrument', edit_instrument_path(@instrument), method: :get, class: 'btn btn-primary btn-md'
+  %br
+
+.instrument_configuration
+  .left
+    .instrument_measurements
+      = render partial: "instrument_measurements", locals: {instrument: @instrument}
+
+  .right
+    - if can?(:download, @instrument)
+      .instrument_download
+        = render partial: "instrument_downloads", locals: {instrument: @instrument}
+
+.clear
+%br
+%br
+
+.instrument_plot_time_window
+  .left
+    %strong Plot measurements for the last
+    %strong= @instrument.plot_offset_value.to_s + " " + @instrument.plot_offset_units.to_s
+
+= (render 'multivariable_graph').html_safe
+
+.clear
+%br
+
+.full_width
+  .instrument_variables
+    = render partial: "instrument_variables", locals: {instrument: @instrument}
+
+%br
+= link_to 'Back', instruments_path

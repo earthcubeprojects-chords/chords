@@ -1,0 +1,11 @@
+%h1 Create a New Variable for Instrument: #{@instrument.name}
+%br
+%div.row
+  %div.col-lg-8.col-md-10
+    = render 'form'
+%br
+
+- if @return == 'edit'
+  = link_to 'Back', edit_instrument_path(@instrument)
+- else
+  = link_to 'Back', instrument_path(@instrument)

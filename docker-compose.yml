@@ -1,0 +1,209 @@
+version: '2'
+
+# The CHORDS configuration (x86) for docker-compose. 
+#
+# When run with "-p chords", it creates these containers:
+#   1. chords_app:      The CHORDS Ruby on Rails server
+#   2. chords_mysql:    A MyQSL database for CHORDS metadata.
+#   3. chords_influxdb: An InfluxDB database for real-time time series data.
+#   4. chords_grafana:  A Grafana dashboard server
+#
+# The following docker volumes provide data persistance:
+#   1. mysql-data:     (/var/lib/mysql)
+#   2. influxdb-data:  (/var/lib/influxdb)
+#   3. grafana-data:   (/var/lib/grafana)
+#   4. postfix-spool:  (var/spool/postfox)
+#
+# This configuration is used to both build the chords image,
+# and to deploy the CHORDS system. Dockerfile provides the recipe
+# for the chords image.
+#
+# To build and upload the chords image:
+#   cd <directory containing the CHORDS project>
+#   docker build --squash --tag ncareol/chords:<tag>
+#   docker push ncareol/chords:<tag>
+#
+# Create a .env file (in the directory that you run docker-compose from) containing
+# CHORDS configuration values. See chords_env_template for a description of values.
+# 
+# To deploy/start/stop CHORDS:
+#   curl -L https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
+#   docker-compose pull 
+#   docker-compose -p chords up -d
+#   docker-compose -p chords down
+#
+# To update a running system:
+#  docker-compose pull
+#  docker-compose -p chords down
+#  docker-compose -p chords up -d
+
+services:
+  # CHORDS Rails application: nginx + rails + CHORDS rails code 
+  app:
+    container_name: chords_app
+    image: ncareol/chords:${DOCKER_TAG}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shared-tmp:/tmp/
+      - nginx-log:/var/log/nginx
+      - rails-log:/chords/log
+    environment:
+      - RAILS_ENV=${RAILS_ENV}
+      - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
+      - CHORDS_GUEST_PW=${CHORDS_GUEST_PW}
+      - GRAFANA_ADMIN_PW=${GRAFANA_ADMIN_PW}
+      - GRAFANA_HTTP_PORT=${GRAFANA_HTTP_PORT}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - DB_RETENTION=${DB_RETENTION}
+      - DOCKER_TAG=${DOCKER_TAG}
+      - CHORDS_EMAIL_SERVER=${CHORDS_EMAIL_SERVER}
+      - CHORDS_EMAIL_PORT=${CHORDS_EMAIL_PORT}
+      - CHORDS_EMAIL_ADDRESS=${CHORDS_EMAIL_ADDRESS}
+      - CHORDS_EMAIL_PASSWORD=${CHORDS_EMAIL_PASSWORD}
+      - WORKERS=${WORKERS}
+      # Note: INFLUXDB_ variables are used by the Influxer gem, meaning that
+      # you should NOT create your own variables beginning with INFLUXDB_.
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
+    command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
+    ports:
+        - ${CHORDS_HTTP_PORT}:80
+    links:
+      - mysql
+      - influxdb
+
+  # Rails mysql database
+  mysql:
+    container_name: chords_mysql
+    image: mysql:5.7
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - mysql-log:/var/log/mysql
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_USER=chords_demo_user
+      - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"
+      
+  # InfluxData influxdb time-series database
+  influxdb:
+    container_name: chords_influxdb
+    image: influxdb:1.6
+    volumes:
+      - influxdb-data:/var/lib/influxdb
+      - influxdb-log:/var/log/influxdb
+      - /var/run/docker.sock:/var/run/docker.sock
+      - shared-tmp:/tmp/
+    environment:
+      - INFLUXDB_HTTP_MAX_ROW_LIMIT=1000000
+      - INFLUXDB_HTTP_AUTH_ENABLED=true
+      - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
+      - INFLUXDB_REPORTING_DISABLED=true
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}      
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    ports:
+      - 8086:8086
+      - 8083:8083
+      
+  # InfluxData kapacitor time series monitoring
+  kapacitor:
+    container_name: chords_kapacitor
+    image: ncareol/kapacitor
+    volumes:
+      - kapacitor-data:/var/lib/kapacitor
+      - kapacitor-log:/var/log/kapacitor
+    environment:
+      # Custom environment variable, used by ncareol/kapacitor
+      - KAPACITOR_ENABLED=${KAPACITOR_ENABLED}
+      #
+      - KAPACITOR_HOSTNAME=chords_kapacitor
+      - KAPACITOR_LOGGING_LEVEL=INFO
+      - KAPACITOR_REPORTING_ENABLED=false
+      #
+      - KAPACITOR_HTTP_AUTH_ENABLED=true
+      #
+      - KAPACITOR_INFLUXDB_0_URLS_0=http://chords_influxdb:8086
+      - KAPACITOR_INFLUXDB_0_USERNAME=admin
+      - KAPACITOR_INFLUXDB_0_PASSWORD=${CHORDS_ADMIN_PW}      
+      #
+      - KAPACITOR_SMTP_ENABLED=true
+      - KAPACITOR_SMTP_FROM=${CHORDS_EMAIL_ADDRESS}
+      - KAPACITOR_SMTP_HOST=${CHORDS_EMAIL_SERVER}
+      - KAPACITOR_SMTP_PORT=${CHORDS_EMAIL_PORT}
+      - KAPACITOR_SMTP_USERNAME=${CHORDS_EMAIL_ADDRESS}
+      - KAPACITOR_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    ports:
+      - 9092:9092
+    links:
+      - app
+      
+  # Grafana graphing server. It draws data from influxdb.
+  grafana:
+    container_name: chords_grafana
+    image: ncareol/grafana:6.0.2
+    # Note: GF_ variables are used by grafana, meaning that
+    # you should not create your own variables beginning with GF_.
+    environment:
+      - GF_DEFAULT_INSTANCE_NAME=localhost.localdomain
+      - GF_SERVER_HTTP_PORT=${GRAFANA_HTTP_PORT}
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PW}
+      - GF_EMAILS_WELCOME_EMAIL_ON_SIGN_UP=true
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_FROM_ADDRESS=${CHORDS_EMAIL_ADDRESS}
+      - GF_SMTP_FROM_NAME=CHORDS Grafana
+      - GF_SMTP_HOST=${CHORDS_EMAIL_SERVER}:${CHORDS_EMAIL_PORT}
+      - GF_SMTP_USER=${CHORDS_EMAIL_ADDRESS}
+      - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}      
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-log:/var/log/grafana
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    ports:
+      - ${GRAFANA_HTTP_PORT}:${GRAFANA_HTTP_PORT}
+    user: "104"
+    links:
+      - influxdb
+
+volumes:
+  # CHORDS Rails meta-data
+  mysql-data: 
+  # CHORDS time-series data
+  influxdb-data:
+  # kapacitor data
+  kapacitor-data:
+  # Grafana configuration data
+  grafana-data:
+  #shared_tmp volume
+  shared-tmp:
+  # log directories
+  rails-log:
+  nginx-log:
+  mysql-log:
+  influxdb-log:
+  kapacitor-log:
+  grafana-log:

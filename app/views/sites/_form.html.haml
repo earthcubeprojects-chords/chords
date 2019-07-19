@@ -1,0 +1,43 @@
+= form_for(@site, html: {class: "new_or_edit_form" }) do |f|
+  - if @site.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@site.errors.count, "error")
+        prohibited this site from being saved:
+      %ul
+        - @site.errors.full_messages.each do |message|
+          %li= message
+  .line
+    .title
+      = f.label :name
+    .field
+      = f.text_field :name, size: '50%', class: 'form-control'
+  .line
+    .title
+      = f.label :description
+    .field
+      = f.text_area :description, rows: 3, class: 'form-control'
+  .field
+    = f.label :site_type, 'Site Type'
+    %br
+    = f.collection_select :site_type_id, SiteType.order(:name), :id, :name, include_blank: false
+  .line
+    .title
+      = f.label :lat
+    .field
+      = f.text_field :lat, class: 'form-control'
+  .line
+    .title
+      = f.label :lon
+    .field
+      = f.text_field :lon, class: 'form-control'
+  .line
+    .title
+      = f.label :elevation
+    .field
+      = f.text_field :elevation, class: 'form-control'
+  .actions
+    = f.submit class: 'btn btn-md btn-primary'
+
+-if (can? :destroy, @site) && action_name == 'edit'
+  %p= button_to 'Delete Site', @site, method: :delete, data: { confirm: "Are you sure you want to delete site: #{@site.name}?" }, class: 'btn btn-md btn-danger'

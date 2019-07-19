@@ -1,0 +1,69 @@
+#samples_per_minute
+:javascript
+  series_by_minute   = JSON.parse('#{@samples_by_minute.to_json.html_safe}')
+  start_by_minute_ms = #{((@start_time_by_minute.to_i())*1000).to_s}
+  end_time           = #{((@end_time.to_i())*1000).to_s}
+  tz_offset_mins     = #{@tz_offset_mins.to_s}
+  
+  $(function () {
+      Highcharts.setOptions({
+  	  global: {
+  		  timezoneOffset: tz_offset_mins,
+  	  }
+      });
+      $('#samples_per_minute').highcharts({
+  		title: {
+  		    text: null
+  		},
+          chart: {
+  			type: 'column',
+              zoomType: 'x',
+              spacing: [1,1,1,1],
+              plotBorderWidth: 1,
+              spacingTop: 10,
+              
+          },
+          plotOptions: {
+            area: {
+              marker: {
+                enabled: false
+              },
+              stacking: 'normal',
+              lineColor: '#666666',
+              lineWidth: 1,
+            },
+            column: {
+              marker: {
+                enabled: false
+              },
+              stacking: 'normal',
+              lineColor: '#666666',
+              lineWidth: 1,
+              groupPadding: 0.0,
+            }
+          },
+          xAxis: {
+              type: 'datetime',
+              tickInterval: 5*60000,
+              min: start_by_minute_ms,
+              max: end_time,
+              title: {
+                text: '#{@tz_name.html_safe}'
+              },
+          },
+          yAxis: {
+          	min: 0,
+              title: {
+                  text: 'Samples Per Minute'
+              }
+          },
+  		legend: {
+  			title: 'test'
+  		},
+  		series: 
+  		  series_by_minute,
+  		credits: {
+            enabled: false,
+          },
+      });
+  });

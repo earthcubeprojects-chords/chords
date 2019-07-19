@@ -1,0 +1,19 @@
+%h1 InfluxDB Tag
+%br
+%p
+  %strong Name:
+  = @influxdb_tag.name
+%p
+  %strong Value:
+  = @influxdb_tag.value
+%p
+  %strong Site:
+  = @influxdb_tag.instrument.site.name
+%p
+  %strong Instrument:
+  = @influxdb_tag.instrument.name
+
+%br
+= button_to 'Edit', edit_influxdb_tag_path(@influxdb_tag), method: :get, class: 'btn btn-default btn-md'
+%br
+= link_to 'Back', influxdb_tags_path

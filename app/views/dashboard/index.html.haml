@@ -1,0 +1,47 @@
+%h1 Dashboard
+.badgestrip
+  .statusbadge
+    %span.badgetitle Measurements
+    %br/
+    %span.badgevalue= number_with_delimiter(@metrics["measurement_count"], :delimiter => ',')
+  .statusbadge
+    %span.badgetitle Instruments
+    %br/
+    %span.badgevalue= @metrics["instrument_count"]
+  .statusbadge
+    %span.badgetitle Sites
+    %br/
+    %span.badgevalue= @metrics["site_count"]
+  .statusbadge
+    %span.badgetitle Storage
+    %br/
+    %span.badgevalue
+      = @metrics["db_size_mb"]
+      MB
+  .statusbadge
+    %span.badgetitle DB Expires
+    %br
+    %span.badgevalue
+      = @metrics["db_expiry_time"]
+  .statusbadge
+    %span.badgetitle Uptime
+    %br/
+    %span.badgevalue= time_ago_in_words(@metrics["uptime"])
+.instrumentstrip
+  - @instruments.each do |instrument|
+    .instrumentstatus
+      - if instrument.is_active
+        - if instrument.is_receiving_data
+          = image_tag('button_green_50.png', size:"16")
+        - else
+          = image_tag('button_red_50.png', size:"16")
+        = link_to(instrument.name+" (#{instrument.id})", instrument_url(:id => instrument.id) )
+
+- if @metrics['last_url'].presence
+  %br/
+  .last_url
+    = @metrics['last_url']
+%br/
+= render 'samples_per_minute'
+= render 'samples_per_hour'
+= render 'samples_per_day'

@@ -1,0 +1,9 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @topic_category.name
+%p
+  %strong Definition:
+  = @topic_category.definition
+
+= link_to 'Back', topic_categories_path

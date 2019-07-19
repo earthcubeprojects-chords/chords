@@ -1,0 +1,13 @@
+%h1 Import Configuration
+
+%h2 This will completely overwrite your current configuration
+%h2 ALL DATA WILL BE DELETED
+- if can?(:import, Profile)
+  = form_tag(import_configuration_profiles_path, :method => 'post', :enctype =>"multipart/form-data") do
+    %div
+      = file_field_tag 'backup_file', :accept => 'text/json', :multiple => false
+      %br/
+    %div
+      = submit_tag("Import", data: { confirm: "Are you sure you want to overwrite the portal configuration?\n\nALL DATA WILL BE LOST" })
+
+= @output

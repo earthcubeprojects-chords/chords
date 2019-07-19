@@ -1,0 +1,9 @@
+chords_env.sh
+*~
+log/
+tmp/
+public/assets/
+vendor/cache/
+.DS_Store
+config/archive.yml
+.env

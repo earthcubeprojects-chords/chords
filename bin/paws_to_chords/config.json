@@ -1,0 +1,75 @@
+#
+# paws_to_chords instructions and configuration.
+#
+# Instructions for 'paws_to_chords', followed by a sample configuration
+# JSON structure.
+#
+# This whole file can be used a configuration template. Comment lines that begin with a 
+# leading hash charcter will be stripped by paws_to_chords.
+#
+# One instance of paws_to_chords will process data for a single CHORDS instrument, submitting
+# it to a CHORDS Portal.
+# 
+# paws_to_chords will periodically scan a list of directories, finding the file that
+# was most recently modified in each directory. It will then examine the last line
+# that file, and extract a timestamp and one or more variable values.
+#
+# The variable values will be paired with the CHORDS short_names.
+# All of the timestamp/short_name/value triples will be used to build a CHORDS URL which will then
+# be submitted to a chords_portal. If different timestamps are encountered, a URL for
+# each unique timestamp will be submitted.
+#
+# The data lines in a file are formatted with whitespace separated variable values as follows:
+# month day year hour minute var1 ... varN
+#
+###############################################################################
+# Command line usage of paws_to_chords:
+#
+# usage: paws_to_chords --config config_file [--key key_value] [--test] [--verbose]
+#  --config file_name  The configuration file
+#  --key key_value     (optional) The chords portal security key.
+#  --test              (optional) Add the "test" data qualifier.
+#  --verbose           (optional) Print detailed diagnostic information.
+#
+###############################################################################
+#  Configuration keys (used in the JSON structure below):
+#  chords_host:     The CHORDS Portal IP.
+#  instrument_id:   The CHORDS instrument id.
+#  top_dir:         The top directory for all of the sensor subdirectories.
+#                   If there is no common top directory, just set it to root
+#                   and specify all sub-directories as absolute paths.
+#  cycle_secs:      The directory scan interval, in seconds.
+#  sensors:         A list of sensors, with one entry for each sensor data directory.
+#    short_names:   A list of short names, corresponding to the data field for each
+#                   variable. Most sensors will only have one variable in the PAWS data file,
+#                   but some may have multiple variables on each data line, e.g. a 
+#                   wind sensor which produces the pair wind speed, wind direction.
+#                   Use a "*" to indicate a field which should be skipped.
+#    sub_dir:       Combine with top_dir as top_dir/sub_dir to specify the location
+#                   where data files are found for that sensor.
+#    file_pattern:  A shell style "glob pattern" for matching files. Thus the 
+#                   selected files will be top_dir/sub_dir/file_pattern.
+#
+{
+  "chords_host":     "xxx.xxx.xxx",
+  "instrument_id":   "1",
+  "top_dir":         "./sample_data",
+  "cycle_secs":       "60",
+  "sensors": [
+      {
+       "short_names": ["t7", "*"],
+       "sub_dir":     "mcp9808",
+       "file_pattern":"mcp9808*"
+      },
+      {
+        "short_names": ["t1", "*", "rh1"],
+        "sub_dir":     "htu21d",
+       "file_pattern":"htu21d*"
+      },
+      {
+        "short_names": ["*", "*", "sp1", "msl1",  "*", "*"],
+        "sub_dir":     "bmp180",
+       "file_pattern":"bmp180*"
+      }
+   ]
+}

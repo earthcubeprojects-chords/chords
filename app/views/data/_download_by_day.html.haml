@@ -1,0 +1,120 @@
+:javascript
+  $(document).ready(function() {
+    $(function() {
+      $("#startpicker").datepicker();
+      $("#startpicker").datepicker('setDate', new Date());
+    });
+
+    $(function() {
+      $("#endpicker").datepicker();
+      $("#endpicker").datepicker('setDate', new Date());
+    });
+
+
+    function send_download_url(datatype) {
+      var startdate = $("#startpicker").datepicker("getDate");
+      var enddate   = $("#endpicker"  ).datepicker("getDate");
+      enddate.setDate(enddate.getDate() + 1);
+
+      var ids = [];
+      $('#instrument_ids_:checked').each(function() {
+        ids.push($(this).attr('value'));
+      });
+
+      if (startdate < enddate) {
+        var url = '';
+        url += '/api/v1/data.' + datatype + '?';
+        url += 'start=' + startdate.toISOString();
+        url += '&end='  + enddate.toISOString();
+
+        if (ids.length > 0) {
+          url += '&instruments=' + ids.join();
+        }
+
+        document.location.href = url;
+      } else {
+        alert("Start date must be less than or equal to the end date");
+      }
+    };
+
+    $('.geoJsonButton').click(function(){
+      send_download_url('geojson');
+    });
+
+    $('.geoCsvButton').click(function(){
+      send_download_url('csv');
+    });
+
+    $('#select_all').click(function(){
+      $(':checkbox').each(function() {
+        this.checked = true;
+      });
+    });
+
+    $('#select_none').click(function(){
+      $(':checkbox').each(function() {
+        this.checked = false;
+      });
+    });
+
+  });
+
+%h2 Download Data By Day
+%table.table
+  %thead
+    %tr{:align => "center"}
+      %td{:align => "center"} Start Date (start of day)
+      %td{:align => "center"} End Date (end of day)
+  %tbody
+    %tr{:align => "center"}
+      %td
+        #startpicker
+      %td
+        #endpicker
+%br/
+
+%p
+  %button#select_all Select All
+  %button#select_none Clear All
+  %button.btn-primary.geoJsonButton Download GeoJSON
+  %button.btn-primary.geoCsvButton Download GeoCSV
+
+%p Select instruments for download. If none are checked, all instruments will be downloaded. It is generally recommended to download a month of data at a time. If you select a date range resulting in too much data, you will receive an error message. Reduce the date range selected and try again.
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th
+        Select for
+        %br
+        Download
+      %th Instrument Name
+      %th Site
+      %th
+        Available
+        %br
+        Measurements
+      %th
+        Fetch/
+        %br
+        Ingest Data
+  %tbody
+    - @instruments.each do |instrument|
+      %tr
+        %td= check_box_tag 'instrument_ids[]', instrument.id
+        %td= link_to(instrument.name, instrument_url(:id => instrument.id) )
+        %td= @sites.find(instrument.site_id).name
+        %td= instrument.sample_count(:either)
+        %td= link_to 'Data URLs', data_urls_about_index_path(instrument_id: instrument.id)
+
+%p
+  %button#select_all Select All
+  %button#select_none Clear All
+  %button.btn-primary.geoJsonButton Download GeoJSON
+  %button.btn-primary.geoCsvButton Download GeoCSV
+
+%p
+  See the
+  %i Data URLs
+  for URL syntax definitions used to make customized data ingest and download
+  requests. These URLs are also used for program generated requests, e.g from browsers, Matlab, R, Python, etc.

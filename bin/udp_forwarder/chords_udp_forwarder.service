@@ -1,0 +1,58 @@
+#
+# Systemd unit description for managing the CHORDS udp_forwarder as a service.
+#
+# Assume: The udp_forwarder service description (this file), the udp_forwarder.rb application, and
+# the udp_forwarder.rb configuration (.json) are all located in /var/lib/chords/
+#
+# *** Note. If a security key is needed for CHORDS ingest:
+#     Edit this file once you have installed it, and add the security key parameter (-s xxxx) to the
+#     ExecStart command. This way you can keep the udp_forwarder configuration file (e.g. ncar_wx.json) on github,
+#     without keeping a security key in it. 
+#
+# To install:
+# Install udp_forwarder.rb
+#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/udp_forwarder.service > /var/lib/chords/udp_forwarder.rb
+#  sudo chmod a+x /var/lib/chords/udp_forwarder.rb
+#
+# Fetch the service definition
+#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/chords_udp_forwarder.service > /var/lib/chords/udp_forwarder.service
+#
+# If you are making a fresh configuration, create the configuration file for for udp_forwarder.rb 
+# (Don't do this if you have an existing configuration. And note that the configuration file name
+#  must match what is specified in ExecStart below. Feel free to change both of these)
+#  sudo curl -L https://github.com/NCAR/chords/raw/development/bin/udp_forwarder/ncar_wx.json > /var/lib/chords/ncar_wx.json
+#
+# Enable the service. (You will get complaints about [Install] missing)
+#  sudo systemctl enable /var/lib/chords/udp_forwarder.service
+#
+# When you make a change to a service file:
+#  sudo systemctl daemon-reload
+#
+# To start udp_forwarder:
+#  sudo systemctl start  udp_forwarder
+#
+# To stop udp_forwarder:
+#  sudo systemctl stop    udp_forwarder
+#
+# To restart udp_forwarder:
+#  sudo systemctl restart udp_forwarder
+#
+#
+# Here's how to see your log files:
+#  since the last boot:
+#    sudo journalctl -b -u udp_forwarder.service
+#  To "follow" the log messages add a -f  (like tail -f):
+#    sudo journalctl -f -u udp_forwarder.service
+#
+[Unit]
+Description=CHORDS UDP Forwarder
+
+[Service]
+Type=simple
+ExecStart=/var/lib/chords/udp_forwarder.rb -v -c /var/lib/chords/ncar_wx.json
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,38 @@
+#
+# Systemd unit description for managing the CHORDS psql_forwarder.
+#
+# Systemd convention locates this file in /usr/lib/systemd/system/chords_psql_forwarder.service,
+# with a link to it from /etc/systemd/system/multi-user.target.wants/chords_psql_forwarder.service
+# 
+# To customize the psql_forwarder command line, edit /usr/lib/systemd/system/chords_psql_forwarder.service
+#
+# When you make a change to a service file:
+#  systemctl daemon-reload
+#
+# To enable and start:
+#  systemctl enable chords_psql_forwarder
+#  systemctl start  chords_psql_forwarder
+#
+# To restart:
+#  systemctl restart chords_psql_forwarder
+#
+# "ps -eo cmd" is a good way to see if the command is running.
+#
+# Here's how to see your log files:
+#  since the last boot:
+#    journalctl -b -u chords_psql_forwarder.service
+#  To "follow" the log messages add a -f  (like tail -f):
+#    journalctl -f -u chords_psql_forwarder.service
+#
+[Unit]
+Description=CHORDS UDP Forwarder
+
+[Service]
+Type=simple
+ExecStart=/usr/local/src/chords_testbed/bin/psql_forwarder/psql_forwarder.py -v -f /usr/local/src/chords_testbed/bin/psql_forwarder/g5.json
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+

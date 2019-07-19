@@ -1,0 +1,218 @@
+
+:javascript
+  var series = [];
+
+  var live_chart;
+  var last_time = 0;
+  var last_times = [];
+  var pause = false;
+
+  var variables = #{@instrument.vars.to_json.html_safe};
+
+- title = "\"#{@instrument.name} - Live Data\""
+- title  = title.as_json.html_safe
+
+- if @var_to_plot.minimum_plot_value
+  - min_y_axis_json = "min: #{@var_to_plot.minimum_plot_value},"
+- else
+  - min_y_axis_json = ""
+
+- if @var_to_plot.maximum_plot_value
+  - max_y_axis_json = "max: #{@var_to_plot.maximum_plot_value},"
+- else
+  - max_y_axis_json = ""
+
+- y_axis_js_parts = Array.new
+
+- variable_index = 0
+- visible_by_default = true
+
+- @instrument.vars.each do |v|
+  - y_axis_js_part = ""
+  - y_axis_js_part += "{  "
+  - y_axis_js_part += "  labels: {\n"
+  - y_axis_js_part += "      format: '{value.html_safe}#{v.unit.try(:abbreviation).html_safe}',\n"
+  - y_axis_js_part += "       style: {color: Highcharts.getOptions().colors[#{variable_index}]},\n"
+  - y_axis_js_part += "  },\n"
+
+  - y_axis_js_part += "  title: { \n "
+  - y_axis_js_part += "   text: '#{v.name.html_safe} (#{v.unit.try(:abbreviation).html_safe})',\n"
+  - y_axis_js_part += "       style: {color: Highcharts.getOptions().colors[#{variable_index}]},\n"
+
+  - y_axis_js_part += "  },\n"
+
+  - y_axis_js_part += "  opposite: false  ,\n"
+  - y_axis_js_part += "  plotLines: [{\n"
+  - y_axis_js_part += "   width: .5,\n"
+  - y_axis_js_part += "  }]\n"
+
+  - y_axis_js_part += "}"
+  - y_axis_js_parts.push(y_axis_js_part)
+
+  :javascript
+    var temp_hash = {name:"#{v.name.html_safe}", visible: #{visible_by_default}, data: [], yAxis: #{variable_index}, lineWidth: 1.3};
+
+    series.push(temp_hash);
+    last_times.push(0);
+  - variable_index += 1
+  - visible_by_default = false
+
+- y_axis_js = y_axis_js_parts.join(", \n")
+
+:javascript
+
+  function requestData()
+  {
+    // If the manual datetime input fields are meing modified (in focus) then don't don't redraw the chart
+    if ($('input.highcharts-range-selector:eq(0)').is(":focus") || $('input.highcharts-range-selector:eq(1)').is(":focus"))  {
+      pause = true;
+    } else {
+      pause = false;
+    }
+
+    // Retrieve the latest points to plot and plot them
+    $.getJSON(
+    '/instruments/#{@instrument.id}/live?after='+last_time,
+    function(live_data) {
+        // Adjust the mix/max y axis bounds
+        // only set a min/max value if the series is visible
+        var minimum_plot_value = null;
+        var maximum_plot_value = null;
+
+        for (var series_index = 0; series_index < series.length; series_index++) {
+
+          if (series[series_index].visible) {
+
+            if (variables[series_index].minimum_plot_value) {
+              if (minimum_plot_value == null) {
+                minimum_plot_value = variables[series_index].minimum_plot_value;
+              } else if (variables[series_index].minimum_plot_value < minimum_plot_value) {
+                minimum_plot_value = variables[series_index].minimum_plot_value;
+              }
+            }
+
+            if (variables[series_index].maximum_plot_value) {
+              if (maximum_plot_value == null) {
+                maximum_plot_value = variables[series_index].maximum_plot_value;
+              } else if (variables[series_index].maximum_plot_value > maximum_plot_value) {
+                maximum_plot_value = variables[series_index].maximum_plot_value;
+              }
+            }
+          }
+        }
+
+        var display_points = live_data["display_points"];
+        var multivariable_points = live_data["multivariable_points"];
+        var multivariable_names = live_data["multivariable_names"];
+
+        var refresh_msecs  = live_data["refresh_msecs"];
+
+        for (i = 0; i < multivariable_names.length; i++) {
+          // set the min/max for the visible series
+          if (series[i].visible) {
+            live_chart.yAxis[i].setExtremes(minimum_plot_value, maximum_plot_value, false);
+            live_chart.yAxis[i].startOnTick = true;
+            live_chart.yAxis[i].endOnTick = true;
+          } else {
+            live_chart.yAxis[i].setExtremes(null, null, false);
+          }
+
+          var points = multivariable_points[multivariable_names[i]];
+
+          // add the new points
+          var point_index;
+
+          for (point_index = 0; point_index < points.length; point_index++) {
+            if (points[point_index][0] > last_times[i]) {
+              var shift = live_chart.series[0].data.length >= display_points;
+              live_chart.series[i].addPoint(points[point_index], false, shift);
+              last_time = points[point_index][0];
+              last_times[i] = points[point_index][0];
+            }
+          }
+
+        }
+
+        // Don't redraw the chart if live updating is paused
+        if (pause == false) {
+          live_chart.redraw();
+        }
+
+        // retrieve new data points after a pause
+        setTimeout(requestData, refresh_msecs);
+      }
+    );
+  }
+
+  $(document).ready(function () {
+    // Adjust the global timezone offset
+    Highcharts.setOptions({
+      global: {
+        timezoneOffset: #{@tz_offset_mins}
+      },
+    });
+
+    live_chart = new Highcharts.stockChart(
+    {
+      chart: {
+        renderTo: 'instrument_live_chart',
+        type: 'line',
+        zoomType: 'x',
+        animation: Highcharts.svg, // don't animate in old IE
+        marginRight: 10
+      },
+      rangeSelector: {
+          buttons: [],
+          inputBoxWidth: 180,
+          enabled: true,
+          inputEnabled: true,
+          inputDateFormat: '%b %e, %Y %H:%M:%S',
+          inputEditDateFormat: '%Y-%m-%d %H:%M:%S',
+          inputDateParser: function (value) {
+            [date, time] = value.split(/[\s]/);
+            [year, month, day] = date.split(/[\-]/);
+            [hours, minutes, seconds] = time.split(/[\:]/);
+
+            ms =  Date.UTC(
+                parseInt(year, 10),
+                parseInt(month-1, 10),
+                parseInt(day, 10),
+                parseInt(hours, 10),
+                parseInt(minutes, 10),
+                parseInt(seconds, 10)
+            );
+
+            // Compensate for the timezone offset
+            // This is NOT taken in to account by highcharts and is likely a bug in their code
+            tz_offset_ms = #{@tz_offset_mins} * 60 * 1000;
+            ms = ms + tz_offset_ms;
+
+            return(ms);
+          },
+          allButtonsEnabled: false
+      },
+      credits: { enabled: false, },
+      title: { text: #{title} },
+      xAxis: {
+        title: {
+          text: '#{@tz_name.html_safe}'
+        },
+        type: 'datetime',
+        tickPixelInterval: 150
+      },
+      yAxis: [
+        #{y_axis_js.html_safe}
+      ],
+      tooltip: {
+        split: true,
+      },
+      legend: { enabled: true },
+      exporting: { enabled: false },
+      series: series,
+    });
+
+    // Make first data request
+    requestData();
+
+    }
+  );

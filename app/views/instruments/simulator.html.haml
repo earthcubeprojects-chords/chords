@@ -1,0 +1,147 @@
+
+:javascript
+  // run status and variable shortnames for each instrument.
+  #{create_instrument_variables_js(@instruments).html_safe}
+
+  function shortnames(id) {
+    var command = "var names = instrument_" + id + "_shortnames";
+    eval(command);
+    return names;
+  }
+
+  function is_running(id) {
+    // return the running status for this id
+    var command = "var run_status = instrument_" + id + "_run_status;";
+    eval(command);
+    return run_status;
+  }
+
+  function random_value(offset) {
+    // these values to be replaced later by configuration values:
+    var measure_min   = 5.0;
+    var measure_max   = -5.0;
+    var measure_sigma = 2.0;
+    var avg   = (measure_max + measure_min)/2.0;
+    var value = avg + (Math.random()-0.5) * 2 * measure_sigma + offset;
+    value = value.toPrecision(4);
+    return value;
+  }
+
+  function makeHttpObject() {
+    try {return new XMLHttpRequest();}
+    catch (error) {}
+    try {return new ActiveXObject("Msxml2.XMLHTTP");}
+    catch (error) {}
+    try {return new ActiveXObject("Microsoft.XMLHTTP");}
+    catch (error) {}
+
+    throw new Error("Could not create HTTP request object.");
+  }
+
+  function send_url(url) {
+    var request = makeHttpObject();
+    request.open("GET", url, false);
+    request.send(null);
+  }
+
+  function make_url(id) {
+    // create base url
+    var url = "/measurements/url_create?instrument_id=" + id;
+
+    // add variable values
+    var s = shortnames(id);
+    for (var i = 0; i < s.length; i++) {
+      url += "&" + s[i] + "=" + random_value(10.0*i + 100*parseInt(id));
+    }
+
+    // add the measurement time
+    var utc_time = new Date();
+    url += "&at=" + utc_time.toISOString();
+
+    // add the security key js if needed
+    url += "#{get_security_key_url_fragment}";
+
+    // add test data flag
+    url += "&test";
+
+    return(url);
+  }
+
+  function display_url(url) {
+    // manage a running display of the urls
+    if ($('#instrument_simulator_requests').children().length > 20) {
+      $('#instrument_simulator_requests').find('div').first().remove();
+    }
+
+    $('#instrument_simulator_requests').append("<div>" + url + "</div>");
+  }
+
+  function single_measurement(id) {
+    var url = make_url(id);
+    display_url(url);
+    send_url(url);
+  }
+
+  function repeat_measurement(id, refresh_ms) {
+    if (is_running(id) == true) {
+      // schedule next measurement
+      setTimeout(function() {repeat_measurement(id, refresh_ms);}, refresh_ms);
+      // create and send a new measurement
+      single_measurement(id);
+    }
+  }
+
+  function toggle_run_state(id, refresh_ms) {
+    if (is_running(id) == false) {
+      // set the run status to true
+      eval("instrument_" + id + "_run_status = true;");
+      // set the indicator to on
+      eval("$('#instrument_" + id + "_simulator_icon').attr('src', chords.toggleOnSwitch)");
+      // start a repeating measurement
+      repeat_measurement(id, refresh_ms);
+    } else {
+      // set the run status to false
+      eval("instrument_" + id + "_run_status = false;");
+      // set the indicator to off
+      eval("$('#instrument_" + id + "_simulator_icon').attr('src', chords.toggleOffSwitch)");
+    }
+  }
+%h1 Simulator
+%p
+  Simulated measurements will be marked as "test", and
+  %strong will be deleted
+  when the "Delete Test Data" button is pressed.
+%p
+  The simulations will be stopped if this page is closed. They will run
+  intermittantly if the page is completely covered. You probably want
+  to run them in a separate window by right-clicking the
+  = link_to 'simulator', '/instruments/simulator'
+  link and choosing "Open Link in New Window". Be sure that 
+  a section of the simulator window is always visible on your screen.
+%table.table.table-striped
+  %thead
+    %tr
+      %th{:align => "center"} Name
+      %th{:align => "center"} ID
+      %th{:align => "center"} Site
+      %th{:align => "center"}
+        Interval
+        %br>/
+        (s)
+      %th{:align => "center"}
+        Simulator
+        %br>/
+        Status
+  %tbody
+    - @instruments.each do |instrument|
+      %tr
+        %td
+          = link_to(instrument.name, instrument_url(:id => instrument.id) )
+        %td{:align => "center"}= instrument.id
+        %td= @sites.find(instrument.site_id).name
+        %td{:align => "center"}= instrument.sample_rate_seconds
+        %td{:align => "center"}
+          = image_tag('toggle_switch_off.png', size:"62X25", id:"instrument_#{instrument.id}_simulator_icon", |
+            onclick:"toggle_run_state(#{instrument.id}, #{instrument.sample_rate_seconds}*1000);")            |
+%br/
+#instrument_simulator_requests{:style => "background-color: black; color: white;"}

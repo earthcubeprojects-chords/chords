@@ -1,0 +1,44 @@
+= form_for @linked_datum do |f|
+  - if @linked_datum.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@linked_datum.errors.count, "error")} prohibited dat from being saved:"
+      %ul
+        - @linked_datum.errors.full_messages.each do |message|
+          %li= message
+
+  .line
+    .title
+      = f.label :name
+    .field
+      = f.text_area :name, class: 'form-control'
+  .line
+    .title
+      = f.label :description
+    .field
+      = f.text_area :description, rows: 10, class: 'form-control'
+  .line
+    .title
+      = f.label :keywords
+    .field
+      Comma separated list of keywords to aid searching for your dataset
+      = f.text_area :keywords, rows:3, class: 'form-control'
+  .line
+    .title
+      = f.label :dataset_url, 'URL'
+    .field
+      URL where your site is located, e.g. http://portal.chordsrt.com
+      = f.text_field :dataset_url, class: 'form-control'
+  .line
+    .title
+      = f.label :license
+    .field
+      License for your dataset, such as CC for Creative Commons or a URL to license text
+      = f.text_field :license, class: 'form-control'
+  .line
+    .title
+      = f.label :doi, 'DOI'
+    .field
+      DOI for your dataset in the format: 10.5065/D6V1236Q  (this is the CHORDS DOI)
+      = f.text_field :doi, class: 'form-control'
+  .actions
+    = f.submit 'Save', class: 'btn btn-md btn-primary'

@@ -1,0 +1,20 @@
+%h4
+  Data Access and Downloads
+
+%div
+  %strong Data ingest/fetch
+  %br
+  = link_to 'Data URLs', data_urls_about_index_path(instrument_id: @instrument.id)
+
+%div
+  %strong
+    Download current day as
+  %br
+  \#{link_to("GeoJSON", @instrument.current_day_download_link('geojson') )},
+  \#{link_to("GeoCSV",  @instrument.current_day_download_link('csv') )}
+
+%div
+  %strong
+    Instrument Description
+  %br
+  #{link_to("SensorML", instrument_url( :format => 'sensorml') )}

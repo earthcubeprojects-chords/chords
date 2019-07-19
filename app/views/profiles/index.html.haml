@@ -1,0 +1,34 @@
+%h1 Configuration
+
+%div
+  .center
+    = link_to 'Export Configuration', {controller: 'profiles', action: 'export_configuration'}, class: 'btn btn-default btn-md'
+    = link_to 'Import Configuration', {controller: 'profiles', action: 'import_configuration'}, class: 'btn btn-default btn-md'
+
+%br
+
+%div
+  .center
+    = link_to 'Export InfluxDB Data', {controller: 'profiles', action: 'export_influxdb'}, class: 'btn btn-default btn-md'
+    = link_to 'Import InfluxDB Data', {controller: 'profiles', action: 'import_influxdb'}, class: 'btn btn-default btn-md'
+
+%br
+
+%dif
+  .center
+    = button_to 'Configure JSON-LD Options', linked_data_path, method: :get, class: 'btn btn-default btn-md'
+    %br
+    = button_to 'Configure InfluxDB Tags', influxdb_tags_path, method: :get, class: 'btn btn-default btn-md'
+
+.profile
+  = form_for(:profile, method: 'post', multipart: true, html: {class: 'new_or_edit_form' }) do |f|
+    = render partial: 'standard_options', locals: {f: f}
+    .line
+    .line
+    = render partial: 'metadata_options', locals: {f: f}
+    .line
+    .line
+    = render partial: 'contact_metadata', locals: {f: f}
+
+    .line
+      = f.submit('Save', class: 'btn btn-md btn-primary')

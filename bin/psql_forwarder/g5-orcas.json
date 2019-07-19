@@ -1,0 +1,143 @@
+#
+# psql_forwarder configuration file, in JSON format.
+#
+# Note: Comment lines must begin with a leading hash charcter. These comment lines must be striped 
+# from this file before attempting to parse it as pure JSON. psql_forwarder does this internally.
+#
+# Configuration file for the CHORDS psql_forward program.
+# Those marked with a * are required in the configuration file. 
+# Others may be specified either here or on the command line of the program.
+# Those marked"O" are completely optional, and do not have to be specified
+# at all unless the option is needed.
+#
+#    chords_host:     The CHORDS Portal IP.
+#    db_host:         The ADS database IP.
+#    db_name:         The ADS database name.
+#    db_user:         The ADS database user.
+#    db_table:        The ADS database table.
+#    time_at:         If true, the value from the db time_column will be submitted with the ?at= parameter.
+#  O test:            If true, the"&test" query parameter will be atteed to the CHORDS url.
+#  O verbose:         If true, enable verbose reporting.
+#  * condition_name:  The Postgres NOTIFY condition name.
+#  * instrument_id:   The CHORDS instrument id.
+#  * time_column:     The name of the database table column containing the row timestamp.
+#  * var_short_names": A hash of mappings between db columns and CHORDS variable short names.
+#
+{
+    "chords_host":           "xxx.xxx.xxx",
+    "db_host":               "xxx.xxx.xxx",
+    "db_name":               "xxxxxxx",
+    "db_user":               "xxx",
+    "db_table":              "xxxx",
+    "key":                   "xxxxxxxx",
+    "time_at":               true,
+    "test":                  false,
+    "verbose":               true,
+    "condition_name":        "current",
+    "instrument_id":         "1",
+    "time_column":           "datetime",
+    "var_short_names": {
+        "datetime":          "datetime",
+        "acetone_toga":      "acetone_toga",
+        "acetonitrile_toga": "acetonitrile_toga",
+        "acgain_vxl":        "acgain_vxl",
+        "adifr":             "adifr",
+        "ao2co2":            "ao2co2",
+        "ao2o2":             "ao2o2",
+        "ao2stat":           "ao2stat",
+        "bdifr":             "bdifr",
+        "benzene_toga":      "benzene_toga",
+        "bottlep_awas":      "bottlep_awas",
+        "butane_toga":       "butane_toga",
+        "cannum_awas":       "cannum_awas",
+        "canopen_awas":      "canopen_awas",
+        "cavp_noaa":         "cavp_noaa",
+        "cavt_noaa":         "cavt_noaa",
+        "ch2br2_toga":       "ch2br2_toga",
+        "ch2cl2_toga":       "ch2cl2_toga",
+        "ch3oh_toga":        "ch3oh_toga",
+        "ch4_noaa":          "ch4_noaa",
+        "ch4_qcls":          "ch4_qcls",
+        "cnts":              "cnts",
+        "co2_noaa":          "co2_noaa",
+        "co2_qcls":          "co2_qcls",
+        "co_noaa":           "co_noaa",
+        "co_qcls":           "co_qcls",
+        "dast_noaa":         "dast_noaa",
+        "dms_toga":          "dms_toga",
+        "ethanol_toga":      "ethanol_toga",
+        "f2dio1_lwo":        "f2dio1_lwo",
+        "f2dio32_lwo":       "f2dio32_lwo",
+        "f2dio64_lwo":       "f2dio64_lwo",
+        "flow_awas":         "flow_awas",
+        "ggalt":             "ggalt",
+        "gglat":             "gglat",
+        "gglon":             "gglon",
+        "ggnsat":            "ggnsat",
+        "ggqual":            "ggqual",
+        "h2o_noaa":          "h2o_noaa",
+        "hcho_toga":         "hcho_toga",
+        "intrvl_awas":       "intrvl_awas",
+        "invlv_noaa":        "invlv_noaa",
+        "lsrint_vxl":        "lsrint_vxl",
+        "manp_awas":         "manp_awas",
+        "maxp_awas":         "maxp_awas",
+        "maxt_awas":         "maxt_awas",
+        "medflow":           "medflow",
+        "medp1":             "medp1",
+        "medp2":             "medp2",
+        "medpsa":            "medpsa",
+        "medstat1":          "medstat1",
+        "medstat2":          "medstat2",
+        "mek_toga":          "mek_toga",
+        "mode_vxl":          "mode_vxl",
+        "mpvpos_noaa":       "mpvpos_noaa",
+        "n2o_qcls":          "n2o_qcls",
+        "offset_awas":       "offset_awas",
+        "pcn":               "pcn",
+        "pneup_awas":        "pneup_awas",
+        "press_clh":         "press_clh",
+        "psf":               "psf",
+        "pumpon_awas":       "pumpon_awas",
+        "qcf":               "qcf",
+        "qcr":               "qcr",
+        "rendpt_clh":        "rendpt_clh",
+        "rice":              "rice",
+        "sampnw_awas":       "sampnw_awas",
+        "secopn_awas":       "secopn_awas",
+        "slope_awas":        "slope_awas",
+        "start_awas":        "start_awas",
+        "temp_clh":          "temp_clh",
+        "toluene_toga":      "toluene_toga",
+        "ubtmp_rwo":         "ubtmp_rwo",
+        "upress_rwo":        "upress_rwo",
+        "uref_rwo":          "uref_rwo",
+        "uscat_rwo":         "uscat_rwo",
+        "ushflw_rwo":        "ushflw_rwo",
+        "usmpflw_rwo":       "usmpflw_rwo",
+        "utemp_rwo":         "utemp_rwo",
+        "vmr_clh":           "vmr_clh",
+        "waitnxt_awas":      "waitnxt_awas",
+        "xvopen_awas":       "xvopen_awas",
+        "atx":               "atx",
+        "conc1dc_lwo":       "conc1dc_lwo",
+        "concd_lwi":         "concd_lwi",
+        "concn":             "concn",
+        "concu100_rwo":      "concu100_rwo",
+        "concu_rwo":         "concu_rwo",
+        "cuhsas_rwo":        "cuhsas_rwo",
+        "dpxc":              "dpxc",
+        "fcnc":              "fcnc",
+        "paltf":             "paltf",
+        "plwcc":             "plwcc",
+        "plwcd_lwi":         "plwcd_lwi",
+        "psxc":              "psxc",
+        "tasx":              "tasx",
+        "theta":             "theta",
+        "wdc":               "wdc",
+        "wic":               "wic",
+        "wsc":               "wsc",
+        "xicnc":             "xicnc"
+   }
+}
+

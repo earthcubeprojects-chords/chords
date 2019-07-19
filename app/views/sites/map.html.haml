@@ -1,0 +1,193 @@
+// configurations to set up leaflet
+%link{rel: "stylesheet", href: "https://unpkg.com/leaflet@1.3.1/dist/leaflet.css", integrity: "sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==", crossorigin: ""}
+%script{src: "https://unpkg.com/leaflet@1.3.1/dist/leaflet.js", integrity: "sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==", crossorigin: ""}
+// configurations to load Esri Leaflet (for satellite layer)
+%script{src: "https://unpkg.com/esri-leaflet@2.1.4/dist/esri-leaflet.js", integrity: "sha512-m+BZ3OSlzGdYLqUBZt3u6eA0sH+Txdmq7cqA1u8/B2aTXviGMMLOfrKyiIW7181jbzZAY0u+3jWoiL61iLcTKQ==",crossorigin:""}
+// configurations to set up marker clustering
+%link{rel: "stylesheet", href: "https://unpkg.com/leaflet.markercluster@1.3.0/dist/MarkerCluster.css"}
+%script{src: "https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster-src.js"}
+%div#refreshinfo{style: "width: 800px; display: block; margin: auto"} Data source is refreshed every 5 minutes.
+%div#geomap{style: "width: 800px; height: 600px; display: block; margin: auto"}
+%div#buttons{style: "width: 800px; display: block; margin: auto"}
+  %button#street{style: "z-index: 1000; margin-top: 5px"} Street View
+  %button#satellite{style: "z-index: 1000; margin-top: 5px"} Satellite View
+%div#sitename{style: "width: 800px; margin: auto; display: block; font-weight: bold; padding-top: 10px"} Site Name:
+%div#site{style: "width: 800px; margin: auto; display: block; color: white"} site
+:javascript
+
+  /////////////////
+  /// MAP SETUP ///
+  /////////////////
+
+  // Markers for Operational/Non-operational Sites
+  var offMark = new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+  var onMark = new L.Icon({
+    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
+  // function to generate instrument popup content, add to popup, return contents
+  function instPopupHTML(inst, imageTag, popup, contents) {
+    contents += '<div style="display:inline-block;height:12px">' + imageTag + '</div>' +
+                    '<div style="display:inline-block;height:12px;margin-left: 5px">' +
+                    '<p style="margin:0;padding:0"><a href=' + inst.url + '>' + inst.name + '</a></p></div><br />';
+    popup.setContent(contents);
+    popup.update();
+    return contents;
+  }
+
+
+  // function to populate marker's popup on map click
+  function populateMarker(e, dataURL, siteName, siteURL) {
+    var popup = e.target.getPopup();
+
+    $.getJSON(dataURL, function (data) {
+      if (data.length == 0) {
+        var popupContent = '<h4><a href=' + siteURL + '>' + siteName + '</a>';
+        popup.setContent(popupContent);
+      } else {
+        var popupContent = '<h4><a href=' + siteURL + '>' + siteName + '</a></h4><p style="margin:0;padding:0">Instruments:</p>';
+        data.forEach(function (inst) {
+          if (inst.status) {
+            popupContent = instPopupHTML(inst, '#{image_tag("button_green_50.png", size: "12")}', popup, popupContent);
+          } else {
+            popupContent = instPopupHTML(inst, '#{image_tag("button_red_50.png", size: "12")}', popup, popupContent);
+          }
+        })
+      }
+    })
+  }
+
+  // function to plot markers and site marker status (given site data and the map),
+  // returns the marker cluster layer and plots markers on map
+  function plotMarkers(data, map, cluster) {
+    // create markers
+    mLayer = L.geoJSON(data, {
+      pointToLayer: function(feature, latlng) {
+        var defaultPopup = L.popup();
+        if (feature.properties.status) {
+          return L.marker(latlng, {icon: onMark}).bindPopup(defaultPopup);
+        } else {
+          return L.marker(latlng, {icon: offMark}).bindPopup(defaultPopup);
+        }
+      },
+      onEachFeature: function(feature, layer) {
+        var siteName = feature.properties.name;
+        var siteURL = feature.properties.url;
+        var dataURL = feature.properties.url + '/map_balloon_json';
+        // add click event listener
+        layer.on('click', function(e) {
+          map.setView(e.target.getLatLng(), map.getZoom());
+          populateMarker(e, dataURL, siteName, siteURL);
+        });
+
+
+        // add mouseover event listener
+        layer.on('mouseover', function(e) {
+          document.getElementById('site').textContent = siteName;
+          document.getElementById('site').style.color = 'black';
+        });
+        layer.on('mouseout', function(e) {
+          document.getElementById('site').style.color = 'white';
+        });
+      }
+    });
+
+    cluster.addLayer(mLayer);
+    map.addLayer(cluster);
+
+    // checks to see if sites exists
+    if (data.features.length == 0) {
+      // if no sites, default to world view
+      map.setView([20.0, 5.0], 2);
+    } else {
+      // otherwise, center map so that all markers displayed
+      map.fitBounds(mLayer.getBounds().pad(0.5));
+    }
+
+    return(cluster);
+  }
+
+  ///////////////////////////
+  /// PLOTTING ACTUAL MAP ///
+  ///////////////////////////
+
+  // initialize json history variables
+  var prevJSON = null;
+  var recentJSON = null;
+
+  // initialize marker cluster layer
+  var markerCluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    iconCreateFunction: function(cluster) {
+      var markers = cluster.getAllChildMarkers();
+      for (var m of markers) {
+        var status = (m.options.icon == onMark);
+        if (status == false) {
+          // return red icon
+          return new L.DivIcon({html:
+          '<div style="width:41px;height:41px;padding-left:5.3px;padding-top:5.3px;background-clip:padding-box;border-radius:20px;background-color:rgba(255, 102, 102, 0.6)"><div style="width:30px;height:30px;text-align:center;border-radius:15px;background-color:rgba(255, 0, 0, 0.6)"><span style="line-height:30px"><b>' + cluster.getChildCount() + '</b></span></div>', iconSize: new L.Point(0, 0)})
+        }
+      }
+      return new L.DivIcon({html:
+          '<div style="width:41px;height:41px;padding-left:5px;padding-top:5px;background-clip:padding-box;border-radius:20px;background-color:rgba(181, 226, 140, 0.6)"><div style="width:30px;height:30px;text-align:center;border-radius:15px;background-color:rgba(110, 204, 57, 0.6)"><span style="line-height:30px"><b>' + cluster.getChildCount() + '</b></span></div></div>', iconSize: new L.Point(0, 0)})
+    }
+  });
+
+  // initialize map
+  var siteMap = L.map('geomap', { minZoom: 2 });
+
+  // satellite layer
+  var satelliteImg = L.esri.basemapLayer('Imagery');
+  var satelliteLabels = L.esri.basemapLayer('ImageryLabels');
+  var satelliteTile = L.layerGroup([satelliteImg, satelliteLabels]);
+
+  // street layer
+  var streetTile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  });
+
+  // initialize current tile layer
+  streetTile.addTo(siteMap);
+  var currTile = streetTile;
+
+  document.getElementById("satellite").addEventListener("click", function() {
+    siteMap.removeLayer(currTile);
+    satelliteTile.addTo(siteMap);
+    currTile = satelliteTile;
+  });
+
+  document.getElementById("street").addEventListener("click", function() {
+    siteMap.removeLayer(currTile);
+    streetTile.addTo(siteMap);
+    currTile = streetTile;
+  });
+
+
+  // add initial markers
+  $.getJSON("#{map_markers_geojson_sites_url}", function (data) {
+    markerCluster = plotMarkers(data, siteMap, markerCluster);
+    prevJSON = data;
+  })
+
+  // interval to refresh data source every 5 minutes
+  setInterval(function() {
+    $.getJSON("#{map_markers_geojson_sites_url}", function (data) {
+      // store recently retrieved JSON
+      recentJSON = data;
+      // if the JSON has changed, remove current markers and replot
+      if (JSON.stringify(recentJSON) != JSON.stringify(prevJSON)) {
+        markerCluster.clearLayers();
+        markerCluster = plotMarkers(data, siteMap, markerCluster);
+      }
+      // save history
+      prevJSON = recentJSON;
+    })
+  }, 300000)

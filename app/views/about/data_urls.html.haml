@@ -1,0 +1,168 @@
+%h1 CHORDS Data URLs
+%div
+  %strong URLs for data ingest and download
+  %br/
+  %strong
+    Instrument: #{@instrument.name} (id: #{@instrument.id})
+  %br/
+  Although this example is for a specific instrument, the syntax is common to all of them.
+  %i instrument_id
+  specifies the instrument. For putting data, there is a list of variable short names with their corresponding
+  measurement value. All of the qualifiers (i.e. the fields following "?" and "") are order independent.
+  %br/
+  %br/
+  %h4 Download Single Instrument Data
+  %br
+  .table-responsive
+    %table.table.table-striped
+      %tr
+        %th Action
+        %th URL format
+        %th Qualifiers
+        %th Example
+      %tr
+        %td Insert data w/instrument_id
+        %td GET
+        %td instrument_id, at, email, api_key, test
+        %td
+          = put_data_url
+      - if !@instrument.sensor_id.blank?
+        %tr
+          %td Insert data w/sensor_id
+          %td GET
+          %td sensor_id, at, email, api_key, test
+          %td
+            = put_data_url_with_sensor_id
+      %tr
+        %td Fetch a CSV file
+        %td .csv
+        %td start, end, last
+        %td
+          = data_file_download_url('csv', 'start_end')
+          %br/
+          = data_file_download_url('csv', 'last')
+      %tr
+        %td Fetch a GeoJSON file
+        %td .geojson
+        %td start, end, last
+        %td
+          = data_file_download_url('geojson')
+          %br/
+          = data_file_download_url('geojson', 'start_end')
+          %br/
+          = data_file_download_url('geojson', 'last')
+
+  %br
+  %h4 Download Multiple Instrument Data
+  %br
+  .table-responsive
+    %table.table.table-striped
+      %tr
+        %th Action
+        %th URL format
+        %th Qualifiers
+        %th Example
+      %tr
+        %td Download all instruments for past 24 hours
+        %td GET
+        %td
+        %td
+          = multi_inst_data_file_download_url(nil, nil, nil, false, false)
+          %br
+          = multi_inst_data_file_download_url('json', nil, nil, false, false)
+          %br
+          = multi_inst_data_file_download_url('geojson', nil, nil, false, false)
+      %tr
+        %td Download all instruments for past 24 hours with authentication
+        %td GET
+        %td email, api_key
+        %td
+          = multi_inst_data_file_download_url(nil, nil, nil, false, true)
+      %tr
+        %td Download all instruments w/date range
+        %td GET
+        %td start, end
+        %td
+          = multi_inst_data_file_download_url(nil, 'start_end', nil, false, false)
+      %tr
+        %td Download all instruments w/date range test data only
+        %td GET
+        %td start, end, test
+        %td
+          = multi_inst_data_file_download_url(nil, 'start_end', nil, true, false)
+      %tr
+        %td Download multiple instruments w/instrument ids
+        %td GET
+        %td instruments, start, end
+        %td
+          = multi_inst_data_file_download_url(nil, 'start_end', 'instruments')
+      %tr
+        %td Download multiple instruments w/sensor ids
+        %td GET
+        %td sensors, start, end
+        %td
+          = multi_inst_data_file_download_url(nil, 'start_end', 'sensors')
+
+  %br
+  %h4 Optional Parameters
+  %br
+  .table-responsive
+    %table.table.table-striped
+      %tr
+        %th
+          Optional
+          %br>/
+          Qualifiers
+        %th Meaning
+      %tr
+        %td
+          sensor_id=
+          %i SENSOR_ID
+        %td
+          A sensor id may be specified instead of the numerical instrument id, this value superceeds instrument
+          id if both are given
+      %tr
+        %td
+          at=
+          %i time
+        %td
+          A time to assign to the measurement. If not present, the measurement will
+          be time stamped with the time that it was received by the portal.
+      %tr
+        %td
+          api_key=
+          %i API_KEY
+        %td
+          An optional validation key. It is required if "Require the security key in order to submit a measurement"
+          is checked in the configuration. The api key value is specified in the user configuration.
+      %tr
+        %td
+          email=
+          %i USER_EMAIL
+        %td
+          A user email is required when supplying an API Key to access secured data.
+      %tr
+        %td test
+        %td
+          If present, this measurement will be marked as a test value.
+          Test values can be deleted from the database using the "Delete Test Button" on the instrument page.
+          Do not use this option for production-ready instruments.
+      %tr
+        %td
+          start=
+          %i time
+        %td A start time for the returned measurements.
+      %tr
+        %td
+          end=
+          %i time
+        %td An end time for the returned measurements.
+      %tr
+        %td last
+        %td Return all measurements for the most recent measurement time stamp.
+  %ul{:style => "margin-top: 0"}
+    %li
+      The optional qualifier section begins with a "?", followed by one or more qualifiers. Each is separated by "".
+      Some qualifiers (e.g. at, start and end) have an associated value.
+      %li Time qualifiers (at, start, and end) are in ISO8601 format.
+      %li If none of the time qualifiers are present for a data fetch, measurements for the current day are returned.

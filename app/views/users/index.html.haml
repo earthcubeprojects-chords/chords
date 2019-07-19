@@ -1,0 +1,23 @@
+%h3 Users
+.table-responsive
+  %table.table.table-striped
+    %tbody
+      %tr
+        %th Email/Username
+        %th Roles
+        %th API Key
+      - @users.each do |user|
+        - if can? :read, user
+          %tr
+            %td
+              = link_to user.email, user_path(user)
+            %td
+              = user.roles_pretty_printed
+            %td
+              - if !user.api_key.nil?
+                - if user == current_user || current_user.role?(:admin) || (current_user.role?(:site_config) && user.role?(:measurements) && user.roles.count == 1)
+                  = user.api_key
+                - elsif !user.api_key.nil?
+                  Yes
+              - else
+                n/a

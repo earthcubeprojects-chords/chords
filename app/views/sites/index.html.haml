@@ -1,0 +1,45 @@
+%h1 Sites
+%br
+
+- if can?(:create, Site)
+  = button_to 'New Site', new_site_path, method: :get, class: 'btn btn-default btn-md'
+  %br
+
+.table-responsive
+  %table.table.table-striped
+    %thead
+      %tr
+        %th Name
+        %th Lat (deg)
+        %th Lon (deg)
+        %th Elevation (m)
+        %th
+          = link_to 'Site Type', :site_types
+
+        %th{colspan: "1"}
+    %tbody
+      - @sites.each do |site|
+        %tr
+          %td= link_to site.name, site_path(site)
+          %td= site.lat
+          %td= site.lon
+          %td= site.elevation
+          %td= site.site_type
+
+        %tr
+          %td{colspan: "4"}
+            %ul{style: "list-style-type:none;padding:0; margin:0px 0px 0px 25px;"}
+              = site.description
+
+        %tr
+          %td
+            %ul{:style => "list-style-type:none;padding:0; margin:0px 0px 0px 25px;"}
+              - site.instruments.each do |inst|
+                %li= link_to inst.name, instrument_path(inst)
+
+        %tr
+          %td
+            %br
+
+- if can?(:create, Site)
+  = button_to 'New Site', new_site_path, method: :get, class: 'btn btn-default btn-md'

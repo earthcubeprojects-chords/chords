@@ -1,0 +1,50 @@
+= form_for(@var) do |f|
+  - if @var.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@var.errors.count, "error")
+        prohibited this var from being saved:
+      %ul
+        - @var.errors.full_messages.each do |message|
+          %li= message
+  .line
+    .title
+      = f.label :name
+    .field
+      = f.text_field :name, class: 'form-control'
+  .line
+    .title
+      = f.label :shortname
+    .field
+      = f.text_field :shortname, class: 'form-control'
+
+      - if @instrument
+        = f.hidden_field :instrument_id, value: @instrument.id
+      - else
+        = f.hidden_field :instrument_id, value: @var.instrument.id
+  .line
+    .title
+      = link_to 'Units', :units
+    %br
+    .field
+      = f.collection_select :unit_id, @units, :id, :name, include_blank: false
+  .line
+    .title
+      = link_to 'Measured Properties', :measured_properties
+    %br
+    .field
+      = f.collection_select :measured_property_id, @measured_properties, :id, :label, include_blank: false
+  .line
+    .title
+      = f.label :minimum_plot_value
+    .field
+      =f.text_field :minimum_plot_value, class: 'form-control'
+  .line
+    .title
+      = f.label :maximum_plot_value
+    .field
+      =f.text_field :maximum_plot_value, class: 'form-control'
+
+  .actions
+    %br
+    = f.submit class: 'btn btn-md btn-primary'

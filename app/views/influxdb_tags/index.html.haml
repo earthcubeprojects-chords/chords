@@ -1,0 +1,23 @@
+%h1 InfluxDB Tags
+= link_to 'New InfluxDB Tag', new_influxdb_tag_path, class: 'btn btn-default btn-md', style: 'text-decoration: none; color: black;', title: 'New InfluxDB Tag'
+%br
+%br
+%div.row
+  %div.col-lg-10.col-md-11
+    %table.table.table-striped
+      %tr
+        %th Name
+        %th Value
+        %th Site
+        %th Instrument
+
+      - @influxdb_tags.each do |tag|
+        %tr
+          %td= link_to tag.name, tag
+          %td= tag.value
+          %td= link_to tag.instrument.site, tag.instrument.site
+          %td= link_to tag.instrument, tag.instrument
+          %td.col-sm-1= link_to '', edit_influxdb_tag_path(tag, return: 'edit'), class: 'glyphicon glyphicon-pencil', style: 'text-decoration: none; color: black;', title: 'Edit'
+          %td.col-sm-1= link_to '', tag, method: :delete, data: { confirm: 'Are you sure?' }, class: 'glyphicon glyphicon-trash', style: 'text-decoration: none; color: black;', title: 'Delete'
+
+= link_to 'New InfluxDB Tag', new_influxdb_tag_path, class: 'btn btn-default btn-md', style: 'text-decoration: none; color: black;', title: 'New InfluxDB Tag'

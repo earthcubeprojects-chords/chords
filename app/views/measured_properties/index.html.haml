@@ -1,0 +1,31 @@
+%p#notice= notice
+
+%h1
+  .center
+    Measured Properties
+
+.accordion
+  - @sources.each do |source|
+    %h3= source
+    %div
+      .row-fluid.variable
+        .col-sm-4
+          %strong Label
+        .col-sm-3
+          %strong URL
+      - @data[source].each do |mp|
+        %br
+        .row-fluid.variable
+          .col-sm-4= mp[:name]
+          .col-sm-3= link_to mp[:url], mp[:url]
+
+.clear
+%br
+
+:javascript
+  $(function() {
+    $('.accordion').accordion({
+      heightStyle: "content",
+      collapsible: true
+    });
+  });

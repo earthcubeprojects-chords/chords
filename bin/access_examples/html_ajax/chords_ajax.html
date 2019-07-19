@@ -1,0 +1,27 @@
+<h1>CHORDS HTML/Ajax Example</h1>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+<script>
+var url = "http://chords.dyndns.org/instruments/26.json?last";
+$(function () {
+    $.getJSON(url, function (data) {
+        var table_html = "<table>";
+        $.each(data,
+        function (key, val) {
+            if (key != "Data") {
+                table_html += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
+            } else {
+                $.each(val, function (datakey, dataval) {
+                    table_html += "<tr><td>Data</td><td>" + datakey + "</td><td>" + dataval + "</td></tr>";
+                });
+            }
+        });
+        table_html += "</table>";
+
+        $("<p>", {
+            html: table_html
+        }).appendTo("body");
+    });
+});
+</script>

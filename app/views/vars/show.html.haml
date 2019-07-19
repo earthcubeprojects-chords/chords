@@ -1,0 +1,31 @@
+%h1 Variable
+%br
+%p
+  %strong Name:
+  = @var.name
+%p
+  %strong Short Name:
+  = @var.shortname
+%p
+  %strong Instrument:
+  = @var.instrument
+%p
+  %strong Units:
+  = @var.unit.try(:name)
+%p
+  %strong Display Units:
+  = @var.unit.try(:abbreviation)
+%p
+  %strong Measured Property:
+  = @var.measured_property.try(:label)
+%p
+  %strong Min Plot Value:
+  = @var.minimum_plot_value
+%p
+  %strong Max Plot Value:
+  = @var.maximum_plot_value
+
+%br
+= button_to 'Edit', edit_var_path(@var), method: :get, class: 'btn btn-default btn-md'
+%br
+= link_to 'Back', vars_path

@@ -1,0 +1,114 @@
+.variable_header {
+  display: none;
+  font-weight: bolder;
+}
+
+.delete_variable_container {
+  width: auto;
+  position: relative;
+  text-align: right;
+  top: 0px;
+  top: 0px;
+}
+
+@media screen and (max-width:13660px){
+  .left {
+  	width: 60%;
+  }
+  .right {
+  	width: 35%;	
+  }
+  .full_width {
+  	width: 95%;
+  }
+  .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
+    width:12%;
+  }
+}
+
+@media screen and (max-width:1024px){
+  .instruments_variables_header {
+    display: none;
+  }
+  .variable_header {
+    display: inline;
+  }
+  .left {
+  	width: 95%;
+  }
+  .right {
+  	width: 95%;	
+  }
+  .full_width {
+  	width: 95%;
+  }
+  .variable .col-sm-1, .instruments_variables_header .col-sm-1  {
+    width:12%;
+  }
+}
+
+@media screen and (max-width:767px){
+  .instruments_variables_header {
+    display: none;
+  }
+  .variable_header {
+    display: inline;
+  } 
+  .variable {
+  	border-radius: 10px;
+  	border: 1px solid black;
+  	margin-bottom: 5px;
+  }
+  .delete_variable_container {
+    height: 0px;
+    width: 100%;
+    position: relative;
+    top: -100px;
+  }
+}
+
+.left, .right {
+  float: left;
+}
+
+.full_width { 
+  clear: both;
+}
+
+.instrument_download, .instrument_measurements, .instrument_metadata, .instrument_variables {
+  margin: 10px;
+}
+
+.instrument_download, .instrument_measurements, .instrument_metadata, .instrument_variables {
+	border-radius: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	border: 2px solid black;
+}
+
+.instrument_download div {
+	margin-bottom: 10px;
+}
+
+.instrument_name {
+	font-size: 20pt;
+	min-height	: 40px;
+}
+
+.instrument_description {
+	font-size: 12pt;
+}
+
+.delete_test_measurements_form , .delete_test_measurements_form form{
+	display: inline;
+}
+
+
+.instrument_plot_time_window {
+	text-align: right;
+}
+
+.delete-icon {
+	margin-left: 10px;
+}
