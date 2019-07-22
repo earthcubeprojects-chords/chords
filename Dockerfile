@@ -14,8 +14,11 @@ RUN apt-get update && apt-get install -y \
   git \
   apt-utils \
   curl \
-  logrotate \
   nano
+
+# don't need logrotation any more as it is handled by the container
+#  logrotate \
+
 
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
