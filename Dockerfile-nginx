@@ -7,9 +7,11 @@ RUN apt-get update -qq && apt-get -y \
   install \
   apache2-utils \
   curl\
-  cron \
-  logrotate \
   nano 
+
+# don't need these, as the log rotation is handled by the docker container
+#  cron \
+#  logrotate \
 
 
 # establish where Nginx should look for files
@@ -33,8 +35,9 @@ COPY ./nginx_default.conf /tmp/default.nginx
 
 
 # Customize the and log rotation
-COPY ./logrotate_nginx /etc/logrotate.d/nginx
-COPY ./logrotate_nginx_cron /etc/cron.d/nginx
+# Don't need to do this, as the log rotation is handled by the docker container
+#COPY ./logrotate_nginx /etc/logrotate.d/nginx
+#COPY ./logrotate_nginx_cron /etc/cron.d/nginx
 
 
 # substitute variable references in the Nginx config template for real values from the environment
@@ -51,7 +54,8 @@ RUN envsubst '$RAILS_ROOT:$SSL_ROOT:$SSL_CERT_HOME'  < /tmp/default.nginx > /etc
  
 
 # Create the log file to be able to run tail
-RUN touch /var/log/cron.log
+# Don't need to do this, as the log rotation is handled by the docker container
+#RUN touch /var/log/cron.log
 
  
 EXPOSE 80
