@@ -19,29 +19,29 @@ describe 'Json-LD API' do
   end
 
 
-  #GET for /linked_data/{id}/edit - WORKING
-  path '/linked_data/{id}/edit' do
+  # #GET for /linked_data/{id}/edit - WORKING
+  # path '/linked_data/{id}/edit' do
 
-    get 'checks a specific JSON-LD' do
-      tags 'Json-LD'
-      produces 'application'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'checks a specific JSON-LD' do
+  #     tags 'Json-LD'
+  #     produces 'application'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end  
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end  
 end

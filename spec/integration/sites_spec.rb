@@ -19,31 +19,31 @@ describe 'Sites API' do
 
 
 
-  #GET for /api/v1/sites/{id} - WORKING
-  path '/api/v1/sites/{id}' do
+  # #GET for /api/v1/sites/{id} - WORKING
+  # path '/api/v1/sites/{id}' do
 
-    get 'Retrieve a specific site' do
-      tags 'Sites'
-      produces 'application/json', 'application/xml'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'Retrieve a specific site' do
+  #     tags 'Sites'
+  #     produces 'application/json', 'application/xml'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end
 
 
   #GET for /sites/map - WORKING
@@ -103,58 +103,58 @@ describe 'Sites API' do
     end
   end
 
-  #GET for /sites/{id}/edit - WORKING 
-  path '/sites/{id}/edit' do
+  # #GET for /sites/{id}/edit - WORKING 
+  # path '/sites/{id}/edit' do
 
-    get 'Retrieve a specific site' do
-      tags 'Sites'
-      produces 'application'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'Retrieve a specific site' do
+  #     tags 'Sites'
+  #     produces 'application'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end
 
 
-  #GET for /sites/{id} - WORKING
-  path '/sites/{id}' do
+  # #GET for /sites/{id} - WORKING
+  # path '/sites/{id}' do
 
-    get 'Retrieve a specific site' do
-      tags 'Sites'
-      produces 'application/json', 'application/xml'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'Retrieve a specific site' do
+  #     tags 'Sites'
+  #     produces 'application/json', 'application/xml'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end
 
   ##################### Site_Types below #####################
   #GET for /site_types - WORKING
@@ -173,30 +173,30 @@ describe 'Sites API' do
 
   
 
-  #GET for /site_types/{id} - WORKING
-  path '/site_types/{id}' do
+  # #GET for /site_types/{id} - WORKING
+  # path '/site_types/{id}' do
 
-    get 'show a specific site type' do
-      tags 'Sites'
-      produces 'application'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'show a specific site type' do
+  #     tags 'Sites'
+  #     produces 'application'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end
   
 end

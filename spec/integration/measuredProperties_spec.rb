@@ -36,55 +36,55 @@ describe 'Measured Properties API' do
 
 
 
-  #GET for /measured_properties/{id}/edit
-  path '/measured_properties/{id}/edit' do
+  # #GET for /measured_properties/{id}/edit
+  # path '/measured_properties/{id}/edit' do
 
-    get 'checks edit Measured Properties page' do
-      tags 'Measured Properties'
-      produces 'application'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'checks edit Measured Properties page' do
+  #     tags 'Measured Properties'
+  #     produces 'application'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end 
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end 
 
-  #GET for /measured_properties/{id} - WORKING
-  path '/measured_properties/{id}' do
+  # #GET for /measured_properties/{id} - WORKING
+  # path '/measured_properties/{id}' do
 
-    get 'checks specific measured properties page' do
-      tags 'Measured Properties'
-      produces 'application'
-      parameter name: :id, :in => :path, :type => :string
+  #   get 'checks specific measured properties page' do
+  #     tags 'Measured Properties'
+  #     produces 'application'
+  #     parameter name: :id, :in => :path, :type => :string
 
-      response '200', 'site found' do
-         schema type: :object,
-          required: ['id']
-        run_test!
-      end
+  #     response '200', 'site found' do
+  #        schema type: :object,
+  #         required: ['id']
+  #       run_test!
+  #     end
 
-      response '404', 'site not found - Entered invalid instrument ID' do
-        let(:id) { 'invalid' }
-        run_test!
-      end
+  #     response '404', 'site not found - Entered invalid instrument ID' do
+  #       let(:id) { 'invalid' }
+  #       run_test!
+  #     end
 
-      response '403', 'unsupported accept header' do
-        let(:'Accept') { 'application/foo' }
-        run_test!
-      end
-    end
-  end 
+  #     response '403', 'unsupported accept header' do
+  #       let(:'Accept') { 'application/foo' }
+  #       run_test!
+  #     end
+  #   end
+  # end 
 end

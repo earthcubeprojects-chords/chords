@@ -45,6 +45,9 @@ describe 'Influxdb API' do
 
       response '200', 'site found' do
          schema type: :object,
+          properties: {
+            id: { type: :integer }
+          },
           required: ['id']
         run_test!
       end

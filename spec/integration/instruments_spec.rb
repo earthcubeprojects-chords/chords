@@ -49,61 +49,61 @@ describe 'Instruments API' do
     end
 
 
-    #GET for /instruments/{id}/edit - WORKING
-    path '/instruments/{id}/edit' do
-        get 'Shows the edit page for a specific instrument' do
-        tags 'Instruments'
-        produces 'application'
-        parameter name: :id, :in => :path, :type => :string
+    # #GET for /instruments/{id}/edit - WORKING
+    # path '/instruments/{id}/edit' do
+    #     get 'Shows the edit page for a specific instrument' do
+    #     tags 'Instruments'
+    #     produces 'application'
+    #     parameter name: :id, :in => :path, :type => :string
 
-        response '200', 'instrument found' do
-            schema type: :object,
-            properties: {
-                id: { type: :integer }
-            },
-            required: ['id']
-            run_test!
-        end
+    #     response '200', 'instrument found' do
+    #         schema type: :object,
+    #         properties: {
+    #             id: { type: :integer }
+    #         },
+    #         required: ['id']
+    #         run_test!
+    #     end
 
-        response '404', 'instrument not found - Entered invalid instrument ID' do
-            let(:id) { 'invalid' }
-            run_test!
-        end
+    #     response '404', 'instrument not found - Entered invalid instrument ID' do
+    #         let(:id) { 'invalid' }
+    #         run_test!
+    #     end
 
-        response '403', 'unsupported accept header' do
-            let(:'Accept') { 'application/foo' }
-            run_test!
-        end
-        end
-    end
+    #     response '403', 'unsupported accept header' do
+    #         let(:'Accept') { 'application/foo' }
+    #         run_test!
+    #     end
+    #     end
+    # end
 
-    #GET for /instruments/{id} - WORKING
-    path '/instruments/{id}' do
-        get 'Shows specific instrument' do
-        tags 'Instruments'
-        produces 'application/xml'
-        parameter name: :id, :in => :path, :type => :string
+    # #GET for /instruments/{id} - WORKING
+    # path '/instruments/{id}' do
+    #     get 'Shows specific instrument' do
+    #     tags 'Instruments'
+    #     produces 'application/xml'
+    #     parameter name: :id, :in => :path, :type => :string
 
-        response '200', 'instrument found' do
-            schema type: :object,
-            properties: {
-                id: { type: :integer }
-            },
-            required: ['id']
-            run_test!
-        end
+    #     response '200', 'instrument found' do
+    #         schema type: :object,
+    #         properties: {
+    #             id: { type: :integer }
+    #         },
+    #         required: ['id']
+    #         run_test!
+    #     end
 
-        response '404', 'instrument not found - Entered invalid instrument ID' do
-            let(:id) { 'invalid' }
-            run_test!
-        end
+    #     response '404', 'instrument not found - Entered invalid instrument ID' do
+    #         let(:id) { 'invalid' }
+    #         run_test!
+    #     end
 
-        response '403', 'unsupported accept header' do
-            let(:'Accept') { 'application/foo' }
-            run_test!
-        end
-        end
-    end
+    #     response '403', 'unsupported accept header' do
+    #         let(:'Accept') { 'application/foo' }
+    #         run_test!
+    #     end
+    #     end
+    # end
     #PUT 
     #DELETE
 
