@@ -1,3 +1,7 @@
 # Dir for API portal deploy
 web_deploy
 node_modules
+.env*
+chords-*.yml
+log/*.log
+tmp/pids/unicorn.pid
