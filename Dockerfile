@@ -10,13 +10,15 @@ RUN apt-get update && apt-get install -y \
   mysql-client \
   default-libmysqlclient-dev \
   dos2unix \
-  nginx \
   cron \
   git \
   apt-utils \
   curl \
-  logrotate \
   nano
+
+# don't need logrotation any more as it is handled by the container
+#  logrotate \
+
 
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
@@ -45,10 +47,6 @@ RUN mkdir -p /chords/log && RAILS_ENV=production SECRET_KEY_BASE=`bundle exec ra
 
 
 
-# Customize the nginx configuration and log rotation
-COPY ./nginx_default.conf /etc/nginx/sites-available/default
-COPY ./logrotate_nginx /etc/logrotate.d/nginx
-COPY ./logrotate_nginx_cron /etc/cron.d/nginx
 
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the Dokcker cache to ensure that the command is run.
@@ -62,12 +60,16 @@ RUN curl -sSL https://get.docker.com/ | DEBIAN_FRONTEND=noninteractive sh
 # however if the docker build command is run with the --squash option
 RUN rm -rf .git log/* tmp/*
 
-# Expose port 80 to the Docker host, so we can access it
-# from the outside.
-EXPOSE 80
+
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
+
+
+# Expose port 3000 to the Docker host, so we can access it
+# from the outside.
+EXPOSE 3042
+
 
 # Configure an entry point, so we don't need to specify
 # "bundle exec" for each of our commands.
