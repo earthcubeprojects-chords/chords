@@ -63,7 +63,7 @@ grafana_http_port=$GRAFANA_HTTP_PORT
 chords_env="./chords_env.sh"
 
 # (Re)start nginx
-service nginx restart
+# service nginx restart
 
 # Make sure that the log directory exists
 mkdir -p log
@@ -177,5 +177,5 @@ service cron restart
 echo "**** Starting web server."
 mkdir -p tmp/pids/
 rm -f tmp/pids/unicorn.pid
-unicorn -p 8080 -c ./config/unicorn.rb -E $RAILS_ENV
+unicorn -p 3042 -c ./config/unicorn.rb -E $RAILS_ENV
 
