@@ -5,3 +5,4 @@ node_modules
 chords-*.yml
 log/*.log
 tmp/pids/unicorn.pid
+tmp/*
