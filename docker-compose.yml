@@ -27,7 +27,7 @@ version: '2'
 # CHORDS configuration values. See chords_env_template for a description of values.
 # 
 # To deploy/start/stop CHORDS:
-#   curl -L https://github.com/NCAR/chords_portal/raw/<branch>/docker-compose.yml > docker-compose.yml
+#   curl -L https://github.com/earthcubeprojects-chords/chords/raw/<branch>/docker-compose.yml > docker-compose.yml
 #   docker-compose pull 
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
@@ -46,7 +46,6 @@ services:
       - mysql-data:/var/lib/mysql
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-tmp:/tmp/
-      - nginx-log:/var/log/nginx
       - rails-log:/chords/log
     environment:
       - RAILS_ENV=${RAILS_ENV}
@@ -72,11 +71,33 @@ services:
       options:
         max-size: "1m"
         max-file: "5"
-    ports:
-        - ${CHORDS_HTTP_PORT}:80
-    links:
+    expose:
+      - "3042"
+    depends_on:
       - mysql
       - influxdb
+
+  # Nginx web service
+  web:
+    container_name: chords_web
+    image: ncareol/chords_web
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - nginx-log:/var/log/nginx
+    environment:
+      - WORKERS=${WORKERS}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "5"      
+    depends_on:
+      - app
+    ports:
+      - ${CHORDS_HTTP_PORT}:80
+
 
   # Rails mysql database
   mysql:
