@@ -20,6 +20,71 @@ RUN apt-get update && apt-get install -y \
 #  logrotate \
 
 
+
+#####
+# Install pyart
+#####
+
+# System packages 
+RUN apt-get install -y curl git gcc gdal-bin
+
+# Dependency on Ubuntu for Matplotlib
+# RUN apt-get install -y python-qt4
+# python-qt4 doesn't work and results in a qt-binding error
+# use pyqt5 instead
+RUN apt-get install -y python-pyqt5
+
+# Install miniconda to /miniconda
+RUN curl -LO http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh
+RUN bash Miniconda-latest-Linux-x86_64.sh -p /miniconda -b
+RUN rm Miniconda-latest-Linux-x86_64.sh
+
+ENV PATH=/miniconda/bin:${PATH}
+ENV CONDA_PREFIX=/miniconda
+ENV PROJ_LIB=${CONDA_PREFIX}/share/proj
+
+RUN conda update -y conda
+
+# Python packages from conda:  flask, boto
+# Install Py-ART dependencies:   numpy, scipy, matplotlib, netcdf4 
+# Optional Py-ART dependencies: basemap,pyproj, nose, gdal
+# Additional dependencies: xarray, colorcet, proj4
+
+RUN conda install --yes \
+  flask \
+  boto \
+  numpy \
+  scipy \
+  matplotlib \
+  netcdf4 \
+  basemap \
+  pyproj \
+  nose \
+  gdal \
+  xarray \
+  colorcet \
+  proj4
+
+RUN conda install --yes -c http://conda.anaconda.org/jjhelmus trmm_rsl
+
+# RUN export CONDA_PREFIX=/miniconda
+# RUN export PROJ_LIB=$CONDA_PREFIX/share/proj
+
+# RUN pip install pyserial
+
+RUN git clone https://github.com/ARM-DOE/pyart.git &&\
+  cd pyart &&\
+  python setup.py install
+
+
+#####
+# End Install pyart
+#####
+
+
+
+
+
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
 # commands.
