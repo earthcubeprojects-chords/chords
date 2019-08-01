@@ -34,6 +34,11 @@ gem 'json', '~> 1.8.6'
 
 gem 'bootsnap', require: false
 
+#gem for rubypython 
+# gem 'rubypython', '~> 0.6.4'
+gem 'rubypython'
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
