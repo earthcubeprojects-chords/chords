@@ -1,4 +1,31 @@
 Rails.application.routes.draw do
+  #####
+  # BEGIN routes from imaging app
+  #####
+  
+  get "/input_data/home", to: "input_data#home"
+  get "/input_data/:id/imageOverlay", to: "input_data#imageOverlay" 
+  #    get "/input_data/:page" => "input_data#show"
+  get "/input_data/:id/netcdf" => "input_data#netcdf"
+  get "/input_data/:id/download", to:"input_data#download"
+
+  resources :input_data
+
+  #get "/radar_data/:id" => "radar_data#show"
+  get "/radar_data/:id/raw_json" => "radar_data#raw_json"
+  get "/radar_data/:id/download", to: "radar_data#download"
+  resources :radar_data
+
+  resources :netcdf_data
+
+  get "/pages/:page" => "pages#show"
+  
+  #####
+  # END routes from imaging app
+  #####
+    
+
+
   # devise_for :users
   devise_for :users, controllers: {
     sessions: 'users/sessions'
