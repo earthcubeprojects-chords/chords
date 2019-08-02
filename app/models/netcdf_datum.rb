@@ -1,0 +1,2 @@
+class NetcdfDatum < ApplicationRecord
+end
