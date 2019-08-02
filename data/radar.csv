@@ -1,0 +1,22 @@
+#https://www.ncl.ucar.edu/Document/Graphics/ColorTables/radar.shtml
+#  r    g    b
+0    0  255  255   # cyan
+1    0  157  255   # light.blue
+2    0    0  255   # blue
+3    9  130  175   # light.green
+4    0  255    0   # green
+5    8  175   20   # dark.green
+6  255  214    0   # yellow
+7  255  152    0   # light.orange
+8  255    0    0   # red
+9  221    0   27   # added
+10  188    0   54   # med.red
+11 121    0  109   # dark.red
+12  121   51  160   # light.violet
+13  195  163  212   # violet
+14  255  255  255   # white
+15 254 220 211
+16 191 191 191
+
+
+
