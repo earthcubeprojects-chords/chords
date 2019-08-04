@@ -1,4 +1,4 @@
-class CreateArchives < ActiveRecord::Migration
+class CreateArchives < ActiveRecord::Migration[5.1]
   def change
     create_table :archives do |t|
       t.string :name

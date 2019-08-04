@@ -1,4 +1,4 @@
-class ReplaceGeneralCategoryIdWithGeneralCategory < ActiveRecord::Migration
+class ReplaceGeneralCategoryIdWithGeneralCategory < ActiveRecord::Migration[5.1]
   def change
     remove_column :vars, :general_category_id
 

@@ -1,4 +1,4 @@
-class AddEnabledToArchives < ActiveRecord::Migration
+class AddEnabledToArchives < ActiveRecord::Migration[5.1]
   def change
   	add_column :archives, :enabled, :boolean, :default => false
   end
