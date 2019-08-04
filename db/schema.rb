@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "archive_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "archive_jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "archive_name"
     t.datetime "start_at"
     t.datetime "end_at"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "archives", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "archives", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "base_url"
     t.string "send_frequency"
@@ -53,18 +53,33 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.boolean "enabled", default: false
   end
 
-  create_table "influxdb_tags", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "images", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "influxdb_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "value"
-    t.integer "instrument_id"
+    t.bigint "instrument_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["instrument_id"], name: "index_influxdb_tags_on_instrument_id"
   end
 
-  create_table "instruments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "input_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
-    t.integer "site_id"
+    t.float "origin_lat", default: 32.4921
+    t.float "origin_lon", default: -96.9973
+    t.datetime "scanned_at"
+    t.text "header_metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "instruments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.bigint "site_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "display_points", default: 120
@@ -82,7 +97,7 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.index ["site_id"], name: "index_instruments_on_site_id"
   end
 
-  create_table "linked_data", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "linked_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.text "name", null: false
     t.text "description", null: false
     t.text "keywords", null: false
@@ -93,7 +108,7 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "measured_properties", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "measured_properties", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "label"
     t.string "url"
@@ -103,7 +118,12 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.string "source", default: "SensorML"
   end
 
-  create_table "profiles", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "netcdf_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "profiles", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "project"
     t.string "affiliation"
     t.text "description"
@@ -130,17 +150,26 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.string "unit_source", default: "CUAHSI"
     t.string "measured_property_source", default: "SensorML"
     t.string "data_archive_url"
-    t.integer "max_download_points", default: 100000, null: false
+    t.integer "max_download_points", default: 100000
   end
 
-  create_table "site_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "radar_data", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "sampled_at"
+    t.float "origin_lat", default: 40.123
+    t.float "origin_lon", default: -101.123
+    t.text "header_metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "site_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.text "definition"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "sites", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "sites", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.decimal "lat", precision: 12, scale: 9
     t.decimal "lon", precision: 12, scale: 9
@@ -148,18 +177,18 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.datetime "updated_at", null: false
     t.text "description"
     t.decimal "elevation", precision: 12, scale: 6, default: "0.0"
-    t.integer "site_type_id"
+    t.bigint "site_type_id"
     t.index ["site_type_id"], name: "index_sites_on_site_type_id"
   end
 
-  create_table "topic_categories", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "topic_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.text "definition"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "units", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "units", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "abbreviation"
     t.datetime "created_at", null: false
@@ -169,7 +198,7 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.string "source"
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -189,13 +218,13 @@ ActiveRecord::Schema.define(version: 2019_08_02_055026) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "vars", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
+  create_table "vars", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
-    t.integer "instrument_id"
+    t.bigint "instrument_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "shortname"
-    t.integer "measured_property_id", default: 795, null: false
+    t.bigint "measured_property_id", default: 795, null: false
     t.float "minimum_plot_value"
     t.float "maximum_plot_value"
     t.integer "unit_id", default: 1
