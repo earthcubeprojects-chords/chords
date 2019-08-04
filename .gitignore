@@ -67,3 +67,5 @@ config/archive.yml
 config/schedule.rb
 .byebug_history
 pylintrc
+
+/storage/
