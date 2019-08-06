@@ -116,7 +116,12 @@ services:
       - web-root:/chords/public
     depends_on:
       - web
-    command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --staging -d chords.mikedye.com 
+    # --staging
+    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --staging -d chords.mikedye.com 
+
+    # --force-renewal    
+    command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --force-renewal -d chords.mikedye.com 
+
 
 
 
