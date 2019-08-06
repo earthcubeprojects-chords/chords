@@ -40,35 +40,41 @@ functionality:
 # Imaging Feature 
 The imaging feature within this application utilizes Leaflet JS and Leaflet.heat to create interactive heat maps using JSON data created from NetCDF files. It also has an image overlay feature in Leaflet JS that allows visualization of data on an interactive map using PNG images of plotted NetCDF data.
 
-Ruby version: 2.6.0
+* Ruby version: 2.6.0
 
-Rails version: 5.2.3
+* Rails version: 5.2.3
 
-Configured to interact with PostGRESQL
+* Configured to interact with PostGRESQL
 
-Utilizes Active Storage to help with uploading and downloading JSON and image files
+* Utilizes Active Storage to help with uploading and downloading JSON and image files
 
-Map feature run through Leaflet JS and Leaflet.Heat plugin* [See Note below]
+* Map feature run through Leaflet JS and Leaflet.Heat plugin* [See Note below]
 
 Tutorials in https://leanpub.com/leaflet-tips-and-tricks/read were useful as a starting point for building maps
 
-In order to get started:
+# In order to get started:
 Git clone project into the directory you would like
 git clone git@github.com:abisuresh/databaseVersion_imageApp.git
 Make sure you have rails installed on your system
 
 Start the rails server by typing the following into the command line from the root of the application: rails server
 
-In order to upload a JSON file and see the resulting map (with data plotted in heatmap version): -> Navigate to localhost:3000/radar_data
+# In order to upload a JSON file and see the resulting map (with data plotted in heatmap version):
 
-In order to upload a NetCDF file and see the resulting map (with data plotted using PNG images) : -> Navigate to localhost:3000/input_data
+  -> Navigate to localhost:3000/radar_data
 
-Running with a Docker-based database
+# In order to upload a NetCDF file and see the resulting map (with data plotted using PNG images) : 
+
+  -> Navigate to localhost:3000/input_data
+
+# Running with a Docker-based database
+
 docker run --name postgres -p 5432:5432 -d postgres
 RAILS_ENV=development rake db:create
 RAILS_ENV=development rails db:migrate RAILS_ENV=development
 RAILS_ENV=development rails s -b localhost
-Build using docker-compose
+
+# Build using docker-compose
 Git clone project into the directory you would like
 git clone git@github.com:abisuresh/databaseVersion_imageApp.git
 Install docker, docker LFS, and docker-compose
@@ -78,18 +84,23 @@ build the docker image, create the database, and run all migrations
 docker-compose build
 docker-compose run web rake db:create
 docker-compose run web rake db:migrate
-Start the docker containers
+
+# Start the docker containers
 docker-compose up -d
-Stop the docker containers
+
+# Stop the docker containers
 docker-compose down
-In order to upload a JSON file and see the resulting map (with data plotted in heatmap version): -> Navigate to localhost/radar_data
 
-In order to upload a NetCDF file and see the resulting map (with data plotted using PNG images) : -> Navigate to localhost/input_data
+# In order to upload a JSON file and see the resulting map (with data plotted in heatmap version): 
+  -> Navigate to localhost/radar_data
 
-Note: The Leaflet.heat Plugin is licensed under a permissive license that allows both private and commercial use and distribution with or without modification provided the following statement is provided along with use:
+# In order to upload a NetCDF file and see the resulting map (with data plotted using PNG images) : 
+  -> Navigate to localhost/input_data
+
+# Note: The Leaflet.heat Plugin is licensed under a permissive license that allows both private and commercial use and distribution with or without modification provided the following statement is provided along with use:
 
 Copyright (c) 2014, Vladimir Agafonkin All rights reserved. https://github.com/Leaflet/Leaflet.heat
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-This project is sponsored by funding from the National Science Foundation under ICER awards 1639750, 1639640, 1639570, 1639554 and 1639720.
+# This project is sponsored by funding from the National Science Foundation under ICER awards 1639750, 1639640, 1639570, 1639554 and 1639720.
