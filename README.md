@@ -110,7 +110,7 @@ docker-compose down
     -> Navigate to localhost/input_data 
 
 
-# Note: The Leaflet.heat Plugin is licensed under a permissive license that allows both private and commercial use and distribution with or without modification provided the following statement is provided along with use:  
+### Note: The Leaflet.heat Plugin is licensed under a permissive license that allows both private and commercial use and distribution with or without modification provided the following statement is provided along with use:  
 
 Copyright (c) 2014, Vladimir Agafonkin
 All rights reserved.
@@ -127,4 +127,4 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF TH
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-# This project is sponsored by funding from the National Science Foundation under ICER awards 1639750, 1639640, 1639570, 1639554 and 1639720.
+### This project is sponsored by funding from the National Science Foundation under ICER awards 1639750, 1639640, 1639570, 1639554 and 1639720.
