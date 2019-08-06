@@ -47,6 +47,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-tmp:/tmp/
       - rails-log:/chords/log
+      - web-root:/chords/public      
     environment:
       - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
@@ -77,6 +78,7 @@ services:
       - mysql
       - influxdb
 
+
   # Nginx web service
   web:
     container_name: chords_web
@@ -86,6 +88,10 @@ services:
       dockerfile: Dockerfile-nginx
     volumes:
       - nginx-log:/var/log/nginx
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/chords/public
+      - dhparam:/etc/ssl/certs
     environment:
       - WORKERS=${WORKERS}
     logging:
@@ -97,6 +103,21 @@ services:
       - app
     ports:
       - ${CHORDS_HTTP_PORT}:80
+      - 443:443
+
+
+  # Certbot 
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/chords/public
+    depends_on:
+      - web
+    command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --staging -d chords.mikedye.com 
+
 
 
   # Rails mysql database
@@ -228,3 +249,19 @@ volumes:
   influxdb-log:
   kapacitor-log:
   grafana-log:
+
+  #certbot volumes
+  certbot-etc:
+  certbot-var:
+  web-root:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   device: ./public
+    #   o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ec2-user/chords/dhparam/
+      o: bind    
