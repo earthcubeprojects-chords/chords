@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Sampled at:</strong>
+  <%= @radar_datum.sampled_at %>
+</p>
+
+<p>
+  <strong>Origin lat:</strong>
+  <%= @radar_datum.origin_lat %>
+</p>
+
+<p>
+  <strong>Origin lon:</strong>
+  <%= @radar_datum.origin_lon %>
+</p>
+
+<p>
+  <strong>Header metadata:</strong>
+  <%= @radar_datum.header_metadata %>
+</p>
+
+<p>
+
+  <%= @radar_datum.map_data.download %>
+</p>
+
+<%= link_to 'Edit', edit_radar_datum_path(@radar_datum) %> |
+<%= link_to 'Back', radar_data_path %>
+

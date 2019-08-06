@@ -12,7 +12,11 @@ class ApplicationController < ActionController::Base
     headers['Access-Control-Allow-Origin'] = '*'
   end
 
+
   def set_global
+    #set host for activestorage use
+    ActiveStorage::Current.host = request.base_url
+
     ActionMailer::Base.default_url_options = {:host => request.host_with_port}
 
     notavailmsg = "unknown"

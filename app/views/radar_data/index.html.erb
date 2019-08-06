@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Radar Data</h1>
+
+<table border= "solid black 1px">
+  <thead>
+    <tr>
+      <th>Sampled at</th>
+      <th>Origin lat</th>
+      <th>Origin lon</th>
+      <th>Header metadata</th>
+      <th>URL</th>
+      <th colspan="10"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @radar_data.each do |radar_datum| %>
+      <tr>
+        <td><%= radar_datum.sampled_at %></td>
+        <td><%= radar_datum.origin_lat %></td>
+        <td><%= radar_datum.origin_lon %></td>
+        <td><%= radar_datum.header_metadata %></td>
+	<td><%= radar_datum.id %></td>
+        <td><%= link_to 'Show', radar_datum %></td>
+        <td><%= link_to 'Edit', edit_radar_datum_path(radar_datum) %></td>
+        <td><%= link_to 'Destroy', radar_datum, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	<td><%= link_to 'Download', "/radar_data/#{radar_datum.id}/download", method: :get, action: :download, data: {confirm: 'Do you want to download this file' } %></td>
+	<td><%= radar_datum.map_data.service_url(disposition: 'attachment') if radar_datum.map_data.attached? %></td>
+     </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Radar Datum', new_radar_datum_path %>

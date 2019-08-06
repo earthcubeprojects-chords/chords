@@ -1,4 +1,4 @@
-class RemoveOldRolesColumnsOnUser < ActiveRecord::Migration
+class RemoveOldRolesColumnsOnUser < ActiveRecord::Migration[5.1]
   def up
     remove_column :users, :is_administrator, :boolean
     remove_column :users, :is_data_viewer, :boolean

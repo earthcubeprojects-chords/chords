@@ -1,0 +1,132 @@
+<head>
+   <title>Simple Leaflet Map with Heatmap </title>
+    <meta charset="utf-8" />
+    <link
+        rel="stylesheet"
+        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+    />
+<style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 90%;
+            width: 90%;
+        }
+    </style>
+
+</head>
+
+<h1>Open Source Map utilizing Leaflet JS, layering and heatmap </h1>
+<body>   
+	<div id="map"></div>
+
+    <script
+       src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script
+       src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js">
+    </script>
+
+    <script>
+
+  var coolPlaces = new L.LayerGroup();
+
+        L.marker([-41.29042, 174.78219])
+            .bindPopup('Te Papa').addTo(coolPlaces),
+        L.marker([-41.29437, 174.78405])
+            .bindPopup('Embassy Theatre').addTo(coolPlaces),
+        L.marker([-41.2895, 174.77803])
+            .bindPopup('Michael Fowler Centre').addTo(coolPlaces),
+        L.marker([-41.28313, 174.77736])
+            .bindPopup('Leuven Belgin Beer Cafe').addTo(coolPlaces),
+        L.polyline([
+            [-41.28313, 174.77736],
+            [-41.2895, 174.77803],
+            [-41.29042, 174.78219],
+            [-41.29437, 174.78405]
+            ]
+            ).addTo(coolPlaces);
+
+        var osmLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>',
+            thunLink = '<a href="http://thunderforest.com/">Thunderforest</a>\
+';
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osmAttrib = '&copy; ' + osmLink + ' Contributors',
+            landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y\
+}.png',
+            thunAttrib = '&copy; '+osmLink+' Contributors & '+thunLink;
+
+        var osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib}),
+            landMap = L.tileLayer(landUrl, {attribution: thunAttrib});
+
+
+	  var quakePoints = [
+[43.5396,-70.1242,1.7345],
+[43.8725,-70.9561,2.6901],
+[43.8992,-70.3117,4.6968],
+[43.7495,-70.02,1.8642],
+[43.7008,-70.0876,2.1629],
+[43.7371,-70.0682,2.0408],
+[43.372,-70.3502,2.7565],
+[43.7511,-70.0623,2.4531],
+[43.7557,-70.3391,2.1871],
+[43.6881,-70.2726,3.1336],
+[43.7463,-70.1194,2.7113],
+[43.6966,-70.1238,2.4168],
+[43.7000, -70.1200, 8.000],
+[43.5398,-70.1242,1.7345],
+[43.8728,-70.9561,2.6901],
+[43.8998,-70.3117,4.6968],
+[43.7498,-70.02,1.8642],
+[43.7004,-70.0876,2.1629],
+[43.7378,-70.0682,2.0408],
+[43.3728,-70.3502,2.7565],
+[43.7518,-70.0623,2.4531],
+[43.7558,-70.3391,2.1871],
+[43.6888,-70.2726,3.1336],
+[43.7468,-70.1194,2.7113],
+[43.6968,-70.1238,2.4168],
+[43.7008, -70.1200, 8.000]
+];
+
+	
+
+	let portland = L.marker([43.6591, -70.2568]).bindPopup('This is Portland, ME.'), 
+	    gorham = L.marker([43.6795, -70.4442]).bindPopup('This is Gorham, ME.'), 
+	    scarborough = L.marker([43.5902, -70.3345]).bindPopup('This is Scarborough, ME.'), 
+	    biddeford = L.marker([43.4926, -70.4534]).bindPopup('This is Biddeford, ME.');
+
+	let cities = L.layerGroup([portland, gorham, scarborough, biddeford]); 
+
+	var map = L.map('map',{ layers: [osmMap] 
+		}).setView([43.6590,-70.2568], 10);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+	 var baseLayers = {
+                        "OSM Mapnik": osmMap,
+                        "Landscape": landMap
+                };
+
+                var overlays = {
+                        "Interesting places": coolPlaces
+                };
+
+                L.control.layers(baseLayers,overlays).addTo(map);
+
+        var heat = L.heatLayer(quakePoints,{
+            radius: 20,
+            blur: 0,
+            maxZoom: 17,
+        }).addTo(map); 
+    </script> 
+</body> 

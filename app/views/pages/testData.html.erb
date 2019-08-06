@@ -1,0 +1,162 @@
+<head>
+   <title>Simple Leaflet Map with Heatmap </title>
+    <meta charset="utf-8" />
+    <link
+        rel="stylesheet"
+        href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css"
+    />
+    
+<style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 90%;
+            width: 90%;
+        }
+    </style>
+
+</head>
+<h1>Open Source Map utilizing Leaflet JS, layering and heatmap </h1>
+<body>
+        <div id="map"></div>
+
+    <script
+       src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js">
+    </script>
+
+    <script
+       src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js">
+    </script>
+
+    <script>
+
+  var coolPlaces = new L.LayerGroup();
+
+        L.marker([-41.29042, 174.78219])
+            .bindPopup('Te Papa').addTo(coolPlaces),
+        L.marker([-41.29437, 174.78405])
+            .bindPopup('Embassy Theatre').addTo(coolPlaces),
+        L.marker([-41.2895, 174.77803])
+            .bindPopup('Michael Fowler Centre').addTo(coolPlaces),
+        L.marker([-41.28313, 174.77736])
+            .bindPopup('Leuven Belgin Beer Cafe').addTo(coolPlaces),
+        L.polyline([
+            [-41.28313, 174.77736],
+            [-41.2895, 174.77803],
+            [-41.29042, 174.78219],
+            [-41.29437, 174.78405]
+            ]
+            ).addTo(coolPlaces);
+
+        var osmLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>',
+thunLink = '<a href="http://thunderforest.com/">Thunderforest</a>\
+';
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            osmAttrib = '&copy; ' + osmLink + ' Contributors',
+            landUrl = 'http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y\
+}.png',
+            thunAttrib = '&copy; '+osmLink+' Contributors & '+thunLink;
+
+        var osmMap = L.tileLayer(osmUrl, {attribution: osmAttrib}),
+            landMap = L.tileLayer(landUrl, {attribution: thunAttrib});
+
+var testPoints = [[32.49347552825701, -96.99732146854532, -11.90999984741211],
+ [32.4940145390658, -96.9973216559672, 15.109999656677246],
+ [32.49455355028627, -96.99732184339148, -41.5099983215332],
+ [32.49509256136951, -96.99732203081795, -38.23999786376953],
+ [32.495631572178304, -96.99732221824658, -35.869998931884766],
+ [32.496170582712644, -96.99732240567735, -34.0099983215332],
+ [32.49670959352144, -96.99732259311047, -32.47999954223633],
+ [32.49724860350686, -96.99732278054555, -31.17999839782715],
+ [32.497787613766754, -96.99732296798295, 6.210000038146973],
+ [32.498326624026646, -96.99732315542262, -17.31999969482422],
+ [32.49886563428653, -96.99732334286455, -28.149999618530273], 
+ [32.49347553,	-96.99732147,	-11.90999985],
+ [32.49401454,	-96.99732166,	15.10999966],
+ [32.49455355,	-96.99732184,	-41.50999832],
+ [32.49509256,	-96.99732203,	-38.23999786],
+ [32.49563157,	-96.99732222,	-35.86999893],
+ [32.49617058,	-96.99732241,	-34.00999832],
+ [32.49670959,	-96.99732259,	-32.47999954],
+ [32.4972486,	-96.99732278,	-31.1799984],
+ [32.49778761,	-96.99732297,	6.210000038],
+ [32.49832662,	-96.99732316,	-17.31999969],
+ [32.49886563,	-96.99732334,	-28.14999962],
+ [32.49940464,	-96.99732353,	-27.34000015],
+ [32.49994365,	-96.99732372,	-16.29999924],
+ [32.50048266,	-96.99732391,	3.099999905],
+ [32.50102167,	-96.99732409,	-25.26999855],
+ [32.50156068,	-96.99732428,	-24.68000031],
+ [32.50209969,	-96.99732447,	2.710000038],
+ [32.5026387,	-96.99732466,	-4.380000114],
+ [32.50317771,	-96.99732484,	-10.13999939],
+ [32.50371672,	-96.99732503,	-13.88999939],
+ [32.50425573,	-96.99732522,	-22.25],
+ [32.50479474,	-96.9973254,	-21.78999901],
+ [32.50533375,	-96.99732559,	-21.38999939],
+ [32.50587276,	-96.99732578,	-21.01000023],
+ [32.50641177,	-96.99732597,	-20.63999939],
+ [32.50695077,	-96.99732615,	-20.28999901],
+ [32.50748978,	-96.99732634,	-15.98999977],
+ [32.50802879,	-96.99732653,	-17.53999901],
+ [32.5085678,	-96.99732672,	-14.78999996],
+ [32.50910681,	-96.9973269,	-7.279999733],
+ [32.50964582,	-96.99732709,	-6.980000019],
+ [32.51018482,	-96.99732728,	-8.93999958],
+ [32.51072383,	-96.99732747,	-0.8799999952],
+ [32.51126284,	-96.99732765,	7.409999847],
+ [32.51180185,	-96.99732784,	7.569999695],
+ [32.51234085,	-96.99732803,	4.880000114],
+ [32.51287986,	-96.99732822,	8.059999466],
+ [32.51341887,	-96.9973284,	10.71000004],
+ [32.51395787,	-96.99732859,	12.5],
+ [32.51449688,	-96.99732878,	14.40999985],
+ [32.51503589,	-96.99732897,	19.75],
+ [32.5155749,	-96.99732915,	20.13999939],
+ [32.5161139,	-96.99732934,	20.97999954],
+ [32.51665291,	-96.99732953,	22.1099987],
+ [32.51719191,	-96.99732972,	17.96999931],
+ [32.51773092,	-96.9973299,	21.96999931],
+ [32.51826993,	-96.99733009,	21.65999985],
+ [32.51880893,	-96.99733028,	20.52000046],
+ [32.51934794,	-96.99733047,	18.75],
+ [32.51988695,	-96.99733065,	24.13999939]];
+
+        let portland = L.marker([43.6591, -70.2568]).bindPopup('This is Portland, ME.'),
+            gorham = L.marker([43.6795, -70.4442]).bindPopup('This is Gorham, ME.'),
+            scarborough = L.marker([43.5902, -70.3345]).bindPopup('This is Scarborough, ME.'),
+            biddeford = L.marker([43.4926, -70.4534]).bindPopup('This is Biddeford, ME.');
+
+        let cities = L.layerGroup([portland, gorham, scarborough, biddeford]);
+
+        var map = L.map('map',{ layers: [osmMap]
+                }).setView([32.492128,-96.997321], 10);
+        mapLink =
+            '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer(
+            'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; ' + mapLink + ' Contributors',
+            maxZoom: 18,
+        }).addTo(map);
+
+        var baseLayers = {
+                        "OSM Mapnik": osmMap,
+                        "Landscape": landMap
+                };
+
+                var overlays = {
+                        "Interesting places": coolPlaces
+                };
+
+                L.control.layers(baseLayers,overlays).addTo(map);
+
+        var heat = L.heatLayer(testPoints,{
+            radius: 20,
+            blur: 0,
+            maxZoom: 17,
+        }).addTo(map);
+    </script>
+</body>

@@ -1,4 +1,4 @@
-class ChangeLatLonFieldToDecimal < ActiveRecord::Migration
+class ChangeLatLonFieldToDecimal < ActiveRecord::Migration[5.1]
 
   def change
     change_column :sites, :lat, :decimal, :precision => 12, :scale => 9

@@ -1,4 +1,4 @@
-class AddCuahsiMethodIdToInstruments < ActiveRecord::Migration
+class AddCuahsiMethodIdToInstruments < ActiveRecord::Migration[5.1]
   def change
     add_column :instruments, :cuahsi_method_id, :integer
   end

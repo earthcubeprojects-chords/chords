@@ -1,4 +1,4 @@
-class CreateInfluxdbTags < ActiveRecord::Migration
+class CreateInfluxdbTags < ActiveRecord::Migration[5.1]
   def change
     create_table :influxdb_tags do |t|
       t.string :name
