@@ -124,8 +124,10 @@ services:
 
 
     # --force-renewal    
-    command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --force-renewal -d chords.mikedye.com 
+    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --force-renewal -d chords.mikedye.com 
 
+    # no force renewal
+    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email -d chords.mikedye.com 
 
 
   # Rails mysql database
