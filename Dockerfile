@@ -7,7 +7,7 @@ LABEL maintainer="martinc@ucar.edu"
 RUN apt-get update && apt-get install -y \
   build-essential \
   nodejs \
-  mysql-client \
+  default-mysql-client \
   default-libmysqlclient-dev \
   dos2unix \
   cron \
