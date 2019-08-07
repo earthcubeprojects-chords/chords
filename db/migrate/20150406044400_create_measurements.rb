@@ -1,4 +1,4 @@
-class CreateMeasurements < ActiveRecord::Migration[5.1]
+class CreateMeasurements < ActiveRecord::Migration
   def change
     create_table :measurements do |t|
       t.references :instrument, index: true

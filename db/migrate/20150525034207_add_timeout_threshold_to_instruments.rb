@@ -1,4 +1,4 @@
-class AddTimeoutThresholdToInstruments < ActiveRecord::Migration[5.1]
+class AddTimeoutThresholdToInstruments < ActiveRecord::Migration
   def change
      add_column :instruments, :seconds_before_timeout, :integer, :default => '5'
    end

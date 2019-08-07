@@ -1,4 +1,4 @@
-class CreateLinkedData < ActiveRecord::Migration[5.1]
+class CreateLinkedData < ActiveRecord::Migration
   def change
     create_table :linked_data do |t|
       t.text :name, null: false

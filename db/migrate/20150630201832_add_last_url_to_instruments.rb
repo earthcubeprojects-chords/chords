@@ -1,4 +1,4 @@
-class AddLastUrlToInstruments < ActiveRecord::Migration[5.1]
+class AddLastUrlToInstruments < ActiveRecord::Migration
   def change
     add_column :instruments, :last_url, :string
   end

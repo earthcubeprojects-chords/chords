@@ -1,4 +1,4 @@
-class AddDisplayPointsToInstruments < ActiveRecord::Migration[5.1]
+class AddDisplayPointsToInstruments < ActiveRecord::Migration
   def change
      add_column :instruments, :display_points, :integer, :default => 20
   end

@@ -1,4 +1,4 @@
-class AddCuahsiSiteCodeToSites < ActiveRecord::Migration[5.1]
+class AddCuahsiSiteCodeToSites < ActiveRecord::Migration
   def change
     add_column :sites, :cuahsi_site_code, :integer
   end

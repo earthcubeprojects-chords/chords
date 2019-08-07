@@ -1,4 +1,4 @@
-class AddCuahsiProfileMetadata < ActiveRecord::Migration[5.1]
+class AddCuahsiProfileMetadata < ActiveRecord::Migration
   def change
   	add_column :profiles, :contact_name, :string, null: false, :default => 'Contact Name'
   	add_column :profiles, :contact_phone, :string, null: false, :default => 'Contact Phone'

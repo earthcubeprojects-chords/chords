@@ -1,4 +1,4 @@
-class ChangeVarsVColumnName < ActiveRecord::Migration[5.1]
+class ChangeVarsVColumnName < ActiveRecord::Migration
   def change
     rename_column :vars, :v, :varnumber
   end

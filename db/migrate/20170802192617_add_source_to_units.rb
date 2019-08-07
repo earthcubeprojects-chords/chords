@@ -1,4 +1,4 @@
-class AddSourceToUnits < ActiveRecord::Migration[5.1]
+class AddSourceToUnits < ActiveRecord::Migration
   def change
     add_column :units, :source, :string
   end

@@ -1,4 +1,4 @@
-class CreateInstruments < ActiveRecord::Migration[5.1]
+class CreateInstruments < ActiveRecord::Migration
   def change
     create_table :instruments do |t|
       t.string :name

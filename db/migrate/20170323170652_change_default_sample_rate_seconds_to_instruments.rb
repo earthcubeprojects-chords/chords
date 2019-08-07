@@ -1,4 +1,4 @@
-class ChangeDefaultSampleRateSecondsToInstruments < ActiveRecord::Migration[5.1]
+class ChangeDefaultSampleRateSecondsToInstruments < ActiveRecord::Migration
   def up
     change_column_default :instruments, :sample_rate_seconds, 60
   end

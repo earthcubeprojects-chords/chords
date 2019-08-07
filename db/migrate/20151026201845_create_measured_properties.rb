@@ -1,4 +1,4 @@
-class CreateMeasuredProperties < ActiveRecord::Migration[5.1]
+class CreateMeasuredProperties < ActiveRecord::Migration
   def change
     create_table :measured_properties do |t|
       t.string :name

@@ -1,4 +1,4 @@
-class CreateVars < ActiveRecord::Migration[5.1]
+class CreateVars < ActiveRecord::Migration
   def change
     create_table :vars do |t|
       t.string :name

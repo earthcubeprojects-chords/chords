@@ -1,4 +1,4 @@
-class AddShortnameToVars < ActiveRecord::Migration[5.1]
+class AddShortnameToVars < ActiveRecord::Migration
   def change
     add_column :vars, :shortname, :string
   end

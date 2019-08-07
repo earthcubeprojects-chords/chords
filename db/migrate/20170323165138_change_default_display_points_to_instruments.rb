@@ -1,4 +1,4 @@
-class ChangeDefaultDisplayPointsToInstruments < ActiveRecord::Migration[5.1]
+class ChangeDefaultDisplayPointsToInstruments < ActiveRecord::Migration
   def up
     change_column_default :instruments, :display_points, 120
   end

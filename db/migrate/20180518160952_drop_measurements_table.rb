@@ -1,4 +1,4 @@
-class DropMeasurementsTable < ActiveRecord::Migration[5.1]
+class DropMeasurementsTable < ActiveRecord::Migration
   def change
     drop_table :measurements
   end

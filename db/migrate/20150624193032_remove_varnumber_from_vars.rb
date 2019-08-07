@@ -1,4 +1,4 @@
-class RemoveVarnumberFromVars < ActiveRecord::Migration[5.1]
+class RemoveVarnumberFromVars < ActiveRecord::Migration
   def change
     remove_column :vars, :varnumber, :string
   end

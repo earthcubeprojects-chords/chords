@@ -1,4 +1,4 @@
-class AddTimezoneToProfile < ActiveRecord::Migration[5.1]
+class AddTimezoneToProfile < ActiveRecord::Migration
   def change
     add_column :profiles, :timezone, :string
   end

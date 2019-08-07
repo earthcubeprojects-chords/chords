@@ -1,4 +1,4 @@
-class CreateProfiles < ActiveRecord::Migration[5.1]
+class CreateProfiles < ActiveRecord::Migration
   def change
     create_table :profiles do |t|
       t.string :project,     limit: 255

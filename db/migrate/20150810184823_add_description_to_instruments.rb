@@ -1,4 +1,4 @@
-class AddDescriptionToInstruments < ActiveRecord::Migration[5.1]
+class AddDescriptionToInstruments < ActiveRecord::Migration
   def change
     add_column :instruments, :description, :text
   end

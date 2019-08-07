@@ -1,4 +1,4 @@
-class AddDefaultValueToGeneralCategory < ActiveRecord::Migration[5.1]
+class AddDefaultValueToGeneralCategory < ActiveRecord::Migration
   def change
   	change_column_default :vars, :general_category, "9"
   end

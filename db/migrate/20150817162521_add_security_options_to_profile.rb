@@ -1,4 +1,4 @@
-class AddSecurityOptionsToProfile < ActiveRecord::Migration[5.1]
+class AddSecurityOptionsToProfile < ActiveRecord::Migration
   def change
      add_column :users, :is_administrator, :boolean, :default => false
      add_column :users, :is_data_viewer, :boolean, :default => true

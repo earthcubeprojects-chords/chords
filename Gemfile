@@ -37,11 +37,6 @@ gem 'json', '~> 1.8.6'
 
 gem 'bootsnap', require: false
 
-#gem for rubypython 
-# gem 'rubypython', '~> 0.6.4'
-gem 'rubypython'
-
-
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -55,9 +50,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec'
-  gem 'rspec-rails'
-
   gem 'database_cleaner'
   gem 'email_spec'
   gem 'rails-controller-testing'
@@ -70,9 +62,7 @@ group :development do
   gem 'letter_opener'
 
   # Access an IRB console on exception pages or by using <%= console %> in views
-  # gem 'web-console', '~> 2.0'
-  gem 'web-console', '>= 3.3.0'
-
+  gem 'web-console', '~> 2.0'
 
   gem 'rubocop', '~> 0.52.1', require: false
 end

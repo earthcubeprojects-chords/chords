@@ -1,2 +1,0 @@
-class NetcdfDatum < ApplicationRecord
-end

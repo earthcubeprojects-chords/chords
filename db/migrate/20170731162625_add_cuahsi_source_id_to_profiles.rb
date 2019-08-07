@@ -1,4 +1,4 @@
-class AddCuahsiSourceIdToProfiles < ActiveRecord::Migration[5.1]
+class AddCuahsiSourceIdToProfiles < ActiveRecord::Migration
   def change
     add_column :profiles, :cuahsi_source_id, :integer
   end

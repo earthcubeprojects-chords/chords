@@ -1,4 +1,4 @@
-class AddIndexToMeasurements < ActiveRecord::Migration[5.1]
+class AddIndexToMeasurements < ActiveRecord::Migration
   def change
     add_index :measurements, :measured_at
   end
