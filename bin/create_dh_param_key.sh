@@ -1,6 +1,6 @@
 #!/bin/sh
 
 
-mkdir /chords/dhparam
+# mkdir /chords/dhparam
 
-openssl dhparam -out /chords/dhparam/dhparam-2048.pem 2048
+openssl dhparam -out /etc/ssl/certs/dhparam-2048.pem 2048
