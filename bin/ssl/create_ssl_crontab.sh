@@ -34,6 +34,8 @@ else
 
   #echo new cron into cron file
   sudo touch ${SSL_CHORDS_DIR}/log/cron.log
+  sudo chmod 666 ${SSL_CHORDS_DIR}/log/cron.log
+
   # echo "*/5 * * * * ${SSL_CHORDS_DIR}/bin/ssl/renew_ssl_cert.sh >> ${SSL_CHORDS_DIR}/log/cron.log 2>&1" >> /tmp/ssl_cron
   echo "* * * * * ${SSL_CHORDS_DIR}/bin/ssl/renew_ssl_cert.sh >> ${SSL_CHORDS_DIR}/log/cron.log 2>&1" >> /tmp/ssl_cron
 
