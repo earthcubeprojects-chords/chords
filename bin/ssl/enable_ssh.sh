@@ -73,7 +73,8 @@ else
 
 
   # generate actual certifcates
-  docker-compose run certbot certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email  --force-renewal --dry-run -d ${SSL_HOST}
+  # docker-compose run certbot certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email  --force-renewal --dry-run -d ${SSL_HOST}
+  docker-compose run certbot certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email  --force-renewal  -d ${SSL_HOST}
 
 
   #restart the web server
