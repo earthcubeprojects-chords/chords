@@ -33,7 +33,7 @@ else
   crontab -l > /tmp/ssl_cron
 
   #echo new cron into cron file
-  touch /var/log/cron.log
+  sudo touch /var/log/cron.log
   echo "*/5 * * * * ${SSL_CHORDS_DIR}/bin/ssl/ssl_renew.sh >> /var/log/cron.log 2>&1" >> /tmp/ssl_cron
 
   #install new cron file
