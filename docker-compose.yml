@@ -82,7 +82,7 @@ services:
   # Nginx web service
   web:
     container_name: chords_web
-    image: ncareol/chords_web
+#    image: ncareol/chords_web
     build:
       context: .
       dockerfile: Dockerfile-nginx
@@ -94,6 +94,10 @@ services:
       - dhparam:/etc/ssl/certs
     environment:
       - WORKERS=${WORKERS}
+      - SSL_ENABLED=${SSL_ENABLED}
+      - SSL_HOST=${SSL_HOST}
+      - SSL_CHORDS_DIR=${SSL_CHORDS_DIR}
+      - SSL_CERT_EMAIL=${SSL_CERT_EMAIL}
     logging:
       driver: "json-file"
       options:
@@ -117,17 +121,17 @@ services:
     depends_on:
       - web
     # --staging
-    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --staging -d chords.mikedye.com 
+    command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --staging -d ${SSL_HOST}
 
     # --dry-run
-    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --dry-run -d chords.mikedye.com 
+    # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --dry-run -d ${SSL_HOST}
 
 
     # --force-renewal    
-    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email --force-renewal -d chords.mikedye.com 
+    # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${SSL_HOST}
 
     # no force renewal
-    # command: certonly --webroot --webroot-path=/chords/public --email admin@chordsrt.com --agree-tos --no-eff-email -d chords.mikedye.com 
+    # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email -d ${SSL_HOST}
 
 
   # Rails mysql database
@@ -273,5 +277,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/ec2-user/chords/dhparam/
+      device: ${SSL_CHORDS_DIR}/dhparam/
       o: bind    
