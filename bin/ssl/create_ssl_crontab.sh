@@ -11,7 +11,7 @@ read_var() {
 
 if test -f ".env"; 
 then
-  SSL_CHORDS_DIR=$(read_var SSL_ENABLED .env)
+  SSL_CHORDS_DIR=$(read_var SSL_CHORDS_DIR .env)
 else
     echo ".env not found in current directory"
 fi
