@@ -31,6 +31,9 @@ COPY ./nginx_default.conf /tmp/default.nginx
 COPY ./nginx_ssl.conf /tmp/ssl.nginx
 
 
+COPY ./bin/create_dh_param_key.sh /chords/create_dh_param_key.sh
+
+
 # where we store everything SSL-related
 ENV SSL_ROOT /etc/letsencryptsss
  
