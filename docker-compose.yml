@@ -82,7 +82,7 @@ services:
   # Nginx web service
   web:
     container_name: chords_web
-#    image: ncareol/chords_web
+    image: ncareol/chords_web
     build:
       context: .
       dockerfile: Dockerfile-nginx
