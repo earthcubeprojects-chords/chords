@@ -47,7 +47,10 @@ EXPOSE 443
  
 
  # copy over the script that is run by the container
-COPY bin/start_web_container_cmd.sh /tmp/
+COPY bin/start_web_container_cmd.sh /tmp/start_web_container_cmd.sh
+
+
+RUN chmod -R 777 /tmp/start_web_container_cmd.sh
 
 
 # Use the "exec" form of CMD so Nginx shuts down gracefully on SIGTERM (i.e. `docker stop`)
