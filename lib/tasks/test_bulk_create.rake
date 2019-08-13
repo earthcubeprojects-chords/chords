@@ -16,6 +16,8 @@ task bulk_create: :environment do |task, args|
   # api_key = 'invlid_key'
   api_key = 'UGg7M3LrVLjhJB_saR2Q'
 
+# /measurements/url_create?instrument_id=1&temp=100.4&pressure=110.1&at=2019-08-13T07:17:13.170Z&email=admin@chordsrt.com&api_key=[INSERT_API_KEY]&test
+
   payload = 
 {
    "email": email,
@@ -27,18 +29,33 @@ task bulk_create: :environment do |task, args|
             "measurements": [
                {
                   "variable": "temp",
-                  "measured_at": "1/1/2019 12:12:12.4324323",
+                  "measured_at": "2019-08-13T07:17:13.170Z",
                   "value": 2.2323
                },
                {
-                  "variable": "temp",
-                  "measured_at": "1/1/2019 12:12:13.4324323",
-                  "value": 3.2323
+                  "variable": "pressure",
+                  "measured_at": "2019-08-13T07:17:13.170Z",
+                  "value": 110.1
                },
                {
                   "variable": "temp",
-                  "measured_at": "1/1/2019 12:12:14.4324323",
+                  "measured_at": "2019-08-13T07:17:14.170Z",
+                  "value": 3.2323
+               },
+               {
+                  "variable": "pressure",
+                  "measured_at": "2019-08-13T07:17:14.170Z",
+                  "value": 111.1
+               },
+               {
+                  "variable": "temp",
+                  "measured_at": "2019-08-13T07:17:15.170Z",
                   "value": 4.2323
+               },
+               {
+                  "variable": "pressure",
+                  "measured_at": "2019-08-13T07:17:15.170Z",
+                  "value": 112.3
                }
             ]
          }
