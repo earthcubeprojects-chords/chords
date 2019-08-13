@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   resources :measurements, except: [:index, :show, :new, :create, :update, :edit, :destroy] do
     collection do
       get  :url_create
+      post :bulk_create
       post :delete_test
     end
   end
