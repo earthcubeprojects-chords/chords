@@ -12,11 +12,14 @@ class MeasurementsController < ApplicationController
   # at=iso8061
   def bulk_create
     Rails.logger.debug "*" * 80
-    Rails.logger.debug(request.body.inspect)
-    Rails.logger.debug "email: #{params['email']}" 
-    Rails.logger.debug "api_key: #{params['api_key']}" 
-    Rails.logger.debug "*" * 80
+    # Rails.logger.debug(request.body.inspect)
+    # Rails.logger.debug "email: #{params['email']}" 
+    # Rails.logger.debug "api_key: #{params['api_key']}" 
 
+
+    # Rails.logger.debug params[:data].class
+    # Rails.logger.debug params[:data].length
+    # Rails.logger.debug params[:data]
 
     save_ok = false
     auth = false
@@ -42,6 +45,43 @@ class MeasurementsController < ApplicationController
 
       return
     end
+
+    
+    json = JSON.parse(request.body.read)
+
+
+    instruments = json['data']['instruments']
+
+    Rails.logger.debug json
+
+    instruments.each do |instrument|
+      instrument_id = instrument['instrument_id']
+      Rails.logger.debug "instrument_id #{instrument_id}"
+      measurements = instrument['measurements']
+
+      measurements.each do |measurement|
+        variable = measurement['variable']
+        measured_at = measurement['measured_at']
+        value = measurement['value']
+
+        
+        Rails.logger.debug "variable #{variable}"
+        Rails.logger.debug "measured_at #{measured_at}"
+        Rails.logger.debug "value #{value}"
+      end
+
+      # Rails.logger.debug instrument['instrument_id']
+    end
+
+
+
+    # Rails.logger.debug json
+    
+
+
+    # Rails.logger.debug instruments
+
+    Rails.logger.debug "*" * 80
 
 
 
