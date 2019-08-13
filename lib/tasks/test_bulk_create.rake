@@ -13,8 +13,8 @@ task bulk_create: :environment do |task, args|
   puts "Posting JSON to #{url}"
 
   email = 'mike@mikedye.com'
-  api_key = 'invlid_key'
-  # api_key = 'UGg7M3LrVLjhJB_saR2Q'
+  # api_key = 'invlid_key'
+  api_key = 'UGg7M3LrVLjhJB_saR2Q'
 
   payload = 
     {
