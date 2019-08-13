@@ -45,6 +45,15 @@ class MeasurementsController < ApplicationController
 
 
 
+
+
+
+    if save_ok
+      render json: {errors: [], success: true, messages: ['OK']}, status: :ok 
+    else
+      error_msg = 'Measurement could not be created. ' + create_err_msg
+      render json: {errors: [error_msg], success: false, messages: []}, status: :bad_request 
+    end
   end
 
 
@@ -83,6 +92,7 @@ class MeasurementsController < ApplicationController
 
       return
     end
+
 
     # sensor_id may be used to find an instrument easier for embedded devices, prefer this over an instrument_id
     # will return nil if the instrument is not found
