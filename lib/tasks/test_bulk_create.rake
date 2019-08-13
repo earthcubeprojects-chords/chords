@@ -17,36 +17,34 @@ task bulk_create: :environment do |task, args|
   api_key = 'UGg7M3LrVLjhJB_saR2Q'
 
   payload = 
-    {
-       "email": email,
-       "api_key": api_key,
-       "data": [
-          {
-             "instruments": [
-                {
-                   "instrument_id": 1,
-                   "measurements": [
-                      {
-                         "variable": "temp",
-                         "measured_at": "1/1/2019 12:12:12.4324323",
-                         "value": 2.2323
-                      },
-                      {
-                         "variable": "temp",
-                         "measured_at": "1/1/2019 12:12:13.4324323",
-                         "value": 3.2323
-                      },
-                      {
-                         "variable": "temp",
-                         "measured_at": "1/1/2019 12:12:14.4324323",
-                         "value": 4.2323
-                      }
-                   ]
-                }
-             ]
-          }
-       ]
-    }
+{
+   "email": email,
+   "api_key": api_key,
+   "data": {
+      "instruments": [
+         {
+            "instrument_id": 1,
+            "measurements": [
+               {
+                  "variable": "temp",
+                  "measured_at": "1/1/2019 12:12:12.4324323",
+                  "value": 2.2323
+               },
+               {
+                  "variable": "temp",
+                  "measured_at": "1/1/2019 12:12:13.4324323",
+                  "value": 3.2323
+               },
+               {
+                  "variable": "temp",
+                  "measured_at": "1/1/2019 12:12:14.4324323",
+                  "value": 4.2323
+               }
+            ]
+         }
+      ]
+   }
+}
 
 
   uri = URI.parse(url)
