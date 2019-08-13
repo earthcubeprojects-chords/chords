@@ -1,6 +1,53 @@
 require 'time'
 
 class MeasurementsController < ApplicationController
+
+
+  # GET 'measurements/bulk_create?<many params>
+  # Params:
+  # test
+  # instrument_id
+  # sensor_id
+  # shortname=val
+  # at=iso8061
+  def bulk_create
+    Rails.logger.debug "*" * 80
+    Rails.logger.debug(request.body.inspect)
+    Rails.logger.debug "email: #{params['email']}" 
+    Rails.logger.debug "api_key: #{params['api_key']}" 
+    Rails.logger.debug "*" * 80
+
+
+    save_ok = false
+    auth = false
+
+    # If the save fails, include this error message in the response.
+    create_err_msg = ""
+
+    # DEPRECATED: This needs to be removed down the road with just this left: authorize! :create, :measurement
+    # secure the creation of new measurements
+    if @profile.secure_data_entry
+      if params[:api_key] && params[:email]
+        authorize! :create, :measurement
+        auth = true
+      elsif params[:key] && @profile.data_entry_key == params[:key]
+        auth = true
+      end
+    else
+      auth = true
+    end
+
+    if !auth
+      render json: {errors: ['FAIL: Not authorized to create measurements. Ensure secure key or api_key and email are present.']}, status: :unauthorized 
+
+      return
+    end
+
+
+
+  end
+
+
   # GET 'measurements/url_create?<many params>
   # Params:
   # test
