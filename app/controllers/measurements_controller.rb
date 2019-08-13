@@ -50,24 +50,110 @@ class MeasurementsController < ApplicationController
     json = JSON.parse(request.body.read)
 
 
-    instruments = json['data']['instruments']
+    instrument_ids = json['data']['instruments']
 
-    Rails.logger.debug json
+    # Rails.logger.debug json
 
-    instruments.each do |instrument|
-      instrument_id = instrument['instrument_id']
-      Rails.logger.debug "instrument_id #{instrument_id}"
-      measurements = instrument['measurements']
+    instrument_ids.each do |instrument_id|
+      # instrument_id = instrument_id['instrument_id']
 
-      measurements.each do |measurement|
-        variable = measurement['variable']
-        measured_at = measurement['measured_at']
-        value = measurement['value']
+      instrument = Instrument.find(instrument_id['instrument_id'])
 
-        
-        Rails.logger.debug "variable #{variable}"
-        Rails.logger.debug "measured_at #{measured_at}"
-        Rails.logger.debug "value #{value}"
+      if instrument
+        # Save the url that invoked us
+        instrument.update_attributes!(last_url: InstrumentsHelper.sanitize_url(request.original_url.html_safe))
+
+
+        # Rails.logger.debug "instrument_id #{instrument_id}"
+
+        measurements = instrument_id['measurements']
+
+        measurements.each do |measurement|
+          variable = measurement['variable']
+          measured_at = measurement['measured_at']
+
+          # Rails.logger.debug "variable #{variable}"
+          # Rails.logger.debug "measured_at #{measured_at}"
+
+          # value = measurement['value']
+
+
+          timestamp = begin
+                        ConvertIsoToMs.call(measured_at)
+                      rescue ArgumentError, e
+                        create_err_msg = "Time format error, please ensure time is formatted using ISO8601."
+                        nil
+                      end
+
+          # Rails.logger.debug "timestamp #{timestamp}"
+
+          if timestamp
+            var_count = 0
+            is_test_value = params.key?(:test)
+
+            tags = instrument.influxdb_tags_hash
+            tags[:site] = instrument.site_id
+            tags[:inst] = instrument.id
+            tags[:test] = is_test_value
+
+            instrument.vars.each do |var|
+              # Rails.logger.debug "var #{var.name}"
+
+              # if params[var.shortname]
+              if (var.shortname.to_s == variable.to_s)
+                value = measurement['value'].to_f
+                tags[:var]  = var.id
+
+                SaveTsPoint.call(timestamp, value, tags)
+
+                # Rails.logger.debug timestamp
+                # Rails.logger.debug value
+                # Rails.logger.debug tags
+
+                save_ok = true
+                var_count += 1
+              end
+
+
+              if var_count > 0
+                if is_test_value
+                  instrument.update_attributes!(measurement_test_count: instrument.measurement_test_count + var_count)
+                else
+                  instrument.update_attributes!(measurement_count: instrument.measurement_count + var_count)
+                end
+              end              
+            end
+          end        
+      end
+
+
+
+
+
+          # sensor_id may be used to find an instrument easier for embedded devices, prefer this over an instrument_id
+          # will return nil if the instrument is not found
+
+
+
+
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       end
 
       # Rails.logger.debug instrument['instrument_id']
