@@ -52,8 +52,23 @@ class MeasurementsController < ApplicationController
 
     json['data']['instruments'].each do |instrument_json|
 
-      instrument = Instrument.find(instrument_json['instrument_id'])
+      # instrument = Instrument.find(instrument_json['instrument_id'])
 
+
+      # sensor_id may be used to find an instrument easier for embedded devices, prefer this over an instrument_id
+      # will return nil if the instrument is not found
+      instrument = if (instrument_json['sensor_id'])
+                     Instrument.where(sensor_id: instrument_json['sensor_id']).first
+                   else
+                     Instrument.where(id: instrument_json['instrument_id'].to_i).first
+                   end
+
+
+      if (! instrument)
+        render json: {errors: ["FAIL: Specified instrument could not be found. (sensor_id: #{instrument_json['sensor_id']}, instrument_id: #{instrument_json['instrument_id']})"]}, status: :unprocessable_entity 
+
+        return
+      end
       measurements_added[instrument.id] = 0
 
       if instrument

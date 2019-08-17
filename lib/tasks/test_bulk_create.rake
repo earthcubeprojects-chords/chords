@@ -22,11 +22,12 @@ task bulk_create: :environment do |task, args|
 {
    "email": email,
    "api_key": api_key,
-   "test":false,
+   "test":true,
    "data": {
       "instruments": [
          {
             "instrument_id": 1,
+            "sensor_id": "sensor_1",
             "measurements": [
                {
                   "variable": "temp",
