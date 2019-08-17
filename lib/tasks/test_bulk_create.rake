@@ -22,6 +22,7 @@ task bulk_create: :environment do |task, args|
 {
    "email": email,
    "api_key": api_key,
+   "test":false,
    "data": {
       "instruments": [
          {
@@ -62,6 +63,26 @@ task bulk_create: :environment do |task, args|
       ]
    }
 }
+
+#   payload = 
+# {
+#    "email": email,
+#    "api_key": api_key,
+#    "data": {
+#       "instruments": [
+#          {
+#             "instrument_id": 1,
+#             "measurements": [
+#                {
+#                   "variable": "pressure",
+#                   "measured_at": "2019-08-13T07:17:15.170Z",
+#                   "value": 112.3
+#                }
+#             ]
+#          }
+#       ]
+#    }
+# }
 
 
   uri = URI.parse(url)
