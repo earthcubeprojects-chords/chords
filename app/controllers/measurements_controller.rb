@@ -89,8 +89,9 @@ class MeasurementsController < ApplicationController
     if @errors.empty?
       render json: {errors: [], success: true, messages: ['OK']}, status: :ok 
     else
+      # http://billpatrianakos.me/blog/2013/10/13/list-of-rails-status-code-symbols/
       error_msg = 'Measurements could not be created. ' 
-      render json: {errors: @errors, success: false, messages: [error_msg]}, status: :bad_request 
+      render json: {errors: @errors, success: false, messages: [error_msg]}, status: :unprocessable_entity
     end
   end
 
