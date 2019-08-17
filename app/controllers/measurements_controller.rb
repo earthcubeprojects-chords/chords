@@ -12,20 +12,12 @@ class MeasurementsController < ApplicationController
   # at=iso8061
   def bulk_create
     Rails.logger.debug "*" * 80
-    # Rails.logger.debug(request.body.inspect)
-    # Rails.logger.debug "email: #{params['email']}" 
-    # Rails.logger.debug "api_key: #{params['api_key']}" 
+
+    @errors = ActiveModel::Errors.new(self)
 
 
-    # Rails.logger.debug params[:data].class
-    # Rails.logger.debug params[:data].length
-    # Rails.logger.debug params[:data]
-
-    save_ok = false
     auth = false
 
-    # If the save fails, include this error message in the response.
-    create_err_msg = ""
 
     # DEPRECATED: This needs to be removed down the road with just this left: authorize! :create, :measurement
     # secure the creation of new measurements
@@ -47,138 +39,58 @@ class MeasurementsController < ApplicationController
     end
 
     
+    is_test = params.key?(:test) && (params[:test] == true)
+
+
     json = JSON.parse(request.body.read)
 
 
-    instrument_ids = json['data']['instruments']
+    json['data']['instruments'].each do |instrument_json|
 
-    # Rails.logger.debug json
-
-    instrument_ids.each do |instrument_id|
-      # instrument_id = instrument_id['instrument_id']
-
-      instrument = Instrument.find(instrument_id['instrument_id'])
+      instrument = Instrument.find(instrument_json['instrument_id'])
+      var_count = 0
 
       if instrument
         # Save the url that invoked us
         instrument.update_attributes!(last_url: InstrumentsHelper.sanitize_url(request.original_url.html_safe))
 
-
-        # Rails.logger.debug "instrument_id #{instrument_id}"
-
-        measurements = instrument_id['measurements']
-
-        measurements.each do |measurement|
-          variable = measurement['variable']
-          measured_at = measurement['measured_at']
-
-          # Rails.logger.debug "variable #{variable}"
-          # Rails.logger.debug "measured_at #{measured_at}"
-
-          # value = measurement['value']
+        instrument_json['measurements'].each do |measurement_json|
 
 
-          timestamp = begin
-                        ConvertIsoToMs.call(measured_at)
-                      rescue ArgumentError, e
-                        create_err_msg = "Time format error, please ensure time is formatted using ISO8601."
-                        nil
-                      end
+          measurement = Measurement.new(instrument, measurement_json, is_test)
+          measurement.validate!
 
-          # Rails.logger.debug "timestamp #{timestamp}"
+          if measurement.errors.empty?
 
-          if timestamp
-            var_count = 0
-            is_test_value = params.key?(:test)
+            SaveTsPoint.call(measurement.timestamp, measurement.value, measurement.tags)
 
-            tags = instrument.influxdb_tags_hash
-            tags[:site] = instrument.site_id
-            tags[:inst] = instrument.id
-            tags[:test] = is_test_value
-
-            instrument.vars.each do |var|
-              # Rails.logger.debug "var #{var.name}"
-
-              # if params[var.shortname]
-              if (var.shortname.to_s == variable.to_s)
-                value = measurement['value'].to_f
-                tags[:var]  = var.id
-
-                SaveTsPoint.call(timestamp, value, tags)
-
-                # Rails.logger.debug timestamp
-                # Rails.logger.debug value
-                # Rails.logger.debug tags
-
-                save_ok = true
-                var_count += 1
-              end
-
-
-              if var_count > 0
-                if is_test_value
-                  instrument.update_attributes!(measurement_test_count: instrument.measurement_test_count + var_count)
-                else
-                  instrument.update_attributes!(measurement_count: instrument.measurement_count + var_count)
-                end
-              end              
-            end
+            var_count += 1
+          else
+            @errors.merge!(measurement.errors)
           end        
+        end
       end
 
-
-
-
-
-          # sensor_id may be used to find an instrument easier for embedded devices, prefer this over an instrument_id
-          # will return nil if the instrument is not found
-
-
-
-
-
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      if is_test
+        instrument.update_attributes!(measurement_test_count: instrument.measurement_test_count + var_count)
+      else
+        instrument.update_attributes!(measurement_count: instrument.measurement_count + var_count)
       end
 
-      # Rails.logger.debug instrument['instrument_id']
     end
 
 
 
-    # Rails.logger.debug json
-    
+    # Rails.logger.debug "@errors #{@errors.messages} " 
+
+    # Rails.logger.debug "*" * 80
 
 
-    # Rails.logger.debug instruments
-
-    Rails.logger.debug "*" * 80
-
-
-
-
-
-
-    if save_ok
+    if @errors.empty?
       render json: {errors: [], success: true, messages: ['OK']}, status: :ok 
     else
-      error_msg = 'Measurement could not be created. ' + create_err_msg
-      render json: {errors: [error_msg], success: false, messages: []}, status: :bad_request 
+      error_msg = 'Measurements could not be created. ' 
+      render json: {errors: @errors, success: false, messages: [error_msg]}, status: :bad_request 
     end
   end
 
