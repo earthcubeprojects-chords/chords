@@ -31,6 +31,21 @@ class Instrument < ApplicationRecord
     end
   end
 
+
+  def get_var_id_by_var_shortname(shortname_to_match)
+    vars_array = self.vars.pluck(:id, :shortname)
+
+    # look up the id that matches the wanted shortname string
+    var_id = vars_array.select{|_, shortname| shortname == shortname_to_match}.map{|id, _| id}[0]
+
+    return var_id
+  end
+
+
+  def var_shortnames
+    return Instrument.first.vars.pluck(:shortname)
+  end
+
   # Returns the time of first or last measurement given parameter point ("first" or "last")
   def point_time_in_ms(point)
     if point == "last"
