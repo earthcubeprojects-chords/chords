@@ -15,7 +15,7 @@ class MeasurementsController < ApplicationController
 
     @errors = ActiveModel::Errors.new(self)
 
-
+    # Is the user authorized to add measuments
     auth = false
 
 
@@ -44,11 +44,17 @@ class MeasurementsController < ApplicationController
 
     json = JSON.parse(request.body.read)
 
+    measurements = Array.new
+
+    # The number of measurements that were added for each instrument
+    measurements_added = Hash.new
+
 
     json['data']['instruments'].each do |instrument_json|
 
       instrument = Instrument.find(instrument_json['instrument_id'])
-      var_count = 0
+
+      measurements_added[instrument.id] = 0
 
       if instrument
         # Save the url that invoked us
@@ -60,33 +66,43 @@ class MeasurementsController < ApplicationController
           measurement = Measurement.new(instrument, measurement_json, is_test)
           measurement.validate!
 
+          measurements.push(measurement)
+
+          measurements_added[instrument.id] += 1
+
+          # Check to see if there were validation errors when defining this measurement
           if measurement.errors.empty?
-
-            SaveTsPoint.call(measurement.timestamp, measurement.value, measurement.tags)
-
-            var_count += 1
+            # SaveTsPoint.call(measurement.timestamp, measurement.value, measurement.tags)
           else
             @errors.merge!(measurement.errors)
           end        
         end
       end
 
-      if is_test
-        instrument.update_attributes!(measurement_test_count: instrument.measurement_test_count + var_count)
-      else
-        instrument.update_attributes!(measurement_count: instrument.measurement_count + var_count)
-      end
 
     end
-
-
-
-    # Rails.logger.debug "@errors #{@errors.messages} " 
 
     # Rails.logger.debug "*" * 80
 
 
     if @errors.empty?
+
+      # Save the entries in one bulk post
+      SaveTsPoints.call(measurements)
+
+      # update the measurement count
+      measurements_added.each do |instrument_id, count|
+
+        instrument = Instrument.find(instrument_id)
+
+        if is_test
+          instrument.update_attributes!(measurement_test_count: instrument.measurement_test_count + count)
+        else
+          instrument.update_attributes!(measurement_count: instrument.measurement_count + count)
+        end
+      end
+
+      # Return success / 200
       render json: {errors: [], success: true, messages: ['OK']}, status: :ok 
     else
       # http://billpatrianakos.me/blog/2013/10/13/list-of-rails-status-code-symbols/
