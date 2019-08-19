@@ -1,0 +1,38 @@
+{
+  "data": [
+    {
+      "type": "users",
+      "id": "nil",
+      "attributes": {
+        "email": "admin@chordsrt.com",
+        "api_key": "VALID_API_KEY"
+      }
+    },
+    {
+      "type": "instruments",
+      "id": "1",
+      "attributes": {
+        "sensor_id": "optional_unique_sensor_id",
+        "vars": [
+          {
+            "shortname": "temp",
+            "measurements": [
+              {
+                "value": "3.43232",
+                "at": "2019-08-13T07:17:12.170Z"
+              },
+              {
+                "value": "3.43232",
+                "at": "2019-08-13T07:17:13.170Z"
+              },
+              {
+                "value": "3.43232",
+                "at": "2019-08-13T07:17:14.170Z"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
