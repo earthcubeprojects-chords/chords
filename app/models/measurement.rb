@@ -19,11 +19,11 @@ class Measurement
   attr_accessor :tags
 
 
-  def initialize(instrument, measurement_json, is_test_value)
+  def initialize(instrument, shortname, measurement_json, is_test_value)
 
     @errors = ActiveModel::Errors.new(self)
 
-    self.variable_shortname = measurement_json['variable']
+    self.variable_shortname = shortname
     self.value = measurement_json['value'].to_f
     self.measured_at = measurement_json['measured_at']
     self.is_test_value = is_test_value

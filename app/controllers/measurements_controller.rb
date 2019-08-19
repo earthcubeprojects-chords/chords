@@ -50,7 +50,7 @@ class MeasurementsController < ApplicationController
     measurements_added = Hash.new
 
 
-    json['data']['instruments'].each do |instrument_json|
+    json['instruments'].each do |instrument_json|
 
       # instrument = Instrument.find(instrument_json['instrument_id'])
 
@@ -69,32 +69,34 @@ class MeasurementsController < ApplicationController
 
         return
       end
+
       measurements_added[instrument.id] = 0
 
       if instrument
         # Save the url that invoked us
         instrument.update_attributes!(last_url: InstrumentsHelper.sanitize_url(request.original_url.html_safe))
 
-        instrument_json['measurements'].each do |measurement_json|
+        instrument_json['variables'].each do |variable_json|
+          shortname = variable_json['shortname']
+          variable_json['measurements'].each do |measurement_json|
 
+            measurement = Measurement.new(instrument, shortname, measurement_json, is_test)
+            measurement.validate!
 
-          measurement = Measurement.new(instrument, measurement_json, is_test)
-          measurement.validate!
+            measurements.push(measurement)
 
-          measurements.push(measurement)
+            measurements_added[instrument.id] += 1
 
-          measurements_added[instrument.id] += 1
+            # Check to see if there were validation errors when defining this measurement
+            if measurement.errors.empty?
+              # SaveTsPoint.call(measurement.timestamp, measurement.value, measurement.tags)
+            else
+              @errors.merge!(measurement.errors)
+            end        
 
-          # Check to see if there were validation errors when defining this measurement
-          if measurement.errors.empty?
-            # SaveTsPoint.call(measurement.timestamp, measurement.value, measurement.tags)
-          else
-            @errors.merge!(measurement.errors)
-          end        
+          end
         end
       end
-
-
     end
 
     # Rails.logger.debug "*" * 80
@@ -122,6 +124,7 @@ class MeasurementsController < ApplicationController
     else
       # http://billpatrianakos.me/blog/2013/10/13/list-of-rails-status-code-symbols/
       error_msg = 'Measurements could not be created. ' 
+
       render json: {errors: @errors, success: false, messages: [error_msg]}, status: :unprocessable_entity
     end
   end

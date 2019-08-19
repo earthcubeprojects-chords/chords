@@ -13,23 +13,29 @@ describe 'User ability specs', type: :request do
 
   let(:data) {
     {
-       "email": creator.email,
-       "api_key": creator.api_key,
-       "test":true,
-       "data": {
-          "instruments": [
-             {
-                "instrument_id": instrument.id,
-                "measurements": [
-                   {
-                      "variable": var.shortname,
-                      "measured_at": "2019-08-13T07:17:13.170Z",
-                      "value": 2.2323
-                   }
-                ]
-             }
+    "email": creator.email,
+    "api_key": creator.api_key,
+    "test":true,
+    "instruments": 
+      [
+        {
+        "instrument_id": instrument.id,
+        "variables": 
+          [
+            {
+              "shortname": var.shortname,
+              "measurements": 
+              [
+                {
+                "measured_at": "2019-08-13T07:17:13.170Z",
+                "value": 2.2323
+                }
+              ]
+
+            }
           ]
-       }
+        }
+      ]
     }
   }
   
@@ -64,7 +70,7 @@ describe 'User ability specs', type: :request do
 
       it 'returns status code 422 with JSON' do
 
-        data[:data][:instruments][0][:sensor_id] = "FAKE_KEY"
+        data[:instruments][0][:sensor_id] = "FAKE_KEY"
 
         post "/measurements/bulk_create", params: data.to_json, headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
 
