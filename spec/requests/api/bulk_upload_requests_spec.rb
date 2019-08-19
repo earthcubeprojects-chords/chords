@@ -62,6 +62,18 @@ describe 'User ability specs', type: :request do
         expect(response).to have_http_status(200)
       end
 
+      it 'returns status code 422 with JSON' do
+
+        data[:data][:instruments][0][:sensor_id] = "FAKE_KEY"
+
+        post "/measurements/bulk_create", params: data.to_json, headers: { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+
+        expect(response.header['Content-Type']).to include 'application/json'
+        expect(response).to have_http_status(422)
+      end
+
+
+
 
       it 'returns status code 403 with JSON' do
 
@@ -72,6 +84,8 @@ describe 'User ability specs', type: :request do
         expect(response.header['Content-Type']).to include 'application/json'
         expect(response).to have_http_status(403)
       end
+
+
 
     end
   end
