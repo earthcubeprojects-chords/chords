@@ -1,45 +1,31 @@
 {
-   "email": "mike@mikedye.com",
-   "api_key": "UGg7M3LrVLjhJB_saR2Q",
-   "test":true,
-   "data": {
-      "instruments": [
-         {
-            "instrument_id": 1,
-            "sensor_id": "sensor_1",
-            "measurements": [
-               {
-                  "variable": "temp",
-                  "measured_at": "2019-08-13T07:17:13.170Z",
-                  "value": 2.2323
-               },
-               {
-                  "variable": "pressure",
-                  "measured_at": "2019-08-13T07:17:13.170Z",
-                  "value": 110.1
-               },
-               {
-                  "variable": "temp",
-                  "measured_at": "2019-08-13T07:17:14.170Z",
-                  "value": 3.2323
-               },
-               {
-                  "variable": "pressure",
-                  "measured_at": "2019-08-13T07:17:14.170Z",
-                  "value": 111.1
-               },
-               {
-                  "variable": "temp",
-                  "measured_at": "2019-08-13T07:17:15.170Z",
-                  "value": 4.2323
-               },
-               {
-                  "variable": "pressure",
-                  "measured_at": "2019-08-13T07:17:15.170Z",
-                  "value": 112.3
-               }
-            ]
-         }
+  "email": "admin@chordsrt.com",
+  "api_key": "VALID_API_KEY",
+  "test": true,
+  "instruments": [
+    {
+      "instrument_id": 1,
+      "sensor_id": "sensor_1",
+      "variables": [
+        {
+          "shortname": "temp",
+          "measurements": [
+            {
+              "measured_at": "2019-08-13T07:17:13.170Z",
+              "value": 4.2323
+            }
+          ]
+        },
+        {
+          "shortname": "pressure",
+          "measurements": [
+            {
+              "measured_at": "2019-08-13T07:17:13.170Z",
+              "value": 4.2323
+            }
+          ]
+        }
       ]
-   }
+    }
+  ]
 }
