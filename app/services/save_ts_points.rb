@@ -10,17 +10,11 @@ class SaveTsPoints
       
       
       precision = 'ms'
-
-      # data = {
-      #   values:    { value: value },
-      #   tags:      tags,
-      #   timestamp: timestamp
-      # }
-            
       series_name= 'tsdata'
-      # influxdb.write_points(name, data, precision)      
 
 
+      # Example:
+      #
       # data = [
       #   {
       #     series: 'cpu',
