@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_160743) do
+ActiveRecord::Schema.define(version: 2019_08_20_043506) do
 
   create_table "archive_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|
     t.string "archive_name"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 2019_03_27_160743) do
     t.string "measured_property_source", default: "SensorML"
     t.string "data_archive_url"
     t.integer "max_download_points", default: 100000, null: false
+    t.boolean "registration_email_sent", default: false
   end
 
   create_table "site_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci", force: :cascade do |t|

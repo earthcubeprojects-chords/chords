@@ -72,6 +72,10 @@ Rails.application.routes.draw do
       post :import_influxdb
 
       post :test_sending_email
+
+      get :register
+
+      post :send_registration_email
     end
   end
 

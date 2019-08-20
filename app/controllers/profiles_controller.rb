@@ -5,6 +5,8 @@ class ProfilesController < ApplicationController
 
   load_resource
 
+
+
   def index
     authorize! :read, Profile
 
@@ -190,6 +192,44 @@ class ProfilesController < ApplicationController
     redirect_to action: :index
   end
 
+
+  def register
+      @email = Rails.application.config.action_mailer.smtp_settings[:user_name] if Rails.application.config.action_mailer.smtp_settings
+
+  end
+
+  def send_registration_email
+    begin
+
+      chords_admin_email = 'mike@mikedye.com'
+      message = params[:message]
+
+      AdminMailer.send_registration_email(chords_admin_email, message).deliver
+
+    rescue Net::SMTPAuthenticationError => e
+      if e.message.include?('accounts.google.com') || e.message.include?('Learn more at')
+        flash[:alert] = 'Problem with SMTP settings. If using GMail, you may need to log into your email account to allow this activity.'
+      else
+        flash[:alert] = 'Problem with SMTP settings. Please use chords_control to change your SMTP configuration.'
+      end
+
+      Rails.logger.warn(e)
+    rescue Errno::ECONNREFUSED => e
+      flash[:alert] = 'Connection to the SMTP server was refused. If using GMail, you may need to log into your email account to allow this activity.'
+      Rails.logger.warn(e)
+    end
+
+
+    flash[:notice] = 'Your email has been sent. Thank you for registering your portal with the CHORDS team!'
+
+    @profile.registration_email_sent = true
+
+    @profile.save
+
+    redirect_to profiles_path
+
+  end
+
 private
   def profile_params
     params.require(:profile).permit(
@@ -197,7 +237,8 @@ private
       :secure_administration, :secure_data_viewing, :secure_data_download,
       :secure_data_entry, :data_entry_key, :backup_file, :doi, :max_download_points,
       :contact_name, :contact_phone, :contact_email, :contact_address, :contact_city, :contact_state, :contact_country,
-      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :data_archive_url
+      :contact_zipcode, :domain_name, :unit_source, :measured_property_source, :data_archive_url,
+      :registration_email_sent
       )
   end
 end

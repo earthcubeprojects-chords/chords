@@ -1,0 +1,73 @@
+.center
+  %h1
+    Register Your Portal
+
+  %h4
+    By submitting this form, an email will be sent to the CHORDS team with the following information:
+
+.line
+.line
+
+= form_with url: send_registration_email_profiles_path do |form|
+        
+
+  .configuration
+    .line
+      .title
+        &nbsp;
+      .field
+        %strong
+          Portal Domain Name: 
+        = @profile.domain_name
+    .line
+      .title
+        &nbsp;
+      .field
+        %strong
+          Portal Admin Email:
+        = @email
+    .line
+      .title
+        &nbsp;        
+      .field
+        %strong
+          Contact Name:
+        = @profile.contact_name
+    .line
+      .title
+        &nbsp;
+      .field
+        %strong
+          Contact Email: 
+        = @profile.contact_email
+    .line
+      .title
+        &nbsp;
+      .field
+        %strong
+          Portal Descrition (Let us know who you are!)
+
+
+    .line
+      .title
+        &nbsp;
+      .field
+        = form.text_area :message, {:cols => 80, :rows => 10}
+
+  
+
+  .center
+    %h4
+      The CHORDS team will use this information to contact you regarding your portal.
+      %br
+      %br
+      We will never distribute your information without your express premission.
+
+    = form.submit "Send Registration Email", {class: 'btn btn-md btn-primary'} 
+
+.center
+  .line  
+  .line  
+  .line  
+    = button_to "Cancel", profiles_path, {method: :get, class: 'btn btn-md btn-primary'} 
+

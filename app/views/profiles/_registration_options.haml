@@ -1,0 +1,16 @@
+
+  
+
+%h2
+	Portal Registration
+
+
+.center
+	.row
+		.col-lg-2
+			= button_to "Register this portal", {action: "register"}, {method: 'get', class: 'btn btn-md btn-primary'} 
+		- if @profile.registration_email_sent == false
+			.col-lg-2
+				= button_to "I don't want to register", {method: :post, action: "create", 'profile[id]' => @profile.id, 'profile[registration_email_sent]' => true}, {class: 'btn btn-md btn-primary'} 
+
+= #button_to "Reset Registration", {method: :post, action: "create", 'profile[id]' => @profile.id, 'profile[registration_email_sent]' => false}, {class: 'btn btn-md btn-primary'} 
