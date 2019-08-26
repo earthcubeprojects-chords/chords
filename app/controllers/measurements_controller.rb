@@ -99,8 +99,6 @@ class MeasurementsController < ApplicationController
       end
 
 
-      # Rails.logger.debug "json #{json}"
-      # Rails.logger.debug "*" * 80
     else
       json = JSON.parse(request.body.read)
     end
