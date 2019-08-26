@@ -12,7 +12,7 @@
       "type": "instruments",
       "id": "1",
       "attributes": {
-        "sensor_id": "optional_unique_sensor_id",
+        "sensor_id": "sensor_1",
         "vars": [
           {
             "shortname": "temp",
