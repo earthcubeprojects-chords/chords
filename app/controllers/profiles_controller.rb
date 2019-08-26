@@ -194,11 +194,14 @@ class ProfilesController < ApplicationController
 
 
   def register
-      @email = Rails.application.config.action_mailer.smtp_settings[:user_name] if Rails.application.config.action_mailer.smtp_settings
+    authorize! :update, Profile
 
+    @email = Rails.application.config.action_mailer.smtp_settings[:user_name] if Rails.application.config.action_mailer.smtp_settings
   end
 
   def send_registration_email
+    authorize! :update, Profile
+
     begin
 
       chords_admin_email = 'mike@mikedye.com'
