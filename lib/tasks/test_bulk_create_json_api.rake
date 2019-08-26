@@ -25,7 +25,8 @@ task bulk_create_json_api: :environment do |task, args|
   uri = URI.parse(url)
   http = Net::HTTP.new(uri.host, uri.port)
   request = Net::HTTP::Post.new(uri.request_uri)
-  request["Accept"] = "application/json"
+  # request["Accept"] = "application/json"
+  request["Accept"] = "application/vnd.api+json"
   request.content_type = "application/vnd.api+json"
   request.body = payload.to_json
 
