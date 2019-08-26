@@ -31,8 +31,11 @@ gem 'whenever', '~> 0.9.7', :require => false
 gem 'rubyzip', '~> 1.2.2'
 
 gem 'json', '~> 1.8.6'
+gem 'jsonapi-rails'
 
 gem 'bootsnap', require: false
+
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

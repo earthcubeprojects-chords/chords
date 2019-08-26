@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_params_from_json_api_spec!
   before_action :set_json_api_spec_reponse_headers!
-  
+
   before_action :authenticate_user_from_token!
   before_action :authenticate_user!
 
@@ -80,17 +80,23 @@ private
     end
   end
 
+
   def set_params_from_json_api_spec!
     if (request.content_type == 'application/vnd.api+json')
-      users_json = params[:data].select {|element| element["type"] == "users" }
+
+      data_json = JSON.parse(request.body.read)
+
+      users_json = data_json['data'].select {|element| element["type"] == "users" }
+      # users_json = params[:data].select {|element| element["type"] == "users" }
 
       if (users_json.length == 1)
-        params[:email] = users_json[0].dig(:attributes, :email) || nil
-        params[:api_key] = users_json[0].dig(:attributes, :api_key) || nil
+        params[:email] = users_json[0].dig('attributes', 'email') || nil
+        params[:api_key] = users_json[0].dig('attributes', 'api_key') || nil
       end
 
     end
   end
+
 
   def set_json_api_spec_reponse_headers!
     if (request.content_type == 'application/vnd.api+json')
@@ -104,6 +110,7 @@ private
       Mime::Type.register 'application/vnd.api+json', :json, api_mime_types
     end
   end
+
 
   def current_user
     if super
