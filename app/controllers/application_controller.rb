@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
 
   before_action :set_global, :set_access_control_header
 
+  before_action :set_params_from_json_api_spec!
+  before_action :set_json_api_spec_reponse_headers!
+  
   before_action :authenticate_user_from_token!
   before_action :authenticate_user!
 
@@ -74,6 +77,31 @@ private
     # token given in the params, mitigating timing attacks
     if user && Devise.secure_compare(user.api_key, api_key)
       sign_in user, store: false
+    end
+  end
+
+  def set_params_from_json_api_spec!
+    if (request.content_type == 'application/vnd.api+json')
+      users_json = params[:data].select {|element| element["type"] == "users" }
+
+      if (users_json.length == 1)
+        params[:email] = users_json[0].dig(:attributes, :email) || nil
+        params[:api_key] = users_json[0].dig(:attributes, :api_key) || nil
+      end
+
+    end
+  end
+
+  def set_json_api_spec_reponse_headers!
+    if (request.content_type == 'application/vnd.api+json')
+      # https://blog.codeship.com/the-json-api-spec/
+      # Automaticall set the correct response headers if this is part of the JSON:API spec
+      api_mime_types = %W(
+        application/vnd.api+json
+        text/x-json
+        application/json
+      )
+      Mime::Type.register 'application/vnd.api+json', :json, api_mime_types
     end
   end
 
