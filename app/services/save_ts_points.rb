@@ -29,8 +29,6 @@ class SaveTsPoints
 
       data = self.create_data_array(series_name, measurements)
 
-      Rails.logger.debug "data: #{data}"
-
       influxdb.write_points(data, precision)      
   end
 
