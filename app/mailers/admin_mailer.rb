@@ -27,8 +27,6 @@ Contact Email: #{profile.contact_email}
 
 Message from Site Admin:
 #{message}
-
-
 BODYSTRING
 
     mail(to: email,
