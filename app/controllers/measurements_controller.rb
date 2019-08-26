@@ -11,12 +11,14 @@ class MeasurementsController < ApplicationController
   # shortname=val
   # at=iso8061
   def bulk_create
-    Rails.logger.debug "*" * 80
 
     @errors = ActiveModel::Errors.new(self)
 
     # Is the user authorized to add measuments
     auth = false
+
+    # users_json = params[:data].select {|element| element["type"] == "users" }
+
 
 
     # DEPRECATED: This needs to be removed down the road with just this left: authorize! :create, :measurement
@@ -41,8 +43,65 @@ class MeasurementsController < ApplicationController
     
     is_test = params.key?(:test) && (params[:test] == true)
 
+    if (request.content_type == 'application/vnd.api+json')
 
-    json = JSON.parse(request.body.read)
+      json = {'instruments' => Array.new}
+      
+      json_api_instruments = params[:data].select {|element| element["type"] == "instruments" }
+
+      json_api_instruments.each do |json_api_instrument|
+
+
+        instrument_id = json_api_instrument.dig(:id) || nil
+        sensor_id = json_api_instrument.dig(:attributes, :sensor_id) || nil
+
+        instrument_json = {
+          'instrument_id' => instrument_id,
+          'sensor_id' => sensor_id,
+          'variables' => []
+        }
+
+
+        json_api_vars = json_api_instrument.dig(:attributes, :vars) || nil
+
+        json_api_vars.each do |json_api_var|
+
+          shortname = json_api_var.dig(:shortname) || nil
+
+          var_json = {
+            'shortname' => shortname,
+            'measurements' => []
+          }
+
+
+          json_api_measurements = json_api_var.dig(:measurements) || nil
+
+          json_api_measurements.each do |json_api_measurement|
+            value = json_api_measurement.dig(:value) || nil
+            at = json_api_measurement.dig(:at) || nil
+
+            measurement_json = {
+              'value' => value,
+              'measured_at' => at
+            }
+
+            var_json['measurements'].push(measurement_json)
+          end
+
+          instrument_json['variables'].push(var_json)
+        end
+
+        json['instruments'].push(instrument_json)
+      end
+
+
+      # Rails.logger.debug "json #{json}"
+      # Rails.logger.debug "*" * 80
+    else
+      json = JSON.parse(request.body.read)
+    end
+    
+
 
     measurements = Array.new
 
@@ -98,8 +157,6 @@ class MeasurementsController < ApplicationController
         end
       end
     end
-
-    # Rails.logger.debug "*" * 80
 
 
     if @errors.empty?
