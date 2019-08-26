@@ -46,14 +46,18 @@ class MeasurementsController < ApplicationController
     if (request.content_type == 'application/vnd.api+json')
 
       json = {'instruments' => Array.new}
+
+
+      data_json = JSON.parse(request.body.read)
       
-      json_api_instruments = params[:data].select {|element| element["type"] == "instruments" }
+
+      json_api_instruments = data_json['data'].select {|element| element["type"] == "instruments" }
 
       json_api_instruments.each do |json_api_instrument|
 
 
-        instrument_id = json_api_instrument.dig(:id) || nil
-        sensor_id = json_api_instrument.dig(:attributes, :sensor_id) || nil
+        instrument_id = json_api_instrument.dig('id') || nil
+        sensor_id = json_api_instrument.dig('attributes', 'sensor_id') || nil
 
         instrument_json = {
           'instrument_id' => instrument_id,
@@ -62,11 +66,11 @@ class MeasurementsController < ApplicationController
         }
 
 
-        json_api_vars = json_api_instrument.dig(:attributes, :vars) || nil
+        json_api_vars = json_api_instrument.dig('attributes', 'vars') || nil
 
         json_api_vars.each do |json_api_var|
 
-          shortname = json_api_var.dig(:shortname) || nil
+          shortname = json_api_var.dig('shortname') || nil
 
           var_json = {
             'shortname' => shortname,
@@ -74,11 +78,11 @@ class MeasurementsController < ApplicationController
           }
 
 
-          json_api_measurements = json_api_var.dig(:measurements) || nil
+          json_api_measurements = json_api_var.dig('measurements') || nil
 
           json_api_measurements.each do |json_api_measurement|
-            value = json_api_measurement.dig(:value) || nil
-            at = json_api_measurement.dig(:at) || nil
+            value = json_api_measurement.dig('value') || nil
+            at = json_api_measurement.dig('at') || nil
 
             measurement_json = {
               'value' => value,
