@@ -136,6 +136,17 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (1.8.6)
+    jsonapi-deserializable (0.2.0)
+    jsonapi-parser (0.1.1)
+    jsonapi-rails (0.4.0)
+      jsonapi-parser (~> 0.1.0)
+      jsonapi-rb (~> 0.5.0)
+    jsonapi-rb (0.5.0)
+      jsonapi-deserializable (~> 0.2.0)
+      jsonapi-serializable (~> 0.3.0)
+    jsonapi-renderer (0.2.2)
+    jsonapi-serializable (0.3.1)
+      jsonapi-renderer (~> 0.2.0)
     kgio (2.11.2)
     launchy (2.4.3)
       addressable (~> 2.3)
@@ -322,6 +333,7 @@ DEPENDENCIES
   jquery-rails (~> 4.3)
   jquery-ui-rails
   json (~> 1.8.6)
+  jsonapi-rails
   letter_opener
   loofah (>= 2.2.3)
   mini_portile2

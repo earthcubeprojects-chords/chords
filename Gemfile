@@ -32,6 +32,7 @@ gem 'rubyzip', '~> 1.2.2'
 
 gem 'json', '~> 1.8.6'
 gem 'jsonapi-rails'
+# gem 'jsonapi-parser'
 
 gem 'bootsnap', require: false
 
