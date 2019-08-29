@@ -204,7 +204,7 @@ class ProfilesController < ApplicationController
 
     begin
 
-      chords_admin_email = 'mike@mikedye.com'
+      chords_admin_email = '303miked@gmail.com'
       message = params[:message]
 
       AdminMailer.send_registration_email(chords_admin_email, message).deliver
