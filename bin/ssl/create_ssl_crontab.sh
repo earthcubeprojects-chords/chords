@@ -1,13 +1,10 @@
 #!/bin/sh
 
-
 read_var() {
     VAR=$(grep $1 $2 | xargs)
     IFS="=" read -ra VAR <<< "$VAR"
     echo ${VAR[1]}
 }
-
-
 
 if test -f ".env"; 
 then
@@ -16,14 +13,11 @@ else
     echo ".env not found in current directory"
 fi
 
-
 if [ -z ${SSL_CHORDS_DIR+x} ]; 
 then 
   echo "SSL_CHORDS_DIR is unset"; 
   abort="true"
 fi
-
-
 
 if [[ $abort = "true" ]]
 then
@@ -44,12 +38,3 @@ else
 
   rm /tmp/ssl_cron
 fi
-
-
-
-
-
-
-
-
-
