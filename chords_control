@@ -64,18 +64,46 @@ from collections import namedtuple
 if platform.system() != "Windows":
     import sh
 
-# The definitions of standard configuration items. These are tri-tuples:
+# The definitions of standard configuration items. These are 5-tuples:
 # [0]: The configuration item description. This will be printed as a prompt
 #      during configuration, and included in the configuration file as a description.
 # [1]: The name of the environment variable to be set in the .env file.
 # [2]: The default value.
 # [3]: Verify:True or False. If True, the user response is compared to the choices available,
-#      verifying that an valid response was entered.
+#      verifying that a valid response was entered.
 # [4]: If [3] is true, this is a list of valid choices. It may be modified/populated
 #      dynamically by the script
 #
 # When you need to add required keys to the configuration, just define them here.
 stdConfigItems = [
+    [
+        "SSL is only required for systems that are providing https (a really good idea).\n"
+        "You will need to obtain a DNS name which points at your CHORDS instance,\n"
+        "and obtain an SSL certificate (which your CHORDS instance will facilitate).\n"
+        "Should SSL be enabled?",
+        "SSL_ENABLED",
+        "false",
+        True,
+        [
+            "true",
+            "false"
+        ]
+    ],
+    [
+        "The email that will be registered (with Letsencrypt), for SSL certification.\n"
+        "Leave blank if SSL is not enabled.",
+        "SSL_CERT_EMAIL",
+        "",
+        False,
+        []
+    ],
+    [
+        "The DNS resolvable host name. Leave blank if SSL is not enabled.",
+        "SSL_HOST",
+        "",
+        False,
+        []
+    ],
     [
         "The PASSWORD for sysadmin access to CHORDS, mysql and influxdb in docker.\n"
         "(NOTE: This not the CHORDS website admin login)\n"
