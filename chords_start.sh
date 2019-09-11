@@ -161,11 +161,11 @@ set +x
 set -x
 gf_url=http://admin:$grafana_admin_pw@chords_grafana:$grafana_http_port
 # Create a the default CHORDS datasource
-curl ${gf_url}/api/datasources -X POST -H "Content-Type: application/json" --data @grafana_datasource.json
+curl ${gf_url}/api/datasources -X POST -H "Content-Type: application/json" --data @./bin/grafana/grafana_datasource.json
 # Create an example dashboard
-curl ${gf_url}/api/dashboards/db -X POST -H "Content-Type: application/json" --data @grafana_dashboard.json
+curl ${gf_url}/api/dashboards/db -X POST -H "Content-Type: application/json" --data @./bin/grafana/grafana_dashboard.json
 # Set the org preferences, inclusing default dashboard
-curl ${gf_url}/api/org/preferences -X PUT -H "Content-Type: application/json" --data @grafana_orgprefs.json
+curl ${gf_url}/api/org/preferences -X PUT -H "Content-Type: application/json" --data @./bin/grafana/grafana_orgprefs.json
 set +x
 
 # start cron
