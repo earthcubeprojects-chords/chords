@@ -91,7 +91,7 @@ services:
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
       - web-root:/chords/public
-      - dhparam:/etc/ssl/certs
+#      - dhparam:/etc/ssl/certs
     environment:
       - WORKERS=${WORKERS}
       - SSL_ENABLED=${SSL_ENABLED}
@@ -216,6 +216,9 @@ services:
   grafana:
     container_name: chords_grafana
     image: ncareol/grafana:6.0.2
+    build:
+      context: ./bin/grafana
+      dockerfile: Dockerfile
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
@@ -272,9 +275,9 @@ volumes:
     #   type: none
     #   device: ./public
     #   o: bind
-  dhparam:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${SSL_CHORDS_DIR}/dhparam/
-      o: bind    
+#  dhparam:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: ${SSL_CHORDS_DIR}/dhparam/
+#      o: bind    
