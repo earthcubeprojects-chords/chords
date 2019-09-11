@@ -85,7 +85,7 @@ services:
     image: ncareol/chords_web
     build:
       context: .
-      dockerfile: Dockerfile-nginx
+      dockerfile: ./bin/nginx/Dockerfile-nginx
     volumes:
       - nginx-log:/var/log/nginx
       - certbot-etc:/etc/letsencrypt
