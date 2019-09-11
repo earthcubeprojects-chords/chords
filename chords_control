@@ -105,6 +105,13 @@ stdConfigItems = [
         []
     ],
     [
+        "The top directory of the CHORDS source tree, on the host system.\n"
+        "Included temporarily until the SSL configuration scheme gets finalized.",
+        "SSL_CHORDS_DIR",
+        "/home/ec2-user/chords",
+        False,
+        []
+    ],    [
         "The PASSWORD for sysadmin access to CHORDS, mysql and influxdb in docker.\n"
         "(NOTE: This not the CHORDS website admin login)\n"
         "Replace this with a secure password.",
