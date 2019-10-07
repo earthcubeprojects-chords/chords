@@ -102,14 +102,14 @@ class CHORDS_curl:
         self.end = self.timestamp(date=end)
 
     def timestamp(self, date):
-        t = date.strftime("%Y-%m-%dT00:00:00.000Z")
+        t = date.strftime("%Y-%m-%dT00Z")
         return t
 
     def get_data(self):
         endpoint = "http://" + self.ip + "/api/v1/data.csv?" + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
         filename = "chords-" + self.begin + "-" + self.end + ".zip"
+        print(filename + ":", endpoint)
         sh.curl("-L", endpoint, "--output", filename)
-        print(endpoint)
 
 #####################################################################
 if __name__ == '__main__':
