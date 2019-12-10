@@ -1,29 +1,28 @@
 # SSL Integration
 Factors involved with SSL integration in CHORDS:
-  - CHORDS may be run in either a non-SSL mode or an SSL mode.  
-  - SSL certificates are created by using nginx and certbot in a  
-  standalone mode.
-  - nginx will use different configuration files, depending  
-    on which mode is in play. Nginx configuration files for all  
-    modes are built into the nginx container, with some symbols  
-    designating configurable information.  
-  - The nginx container contains a startup script which will  
-    choose which nginx configuration to use. It will make the  
-    variable substitutions prior to starting nginx.  
-  - With CHORDS in SSL mode, certbot will be running in a certificate  
-    renewal mode, attempting the renewal every 6 hours.
-  - In non-SSL mode, certbot will exit.
-  - The certbot image is use for housekeeping activities, such as  
-    removing certificates, and generating dummy certificates. 
+
+* CHORDS may be run in either a non-SSL mode or an SSL mode.
+* SSL certificates are created by using nginx and certbot in a standalone mode.
+* nginx will use different configuration files, depending upon which mode is
+  in play. Nginx configuration files for all modes are built into the nginx
+  container, with some symbols designating configurable information.
+* The nginx container contains a startup script which will choose which
+  nginx configuration to use. It will make the variable substitutions
+  prior to starting nginx.
+* With CHORDS in SSL mode, certbot will be running in a certificate
+  renewal mode, attempting the renewal every 6 hours.
+* In non-SSL mode, certbot will exit
+* The certbot image is use for housekeeping activities,
+  such as removing certificates, and generating dummy certificates. 
 
 ## Configuration values
 
 Related docker-compose environment (.env) variables:
   - SSL_ENABLED: true or false
-  - SSL_HOST: The FQDN that accesses this portal. It must be 
-    operational prior to certificate generation. Can be blank if  
+  - SSL_HOST: The FQDN that accesses this portal. It must be
+    operational prior to certificate generation. Can be blank if
     SSL_ENABLED==false.
-  - SSL_EMAIL: The email to be associated with the cert. Can be blank if  
+  - SSL_EMAIL: The email to be associated with the cert. Can be blank if
     SSL_ENABLED==false.
   - NGINX_CERT_CREATE: if present, nginx knows that it is being used only
     to create certificates.
