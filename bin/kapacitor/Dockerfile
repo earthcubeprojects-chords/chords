@@ -1,5 +1,4 @@
 FROM kapacitor:1.3 
-MAINTAINER martinc@ucar.edu
 
 # Update
 RUN apt-get update 

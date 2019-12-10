@@ -1,7 +1,6 @@
 # Base image:
 FROM nginx
 
-
 # Install dependencies
 RUN apt-get update -qq && apt-get -y \
   install \
@@ -9,30 +8,23 @@ RUN apt-get update -qq && apt-get -y \
   curl\
   nano 
 
-
 # establish where Nginx should look for files
 ENV RAILS_ROOT /chords
-
 
 # Set our working directory inside the image
 WORKDIR $RAILS_ROOT
 
-
 # create log directory
 RUN mkdir log
 
-
 # copy over static assets
 COPY public public/
-
 
 # Copy Nginx configuration
 COPY ./nginx_default.conf /tmp/default.nginx
 COPY ./nginx_ssl.conf /tmp/ssl.nginx
 
-
 COPY ./bin/create_dh_param_key.sh /chords/create_dh_param_key.sh
-
 
 # where we store everything SSL-related
 ENV SSL_ROOT /etc/letsencryptsss
@@ -40,18 +32,14 @@ ENV SSL_ROOT /etc/letsencryptsss
 # where Nginx looks for SSL files
 ENV SSL_CERT_HOME $SSL_ROOT/live/chords
 
-
 # EXPOSE http and https ports 
 EXPOSE 80
 EXPOSE 443
- 
 
  # copy over the script that is run by the container
 COPY bin/start_web_container_cmd.sh /tmp/start_web_container_cmd.sh
 
-
 RUN chmod -R 777 /tmp/start_web_container_cmd.sh
-
 
 # Use the "exec" form of CMD so Nginx shuts down gracefully on SIGTERM (i.e. `docker stop`)
 # CMD [ "nginx", "-g", "daemon off;" ]

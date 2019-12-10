@@ -85,7 +85,7 @@ services:
     image: ncareol/chords_web
     build:
       context: .
-      dockerfile: ./bin/nginx/Dockerfile-nginx
+      dockerfile: ./bin/nginx/Dockerfile
     volumes:
       - nginx-log:/var/log/nginx
       - certbot-etc:/etc/letsencrypt
@@ -111,16 +111,19 @@ services:
 
   # Certbot 
   certbot:
-    image: certbot/certbot
-    container_name: certbot
+    container_name: chords_certbot
+    image: ncareol/chords_certbot
+    build:
+      context: .
+      dockerfile: ./bin/certbot/Dockerfile
     volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - web-root:/chords/public
-    depends_on:
-      - web
-    # --staging
-    command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --staging -d ${SSL_HOST}
+        - certbot-etc:/etc/letsencrypt
+        - certbot-var:/var/lib/letsencrypt
+        - web-root:/chords/public
+    environment:
+        - SSL_ENABLED=${SSL_ENABLED}
+  # --staging
+    #command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --staging -d ${SSL_HOST}
 
     # --dry-run
     # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --dry-run -d ${SSL_HOST}
