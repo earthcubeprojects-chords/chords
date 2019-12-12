@@ -1,5 +1,7 @@
 FROM certbot/certbot 
 
+RUN apk add --no-cache bash
+
 WORKDIR /
 
 COPY bin/certbot/certbot_start.sh certbot_start.sh
