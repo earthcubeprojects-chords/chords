@@ -92,7 +92,7 @@ stdConfigItems = [
     [
         "The email that will be registered (with Letsencrypt), for SSL certification.\n"
         "Leave blank if SSL is not enabled.",
-        "SSL_CERT_EMAIL",
+        "SSL_EMAIL",
         "",
         False,
         []

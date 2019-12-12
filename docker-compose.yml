@@ -38,7 +38,7 @@ version: '2.4'
 #  docker-compose -p chords up -d
 
 services:
-  # CHORDS Rails application: nginx + rails + CHORDS rails code 
+  # CHORDS Rails application 
   app:
     build: .
     container_name: chords_app
@@ -80,16 +80,16 @@ services:
       - influxdb
 
   # Nginx web service
-  web:
-    container_name: chords_web
-    image: ncareol/chords_web
+  nginx:
+    container_name: chords_nginx
+    image: ncareol/chords_nginx
     build:
       context: .
       dockerfile: ./bin/nginx/Dockerfile
     volumes:
       - nginx-log:/var/log/nginx
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
+      - letsencrypt-etc:/etc/letsencrypt
+      - letsencrypt-var-lib:/var/lib/letsencrypt
       - web-root:/chords/public
 #      - dhparam:/etc/ssl/certs
     environment:
@@ -97,19 +97,19 @@ services:
       - SSL_ENABLED=${SSL_ENABLED}
       - SSL_HOST=${SSL_HOST}
       - SSL_CHORDS_DIR=${SSL_CHORDS_DIR}
-      - SSL_CERT_EMAIL=${SSL_CERT_EMAIL}
+      - SSL_EMAIL=${SSL_EMAIL}
     logging:
       driver: "json-file"
       options:
         max-size: "1m"
         max-file: "5"      
-    depends_on:
-      - app
     ports:
       - ${CHORDS_HTTP_PORT:-80}:80
       - 443:443
+    depends_on:
+      - app
 
-  # Certbot 
+  # Certbot SSL certificate handling.
   certbot:
     container_name: chords_certbot
     image: ncareol/chords_certbot
@@ -117,21 +117,17 @@ services:
       context: .
       dockerfile: ./bin/certbot/Dockerfile
     volumes:
-        - certbot-etc:/etc/letsencrypt
-        - certbot-var:/var/lib/letsencrypt
+        - letsencrypt-etc:/etc/letsencrypt
+        - letsencrypt-var-lib:/var/lib/letsencrypt
         - web-root:/chords/public
     environment:
         - SSL_ENABLED=${SSL_ENABLED}
   # --staging
     #command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --staging -d ${SSL_HOST}
-
     # --dry-run
     # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --dry-run -d ${SSL_HOST}
-
-
     # --force-renewal    
     # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${SSL_HOST}
-
     # no force renewal
     # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email -d ${SSL_HOST}
 
@@ -269,9 +265,9 @@ volumes:
   kapacitor-log:
   grafana-log:
 
-  #certbot volumes
-  certbot-etc:
-  certbot-var:
+  #ssl related volumes
+  letsencrypt-etc:
+  letsencrypt-var-lib:
   web-root:
     # driver: local
     # driver_opts:

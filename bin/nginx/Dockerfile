@@ -21,8 +21,9 @@ RUN mkdir log
 COPY public public/
 
 # Copy Nginx configuration
-COPY ./nginx_default.conf /tmp/default.nginx
-COPY ./nginx_ssl.conf /tmp/ssl.nginx
+#COPY ./nginx_default.conf /tmp/default.nginx
+#COPY ./nginx_ssl.conf /tmp/ssl.nginx
+COPY bin/nginx/*.conf /tmp/
 
 COPY ./bin/create_dh_param_key.sh /chords/create_dh_param_key.sh
 
@@ -37,10 +38,10 @@ EXPOSE 80
 EXPOSE 443
 
  # copy over the script that is run by the container
-COPY bin/start_web_container_cmd.sh /tmp/start_web_container_cmd.sh
+COPY bin/nginx/nginx_start.sh /tmp/
 
-RUN chmod -R 777 /tmp/start_web_container_cmd.sh
+RUN chmod -R 777 /tmp/nginx_start.sh
 
 # Use the "exec" form of CMD so Nginx shuts down gracefully on SIGTERM (i.e. `docker stop`)
 # CMD [ "nginx", "-g", "daemon off;" ]
-CMD [ "/tmp/start_web_container_cmd.sh" ]
+CMD [ "/tmp/nginx_start.sh" ]

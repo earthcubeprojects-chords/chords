@@ -14,7 +14,11 @@ if [ $SSL_ENABLED == "TRUE" ]; then
   export SSL_ENABLED="true"
 fi
 
-# If enabled, start capacitor
+# If enabled, start certbot renewal attempts.
+if [ $SSL_ENABLED == "true" ]; then
+  echo "*** SSL is enabled; starting certbot in certificate renewal mode"
+  /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 6h & wait ${!}; done;'
+else
 if [ $SSL_ENABLED == "true" ]; then
   echo "*** SSL is enabled; starting certbot in certificate renewal mode"
   /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 6h & wait ${!}; done;'
