@@ -69,14 +69,14 @@ When certificates are to be generated, or replaced:
           certbot
 
 1.	Run certbot to request a certificate (“certonly” command) . This causes the following to happen:
-    - certbot requests a token from letsencrypt, which it places in the nginx accessible filesystem.
-    - letsencrypt retrieves the token via nginx.
-    - certbot is delivered the certificate, which it places it in the nginx SSL certificate directory.
+- certbot requests a token from letsencrypt, which it places in the nginx accessible filesystem.
+- letsencrypt retrieves the token via nginx.
+- certbot is delivered the certificate, which it places it in the nginx SSL certificate directory.
 
-        docker-compose run --nodeps --entrypont " \
-           certonly \
-           --webroot -w=/var/www/certbot --email $SSL_EMAIL \
-           --agree-tos --no-eff-email --staging -d $SSL_HOST " \
+        docker-compose run --nodeps --entrypoint "\
+          certbot certonly \
+           --webroot -w=/chords/public/certbot --email $SSL_EMAIL \
+           --agree-tos --no-eff-email --staging -d $SSL_HOST" \
            certbot
 
 1.	Shutdown nginx. 
