@@ -122,6 +122,8 @@ services:
         - web-root:/chords/public
     environment:
         - SSL_ENABLED=${SSL_ENABLED}
+    depends_on:
+      - nginx
   # --staging
     #command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --staging -d ${SSL_HOST}
     # --dry-run
