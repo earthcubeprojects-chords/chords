@@ -180,7 +180,7 @@ services:
     build:
       context: ./bin/kapacitor
       dockerfile: Dockerfile
-  container_name: chords_kapacitor
+    container_name: chords_kapacitor
     image: ncareol/kapacitor
     volumes:
       - kapacitor-data:/var/lib/kapacitor
