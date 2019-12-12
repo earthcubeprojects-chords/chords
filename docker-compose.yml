@@ -177,9 +177,9 @@ services:
       
   # InfluxData kapacitor time series monitoring
   kapacitor:
-  build:
-    context: ./bin/kapacitor
-    dockerfile: Dockerfile
+    build:
+      context: ./bin/kapacitor
+      dockerfile: Dockerfile
   container_name: chords_kapacitor
     image: ncareol/kapacitor
     volumes:
