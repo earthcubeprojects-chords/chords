@@ -75,7 +75,7 @@ When certificates are to be generated, or replaced:
 
         docker-compose run --nodeps --entrypoint "\
           certbot certonly \
-           --webroot -w=/chords/public/certbot --email $SSL_EMAIL \
+           --webroot -w=/chords/public/ --email $SSL_EMAIL \
            --agree-tos --no-eff-email --staging -d $SSL_HOST" \
            certbot
 
