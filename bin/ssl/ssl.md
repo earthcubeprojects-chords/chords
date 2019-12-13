@@ -73,10 +73,8 @@ When certificates are to be generated, or replaced:
 - letsencrypt retrieves the token via nginx.
 - certbot is delivered the certificate, which it places it in the nginx SSL certificate directory.
 
-        docker-compose run --nodeps --entrypoint "\
-          certbot certonly \
-           --webroot -w=/chords/public/ --email $SSL_EMAIL \
-           --agree-tos --no-eff-email --staging -d $SSL_HOST" \
-           certbot
+        docker-compose run --no-deps --entrypoint "certbot certonly \
+        --webroot -w=/chords/public/ --email $SSL_EMAIL --agree-tos --no-eff-email \
+        --staging -d $SSL_HOST" certbot
 
 1.	Shutdown nginx. 
