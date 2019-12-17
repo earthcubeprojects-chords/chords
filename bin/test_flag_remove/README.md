@@ -80,6 +80,7 @@ influx_inspect export -datadir /var/lib/influxdb/data/ -waldir /var/lib/influxdb
 ```sh 
 grep tsdata influxdb.txt | grep "test=true" > influx_true.txt
 sed -e "s/true/false/" influx_true.txt > influx_false.txt
+
 # Set the timestamps to ms precision
 sed -e "s/000000$//" influx_false.txt > influx_false_ms.txt
 ```
@@ -103,6 +104,7 @@ influx -username=admin -password=<influxdb_pw> -import -path=influx_false_ms.txt
 
 ```sh
 influx -username=admin -password=<influxdb_pw> -database=chords_ts_production
+
 # Check statistics
 > select count(*) from "tsdata"
 name: tsdata
@@ -119,8 +121,10 @@ name: tsdata
 time count_value
 ---- -----------
 0    1757935
+
 # Drop duplicate measurements
 > drop series from "tsdata" where "test"='true'
+
 # Check statistics
 > select count(*) from "tsdata"
 name: tsdata
