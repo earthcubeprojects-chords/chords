@@ -218,8 +218,8 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: ncareol/grafana:6.0.2
-    build:
+  image: ncareol/grafana:6.4.3
+  build:
       context: ./bin/grafana
       dockerfile: Dockerfile
     # Note: GF_ variables are used by grafana, meaning that

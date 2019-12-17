@@ -1,8 +1,6 @@
-FROM grafana/grafana:6.0.2
+FROM grafana/grafana:6.4.3
 LABEL maintainer="martinc@ucar.edu"
 USER root
-
-RUN apt-get update
 
 ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
 RUN mkdir -p $GF_PATHS_PLUGINS
