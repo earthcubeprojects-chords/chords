@@ -136,7 +136,6 @@ name: tsdata
 time count_value
 ---- -----------
 0    2895848
-> drop series from "tsdata" where "test"='true'
 > select count(*) from "tsdata" where "test"='true'
 ```
 ## Fine
