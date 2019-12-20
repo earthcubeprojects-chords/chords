@@ -8,9 +8,6 @@ RUN apt-get update -qq && apt-get -y \
   curl\
   nano 
 
-# Remove links for log files so that they go to the file system
-RUN rm -f /var/log/access.log /var/log/error.log
-
 # establish where Nginx should look for files
 ENV RAILS_ROOT /chords
 
