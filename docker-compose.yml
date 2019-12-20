@@ -117,11 +117,14 @@ services:
       context: .
       dockerfile: ./bin/certbot/Dockerfile
     volumes:
-        - letsencrypt-etc:/etc/letsencrypt
-        - letsencrypt-var-lib:/var/lib/letsencrypt
-        - web-root:/chords/public
+      - letsencrypt-var-log:/var/log/letsencrypt
+      - letsencrypt-etc:/etc/letsencrypt
+      - letsencrypt-var-lib:/var/lib/letsencrypt
+      - web-root:/chords/public
     environment:
         - SSL_ENABLED=${SSL_ENABLED}
+        - SSL_HOST=${SSL_HOST}
+        - SSL_EMAIL=${SSL_HOST}
     depends_on:
       - nginx
   # --staging
@@ -177,11 +180,11 @@ services:
       
   # InfluxData kapacitor time series monitoring
   kapacitor:
+    container_name: chords_kapacitor
+    image: ncareol/kapacitor
     build:
       context: ./bin/kapacitor
       dockerfile: Dockerfile
-    container_name: chords_kapacitor
-    image: ncareol/kapacitor
     volumes:
       - kapacitor-data:/var/lib/kapacitor
       - kapacitor-log:/var/log/kapacitor
@@ -218,8 +221,8 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-  image: ncareol/grafana:6.4.3
-  build:
+    image: ncareol/grafana:6.4.3
+    build:
       context: ./bin/grafana
       dockerfile: Dockerfile
     # Note: GF_ variables are used by grafana, meaning that
@@ -272,6 +275,7 @@ volumes:
   #ssl related volumes
   letsencrypt-etc:
   letsencrypt-var-lib:
+  letsencrypt-var-log:
   web-root:
     # driver: local
     # driver_opts:
