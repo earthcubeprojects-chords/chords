@@ -124,7 +124,7 @@ services:
     environment:
         - SSL_ENABLED=${SSL_ENABLED}
         - SSL_HOST=${SSL_HOST}
-        - SSL_EMAIL=${SSL_HOST}
+        - SSL_EMAIL=${SSL_EMAIL}
     depends_on:
       - nginx
   # --staging
