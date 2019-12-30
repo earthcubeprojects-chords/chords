@@ -19,7 +19,6 @@ RUN apt-get update && apt-get install -y \
 # don't need logrotation any more as it is handled by the container
 #  logrotate \
 
-
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
 # commands.
@@ -44,10 +43,6 @@ COPY . ./
 # Bake the assets (for production mode) into the image
 RUN mkdir -p /chords/log && RAILS_ENV=production SECRET_KEY_BASE=`bundle exec rake secret` bundle exec rake assets:precompile
 
-
-
-
-
 # Create the CHORDS environment value setting script chords_env.sh.
 # Use this bit of magic to invalidate the Dokcker cache to ensure that the command is run.
 ADD https://www.random.org/integers/\?num\=1\&min\=1\&max\=1000000000\&col\=1\&base\=10\&format\=plain\&rnd\=new cache_invalidator
@@ -60,16 +55,12 @@ RUN curl -sSL https://get.docker.com/ | DEBIAN_FRONTEND=noninteractive sh
 # however if the docker build command is run with the --squash option
 RUN rm -rf .git log/* tmp/*
 
-
-
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
-
 
 # Expose port 3000 to the Docker host, so we can access it
 # from the outside.
 EXPOSE 3042
-
 
 # Configure an entry point, so we don't need to specify
 # "bundle exec" for each of our commands.
