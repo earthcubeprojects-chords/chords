@@ -34,45 +34,57 @@ Related docker-compose environment (.env) variables:
 
 ## Docker volumes
 
-| Directory        | Function          | Visibility | Comments |
-|------------------|-------------------|------------|----------|
-| /etc/letsencrypt | Certificates      |certbot, nginx| |
-| /var/www/certbot | ACME challenge    |certbot, nginx| |
+| Directory            | Function          | Used By                 | Comments |
+|----------------------|-------------------|-------------------------|----------|
+| /etc/letsencrypt     | Certificates      |certbot, nginx           | Certificates are stored here.|
+| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs permanance. |
+| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
+| /chords/public       | index.html, error.html, ACME challenge |app, certbot, nginx| Intially populated by nginx.|
 
 ## Certificates
 
+_The following script commands assume that SSL_HOST and SSL_EMAIL are set in the environment.
+Make sure that they are defined._
+
 When certificates are to be generated, or replaced:
 
-1.	Run oppenssl to create dummy certificates. Use certbot container for this.
+1. Run oppenssl to create dummy certificates. Use certbot container for this.
+```sh
+  docker-compose run --no-deps --entrypoint " \
+  mkdir -p /etc/letsencrypt/live/$SSL_HOST" certbot
 
-        docker-compose run --no-deps --entrypoint " \
-        mkdir -p /etc/letsencrypt/live/$SSL_HOST" certbot
-
-        docker-compose run --no-deps --entrypoint " \
-        openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
-          -keyout '/etc/letsencrypt/live/$SSL_HOST/privkey.pem' \
-          -out '/etc/letsencrypt/live/$SSL_HOST/fullchain.pem' \
-          -subj '/CN=localhost'" certbot
-
-1. Run nginx (as a daemon), in certificate creation mode. 
+  docker-compose run --no-deps --entrypoint " \
+  openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
+    -keyout '/etc/letsencrypt/live/$SSL_HOST/privkey.pem' \
+    -out '/etc/letsencrypt/live/$SSL_HOST/fullchain.pem' \
+    -subj '/CN=localhost'" certbot
+```
+2. Run nginx (as a daemon), in certificate creation mode. 
    nginx, which will be configured for SSL, can start because the 
    dummy certs are present.
+```sh
+  docker-compose run -e CERT_CREATE=1 -e SSL_HOST=$SSL_HOST -e SSL_EMAIL=$SSL_EMAIL -p 80:80 -p 443:443 --no-deps -d nginx
+```
+3. Run certbot with an ``rm`` commands to erase dummy certificates:
+```sh
+  docker-compose run --no-deps --entrypoint " \
+    rm -Rf /etc/letsencrypt/live/$SSL_HOST && \
+    rm -Rf /etc/letsencrypt/archive/$SSL_HOST && \
+    rm -Rf /etc/letsencrypt/renewal/$SSL_HOST.conf " \
+    certbot
+```
+4. Run certbot to request a certificate (“certonly” command) . This causes the following
+   to happen:
+    1. certbot requests a token from letsencrypt, which it places in the nginx accessible filesystem.
+    1. letsencrypt retrieves the token via nginx.
+    1. certbot is delivered the certificate, which it places it in the nginx SSL certificate directory.
+```sh
+  docker-compose run --no-deps --entrypoint "certbot certonly \
+  --webroot -w=/chords/public --email $SSL_EMAIL --agree-tos \
+  --no-eff-email --staging -d $SSL_HOST" certbot
+```
+5. Shutdown nginx (and other containers):
 
-        docker-compose run -e CERT_CREATE=1 -e SSL_HOST=$SSL_HOST -e SSL_EMAIL=$SSL_EMAIL -p 80:80 -p 443:443 --no-deps -d nginx
-
-1. Run certbot with an ``rm`` entrypoint to erase dummy certificates:
-
-        docker-compose run --no-deps --entrypoint " \
-          rm -Rf /etc/letsencrypt/live/$SSL_HOST && \
-          rm -Rf /etc/letsencrypt/archive/$SSL_HOST && \
-          rm -Rf /etc/letsencrypt/renewal/$SSL_HOST.conf " \
-          certbot
-
-1.	Run certbot to request a certificate (“certonly” command) . This causes the following to happen:
-- certbot requests a token from letsencrypt, which it places in the nginx accessible filesystem.
-- letsencrypt retrieves the token via nginx.
-- certbot is delivered the certificate, which it places it in the nginx SSL certificate directory.
-
-        docker-compose run --no-deps --entrypoint "certbot certonly --webroot -w=/chords/public --email $SSL_EMAIL --agree-tos --no-eff-email --staging -d $SSL_HOST" certbot
-
-1.	Shutdown nginx. 
+```sh
+  docker-compose down
+```
