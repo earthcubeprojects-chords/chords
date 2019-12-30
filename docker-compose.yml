@@ -96,7 +96,6 @@ services:
       - WORKERS=${WORKERS}
       - SSL_ENABLED=${SSL_ENABLED}
       - SSL_HOST=${SSL_HOST}
-      - SSL_CHORDS_DIR=${SSL_CHORDS_DIR}
       - SSL_EMAIL=${SSL_EMAIL}
     logging:
       driver: "json-file"
