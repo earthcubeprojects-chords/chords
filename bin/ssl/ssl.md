@@ -78,6 +78,10 @@ When certificates are to be generated, or replaced:
     1. certbot requests a token from letsencrypt, which it places in the nginx accessible filesystem.
     1. letsencrypt retrieves the token via nginx.
     1. certbot is delivered the certificate, which it places it in the nginx SSL certificate directory.
+
+**Add ``--staging`` for initial testing, and make sure that succeeds, before getting a real certificate.** Remove it once everything passes. This is to avoid hitting the letsencrypt
+rate limit.
+
 ```sh
   docker-compose run --no-deps --entrypoint "certbot certonly \
   --webroot -w=/chords/public --email $SSL_EMAIL --agree-tos \
@@ -87,4 +91,16 @@ When certificates are to be generated, or replaced:
 
 ```sh
   docker-compose down
+```
+## Debugging
+See these [debugging tools](https://certbot.eff.org/faq#what-tools-can-i-use-for-debugging-my-site-s-https-configuration) when you are having problems.
+
+## Saving the Certificates (and Other Letsencrypt Artifacts)
+
+The _letsencrypt_ environment, including the certificates will need to be saved/restored during
+a CHORDS backup/restore operation:
+```sh
+docker-compose run --no-deps --rm --entrypoint "/bin/bash -c 'cd /etc/letsencrypt; tar --exclude etc-letsencrypt.tar -cvf etc-letsencrypt.tar .'" nginx
+
+docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
 ```
