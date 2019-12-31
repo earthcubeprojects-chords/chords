@@ -17,7 +17,7 @@ fi
 # If SSL is enabled, start certbot renewal attempts.
 if [ $SSL_ENABLED == "true" ]; then
   echo "*** SSL is enabled; starting certbot in certificate renewal mode"
-  /bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 6h & wait ${!}; done;'
+  /bin/sh -c 'trap exit TERM; while :; do date; certbot renew; sleep 6h & wait ${!}; done;'
 else
   echo "SSL was not enabled (via SSL_ENABLED); certbot is not starting"
 fi
