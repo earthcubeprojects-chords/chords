@@ -1,3 +1,5 @@
+# Must be built from the top-level CHORDS directory.
+
 # Base image:
 FROM nginx
 
@@ -8,11 +10,8 @@ RUN apt-get update -qq && apt-get -y \
   curl\
   nano 
 
-# establish where Nginx should look for files
-ENV RAILS_ROOT /chords
-
 # Set our working directory inside the image
-WORKDIR $RAILS_ROOT
+WORKDIR /chords
 
 # create log directory
 RUN mkdir log
@@ -21,17 +20,9 @@ RUN mkdir log
 COPY public public/
 
 # Copy Nginx configuration
-#COPY ./nginx_default.conf /tmp/default.nginx
-#COPY ./nginx_ssl.conf /tmp/ssl.nginx
 COPY bin/nginx/*.conf /tmp/
 
 COPY ./bin/create_dh_param_key.sh /chords/create_dh_param_key.sh
-
-# where we store everything SSL-related
-ENV SSL_ROOT /etc/letsencryptsss
- 
-# where Nginx looks for SSL files
-ENV SSL_CERT_HOME $SSL_ROOT/live/chords
 
 # EXPOSE http and https ports 
 EXPOSE 80
