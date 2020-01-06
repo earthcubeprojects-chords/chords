@@ -20,6 +20,18 @@ Factors involved with SSL integration in CHORDS:
 * The certbot image is use for housekeeping activities,
   such as removing certificates, and generating dummy certificates.
 
+## Building
+
+Just a reminder: build the CHORDS specific containers using ``docker-compose``:
+
+```sh
+docker-compose build  app
+docker-compose build  certbot
+docker-compose build  nginx
+docker-compose build  grafana
+docker-compose build  kapacitor
+```
+
 ## Configuration values
 
 Related docker-compose environment (.env) variables:
