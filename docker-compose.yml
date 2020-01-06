@@ -270,16 +270,15 @@ volumes:
   kapacitor-log:
   grafana-log:
 
-  #ssl related volumes
+  # Volumes for letsencrypt configuration
+  # and certificates. Certbot manages these directories;
+  # nginx will access the certificates (in /etc/letsencrypt/live/).
   letsencrypt-etc:
   letsencrypt-var-lib:
   letsencrypt-var-log:
+  # Shared between certbot and nginx for the letsencrypt ACME challenge.
   web-root:
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   device: ./public
-    #   o: bind
+
 #  dhparam:
 #    driver: local
 #    driver_opts:
