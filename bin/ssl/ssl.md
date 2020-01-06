@@ -5,7 +5,8 @@ Factors involved with SSL integration in CHORDS:
 * SSL certificates are created by using nginx and certbot in a standalone mode.
   The ``--no-deps`` switch applied to ``docker-compose run``
   and ``docker-compose up`` can be used to run nginx or certbot
-  without starting other dependencies, ie. mysql, influxdb, etc.
+  without starting other dependencies, ie. mysql, influxdb, etc.,
+  but still attachingthe volumes.
 * Nginx will use different configuration files, depending upon
   which mode is in play. Nginx configuration files for all
   modes are built into the nginx container, with some symbols
@@ -34,12 +35,12 @@ Related docker-compose environment (.env) variables:
 
 ## Docker volumes
 
-| Directory            | Function          | Used By                 | Comments |
-|----------------------|-------------------|-------------------------|----------|
-| /etc/letsencrypt     | Certificates      |certbot, nginx           | Certificates are stored here.|
-| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs permanance. |
-| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
-| /chords/public       | index.html, error.html, ACME challenge |app, certbot, nginx| Intially populated by nginx.|
+| Volume            | Directory            | Function          | Used By                 | Comments |
+|-------------------|----------------------|-------------------|-------------------------|----------|
+|letsencrypt-etc    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here.|
+|letsencrypt-var-log| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs permanance. |
+|letsencrypt-var-log| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
+|web-root           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by nginx container, it contains a few error htmls, and is used for the ACME challenge.|
 
 ## Certificates
 
@@ -93,7 +94,15 @@ rate limit.
   docker-compose down
 ```
 ## Debugging
-See these [debugging tools](https://certbot.eff.org/faq#what-tools-can-i-use-for-debugging-my-site-s-https-configuration) when you are having problems.
+- See these [debugging tools](https://certbot.eff.org/faq#what-tools-can-i-use-for-debugging-my-site-s-https-configuration) when you are having problems.
+
+- It is very useful to run a shell in an image, with the volumes mounted,
+  but not starting dependent services. This allows you to see exactly what
+  the container is mounting. Use the ``--no-deps`` flag:
+
+```sh
+docker-compose run --no-deps --entrypoint /bin/bash certbot
+```
 
 ## Saving the Certificates (and Other Letsencrypt Artifacts)
 
