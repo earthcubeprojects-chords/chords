@@ -48,7 +48,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - shared-tmp:/tmp/
       - rails-log:/chords/log
-      - web-root:/chords/public      
     environment:
       - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
