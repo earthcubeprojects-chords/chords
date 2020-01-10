@@ -81,7 +81,7 @@ services:
   # Nginx web service
   nginx:
     container_name: chords_nginx
-    image: ncareol/chords_nginx
+    image: ncareol/chords_nginx:${DOCKER_TAG}
     build:
       context: .
       dockerfile: ./bin/nginx/Dockerfile
@@ -110,7 +110,7 @@ services:
   # Certbot SSL certificate handling.
   certbot:
     container_name: chords_certbot
-    image: ncareol/chords_certbot
+    image: ncareol/chords_certbot:${DOCKER_TAG}
     build:
       context: .
       dockerfile: ./bin/certbot/Dockerfile
