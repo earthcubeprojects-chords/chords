@@ -1,28 +1,36 @@
 # SSL Integration
-Factors involved with SSL integration in CHORDS:
+Notes about the SSL integration in CHORDS:
 
 * CHORDS may be run in either a non-SSL mode or an SSL mode.
+* Certificates are issued by _Let's Encrypt_.
+* CHORDS uses derived imagees for nginx and certbot. These images add
+  a bit of useful functionality, e.g. _bash_ and _nano_. Most importantly,
+  they have startup scripts which do some initial configuration based
+  on the mode that CHORDS is starting in.
 * SSL certificates are created by using nginx and certbot in a standalone mode.
   The ``--no-deps`` switch applied to ``docker-compose run``
   and ``docker-compose up`` can be used to run nginx or certbot
   without starting other dependencies, ie. mysql, influxdb, etc.,
-  but still attachingthe volumes.
+  while still attaching the persistent volumes.
 * Nginx will use different configuration files, depending upon
   which mode is in play. Nginx configuration files for all
   modes are built into the nginx container, with some symbols
   designating configurable information.
 * The nginx container contains a startup script which will choose which
-  nginx configuration to use. It will make the variable substitutions
+  nginx configuration to use. It will make variable substitutions
   prior to starting nginx.
-* With CHORDS in SSL mode, certbot will be running in a certificate
-  maintenance mode, attempting the renewal every 6 hours.
-* In non-SSL mode, certbot will exit
-* The certbot image is use for housekeeping activities,
-  such as removing certificates, and generating dummy certificates.
+* The certbot container startup script will attempt a certificate
+  renewal every 6 hours if operating in SSL mode. Otherwise, the
+  container will exit.
+* The certbot service is run standalone for housekeeping activities,
+  such as removing certificates, generating dummy certificates
+  (using _openssl_), and so on. This service is used because _docker-compose_
+  has it mount the _Let's Encrypt_ related volumes.
 
 ## Building
 
-Just a reminder: build the CHORDS specific containers using ``docker-compose``:
+Just a reminder: how to build the CHORDS specific containers using ``docker-compose``. The service names are referenced; the _build_
+section in _docker-compose.yml_ provides directions for building the image:
 
 ```sh
 docker-compose build  app
@@ -31,6 +39,9 @@ docker-compose build  nginx
 docker-compose build  grafana
 docker-compose build  kapacitor
 ```
+
+_mysql_ is the only service which is run with a stock image. All of the
+rest have CHORDS specific images.
 
 ## Configuration values
 
@@ -42,15 +53,18 @@ Related docker-compose environment (.env) variables:
   - SSL_EMAIL: The email to be associated with the cert. Can be blank
     if SSL_ENABLED == false.
   - CERT_CREATE: if present, nginx knows that it is being used
-    only for certificate creation (define via command line
-    arguement to ``docker-compose``)
+    only for certificate creation (usually does not need to be in
+    the environment; usually just define via command line argument to
+    ``docker-compose``)
 
 ## Docker volumes
 
-| Volume            | Directory            | Function          | Used By                 | Comments |
+Persistent Docker volumes.
+
+| Volume Name      | Directory            | Function          | Used By                 | Comments |
 |-------------------|----------------------|-------------------|-------------------------|----------|
 |letsencrypt-etc    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here.|
-|letsencrypt-var-log| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs permanance. |
+|letsencrypt-var-log| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
 |web-root           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by nginx container, it contains a few error htmls, and is used for the ACME challenge.|
 
@@ -116,12 +130,26 @@ rate limit.
 docker-compose run --no-deps --entrypoint /bin/bash certbot
 ```
 
-## Saving the Certificates (and Other Letsencrypt Artifacts)
+## Saving the Certificates (and Other Let's Encrypt Artifacts)
 
-The _letsencrypt_ environment, including the certificates will need to be saved/restored during
+The _Let's Encrypt_ environment, including the certificates will need to be saved/restored during
 a CHORDS backup/restore operation:
 ```sh
 docker-compose run --no-deps --rm --entrypoint "/bin/bash -c 'cd /etc/letsencrypt; tar --exclude etc-letsencrypt.tar -cvf etc-letsencrypt.tar .'" nginx
 
 docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
 ```
+
+## Resources
+* [Things you want to know about Let's Encrypt](https://simonecarletti.com/blog/2016/02/things-about-letsencrypt/#staging)
+* A [good tutorial](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
+  on using Docker and Certbot to manage Let's Encrypt services,
+  and the [Github repository](https://github.com/wmnnd/nginx-certbot) containing a
+  script that is used in the tutorial. Digging into thescript was very helpful.
+* [Nginx configuration](https://docs.nginx.com/nginx/admin-guide/basic-functionality/managing-configuration-files), by nginx.com.
+* A [free O’Reilley book](https://www.nginx.com/resources/library/complete-nginx-cookbook)
+  on nginx, with a basic intro tutorial. Chapter 7 discusses security controls, specifically
+  section 7.3 for client-side SSL encryption.
+* ACME: Automatic Certificate Management Environment. Certbot is an ACME client.
+* Another [intro to Let's Encrypt](https://www.digitalocean.com/community/tutorials/an-introduction-to-let-s-encrypt),
+  by Digital Ocean.
