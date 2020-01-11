@@ -24,4 +24,4 @@ mv /etc/nginx/conf.d/* /tmp/old_nginx_conf
 envsubst '$SSL_HOST:$SSL_CHORDS_DIR:$SSL_EMAIL'  < /tmp/$nginx_conf_file > /etc/nginx/conf.d/$nginx_conf_file
 
 # start Nginx in foreground so Docker container doesn't exit
-nginx-debug -g "daemon off;"
+nginx -g "daemon off;"
