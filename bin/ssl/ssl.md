@@ -69,7 +69,7 @@ Persistent Docker volumes.
 |letsencrypt-etc    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here.|
 |letsencrypt-var-log| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
-|web-root           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by nginx container, it contains a few error htmls, and is used for the ACME challenge.|
+|web-root           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it will be is used for the ACME challenge.|
 
 ## Certificates
 
