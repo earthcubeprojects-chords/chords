@@ -29,7 +29,7 @@ Notes about the SSL integration in CHORDS:
 
 ## Building
 
-Just a reminder: how to build the CHORDS specific containers using ``docker-compose``. The service names are referenced; the _build_
+Just a reminder on how to build the CHORDS specific images using ``docker-compose``. The service names are referenced; the _build_
 section in _docker-compose.yml_ provides directions for building the image:
 
 ```sh
@@ -46,6 +46,9 @@ rest have CHORDS specific images.
 ## Configuration values
 
 Related docker-compose environment (.env) variables:
+  - DOCKER_TAG: set to the desired tag for Docker images. _ssl-cc_
+    was used during development; but this will progress through _development_
+    to a release number such as _1.1.0_.
   - SSL_ENABLED: "true" / "false".
   - SSL_HOST: The FQDN that accesses this portal. It must be
     operational prior to certificate generation. Can be blank if
@@ -70,8 +73,8 @@ Persistent Docker volumes.
 
 ## Certificates
 
-_The following script commands assume that SSL_HOST and SSL_EMAIL are set in the environment.
-Make sure that they are defined._
+_The following script commands assume that DOCKER_TAG, SSL_HOST and SSL_EMAIL are
+set in the environment (and in .env). Make sure that they are defined._
 
 When certificates are to be generated, or replaced:
 
@@ -80,7 +83,7 @@ When certificates are to be generated, or replaced:
   docker-compose run --no-deps --entrypoint " \
   mkdir -p /etc/letsencrypt/live/$SSL_HOST" certbot
 
-  docker-compose run --no-deps --entrypoint " \
+  docker-compose run --no-deps --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
     -keyout '/etc/letsencrypt/live/$SSL_HOST/privkey.pem' \
     -out '/etc/letsencrypt/live/$SSL_HOST/fullchain.pem' \
