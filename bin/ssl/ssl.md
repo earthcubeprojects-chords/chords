@@ -33,11 +33,11 @@ Just a reminder on how to build the CHORDS specific images using ``docker-compos
 section in _docker-compose.yml_ provides directions for building the image:
 
 ```sh
-docker-compose build  app
-docker-compose build  certbot
-docker-compose build  nginx
-docker-compose build  grafana
-docker-compose build  kapacitor
+docker-compose build  --no-cache app
+docker-compose build  --no-cache  certbot
+docker-compose build  --no-cache  nginx
+docker-compose build  --no-cache  grafana
+docker-compose build  --no-cache  kapacitor
 ```
 
 _mysql_ is the only service which is run with a stock image. All of the
