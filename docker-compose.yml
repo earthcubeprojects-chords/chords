@@ -90,7 +90,7 @@ services:
       - letsencrypt-etc:/etc/letsencrypt
       - letsencrypt-var-lib:/var/lib/letsencrypt
       - web-root:/chords/public
-#      - dhparam:/etc/ssl/certs
+      - etc-ssl-certs:/etc/ssl/certs
     environment:
       - WORKERS=${WORKERS}
       - SSL_ENABLED=${SSL_ENABLED}
@@ -279,10 +279,5 @@ volumes:
   letsencrypt-var-log:
   # Shared between certbot and nginx for the letsencrypt ACME challenge.
   web-root:
-
-#  dhparam:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: ${SSL_CHORDS_DIR}/dhparam/
-#      o: bind    
+  # SSL parameters
+  etc-ssl-certs:

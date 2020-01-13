@@ -22,8 +22,6 @@ COPY public public/
 # Copy Nginx configuration
 COPY bin/nginx/*.conf /tmp/
 
-COPY ./bin/create_dh_param_key.sh /chords/create_dh_param_key.sh
-
 # EXPOSE http and https ports 
 EXPOSE 80
 EXPOSE 443
