@@ -90,7 +90,6 @@ services:
       - letsencrypt-etc:/etc/letsencrypt
       - letsencrypt-var-lib:/var/lib/letsencrypt
       - web-root:/chords/public
-      - etc-ssl-certs:/etc/ssl/certs
     environment:
       - WORKERS=${WORKERS}
       - SSL_ENABLED=${SSL_ENABLED}
@@ -270,14 +269,12 @@ volumes:
   influxdb-log:
   kapacitor-log:
   grafana-log:
-
   # Volumes for letsencrypt configuration
   # and certificates. Certbot manages these directories;
   # nginx will access the certificates (in /etc/letsencrypt/live/).
+  # The DH params are also stored here.
   letsencrypt-etc:
   letsencrypt-var-lib:
   letsencrypt-var-log:
   # Shared between certbot and nginx for the letsencrypt ACME challenge.
   web-root:
-  # SSL parameters
-  etc-ssl-certs:

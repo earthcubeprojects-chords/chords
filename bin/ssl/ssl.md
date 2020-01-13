@@ -86,11 +86,10 @@ Persistent Docker volumes related to _Let's Encrypt_.
 
 | Volume Name        | Directory            | Function          | Used By                 | Comments |
 |--------------------|----------------------|-------------------|:-----------------------:|----------|
-|letsencrypt-etc:    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here.|
+|letsencrypt-etc:    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here. DH parameters are also saved here.|
 |letsencrypt-var-log:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
 |web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it will be is used for the ACME challenge.|
-|etc-ssl-certs:| /etc/ssl/certs | DH parameters | nginx | |
 
 ## Certificates
 
@@ -115,8 +114,11 @@ When certificates are to be generated, or replaced:
 
 2. Run oppenssl to **create DH parameters**. Use the nginx image for this.
 ```sh
+  docker-compose run --no-deps --entrypoint " \
+  mkdir -p /etc/letsencrypt/chords-dhparam" certbot
+
   docker-compose run --no-deps --entrypoint "\
-  openssl dhparam -out /etc/ssl/certs/dhparam-2048.pem 2048" nginx
+  openssl dhparam -out /etc/letsencrypt/chords-dhparam/dhparam-2048.pem 2048" certbot
 ```
 
 3. Provide a **web server for the ACME challenge**.
