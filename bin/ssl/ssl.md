@@ -7,6 +7,7 @@ steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
 
 Process:
+
 | Step | Svcs | Standalone or Daemon | Action |
 |----|--------|----------------------|--------|
 | 1  | certbot | S | Create a temporary certificate.|
