@@ -7,15 +7,15 @@ steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
 
 Process:
-|Step| Services | Standalone or Daemon | Action|
-|----|----------|----------------------|-------|
-|1|certbot|S| Create a temporary certificate.|
-|2|nginx|S| Create DH parameters.|
-|3|nginx|D| Run a server to handle the ACME challenge.|
-|4|certbot|S| Erase the temporary certificate.|
-|5|certbot|S| Use certbot (and Let's Encrypt) to validate using an ACME challenge, and then receive a certificate.|
-|6|nginx|  | Shutdown the nginx server.|
-|7|All|D| Start CHORDS with the new certificate.|
+| Step | Svcs | Standalone or Daemon | Action |
+|----|--------|----------------------|--------|
+| 1  | certbot | S | Create a temporary certificate.|
+| 2  | nginx   | S | Create DH parameters.|
+| 3  | nginx   | D | Run a server to handle the ACME challenge.|
+| 4  | certbot | S | Erase the temporary certificate.|
+| 5  | certbot | S | Use certbot (and Let's Encrypt) to validate using an ACME challenge, and then receive a certificate.|
+| 6  | nginx   |   | Shutdown the nginx server.|
+| 7  | All     | D | Start CHORDS with the new certificate.|
 
 ## NOTES
 
