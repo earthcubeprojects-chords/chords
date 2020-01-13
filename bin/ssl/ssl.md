@@ -11,7 +11,7 @@ Process:
 | Step | Svcs | Standalone or Daemon | Action |
 |:--:|:------:|:--------------------:|--------|
 | 1  | certbot | S | Create a temporary certificate.|
-| 2  | nginx   | S | Create DH parameters.|
+| 2  | certbot | S | Create DH parameters.|
 | 3  | nginx   | D | Run a server to handle the ACME challenge.|
 | 4  | certbot | S | Erase the temporary certificate.|
 | 5  | certbot | S | Use certbot (and Let's Encrypt) to validate using an ACME challenge, and then receive a certificate.|
@@ -112,7 +112,7 @@ When certificates are to be generated, or replaced:
     -subj '/CN=localhost'" certbot
 ```
 
-2. Run oppenssl to **create DH parameters**. Use the nginx image for this.
+2. Run oppenssl to **create DH parameters**.
 ```sh
   docker-compose run --no-deps --entrypoint " \
   mkdir -p /etc/letsencrypt/chords-dhparam" certbot
