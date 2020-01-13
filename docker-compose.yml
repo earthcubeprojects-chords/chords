@@ -260,7 +260,8 @@ volumes:
   kapacitor-data:
   # Grafana configuration data
   grafana-data:
-  #shared_tmp volume
+  # shared_tmp volume, used for influxdb backup sharing
+  # between app and influxdb services.
   shared-tmp:
   # log directories
   rails-log:
