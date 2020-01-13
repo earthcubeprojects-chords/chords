@@ -9,7 +9,7 @@ commands will eventually be integrated into the _chords_control_ script.
 Process:
 
 | Step | Svcs | Standalone or Daemon | Action |
-|----|--------|----------------------|--------|
+|:--:|:------:|:--------------------:|--------|
 | 1  | certbot | S | Create a temporary certificate.|
 | 2  | nginx   | S | Create DH parameters.|
 | 3  | nginx   | D | Run a server to handle the ACME challenge.|
@@ -85,7 +85,7 @@ Related docker-compose environment (.env) variables:
 Persistent Docker volumes related to _Let's Encrypt_.
 
 | Volume Name        | Directory            | Function          | Used By                 | Comments |
-|--------------------|----------------------|-------------------|-------------------------|----------|
+|--------------------|----------------------|-------------------|:-----------------------:|----------|
 |letsencrypt-etc:    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here.|
 |letsencrypt-var-log:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
