@@ -1,22 +1,36 @@
 # SSL Integration
-This describes the process for using SSL certificates with CHORDS. The
+
+## Overview
+
+This describes the process for enabling SSL certificates with CHORDS. The
 steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
+
+Process:
+|Step| Services | Standalone or Daemon | Action|
+|----|----------|----------------------|-------|
+|1|certbot|S| Create a temporary certificate.|
+|2|nginx|S| Create DH parameters.|
+|3|nginx|D| Run a server to handle the ACME challenge.|
+|4|certbot|S| Erase the temporary certificate.|
+|5|certbot|S| Use certbot (and Let's Encrypt) to validate using an ACME challenge, and then receive a certificate.|
+|6|nginx|  | Shutdown the nginx server.|
+|7|All|D| Start CHORDS with the new certificate.|
 
 ## NOTES
 
 * CHORDS may be run in either a non-SSL mode or an SSL mode.
 * Certificates are issued by _Let's Encrypt_. Nginx and certbot containers
   provide the tools for certificate management.
-* CHORDS uses derived imagees for nginx and certbot. These images add
+* We use derived imagees for nginx and certbot. These images add
   a bit of useful functionality, e.g. _bash_ and _nano_. Most importantly,
   they have startup scripts which do some initial configuration based
-  on the mode that CHORDS is starting in.
+  on the mode that CHORDS is starting in. _Look at the startup scripts._
 * SSL certificates are created by using nginx and certbot in a standalone mode.
   The ``--no-deps`` switch applied to ``docker-compose run``
   and ``docker-compose up`` can be used to run nginx or certbot
   without starting other dependencies, ie. mysql, influxdb, etc.,
-  while still attaching the docker persistent volumes.
+  while still attaching the docker volumes.
 * Nginx will use different configuration files, depending upon
   which mode is in play. Nginx configuration files for all
   modes are built into the nginx image, with some symbols
@@ -27,12 +41,8 @@ commands will eventually be integrated into the _chords_control_ script.
 * The certbot image startup script will attempt a certificate
   renewal every 6 hours if operating in SSL mode. Otherwise, the
   container will exit.
-* The certbot service is run standalone for housekeeping activities,
-  such as removing certificates, generating dummy certificates
-  (using _openssl_), and so on. This service is used because _docker-compose_
-  mounts the _Let's Encrypt_ related volumes.
 * _Let's Encrypt_ certficate generation should always be tried in staging mode
-  first, to verify that the domain name is working and everything
+  first, to verify that the domain name and everything
   else is working properly.
 
 ## Building
@@ -66,7 +76,7 @@ Related docker-compose environment (.env) variables:
     if SSL_ENABLED == false.
   - CERT_CREATE: if present, nginx knows that it is being used
     only for certificate creation (usually does not need to be in
-    the environment; usually just define via command line argument to
+    the environment; just define via command line argument to
     ``docker-compose``)
 
 ## Docker volumes
@@ -79,6 +89,7 @@ Persistent Docker volumes related to _Let's Encrypt_.
 |letsencrypt-var-log:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
 |web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it will be is used for the ACME challenge.|
+|etc-ssl-certs:| /etc/ssl/certs | DH parameters | nginx | |
 
 ## Certificates
 
@@ -131,8 +142,9 @@ When certificates are to be generated, or replaced:
     1. letsencrypt retrieves the token via nginx, succesfully completing the ACME challenge.
     1. the certificate is delivered to certbot, which it places it in the nginx SSL certificate directory.
 
-  *Include ``--staging`` for initial testing, and make sure it succeeds, before getting a real certificate.* Remove it and rerun the command, once everything passes. This is to avoid hitting the letsencrypt
-  rate limit.
+  *Include ``--staging`` for initial testing, and make sure it succeeds, before getting a real certificate.* Remove ``--staging`` and rerun the command,
+  once everything passes. This is to avoid hitting the letsencrypt rate limit, which is
+  about 5 measly certificates _per week_!.
 
 ```sh
   docker-compose run --no-deps --entrypoint "certbot certonly \
@@ -167,23 +179,25 @@ docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
 
 - It is very useful to run a shell in an image, with the volumes mounted,
   but not starting dependent services. This allows you to see exactly what
-  the container is mounting. Use the ``--no-deps`` flag:
+  the container is mounting. Use the ``--no-deps`` flag, e.g.:
 
 ```sh
 docker-compose run --no-deps --entrypoint /bin/bash certbot
+docker-compose run --no-deps --entrypoint /bin/bash nginx
+docker-compose run --no-deps --entrypoint /bin/bash app
 ```
 
 ## Resources
-* [Things you want to know about Let's Encrypt](https://simonecarletti.com/blog/2016/02/things-about-letsencrypt/#staging)
+* [Things you want to know about Let's Encrypt](https://simonecarletti.com/blog/2016/02/things-about-letsencrypt/#staging).
 * A [good tutorial](https://medium.com/@pentacent/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71)
   on using Docker and Certbot to manage Let's Encrypt services,
   and the [Github repository](https://github.com/wmnnd/nginx-certbot) containing a
-  script that is used in the tutorial. Digging into thescript was very helpful.
+  script that is used in the tutorial. Digging into the script was very helpful.
 * [Nginx configuration](https://docs.nginx.com/nginx/admin-guide/basic-functionality/managing-configuration-files), by nginx.com.
-* [Nginx location blocks](https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms).
+* Nginx [location blocks](https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms).
 * A [free O’Reilley book](https://www.nginx.com/resources/library/complete-nginx-cookbook)
   on nginx, with a basic intro tutorial. Chapter 7 discusses security controls, specifically
   section 7.3 for client-side SSL encryption.
 * ACME: Automatic Certificate Management Environment. Certbot is an ACME client.
-* Another [intro to Let's Encrypt](https://www.digitalocean.com/community/tutorials/an-introduction-to-let-s-encrypt),
+* Another [intro to Let's Encrypt](https://www.digitalocean.com/community/tutorials/an-introduction-to-let-s-encrypt) 
   by Digital Ocean.
