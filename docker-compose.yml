@@ -3,32 +3,27 @@ version: '3.3'
 # The CHORDS configuration (x86) for docker-compose. 
 #
 # When run with "-p chords", it creates these containers:
-#   1. chords_app:      The CHORDS Ruby on Rails server
-#   2. chords_mysql:    A MyQSL database for CHORDS metadata.
-#   3. chords_influxdb: An InfluxDB database for real-time time series data.
-#   4. chords_grafana:  A Grafana dashboard server
+#   1. chords_app:       The CHORDS Ruby on Rails server
+#   2. chords_mysql:     A MyQSL database for CHORDS metadata.
+#   3. chords_influxdb:  An InfluxDB database for real-time time series data.
+#   4. chords_nginx:     An nginx reverse-proxy server.
+#   5. chords_certbot:   A letsencrypt certificate manager.
+#   6. chords_grafana:   A Grafana dashboard server.
+#   6. chords_kapacitor: An influxdata kapacitor serve.
 #
-# The following docker volumes provide data persistance:
-#   1. mysql-data:     (/var/lib/mysql)
-#   2. influxdb-data:  (/var/lib/influxdb)
-#   3. grafana-data:   (/var/lib/grafana)
-#   4. postfix-spool:  (var/spool/postfox)
-#
-# This configuration is used to both build the chords image,
-# and to deploy the CHORDS system. Dockerfile provides the recipe
+# This configuration is used to both build the the service images,
+# and to deploy the CHORDS system. Dockerfiles provide the recipes
 # for the chords image.
 #
-# To build and upload the chords image:
+# To build and deploy the service images:
 #   cd <directory containing the CHORDS project>
-#   docker build --squash --tag ncareol/chords:<tag>
-#   docker push ncareol/chords:<tag>
+#   docker-compose build --no-cache <service>
+#   docker push ncareol/chords_<service>:<DOCKER_TAG>
 #
-# Create a .env file (in the directory that you run docker-compose from) containing
-# CHORDS configuration values. See chords_env_template for a description of values.
-# 
 # To deploy/start/stop CHORDS:
 #   curl -L https://github.com/earthcubeprojects-chords/chords/raw/<branch>/docker-compose.yml > docker-compose.yml
-#   docker-compose pull 
+#   docker-compose pull
+#   python chords_control --config
 #   docker-compose -p chords up -d
 #   docker-compose -p chords down
 #
@@ -36,6 +31,8 @@ version: '3.3'
 #  docker-compose pull
 #  docker-compose -p chords down
 #  docker-compose -p chords up -d
+# 
+# See bin/ssl/SSL.md for instructions on enabling SSL.
 
 services:
   # CHORDS Rails application 
@@ -78,7 +75,7 @@ services:
       - mysql
       - influxdb
 
-  # Nginx web service
+  # Nginx web server
   nginx:
     container_name: chords_nginx
     image: ncareol/chords_nginx:${DOCKER_TAG}
@@ -114,7 +111,7 @@ services:
       context: .
       dockerfile: ./bin/certbot/Dockerfile
     volumes:
-      - letsencrypt-var-log:/var/log/letsencrypt
+      - letsencrypt-log:/var/log/letsencrypt
       - letsencrypt-etc:/etc/letsencrypt
       - letsencrypt-var-lib:/var/lib/letsencrypt
       - web-root:/chords/public
@@ -124,14 +121,6 @@ services:
         - SSL_EMAIL=${SSL_EMAIL}
     depends_on:
       - nginx
-  # --staging
-    #command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --staging -d ${SSL_HOST}
-    # --dry-run
-    # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --dry-run -d ${SSL_HOST}
-    # --force-renewal    
-    # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${SSL_HOST}
-    # no force renewal
-    # command: certonly --webroot --webroot-path=/chords/public --email ${SSL_CERT_EMAIL} --agree-tos --no-eff-email -d ${SSL_HOST}
 
   # Rails mysql database
   mysql:
@@ -259,7 +248,7 @@ volumes:
   kapacitor-data:
   # Grafana configuration data
   grafana-data:
-  # shared_tmp volume, used for influxdb backup sharing
+  # shared /tmp volume, used for influxdb backup sharing
   # between app and influxdb services.
   shared-tmp:
   # log directories
@@ -269,12 +258,12 @@ volumes:
   influxdb-log:
   kapacitor-log:
   grafana-log:
+  letsencrypt-log:
   # Volumes for letsencrypt configuration
   # and certificates. Certbot manages these directories;
   # nginx will access the certificates (in /etc/letsencrypt/live/).
   # The DH params are also stored here.
   letsencrypt-etc:
   letsencrypt-var-lib:
-  letsencrypt-var-log:
   # Shared between certbot and nginx for the letsencrypt ACME challenge.
   web-root:
