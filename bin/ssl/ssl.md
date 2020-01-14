@@ -177,6 +177,9 @@ docker-compose run --no-deps --rm --entrypoint "/bin/bash -c 'cd /etc/letsencryp
 docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
 ```
 
+## Renewal
+**nginx will need to be restarted after a certificate has been renewed. How to automate this?**
+
 ## Debugging
 - See these [debugging tools](https://certbot.eff.org/faq#what-tools-can-i-use-for-debugging-my-site-s-https-configuration) when you are having problems.
 
