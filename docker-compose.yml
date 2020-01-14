@@ -115,6 +115,7 @@ services:
       - letsencrypt-etc:/etc/letsencrypt
       - letsencrypt-var-lib:/var/lib/letsencrypt
       - web-root:/chords/public
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
         - SSL_ENABLED=${SSL_ENABLED}
         - SSL_HOST=${SSL_HOST}

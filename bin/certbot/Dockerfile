@@ -1,10 +1,13 @@
 FROM certbot/certbot 
 
-RUN apk add --no-cache bash
+# Install Docker on the container itself, so that this 
+# container can can ask docker to restart nginx after cert renewal.
+RUN apk add --no-cache bash docker
 
 WORKDIR /
 
-COPY bin/certbot/certbot_start.sh certbot_start.sh
+# Add our management scripts.
+COPY bin/certbot/*.sh ./
 
 # Start certbot
 ENTRYPOINT ["/bin/sh", "-f", "certbot_start.sh"]
