@@ -6,8 +6,6 @@ This describes the process for enabling SSL certificates with CHORDS. The
 steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
 
-Process:
-
 | Step | Svcs | Standalone or Daemon | Action |
 |:--:|:------:|:--------------------:|--------|
 | 1  | certbot | S | Create a temporary certificate.|
@@ -23,10 +21,10 @@ Process:
 * CHORDS may be run in either a non-SSL mode or an SSL mode.
 * Certificates are issued by _Let's Encrypt_. Nginx and certbot containers
   provide the tools for certificate management.
-* We use derived imagees for nginx and certbot. These images add
+* We use derived images for nginx and certbot. These images add
   a bit of useful functionality, e.g. _bash_ and _nano_. Most importantly,
   they have startup scripts which do some initial configuration based
-  on the mode that CHORDS is starting in. _Look at the startup scripts._
+  on the mode that CHORDS is starting in. _Look at the startup scripts nginx_start.sh and certbot_start.sh_
 * SSL certificates are created by using nginx and certbot in a standalone mode.
   The ``--no-deps`` switch applied to ``docker-compose run``
   and ``docker-compose up`` can be used to run nginx or certbot
@@ -49,6 +47,7 @@ Process:
 ## Building
 
 Just a reminder on how to build the CHORDS specific images using ``docker-compose``. 
+_DOCKER_TAG_ must be defined.
 The service names are referenced; the _build_ section in _docker-compose.yml_
 provides directions for building the image:
 
@@ -86,17 +85,15 @@ Persistent Docker volumes related to _Let's Encrypt_.
 
 | Volume Name        | Directory            | Function          | Used By                 | Comments |
 |--------------------|----------------------|-------------------|:-----------------------:|----------|
-|letsencrypt-etc:    | /etc/letsencrypt     | Certificates      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here. DH parameters are also saved here.|
+|letsencrypt-etc:    | /etc/letsencrypt     | Certificates and renewal info      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here. DH parameters are also saved here.|
 |letsencrypt-var-log:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
 |web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it will be is used for the ACME challenge.|
 
-## Certificates
+## Certificate Creation
 
 _The following script commands assume that DOCKER_TAG, SSL_HOST and SSL_EMAIL are
 set in the environment (and in .env). Make sure that they are defined._
-
-When certificates are to be generated, or replaced:
 
 1. Run oppenssl to **create dummy certificates**. Use the certbot image for this.
    This is required because nginx, when configured for the ACME challenge, will
@@ -169,10 +166,12 @@ When certificates are to be generated, or replaced:
 
 ## Saving the Certificates (and Other Let's Encrypt Artifacts)
 
-The _Let's Encrypt_ environment, including the certificates will need to be saved/restored during
-a CHORDS backup/restore operation:
+The _Let's Encrypt_ environment, including the certificates may need to be
+saved/restored during a CHORDS backup/restore operation:
+
 ```sh
-docker-compose run --no-deps --rm --entrypoint "/bin/bash -c 'cd /etc/letsencrypt; tar --exclude etc-letsencrypt.tar -cvf etc-letsencrypt.tar .'" nginx
+docker-compose run --no-deps --rm --entrypoint \
+"/bin/bash -c 'cd /etc/letsencrypt; tar --exclude etc-letsencrypt.tar -cvf etc-letsencrypt.tar .'" nginx
 
 docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
 ```
@@ -184,10 +183,12 @@ When the CHORDS certbot container is started with _SSL_ENABLED=true",
 the _certbot_start.sh_ script does the following:
 
 ```sh
-  /bin/sh -c 'trap exit TERM; while :; do date; certbot renew --pre-hook "/renew_hooks.sh --pre" --post-hook "/renew_hooks.sh --post"; sleep 6h & wait ${!};
+  /bin/sh -c 'trap exit TERM; while :; do date; certbot renew \
+  --pre-hook "/renew_hooks.sh --pre" --post-hook "/renew_hooks.sh --post"; \
+  sleep 6h & wait ${!};
 ```
 
-A little bit gnarly, but it is just running ``certbot renew`` every 6 hours, attempting to renew the certificates. It will only succeed when certificates are
+A little bit gnarly, but it is just running ``certbot renew`` every 24 hours, attempting to renew the certificates. It will only succeed when certificates are
 ready to be renewed.
 
 ``--pre-hook`` and ``--post-hook`` specify scripts to be run before and
