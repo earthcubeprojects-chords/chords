@@ -28,8 +28,9 @@ if [[ $pre_hook = true &&  $post_hook = true ]] || [[ $pre_hook = false &&  $pos
 fi
 
 if [[ $pre_hook = true ]]; then
-  echo "Pre-renewal hook"
+  echo "Pre-renewal hook, no action"
 fi
 if [[ $post_hook = true  ]]; then
-  echo "Post renewal hook"
+  echo "Post-renewal hook, reloading nginx in the chords_nginx container"
+  docker exec chords_nginx /usr/sbin/nginx -s reload
 fi

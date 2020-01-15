@@ -18,7 +18,7 @@ Process:
 | 6  | nginx   |   | Shutdown the nginx server.|
 | 7  | All     | D | Start CHORDS with the new certificate.|
 
-## NOTES
+## Notes
 
 * CHORDS may be run in either a non-SSL mode or an SSL mode.
 * Certificates are issued by _Let's Encrypt_. Nginx and certbot containers
@@ -63,7 +63,7 @@ docker-compose build  --no-cache  kapacitor
 _mysql_ is the only service in CHORDS which is run with a stock image. All of the
 rest have CHORDS specific images.
 
-## Configuration values
+## Configuration Values
 
 Related docker-compose environment (.env) variables:
   - DOCKER_TAG: set to the desired tag for Docker images. _ssl-cc_
@@ -80,7 +80,7 @@ Related docker-compose environment (.env) variables:
     the environment; just define via command line argument to
     ``docker-compose``)
 
-## Docker volumes
+## Docker Volumes
 
 Persistent Docker volumes related to _Let's Encrypt_.
 
@@ -177,10 +177,42 @@ docker-compose run --no-deps --rm --entrypoint "/bin/bash -c 'cd /etc/letsencryp
 docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
 ```
 
-## Renewal
-**nginx will need to be restarted after a certificate has been renewed. How to automate this?**
+## Certificate Renewal
+
+Certificates are renewed by running ``certbot renew``.
+When the CHORDS certbot container is started with _SSL_ENABLED=true",
+the _certbot_start.sh_ script does the following:
+
+```sh
+  /bin/sh -c 'trap exit TERM; while :; do date; certbot renew --pre-hook "/renew_hooks.sh --pre" --post-hook "/renew_hooks.sh --post"; sleep 6h & wait ${!};
+```
+
+A little bit gnarly, but it is just running ``certbot renew`` every 6 hours, attempting to renew the certificates. It will only succeed when certificates are
+ready to be renewed.
+
+``--pre-hook`` and ``--post-hook`` specify scripts to be run before and
+after the renewal. _They will only be run if a certificate is ready for
+renewal, and ``--post-hook`` will only be run after a successful renewal_.
+
+The --post-hook script (``renew_hooks.sh --post``) will force an
+nginx restart, by having docker run the reload command in the neighboring
+nginx container:
+
+```sh
+docker exec chords_nginx /usr/sbin/nginx -s reload
+```
+
+This is possible because we installed docker in the certbot container,
+and share the docker socket between the host, and the nginx and certbot containers. Note: the Rails application uses a similar technique to
+acccess _influxdb_ for database backups.
+
+It's tricky to test the hook scripts, because they normally don't run.
+However, you can run the certbot renew command with ``--force-renew``, to
+force a renewal. But this should be used judicously, since you will
+run into the the same limits (5 per week) as for certificate creation.
 
 ## Debugging
+
 - See these [debugging tools](https://certbot.eff.org/faq#what-tools-can-i-use-for-debugging-my-site-s-https-configuration) when you are having problems.
 
 - It is very useful to run a shell in an image, with the volumes mounted,
