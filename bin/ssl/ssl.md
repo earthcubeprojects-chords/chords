@@ -124,7 +124,8 @@ set in the environment (and in .env). Make sure that they are defined._
    dummy certs are present. See _bin/nginx/nginx_cert_create.conf_.
 
 ```sh
-  docker-compose run -e CERT_CREATE=1 -e SSL_HOST=$SSL_HOST -e SSL_EMAIL=$SSL_EMAIL -p 80:80 -p 443:443 --no-deps -d nginx
+  docker-compose run -e CERT_CREATE=1 -e SSL_HOST=$SSL_HOST \
+  -e SSL_EMAIL=$SSL_EMAIL -p 80:80 -p 443:443 --no-deps -d nginx
 ```
 
 4. Run certbot with an ``rm`` commands to **erase the dummy certificates**:
@@ -138,9 +139,11 @@ set in the environment (and in .env). Make sure that they are defined._
 
 5. Run certbot to **request a certificate** (“certonly” command) . This causes the following
    to happen:
-    1. certbot requests a token from letsencrypt, which it places in the nginx accessible filesystem.
+    1. certbot requests a token from letsencrypt, which it places
+    _web-root:_, which is shared by nginx and cerbot.
     1. letsencrypt retrieves the token via nginx, succesfully completing the ACME challenge.
-    1. the certificate is delivered to certbot, which it places it in the nginx SSL certificate directory.
+    1. the certificate is delivered to certbot, which it places it in 
+    _letsencrypt-etc:_.
 
   *Include ``--staging`` for initial testing, and make sure it succeeds, before getting a real certificate.* Remove ``--staging`` and rerun the command,
   once everything passes. This is to avoid hitting the letsencrypt rate limit, which is
