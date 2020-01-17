@@ -6,7 +6,7 @@ This describes the process for enabling SSL certificates with CHORDS. The
 steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
 
-| Step | Svcs | Standalone or Daemon | Action |
+| Step | docker-compose Service | Standalone or Daemon | Action |
 |:--:|:------:|:--------------------:|--------|
 | 1  | certbot | S | Create a temporary certificate.|
 | 2  | certbot | S | Create DH parameters.|
@@ -193,6 +193,7 @@ the _certbot_start.sh_ script does the following:
 
 A little bit gnarly, but it is just running ``certbot renew`` every 24 hours, attempting to renew the certificates. It will only succeed when certificates are
 ready to be renewed.
+
 
 ``--pre-hook`` and ``--post-hook`` specify scripts to be run before and
 after the renewal. _They will only be run if a certificate is ready for
