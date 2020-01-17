@@ -86,13 +86,13 @@ Persistent Docker volumes related to _Let's Encrypt_.
 | Volume Name        | Directory            | Function          | Used By                 | Comments |
 |--------------------|----------------------|-------------------|:-----------------------:|----------|
 |letsencrypt-etc:    | /etc/letsencrypt     | Certificates and renewal info      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here. DH parameters are also saved here.|
-|letsencrypt-var-log:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
+|letsencrypt-var-lib:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
-|web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it will be is used for the ACME challenge.|
+|web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it is used for the ACME challenge.|
 
 ## Certificate Creation
 
-_The following script commands assume that DOCKER_TAG, SSL_HOST and SSL_EMAIL are
+_The following script commands assume that DOCKER_TAG, SSL_ENABLED, SSL_HOST and SSL_EMAIL are
 set in the environment (and in .env). Make sure that they are defined._
 
 1. Run oppenssl to **create dummy certificates**. Use the certbot image for this.
