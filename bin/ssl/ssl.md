@@ -6,7 +6,7 @@ This describes the process for enabling SSL certificates with CHORDS. The
 steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
 
-| Step | Svcs | Standalone or Daemon | Action |
+| Step | Docker-compose Service | Standalone or Daemon | Action |
 |:--:|:------:|:--------------------:|--------|
 | 1  | certbot | S | Create a temporary certificate.|
 | 2  | certbot | S | Create DH parameters.|
@@ -94,6 +94,8 @@ Persistent Docker volumes related to _Let's Encrypt_.
 
 _The following script commands assume that DOCKER_TAG, SSL_HOST and SSL_EMAIL are
 set in the environment (and in .env). Make sure that they are defined._
+
+The steps below correspond to the step numbering in the Overview.
 
 1. Run oppenssl to **create dummy certificates**. Use the certbot image for this.
    This is required because nginx, when configured for the ACME challenge, will
