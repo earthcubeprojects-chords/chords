@@ -86,13 +86,13 @@ Persistent Docker volumes related to _Let's Encrypt_.
 | Volume Name        | Directory            | Function          | Used By                 | Comments |
 |--------------------|----------------------|-------------------|:-----------------------:|----------|
 |letsencrypt-etc:    | /etc/letsencrypt     | Certificates and renewal info      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here. DH parameters are also saved here.|
-|letsencrypt-var-log:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
+|letsencrypt-var-lib:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
-|web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it will be is used for the ACME challenge.|
+|web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it is used for the ACME challenge.|
 
 ## Certificate Creation
 
-_The following script commands assume that DOCKER_TAG, SSL_HOST and SSL_EMAIL are
+_The following script commands assume that DOCKER_TAG, SSL_ENABLED, SSL_HOST and SSL_EMAIL are
 set in the environment (and in .env). Make sure that they are defined._
 
 The steps below correspond to the step numbering in the Overview.
@@ -195,6 +195,7 @@ the _certbot_start.sh_ script does the following:
 
 A little bit gnarly, but it is just running ``certbot renew`` every 24 hours, attempting to renew the certificates. It will only succeed when certificates are
 ready to be renewed.
+
 
 ``--pre-hook`` and ``--post-hook`` specify scripts to be run before and
 after the renewal. _They will only be run if a certificate is ready for
