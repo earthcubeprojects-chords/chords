@@ -42,9 +42,10 @@ services:
     image: ncareol/chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
-      - /var/run/docker.sock:/var/run/docker.sock
       - shared-tmp:/tmp/
       - rails-log:/chords/log
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./acme-challenge:/acme-challenge
     environment:
       - RAILS_ENV=${RAILS_ENV}
       - CHORDS_ADMIN_PW=${CHORDS_ADMIN_PW}
@@ -86,7 +87,7 @@ services:
       - nginx-log:/var/log/nginx
       - letsencrypt-etc:/etc/letsencrypt
       - letsencrypt-var-lib:/var/lib/letsencrypt
-      - web-root:/chords/public
+      - ./acme-challenge:/acme-challenge
     environment:
       - WORKERS=${WORKERS}
       - SSL_ENABLED=${SSL_ENABLED}
@@ -114,8 +115,8 @@ services:
       - letsencrypt-log:/var/log/letsencrypt
       - letsencrypt-etc:/etc/letsencrypt
       - letsencrypt-var-lib:/var/lib/letsencrypt
-      - web-root:/chords/public
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./acme-challenge:/acme-challenge
     environment:
         - SSL_ENABLED=${SSL_ENABLED}
         - SSL_HOST=${SSL_HOST}
@@ -266,5 +267,3 @@ volumes:
   # The DH params are also stored here.
   letsencrypt-etc:
   letsencrypt-var-lib:
-  # Shared between certbot and nginx for the letsencrypt ACME challenge.
-  web-root:

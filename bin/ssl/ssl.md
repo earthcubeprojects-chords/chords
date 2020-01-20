@@ -153,7 +153,7 @@ The steps below correspond to the step numbering in the Overview.
 
 ```sh
   docker-compose run --no-deps --entrypoint "certbot certonly \
-  --webroot -w=/chords/public --email $SSL_EMAIL --agree-tos \
+  --webroot -w=/acme-challenge --email $SSL_EMAIL --agree-tos \
   --no-eff-email --staging -d $SSL_HOST" certbot
 ```
 

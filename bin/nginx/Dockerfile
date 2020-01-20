@@ -16,9 +16,6 @@ WORKDIR /chords
 # create log directory
 RUN mkdir log
 
-# copy over static assets
-COPY public public/
-
 # Copy Nginx configuration
 COPY bin/nginx/*.conf /tmp/
 
