@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Remove links for log files so that logs go to the file system
-rm -f /var/log/nginx/access.log /var/log/nginx/error.log
-echo '/var/log/nginx:'
-ls -l /var/log/nginx
+# activate nginx log rotation
+crontab -l > /tmp/nginx_cron
+echo "0 * * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" >> /tmp/nginx_cron
+crontab /tmp/nginx_cron
+rm /tmp/nginx_cron
 
+# Set the proper nginx configuration
 if [[ -v CERT_CREATE ]]
 then
    nginx_conf_file="nginx_cert_create.conf"
