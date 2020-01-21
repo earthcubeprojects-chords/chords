@@ -10,24 +10,22 @@ RUN apt-get update -qq && apt-get -y \
   curl\
   nano 
 
-# Set our working directory inside the image
-WORKDIR /chords
+WORKDIR /
 
-# create log directory
-RUN mkdir log
-
-# Copy Nginx configuration
-COPY bin/nginx/*.conf /tmp/
+# create the directory for certbot validation
+RUN mkdir acme-challenge
 
 # EXPOSE http and https ports 
 EXPOSE 80
 EXPOSE 443
 
- # copy over the script that is run by the container
+ # Install the nginx start script
 COPY bin/nginx/nginx_start.sh /tmp/
-
 RUN chmod -R 777 /tmp/nginx_start.sh
 
-# Use the "exec" form of CMD so Nginx shuts down gracefully on SIGTERM (i.e. `docker stop`)
-# CMD [ "nginx", "-g", "daemon off;" ]
+# Install Nginx configurations. They will be referrenced
+# in nginx_start.sh
+COPY bin/nginx/*.conf /tmp/
+
+# Run nginx
 CMD [ "/tmp/nginx_start.sh" ]

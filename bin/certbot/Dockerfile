@@ -6,6 +6,9 @@ RUN apk add --no-cache bash docker
 
 WORKDIR /
 
+# create the directory for certbot validation
+RUN mkdir acme-challenge
+
 # Add our management scripts.
 COPY bin/certbot/*.sh ./
 

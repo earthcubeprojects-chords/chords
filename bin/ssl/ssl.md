@@ -88,7 +88,7 @@ Persistent Docker volumes related to _Let's Encrypt_.
 |letsencrypt-etc:    | /etc/letsencrypt     | Certificates and renewal info      |certbot, nginx           | letsencrypt configuration, certificates and renewal details are stored here. DH parameters are also saved here.|
 |letsencrypt-var-lib:| /var/lib/letsencrypt | Letsencrypt work directory | certbot, nginx | Not sure why this directory needs persistence. |
 |letsencrypt-var-log:| /var/log/letsencrypt | Letsencrypt logs | certbot |  |
-|web-root:           | /chords/public       | index.html, error.html, ACME challenge |certbot, nginx| Intially populated by the nginx container with a few static html's (404.html, etc.), it is used for the ACME challenge.|
+|acme-challenge:     | /acme-challenge      | ACME challenge   |certbot, nginx|  |
 
 ## Certificate Creation
 
@@ -123,12 +123,9 @@ The steps below correspond to the step numbering in the Overview.
 3. Provide a **web server for the ACME challenge**.
    Run nginx (as a daemon), in certificate creation mode. 
    nginx, which will be configured for SSL, can start because the 
-   dummy certs are present. See _bin/nginx/nginx_cert_create.conf_. Will need to create
-   the directory for the shared ACME challenge.
+   dummy certs are present. See _bin/nginx/nginx_cert_create.conf_. 
 
 ```sh
-  mkdir -p ./acme-challenge
-
   docker-compose run -e CERT_CREATE=1 -e SSL_HOST=$SSL_HOST \
   -e SSL_EMAIL=$SSL_EMAIL -p 80:80 -p 443:443 --no-deps -d nginx
 ```
