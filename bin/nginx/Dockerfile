@@ -7,7 +7,9 @@ RUN apt-get update -qq && apt-get -y \
   apache2-utils \
   curl\
   nano \
-  logrotate
+  logrotate \
+  cron \
+  procps
 
 WORKDIR /
 

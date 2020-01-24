@@ -1,10 +1,15 @@
 #!/bin/bash
 
+# start cron
+/etc/init.d/cron start
+service cron status
+
 # activate nginx log rotation
 crontab -l > /tmp/nginx_cron
 echo "0 * * * * /usr/sbin/logrotate /etc/logrotate.d/nginx" >> /tmp/nginx_cron
 crontab /tmp/nginx_cron
 rm /tmp/nginx_cron
+crontab -l
 
 # Set the proper nginx configuration
 if [[ -v CERT_CREATE ]]
