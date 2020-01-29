@@ -763,6 +763,19 @@ class Docker(object):
             tags.append(byteify(t["name"]))
 
         return tags
+#####################################################################
+class ChordsSslError(Exception):
+    """ Raise ChordsSslError("error msg"). """
+    pass
+
+#####################################################################
+class ChordsSSL(object):
+    """
+    Manage SSL certificates.
+    """
+    def __init__(self, ssl_host, ssl_email):
+        if ssl_host == "" or ssl_email == "":
+            raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
 
 #####################################################################
 class ChordsBackupError(Exception):
@@ -1254,6 +1267,16 @@ def status():
         print container['name'] + ': ' + str(container)
 
 #####################################################################
+def ssl(config):
+    """ Manage SSL """
+    try:
+        if config["SSL_ENABLED"] == "true":
+            ChordsSSL(ssl_host=config["SSL_HOST"], ssl_email=config["SSL_EMAIL"])
+    except ChordsSslError as error:
+        print error
+        exit(1)
+
+#####################################################################
 def backup():
     """ Backup a CHORDS portal """
     try:
@@ -1423,8 +1446,8 @@ def check_file_exists(aFile, writeable=False, print_warning=True, exit_on_failur
 #####################################################################
 def grep(expression, aFile):
     """
-    Find a lines in a file containing the expression.
-    Return ass an array of strings. White space is
+    Find lines in a file containing the expression.
+    Return as an array of strings. White space is
     removed.
     """
     ourFile = open(aFile, "r")
@@ -1543,6 +1566,7 @@ if __name__ == '__main__':
         config.writeYMLFile(configfile=options['file'])
         config.writeEnvFile()
         print
+        ssl(config)
         print "*** Don't forget to run 'python chords_control --update' if you have changed the configuration."
 
     # Create the .env file from the configuration file
