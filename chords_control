@@ -58,6 +58,7 @@ import tempfile
 import string
 import glob
 import getpass
+import socket
 from collections import OrderedDict
 from collections import namedtuple
 # sh is not available on Windows, and the Linux commands are not there either!
@@ -774,8 +775,24 @@ class ChordsSSL(object):
     Manage SSL certificates.
     """
     def __init__(self, ssl_host, ssl_email):
+        self.ssl_host = ssl_host
+        self.ssl_email = ssl_email
+
+        print "*** Beginning SSL management. This is a complicated activity, with many steps."
+        print
+
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
+        self.check_host()
+
+        print
+
+    def check_host(self):
+        try:
+            socket.gethostbyname(self.ssl_host)
+        except:
+            raise ChordsSslError("The SSL_HOST " + self.ssl_host + "could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
+        print "Good news! Your host name (" + self.ssl_host + ") appears to be registered with DNS."
 
 #####################################################################
 class ChordsBackupError(Exception):
