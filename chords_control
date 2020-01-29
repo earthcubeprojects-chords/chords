@@ -23,7 +23,7 @@ with -c.
 
 If the CHORDs configuration file does not exist, then it will be created. Thus,
 to create an initial default configuration, use:
-   ./chords_control -c -d
+   ./chords_control --config --default
 
 A .env file is also created by the configuration mode. It contains
  environment variable commands, with one for each configuration item.
@@ -1548,7 +1548,7 @@ if __name__ == '__main__':
     # Create the .env file from the configuration file
     if options["env"]:
         if not os.path.isfile(options["file"]):
-            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
+            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]"
             exit(1)
         config = ChordsConfig(configfile=options['file'])
         config.writeEnvFile()
@@ -1560,7 +1560,7 @@ if __name__ == '__main__':
     # Update the docker images
     if options["update"]:
         if not os.path.isfile(options["file"]):
-            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control -c -d [-f FILE]"
+            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]"
             exit(1)
         # Get the system configuration.
         config = ChordsConfig(configfile=options['file'])
