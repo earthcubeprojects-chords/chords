@@ -309,7 +309,7 @@ CHORDS configuration and operation management.
         
 In configuration mode, you are prompted for configuration options. These will be
 saved in the configuration file (default chords.yml) and in a corresponding .env file. 
-Backup copies will be made of the existing configuration files. Use the --defalut option
+Backup copies will be made of the existing configuration files. Use the --default option
 to set the configuration to default values.
 """
 
@@ -784,7 +784,7 @@ class ChordsSSL(object):
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
         self.check_host()
-
+        self.check_cert()
         print
 
     def check_host(self):
@@ -793,6 +793,14 @@ class ChordsSSL(object):
         except:
             raise ChordsSslError("The SSL_HOST " + self.ssl_host + "could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
         print "Good news! Your host name (" + self.ssl_host + ") appears to be registered with DNS."
+
+    def check_cert(self):
+        cert_path = "/etc/letsencrypt/live/SSL_HOST/fullchain.pem".replace("SSL_HOST", self.ssl_host)
+        cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
+        print (
+            sh.docker_compose(cmd)
+        ) 
+
 
 #####################################################################
 class ChordsBackupError(Exception):
@@ -1579,11 +1587,12 @@ if __name__ == '__main__':
         add_choices_to_DOCKER_TAG()
         add_choices_to_GIT_BRANCH()
         config = ChordsConfig(configfile=options['file'])
+        ssl(config)
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
         config.writeEnvFile()
         print
-        ssl(config)
+#        ssl(config)
         print "*** Don't forget to run 'python chords_control --update' if you have changed the configuration."
 
     # Create the .env file from the configuration file
