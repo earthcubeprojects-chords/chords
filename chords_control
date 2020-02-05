@@ -50,7 +50,6 @@ import sys
 import re
 import shutil
 import datetime
-import dateutil.parser
 import argparse
 import subprocess
 import json
@@ -816,9 +815,9 @@ class ChordsSSL(object):
                 if not (retval["notBefore"] and retval["notAfter"]):
                     retval["has_cert"] = False
                 else:
-                    retval["notBefore"] =  dateutil.parser.parse(notBefore)
-                    retval["notAfter"]  = dateutil.parser.parse(notAfter)
-                    retval["expired"]   =  datetime.now() > retval["notAfter"]
+                    retval["notBefore"] = datetime.datetime.strptime(notBefore, '%b %d %H:%M:%S %Y %Z')
+                    retval["notAfter"]  = datetime.datetime.strptime(notAfter)
+                    retval["expired"]   =  datetime.now() > retval["notAfter", '%b %d %H:%M:%S %Y %Z']
             except sh.ErrorReturnCode_1 as e:
                 retval["has_cert"] = False
 
