@@ -784,7 +784,7 @@ class ChordsSSL(object):
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
         self.host_dns()
-        print(self.check_cert())
+        print('check_cert results:', self.check_cert())
         print
 
     def host_dns(self):
@@ -813,11 +813,11 @@ class ChordsSSL(object):
                 notBefore = [s.split("=")[1] for s in result if "notBefore" in s]
                 notAfter = [s.split("=")[1] for s in result if "notAfter" in s]
                 if not (retval["notBefore"] and retval["notAfter"]):
-                    retval["has_cert"] = False
+                    retval["notBefore"] = datetime.datetime.strptime(notBefore[0], '%b %d %H:%M:%S %Y %Z')
+                    retval["notAfter"]  = datetime.datetime.strptime(notAfter[0], '%b %d %H:%M:%S %Y %Z')
+                    retval["expired"]   = datetime.datetime.now() > retval["notAfter"]
                 else:
-                    retval["notBefore"] = datetime.datetime.strptime(notBefore, '%b %d %H:%M:%S %Y %Z')
-                    retval["notAfter"]  = datetime.datetime.strptime(notAfter)
-                    retval["expired"]   =  datetime.now() > retval["notAfter", '%b %d %H:%M:%S %Y %Z']
+                    retval["has_cert"] = False
             except sh.ErrorReturnCode_1 as e:
                 retval["has_cert"] = False
 
