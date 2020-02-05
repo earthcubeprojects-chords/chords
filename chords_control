@@ -808,8 +808,8 @@ class ChordsSSL(object):
             cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
             try:
                 result = sh.docker_compose(cmd).split('\n')
-                retval["notBefore"] = [s for s in result if "notBefore" in s]
-                retval["notAfter"] = [s for s in result if "notBefore" in s]
+                retval["notBefore"] = [s.split("=")[1] for s in result if "notBefore" in s]
+                retval["notAfter"]  = [s.split("=")[1] for s in result if "notAfter" in s]
                 if not (retval["notBefore"] and retval["notAfter"]):
                     retval["has_cert"] = False
             except sh.ErrorReturnCode_1 as e:
