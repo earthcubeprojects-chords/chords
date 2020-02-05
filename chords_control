@@ -783,24 +783,39 @@ class ChordsSSL(object):
 
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
-        self.check_host()
-        self.check_cert()
+        self.host_dns()
+        print(self.check_cert())
         print
 
-    def check_host(self):
+    def host_dns(self):
         try:
             socket.gethostbyname(self.ssl_host)
+            print "Good news! Your host name (" + self.ssl_host + ") appears to be registered with DNS."
         except:
             raise ChordsSslError("The SSL_HOST " + self.ssl_host + "could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
-        print "Good news! Your host name (" + self.ssl_host + ") appears to be registered with DNS."
 
     def check_cert(self):
-        cert_path = "/etc/letsencrypt/live/SSL_HOST/fullchain.pem".replace("SSL_HOST", self.ssl_host)
-        cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
-        print (
-            sh.docker_compose(cmd)
-        ) 
+        """ Return a dictionary containing the cert status """
 
+        retval = {"has_cert": True, "notBefore": "", "notAfter": ""}
+
+        cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
+        result = sh.docker_compose(cmd).split('\n')
+        retval["has_cert"] =  not ("No certs found." in result)
+
+        if retval["has_cert"]:
+            cert_path = "/etc/letsencrypt/live/SSL_HOST/fullchain.pem".replace("SSL_HOST", self.ssl_host)
+            cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
+            try:
+                result = sh.docker_compose(cmd).split('\n')
+                retval["notBefore"] = [s for s in result if "notBefore" in s]
+                retval["notAfter"] = [s for s in result if "notBefore" in s]
+                if not (retval["notBefore"] and retval["notAfter"]):
+                    retval["has_cert"] = False
+            except sh.ErrorReturnCode_1 as e:
+                retval["has_cert"] = False
+
+            return retval
 
 #####################################################################
 class ChordsBackupError(Exception):
