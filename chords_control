@@ -50,6 +50,7 @@ import sys
 import re
 import shutil
 import datetime
+import dateutil.parser
 import argparse
 import subprocess
 import json
@@ -797,25 +798,31 @@ class ChordsSSL(object):
     def check_cert(self):
         """ Return a dictionary containing the cert status """
 
-        retval = {"has_cert": True, "notBefore": "", "notAfter": ""}
+        retval = {"has_cert": True, "expired": None, "notBefore": None, "notAfter": None}
 
+        # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
         result = sh.docker_compose(cmd).split('\n')
         retval["has_cert"] =  not ("No certs found." in result)
 
         if retval["has_cert"]:
+            # Use openssl to get the timestamps from the certificate.
             cert_path = "/etc/letsencrypt/live/SSL_HOST/fullchain.pem".replace("SSL_HOST", self.ssl_host)
             cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
             try:
                 result = sh.docker_compose(cmd).split('\n')
-                retval["notBefore"] = [s.split("=")[1] for s in result if "notBefore" in s]
-                retval["notAfter"]  = [s.split("=")[1] for s in result if "notAfter" in s]
+                notBefore = [s.split("=")[1] for s in result if "notBefore" in s]
+                notAfter = [s.split("=")[1] for s in result if "notAfter" in s]
                 if not (retval["notBefore"] and retval["notAfter"]):
                     retval["has_cert"] = False
+                else:
+                    retval["notBefore"] =  dateutil.parser.parse(notBefore)
+                    retval["notAfter"]  = dateutil.parser.parse(notAfter)
+                    retval["expired"]   =  datetime.now() > retval["notAfter"]
             except sh.ErrorReturnCode_1 as e:
                 retval["has_cert"] = False
 
-            return retval
+        return retval
 
 #####################################################################
 class ChordsBackupError(Exception):
