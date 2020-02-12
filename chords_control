@@ -78,7 +78,7 @@ if platform.system() != "Windows":
 # When you need to add required keys to the configuration, just define them here.
 stdConfigItems = [
     [
-        "SSL is only required for systems that are providing https (a really good idea).\n"
+        "SSL is only required for systems that need to provide https (a really good idea).\n"
         "You will need to obtain a DNS name which points at your CHORDS instance,\n"
         "and obtain an SSL certificate (which your CHORDS instance will facilitate).\n"
         "Should SSL be enabled?",
@@ -783,28 +783,38 @@ class ChordsSSL(object):
 
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
+        print ("Checking DNS for your hostname...")
         self.host_dns()
-        print('check_cert results:', self.check_cert())
+        print
+        print ("Checking to see if you already have a valid SSL certificate...")
+        result = self.check_cert()
+        print
+        if result["valid_cert"]:
+            print ("You have a valid certificate!")
+            return
+        else:
+            print ("You don't have a valid SSL certificate; we will try to obtain one now...")
+            self.create_cert()
         print
 
     def host_dns(self):
         try:
-            socket.gethostbyname(self.ssl_host)
-            print "Good news! Your host name (" + self.ssl_host + ") appears to be registered with DNS."
+            out = socket.gethostbyname(self.ssl_host)
+            print "Good news! Your host name (" + self.ssl_host + ") is registered with DNS as " + out + "."
         except:
             raise ChordsSslError("The SSL_HOST " + self.ssl_host + "could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
 
     def check_cert(self):
         """ Return a dictionary containing the cert status """
 
-        retval = {"has_cert": True, "expired": None, "notBefore": None, "notAfter": None}
+        retval = {"valid_cert": True, "expired": None, "notBefore": None, "notAfter": None}
 
         # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
         result = sh.docker_compose(cmd).split('\n')
-        retval["has_cert"] =  not ("No certs found." in result)
+        retval["valid_cert"] =  not ("No certs found." in result)
 
-        if retval["has_cert"]:
+        if retval["valid_cert"]:
             # Use openssl to get the timestamps from the certificate.
             cert_path = "/etc/letsencrypt/live/SSL_HOST/fullchain.pem".replace("SSL_HOST", self.ssl_host)
             cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
@@ -817,15 +827,19 @@ class ChordsSSL(object):
                     retval["notAfter"]  = datetime.datetime.strptime(notAfter[0], '%b %d %H:%M:%S %Y %Z')
                     retval["expired"]   = datetime.datetime.now() > retval["notAfter"]
                 else:
-                    retval["has_cert"] = False
+                    retval["valid_cert"] = False
             except sh.ErrorReturnCode_1 as e:
-                retval["has_cert"] = False
+                retval["valid_cert"] = False
 
         return retval
 
+    def create_cert(self):
+        """ Create a new certificate. """
+        pass
+
 #####################################################################
 class ChordsBackupError(Exception):
-    """ Raise ChordsBackupError("error msg"). """
+    """ Usage: raise ChordsBackupError("error msg"). """
     pass
 
 class ChordsBackup(object):
