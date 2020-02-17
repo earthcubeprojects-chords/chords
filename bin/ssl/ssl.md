@@ -2,7 +2,7 @@
 
 ## Overview
 
-This describes the process for enabling SSL certificates with CHORDS. The
+This describes the process for creating/enabling SSL certificates with CHORDS. The
 steps are described as shell commands, to be followed in order. These
 commands will eventually be integrated into the _chords_control_ script.
 
@@ -172,13 +172,17 @@ The steps below correspond to the step numbering in the Overview.
 ## Saving the Certificates (and Other Let's Encrypt Artifacts)
 
 The _Let's Encrypt_ environment, including the certificates may need to be
-saved/restored during a CHORDS backup/restore operation:
+saved/restored during a CHORDS backup/restore operation. The certbot container
+must be running for the copy to succeed:
 
 ```sh
 docker-compose run --no-deps --rm --entrypoint \
-"/bin/bash -c 'cd /etc/letsencrypt; tar --exclude etc-letsencrypt.tar -cvf etc-letsencrypt.tar .'" nginx
+"/bin/bash -c 'cd /etc/letsencrypt; tar --exclude etc-letsencrypt.tar -cvf etc-letsencrypt.tar .'" certbot
 
-docker cp $(docker-compose ps -q nginx):/etc/letsencrypt/etc-letsencrypt.tar .
+docker cp $(docker-compose ps -q certbot):/etc/letsencrypt/etc-letsencrypt.tar .
+
+
+chmod og-rw etc-letsencrypt.tar
 ```
 
 ## Certificate Renewal
