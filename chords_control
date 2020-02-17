@@ -502,11 +502,13 @@ class ChordsConfig(OrderedDict):
         if defaultval:
             print("(default: " + str(defaultval) + ")", end=' ')
         print(termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ', end=' ')
+        sys.stdout.flush()
         if not usedefault:
             l = sys.stdin.readline().strip()
         else:
             l = "."
             print(".", end=' ')
+            sys.stdout.flush()
         # An empty line means retain value
         if l != "":
             # A period means use the default, if it is avaiable
@@ -595,6 +597,7 @@ class ChordsGit(object):
                 proxy_switch = ['-xxx', self.proxy]
 
             print('Downloading ' + file_url + '.', end=' ')
+            sys.stdout.flush()
             curl_cmd = [
                 'curl', '-O', '-s', file_url
                 ]
@@ -685,7 +688,7 @@ class Docker(object):
                     containers.append(json.loads(p))
 
         # Convert the json unicode to bytes
-        return byteify(containers)
+        return containers
 
     def up(self, devmode=False):
         """
@@ -764,7 +767,7 @@ class Docker(object):
 
         tags = []
         for t in json.loads(curl_result):
-            tags.append(byteify(t["name"]))
+            tags.append(t["name"])
 
         return tags
 #####################################################################
@@ -1056,6 +1059,7 @@ class ChordsRestore(object):
 
         print("*** Warning: this action will overwrite ALL data in the running portal.")
         print('Are you sure that you want restore from %s [Y/y]? ' % (self.dump_file), end=' ')
+        sys.stdout.flush()
         l = sys.stdin.readline().strip()
         if l not in ['Y', 'y']:
             raise ChordsRestoreError("Restore cancelled.")
@@ -1436,7 +1440,7 @@ def os_cmd(cmd, err_msg=None, printlines=True):
         proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         lines = ''
         while True:
-            output = proc.stdout.readline()
+            output = proc.stdout.readline().decode('utf-8')
             lines = lines + output
             if output == '' and proc.poll() is not None:
                 break
@@ -1566,6 +1570,7 @@ def choose_branch(aFile):
         for b in git_branches:
             print('\''+b+'\'', end=' ')
         print(')? ', end=' ')
+        sys.stdout.flush()
         git_branch = sys.stdin.readline().strip()
         if git_branch in git_branches:
             break
