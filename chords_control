@@ -43,7 +43,10 @@ is mounted as the CHORDS Rails source.
 The the --renew option makes a backup copy of this script, and pulls down
 a new version from github.
 """
+from __future__ import print_function
 
+from builtins import str
+from builtins import object
 import os
 import stat
 import sys
@@ -293,7 +296,7 @@ def createBackupFile(filename, print_note=True):
     os.chmod(backupfile, stat.S_IRUSR | stat.S_IWUSR)
 
     if print_note:
-        print "*** " + filename + " has been backed up to " + backupfile + "."
+        print("*** " + filename + " has been backed up to " + backupfile + ".")
 
 #####################################################################
 class CommandArgs(object):
@@ -361,11 +364,11 @@ Backup and restore are not currently available on Windows.
                 o['backup'],
                 o['restore']
            ].count(True) > 1:
-            print epilog
+            print(epilog)
             exit(1)
 
         if o['default'] and not o['config']:
-            print epilog
+            print(epilog)
             exit(1)
 
     def get_options(self):
@@ -402,23 +405,23 @@ class ChordsConfig(OrderedDict):
         if not os.path.isfile(configFile):
             f = open(options["file"], 'w')
             f.close()
-            print configFile, 'has been created'
+            print(configFile, 'has been created')
 
         items = config_items(configFile)
 
         tmpConfig = OrderedDict()
         # Collect all of the standard items. Add them if they
         # weren't in the file
-        for key in self.configItems.keys():
-            if key in items.keys():
+        for key in list(self.configItems.keys()):
+            if key in list(items.keys()):
                 tmpConfig[key] = items[key]
                 del items[key]
             else:
                 tmpConfig[key] = self.configItems[key]['default']
-        for key, value in items.iteritems():
+        for key, value in items.items():
             # Append any remaining items that aren't in the standard list
             tmpConfig[key] = value
-        for key in tmpConfig.keys():
+        for key in list(tmpConfig.keys()):
             self[key] = tmpConfig[key]
 
     def initConfigItems(self):
@@ -438,15 +441,15 @@ class ChordsConfig(OrderedDict):
         The standard items are wrtten first, followed by the extras.
         """
         yml = ''
-        for key in self.keys():
-            if key in self.configItems.keys():
+        for key in list(self.keys()):
+            if key in list(self.configItems.keys()):
                 descripts = self.configItems[key]['description'].split('\n')
                 for d in descripts:
                     yml =  yml + '# ' + d + '\n'
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         yml = yml +  '#' + '\n' + '# Non-standard options.' + '\n'
-        for key in self.keys():
-            if key not in self.configItems.keys():
+        for key in list(self.keys()):
+            if key not in list(self.configItems.keys()):
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         return yml
 
@@ -458,14 +461,14 @@ class ChordsConfig(OrderedDict):
         The items found in configItems are done first, followed by all other
         items.
         """
-        print "Enter:\n   Return to keep the current value, or\n   Period (.) to select to the default value, or a\n   New value."
+        print("Enter:\n   Return to keep the current value, or\n   Period (.) to select to the default value, or a\n   New value.")
 
         # Process config items that are part of the standard configuration
-        for key in self.keys():
-            print
-            if key in self.configItems.keys():
+        for key in list(self.keys()):
+            print()
+            if key in list(self.configItems.keys()):
                 description = self.configItems[key]['description']
-                print
+                print()
                 # If verify is enabled for this item, then we need to populate the valid choices.
                 if self.configItems[key]['verify']:
                     description = description + ' Valid choices are: '
@@ -482,11 +485,11 @@ class ChordsConfig(OrderedDict):
                         if self[key] in self.configItems[key]['choices']:
                             break
                         else:
-                            print '>>>> You entered an invalid value. Please try again (or use ctrl-C to exit)'
+                            print('>>>> You entered an invalid value. Please try again (or use ctrl-C to exit)')
 
         # Process items that extras which are not part of the standard configuration
-        for key in self.keys():
-            if key not in self.configItems.keys():
+        for key in list(self.keys()):
+            if key not in list(self.configItems.keys()):
                 self.queryValue(key=key, usedefault=usedefault)
 
     def queryValue(self, key, usedefault, description=None, defaultval=None):
@@ -494,16 +497,16 @@ class ChordsConfig(OrderedDict):
         Query the user for a replacement value.
         """
         if description:
-            print description
-        print key,
+            print(description)
+        print(key, end=' ')
         if defaultval:
-            print "(default: " + str(defaultval) + ")",
-        print termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ',
+            print("(default: " + str(defaultval) + ")", end=' ')
+        print(termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ', end=' ')
         if not usedefault:
             l = sys.stdin.readline().strip()
         else:
             l = "."
-            print ".",
+            print(".", end=' ')
         # An empty line means retain value
         if l != "":
             # A period means use the default, if it is avaiable
@@ -513,7 +516,7 @@ class ChordsConfig(OrderedDict):
             else:
                 self[key] = l
         if usedefault:
-            print
+            print()
 
     def writeYMLFile(self, configfile):
         """
@@ -524,14 +527,14 @@ class ChordsConfig(OrderedDict):
         If specified, a backup copy of the original file is created.
         """
 
-        print
+        print()
         createBackupFile(configfile)
 
         f = open(configfile, "w")
         f.write(self.toYML())
         f.close()
         os.chmod(configfile, stat.S_IRUSR | stat.S_IWUSR)
-        print "*** " + options["file"] + " has been written with the new configuration."
+        print("*** " + options["file"] + " has been written with the new configuration.")
 
     def writeEnvFile(self):
         """
@@ -543,11 +546,11 @@ class ChordsConfig(OrderedDict):
         createBackupFile(".env")
 
         f = open(".env", 'w')
-        for key in self.keys():
+        for key in list(self.keys()):
             f.write(key + "=" + str(self[key])+"\n")
         f.close()
         os.chmod(".env", stat.S_IRUSR | stat.S_IWUSR)
-        print "*** .env has been written with the new configuration."
+        print("*** .env has been written with the new configuration.")
 
 
 #####################################################################
@@ -591,7 +594,7 @@ class ChordsGit(object):
             if self.proxy != '':
                 proxy_switch = ['-xxx', self.proxy]
 
-            print 'Downloading ' + file_url + '.',
+            print('Downloading ' + file_url + '.', end=' ')
             curl_cmd = [
                 'curl', '-O', '-s', file_url
                 ]
@@ -603,7 +606,7 @@ class ChordsGit(object):
 
             os_cmd(cmd=curl_cmd)
 
-            print
+            print()
 
     def branches(self):
         """
@@ -644,13 +647,13 @@ class Docker(object):
                     found_cmd = True
                     break
             if not found_cmd:
-                print 'docker-compose was not found in', cmd_choices
-                print 'You must install docker-compose before proceeding.'
+                print('docker-compose was not found in', cmd_choices)
+                print('You must install docker-compose before proceeding.')
                 exit(1)
 
         if not check_file_exists(self.docker_compose_yml, exit_on_failure=False):
             git_branch = choose_branch(self.docker_compose_yml)
-            print git_branch
+            print(git_branch)
             ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml)
 
     def ps(self):
@@ -690,20 +693,20 @@ class Docker(object):
         """
         # Make sure that .env exists
         if not os.path.isfile('.env'):
-            print '*** The environment file .env is missing. Use chords_control to create it.'
+            print('*** The environment file .env is missing. Use chords_control to create it.')
             exit (1)
 
         # Find out the release that we are running
         d = grep('DOCKER_TAG', '.env')
         d = d[0].split('=')
         if len(d) == 2:
-            print '*** Running the \'' + d[1] + '\' release of CHORDS',
+            print('*** Running the \'' + d[1] + '\' release of CHORDS', end=' ')
             if not devmode:
-                print '.'
+                print('.')
             else:
-                print ', in development mode.'
+                print(', in development mode.')
         else:
-            print '.env file is incorrectly formatted (DOCKER_TAG is missing)'
+            print('.env file is incorrectly formatted (DOCKER_TAG is missing)')
             exit (1)
 
         if not devmode:
@@ -736,12 +739,12 @@ class Docker(object):
         # We need docker-compose.yml
         check_file_exists(self.docker_compose_yml)
 
-        print "*** Pulling Docker images. This may take awhile..."
+        print("*** Pulling Docker images. This may take awhile...")
         pull_cmd = [
             self.docker_compose_cmd,
             '-f', self.docker_compose_yml, 'pull']
         os_cmd(cmd=pull_cmd, err_msg='Unable to pull Docker images')
-        print "*** ...Docker pull is finished."
+        print("*** ...Docker pull is finished.")
 
     def tags(self):
         """
@@ -778,29 +781,29 @@ class ChordsSSL(object):
         self.ssl_host = ssl_host
         self.ssl_email = ssl_email
 
-        print "*** Beginning SSL management. This is a complicated activity, with many steps."
-        print
+        print("*** Beginning SSL management. This is a complicated activity, with many steps.")
+        print()
 
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
         print ("Checking DNS for your hostname...")
         self.host_dns()
-        print
+        print()
         print ("Checking to see if you already have a valid SSL certificate...")
         result = self.check_cert()
-        print
+        print()
         if result["valid_cert"]:
             print ("You have a valid certificate!")
             return
         else:
             print ("You don't have a valid SSL certificate; we will try to obtain one now...")
             self.create_cert()
-        print
+        print()
 
     def host_dns(self):
         try:
             out = socket.gethostbyname(self.ssl_host)
-            print "Good news! Your host name (" + self.ssl_host + ") is registered with DNS as " + out + "."
+            print("Good news! Your host name (" + self.ssl_host + ") is registered with DNS as " + out + ".")
         except:
             raise ChordsSslError("The SSL_HOST " + self.ssl_host + "could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
 
@@ -868,21 +871,21 @@ class ChordsBackup(object):
         self.manifest_file = "manifest-" + time_stamp + ".txt"
         self.chords_tar_file = 'chords-backup-' + self.nice_project_name() + '-' + time_stamp + '.tar'
 
-        print "*** Saving mysql ***"
+        print("*** Saving mysql ***")
         mysql_file = open(self.mysql_sql_file, 'w')
-        print sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
-                        _out=mysql_file).stdout
+        print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
+                        _out=mysql_file).stdout)
 
-        print "*** Saving influxdb ***"
-        print docker_bash(
-            "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir))
+        print("*** Saving influxdb ***")
+        print(docker_bash(
+            "chords_influxdb", "cd /tmp && influxd backup -portable %s" % (influx_dump_dir)))
         print(docker_bash(
             "chords_influxdb", "cd /tmp && tar -cvf %s %s" % (self.influx_tar_file, influx_dump_dir)))
         docker_cp('chords_influxdb:%s' % ("/tmp/"+self.influx_tar_file), '.')
         print(docker_bash(
             "chords_influxdb", "cd /tmp && rm -rf %s %s" % (self.influx_tar_file, influx_dump_dir)))
 
-        print "** Saving grafana ***"
+        print("** Saving grafana ***")
         print(docker_bash(
             "chords_grafana", "cd / && tar -cvf /tmp/%s etc/grafana/grafana.ini var/lib/grafana/ /opt/grafana-plugins" %
             (self.grafana_tar_file)))
@@ -890,24 +893,24 @@ class ChordsBackup(object):
         print(docker_bash(
             "chords_grafana", "cd /tmp && rm %s" % (self.grafana_tar_file)))
 
-        print "*** Manifest ***:"
+        print("*** Manifest ***:")
         self.manifest()
-        print "%s has been created." % (self.manifest_file)
-        print ""
+        print("%s has been created." % (self.manifest_file))
+        print("")
 
-        print "*** Packaging files ***"
+        print("*** Packaging files ***")
         tar_params = [
             '-czvf', self.chords_tar_file, ".env", "chords.yml",
             self.manifest_file,
             self.mysql_sql_file,
             self.influx_tar_file,
             self.grafana_tar_file]
-        print sh.tar(tar_params, _err_to_out=True).stdout
-        print sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file, self.grafana_tar_file)
+        print(sh.tar(tar_params, _err_to_out=True).stdout)
+        print(sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file, self.grafana_tar_file))
 
-        print "*** Success ***"
-        print "%s has been created." % (self.chords_tar_file)
-        print "For details on the CHORDS backup, examine the file: %s (contained in the tar file)." % (self.manifest_file)
+        print("*** Success ***")
+        print("%s has been created." % (self.chords_tar_file))
+        print("For details on the CHORDS backup, examine the file: %s (contained in the tar file)." % (self.manifest_file))
 
     def nice_project_name(self):
         """ Return a nicely behaved project name for use in file name construction."""
@@ -1022,26 +1025,26 @@ class ChordsRestore(object):
         self.file_paths = {}
         self.docker_containers = {}
 
-        print "*** Docker ***"
+        print("*** Docker ***")
         self.docker_check()
         self.docker_container_status()
 
-        print "*** Dump file unpacking ***"
+        print("*** Dump file unpacking ***")
         self.backup_unpack()
 
-        print "*** Environment restore ***"
+        print("*** Environment restore ***")
         self.env_restore()
 
-        print "*** Loading mysql ***"
+        print("*** Loading mysql ***")
         self.load_mysql()
 
-        print "*** Loading influxdb ***"
+        print("*** Loading influxdb ***")
         self.load_influxdb()
 
-        print "*** Loading grafana ***"
+        print("*** Loading grafana ***")
         self.load_grafana()
 
-        print "*** Cleanup ***"
+        print("*** Cleanup ***")
         self.cleanup()
 
     def are_you_sure(self):
@@ -1051,8 +1054,8 @@ class ChordsRestore(object):
         If not, raise ChordsRestoreError.
         """
 
-        print "*** Warning: this action will overwrite ALL data in the running portal."
-        print 'Are you sure that you want restore from %s [Y/y]? ' % (self.dump_file),
+        print("*** Warning: this action will overwrite ALL data in the running portal.")
+        print('Are you sure that you want restore from %s [Y/y]? ' % (self.dump_file), end=' ')
         l = sys.stdin.readline().strip()
         if l not in ['Y', 'y']:
             raise ChordsRestoreError("Restore cancelled.")
@@ -1092,10 +1095,10 @@ A CHORDS restore cannot be performed.""")
     def docker_container_status(self):
         """ Print the status of all containers. """
 
-        print "Docker containers:"
-        for name, container in self.docker_containers.items():
-            print name + ": " + container.status
-        print ""
+        print("Docker containers:")
+        for name, container in list(self.docker_containers.items()):
+            print(name + ": " + container.status)
+        print("")
 
     def env_restore(self):
         """
@@ -1106,23 +1109,23 @@ A CHORDS restore cannot be performed.""")
         """
 
         config_files = (".env", "chords.yml")
-        print "Since we are in a CHORDS home directory, you have already configured"
-        print "CHORDS with items such as system passwords, email access and software versions."
-        print "However, we can restore the CHORDS configuration files %s" % (str(config_files))
-        print "from %s." % (self.dump_file)
-        print "Backup copies of these files will be made, in case you need to reverse this action."
-        print 'Would you like to restore these files [Y/y]? '
+        print("Since we are in a CHORDS home directory, you have already configured")
+        print("CHORDS with items such as system passwords, email access and software versions.")
+        print("However, we can restore the CHORDS configuration files %s" % (str(config_files)))
+        print("from %s." % (self.dump_file))
+        print("Backup copies of these files will be made, in case you need to reverse this action.")
+        print('Would you like to restore these files [Y/y]? ')
         l = sys.stdin.readline().strip()
         if l not in ['Y', 'y']:
-            print "%s WERE NOT restored." % (str(config_files))
+            print("%s WERE NOT restored." % (str(config_files)))
         else:
             for f in config_files:
                 createBackupFile(f)
                 src_file = os.path.abspath(self.tmp_dir + "/" + f)
                 dst_file = os.path.abspath("./" + f)
-                print "Restoring %s to %s" % (src_file, dst_file)
+                print("Restoring %s to %s" % (src_file, dst_file))
                 sh.cp(src_file, dst_file)
-        print " "
+        print(" ")
         # get the admin password, which will be needed to access the databases,etc.
         self.env_admin_pw = config_items(".env", delimiter="=")["CHORDS_ADMIN_PW"]
 
@@ -1131,9 +1134,9 @@ A CHORDS restore cannot be performed.""")
 
         container="chords_mysql"
         mysql_user = "chords_demo_user"
-        print "Container:%s, database:%s" % (container, database_name)
+        print("Container:%s, database:%s" % (container, database_name))
 
-        print "Setting the user password for %s." % (mysql_user)
+        print("Setting the user password for %s." % (mysql_user))
         docker_args = ['exec', '-t', container, '/usr/bin/mysql', '-e',
                        "set password for '%s' = '%s';"%(mysql_user, self.env_admin_pw)]
         try:
@@ -1147,7 +1150,7 @@ A CHORDS restore cannot be performed.""")
 
         # Load the mysql database simply by streaming the database spl file into
         # the mysql app on the container.
-        print "Restoring the database."
+        print("Restoring the database.")
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         try:
             print(
@@ -1162,29 +1165,29 @@ A CHORDS restore cannot be performed.""")
         """ Load the influxdb database into the database in the chords_influxdb container. """
 
         try:
-            print "Setting the database password."
-            print docker_bash("chords_influxdb",
+            print("Setting the database password.")
+            print(docker_bash("chords_influxdb",
                               "influx -username admin -password chords_ec_demo -execute \"set password for admin = \'%s\'\""
-                              % (self.env_admin_pw))
+                              % (self.env_admin_pw)))
         except ChordsDockerError as error:
             try:
-                print docker_bash("chords_influxdb",
+                print(docker_bash("chords_influxdb",
                                   "influx -username admin -password %s -execute \"set password for admin = \'%s\'\""
-                                  % (self.env_admin_pw, self.env_admin_pw))
+                                  % (self.env_admin_pw, self.env_admin_pw)))
             except ChordsDockerError as error:
                 raise ChordsRestoreError(error)
 
         try:
-            print "Current influxdb databases:"
-            print docker_bash("chords_influxdb",
+            print("Current influxdb databases:")
+            print(docker_bash("chords_influxdb",
                               "influx -username admin -password %s -execute 'show databases'"
-                              % (self.env_admin_pw))
+                              % (self.env_admin_pw)))
         except ChordsDockerError as error:
             raise ChordsRestoreError(error)
 
         influx_tar_file_base = os.path.basename(self.file_paths["influxdb"])
 
-        print "Loading from " + self.file_paths["influxdb"]
+        print("Loading from " + self.file_paths["influxdb"])
         docker_cp(self.file_paths["influxdb"], "chords_influxdb:/tmp/")
         try:
             docker_bash("chords_influxdb",
@@ -1193,13 +1196,13 @@ A CHORDS restore cannot be performed.""")
             raise ChordsRestoreError(error)
 
         try:
-            print "Dropping influxdb database chords_ts_production"
+            print("Dropping influxdb database chords_ts_production")
             docker_bash(
                 "chords_influxdb",
                 "influx -username admin -password %s -execute 'drop database chords_ts_production'"
                 % (self.env_admin_pw)
             )
-            print "Loading databases"
+            print("Loading databases")
             docker_bash(
                 "chords_influxdb",
                 "influxd restore -portable /tmp/%s" % (influx_tar_file_base.replace(".tar", ""))
@@ -1212,19 +1215,19 @@ A CHORDS restore cannot be performed.""")
 
         grafana_tar_file_base = os.path.basename(self.file_paths["grafana"])
 
-        print "Loading from " + self.file_paths["grafana"]
+        print("Loading from " + self.file_paths["grafana"])
         docker_cp(self.file_paths["grafana"], "chords_grafana:/tmp/")
         docker_bash("chords_grafana",
                     "cd / && tar -xvpf /tmp/%s" % (grafana_tar_file_base), user='0')
         docker_bash("chords_grafana",
                     "rm /tmp/%s" % (grafana_tar_file_base), user='0')
-        print " "
+        print(" ")
 
     def backup_unpack(self):
         """ Unpack the ChordsBackup created backup file to a temporary directoy. """
 
-        print "*** Unpacking chords files ***"
-        print "Temporary directory: " + self.tmp_dir
+        print("*** Unpacking chords files ***")
+        print("Temporary directory: " + self.tmp_dir)
         try:
             print(
                 sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
@@ -1270,8 +1273,8 @@ A CHORDS restore cannot be performed.""")
     def cleanup(self):
         """ Cleanup temporary files. """
 
-        print "Removing the temporary directory " + self.tmp_dir
-        print sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout
+        print("Removing the temporary directory " + self.tmp_dir)
+        print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout)
 
 
 #####################################################################
@@ -1300,10 +1303,10 @@ def docker_sh(*args):
 
     try:
         if verbose:
-            print "Executing: docker", " ".join(args)
+            print("Executing: docker", " ".join(args))
         result = sh.docker(args, _err_to_out=True).stdout
         if verbose:
-            print "Result:", str(result)
+            print("Result:", str(result))
         return str(result)
     except Exception as sh_err:
         raise ChordsDockerError(sh_err)
@@ -1324,7 +1327,7 @@ def status():
     Show the docker status for the running containers.
     """
     for container in Docker(proxy=options['proxy']).ps():
-        print container['name'] + ': ' + str(container)
+        print(container['name'] + ': ' + str(container))
 
 #####################################################################
 def ssl(config):
@@ -1333,7 +1336,7 @@ def ssl(config):
         if config["SSL_ENABLED"] == "true":
             ChordsSSL(ssl_host=config["SSL_HOST"], ssl_email=config["SSL_EMAIL"])
     except ChordsSslError as error:
-        print error
+        print(error)
         exit(1)
 
 #####################################################################
@@ -1342,7 +1345,7 @@ def backup():
     try:
         ChordsBackup()
     except ChordsBackupError as error:
-        print error
+        print(error)
         exit(1)
 
 #####################################################################
@@ -1352,17 +1355,17 @@ def restore(backup_file):
     try:
         ChordsRestore(backup_file)
     except ChordsRestoreError as restore_exception:
-        print "Error processing %s" % (backup_file)
-        print restore_exception
+        print("Error processing %s" % (backup_file))
+        print(restore_exception)
         exit(1)
 
-    print """
+    print("""
 CHORDS databases have been restored.
 
 CHORDS must be restarted by running:
 python chords_control --stop
 python chords_control --run
-"""
+""")
 
 #####################################################################
 def docker_check():
@@ -1383,7 +1386,7 @@ def docker_check():
         if container_name not in names:
             err_msg += "The %s docker container is not present.\n" % (container_name)
 
-    print err_msg
+    print(err_msg)
     return err_msg
 
 #####################################################################
@@ -1427,7 +1430,7 @@ def os_cmd(cmd, err_msg=None, printlines=True):
     and chk_cmd_status() will be called.
     """
     if verbose:
-        print ' '.join(str(x) for x in cmd)
+        print(' '.join(str(x) for x in cmd))
 
     try:
         proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -1438,10 +1441,10 @@ def os_cmd(cmd, err_msg=None, printlines=True):
             if output == '' and proc.poll() is not None:
                 break
             if output != '' and printlines:
-                print output.rstrip()
+                print(output.rstrip())
         exit_status = proc.poll()
     except (OSError, ValueError) as e:
-        print str(e) + ': ' + ' '.join(str(x) for x in cmd)
+        print(str(e) + ': ' + ' '.join(str(x) for x in cmd))
 
     if err_msg:
         check_cmd_status(exit_status=exit_status, err_msg=err_msg, cmd=cmd)
@@ -1455,10 +1458,10 @@ def byteify(inputStr):
     """
     if isinstance(inputStr, dict):
         return {byteify(key): byteify(value)
-                for key, value in inputStr.iteritems()}
+                for key, value in inputStr.items()}
     elif isinstance(inputStr, list):
         return [byteify(element) for element in inputStr]
-    elif isinstance(inputStr, unicode):
+    elif isinstance(inputStr, str):
         return inputStr.encode('utf-8')
     else:
         return inputStr
@@ -1496,7 +1499,7 @@ def check_file_exists(aFile, writeable=False, print_warning=True, exit_on_failur
 
     if not os.path.isfile(aFile) or not os.access(aFile, os.R_OK if not writeable else os.W_OK):
         if print_warning:
-            print "File " + aFile +  " doesn't exist or isn't readable."
+            print("File " + aFile +  " doesn't exist or isn't readable.")
         if exit_on_failure:
             exit(1)
         else:
@@ -1528,7 +1531,7 @@ def renew_script(proxy):
     script_name = 'chords_control'
 
     if not check_file_exists(script_name, writeable=True, print_warning=False, exit_on_failure=False):
-        print "Either " + script_name + " isn't located in this directory, or it is not writeable."
+        print("Either " + script_name + " isn't located in this directory, or it is not writeable.")
         exit(1)
 
     git_branch = choose_branch(script_name)
@@ -1548,7 +1551,7 @@ def check_cmd_status(exit_status, cmd, err_msg):
     cmd is a list, such as used with the subrocess command.
     """
     if exit_status != 0:
-        print err_msg + ' using "' + " ".join(cmd) + '"'
+        print(err_msg + ' using "' + " ".join(cmd) + '"')
         exit(1)
 
 #####################################################################
@@ -1559,15 +1562,15 @@ def choose_branch(aFile):
     git_branches = ChordsGit().branches()
     git_branch = ''
     while True:
-        print "Which branch do you want to pull " + aFile + " from (usually master) (",
+        print("Which branch do you want to pull " + aFile + " from (usually master) (", end=' ')
         for b in git_branches:
-            print '\''+b+'\'',
-        print ')? ',
+            print('\''+b+'\'', end=' ')
+        print(')? ', end=' ')
         git_branch = sys.stdin.readline().strip()
         if git_branch in git_branches:
             break
         else:
-            print "The", git_branch, "branch is not available."
+            print("The", git_branch, "branch is not available.")
     return git_branch
 
 #####################################################################
@@ -1586,7 +1589,7 @@ def config_items(configFile, delimiter=":"):
             if l[0] != "#":
                 tokens = l.split(delimiter)
                 if len(tokens) != 2:
-                    print "Ambiguous value in line %d of %s" % (i, configFile)
+                    print("Ambiguous value in line %d of %s" % (i, configFile))
                 items[tokens[0].strip()] = tokens[1].strip()
         i = i + 1
     return items
@@ -1626,14 +1629,14 @@ if __name__ == '__main__':
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
         config.writeEnvFile()
-        print
+        print()
 #        ssl(config)
-        print "*** Don't forget to run 'python chords_control --update' if you have changed the configuration."
+        print("*** Don't forget to run 'python chords_control --update' if you have changed the configuration.")
 
     # Create the .env file from the configuration file
     if options["env"]:
         if not os.path.isfile(options["file"]):
-            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]"
+            print("The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]")
             exit(1)
         config = ChordsConfig(configfile=options['file'])
         config.writeEnvFile()
@@ -1645,7 +1648,7 @@ if __name__ == '__main__':
     # Update the docker images
     if options["update"]:
         if not os.path.isfile(options["file"]):
-            print "The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]"
+            print("The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]")
             exit(1)
         # Get the system configuration.
         config = ChordsConfig(configfile=options['file'])
@@ -1665,11 +1668,11 @@ if __name__ == '__main__':
         if platform.system() != "Windows":
             backup()
         else:
-            print "Backup is not available on Windows."
+            print("Backup is not available on Windows.")
 
     # Load from a backup file
     if options["restore"]:
         if platform.system() != "Windows":
             restore(options['restore'])
         else:
-            print "Restore is not available on Windows."
+            print("Restore is not available on Windows.")
