@@ -783,35 +783,37 @@ class ChordsSSL(object):
     def __init__(self, ssl_host, ssl_email):
         self.ssl_host = ssl_host
         self.ssl_email = ssl_email
-
+        self.cert_dir = "/etc/letsencrypt/live/"+self.ssl_host
+ 
         print("*** Beginning SSL management. This is a complicated activity, with many steps.")
         print()
 
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
-        print ("Checking DNS for your hostname...")
+        print ("*** Checking DNS for your hostname...")
         self.host_dns()
-        print()
-        print ("Checking to see if you already have a valid SSL certificate...")
+        print ("*** Checking to see if you already have a valid SSL certificate...")
         result = self.check_cert()
-        print()
         if result["valid_cert"]:
             print ("You have a valid certificate!")
-            return
+            print()
         else:
             print ("You don't have a valid SSL certificate; we will try to obtain one now...")
             self.create_cert()
         print()
 
+        self.create_cert()
+
     def host_dns(self):
         try:
             out = socket.gethostbyname(self.ssl_host)
             print("Good news! Your host name (" + self.ssl_host + ") is registered with DNS as " + out + ".")
+            print()
         except:
-            raise ChordsSslError("The SSL_HOST " + self.ssl_host + "could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
+            raise ChordsSslError("The SSL_HOST " + self.ssl_host + " could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
 
     def check_cert(self):
-        """ Return a dictionary containing the cert status """
+        """ Return a dictionary containing the certificate status """
 
         retval = {"valid_cert": True, "expired": None, "notBefore": None, "notAfter": None}
 
@@ -822,8 +824,8 @@ class ChordsSSL(object):
 
         if retval["valid_cert"]:
             # Use openssl to get the timestamps from the certificate.
-            cert_path = "/etc/letsencrypt/live/SSL_HOST/fullchain.pem".replace("SSL_HOST", self.ssl_host)
-            cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in " + cert_path, "certbot"]
+            cert_path = self.cert_dir + "/fullchain.pem"
+            cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in %s" % cert_path, "certbot"]
             try:
                 result = sh.docker_compose(cmd).split('\n')
                 notBefore = [s.split("=")[1] for s in result if "notBefore" in s]
@@ -841,8 +843,123 @@ class ChordsSSL(object):
 
     def create_cert(self):
         """ Create a new certificate. """
-        pass
+        print ("*** Creating the SSL certificate")
 
+        # docker_check() returns an empty string if the named instance is running.
+        instances = [docker_check([s])=='' for s in ["chords_app", "chords_nginx", "chords_certbot"]]
+        if True in instances:
+            raise ChordsSslError(
+                "SSL certificate creation can't be done while one of the CHORDS \n"
+                "services (chords_app, chords_nginx, or chords_certbot) is running. \n"
+                "Use python chords_control --stop."
+            )
+
+        self.make_dummy_cert()
+        #self.make_dh_params()
+        self.start_nginx()
+        self.remove_certs()
+        self.request_cert()
+
+    def make_dummy_cert(self):
+        """ Create a dummy certificate"""
+        print("*** Creating a dummy certificate.")
+
+        cmd = [
+          "run",
+          "--no-deps", 
+          "--entrypoint", 
+          "mkdir -p %s" % self.cert_dir, 
+          "certbot"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
+        cmd = [
+          "run", 
+          "--no-deps", 
+          "--entrypoint", 
+          "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
+          "certbot"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
+    def make_dh_params(self):
+        """ Create the Diffie-Hellman parameters """
+        print ("*** Creating the Diffie-Hellman parameters. This can take several minutes.")
+
+        cmd = [
+            "run",
+            "--no-deps",
+            "--entrypoint",
+            "mkdir -p /etc/letsencrypt/chords-dhparam",
+            "certbot"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
+        cmd = [
+            "run",
+            "--no-deps",
+            "--entrypoint",
+            "openssl dhparam -out /etc/letsencrypt/chords-dhparam/dhparam-2048.pem 2048",
+            "certbot"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+    
+    def start_nginx(self):
+        """ Start an nginx webserver, to service the ACME challenge."""
+
+        print ("*** Starting nginx, to service the ACME challenge.")
+
+        # Make sure that nginx is not running from a previous attempt.
+        cmd = ["down"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
+        # Run nginx in certificate creation mode.
+        cmd = [
+            "run",
+            "-e",
+            "CERT_CREATE=1",
+            "-e",
+            "SSL_HOST=%s" % self.ssl_host,
+            "-e",
+            "SSL_EMAIL=%s" % self.ssl_email,
+            "-p", 
+            "80:80",
+            "-p",
+            "443:443", 
+            "--no-deps", 
+            "-d", 
+            "nginx"
+        ]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
+    def remove_certs(self):
+        """ Remove existing certificates. """
+        print ("*** Removing the existing certificates.")
+    
+        cmd = [
+            "run", 
+            "--no-deps", 
+            "--entrypoint", 
+            "rm -Rf /etc/letsencrypt/live/%s && rm -Rf /etc/letsencrypt/archive/%s && rm -Rf /etc/letsencrypt/renewal/%s.conf" % (self.ssl_host, self.ssl_host, self.ssl_host), 
+            "certbot"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
+    def request_cert(self):
+        """ Obtain a new certificate from letsencrypt."""
+        print ("*** Obtaining a new certificate from letsencrypt.")
+
+        cmd = [
+            "run", 
+            "--no-deps", 
+            "--entrypoint", 
+            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email --staging -d $%s" % (self.ssl_email, self.ssl_host), 
+            "certbot"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+    
 #####################################################################
 class ChordsBackupError(Exception):
     """ Usage: raise ChordsBackupError("error msg"). """
@@ -1372,7 +1489,7 @@ python chords_control --run
 """)
 
 #####################################################################
-def docker_check():
+def docker_check(containers=["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
     """
     Verify that a CHORDS instance is running correctly.
 
@@ -1386,11 +1503,12 @@ def docker_check():
 
     names = [c['name'].split("/")[-1] for c in Docker(proxy=options['proxy']).ps()]
     err_msg = ""
-    for container_name in ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]:
+    for container_name in containers:
         if container_name not in names:
             err_msg += "The %s docker container is not present.\n" % (container_name)
 
-    print(err_msg)
+    if err_msg != '':
+        print(err_msg)
     return err_msg
 
 #####################################################################
