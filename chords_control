@@ -877,7 +877,7 @@ class ChordsBackup(object):
         print("*** Saving mysql ***")
         mysql_file = open(self.mysql_sql_file, 'w')
         print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
-                        _out=mysql_file).stdout)
+                        _out=mysql_file).stdout.decode('utf-8'))
 
         print("*** Saving influxdb ***")
         print(docker_bash(
@@ -908,7 +908,7 @@ class ChordsBackup(object):
             self.mysql_sql_file,
             self.influx_tar_file,
             self.grafana_tar_file]
-        print(sh.tar(tar_params, _err_to_out=True).stdout)
+        print(sh.tar(tar_params, _err_to_out=True).stdout.decode('utf-8'))
         print(sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file, self.grafana_tar_file))
 
         print("*** Success ***")
@@ -1147,7 +1147,7 @@ A CHORDS restore cannot be performed.""")
             print(
                 sh.docker(
                     sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
-                ).stdout
+                ).stdout.decode('utf-8')
             )
         except sh.ErrorReturnCode_1 as error:
             raise ChordsRestoreError(error)
@@ -1160,7 +1160,7 @@ A CHORDS restore cannot be performed.""")
             print(
                 sh.docker(
                     sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
-                ).stdout
+                ).stdout.decode('utf-8')
             )
         except sh.ErrorReturnCode_1 as error:
             raise ChordsRestoreError(error)
@@ -1234,7 +1234,7 @@ A CHORDS restore cannot be performed.""")
         print("Temporary directory: " + self.tmp_dir)
         try:
             print(
-                sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout
+                sh.tar('-xzvf', self.dump_file, '-C', self.tmp_dir, _err_to_out=True).stdout.decode('utf-8')
             )
         except Exception as sh_err:
             raise ChordsRestoreError(sh_err)
@@ -1278,7 +1278,7 @@ A CHORDS restore cannot be performed.""")
         """ Cleanup temporary files. """
 
         print("Removing the temporary directory " + self.tmp_dir)
-        print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout)
+        print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout.decode('utf-8'))
 
 
 #####################################################################
@@ -1308,7 +1308,7 @@ def docker_sh(*args):
     try:
         if verbose:
             print("Executing: docker", " ".join(args))
-        result = sh.docker(args, _err_to_out=True).stdout
+        result = sh.docker(args, _err_to_out=True).stdout.decode('utf-8')
         if verbose:
             print("Result:", str(result))
         return str(result)
