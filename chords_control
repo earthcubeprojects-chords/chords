@@ -793,16 +793,34 @@ class ChordsSSL(object):
         print ("*** Checking DNS for your hostname...")
         self.host_dns()
         print ("*** Checking to see if you already have a valid SSL certificate...")
+
         result = self.check_cert()
         if result["valid_cert"]:
             print ("You have a valid certificate!")
-            print()
         else:
-            print ("You don't have a valid SSL certificate; we will try to obtain one now...")
-            self.create_cert()
-        print()
-
-        self.create_cert()
+            if result["test_cert"]:
+                print ("You appear to have a test certificate. Do you wish to replace it with a valid certificate? [y/N]?", end=' ')
+                sys.stdout.flush()
+                l = ''
+                while l not in ['y', 'n']:
+                    l = sys.stdin.readline().strip().lower()
+                    if l not in ['y', 'n']:
+                        print ('Enter y/n', end=' ')
+                        sys.stdout.flush()
+                if l == 'n':
+                    # Don't create cert now
+                    print()
+                    print("""
+The test certificate will be retained. The CHORDS portal will be using an
+inoperative certificate. We suggest that you rerun the configuration
+and set SSL_ENABLED to false.""")
+                    print()
+                    return
+            
+                # Create a new certificate
+                print ("You don't have a valid SSL certificate; we will try to obtain one now...")
+                self.create_cert()
+                print()
 
     def host_dns(self):
         try:
@@ -815,12 +833,17 @@ class ChordsSSL(object):
     def check_cert(self):
         """ Return a dictionary containing the certificate status """
 
-        retval = {"valid_cert": True, "expired": None, "notBefore": None, "notAfter": None}
+        retval = {"valid_cert": True, "test_cert": False, "expired": None, "notBefore": None, "notAfter": None}
 
         # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
         result = sh.docker_compose(cmd).split('\n')
+        
         retval["valid_cert"] =  not ("No certs found." in result)
+        retval["test_cert"] = ("INVALID: TEST_CERT" in "".join(result))
+
+        if retval["test_cert"]:
+            retval["valid_cert"] = False
 
         if retval["valid_cert"]:
             # Use openssl to get the timestamps from the certificate.
@@ -855,7 +878,7 @@ class ChordsSSL(object):
             )
 
         self.make_dummy_cert()
-        #self.make_dh_params()
+        self.make_dh_params()
         self.start_nginx()
         self.remove_certs()
         self.request_cert()
@@ -910,10 +933,8 @@ class ChordsSSL(object):
         print ("*** Starting nginx, to service the ACME challenge.")
 
         # Make sure that nginx is not running from a previous attempt.
-        cmd = ["down"]
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
-        print(result)
-
+        self.stop_nginx()
+    
         # Run nginx in certificate creation mode.
         cmd = [
             "run",
@@ -955,11 +976,19 @@ class ChordsSSL(object):
             "run", 
             "--no-deps", 
             "--entrypoint", 
-            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email --staging -d $%s" % (self.ssl_email, self.ssl_host), 
+            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email --staging -d %s" % (self.ssl_email, self.ssl_host), 
             "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
-    
+
+        # Shutdown nginx
+        self.stop_nginx()
+
+    def stop_nginx(self):
+        cmd = ["down"]
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
 #####################################################################
 class ChordsBackupError(Exception):
     """ Usage: raise ChordsBackupError("error msg"). """
@@ -1748,12 +1777,11 @@ if __name__ == '__main__':
         add_choices_to_DOCKER_TAG()
         add_choices_to_GIT_BRANCH()
         config = ChordsConfig(configfile=options['file'])
-        ssl(config)
         config.queryValues(usedefault=options['default'])
         config.writeYMLFile(configfile=options['file'])
         config.writeEnvFile()
         print()
-#        ssl(config)
+        ssl(config)
         print("*** Don't forget to run 'python chords_control --update' if you have changed the configuration.")
 
     # Create the .env file from the configuration file
