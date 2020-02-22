@@ -799,15 +799,9 @@ class ChordsSSL(object):
             print ("You have a valid certificate!")
         else:
             if result["test_cert"]:
-                print ("You appear to have a test certificate. Do you wish to replace it with a valid certificate? [y/N]?", end=' ')
-                sys.stdout.flush()
-                l = ''
-                while l not in ['y', 'n']:
-                    l = sys.stdin.readline().strip().lower()
-                    if l not in ['y', 'n']:
-                        print ('Enter y/n', end=' ')
-                        sys.stdout.flush()
-                if l == 'n':
+                print ("You appear to have a test certificate.")
+                reply = prompt("Do you wish to replace it with a valid certificate?", ['y', 'Y', 'n', 'N'])
+                if reply == 'n':
                     # Don't create cert now
                     print()
                     print("""
@@ -817,10 +811,10 @@ and set SSL_ENABLED to false.""")
                     print()
                     return
             
-                # Create a new certificate
-                print ("You don't have a valid SSL certificate; we will try to obtain one now...")
-                self.create_cert()
-                print()
+            # Create a new certificate
+            print ("We need to create a new certificate.")
+            self.create_cert()
+            print()
 
     def host_dns(self):
         try:
@@ -865,7 +859,12 @@ and set SSL_ENABLED to false.""")
         return retval
 
     def create_cert(self):
-        """ Create a new certificate. """
+        """ 
+        Create a new certificate. 
+
+        A stging certificate will be created first, just to insure
+        that the process is working.
+        """
         print ("*** Creating the SSL certificate")
 
         # docker_check() returns an empty string if the named instance is running.
@@ -881,7 +880,22 @@ and set SSL_ENABLED to false.""")
         self.make_dh_params()
         self.start_nginx()
         self.remove_certs()
-        self.request_cert()
+        self.request_cert(create_test_cert = True)
+        reply = prompt("Did the test cert get created properly?", ['y', 'Y', 'n', 'N'])
+        if reply == 'n':
+            print ("Test certificate creation failed. Try again later.")
+            return
+        print ("""
+Test certificates can be created as often as you like.
+However, you can only create 5 real certificates each WEEK.
+If the certificate creation process is failing, do not
+use up your quota of requests!
+        """)
+        reply = prompt("Do you want to create a real certificate", ['y', 'Y', 'n', 'N'])
+        if reply == 'n':
+            print ("Test certificate creation failed. Try again later.")
+            return
+        self.request_cert(create_test_cert = False)
 
     def make_dummy_cert(self):
         """ Create a dummy certificate"""
@@ -968,15 +982,17 @@ and set SSL_ENABLED to false.""")
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
-    def request_cert(self):
-        """ Obtain a new certificate from letsencrypt."""
-        print ("*** Obtaining a new certificate from letsencrypt.")
+    def request_cert(self, create_test_cert=True):
+        """ Obtain a certificate from letsencrypt."""
+
+        print ("*** Obtaining a new %s certificate from letsencrypt." % ("test" if create_test_cert else "real"))
 
         cmd = [
             "run", 
             "--no-deps", 
             "--entrypoint", 
-            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email --staging -d %s" % (self.ssl_email, self.ssl_host), 
+            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email %s -d %s" % 
+                  (self.ssl_email, ("" if create_test_cert else "--staging"), self.ssl_host), 
             "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
@@ -1535,7 +1551,6 @@ def docker_check(containers=["chords_app", "chords_influxdb", "chords_mysql", "c
     for container_name in containers:
         if container_name not in names:
             err_msg += "The %s docker container is not present.\n" % (container_name)
-
     if err_msg != '':
         print(err_msg)
     return err_msg
@@ -1601,21 +1616,48 @@ def os_cmd(cmd, err_msg=None, printlines=True):
         check_cmd_status(exit_status=exit_status, err_msg=err_msg, cmd=cmd)
     return (lines, exit_status)
 
+#####################################################################
+def prompt(message, choices):
+    ''' 
+    Keep prompting until the user enters a valid choice.
+
+    The lowercase of the accepted response will be returned.
+    '''
+
+    if type(choices) is not list:
+        choices = [choices]
+
+    choice_string = ""
+    for i in range(len(choices)):
+        choice_string += choices[i]
+        if (i != len(choices) - 1):
+            choice_string += '/'
+    print(message + " [" + choice_string + "]?", end=' ')
+    sys.stdout.flush()
+
+    l = ''
+    while l not in choices:
+        l = sys.stdin.readline().strip()
+        if l not in choices:
+            print ('Enter ' + choice_string, end=' ')
+            sys.stdout.flush()
+    l = l.lower()
+    return (l)
 
 #####################################################################
-def byteify(inputStr):
-    """
-    Convert unicode to a byte strings
-    """
-    if isinstance(inputStr, dict):
-        return {byteify(key): byteify(value)
-                for key, value in inputStr.items()}
-    elif isinstance(inputStr, list):
-        return [byteify(element) for element in inputStr]
-    elif isinstance(inputStr, str):
-        return inputStr.encode('utf-8')
-    else:
-        return inputStr
+#def byteify(inputStr):
+#    """
+#    Convert unicode to a byte strings
+#    """
+#    if isinstance(inputStr, dict):
+#        return {byteify(key): byteify(value)
+#                for key, value in inputStr.items()}
+#    elif isinstance(inputStr, list):
+#        return [byteify(element) for element in inputStr]
+#    elif isinstance(inputStr, str):
+#        return inputStr.encode('utf-8')
+#    else:
+#        return inputStr
 
 #####################################################################
 def add_choices_to_DOCKER_TAG(proxy=""):
