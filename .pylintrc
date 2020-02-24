@@ -1,2 +1,8 @@
 [TYPECHECK]
 ignored-modules=sh
+
+[MESSAGES CONTROL]
+disable=C0326
+
+[FORMAT]
+max-line-length=150
