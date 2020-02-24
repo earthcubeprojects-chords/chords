@@ -853,7 +853,7 @@ and set SSL_ENABLED to false.""")
                     retval["expired"]   = datetime.datetime.now() > retval["notAfter"]
                 else:
                     retval["valid_cert"] = False
-            except sh.ErrorReturnCode_1 as e:
+            except sh.ErrorReturnCode_1:
                 retval["valid_cert"] = False
 
         return retval
