@@ -1116,7 +1116,8 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
     def docker_check(self):
         """ Verify that a CHORDS instance is running correctly. """
 
-        if docker_check():
+        if docker_check(containers=
+            ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
             raise ChordsBackupError("""
 It appears that CHORDS is not running correctly.
 A CHORDS backup cannot be performed.""")
@@ -1251,7 +1252,8 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
     def docker_check(self):
         """ Verify that a CHORDS instance is running correctly. """
 
-        if docker_check():
+        if docker_check(containers=
+            ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
             raise ChordsRestoreError("""
 It appears that CHORDS is not running correctly.
 A CHORDS restore cannot be performed.""")
@@ -1492,11 +1494,11 @@ def status():
         print(container['name'] + ': ' + str(container))
 
 #####################################################################
-def ssl(config):
+def ssl(ssl_config):
     """ Manage SSL """
     try:
-        if config["SSL_ENABLED"] == "true":
-            ChordsSSL(ssl_host=config["SSL_HOST"], ssl_email=config["SSL_EMAIL"])
+        if ssl_config["SSL_ENABLED"] == "true":
+            ChordsSSL(ssl_host=ssl_config["SSL_HOST"], ssl_email=ssl_config["SSL_EMAIL"])
     except ChordsSslError as error:
         print(error)
         exit(1)
@@ -1530,7 +1532,7 @@ python chords_control --run
 """)
 
 #####################################################################
-def docker_check(containers=["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
+def docker_check(containers):
     """
     Verify that a CHORDS instance is running correctly.
 
