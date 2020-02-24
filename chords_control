@@ -773,7 +773,6 @@ class Docker(object):
 #####################################################################
 class ChordsSslError(Exception):
     """ Raise ChordsSslError("error msg"). """
-    pass
 
 #####################################################################
 class ChordsSSL(object):
@@ -781,6 +780,7 @@ class ChordsSSL(object):
     Manage SSL certificates.
     """
     def __init__(self, ssl_host, ssl_email):
+
         self.ssl_host = ssl_host
         self.ssl_email = ssl_email
         self.cert_dir = "/etc/letsencrypt/live/"+self.ssl_host
@@ -1008,7 +1008,6 @@ use up your quota of requests!
 #####################################################################
 class ChordsBackupError(Exception):
     """ Usage: raise ChordsBackupError("error msg"). """
-    pass
 
 class ChordsBackup(object):
     """
@@ -1161,7 +1160,6 @@ A CHORDS backup cannot be performed.""")
 #####################################################################
 class ChordsRestoreError(Exception):
     """ Raise ChordsRestoreError("error msg"). """
-    pass
 
 class ChordsRestore(object):
     """
@@ -1442,11 +1440,9 @@ A CHORDS restore cannot be performed.""")
         print("Removing the temporary directory " + self.tmp_dir)
         print(sh.rm('-rf', self.tmp_dir, _err_to_out=True).stdout.decode('utf-8'))
 
-
 #####################################################################
 class ChordsDockerError(Exception):
     """ Raise ChordsDockerError("error msg"). """
-    pass
 
 def docker_bash(container, script, user=None):
     """
