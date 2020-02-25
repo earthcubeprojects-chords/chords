@@ -79,7 +79,7 @@ if platform.system() != "Windows":
 #      dynamically by the script
 #
 # When you need to add required keys to the configuration, just define them here.
-stdConfigItems = [
+STD_CONFIG_ITEMS = [
     [
         "SSL is only required for systems that need to provide https (a really good idea).\n"
         "You will need to obtain a DNS name which points at your CHORDS instance,\n"
@@ -177,8 +177,9 @@ stdConfigItems = [
         []
     ],
     [
-        "The time series DATABASE RETENTION DURATION, e.g. 168h or 52w. Use \"inf\" for permanent.\n"
-        "This value can be changed on successive restarts of a portal. Note: making it shorter\n"
+        "The time series DATABASE RETENTION DURATION, e.g. 168h or 52w.\n"
+        "Use \"inf\" for permanent. This value can be changed on\n"
+        "successive restarts of a portal. Note: making it shorter\n"
         "will trim the existing time series database.",
         "DB_RETENTION",
         "inf",
@@ -257,21 +258,21 @@ stdConfigItems = [
 ]
 
 # If set True, add some diagnostic printing.
-verbose = False
+VERBOSE = False
 
 # Terminal control characters
-termBoldOn = '\033[1m'
-termBoldOff = '\033[0m'
+TERM_BOLD_ON = '\033[1m'
+TERM_BOLD_OFF = '\033[0m'
 if os.name == 'nt':
-    termBoldOn = ''
-    termBoldOff = ''
+    TERM_BOLD_ON = ''
+    TERM_BOLD_OFF = ''
 
 # Platform characteristics
-os_name = os.name
-os_arch = platform.uname()[4]
+OS_NAME = os.name
+OS_ARCH = platform.uname()[4]
 
 #####################################################################
-def createBackupFile(filename, print_note=True):
+def create_backup_file(filename, print_note=True):
     """
     Create a backup copy of the file. A timestamp is included
     in the new file name. If print_note is True, print
@@ -324,7 +325,7 @@ To create an initial default configuration:
    'python chords_control --config --default'
 Backup and restore are not currently available on Windows.
 
-""" + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
+""" + "This operating system is " + OS_NAME + ", the architecture is " + OS_ARCH + "."
 
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("--run",     help="run",                                                  default=False,        action="store_true")
@@ -341,7 +342,7 @@ Backup and restore are not currently available on Windows.
         parser.add_argument("--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
         parser.add_argument("--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
         parser.add_argument("--renew",   help="replace chords_control with a new version (use with caution!)",  default=False, action="store_true")
-        parser.add_argument("--verbose", help="enable verbose",                                       default=False,        action="store_true")
+        parser.add_argument("--VERBOSE", help="enable VERBOSE",                                       default=False,        action="store_true")
 
         # If no switches, print the help.
         if not sys.argv[1:]:
@@ -353,21 +354,21 @@ Backup and restore are not currently available on Windows.
         self.options = vars(args)
 
         # Make sure that at most only one of these args was specified
-        o = self.options
-        if [o['config'],
-                o['run'],
-                o['stop'],
-                o['update'],
-                o['env'],
-                o['backwards'],
-                o['renew'],
-                o['backup'],
-                o['restore']
+        opt = self.options
+        if [opt['config'],
+                opt['run'],
+                opt['stop'],
+                opt['update'],
+                opt['env'],
+                opt['backwards'],
+                opt['renew'],
+                opt['backup'],
+                opt['restore']
            ].count(True) > 1:
             print(epilog)
             exit(1)
 
-        if o['default'] and not o['config']:
+        if opt['default'] and not opt['config']:
             print(epilog)
             exit(1)
 
@@ -390,75 +391,75 @@ class ChordsConfig(OrderedDict):
 
         # Initialize the configuration item descriptions. These are
         # used as comments in the output configuration file.
-        self.initConfigItems()
+        self.init_config_items()
 
         # Fetch the configuration key:value pairs from the configuration file.
         # Add them to self.
-        self.getPairs(configfile)
+        self.get_pairs(configfile)
 
-    def getPairs(self, configFile):
+    def get_pairs(self, config_file):
         """
         Return the configuration key:value pairs from the configuration file.
         """
 
         # Get the current configuration file
-        if not os.path.isfile(configFile):
-            f = open(options["file"], 'w')
-            f.close()
-            print(configFile, 'has been created')
+        if not os.path.isfile(config_file):
+            cfile = open(OPTIONS["file"], 'w')
+            cfile.close()
+            print(config_file, 'has been created')
 
-        items = config_items(configFile)
+        items = config_items(config_file)
 
-        tmpConfig = OrderedDict()
+        tmp_config = OrderedDict()
         # Collect all of the standard items. Add them if they
         # weren't in the file
-        for key in list(self.configItems.keys()):
+        for key in list(self.config_items.keys()):
             if key in list(items.keys()):
-                tmpConfig[key] = items[key]
+                tmp_config[key] = items[key]
                 del items[key]
             else:
-                tmpConfig[key] = self.configItems[key]['default']
+                tmp_config[key] = self.config_items[key]['default']
         for key, value in items.items():
             # Append any remaining items that aren't in the standard list
-            tmpConfig[key] = value
-        for key in list(tmpConfig.keys()):
-            self[key] = tmpConfig[key]
+            tmp_config[key] = value
+        for key in list(tmp_config.keys()):
+            self[key] = tmp_config[key]
 
-    def initConfigItems(self):
+    def init_config_items(self):
         """
         Create a collection of config items which must be in the final configuration.
         These items define the default values which will be used if they haven't already been
         set in a configuration.
         """
-        self.configItems = OrderedDict()
+        self.config_items = OrderedDict()
 
-        for i in stdConfigItems:
-            self.configItems[i[1]] = ConfigItem(description=i[0], default=i[2], verify=i[3], choices=i[4])
+        for i in STD_CONFIG_ITEMS:
+            self.config_items[i[1]] = ConfigItem(description=i[0], default=i[2], verify=i[3], choices=i[4])
 
-    def toYML(self):
+    def to_yml(self):
         """
         Create the YML version of the configuration. Line terminators will be included.
         The standard items are wrtten first, followed by the extras.
         """
         yml = ''
         for key in list(self.keys()):
-            if key in list(self.configItems.keys()):
-                descripts = self.configItems[key]['description'].split('\n')
+            if key in list(self.config_items.keys()):
+                descripts = self.config_items[key]['description'].split('\n')
                 for d in descripts:
                     yml =  yml + '# ' + d + '\n'
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         yml = yml +  '#' + '\n' + '# Non-standard options.' + '\n'
         for key in list(self.keys()):
-            if key not in list(self.configItems.keys()):
+            if key not in list(self.config_items.keys()):
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         return yml
 
-    def queryValues(self, usedefault):
+    def query_values(self, usedefault):
         """
         Go through the configuration, asking the user if they want to
         change the values. The response can be a return, to accept the
         value, a new value to replace the value, or a period to use the default value.
-        The items found in configItems are done first, followed by all other
+        The items found in config_items are done first, followed by all other
         items.
         """
         print("Enter:\n   Return to keep the current value, or\n   Period (.) to select to the default value, or a\n   New value.")
@@ -466,33 +467,33 @@ class ChordsConfig(OrderedDict):
         # Process config items that are part of the standard configuration
         for key in list(self.keys()):
             print()
-            if key in list(self.configItems.keys()):
-                description = self.configItems[key]['description']
+            if key in list(self.config_items.keys()):
+                description = self.config_items[key]['description']
                 print()
                 # If verify is enabled for this item, then we need to populate the valid choices.
-                if self.configItems[key]['verify']:
+                if self.config_items[key]['verify']:
                     description = description + ' Valid choices are: '
-                    for choice in self.configItems[key]['choices']:
+                    for choice in self.config_items[key]['choices']:
                         description = description + '\'' + choice + '\' '
                 while True:
-                    self.queryValue(key=key,
-                                    usedefault = usedefault,
-                                    description = description,
-                                    defaultval = self.configItems[key]['default'])
-                    if not self.configItems[key]['verify']:
+                    self.query_value(key=key,
+                                     usedefault = usedefault,
+                                     description = description,
+                                     defaultval = self.config_items[key]['default'])
+                    if not self.config_items[key]['verify']:
                         break
                     else:
-                        if self[key] in self.configItems[key]['choices']:
+                        if self[key] in self.config_items[key]['choices']:
                             break
                         else:
                             print('>>>> You entered an invalid value. Please try again (or use ctrl-C to exit)')
 
         # Process items that extras which are not part of the standard configuration
         for key in list(self.keys()):
-            if key not in list(self.configItems.keys()):
-                self.queryValue(key=key, usedefault=usedefault)
+            if key not in list(self.config_items.keys()):
+                self.query_value(key=key, usedefault=usedefault)
 
-    def queryValue(self, key, usedefault, description=None, defaultval=None):
+    def query_value(self, key, usedefault, description=None, defaultval=None):
         """
         Query the user for a replacement value.
         """
@@ -501,51 +502,51 @@ class ChordsConfig(OrderedDict):
         print(key, end=' ')
         if defaultval:
             print("(default: " + str(defaultval) + ")", end=' ')
-        print(termBoldOn + '[' + str(self[key]) + ']'+ termBoldOff + '? ', end=' ')
+        print(TERM_BOLD_ON + '[' + str(self[key]) + ']'+ TERM_BOLD_OFF + '? ', end=' ')
         sys.stdout.flush()
         if not usedefault:
-            l = sys.stdin.readline().strip()
+            response = sys.stdin.readline().strip()
         else:
-            l = "."
+            response = "."
             print(".", end=' ')
             sys.stdout.flush()
         # An empty line means retain value
-        if l != "":
+        if response != "":
             # A period means use the default, if it is avaiable
-            if l == ".":
+            if response == ".":
                 self[key] = defaultval
             # Other replace with the user entered value
             else:
-                self[key] = l
+                self[key] = response
         if usedefault:
             print()
 
-    def writeYMLFile(self, configfile):
+    def write_yml_file(self, configfile):
         """
         Write the configuration to the file. The whole configuration is written,
-        starting with the elements listed in the configItems. Configuration items
-        are prefixed with the comments provided in the configItems.
+        starting with the elements listed in the config_items. Configuration items
+        are prefixed with the comments provided in the config_items.
 
         If specified, a backup copy of the original file is created.
         """
 
         print()
-        createBackupFile(configfile)
+        create_backup_file(configfile)
 
         f = open(configfile, "w")
-        f.write(self.toYML())
+        f.write(self.to_yml())
         f.close()
         os.chmod(configfile, stat.S_IRUSR | stat.S_IWUSR)
-        print("*** " + options["file"] + " has been written with the new configuration.")
+        print("*** " + OPTIONS["file"] + " has been written with the new configuration.")
 
-    def writeEnvFile(self):
+    def write_env_file(self):
         """
         Write the configuration to the .env file, in environment
         notation.
 
         A backup copy of the original file is created.
         """
-        createBackupFile(".env")
+        create_backup_file(".env")
 
         f = open(".env", 'w')
         for key in list(self.keys()):
@@ -587,9 +588,9 @@ class ChordsGit(object):
         if not isinstance(files, list):
             files = [files]
 
-        for fileName in files:
-            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ git_branch + '/' + fileName
-#            if os_arch[:3] == 'arm':
+        for file_name in files:
+            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ git_branch + '/' + file_name
+#            if OS_ARCH[:3] == 'arm':
 #                docker_compose_yml = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/' + git_branch + '/rpi-docker-compose.yml'
 
             proxy_switch = []
@@ -601,7 +602,7 @@ class ChordsGit(object):
             curl_cmd = [
                 'curl', '-O', '-s', file_url
                 ]
-            if os_name == 'nt':
+            if OS_NAME == 'nt':
                 curl_cmd[1:1] = ['-k']
 
             # Insert proxy switch
@@ -634,12 +635,12 @@ class Docker(object):
 
         self.docker_compose_yml = 'docker-compose.yml'
         self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/chords/tags"
-        if os_arch[:3] == 'arm':
+        if OS_ARCH[:3] == 'arm':
             self.docker_compose_yml = 'rpi-docker-compose.yml'
             self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/ncareol/rpi-chords/tags"
 
         # Determine the path for docker-compose
-        if os_name == 'nt':
+        if OS_NAME == 'nt':
             self.docker_compose_cmd = 'docker-compose'
         else:
             cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose']
@@ -680,12 +681,12 @@ class Docker(object):
 
         ps_result = ps_result.split('\n')
         containers = []
-        for p in ps_result:
-            p = p.strip()
-            if p != '':
-                if not re.search("WARNING", p):
-                    p = '{' + p + '}'
-                    containers.append(json.loads(p))
+        for result in ps_result:
+            result = result.strip()
+            if result != '':
+                if not re.search("WARNING", result):
+                    result = '{' + result + '}'
+                    containers.append(json.loads(result))
 
         # Convert the json unicode to bytes
         return containers
@@ -700,10 +701,10 @@ class Docker(object):
             exit (1)
 
         # Find out the release that we are running
-        d = grep('DOCKER_TAG', '.env')
-        d = d[0].split('=')
-        if len(d) == 2:
-            print('*** Running the \'' + d[1] + '\' release of CHORDS', end=' ')
+        d_tag = grep('DOCKER_TAG', '.env')
+        d_tag = d_tag[0].split('=')
+        if len(d_tag) == 2:
+            print('*** Running the \'' + d_tag[1] + '\' release of CHORDS', end=' ')
             if not devmode:
                 print('.')
             else:
@@ -757,7 +758,7 @@ class Docker(object):
         curl_cmd = [
             'curl', '-f', '-s', self.dockerhub_tags_uri
             ]
-        if os_name == 'nt':
+        if OS_NAME == 'nt':
             curl_cmd[1:1] = ['-k']
 
         curl_result, _ = os_cmd(
@@ -766,8 +767,8 @@ class Docker(object):
             printlines=False)
 
         tags = []
-        for t in json.loads(curl_result):
-            tags.append(t["name"])
+        for tag in json.loads(curl_result):
+            tags.append(tag["name"])
 
         return tags
 #####################################################################
@@ -784,7 +785,7 @@ class ChordsSSL(object):
         self.ssl_host = ssl_host
         self.ssl_email = ssl_email
         self.cert_dir = "/etc/letsencrypt/live/"+self.ssl_host
- 
+
         print("*** Beginning SSL management. This is a complicated activity, with many steps.")
         print()
 
@@ -810,13 +811,14 @@ inoperative certificate. We suggest that you rerun the configuration
 and set SSL_ENABLED to false.""")
                     print()
                     return
-            
+
             # Create a new certificate
             print ("We need to create a new certificate.")
             self.create_cert()
             print()
 
     def host_dns(self):
+        """ Determine the IP address of the ssl host """
         try:
             out = socket.gethostbyname(self.ssl_host)
             print("Good news! Your host name (" + self.ssl_host + ") is registered with DNS as " + out + ".")
@@ -832,8 +834,8 @@ and set SSL_ENABLED to false.""")
         # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
         result = sh.docker_compose(cmd).split('\n')
-        
-        retval["valid_cert"] =  not ("No certs found." in result)
+
+        retval["valid_cert"] =  not "No certs found." in result
         retval["test_cert"] = ("INVALID: TEST_CERT" in "".join(result))
 
         if retval["test_cert"]:
@@ -845,11 +847,11 @@ and set SSL_ENABLED to false.""")
             cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in %s" % cert_path, "certbot"]
             try:
                 result = sh.docker_compose(cmd).split('\n')
-                notBefore = [s.split("=")[1] for s in result if "notBefore" in s]
-                notAfter = [s.split("=")[1] for s in result if "notAfter" in s]
+                not_before = [s.split("=")[1] for s in result if "notBefore" in s]
+                not_after = [s.split("=")[1] for s in result if "notAfter" in s]
                 if not (retval["notBefore"] and retval["notAfter"]):
-                    retval["notBefore"] = datetime.datetime.strptime(notBefore[0], '%b %d %H:%M:%S %Y %Z')
-                    retval["notAfter"]  = datetime.datetime.strptime(notAfter[0], '%b %d %H:%M:%S %Y %Z')
+                    retval["notBefore"] = datetime.datetime.strptime(not_before[0], '%b %d %H:%M:%S %Y %Z')
+                    retval["notAfter"]  = datetime.datetime.strptime(not_after[0], '%b %d %H:%M:%S %Y %Z')
                     retval["expired"]   = datetime.datetime.now() > retval["notAfter"]
                 else:
                     retval["valid_cert"] = False
@@ -859,8 +861,8 @@ and set SSL_ENABLED to false.""")
         return retval
 
     def create_cert(self):
-        """ 
-        Create a new certificate. 
+        """
+        Create a new certificate.
 
         A stging certificate will be created first, just to insure
         that the process is working.
@@ -902,20 +904,20 @@ use up your quota of requests!
         print("*** Creating a dummy certificate.")
 
         cmd = [
-          "run",
-          "--no-deps", 
-          "--entrypoint", 
-          "mkdir -p %s" % self.cert_dir, 
-          "certbot"]
+            "run",
+            "--no-deps",
+            "--entrypoint",
+            "mkdir -p %s" % self.cert_dir,
+            "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
         cmd = [
-          "run", 
-          "--no-deps", 
-          "--entrypoint", 
-          "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
-          "certbot"]
+            "run",
+            "--no-deps",
+            "--entrypoint",
+            "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
+            "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -940,7 +942,7 @@ use up your quota of requests!
             "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
-    
+
     def start_nginx(self):
         """ Start an nginx webserver, to service the ACME challenge."""
 
@@ -948,7 +950,7 @@ use up your quota of requests!
 
         # Make sure that nginx is not running from a previous attempt.
         self.stop_nginx()
-    
+
         # Run nginx in certificate creation mode.
         cmd = [
             "run",
@@ -958,12 +960,12 @@ use up your quota of requests!
             "SSL_HOST=%s" % self.ssl_host,
             "-e",
             "SSL_EMAIL=%s" % self.ssl_email,
-            "-p", 
+            "-p",
             "80:80",
             "-p",
-            "443:443", 
-            "--no-deps", 
-            "-d", 
+            "443:443",
+            "--no-deps",
+            "-d",
             "nginx"
         ]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
@@ -972,12 +974,13 @@ use up your quota of requests!
     def remove_certs(self):
         """ Remove existing certificates. """
         print ("*** Removing the existing certificates.")
-    
+
         cmd = [
-            "run", 
-            "--no-deps", 
-            "--entrypoint", 
-            "rm -Rf /etc/letsencrypt/live/%s && rm -Rf /etc/letsencrypt/archive/%s && rm -Rf /etc/letsencrypt/renewal/%s.conf" % (self.ssl_host, self.ssl_host, self.ssl_host), 
+            "run",
+            "--no-deps",
+            "--entrypoint",
+            "rm -Rf /etc/letsencrypt/live/%s && rm -Rf /etc/letsencrypt/archive/%s && rm -Rf /etc/letsencrypt/renewal/%s.conf" %
+            (self.ssl_host, self.ssl_host, self.ssl_host),
             "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
@@ -988,11 +991,11 @@ use up your quota of requests!
         print ("*** Obtaining a new %s certificate from letsencrypt." % ("test" if create_test_cert else "real"))
 
         cmd = [
-            "run", 
-            "--no-deps", 
-            "--entrypoint", 
-            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email %s -d %s" % 
-                  (self.ssl_email, ("" if create_test_cert else "--staging"), self.ssl_host), 
+            "run",
+            "--no-deps",
+            "--entrypoint",
+            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email %s -d %s" %
+            (self.ssl_email, ("" if create_test_cert else "--staging"), self.ssl_host),
             "certbot"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
@@ -1001,6 +1004,7 @@ use up your quota of requests!
         self.stop_nginx()
 
     def stop_nginx(self):
+        """ Stop the nginx container """
         cmd = ["down"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
@@ -1117,7 +1121,7 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
         """ Verify that a CHORDS instance is running correctly. """
 
         if docker_check(containers=
-            ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
+                        ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
             raise ChordsBackupError("""
 It appears that CHORDS is not running correctly.
 A CHORDS backup cannot be performed.""")
@@ -1253,7 +1257,7 @@ Are you in a CHORDS home directory (typically /var/lib/chords/)?
         """ Verify that a CHORDS instance is running correctly. """
 
         if docker_check(containers=
-            ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
+                        ["chords_app", "chords_influxdb", "chords_mysql", "chords_grafana"]):
             raise ChordsRestoreError("""
 It appears that CHORDS is not running correctly.
 A CHORDS restore cannot be performed.""")
@@ -1286,7 +1290,7 @@ A CHORDS restore cannot be performed.""")
             print("%s WERE NOT restored." % (str(config_files)))
         else:
             for f in config_files:
-                createBackupFile(f)
+                create_backup_file(f)
                 src_file = os.path.abspath(self.tmp_dir + "/" + f)
                 dst_file = os.path.abspath("./" + f)
                 print("Restoring %s to %s" % (src_file, dst_file))
@@ -1466,10 +1470,10 @@ def docker_sh(*args):
     """ Run a docker command with the args, printing stdout and stderr. """
 
     try:
-        if verbose:
+        if VERBOSE:
             print("Executing: docker", " ".join(args))
         result = sh.docker(args, _err_to_out=True).stdout.decode('utf-8')
-        if verbose:
+        if VERBOSE:
             print("Result:", str(result))
         return str(result)
     except Exception as sh_err:
@@ -1490,7 +1494,7 @@ def status():
     """
     Show the docker status for the running containers.
     """
-    for container in Docker(proxy=options['proxy']).ps():
+    for container in Docker(proxy=OPTIONS['proxy']).ps():
         print(container['name'] + ': ' + str(container))
 
 #####################################################################
@@ -1544,7 +1548,7 @@ def docker_check(containers):
     an error.
     """
 
-    names = [c['name'].split("/")[-1] for c in Docker(proxy=options['proxy']).ps()]
+    names = [c['name'].split("/")[-1] for c in Docker(proxy=OPTIONS['proxy']).ps()]
     err_msg = ""
     for container_name in containers:
         if container_name not in names:
@@ -1554,7 +1558,7 @@ def docker_check(containers):
     return err_msg
 
 #####################################################################
-def create_config_file_from_env(optionsIn):
+def create_config_file_from_env(options_in):
     """
     Read the .env file, and convert it into a configuration file.
     options["file"] is the name of the new configuration file.
@@ -1577,11 +1581,11 @@ def create_config_file_from_env(optionsIn):
 
     # Process the temporary configuration file, which will
     # merge in default values for variables that weren't in .env.
-    configTmp = ChordsConfig(configfile=tfile)
+    config_tmp = ChordsConfig(configfile=tfile)
 
     # Save the new configuration file and update the .env file.
-    configTmp.writeYMLFile(optionsIn["file"])
-    configTmp.writeEnvFile()
+    config_tmp.write_yml_file(options_in["file"])
+    config_tmp.write_env_file()
 
 #####################################################################
 def os_cmd(cmd, err_msg=None, printlines=True):
@@ -1593,7 +1597,7 @@ def os_cmd(cmd, err_msg=None, printlines=True):
     If err is specified, it should contain an error message,
     and chk_cmd_status() will be called.
     """
-    if verbose:
+    if VERBOSE:
         print(' '.join(str(x) for x in cmd))
 
     try:
@@ -1607,8 +1611,8 @@ def os_cmd(cmd, err_msg=None, printlines=True):
             if output != '' and printlines:
                 print(output.rstrip())
         exit_status = proc.poll()
-    except (OSError, ValueError) as e:
-        print(str(e) + ': ' + ' '.join(str(x) for x in cmd))
+    except (OSError, ValueError) as ex:
+        print(str(ex) + ': ' + ' '.join(str(x) for x in cmd))
 
     if err_msg:
         check_cmd_status(exit_status=exit_status, err_msg=err_msg, cmd=cmd)
@@ -1616,7 +1620,7 @@ def os_cmd(cmd, err_msg=None, printlines=True):
 
 #####################################################################
 def prompt(message, choices):
-    ''' 
+    '''
     Keep prompting until the user enters a valid choice.
 
     The lowercase of the accepted response will be returned.
@@ -1628,7 +1632,7 @@ def prompt(message, choices):
     choice_string = ""
     for i in range(len(choices)):
         choice_string += choices[i]
-        if (i != len(choices) - 1):
+        if i != len(choices) - 1:
             choice_string += '/'
     print(message + " [" + choice_string + "]?", end=' ')
     sys.stdout.flush()
@@ -1640,7 +1644,7 @@ def prompt(message, choices):
             print ('Enter ' + choice_string, end=' ')
             sys.stdout.flush()
     l = l.lower()
-    return (l)
+    return l
 
 #####################################################################
 #def byteify(inputStr):
@@ -1658,24 +1662,26 @@ def prompt(message, choices):
 #        return inputStr
 
 #####################################################################
-def add_choices_to_DOCKER_TAG(proxy=""):
+def add_choices_to_docker_tag(proxy=""):
     """
     Get the available tags and add them to the DOCKER_TAG valid choices.
-    Modifies stdConfigItems.
+    Modifies S
+tdConfigItems.
     """
-    for s in stdConfigItems:
+    for s in STD_CONFIG_ITEMS:
         if s[1] =="DOCKER_TAG":
             tags = Docker(proxy=proxy).tags()
             for t in tags:
                 s[4].append(t)
 
 #####################################################################
-def add_choices_to_GIT_BRANCH(proxy=""):
+def add_choices_to_git_branch(proxy=""):
     """
     Get the avaiable branches and and them to the GIT_BRANCH valid choices.
-    Modifies stdConfigItems.
+    Modifies S
+tdConfigItems.
     """
-    for s in stdConfigItems:
+    for s in STD_CONFIG_ITEMS:
         if s[1] =="GIT_BRANCH":
             branches = ChordsGit(proxy=proxy).branches()
             for b in branches:
@@ -1729,7 +1735,7 @@ def renew_script(proxy):
 
     files = [script_name, "docker-compose.yml", "docker-compose-dev.yml"]
     for ourFile in files:
-        createBackupFile(ourFile)
+        create_backup_file(ourFile)
 
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
 
@@ -1766,12 +1772,12 @@ def choose_branch(aFile):
     return git_branch
 
 #####################################################################
-def config_items(configFile, delimiter=":"):
+def config_items(config_file, delimiter=":"):
     """
     Return a dictionary of pairs in a config file
     """
     items = dict()
-    f = open(configFile)
+    f = open(config_file)
     lines = f.readlines()
     f.close()
     i = 1
@@ -1781,7 +1787,7 @@ def config_items(configFile, delimiter=":"):
             if l[0] != "#":
                 tokens = l.split(delimiter)
                 if len(tokens) != 2:
-                    print("Ambiguous value in line %d of %s" % (i, configFile))
+                    print("Ambiguous value in line %d of %s" % (i, config_file))
                 items[tokens[0].strip()] = tokens[1].strip()
         i = i + 1
     return items
@@ -1792,78 +1798,78 @@ def config_items(configFile, delimiter=":"):
 if __name__ == '__main__':
 
     # Get the command line options
-    options = CommandArgs().get_options()
-    verbose = options['verbose']
+    OPTIONS = CommandArgs().get_options()
+    VERBOSE = OPTIONS['VERBOSE']
 
     # --- Command procesing ---
 
     # Run the CHORDS portal
-    if options["run"]:
-        if options['devmode']:
+    if OPTIONS["run"]:
+        if OPTIONS['devmode']:
             check_file_exists('docker-compose-dev.yml')
 
-        Docker(proxy=options['proxy']).up(options['devmode'])
+        Docker(proxy=OPTIONS['proxy']).up(OPTIONS['devmode'])
 
     # Stop the currently running CHORDS portal
-    if options["stop"]:
-        Docker(proxy=options['proxy']).down()
+    if OPTIONS["stop"]:
+        Docker(proxy=OPTIONS['proxy']).down()
 
     # Show the current CHORDS status
-    if options["status"]:
+    if OPTIONS["status"]:
         status()
 
     # Prompt and update the configuration
-    if options["config"]:
-        add_choices_to_DOCKER_TAG()
-        add_choices_to_GIT_BRANCH()
-        config = ChordsConfig(configfile=options['file'])
-        config.queryValues(usedefault=options['default'])
-        config.writeYMLFile(configfile=options['file'])
-        config.writeEnvFile()
+    if OPTIONS["config"]:
+        add_choices_to_docker_tag()
+        add_choices_to_git_branch()
+        CONFIG = ChordsConfig(configfile=OPTIONS['file'])
+        CONFIG.query_values(usedefault=OPTIONS['default'])
+        CONFIG.write_yml_file(configfile=OPTIONS['file'])
+        CONFIG.write_env_file()
         print()
-        ssl(config)
+        ssl(CONFIG)
         print("*** Don't forget to run 'python chords_control --update' if you have changed the configuration.")
 
     # Create the .env file from the configuration file
-    if options["env"]:
-        if not os.path.isfile(options["file"]):
-            print("The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]")
+    if OPTIONS["env"]:
+        if not os.path.isfile(OPTIONS["file"]):
+            print("The CHORDS configuration file " + OPTIONS['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]")
             exit(1)
-        config = ChordsConfig(configfile=options['file'])
-        config.writeEnvFile()
+        CONFIG = ChordsConfig(configfile=OPTIONS['file'])
+        CONFIG.write_env_file()
 
     # Create the configuration file from the .env file
-    if options["backwards"]:
-        create_config_file_from_env(options)
+    if OPTIONS["backwards"]:
+        create_config_file_from_env(OPTIONS)
 
     # Update the docker images
-    if options["update"]:
-        if not os.path.isfile(options["file"]):
-            print("The CHORDS configuration file " + options['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]")
+    if OPTIONS["update"]:
+        if not os.path.isfile(OPTIONS["file"]):
+            print("The CHORDS configuration file " + OPTIONS['file'] + " does not exist. It can be created with ./chords_control --config --default [--file FILE]")
             exit(1)
         # Get the system configuration.
-        config = ChordsConfig(configfile=options['file'])
+        CONFIG = ChordsConfig(configfile=OPTIONS['file'])
         # Get items from git that are needed.
-        ChordsGit(proxy=options['proxy']).fetch(git_branch=config["GIT_BRANCH"], files="docker-compose.yml")
+        ChordsGit(proxy=OPTIONS['proxy']).fetch(git_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
         # Pull the images.
-        Docker(proxy=config['PROXY']).pull()
+        Docker(proxy=CONFIG['PROXY']).pull()
 
     # Replace this script with one from the repository
-    if options["renew"]:
-        add_choices_to_DOCKER_TAG()
-        add_choices_to_GIT_BRANCH()
-        renew_script(proxy=options['proxy'])
+    if OPTIONS["renew"]:
+        add_choices_to_docker_tag()
+        add_choices_to_git_branch()
+        renew_script(proxy=OPTIONS['proxy'])
 
     # Create a backup file
-    if options["backup"]:
+    if OPTIONS["backup"]:
         if platform.system() != "Windows":
             backup()
         else:
             print("Backup is not available on Windows.")
 
     # Load from a backup file
-    if options["restore"]:
+    if OPTIONS["restore"]:
         if platform.system() != "Windows":
-            restore(options['restore'])
+            restore(OPTIONS['restore'])
         else:
             print("Restore is not available on Windows.")
