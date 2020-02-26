@@ -817,6 +817,45 @@ and set SSL_ENABLED to false.""")
             self.create_cert()
             print()
 
+    def create_cert(self):
+        """
+        Create a new certificate.
+
+        A stging certificate will be created first, just to insure
+        that the process is working.
+        """
+        print ("*** Creating the SSL certificate")
+
+        # docker_check() returns an empty string if the named instance is running.
+        instances = [docker_check([s])=='' for s in ["chords_app", "chords_nginx", "chords_certbot"]]
+        if True in instances:
+            raise ChordsSslError(
+                "SSL certificate creation can't be done while one of the CHORDS \n"
+                "services (chords_app, chords_nginx, or chords_certbot) is running. \n"
+                "Use python chords_control --stop."
+            )
+
+        self.make_dummy_cert()
+        self.make_dh_params()
+        self.start_nginx()
+        self.remove_certs()
+        self.request_cert(create_test_cert = True)
+        reply = prompt("Did the test cert get created properly?", ['y', 'Y', 'n', 'N'])
+        if reply == 'n':
+            print ("Test certificate creation failed. Try again later.")
+            return
+        print ("""
+Test certificates can be created as often as you like.
+However, you can only create 5 real certificates each WEEK.
+If the certificate creation process is failing, do not
+use up your quota of requests!
+        """)
+        reply = prompt("Do you want to create a real certificate", ['y', 'Y', 'n', 'N'])
+        if reply == 'n':
+            print ("Test certificate creation failed. Try again later.")
+            return
+        self.request_cert(create_test_cert = False)
+
     def host_dns(self):
         """ Determine the IP address of the ssl host """
         try:
@@ -859,45 +898,6 @@ and set SSL_ENABLED to false.""")
                 retval["valid_cert"] = False
 
         return retval
-
-    def create_cert(self):
-        """
-        Create a new certificate.
-
-        A stging certificate will be created first, just to insure
-        that the process is working.
-        """
-        print ("*** Creating the SSL certificate")
-
-        # docker_check() returns an empty string if the named instance is running.
-        instances = [docker_check([s])=='' for s in ["chords_app", "chords_nginx", "chords_certbot"]]
-        if True in instances:
-            raise ChordsSslError(
-                "SSL certificate creation can't be done while one of the CHORDS \n"
-                "services (chords_app, chords_nginx, or chords_certbot) is running. \n"
-                "Use python chords_control --stop."
-            )
-
-        self.make_dummy_cert()
-        self.make_dh_params()
-        self.start_nginx()
-        self.remove_certs()
-        self.request_cert(create_test_cert = True)
-        reply = prompt("Did the test cert get created properly?", ['y', 'Y', 'n', 'N'])
-        if reply == 'n':
-            print ("Test certificate creation failed. Try again later.")
-            return
-        print ("""
-Test certificates can be created as often as you like.
-However, you can only create 5 real certificates each WEEK.
-If the certificate creation process is failing, do not
-use up your quota of requests!
-        """)
-        reply = prompt("Do you want to create a real certificate", ['y', 'Y', 'n', 'N'])
-        if reply == 'n':
-            print ("Test certificate creation failed. Try again later.")
-            return
-        self.request_cert(create_test_cert = False)
 
     def make_dummy_cert(self):
         """ Create a dummy certificate"""
