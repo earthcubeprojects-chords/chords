@@ -773,12 +773,17 @@ class Docker(object):
         return tags
 #####################################################################
 class ChordsSslError(Exception):
-    """ Raise ChordsSslError("error msg"). """
+    """
+    Usage: Raise ChordsSslError("error msg").
+    """
 
 #####################################################################
 class ChordsSSL(object):
     """
     Manage SSL certificates.
+
+    The complete chain of certificate management activities
+    is trigger just by instantiating this class.
     """
     def __init__(self, ssl_host, ssl_email):
 
@@ -821,7 +826,9 @@ and set SSL_ENABLED to false.""")
         """
         Create a new certificate.
 
-        A stging certificate will be created first, just to insure
+        CHORDS must not be running.
+
+        A staging certificate will be created first, just to insure
         that the process is working.
         """
         print ("*** Creating the SSL certificate")
@@ -840,6 +847,7 @@ and set SSL_ENABLED to false.""")
         self.start_nginx()
         self.remove_certs()
         self.request_cert(create_test_cert = True)
+
         reply = prompt("Did the test cert get created properly?", ['y', 'Y', 'n', 'N'])
         if reply == 'n':
             print ("Test certificate creation failed. Try again later.")
@@ -850,6 +858,7 @@ However, you can only create 5 real certificates each WEEK.
 If the certificate creation process is failing, do not
 use up your quota of requests!
         """)
+
         reply = prompt("Do you want to create a real certificate", ['y', 'Y', 'n', 'N'])
         if reply == 'n':
             print ("Test certificate creation failed. Try again later.")
@@ -857,7 +866,12 @@ use up your quota of requests!
         self.request_cert(create_test_cert = False)
 
     def host_dns(self):
-        """ Determine the IP address of the ssl host """
+        """
+        Determine the IP address of self.ssl_host.
+
+        Raise ChordsSslError if self.ssl_host cannot be located.
+        """
+
         try:
             out = socket.gethostbyname(self.ssl_host)
             print("Good news! Your host name (" + self.ssl_host + ") is registered with DNS as " + out + ".")
@@ -866,7 +880,9 @@ use up your quota of requests!
             raise ChordsSslError("The SSL_HOST " + self.ssl_host + " could not be located. Ensure that you have a DNS name assigned and that it is pointing to this computer.")
 
     def check_cert(self):
-        """ Return a dictionary containing the certificate status """
+        """
+        Return a dictionary containing the certificate status.
+        """
 
         retval = {"valid_cert": True, "test_cert": False, "expired": None, "notBefore": None, "notAfter": None}
 
@@ -900,7 +916,15 @@ use up your quota of requests!
         return retval
 
     def make_dummy_cert(self):
-        """ Create a dummy certificate"""
+        """
+        Create a dummy key and certificate.
+
+        This allows nginx to run in SSL mode.
+
+        The key will be written to self.cert_dir/privkey.pem.
+        The certificate will be written to self.cert_dir/fullchain.pem.
+        """
+
         print("*** Creating a dummy certificate.")
 
         cmd = [
@@ -922,7 +946,11 @@ use up your quota of requests!
         print(result)
 
     def make_dh_params(self):
-        """ Create the Diffie-Hellman parameters """
+        """
+        Create the Diffie-Hellman parameters.
+
+        They will be written to /etc/letsencrypt/chords-dhparam/dhparam-2048.pem.
+        """
         print ("*** Creating the Diffie-Hellman parameters. This can take several minutes.")
 
         cmd = [
@@ -944,7 +972,9 @@ use up your quota of requests!
         print(result)
 
     def start_nginx(self):
-        """ Start an nginx webserver, to service the ACME challenge."""
+        """
+        Start an nginx webserver, to service the ACME challenge.
+        """
 
         print ("*** Starting nginx, to service the ACME challenge.")
 
@@ -972,7 +1002,14 @@ use up your quota of requests!
         print(result)
 
     def remove_certs(self):
-        """ Remove existing certificates. """
+        """
+        Remove existing certificates.
+
+        Remove the following:
+        /etc/letsencrypt/live/self.ssl_host
+        /etc/letsencrypt/archive/self.ssl_host
+        /etc/letsencrypt/renewal/self.ssl_host
+        """
         print ("*** Removing the existing certificates.")
 
         cmd = [
@@ -986,7 +1023,9 @@ use up your quota of requests!
         print(result)
 
     def request_cert(self, create_test_cert=True):
-        """ Obtain a certificate from letsencrypt."""
+        """
+        Obtain a test or real certificate from letsencrypt.
+        """
 
         print ("*** Obtaining a new %s certificate from letsencrypt." % ("test" if create_test_cert else "real"))
 
@@ -1004,7 +1043,9 @@ use up your quota of requests!
         self.stop_nginx()
 
     def stop_nginx(self):
-        """ Stop the nginx container """
+        """
+        Stop the nginx container.
+        """
         cmd = ["down"]
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
