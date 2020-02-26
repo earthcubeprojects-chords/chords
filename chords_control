@@ -344,7 +344,7 @@ chords_control is not available on Windows.
         parser.add_argument("--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
         parser.add_argument("--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
         parser.add_argument("--renew",   help="replace chords_control with a new version (use with caution!)",  default=False, action="store_true")
-        parser.add_argument("--VERBOSE", help="enable VERBOSE",                                       default=False,        action="store_true")
+        parser.add_argument("--verbose", help="enable VERBOSE",                                       default=False,        action="store_true")
 
         # If no switches, print the help.
         if not sys.argv[1:]:
@@ -836,6 +836,8 @@ and set SSL_ENABLED to false.""")
         """
         print ("*** Creating the SSL certificate")
 
+        self.stop_nginx()
+
         # docker_check() returns an empty string if the named instance is running.
         instances = [docker_check([s])=='' for s in ["chords_app", "chords_nginx", "chords_certbot"]]
         if True in instances:
@@ -847,8 +849,6 @@ and set SSL_ENABLED to false.""")
 
         self.make_dummy_cert()
         self.make_dh_params()
-        self.start_nginx()
-        self.remove_certs()
         self.request_cert(create_test_cert = True)
 
         reply = prompt("Did the test cert get created properly?", ['y', 'Y', 'n', 'N'])
@@ -866,6 +866,8 @@ use up your quota of requests!
         if reply == 'n':
             print ("Test certificate creation failed. Try again later.")
             return
+
+        # Create the new cert
         self.request_cert(create_test_cert = False)
 
     def host_dns(self):
@@ -891,9 +893,13 @@ use up your quota of requests!
 
         # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
-        result = sh.docker_compose(cmd).split('\n')
-
-        retval["valid_cert"] =  not "No certs found." in result
+        if VERBOSE:
+            print("docker_compose:", cmd)
+        result = sh.docker_compose(cmd, _err_to_out = True)
+        print(result)
+        print(result.split('\n'))
+        print(result.split(' '))
+        retval["valid_cert"] =  not ("No certs found." in result or "invalid" in result.split(' '))
         retval["test_cert"] = ("INVALID: TEST_CERT" in "".join(result))
 
         if retval["test_cert"]:
@@ -904,6 +910,8 @@ use up your quota of requests!
             cert_path = self.cert_dir + "/fullchain.pem"
             cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in %s" % cert_path, "certbot"]
             try:
+                if VERBOSE:
+                    print("docker_compose:", cmd)
                 result = sh.docker_compose(cmd).split('\n')
                 not_before = [s.split("=")[1] for s in result if "notBefore" in s]
                 not_after = [s.split("=")[1] for s in result if "notAfter" in s]
@@ -936,6 +944,8 @@ use up your quota of requests!
             "--entrypoint",
             "mkdir -p %s" % self.cert_dir,
             "certbot"]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -945,6 +955,8 @@ use up your quota of requests!
             "--entrypoint",
             "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
             "certbot"]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -962,6 +974,8 @@ use up your quota of requests!
             "--entrypoint",
             "mkdir -p /etc/letsencrypt/chords-dhparam",
             "certbot"]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -971,36 +985,8 @@ use up your quota of requests!
             "--entrypoint",
             "openssl dhparam -out /etc/letsencrypt/chords-dhparam/dhparam-2048.pem 2048",
             "certbot"]
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
-        print(result)
-
-    def start_nginx(self):
-        """
-        Start an nginx webserver, to service the ACME challenge.
-        """
-
-        print ("*** Starting nginx, to service the ACME challenge.")
-
-        # Make sure that nginx is not running from a previous attempt.
-        self.stop_nginx()
-
-        # Run nginx in certificate creation mode.
-        cmd = [
-            "run",
-            "-e",
-            "CERT_CREATE=1",
-            "-e",
-            "SSL_HOST=%s" % self.ssl_host,
-            "-e",
-            "SSL_EMAIL=%s" % self.ssl_email,
-            "-p",
-            "80:80",
-            "-p",
-            "443:443",
-            "--no-deps",
-            "-d",
-            "nginx"
-        ]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -1022,6 +1008,8 @@ use up your quota of requests!
             "rm -Rf /etc/letsencrypt/live/%s && rm -Rf /etc/letsencrypt/archive/%s && rm -Rf /etc/letsencrypt/renewal/%s.conf" %
             (self.ssl_host, self.ssl_host, self.ssl_host),
             "certbot"]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -1032,6 +1020,13 @@ use up your quota of requests!
 
         print ("*** Obtaining a new %s certificate from letsencrypt." % ("test" if create_test_cert else "real"))
 
+        # Start nginx for the ACME challenge.
+        self.start_nginx()
+        reply = prompt("Is nginx running?",['y', 'Y', 'n', 'N'])
+
+        # Remove the exiting cert
+        self.remove_certs()
+
         cmd = [
             "run",
             "--no-deps",
@@ -1039,17 +1034,51 @@ use up your quota of requests!
             "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email %s -d %s" %
             (self.ssl_email, ("" if create_test_cert else "--staging"), self.ssl_host),
             "certbot"]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
         # Shutdown nginx
         self.stop_nginx()
 
+    def start_nginx(self):
+        """
+        Start an nginx webserver, to service the ACME challenge.
+        """
+
+        print ("*** Starting nginx, to service the ACME challenge.")
+        # Run nginx in certificate creation mode.
+        cmd = [
+            "run",
+            "-e",
+            "CERT_CREATE=1",
+            "-e",
+            "SSL_HOST=%s" % self.ssl_host,
+            "-e",
+            "SSL_EMAIL=%s" % self.ssl_email,
+            "-p",
+            "80:80",
+            "-p",
+            "443:443",
+            "--no-deps",
+            "-d",
+            "nginx"
+        ]
+        if VERBOSE:
+            print("docker_compose:", cmd)
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        print(result)
+
     def stop_nginx(self):
         """
         Stop the nginx container.
         """
+
+        print("*** Stopping nginx")
         cmd = ["down"]
+        if VERBOSE:
+            print("docker_compose:", cmd)
         result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
 
@@ -1864,7 +1893,7 @@ if __name__ == '__main__':
 
     # Get the command line options
     OPTIONS = CommandArgs().get_options()
-    VERBOSE = OPTIONS['VERBOSE']
+    VERBOSE = OPTIONS['verbose']
 
     # --- Command procesing ---
 
