@@ -548,10 +548,10 @@ class ChordsConfig(OrderedDict):
         """
         create_backup_file(".env")
 
-        f = open(".env", 'w')
+        env_file = open(".env", 'w')
         for key in list(self.keys()):
-            f.write(key + "=" + str(self[key])+"\n")
-        f.close()
+            env_file.write(key + "=" + str(self[key])+"\n")
+        env_file.close()
         os.chmod(".env", stat.S_IRUSR | stat.S_IWUSR)
         print("*** .env has been written with the new configuration.")
 
@@ -660,7 +660,7 @@ class Docker(object):
             print(git_branch)
             ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml)
 
-    def ps(self):
+    def running_containers(self):
         """
         Return an array containing a dictionary for each currently running container.
         The dictionaries keys are a subset of the output columns from docker ps. They are:
@@ -691,7 +691,7 @@ class Docker(object):
         # Convert the json unicode to bytes
         return containers
 
-    def up(self, devmode=False):
+    def docker_compose_up(self, devmode=False):
         """
         Bring the containers up with docker-compose.
         """
@@ -1108,8 +1108,8 @@ class ChordsBackup(object):
         """
 
         error = False
-        for f in files:
-            if not check_file_exists(aFile=f, exit_on_failure=False):
+        for file in files:
+            if not check_file_exists(the_file=file, exit_on_failure=False):
                 error = True
         if error:
             raise ChordsBackupError("""
@@ -1225,8 +1225,8 @@ class ChordsRestore(object):
         print("*** Warning: this action will overwrite ALL data in the running portal.")
         print('Are you sure that you want restore from %s [Y/y]? ' % (self.dump_file), end=' ')
         sys.stdout.flush()
-        l = sys.stdin.readline().strip()
-        if l not in ['Y', 'y']:
+        response = sys.stdin.readline().strip()
+        if response not in ['Y', 'y']:
             raise ChordsRestoreError("Restore cancelled.")
 
     def id_check(self):
@@ -1244,8 +1244,8 @@ class ChordsRestore(object):
         """
 
         error = False
-        for f in files:
-            if not check_file_exists(aFile=f, exit_on_failure=False):
+        for file in files:
+            if not check_file_exists(the_file=file, exit_on_failure=False):
                 error = True
         if error:
             raise ChordsRestoreError("""
@@ -1285,14 +1285,14 @@ A CHORDS restore cannot be performed.""")
         print("from %s." % (self.dump_file))
         print("Backup copies of these files will be made, in case you need to reverse this action.")
         print('Would you like to restore these files [Y/y]? ')
-        l = sys.stdin.readline().strip()
-        if l not in ['Y', 'y']:
+        response = sys.stdin.readline().strip()
+        if response not in ['Y', 'y']:
             print("%s WERE NOT restored." % (str(config_files)))
         else:
-            for f in config_files:
-                create_backup_file(f)
-                src_file = os.path.abspath(self.tmp_dir + "/" + f)
-                dst_file = os.path.abspath("./" + f)
+            for c_file in config_files:
+                create_backup_file(c_file)
+                src_file = os.path.abspath(self.tmp_dir + "/" + c_file)
+                dst_file = os.path.abspath("./" + c_file)
                 print("Restoring %s to %s" % (src_file, dst_file))
                 sh.cp(src_file, dst_file)
         print(" ")
@@ -1494,7 +1494,7 @@ def status():
     """
     Show the docker status for the running containers.
     """
-    for container in Docker(proxy=OPTIONS['proxy']).ps():
+    for container in Docker(proxy=OPTIONS['proxy']).running_containers():
         print(container['name'] + ': ' + str(container))
 
 #####################################################################
@@ -1548,7 +1548,7 @@ def docker_check(containers):
     an error.
     """
 
-    names = [c['name'].split("/")[-1] for c in Docker(proxy=OPTIONS['proxy']).ps()]
+    names = [c['name'].split("/")[-1] for c in Docker(proxy=OPTIONS['proxy']).running_containers()]
     err_msg = ""
     for container_name in containers:
         if container_name not in names:
@@ -1574,9 +1574,9 @@ def create_config_file_from_env(options_in):
     if os.path.isfile(".env"):
         efile = open(".env")
         lines = efile.readlines()
-        for l in lines:
-            l = l.replace("=", ":")
-            cfile.write(l)
+        for line in lines:
+            line = line.replace("=", ":")
+            cfile.write(line)
     cfile.close()
 
     # Process the temporary configuration file, which will
@@ -1626,7 +1626,7 @@ def prompt(message, choices):
     The lowercase of the accepted response will be returned.
     '''
 
-    if type(choices) is not list:
+    if not isinstance(choices, list):
         choices = [choices]
 
     choice_string = ""
@@ -1637,14 +1637,14 @@ def prompt(message, choices):
     print(message + " [" + choice_string + "]?", end=' ')
     sys.stdout.flush()
 
-    l = ''
-    while l not in choices:
-        l = sys.stdin.readline().strip()
-        if l not in choices:
+    response = ''
+    while response not in choices:
+        response = sys.stdin.readline().strip()
+        if response not in choices:
             print ('Enter ' + choice_string, end=' ')
             sys.stdout.flush()
-    l = l.lower()
-    return l
+    response = response.lower()
+    return response
 
 #####################################################################
 #def byteify(inputStr):
@@ -1668,35 +1668,34 @@ def add_choices_to_docker_tag(proxy=""):
     Modifies S
 tdConfigItems.
     """
-    for s in STD_CONFIG_ITEMS:
-        if s[1] =="DOCKER_TAG":
+    for std_item in STD_CONFIG_ITEMS:
+        if std_item[1] =="DOCKER_TAG":
             tags = Docker(proxy=proxy).tags()
-            for t in tags:
-                s[4].append(t)
+            for tag in tags:
+                std_item[4].append(tag)
 
 #####################################################################
 def add_choices_to_git_branch(proxy=""):
     """
     Get the avaiable branches and and them to the GIT_BRANCH valid choices.
-    Modifies S
-tdConfigItems.
+    Modifies StdConfigItems.
     """
-    for s in STD_CONFIG_ITEMS:
-        if s[1] =="GIT_BRANCH":
+    for std_item in STD_CONFIG_ITEMS:
+        if std_item[1] =="GIT_BRANCH":
             branches = ChordsGit(proxy=proxy).branches()
-            for b in branches:
-                s[4].append(b)
+            for branch in branches:
+                std_item[4].append(branch)
 
 #####################################################################
-def check_file_exists(aFile, writeable=False, print_warning=True, exit_on_failure=True):
+def check_file_exists(the_file, writeable=False, print_warning=True, exit_on_failure=True):
     """
     Make sure that the file is readable. If not, print error message
     and exit.
     """
 
-    if not os.path.isfile(aFile) or not os.access(aFile, os.R_OK if not writeable else os.W_OK):
+    if not os.path.isfile(the_file) or not os.access(the_file, os.R_OK if not writeable else os.W_OK):
         if print_warning:
-            print("File " + aFile +  " doesn't exist or isn't readable.")
+            print("File " + the_file +  " doesn't exist or isn't readable.")
         if exit_on_failure:
             exit(1)
         else:
@@ -1704,16 +1703,16 @@ def check_file_exists(aFile, writeable=False, print_warning=True, exit_on_failur
     return True
 
 #####################################################################
-def grep(expression, aFile):
+def grep(expression, the_file):
     """
     Find lines in a file containing the expression.
     Return as an array of strings. White space is
     removed.
     """
-    ourFile = open(aFile, "r")
+    our_file = open(the_file, "r")
 
     matches = []
-    for line in ourFile:
+    for line in our_file:
         if re.search(expression, line):
             matches.append(line.strip())
 
@@ -1734,8 +1733,8 @@ def renew_script(proxy):
     git_branch = choose_branch(script_name)
 
     files = [script_name, "docker-compose.yml", "docker-compose-dev.yml"]
-    for ourFile in files:
-        create_backup_file(ourFile)
+    for our_file in files:
+        create_backup_file(our_file)
 
     ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
 
@@ -1752,16 +1751,16 @@ def check_cmd_status(exit_status, cmd, err_msg):
         exit(1)
 
 #####################################################################
-def choose_branch(aFile):
+def choose_branch(the_file):
     """
     Prompt the user to choose which git branch to fetch the file from.
     """
     git_branches = ChordsGit().branches()
     git_branch = ''
     while True:
-        print("Which branch do you want to pull " + aFile + " from (usually master) (", end=' ')
-        for b in git_branches:
-            print('\''+b+'\'', end=' ')
+        print("Which branch do you want to pull " + the_file + " from (usually master) (", end=' ')
+        for branch in git_branches:
+            print('\''+branch+'\'', end=' ')
         print(')? ', end=' ')
         sys.stdout.flush()
         git_branch = sys.stdin.readline().strip()
@@ -1777,15 +1776,15 @@ def config_items(config_file, delimiter=":"):
     Return a dictionary of pairs in a config file
     """
     items = dict()
-    f = open(config_file)
-    lines = f.readlines()
-    f.close()
+    c_file = open(config_file)
+    lines = c_file.readlines()
+    c_file.close()
     i = 1
-    for l in lines:
-        l = l.strip()
-        if l:
-            if l[0] != "#":
-                tokens = l.split(delimiter)
+    for line in lines:
+        line = line.strip()
+        if line:
+            if line[0] != "#":
+                tokens = line.split(delimiter)
                 if len(tokens) != 2:
                     print("Ambiguous value in line %d of %s" % (i, config_file))
                 items[tokens[0].strip()] = tokens[1].strip()
@@ -1808,7 +1807,7 @@ if __name__ == '__main__':
         if OPTIONS['devmode']:
             check_file_exists('docker-compose-dev.yml')
 
-        Docker(proxy=OPTIONS['proxy']).up(OPTIONS['devmode'])
+        Docker(proxy=OPTIONS['proxy']).docker_compose_up(OPTIONS['devmode'])
 
     # Stop the currently running CHORDS portal
     if OPTIONS["stop"]:
