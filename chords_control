@@ -319,17 +319,19 @@ to set the configuration to default values.
 
         epilog = """
 At least one and only one of --config, --env, --backwards, --run, --stop, 
---update, --backup, --restore or --renew can be specified. 
+--restart, --update, --backup, --restore or --renew can be specified. 
 --default must be accompanied by --config. 
 To create an initial default configuration: 
    'python chords_control --config --default'
-Backup and restore are not currently available on Windows.
+
+chords_control is not available on Windows.
 
 """ + "This operating system is " + OS_NAME + ", the architecture is " + OS_ARCH + "."
 
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
-        parser.add_argument("--run",     help="run",                                                  default=False,        action="store_true")
-        parser.add_argument("--stop",    help="stop",                                                 default=False,        action="store_true")
+        parser.add_argument("--run",     help="run CHORDS",                                           default=False,        action="store_true")
+        parser.add_argument("--stop",    help="stop CHORDS",                                          default=False,        action="store_true")
+        parser.add_argument("--restart", help="restart CHORDS",                                       default=False,        action="store_true")
         parser.add_argument("--update",  help="update",                                               default=False,        action="store_true")
         parser.add_argument("--file",    help="configuration file (default chords.yml)",              default="chords.yml", action="store")
         parser.add_argument("--config",  help="prompt for configuration and write config/.env files", default=False,        action="store_true")
@@ -358,6 +360,7 @@ Backup and restore are not currently available on Windows.
         if [opt['config'],
                 opt['run'],
                 opt['stop'],
+                opt['restart'],
                 opt['update'],
                 opt['env'],
                 opt['backwards'],
@@ -1531,6 +1534,28 @@ def docker_cp(src, dest):
     docker_sh('cp', src, dest)
 
 #####################################################################
+def run():
+    """
+    Run CHORDS.
+    """
+    if OPTIONS['devmode']:
+        check_file_exists('docker-compose-dev.yml')
+
+    Docker(proxy=OPTIONS['proxy']).docker_compose_up(OPTIONS['devmode'])
+
+def stop():
+    """
+    Stop CHORDS.
+    """
+    Docker(proxy=OPTIONS['proxy']).down()
+
+def restart():
+    """
+    Stop, then start CHORDS.
+    """
+    stop()
+    run()
+
 def status():
     """
     Show the docker status for the running containers.
@@ -1845,14 +1870,15 @@ if __name__ == '__main__':
 
     # Run the CHORDS portal
     if OPTIONS["run"]:
-        if OPTIONS['devmode']:
-            check_file_exists('docker-compose-dev.yml')
-
-        Docker(proxy=OPTIONS['proxy']).docker_compose_up(OPTIONS['devmode'])
+        run()
 
     # Stop the currently running CHORDS portal
     if OPTIONS["stop"]:
-        Docker(proxy=OPTIONS['proxy']).down()
+        stop()
+
+    # Restart the CHORDS portal
+    if OPTIONS["restart"]:
+        restart()
 
     # Show the current CHORDS status
     if OPTIONS["status"]:
