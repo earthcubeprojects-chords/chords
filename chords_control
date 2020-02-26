@@ -445,8 +445,8 @@ class ChordsConfig(OrderedDict):
         for key in list(self.keys()):
             if key in list(self.config_items.keys()):
                 descripts = self.config_items[key]['description'].split('\n')
-                for d in descripts:
-                    yml =  yml + '# ' + d + '\n'
+                for descript in descripts:
+                    yml =  yml + '# ' + descript + '\n'
                 yml = yml + key + ': ' + str(self[key]) + '\n'
         yml = yml +  '#' + '\n' + '# Non-standard options.' + '\n'
         for key in list(self.keys()):
@@ -533,9 +533,9 @@ class ChordsConfig(OrderedDict):
         print()
         create_backup_file(configfile)
 
-        f = open(configfile, "w")
-        f.write(self.to_yml())
-        f.close()
+        config_file = open(configfile, "w")
+        config_file.write(self.to_yml())
+        config_file.close()
         os.chmod(configfile, stat.S_IRUSR | stat.S_IWUSR)
         print("*** " + OPTIONS["file"] + " has been written with the new configuration.")
 
