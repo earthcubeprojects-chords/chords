@@ -132,11 +132,9 @@ The steps below correspond to the step numbering in the Overview.
 
 4. Run certbot with an ``rm`` commands to **erase the dummy certificates**:
 ```sh
-  docker-compose run --no-deps --entrypoint " \
-    rm -Rf /etc/letsencrypt/live/$SSL_HOST && \
-    rm -Rf /etc/letsencrypt/archive/$SSL_HOST && \
-    rm -Rf /etc/letsencrypt/renewal/$SSL_HOST.conf " \
-    certbot
+  docker-compose run --no-deps --entrypoint "/bin/bash -c \
+    'rm -rf /etc/letsencrypt/live/* /etc/letsencrypt/archive/* \
+     /etc/letsencrypt/renewal/*' " certbot
 ```
 
 5. Run certbot to **request a certificate** (“certonly” command) . This causes the following
