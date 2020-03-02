@@ -889,21 +889,21 @@ use up your quota of requests!
         Return a dictionary containing the certificate status.
         """
 
-        retval = {"valid_cert": True, "test_cert": False, "expired": None, "notBefore": None, "notAfter": None}
+        retval = {"valid_cert": False, "test_cert": False, "expired": None, "notBefore": None, "notAfter": None}
 
         # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True)
+        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
         print(result)
-        print(result.split('\n'))
-        print(result.split(' '))
-        retval["valid_cert"] =  not ("No certs found." in result or "invalid" in result.split(' '))
-        retval["test_cert"] = ("INVALID: TEST_CERT" in "".join(result))
+        print("")
 
+        retval["valid_cert"] =  not ("No certs found." in result or "invalid" in result or "error" in result)
+        retval["test_cert"] = ("INVALID: TEST_CERT" in result)
         if retval["test_cert"]:
             retval["valid_cert"] = False
+
+        if VERBOSE:
+            print("docker_compose:", cmd)
 
         if retval["valid_cert"]:
             # Use openssl to get the timestamps from the certificate.
@@ -912,7 +912,7 @@ use up your quota of requests!
             try:
                 if VERBOSE:
                     print("docker_compose:", cmd)
-                result = sh.docker_compose(cmd).split('\n')
+                result = sh.docker_compose(cmd).stdout.decode('utf-8').split('\n')
                 not_before = [s.split("=")[1] for s in result if "notBefore" in s]
                 not_after = [s.split("=")[1] for s in result if "notAfter" in s]
                 if not (retval["notBefore"] and retval["notAfter"]):
@@ -995,9 +995,9 @@ use up your quota of requests!
         Remove existing certificates.
 
         Remove the following:
-        /etc/letsencrypt/live/self.ssl_host
-        /etc/letsencrypt/archive/self.ssl_host
-        /etc/letsencrypt/renewal/self.ssl_host
+        /etc/letsencrypt/live/*
+        /etc/letsencrypt/archive/*
+        /etc/letsencrypt/renewal/*
         """
         print ("*** Removing the existing certificates.")
 
@@ -1005,8 +1005,7 @@ use up your quota of requests!
             "run",
             "--no-deps",
             "--entrypoint",
-            "rm -Rf /etc/letsencrypt/live/%s && rm -Rf /etc/letsencrypt/archive/%s && rm -Rf /etc/letsencrypt/renewal/%s.conf" %
-            (self.ssl_host, self.ssl_host, self.ssl_host),
+            "/bin/bash -c 'rm -rf /etc/letsencrypt/live/* /etc/letsencrypt/archive/* /etc/letsencrypt/renewal/*'",
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
@@ -1022,7 +1021,6 @@ use up your quota of requests!
 
         # Start nginx for the ACME challenge.
         self.start_nginx()
-        reply = prompt("Is nginx running?",['y', 'Y', 'n', 'N'])
 
         # Remove the exiting cert
         self.remove_certs()
@@ -1031,8 +1029,8 @@ use up your quota of requests!
             "run",
             "--no-deps",
             "--entrypoint",
-            "certbot certonly --webroot -w=/acme-challenge --email %s --agree-tos --no-eff-email %s -d %s" %
-            (self.ssl_email, ("" if create_test_cert else "--staging"), self.ssl_host),
+            "certbot certonly --webroot -w=/acme-challenge %s --email %s --agree-tos --no-eff-email -d %s" %
+            (("--staging" if create_test_cert else ""), self.ssl_email, self.ssl_host),
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
