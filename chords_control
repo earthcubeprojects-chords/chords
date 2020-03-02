@@ -897,8 +897,8 @@ use up your quota of requests!
         print(result, "\n")
 
         retval["valid_cert"] =  (not
-                                ("No certs found." in result or "invalid" in result or "error" in result) or
-                                "(VALID:" in result)
+                                 ("No certs found." in result or "invalid" in result or "error" in result) or
+                                 "(VALID:" in result)
         retval["test_cert"] = ("INVALID: TEST_CERT" in result)
         if retval["test_cert"]:
             retval["valid_cert"] = False
