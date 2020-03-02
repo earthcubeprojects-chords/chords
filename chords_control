@@ -893,26 +893,22 @@ use up your quota of requests!
 
         # Ask certbot if there are any certificates.
         cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
-        print(result)
-        print("")
+        result = docker_compose(cmd)
+        print(result, "\n")
 
-        retval["valid_cert"] =  not ("No certs found." in result or "invalid" in result or "error" in result)
+        retval["valid_cert"] =  (not
+                                ("No certs found." in result or "invalid" in result or "error" in result) or
+                                "(VALID:" in result)
         retval["test_cert"] = ("INVALID: TEST_CERT" in result)
         if retval["test_cert"]:
             retval["valid_cert"] = False
-
-        if VERBOSE:
-            print("docker_compose:", cmd)
 
         if retval["valid_cert"]:
             # Use openssl to get the timestamps from the certificate.
             cert_path = self.cert_dir + "/fullchain.pem"
             cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in %s" % cert_path, "certbot"]
             try:
-                if VERBOSE:
-                    print("docker_compose:", cmd)
-                result = sh.docker_compose(cmd).stdout.decode('utf-8').split('\n')
+                result = docker_compose(cmd).split('\n')
                 not_before = [s.split("=")[1] for s in result if "notBefore" in s]
                 not_after = [s.split("=")[1] for s in result if "notAfter" in s]
                 if not (retval["notBefore"] and retval["notAfter"]):
@@ -946,7 +942,7 @@ use up your quota of requests!
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
         cmd = [
@@ -957,7 +953,7 @@ use up your quota of requests!
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
     def make_dh_params(self):
@@ -976,7 +972,7 @@ use up your quota of requests!
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
         cmd = [
@@ -987,7 +983,7 @@ use up your quota of requests!
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
     def remove_certs(self):
@@ -1009,7 +1005,7 @@ use up your quota of requests!
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
     def request_cert(self, create_test_cert=True):
@@ -1034,7 +1030,7 @@ use up your quota of requests!
             "certbot"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
         # Shutdown nginx
@@ -1065,7 +1061,7 @@ use up your quota of requests!
         ]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
     def stop_nginx(self):
@@ -1077,7 +1073,7 @@ use up your quota of requests!
         cmd = ["down"]
         if VERBOSE:
             print("docker_compose:", cmd)
-        result = sh.docker_compose(cmd, _err_to_out = True).stdout.decode('utf-8')
+        result = docker_compose(cmd)
         print(result)
 
 #####################################################################
@@ -1559,6 +1555,19 @@ def docker_cp(src, dest):
     """
 
     docker_sh('cp', src, dest)
+
+def docker_compose(cmd, err_to_out=True):
+    """
+    Run a docker-compose command.
+
+    By default, stderr is combined into stdout.
+    """
+
+    if VERBOSE:
+        print("docker_compose:", cmd)
+
+    result = sh.docker_compose(cmd, _err_to_out=err_to_out).stdout.decode('utf-8')
+    return result
 
 #####################################################################
 def run():
