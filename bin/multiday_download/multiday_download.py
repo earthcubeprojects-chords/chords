@@ -46,9 +46,10 @@ date + one day, .i.e a single day will be processed.
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("--ip",    action="store", help="IP of CHORDS portal")
         parser.add_argument("--ids",   action="store", help="comma separated list of instrument ids")
+        parser.add_argument("--test",  action="store_true", help="include test observations")
         parser.add_argument("--begin", action="store", help="begin date: yyyy-mm-dd")
         parser.add_argument("--end",   action="store", help="end date:yyyy-mm-dd")
-        parser.add_argument("-v", "--verbose",     help="verbose output (optional)", action="store_true")
+        parser.add_argument("-v", "--verbose", action="store_true", help="verbose output (optional)")
 
         # Parse the command line. 
         args = parser.parse_args()
@@ -77,6 +78,9 @@ date + one day, .i.e a single day will be processed.
 
         self.options = vars(args)
  
+        if not args.test:
+            self.options['test'] = None
+
         if not args.verbose:
             self.options['verbose'] = None
 
@@ -95,9 +99,10 @@ date + one day, .i.e a single day will be processed.
             exit(1)
 
 class CHORDS_curl:
-    def __init__(self, ip, ids, begin, end):
+    def __init__(self, ip, ids, test_data, begin, end):
         self.ip = ip
         self.ids = ids
+        self.test_data = test_data
         self.begin = self.timestamp(date=begin)
         self.end = self.timestamp(date=end)
 
@@ -107,6 +112,8 @@ class CHORDS_curl:
 
     def get_data(self):
         endpoint = "http://" + self.ip + "/api/v1/data.csv?" + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
+        if self.test_data:
+            endpoint += "&test"
         filename = "chords-" + self.begin + "-" + self.end + ".zip"
         print(filename + ":", endpoint)
         sh.curl("-L", endpoint, "--output", filename)
@@ -116,9 +123,10 @@ if __name__ == '__main__':
     # Get the command line options
     options = CommandArgs().get_options()
 
+    test_data = options["test"]
     this_day = options["begin"]
     while this_day <= options["end"]:
-        c = CHORDS_curl(ip=options["ip"], ids=options["ids"], 
+        c = CHORDS_curl(ip=options["ip"], ids=options["ids"], test_data=test_data, 
                 begin=this_day, end=this_day+timedelta(days=1))
         c.get_data()
         this_day += timedelta(days=1)
