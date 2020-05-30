@@ -113,7 +113,7 @@ class CHORDS_curl:
     def get_data(self):
         endpoint = "http://" + self.ip + "/api/v1/data.csv?" + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
         if self.test_data:
-            endpoint += "&test"
+            endpoint += "&include_test_data=true"
         filename = "chords-" + self.begin + "-" + self.end + ".zip"
         print(filename + ":", endpoint)
         sh.curl("-L", endpoint, "--output", filename)
