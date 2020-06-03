@@ -47,9 +47,10 @@ commands will eventually be integrated into the _chords_control_ script.
 ## Building
 
 Just a reminder on how to build the CHORDS specific images using ``docker-compose``. 
-_DOCKER_TAG_ must be defined.
+_DOCKER_TAG_ must be defined, typically in _.env_.
 The service names are referenced; the _build_ section in _docker-compose.yml_
-provides directions for building the image:
+provides directions for building the image. Run the builds
+from the top CHORDS source directory:
 
 ```sh
 docker-compose build  --no-cache  app
