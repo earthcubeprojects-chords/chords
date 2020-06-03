@@ -39,22 +39,24 @@ This is convention provided by CHORDS when a multi-instrument download is reques
 """
 
         epilog = """
---ip, --ids and --begin are required parameters. If --end is not supplied, the end date is set to the begin
-date + one day, .i.e a single day will be processed.
+If --end is not supplied, the end date is set to the begin
+date + one day, .i.e a single day will be processed. 
+If --ids is not supplied, all instruments will be fetched.
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
-        parser.add_argument("--ip",    action="store", help="IP of CHORDS portal")
-        parser.add_argument("--ids",   action="store", help="comma separated list of instrument ids")
-        parser.add_argument("--test",  action="store_true", help="include test observations")
-        parser.add_argument("--begin", action="store", help="begin date: yyyy-mm-dd")
-        parser.add_argument("--end",   action="store", help="end date:yyyy-mm-dd")
-        parser.add_argument("-v", "--verbose", action="store_true", help="verbose output (optional)")
+        parser.add_argument("--ip",    action="store", required=True, help="IP of CHORDS portal")
+        parser.add_argument("--ids",   action="store", default=None, help="comma separated list of instrument ids")
+        parser.add_argument("--format",action="store", required=True, help="csv|geojson")
+        parser.add_argument("--test",  action="store_true", default=False, help="include test observations")
+        parser.add_argument("--begin", action="store", required=True, help="begin date: yyyy-mm-dd")
+        parser.add_argument("--end",   action="store", default=None, help="end date:yyyy-mm-dd")
+        parser.add_argument("-v", "--verbose", action="store_true", default=False, help="verbose output (optional)")
 
         # Parse the command line. 
         args = parser.parse_args()
-        
-        if not (args.ip and args.ids):
+    
+        if (args.format != 'csv' and args.format != 'geojson'):
             parser.print_help()
             exit(1)
 
@@ -65,11 +67,11 @@ date + one day, .i.e a single day will be processed.
         else:
             args.end = args.begin + timedelta(days=1)
     
-        id_chars = '0123456789,'
-        if not set(args.ids).issubset(set(id_chars)):
-            print('Only the characters "' + id_chars + '" are allowed in the instrument identifiers.')
-            exit(1)
-            args.ids = args.ids.strip(',')
+        if args.ids:
+            id_chars = '0123456789,'
+            if not set(args.ids).issubset(set(id_chars)):
+                print('Only the characters "' + id_chars + '" are allowed in the instrument identifiers.')
+                exit(1)
             
         # If no switches, print the help.
         if not sys.argv[1:]:
@@ -77,12 +79,6 @@ date + one day, .i.e a single day will be processed.
             parser.exit()
 
         self.options = vars(args)
- 
-        if not args.test:
-            self.options['test'] = None
-
-        if not args.verbose:
-            self.options['verbose'] = None
 
     def get_options(self):
         """
@@ -99,9 +95,10 @@ date + one day, .i.e a single day will be processed.
             exit(1)
 
 class CHORDS_curl:
-    def __init__(self, ip, ids, test_data, begin, end):
+    def __init__(self, ip, ids, format, test_data, begin, end):
         self.ip = ip
         self.ids = ids
+        self.format = format
         self.test_data = test_data
         self.begin = self.timestamp(date=begin)
         self.end = self.timestamp(date=end)
@@ -111,10 +108,20 @@ class CHORDS_curl:
         return t
 
     def get_data(self):
-        endpoint = "http://" + self.ip + "/api/v1/data.csv?" + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
+        endpoint = "http://" + self.ip + "/api/v1/data.%s?" % (self.format) + "start=" + self.begin + "&end=" + self.end
+        if self.ids:
+            endpoint += "&instruments=" + self.ids
         if self.test_data:
             endpoint += "&include_test_data=true"
-        filename = "chords-" + self.begin + "-" + self.end + ".zip"
+        if self.format == 'csv':
+            file_ext = '.zip'
+        else:
+            if self.format == 'geojson':
+                file_ext = '.geojson'
+            else:
+                file_ext = ''
+
+        filename = "chords-" + self.begin + "-" + self.end + file_ext
         print(filename + ":", endpoint)
         sh.curl("-L", endpoint, "--output", filename)
 
@@ -126,7 +133,7 @@ if __name__ == '__main__':
     test_data = options["test"]
     this_day = options["begin"]
     while this_day <= options["end"]:
-        c = CHORDS_curl(ip=options["ip"], ids=options["ids"], test_data=test_data, 
-                begin=this_day, end=this_day+timedelta(days=1))
+        c = CHORDS_curl(ip=options["ip"], ids=options["ids"], format=options["format"],
+            test_data=test_data, begin=this_day, end=this_day+timedelta(days=1))
         c.get_data()
         this_day += timedelta(days=1)
