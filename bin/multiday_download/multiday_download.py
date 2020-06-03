@@ -39,26 +39,23 @@ This is convention provided by CHORDS when a multi-instrument download is reques
 """
 
         epilog = """
---ip, --ids, --format and --begin are required parameters. If --end is not supplied, the end date is set to the begin
-date + one day, .i.e a single day will be processed.
+If --end is not supplied, the end date is set to the begin
+date + one day, .i.e a single day will be processed. 
+If --ids is not supplied, all instruments will be fetched.
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
-        parser.add_argument("--ip",    action="store", help="IP of CHORDS portal")
-        parser.add_argument("--ids",   action="store", help="comma separated list of instrument ids")
-        parser.add_argument("--format",action="store", help="csv|geojson")
-        parser.add_argument("--test",  action="store_true", help="include test observations")
-        parser.add_argument("--begin", action="store", help="begin date: yyyy-mm-dd")
-        parser.add_argument("--end",   action="store", help="end date:yyyy-mm-dd")
-        parser.add_argument("-v", "--verbose", action="store_true", help="verbose output (optional)")
+        parser.add_argument("--ip",    action="store", required=True, help="IP of CHORDS portal")
+        parser.add_argument("--ids",   action="store", default=None, help="comma separated list of instrument ids")
+        parser.add_argument("--format",action="store", required=True, help="csv|geojson")
+        parser.add_argument("--test",  action="store_true", default=False, help="include test observations")
+        parser.add_argument("--begin", action="store", required=True, help="begin date: yyyy-mm-dd")
+        parser.add_argument("--end",   action="store", default=None, help="end date:yyyy-mm-dd")
+        parser.add_argument("-v", "--verbose", action="store_true", default=False, help="verbose output (optional)")
 
         # Parse the command line. 
         args = parser.parse_args()
     
-        if not (args.ip and args.ids and args.format):
-            parser.print_help()
-            exit(1)
-
         if (args.format != 'csv' and args.format != 'geojson'):
             parser.print_help()
             exit(1)
@@ -70,11 +67,11 @@ date + one day, .i.e a single day will be processed.
         else:
             args.end = args.begin + timedelta(days=1)
     
-        id_chars = '0123456789,'
-        if not set(args.ids).issubset(set(id_chars)):
-            print('Only the characters "' + id_chars + '" are allowed in the instrument identifiers.')
-            exit(1)
-            args.ids = args.ids.strip(',')
+        if args.ids:
+            id_chars = '0123456789,'
+            if not set(args.ids).issubset(set(id_chars)):
+                print('Only the characters "' + id_chars + '" are allowed in the instrument identifiers.')
+                exit(1)
             
         # If no switches, print the help.
         if not sys.argv[1:]:
@@ -82,12 +79,6 @@ date + one day, .i.e a single day will be processed.
             parser.exit()
 
         self.options = vars(args)
- 
-        if not args.test:
-            self.options['test'] = None
-
-        if not args.verbose:
-            self.options['verbose'] = None
 
     def get_options(self):
         """
@@ -117,10 +108,20 @@ class CHORDS_curl:
         return t
 
     def get_data(self):
-        endpoint = "http://" + self.ip + "/api/v1/data.%s?" % (self.format) + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
+        endpoint = "http://" + self.ip + "/api/v1/data.%s?" % (self.format) + "start=" + self.begin + "&end=" + self.end
+        if self.ids:
+            endpoint += "&instruments=" + self.ids
         if self.test_data:
             endpoint += "&include_test_data=true"
-        filename = "chords-" + self.begin + "-" + self.end + ".zip"
+        if self.format == 'csv':
+            file_ext = '.zip'
+        else:
+            if self.format == 'geojson':
+                file_ext = '.geojson'
+            else:
+                file_ext = ''
+
+        filename = "chords-" + self.begin + "-" + self.end + file_ext
         print(filename + ":", endpoint)
         sh.curl("-L", endpoint, "--output", filename)
 
