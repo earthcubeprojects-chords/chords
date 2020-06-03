@@ -5,6 +5,7 @@ module API
     class DataController < ApplicationController
       respond_to :json
 
+
       def index
         auth = false
         instruments = nil
@@ -49,7 +50,7 @@ module API
         end
 
         # Check whether to include test data
-        test_opts = params.has_key?(:test) ? :test : :not_test
+        test_opts = params.has_key?(:include_test_data) ? :either : :not_test
 
         # Check number of points to download against max allowed
         points_count = GetTsCountMultiInst.call(TsPoint, instruments, start_time: start_time, end_time: end_time, find_test: test_opts)
@@ -106,6 +107,7 @@ module API
         end
       end
 
+
       def show
         auth = false
 
@@ -150,7 +152,7 @@ module API
         end
 
         # Check whether to include test data
-        test_opts = params[:test] ? :test : :not_test
+        test_opts = params.has_key?(:test) ? :either : :not_test
 
         # Check number of points to download against max allowed
         points_count = GetTsCountMultiInst.call(TsPoint, [@instrument.id], start_time: start_time, end_time: end_time, find_test: test_opts)

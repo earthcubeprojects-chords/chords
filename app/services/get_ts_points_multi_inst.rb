@@ -30,6 +30,7 @@ class GetTsPointsMultiInst
       ts_points = ts_points.where(test: false)
     when :test
       ts_points = ts_points.where(test: true)
+    when :either
     end
 
     return ts_points.to_a
