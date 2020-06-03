@@ -39,13 +39,14 @@ This is convention provided by CHORDS when a multi-instrument download is reques
 """
 
         epilog = """
---ip, --ids and --begin are required parameters. If --end is not supplied, the end date is set to the begin
+--ip, --ids, --format and --begin are required parameters. If --end is not supplied, the end date is set to the begin
 date + one day, .i.e a single day will be processed.
 
 """ + "This operating system is " + os_name + ", the architecture is " + os_arch + "."
         parser = argparse.ArgumentParser(description=description, epilog=epilog, formatter_class=argparse.RawTextHelpFormatter)
         parser.add_argument("--ip",    action="store", help="IP of CHORDS portal")
         parser.add_argument("--ids",   action="store", help="comma separated list of instrument ids")
+        parser.add_argument("--format",action="store", help="csv|geojson")
         parser.add_argument("--test",  action="store_true", help="include test observations")
         parser.add_argument("--begin", action="store", help="begin date: yyyy-mm-dd")
         parser.add_argument("--end",   action="store", help="end date:yyyy-mm-dd")
@@ -53,8 +54,12 @@ date + one day, .i.e a single day will be processed.
 
         # Parse the command line. 
         args = parser.parse_args()
-        
-        if not (args.ip and args.ids):
+    
+        if not (args.ip and args.ids and args.format):
+            parser.print_help()
+            exit(1)
+
+        if (args.format != 'csv' and args.format != 'geojson'):
             parser.print_help()
             exit(1)
 
@@ -99,9 +104,10 @@ date + one day, .i.e a single day will be processed.
             exit(1)
 
 class CHORDS_curl:
-    def __init__(self, ip, ids, test_data, begin, end):
+    def __init__(self, ip, ids, format, test_data, begin, end):
         self.ip = ip
         self.ids = ids
+        self.format = format
         self.test_data = test_data
         self.begin = self.timestamp(date=begin)
         self.end = self.timestamp(date=end)
@@ -111,7 +117,7 @@ class CHORDS_curl:
         return t
 
     def get_data(self):
-        endpoint = "http://" + self.ip + "/api/v1/data.csv?" + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
+        endpoint = "http://" + self.ip + "/api/v1/data.%s?" % (self.format) + "start=" + self.begin + "&end=" + self.end + "&instruments=" + self.ids
         if self.test_data:
             endpoint += "&include_test_data=true"
         filename = "chords-" + self.begin + "-" + self.end + ".zip"
@@ -126,7 +132,7 @@ if __name__ == '__main__':
     test_data = options["test"]
     this_day = options["begin"]
     while this_day <= options["end"]:
-        c = CHORDS_curl(ip=options["ip"], ids=options["ids"], test_data=test_data, 
-                begin=this_day, end=this_day+timedelta(days=1))
+        c = CHORDS_curl(ip=options["ip"], ids=options["ids"], format=options["format"],
+            test_data=test_data, begin=this_day, end=this_day+timedelta(days=1))
         c.get_data()
         this_day += timedelta(days=1)
