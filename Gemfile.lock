@@ -323,11 +323,11 @@ DEPENDENCIES
   jquery-ui-rails
   json (~> 1.8.6)
   letter_opener
-  loofah (>= 2.2.3)
+  loofah (>= 2.3.1)
   mini_portile2
   mysql2 (~> 0.5)
   puma
-  rack (>= 2.0.6)
+  rack (>= 2.0.8)
   rails (~> 5.2.3)
   rails-controller-testing
   rails4-autocomplete
