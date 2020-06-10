@@ -853,9 +853,9 @@ and set SSL_ENABLED to false.""")
 
         reply = prompt("""
 Did the test cert get created properly?
-(If the above text contains the phrase 
-"Congratulations! Your certificate and chain have been saved at ...") 
-then the test certificate was created properly.
+If the above text contains the phrase 
+"Congratulations! Your certificate and chain have been saved at ..."
+then the test certificate was successfully created.
 """, ['y', 'Y', 'n', 'N'])
         if reply == 'n':
             print ("Test certificate creation failed. Try again later.")
