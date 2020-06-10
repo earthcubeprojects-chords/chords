@@ -1929,8 +1929,19 @@ if __name__ == '__main__':
         CONFIG.write_yml_file(configfile=OPTIONS['file'])
         CONFIG.write_env_file()
         print()
+
+        # Get items from git that are needed.
+        # moved from --update
+        ChordsGit(proxy=OPTIONS['proxy']).fetch(git_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
+
+        # Pull the images.
+        # moved from --update
+        Docker(proxy=CONFIG['PROXY']).pull()
+
+        #manage SSL configuration
         ssl(CONFIG)
-        print("*** Don't forget to run 'python chords_control --update' if you have changed the configuration.")
+
+        # print("*** Don't forget to run 'python chords_control --update' if you have changed the configuration.")
 
     # Create the .env file from the configuration file
     if OPTIONS["env"]:
