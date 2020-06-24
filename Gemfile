@@ -18,13 +18,13 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 
-gem 'devise', '~> 4.6'
+gem 'devise', '~> 4.7'
 gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
 gem 'ffi', '~> 1.9.25'
-gem 'loofah', '>= 2.2.3'
-gem 'rack', '>= 2.0.6'
+gem 'loofah', '>= 2.3.1'
+gem 'rack', '>= 2.0.8'
 
 gem 'mini_portile2'
 gem 'whenever', '~> 0.9.7', :require => false
