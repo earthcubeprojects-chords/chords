@@ -63,6 +63,10 @@ services:
       # you should NOT create your own variables beginning with INFLUXDB_.
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
+      - SSL_ENABLED=${SSL_ENABLED}
+      - SSL_HOST=${SSL_HOST}
+      - SSL_EMAIL=${SSL_EMAIL}
+
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     logging:
       driver: "json-file"
