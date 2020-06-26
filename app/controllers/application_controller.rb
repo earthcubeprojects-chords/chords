@@ -28,6 +28,12 @@ class ApplicationController < ActionController::Base
     @system_uptime   = ApplicationHelper.system_uptime
     @server_uptime   = ApplicationHelper.server_uptime
 
+    # SSL related environment parameters
+    @ssl_enabled     = ENV.fetch('SSL_ENABLED' , 'false')
+    @ssl_host        = ENV.fetch('SSL_HOST'    , notavailmsg)
+    @ssl_email       = ENV.fetch('SSL_EMAIL'   , notavailmsg)
+
+
     if !(@profile = Profile.first)
       Profile.initialize
       @profile = Profile.first
