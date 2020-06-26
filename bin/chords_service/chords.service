@@ -41,9 +41,9 @@ Requires=docker.service
 [Service]
 Type=simple
 WorkingDirectory=/var/lib/chords
-ExecStartPre=/usr/local/bin/docker-compose -p chords down
-ExecStart=/usr/local/bin/docker-compose    -p chords up
-ExecStop=/usr/local/bin/docker-compose     -p chords down
+ExecStartPre=/usr/bin/docker-compose -p chords down
+ExecStart=/usr/bin/docker-compose    -p chords up
+ExecStop=/usr/bin/docker-compose     -p chords down
 Restart=always
 RestartSec=60
 

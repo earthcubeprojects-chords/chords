@@ -51,6 +51,7 @@ If --ids is not supplied, all instruments will be fetched.
         parser.add_argument("--test",  action="store_true", default=False, help="include test observations")
         parser.add_argument("--begin", action="store", required=True, help="begin date: yyyy-mm-dd")
         parser.add_argument("--end",   action="store", default=None, help="end date:yyyy-mm-dd")
+        parser.add_argument("--prefix",action="store", default="", help="(optional) output file name prefix")
         parser.add_argument("-v", "--verbose", action="store_true", default=False, help="verbose output (optional)")
 
         # Parse the command line. 
@@ -95,13 +96,14 @@ If --ids is not supplied, all instruments will be fetched.
             exit(1)
 
 class CHORDS_curl:
-    def __init__(self, ip, ids, format, test_data, begin, end):
+    def __init__(self, ip, ids, format, test_data, begin, end, prefix):
         self.ip = ip
         self.ids = ids
         self.format = format
         self.test_data = test_data
         self.begin = self.timestamp(date=begin)
         self.end = self.timestamp(date=end)
+        self.prefix = prefix
 
     def timestamp(self, date):
         t = date.strftime("%Y-%m-%dT00Z")
@@ -121,7 +123,7 @@ class CHORDS_curl:
             else:
                 file_ext = ''
 
-        filename = "chords-" + self.begin + "-" + self.end + file_ext
+        filename = self.prefix+"chords-" + self.begin + "-" + self.end + file_ext
         print(filename + ":", endpoint)
         sh.curl("-L", endpoint, "--output", filename)
 
@@ -134,6 +136,7 @@ if __name__ == '__main__':
     this_day = options["begin"]
     while this_day <= options["end"]:
         c = CHORDS_curl(ip=options["ip"], ids=options["ids"], format=options["format"],
-            test_data=test_data, begin=this_day, end=this_day+timedelta(days=1))
+            test_data=test_data, prefix=options["prefix"],
+            begin=this_day, end=this_day+timedelta(days=1))
         c.get_data()
         this_day += timedelta(days=1)
