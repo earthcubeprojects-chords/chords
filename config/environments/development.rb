@@ -91,4 +91,11 @@ Rails.application.configure do
 
   # Port that Grafana is using, normally configured with enviroment variables
   config.grafana_http_port = ENV['GRAFANA_HTTP_PORT'] || 3001
+
+  # SSL Settings
+  # default_url_options is required for the correct http/https prefix to be applied to rails generated paths and urls
+  if (! ENV['SSL_ENABLED'].blank? && ENV['SSL_ENABLED'] == 'true') 
+    config.action_controller.default_url_options= {:protocol => 'https'}
+  end
+  
 end
