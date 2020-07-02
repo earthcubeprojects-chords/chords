@@ -1,5 +1,4 @@
 FROM grafana/grafana:6.4.3
-LABEL maintainer="martinc@ucar.edu"
 USER root
 
 ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
