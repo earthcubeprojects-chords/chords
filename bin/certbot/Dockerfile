@@ -10,7 +10,7 @@ WORKDIR /
 RUN mkdir acme-challenge
 
 # Add our management scripts.
-COPY *.sh ./
+COPY bin/certbot/*.sh ./
 
 # Start certbot
 ENTRYPOINT ["/bin/sh", "-f", "certbot_start.sh"]
