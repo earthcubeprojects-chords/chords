@@ -1,4 +1,4 @@
-FROM grafana/grafana:6.4.3
+FROM grafana/grafana:7.0.5
 USER root
 
 ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
