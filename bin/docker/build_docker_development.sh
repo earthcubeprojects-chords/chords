@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build --squash -t="ncareol/chords:development" .
+docker build --squash -t="earthcubechords/chords:development" .

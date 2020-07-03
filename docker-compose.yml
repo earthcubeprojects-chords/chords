@@ -17,8 +17,8 @@ version: '3.3'
 #
 # To build and deploy the service images:
 #   cd <directory containing the CHORDS project>
-#   docker-compose build --no-cache <service>
-#   docker push ncareol/chords_<service>:<DOCKER_TAG>
+#   docker-compose -f docker-compose.yml -f docker-compose-build.yml build --no-cache <service>
+#   docker push earthcubechords/chords_<service>:<DOCKER_TAG>
 #
 # To deploy/start/stop CHORDS:
 #   curl -L https://github.com/earthcubeprojects-chords/chords/raw/<branch>/docker-compose.yml > docker-compose.yml
@@ -38,7 +38,7 @@ services:
   # CHORDS Rails application 
   app:
     container_name: chords_app
-    image: ncareol/chords:${DOCKER_TAG}
+    image: earthcubechords/chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
       - shared-tmp:/tmp/
@@ -81,7 +81,7 @@ services:
   # Nginx web server
   nginx:
     container_name: chords_nginx
-    image: ncareol/chords_nginx:${DOCKER_TAG}
+    image: earthcubechords/chords_nginx:${DOCKER_TAG}
     volumes:
       - nginx-log:/var/log/nginx
       - letsencrypt-etc:/etc/letsencrypt
@@ -106,7 +106,7 @@ services:
   # Certbot SSL certificate handling.
   certbot:
     container_name: chords_certbot
-    image: ncareol/chords_certbot:${DOCKER_TAG}
+    image: earthcubechords/chords_certbot:${DOCKER_TAG}
     volumes:
       - letsencrypt-log:/var/log/letsencrypt
       - letsencrypt-etc:/etc/letsencrypt
@@ -165,12 +165,12 @@ services:
   # InfluxData kapacitor time series monitoring
   kapacitor:
     container_name: chords_kapacitor
-    image: ncareol/kapacitor
+    image: earthcubechords/kapacitor
     volumes:
       - kapacitor-data:/var/lib/kapacitor
       - kapacitor-log:/var/log/kapacitor
     environment:
-      # Custom environment variable, used by ncareol/kapacitor
+      # Custom environment variable, used by earthcubechords/kapacitor
       - KAPACITOR_ENABLED=${KAPACITOR_ENABLED}
       #
       - KAPACITOR_HOSTNAME=chords_kapacitor
@@ -202,7 +202,7 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: ncareol/grafana:6.4.3
+    image: earthcubechords/grafana:6.4.3
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:

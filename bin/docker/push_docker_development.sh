@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker push ncareol/chords:development
+docker push earthcubechords/chords:development

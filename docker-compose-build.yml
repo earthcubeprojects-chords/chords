@@ -13,7 +13,7 @@ services:
     build: .
 
   nginx:
-    image: ncareol/chords_nginx:${DOCKER_TAG}
+    image: earthcubechords/chords_nginx:${DOCKER_TAG}
     build:
       context: .
       dockerfile: ./bin/nginx/Dockerfile

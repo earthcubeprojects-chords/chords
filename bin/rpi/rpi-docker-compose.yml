@@ -21,8 +21,8 @@ version: '2'
 #
 # To build and upload the chords image:
 #   cd <directory containing the CHORDS project>
-#   docker build --squash --tag ncareol/chords:<tag>
-#   docker push ncareol/chords:<tag>
+#   docker build --squash --tag earthcubechords/chords:<tag>
+#   docker push earthcubechords/chords:<tag>
 #
 # Create a .env file (in the directory that you run docker-compose from) containing
 # CHORDS configuration values. See chords_env_template for a description of values.
@@ -42,7 +42,7 @@ services:
   # CHORDS Rails application: nginx + rails + CHORDS rails code 
   app:
     container_name: chords_app
-    image: ncareol/rpi-chords:${DOCKER_TAG}
+    image: earthcubechords/rpi-chords:${DOCKER_TAG}
     volumes:
       - mysql-data:/var/lib/mysql
       - /var/run/docker.sock:/var/run/docker.sock
