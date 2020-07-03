@@ -1,0 +1,34 @@
+version: '3.3'
+
+# Use this in conjunction with docker-compose.yml to build CHORDS images.
+#
+# To use, both docker-compose files must be specified: 
+#
+# docker-compose -f docker-compose.yml -f docker-compose-build.yml build
+# or
+# docker-compose -f docker-compose.yml -f docker-compose-build.yml build <service>
+
+services:
+  app:
+    build: .
+
+  nginx:
+    image: ncareol/chords_nginx:${DOCKER_TAG}
+    build:
+      context: .
+      dockerfile: ./bin/nginx/Dockerfile
+
+  certbot:
+    build:
+      context: .
+      dockerfile: ./bin/certbot/Dockerfile
+
+  kapacitor:
+    build:
+      context: ./bin/kapacitor
+      dockerfile: Dockerfile
+      
+  grafana:
+    build:
+      context: ./bin/grafana
+      dockerfile: Dockerfile

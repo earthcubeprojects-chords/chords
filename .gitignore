@@ -54,7 +54,7 @@ chords_env.sh
 .env
 .env-*
 chords-*.yml
-docker-compose-*.yml
+docker-compose-2020*.yml
 chords_control-*
 chords.yml
 bin/*.tgz
