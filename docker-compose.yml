@@ -37,7 +37,6 @@ version: '3.3'
 services:
   # CHORDS Rails application 
   app:
-    build: .
     container_name: chords_app
     image: ncareol/chords:${DOCKER_TAG}
     volumes:
@@ -83,9 +82,6 @@ services:
   nginx:
     container_name: chords_nginx
     image: ncareol/chords_nginx:${DOCKER_TAG}
-    build:
-      context: .
-      dockerfile: ./bin/nginx/Dockerfile
     volumes:
       - nginx-log:/var/log/nginx
       - letsencrypt-etc:/etc/letsencrypt
@@ -111,9 +107,6 @@ services:
   certbot:
     container_name: chords_certbot
     image: ncareol/chords_certbot:${DOCKER_TAG}
-    build:
-      context: .
-      dockerfile: ./bin/certbot/Dockerfile
     volumes:
       - letsencrypt-log:/var/log/letsencrypt
       - letsencrypt-etc:/etc/letsencrypt
@@ -173,9 +166,6 @@ services:
   kapacitor:
     container_name: chords_kapacitor
     image: ncareol/kapacitor
-    build:
-      context: ./bin/kapacitor
-      dockerfile: Dockerfile
     volumes:
       - kapacitor-data:/var/lib/kapacitor
       - kapacitor-log:/var/log/kapacitor
@@ -213,9 +203,6 @@ services:
   grafana:
     container_name: chords_grafana
     image: ncareol/grafana:6.4.3
-    build:
-      context: ./bin/grafana
-      dockerfile: Dockerfile
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
