@@ -441,7 +441,7 @@ Resources:
         chords_setup:
           commands:
             00_python_pip:
-              command: "pip install sh"
+              command: "pip install sh future"
             01_var_lib_chords:
               command: "mkdir -p /var/lib/chords"
             02_get_chords_control:
