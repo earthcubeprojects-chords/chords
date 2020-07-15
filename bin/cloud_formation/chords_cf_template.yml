@@ -471,7 +471,7 @@ Resources:
           commands:
             # Create chords.yml from .env. The .env file will also be updated.
             01_create_chords_yml:
-              command: "cd /var/lib/chords && python chords_control -b"
+              command: "cd /var/lib/chords && python chords_control --backwards"
 
         # Install docker-compose.yml and get the CHORDS images.
         docker_pull:
