@@ -16,5 +16,6 @@ RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install mtanda-histogram-
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install bessler-pictureit-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install natel-plotly-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install btplc-status-dot-panel
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-image-renderer
 
 ENTRYPOINT ["/run.sh"]
