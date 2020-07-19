@@ -1,6 +1,8 @@
 FROM grafana/grafana:7.1.0
 USER root
 
+ARG GF_INSTALL_IMAGE_RENDERER_PLUGIN
+
 ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
 RUN mkdir -p $GF_PATHS_PLUGINS
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel
@@ -16,6 +18,5 @@ RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install mtanda-histogram-
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install bessler-pictureit-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install natel-plotly-panel
 RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install btplc-status-dot-panel
-RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-image-renderer
 
 ENTRYPOINT ["/run.sh"]

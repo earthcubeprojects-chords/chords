@@ -32,3 +32,5 @@ services:
     build:
       context: ./bin/grafana
       dockerfile: Dockerfile
+      args:
+        GF_INSTALL_IMAGE_RENDERER_PLUGIN: "true"
