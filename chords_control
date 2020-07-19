@@ -946,8 +946,6 @@ use up your quota of requests!
             "--entrypoint",
             "mkdir -p %s" % self.cert_dir,
             "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -957,8 +955,6 @@ use up your quota of requests!
             "--entrypoint",
             "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
             "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -976,8 +972,6 @@ use up your quota of requests!
             "--entrypoint",
             "mkdir -p /etc/letsencrypt/chords-dhparam",
             "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -987,8 +981,6 @@ use up your quota of requests!
             "--entrypoint",
             "openssl dhparam -out /etc/letsencrypt/chords-dhparam/dhparam-2048.pem 2048",
             "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -1009,8 +1001,6 @@ use up your quota of requests!
             "--entrypoint",
             "/bin/bash -c 'rm -rf /etc/letsencrypt/live/* /etc/letsencrypt/archive/* /etc/letsencrypt/renewal/*'",
             "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -1034,8 +1024,6 @@ use up your quota of requests!
             "certbot certonly --webroot -w=/acme-challenge %s --email %s --agree-tos --no-eff-email -d %s" %
             (("--staging" if create_test_cert else ""), self.ssl_email, self.ssl_host),
             "certbot"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -1065,8 +1053,6 @@ use up your quota of requests!
             "-d",
             "nginx"
         ]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
@@ -1077,8 +1063,6 @@ use up your quota of requests!
 
         print("*** Stopping nginx")
         cmd = ["down"]
-        if VERBOSE:
-            print("docker_compose:", cmd)
         result = docker_compose(cmd)
         print(result)
 
