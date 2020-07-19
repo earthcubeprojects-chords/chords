@@ -1572,7 +1572,11 @@ def docker_compose(cmd, err_to_out=True):
     if VERBOSE:
         print("docker_compose:", cmd)
 
-    result = sh.docker_compose(cmd, _err_to_out=err_to_out).stdout.decode('utf-8')
+    try:
+        result = sh.docker_compose(cmd, _err_to_out=err_to_out, _internal_bufsize=100).stdout.decode('utf-8')
+    except sh.ErrorReturnCode as e:
+        print('docker_compose command failed:', cmd, '\n', e.stdout, '/n', e.stderr)
+        exit(1)
     return result
 
 #####################################################################
