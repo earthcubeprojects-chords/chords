@@ -796,6 +796,18 @@ class ChordsSSL(object):
 
         print("*** Beginning SSL management. This is a complicated activity, with many steps.")
         print()
+        print ("""
+CHORDS should not be automatically restarted by a Linux
+service during the SSL process. You should disable or stop
+any such service before proceeding.""")
+        print()
+        reply = prompt("Have you stopped any CHORDS auto-restart services?", ['y', 'Y', 'n', 'N'])
+        if reply == 'n':
+            # Don't create cert now
+            print()
+            print("You will have to continue the SSL configuration later.")
+            print()
+            return
 
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
@@ -898,8 +910,7 @@ use up your quota of requests!
         retval = {"valid_cert": False, "test_cert": False, "expired": None, "notBefore": None, "notAfter": None}
 
         # Ask certbot if there are any certificates.
-        cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
-        result = docker_compose(cmd)
+        result = self.cert_inquire()
         print(result, "\n")
 
         retval["valid_cert"] =  (not
@@ -953,10 +964,11 @@ use up your quota of requests!
             "run",
             "--no-deps",
             "--entrypoint",
-            "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
+            "openssl req -x509 -nodes -newkey rsa:2048 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
             "certbot"]
         result = docker_compose(cmd)
         print(result)
+        print("*** Dummy certificate created.")
 
     def make_dh_params(self):
         """
@@ -983,6 +995,7 @@ use up your quota of requests!
             "certbot"]
         result = docker_compose(cmd)
         print(result)
+        print ("*** Diffie-Hellman parameters created.")
 
     def remove_certs(self):
         """
@@ -1014,9 +1027,10 @@ use up your quota of requests!
         # Start nginx for the ACME challenge.
         self.start_nginx()
 
-        # Remove the exiting cert
+        # Remove the existing cert
         self.remove_certs()
 
+        print("*** Sending certificate request to letsencrypt.")
         cmd = [
             "run",
             "--no-deps",
@@ -1065,6 +1079,12 @@ use up your quota of requests!
         cmd = ["down"]
         result = docker_compose(cmd)
         print(result)
+
+    def cert_inquire(self):
+      # Ask certbot if there are any certificates.
+      cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
+      result = docker_compose(cmd)
+      return result
 
 #####################################################################
 class ChordsBackupError(Exception):
