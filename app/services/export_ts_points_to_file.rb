@@ -22,7 +22,8 @@ class ExportTsPointsToFile
 
 
     pid = Process.pid
-    output_file_name = "pid_#{pid}_var_#{var.id}_instrument_#{var.instrument_id}.csv"
+    output_file_name = "pid_#{pid}_instrument_#{var.instrument_id}_var_#{var.id}.csv"
+    
     # output_file_name = "tmp.csv"
     output_file_path = "/tmp/#{output_file_name}"
 
@@ -53,7 +54,7 @@ class ExportTsPointsToFile
 
 
 
-    command = "gzip #{output_file_path}"
+    command = "gzip -f #{output_file_path}"
     system(command)
 
 
@@ -224,9 +225,19 @@ class ExportTsPointsToFile
     values = Array.new
 
     object_fields.each do |object_field|
-      value = [eval("object.#{object_field}")]
+      begin
+        value = [eval("object.#{object_field}")]
+      rescue
+        # rescus in case one of the shild properties is undefined
+        # puts "FAILED " * 40
+        # puts object
+        # puts object_field
+        value = ""
+      end
+      
+      array = [value]
 
-      values.push(value.to_csv.to_s.chomp.dump)
+      values.push(array.to_csv.to_s.chomp.dump)
     end
 
     return values.join(',')
