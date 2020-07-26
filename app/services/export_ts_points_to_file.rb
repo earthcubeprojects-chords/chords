@@ -8,69 +8,61 @@ class ExportTsPointsToFile
   # start_time     - beginning time stamp. Times greater or equal will be returned
   # end_time       - the end time. Times less than this will be returned..
   # def self.call(time_series_db, instrument_id, var_id)
-  def self.call(time_series_db)
-    # influxdb_database = 'chords_ts_development'
+  def self.call(time_series_db, var_id)
+
+    var = Var.find(var_id)
 
     influxdb_database_name = "chords_ts_#{ENV['RAILS_ENV']}"
     series = 'tsdata'
     chunk_size = true  # tell influx db to stream the data in chunks so we can bypass the max-row-limit setting
-    limit = 10
 
-    var = Var.last
-    var_id = var.id
 
     url = "http://influxdb:8086/query?db=#{influxdb_database_name}&p=#{ENV['INFLUXDB_PASSWORD']}&u=#{ENV['INFLUXDB_USERNAME']}&chunked=#{chunk_size}"
-    # query = "q=select value from #{series} WHERE var=\'#{var_id}\' "
-    query = "q=select value from #{series} WHERE var=\'#{var_id}\' LIMIT #{limit}"
+    query = "q=select value from #{series} WHERE var=\'#{var.id}\' "
 
 
-    # pid = Process.pid
-    # output_file_name = "pid_#{pid}_var_#{var.id}_instrument_#{var.instrument_id}.csv"
-    output_file_name = "tmp.csv"
-    output_file = "/tmp/#{output_file_name}"
+    pid = Process.pid
+    output_file_name = "pid_#{pid}_var_#{var.id}_instrument_#{var.instrument_id}.csv"
+    # output_file_name = "tmp.csv"
+    output_file_path = "/tmp/#{output_file_name}"
 
     # Export the influxdb data to a temp file
-    # command = "curl -XPOST '#{url}' --data-urlencode \"#{query}\"   > #{output_file} "
-    # system(command)
+    command = "curl -XPOST '#{url}' --data-urlencode \"#{query}\"   > #{output_file_path} "
+    system(command)
 
-    # self.json_to_csv(output_file)
+    self.json_to_csv(output_file_path)
 
     site_row = self.csv_row(var.instrument.site, self.site_fields)
     instrument_row = self.csv_row(var.instrument, self.instrument_fields)
     var_row = self.csv_row(var, self.var_fields)
 
     row_suffix = "#{site_row},#{instrument_row},#{var_row}"
-    puts row_suffix
+    # puts row_suffix
 
     row_labels = self.row_labels
-    puts row_labels
-
+    # puts row_labels
 
     # puts site_row
-    # puts site_row_labels
     # puts var_row
-    # puts var_row_labels
     # puts instrument_row
-    # puts instrument_row_labels
 
     # var_row_labels.to_csv
 
-
-    # sed_command = "sed -i  's/$/xxx/' #{output_file}"
-    # system(sed_command)
-
-    # str = "Height,height,Unknown,,,AverageTerrainHeight,Average Terrain Height,http://sensorml.com/ont/swe/property/AverageTerrainHeight,SensorML,meter,m,52,Length,CUAHSI"
-
-    # script = "s*$*#{var_row}*"
-    # system "sed", "-i", "-e", script, output_file
+    script = "s*$*#{row_suffix}*"
+    system "sed", "-i", "-e", script, output_file_path
 
 
 
-    # sed 's/$/ is a great language/' languages.txt
+    command = "gzip #{output_file_path}"
+    system(command)
 
-    # file = File.open(output_file)
-    # puts file.read    
 
+    zip_file_name = "#{output_file_path}.gz"
+
+    # file = File.open(output_file_path)
+    # puts file.read
+
+    return zip_file_name
   end
 
 
@@ -155,14 +147,14 @@ class ExportTsPointsToFile
 
       'measured_property.name',
       'measured_property.label',
-      'measured_property.url',
-      'measured_property.source',
+      # 'measured_property.url',
+      # 'measured_property.source',
 
       'unit.name',
       'unit.abbreviation',
       'unit.id_num',
       'unit.unit_type',
-      'unit.source',
+      # 'unit.source',
     ]
 
     # Vars
