@@ -47,7 +47,7 @@ class CreateBulkDownloadJob < ApplicationJob
 
     time_string 		= Time.now.strftime('%Y-%m-%d_%H-%M-%S')
     final_file_name = "bulk_download_#{time_string}.csv.gz"
-    final_file_path = "#{processing_dir}/#{final_file_name}"
+    final_file_path = "#{tmp_dir}/#{final_file_name}"
 
 
     # Generate the header row
