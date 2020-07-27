@@ -14,6 +14,8 @@ class DataController < ApplicationController
     @sites = Site.accessible_by(current_ability)
     @instruments = Instrument.accessible_by(current_ability)
     @db_expiry_time = ApplicationHelper.db_expiry_time
+
+    @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"]
   end
 
   def create_bulk_download
