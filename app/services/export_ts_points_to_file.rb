@@ -20,10 +20,12 @@ class ExportTsPointsToFile
     url = "http://influxdb:8086/query?db=#{influxdb_database_name}&p=#{ENV['INFLUXDB_PASSWORD']}&u=#{ENV['INFLUXDB_USERNAME']}&chunked=#{chunk_size}"
     query = "q=select value from #{series} WHERE var=\'#{var.id}\' "
 
+    query = "q=select value from #{series} WHERE var=\'#{var.id}\' LIMIT 10 "
+
 
     pid = Process.pid
     output_file_name = "pid_#{pid}_instrument_#{var.instrument_id}_var_#{var.id}.csv"
-    
+
     # output_file_name = "tmp.csv"
     output_file_path = "/tmp/#{output_file_name}"
 
@@ -33,9 +35,9 @@ class ExportTsPointsToFile
 
     self.json_to_csv(output_file_path)
 
-    site_row = self.csv_row(var.instrument.site, self.site_fields)
-    instrument_row = self.csv_row(var.instrument, self.instrument_fields)
-    var_row = self.csv_row(var, self.var_fields)
+    site_row = self.csv_row(var.instrument.site, BulkDownload.site_fields)
+    instrument_row = self.csv_row(var.instrument, BulkDownload.instrument_fields)
+    var_row = self.csv_row(var, BulkDownload.var_fields)
 
     row_suffix = "#{site_row},#{instrument_row},#{var_row}"
     # puts row_suffix
@@ -67,150 +69,25 @@ class ExportTsPointsToFile
   end
 
 
-  def self.site_fields
-    site_fields = [
-      'id',
-      'name',
-      'lat',
-      'lon',
-      'elevation',
-      'site_type.name',
-    ]
-
-    # Sites
-    # t.string "name"
-    # t.decimal "lat", precision: 12, scale: 9
-    # t.decimal "lon", precision: 12, scale: 9
-    # t.decimal "elevation", precision: 12, scale: 6, default: "0.0"
-    # t.integer "site_type_id"
-    #   t.datetime "created_at", null: false
-    #   t.datetime "updated_at", null: false
-    # t.text "description"
-
-    # Site Types
-    # t.string "name"
-    #   t.text "definition"
-    #   t.datetime "created_at", null: false
-    #   t.datetime "updated_at", null: false
-
-
-    return site_fields
-  end
-
-
-  def self.instrument_fields
-    instrument_fields = [
-      'id',
-      'name',
-      'sensor_id',
-      'display_points',
-      'sample_rate_seconds',
-
-      'topic_category.name',
-    ]
-
-    # Instruments
-    # t.string "name"
-    # t.string "sensor_id"
-    # t.integer "display_points", default: 120
-    # t.integer "sample_rate_seconds", default: 60
-    #   t.integer "site_id"
-    #   t.datetime "created_at", null: false
-    #   t.datetime "updated_at", null: false
-    #   t.text "last_url"
-    #   t.text "description"
-    #   t.integer "plot_offset_value", default: 1
-    #   t.string "plot_offset_units", default: "weeks"
-    #   t.integer "topic_category_id"
-    #   t.boolean "is_active", default: true
-    #   t.bigint "measurement_count", default: 0, null: false
-    #   t.bigint "measurement_test_count", default: 0, null: false
-
-    # Topic Category
-    # t.string "name"
-    #   t.text "definition"
-    #   t.datetime "created_at", null: false
-    #   t.datetime "updated_at", null: false
-
-    return instrument_fields
-  end
-
-
-
-
-  def self.var_fields
-    var_fields = [
-      'name',
-      'shortname',
-      'general_category',
-      'minimum_plot_value',
-      'maximum_plot_value',
-
-      'measured_property.name',
-      'measured_property.label',
-      # 'measured_property.url',
-      # 'measured_property.source',
-
-      'unit.name',
-      'unit.abbreviation',
-      'unit.id_num',
-      'unit.unit_type',
-      # 'unit.source',
-    ]
-
-    # Vars
-    # t.string "name"
-    # t.integer "instrument_id"
-    # t.datetime "created_at", null: false
-    # t.datetime "updated_at", null: false
-    # t.string "shortname"
-    # t.integer "measured_property_id", default: 795, null: false
-    # t.float "minimum_plot_value"
-    # t.float "maximum_plot_value"
-    # t.integer "unit_id", default: 1
-    # t.string "general_category", default: "Unknown"
-
-    # Measured Properties
-    # t.string "name"
-    # t.string "label"
-    # t.string "url"
-    # t.text "definition"
-    # t.datetime "created_at", null: false
-    # t.datetime "updated_at", null: false
-    # t.string "source", default: "SensorML"
-
-    # Units
-    # t.string "name"
-    # t.string "abbreviation"
-    # t.datetime "created_at", null: false
-    # t.datetime "updated_at", null: false
-    # t.integer "id_num"
-    # t.string "unit_type"
-    # t.string "source"
-
-    return var_fields
-  end
-
-
   def self.row_labels
     row_labels = Array.new
 
     prefix = 'site'
-    fields = self.site_fields
+    fields = BulkDownload.site_fields
     fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)
     end
 
     prefix = 'instrument'
-    fields = self.instrument_fields
+    fields = BulkDownload.instrument_fields
     fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)
     end
 
     prefix = 'var'
-    fields = self.var_fields
+    fields = BulkDownload.var_fields
     fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)
