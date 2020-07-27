@@ -28,41 +28,49 @@ class CreateBulkDownloadJob < ApplicationJob
 
 		instruments = Instrument.where(id: instrument_ids) 
 
+		# Define a unique string for this job
+  	random_job_id = SecureRandom.hex(10)
 
-  	# Rails.logger.debug "*" * 80
-  	# Rails.logger.debug "start_time #{start_time}"
-  	# Rails.logger.debug "end_time #{end_time}"
-
-  	# Rails.logger.debug "instrument_ids #{instrument_ids}"
-  	# Rails.logger.debug "include_test_data #{include_test_data}"
-
-  	# Rails.logger.debug "site_fields #{site_fields}"
-  	# Rails.logger.debug "instrument_fields #{instrument_fields}"
-  	# Rails.logger.debug "var_fields #{var_fields}"
-
-  	# Rails.logger.debug "instruments #{instruments}"
-  	# Rails.logger.debug "instruments.count #{instruments.count}"
-
-
-  	random_job_id = SecureRandom.urlsafe_base64(nil, false)
+  	# Define the tmp directory to store the files in
   	tmp_dir = "/tmp/bulk_downloads"
   	processing_dir = "#{tmp_dir}/processing"
 
+		# Make sure the tmp dir exists
   	require 'fileutils'
   	FileUtils.mkpath(processing_dir)
 
 
-  	@temp_files = Array.new
-  	
+  	# define a few file names
+    header_row_file_name = "#{random_job_id}_header_row.csv"
+    header_row_file_path = "#{processing_dir}/#{header_row_file_name}"
+    header_row_zip_file_path = "#{processing_dir}/#{header_row_file_name}.gz"
+
+    time_string 		= Time.now.strftime('%Y-%m-%d_%H-%M-%S')
+    final_file_name = "bulk_download_#{time_string}.csv.gz"
+    final_file_path = "#{processing_dir}/#{final_file_name}"
+
+
+    # Generate the header row
+    # Get the labels for the master csv file
+    row_labels = BulkDownload.row_labels(site_fields, instrument_fields, var_fields)
+    File.write(header_row_file_path, row_labels)
+
+    # zip the temp file
+    command = "gzip -f #{header_row_file_path}"
+    system(command)
+
+    # track all the files that are created
+  	temp_files = Array.new
+  	temp_files.push(header_row_zip_file_path)
 
 
 
+  	# Create zip files for each variable of each desired instrument
 		instruments.each do |instrument|
 			instrument.vars.each do |var|
 		
 		    output_file_name = "#{random_job_id}_instrument_#{var.instrument_id}_var_#{var.id}.csv"
 		    output_file_path = "#{processing_dir}/#{output_file_name}"
-
 
 				zip_file_path = ExportTsPointsToFile.call(
 					var.id, 
@@ -75,20 +83,21 @@ class CreateBulkDownloadJob < ApplicationJob
 					output_file_path
 				)
 
-				@temp_files.push(zip_file_path)
-
-				puts "zip_file_path #{zip_file_path}"
-
+				temp_files.push(zip_file_path)
 			end
 		end
 
 
-    # Get the labels for the master csv file
-    row_labels = BulkDownload.row_labels(site_fields, instrument_fields, var_fields)
+		# Merge the zip files together
+		files_string = temp_files.join(" ")
+		command = "cat  #{files_string} > #{final_file_path}"
+		system(command)
 
-  	# Rails.logger.debug "row_labels #{row_labels}"
-  	# Rails.logger.debug "*" * 80
 
+  	# Remove the temp files
+  	temp_files.each do |file_path|
+  		File.delete(file_path)
+  	end
 
   end
 end
