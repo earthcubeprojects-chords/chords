@@ -30,6 +30,10 @@ Rails.application.routes.draw do
   resources :topic_categories
   resources :units
 
+
+  get '/data/bulk_download', to: 'data#bulk_download'
+  post '/data/create_bulk_download', to: 'data#create_bulk_download'
+
   resources :about, only: :index do
     collection do
       get :data_urls

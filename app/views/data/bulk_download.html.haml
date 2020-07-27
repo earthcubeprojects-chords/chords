@@ -1,0 +1,12 @@
+%h1 Bulk Data Download
+%p
+  Observations prior to
+  %b= @db_expiry_time
+  are automatically removed from the database.
+
+- if @profile.data_archive_url
+  %p
+    Archived data may be found at:
+    = link_to nil, @profile.data_archive_url
+
+= render partial: "bulk_download"
