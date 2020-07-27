@@ -57,7 +57,7 @@
             var_fields: var_fields.join()
           }, // data to be submit
           function(data, status, jqXHR) {// success callback
-            $('.bulk_data_notifications').append('Your bulk download is being created. Please refesh this page to check it\'s status');
+            $('.bulk_data_notifications').html('Your bulk download is being created. Please refesh this page to check it\'s status');
             $('.bulk_data_notifications').show();
           })        
       } else {
