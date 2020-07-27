@@ -35,9 +35,9 @@ class ExportTsPointsToFile
 
     self.json_to_csv(output_file_path)
 
-    site_row = self.csv_row(var.instrument.site, BulkDownload.site_fields)
-    instrument_row = self.csv_row(var.instrument, BulkDownload.instrument_fields)
-    var_row = self.csv_row(var, BulkDownload.var_fields)
+    site_row = self.csv_row(var.instrument.site, BulkDownload.site_fields.keys)
+    instrument_row = self.csv_row(var.instrument, BulkDownload.instrument_fields.keys)
+    var_row = self.csv_row(var, BulkDownload.var_fields.keys)
 
     row_suffix = "#{site_row},#{instrument_row},#{var_row}"
     # puts row_suffix
@@ -73,21 +73,21 @@ class ExportTsPointsToFile
     row_labels = Array.new
 
     prefix = 'site'
-    fields = BulkDownload.site_fields
+    fields = BulkDownload.site_fields.keys
     fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)
     end
 
     prefix = 'instrument'
-    fields = BulkDownload.instrument_fields
+    fields = BulkDownload.instrument_fields.keys
     fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)
     end
 
     prefix = 'var'
-    fields = BulkDownload.var_fields
+    fields = BulkDownload.var_fields.keys
     fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)

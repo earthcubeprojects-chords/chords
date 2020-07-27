@@ -1,14 +1,14 @@
 class BulkDownload
- 
+
   def self.site_fields
-    site_fields = [
-      'id',
-      'name',
-      'lat',
-      'lon',
-      'elevation',
-      'site_type.name',
-    ]
+    site_fields = {
+      'id'              => true,
+      'name'            => true,
+      'lat'             => true,
+      'lon'             => true,
+      'elevation'       => true,
+      'site_type.name'  => false,
+    }
 
     # Sites
     # t.string "name"
@@ -31,15 +31,15 @@ class BulkDownload
   end
 
 def self.instrument_fields
-    instrument_fields = [
-      'id',
-      'name',
-      'sensor_id',
-      'display_points',
-      'sample_rate_seconds',
+    instrument_fields = {
+      'id'                  => true,
+      'name'                => true,
+      'sensor_id'           => true,
+      'display_points'      => false,
+      'sample_rate_seconds' => false,
 
-      'topic_category.name',
-    ]
+      'topic_category.name' => false,
+    }
 
     # Instruments
     # t.string "name"
@@ -71,24 +71,24 @@ def self.instrument_fields
 
 
   def self.var_fields
-    var_fields = [
-      'name',
-      'shortname',
-      'general_category',
-      'minimum_plot_value',
-      'maximum_plot_value',
+    var_fields = {
+      'name' =>                   true,
+      'shortname'                 => true,
+      'general_category'          => true,
+      'minimum_plot_value'        => false,
+      'maximum_plot_value'        => false,
 
-      'measured_property.name',
-      'measured_property.label',
-      # 'measured_property.url',
-      # 'measured_property.source',
+      'measured_property.name'    => false,
+      'measured_property.label'   => false,
+      'measured_property.url'     => false,
+      'measured_property.source'  => false,
 
-      'unit.name',
-      'unit.abbreviation',
-      'unit.id_num',
-      'unit.unit_type',
-      # 'unit.source',
-    ]
+      'unit.name'                 => true,
+      'unit.abbreviation'         => true,
+      'unit.id_num'               => false,
+      'unit.unit_type'            => false,
+      'unit.source'               => false,
+    }
 
     # Vars
     # t.string "name"
