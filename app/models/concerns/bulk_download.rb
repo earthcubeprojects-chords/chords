@@ -35,6 +35,7 @@ def self.instrument_fields
       'id'                  => true,
       'name'                => true,
       'sensor_id'           => true,
+      'description'         => false,
       'display_points'      => false,
       'sample_rate_seconds' => false,
 
@@ -72,7 +73,7 @@ def self.instrument_fields
 
   def self.var_fields
     var_fields = {
-      'name' =>                   true,
+      'name'                      => true,
       'shortname'                 => true,
       'general_category'          => true,
       'minimum_plot_value'        => false,
