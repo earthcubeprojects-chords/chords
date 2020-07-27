@@ -123,4 +123,32 @@ def self.instrument_fields
 
     return var_fields
   end
+
+
+  def self.row_labels(site_fields, instrument_fields, var_fields)
+    row_labels = Array.new
+
+    prefix = 'site'
+    site_fields.each do |field|
+      label = ["#{prefix}_#{field}".parameterize.underscore]
+      row_labels.push(label.to_csv.to_s.chomp.dump)
+    end
+
+    prefix = 'instrument'
+    instrument_fields.each do |field|
+      label = ["#{prefix}_#{field}".parameterize.underscore]
+      row_labels.push(label.to_csv.to_s.chomp.dump)
+    end
+
+    prefix = 'var'
+    var_fields.each do |field|
+      label = ["#{prefix}_#{field}".parameterize.underscore]
+      row_labels.push(label.to_csv.to_s.chomp.dump)
+    end
+
+    return row_labels.join(',')
+  end
+
+
+
 end

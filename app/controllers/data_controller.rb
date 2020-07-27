@@ -17,7 +17,7 @@ class DataController < ApplicationController
   end
 
   def create_bulk_download
-  	Rails.logger.debug "*" * 80
+  	# Rails.logger.debug "*" * 80
 
     # Get the instrument ids
     instrument_ids = params[:instruments].split(',')
@@ -26,17 +26,7 @@ class DataController < ApplicationController
     	instrument_ids = Instrument.accessible_by(current_ability).pluck(:id)
     end
 
-    # Determine the time range. Default to the most recent day
-    end_time = Time.now
-    start_time = end_time - 1.day
 
-    if params[:start]
-      start_time = Time.parse(params[:start])
-    end
-
-    if params[:end]
-      end_time = Time.parse(params[:end])
-    end
 
     # Should test data be included?
 		include_test_data = params['include_test_data'] == 'true' ? true : false
@@ -59,15 +49,15 @@ class DataController < ApplicationController
   	# Rails.logger.debug "instrument_ids.count #{instrument_ids.count}"
   	# Rails.logger.debug "include_test_data #{include_test_data}"
 
-  	Rails.logger.debug "site_fields #{site_fields}"
-  	Rails.logger.debug "instrument_fields #{instrument_fields}"
-  	Rails.logger.debug "var_fields #{var_fields}"
+  	# Rails.logger.debug "site_fields #{site_fields}"
+  	# Rails.logger.debug "instrument_fields #{instrument_fields}"
+  	# Rails.logger.debug "var_fields #{var_fields}"
 
-  	Rails.logger.debug "*" * 80
+  	# Rails.logger.debug "*" * 80
 
   	CreateBulkDownloadJob.perform_later(
-  		start_time, 
-  		end_time, 
+  		params[:start], 
+  		params[:end], 
   		instrument_ids, 
   		include_test_data,
   		site_fields,
