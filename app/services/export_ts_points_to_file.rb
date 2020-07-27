@@ -36,6 +36,10 @@ class ExportTsPointsToFile
 
     row_suffix = "#{site_row},#{instrument_row},#{var_row}"
 
+    # Rails.logger.debug "*" * 80
+    # Rails.logger.debug "row_suffix #{row_suffix}"
+    # Rails.logger.debug "*" * 80
+
 
     # Add the suffix on to each line in the csv file
     script = "s*$*#{row_suffix}*"
@@ -62,7 +66,7 @@ class ExportTsPointsToFile
 
     object_fields.each do |object_field|
       begin
-        value = [eval("object.#{object_field}")]
+        value = eval("object.#{object_field}")
       rescue
         # rescue in case one of the shild properties is undefined
         # puts "FAILED " * 40
