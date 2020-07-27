@@ -18,9 +18,9 @@ class ExportTsPointsToFile
 
 
     url = "http://influxdb:8086/query?db=#{influxdb_database_name}&p=#{ENV['INFLUXDB_PASSWORD']}&u=#{ENV['INFLUXDB_USERNAME']}&chunked=#{chunk_size}"
-    query = "q=select value, test from #{series} WHERE var=\'#{var.id}\' "
+    # query = "q=select value, test from #{series} WHERE var=\'#{var.id}\' "
 
-    # query = "q=select value, test from #{series} WHERE var=\'#{var.id}\' LIMIT 10 "
+    query = "q=select value, test from #{series} WHERE var=\'#{var.id}\' LIMIT 10 "
 
     # Export the influxdb data to a temp csv file
     command = "curl -XPOST '#{url}' --data-urlencode \"#{query}\"   > #{output_file_path} "

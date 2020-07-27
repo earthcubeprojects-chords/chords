@@ -128,6 +128,10 @@ def self.instrument_fields
   def self.row_labels(site_fields, instrument_fields, var_fields)
     row_labels = Array.new
 
+    row_labels.push('measurement_time')
+    row_labels.push('measurement_value')
+    row_labels.push('is_test_value')
+
     prefix = 'site'
     site_fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
