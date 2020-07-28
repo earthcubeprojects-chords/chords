@@ -34,7 +34,7 @@ class ExportTsPointsToFile
     instrument_row = self.csv_row(var.instrument, instrument_fields)
     var_row = self.csv_row(var, var_fields)
 
-    row_suffix = "#{site_row},#{instrument_row},#{var_row}"
+    row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
 
     # Rails.logger.debug "*" * 80
     # Rails.logger.debug "row_suffix #{row_suffix}"

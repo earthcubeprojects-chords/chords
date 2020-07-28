@@ -158,7 +158,9 @@ def self.instrument_fields
       row_labels.push(label.to_csv.to_s.chomp.dump)
     end
 
-    return row_labels.join(',')
+    row_label = row_labels.join(',') + "\n"
+    
+    return row_label
   end
 
 
