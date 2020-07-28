@@ -16,8 +16,8 @@ class DataController < ApplicationController
     @instruments = Instrument.accessible_by(current_ability)
     @db_expiry_time = ApplicationHelper.db_expiry_time
 
-    @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"]
-    @placeholder_files   = Dir["/tmp/bulk_downloads/*.temp"]
+    @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"].sort
+    @placeholder_files   = Dir["/tmp/bulk_downloads/*.temp"].sort
   end
 
 
