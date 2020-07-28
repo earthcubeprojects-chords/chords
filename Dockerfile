@@ -3,7 +3,7 @@ FROM ruby:2.5-slim
 # Install apt based dependencies required to run Rails as
 # well as RubyGems. As the Ruby image itself is based on a
 # Debian image, we use apt-get to install those.
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   nodejs \
   default-mysql-client \
@@ -13,10 +13,8 @@ RUN apt-get update && apt-get install -y \
   git \
   apt-utils \
   curl \
-  nano
-
-# don't need logrotation any more as it is handled by the container
-#  logrotate \
+  nano \
+  && rm -rf /var/lib/apt/lists/*
 
 # Configure the main working directory. This is the base
 # directory used in any further RUN, COPY, and ENTRYPOINT
