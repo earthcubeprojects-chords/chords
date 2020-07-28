@@ -16,11 +16,41 @@ class ExportTsPointsToFile
     series = 'tsdata'
     chunk_size = true  # tell influx db to stream the data in chunks so we can bypass the max-row-limit setting
 
-
     url = "http://influxdb:8086/query?db=#{influxdb_database_name}&p=#{ENV['INFLUXDB_PASSWORD']}&u=#{ENV['INFLUXDB_USERNAME']}&chunked=#{chunk_size}"
-    # query = "q=select value, test from #{series} WHERE var=\'#{var.id}\' "
 
-    query = "q=select value, test from #{series} WHERE var=\'#{var.id}\' LIMIT 10 "
+
+    # Build the influxdb query
+    query = "q=select value, test from #{series} WHERE var=\'#{var.id}\'"
+
+    query += " AND time >= '#{start_time.strftime('%Y-%m-%d')} 00:00:00' AND time <= '#{end_time.strftime('%Y-%m-%d')} 00:00:00'"
+    # query += " AND time >= '2020-05-01 00:00:00' "
+
+    unless include_test_data.to_s == 'true'
+      query += " AND test=\'false\'"
+    end
+
+
+    # query += " LIMIT 100"
+
+
+    # start_time_obj = Time.find_zone("UTC").parse(start_time)
+    # start_time_obj = Time.parse(start_time)
+    # end_time_obj = Time.parse(end_time)
+
+    # Rails.logger.debug "*" * 80
+    # Rails.logger.debug "start_time #{start_time}"
+    # Rails.logger.debug "start_time.class #{start_time.class}"
+    # Rails.logger.debug "end_time #{end_time}"
+
+    # Rails.logger.debug "start_time.strftime('%Y-%m-%d') #{start_time.strftime('%Y-%m-%d')}"
+    # Rails.logger.debug "end_time.strftime('%Y-%m-%d') #{end_time.strftime('%Y-%m-%d')}"
+    
+
+    # Rails.logger.debug "#{query}"
+    # Rails.logger.debug "*" * 80
+
+
+    
 
     # Export the influxdb data to a temp csv file
     command = "curl -XPOST '#{url}' --data-urlencode \"#{query}\"   > #{output_file_path} "
@@ -36,9 +66,6 @@ class ExportTsPointsToFile
 
     row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
 
-    # Rails.logger.debug "*" * 80
-    # Rails.logger.debug "row_suffix #{row_suffix}"
-    # Rails.logger.debug "*" * 80
 
 
     # Add the suffix on to each line in the csv file
