@@ -17,6 +17,7 @@ class DataController < ApplicationController
     @db_expiry_time = ApplicationHelper.db_expiry_time
 
     @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"]
+    @placeholder_files   = Dir["/tmp/bulk_downloads/*.temp"]
   end
 
 

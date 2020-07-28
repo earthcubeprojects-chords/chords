@@ -45,7 +45,14 @@ class CreateBulkDownloadJob < ApplicationJob
     header_row_file_path = "#{processing_dir}/#{header_row_file_name}"
     header_row_zip_file_path = "#{processing_dir}/#{header_row_file_name}.gz"
 
+    placeholder_file_name = 
+
     time_string 		= Time.now.strftime('%Y-%m-%d_%H-%M-%S')
+
+    placeholder_file_name = "bulk_download_#{time_string}.temp"
+    placeholder_file_path = "#{tmp_dir}/#{placeholder_file_name}"
+    FileUtils.touch(placeholder_file_path)
+
     final_file_name = "bulk_download_#{time_string}.csv.gz"
     final_file_path = "#{tmp_dir}/#{final_file_name}"
 
@@ -105,6 +112,8 @@ class CreateBulkDownloadJob < ApplicationJob
   	temp_files.each do |file_path|
   		File.delete(file_path)
   	end
+
+  	File.delete(placeholder_file_path)
 
   end
 end
