@@ -202,7 +202,7 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: earthcubechords/grafana:7.1.0
+    image: earthcubechords/grafana:7.1.1
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
