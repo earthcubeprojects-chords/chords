@@ -18,6 +18,8 @@ class DataController < ApplicationController
 
     @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"].sort
     @placeholder_files   = Dir["/tmp/bulk_downloads/*.temp"].sort
+
+    @space_left_on_system = `df --block-size=1 .`.split[10]
   end
 
 

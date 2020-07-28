@@ -1,6 +1,15 @@
 %h1 Bulk Data Download
 
 
+%p
+Space left on system hard drive:
+%b
+	= number_to_human_size @space_left_on_system
+
+%p
+Total size of all bulk data packages (Includes temporary files):
+%b
+	= number_to_human_size Dir["#{BulkDownload.tmp_dir}/**/*"].select { |f| File.file?(f) }.sum { |f| File.size(f) }
 
 
 - if @bulk_download_files.count > 0
