@@ -57,7 +57,7 @@
             var_fields: var_fields.join()
           }, // data to be submit
           function(data, status, jqXHR) {// success callback
-            $('.bulk_data_notifications').html('Your bulk download is being created. Please refesh this page to check its status');
+            $('.bulk_data_notifications').html('Your bulk download is now being created. Please refesh this page to check its status.');
             $('.bulk_data_notifications').show();
           })        
       } else {
@@ -66,6 +66,9 @@
     };
 
     $('.bulkDownloadButton').click(function(){
+      $('.bulk_data_notifications').html('... Initiating Background Creation of CSV Package ...');
+      $('.bulk_data_notifications').show();
+
       send_download_url('geojson');
     });
 
@@ -108,6 +111,8 @@
         %p
 
         %button.btn-primary.bulkDownloadButton Create Bulk Data Download (zipped csv)
+
+        %p
 
         .bulk_data_notifications.alert.alert-success
 
