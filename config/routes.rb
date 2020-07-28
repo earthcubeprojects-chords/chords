@@ -32,7 +32,10 @@ Rails.application.routes.draw do
 
 
   get '/data/bulk_download', to: 'data#bulk_download'
+  get '/data/send_bulk_download_file', to: 'data#send_bulk_download_file'
+  delete '/data/delete_bulk_download_file', to: 'data#delete_bulk_download_file'
   post '/data/create_bulk_download', to: 'data#create_bulk_download'
+
 
   resources :about, only: :index do
     collection do

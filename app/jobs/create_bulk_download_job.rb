@@ -32,8 +32,8 @@ class CreateBulkDownloadJob < ApplicationJob
   	random_job_id = SecureRandom.hex(10)
 
   	# Define the tmp directory to store the files in
-  	tmp_dir = "/tmp/bulk_downloads"
-  	processing_dir = "#{tmp_dir}/processing"
+  	tmp_dir = BulkDownload.tmp_dir
+  	processing_dir = BulkDownload.processing_dir
 
 		# Make sure the tmp dir exists
   	require 'fileutils'
