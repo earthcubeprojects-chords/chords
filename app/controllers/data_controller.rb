@@ -64,23 +64,6 @@ class DataController < ApplicationController
 
 
   	
-  	# Rails.logger.debug params['start']
-  	# Rails.logger.debug params['end']
-  	# Rails.logger.debug params['instruments']
-  	# Rails.logger.debug params['include_test_data']
-
-  	# Rails.logger.debug "start_time #{start_time}"
-  	# Rails.logger.debug "end_time #{end_time}"
-  	# Rails.logger.debug "instrument_ids #{instrument_ids}"
-  	# Rails.logger.debug "instrument_ids.count #{instrument_ids.count}"
-  	# Rails.logger.debug "include_test_data #{include_test_data}"
-
-  	# Rails.logger.debug "site_fields #{site_fields}"
-  	# Rails.logger.debug "instrument_fields #{instrument_fields}"
-  	# Rails.logger.debug "var_fields #{var_fields}"
-
-  	# Rails.logger.debug "*" * 80
-
   	CreateBulkDownloadJob.perform_later(
   		params[:start], 
   		params[:end], 

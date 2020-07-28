@@ -32,24 +32,6 @@ class ExportTsPointsToFile
 
     # query += " LIMIT 100"
 
-
-    # start_time_obj = Time.find_zone("UTC").parse(start_time)
-    # start_time_obj = Time.parse(start_time)
-    # end_time_obj = Time.parse(end_time)
-
-    # Rails.logger.debug "*" * 80
-    # Rails.logger.debug "start_time #{start_time}"
-    # Rails.logger.debug "start_time.class #{start_time.class}"
-    # Rails.logger.debug "end_time #{end_time}"
-
-    # Rails.logger.debug "start_time.strftime('%Y-%m-%d') #{start_time.strftime('%Y-%m-%d')}"
-    # Rails.logger.debug "end_time.strftime('%Y-%m-%d') #{end_time.strftime('%Y-%m-%d')}"
-    
-
-    # Rails.logger.debug "#{query}"
-    # Rails.logger.debug "*" * 80
-
-
     
 
     # Export the influxdb data to a temp csv file
