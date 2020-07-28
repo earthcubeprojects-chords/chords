@@ -18,6 +18,24 @@ class DataController < ApplicationController
     @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"]
   end
 
+  def send_bulk_download_file
+  	file_name = params[:file]
+  	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
+
+  	send_file  file_path
+  end
+
+  def delete_bulk_download_file
+  	file_name = params[:file]
+  	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
+
+  	File.delete(file_path) if File.exist?(file_path)
+
+    redirect_to data_bulk_download_path, notice: "#{file_name} has been deleted." 
+  end
+
+
+
   def create_bulk_download
   	# Rails.logger.debug "*" * 80
 

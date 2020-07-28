@@ -1,5 +1,13 @@
 class BulkDownload
 
+  def self.tmp_dir
+    "/tmp/bulk_downloads"
+  end
+
+  def self.processing_dir
+    "#{self.tmp_dir}/processing"
+  end
+
   def self.site_fields
     site_fields = {
       'id'              => true,

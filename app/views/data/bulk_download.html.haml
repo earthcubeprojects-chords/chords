@@ -1,12 +1,39 @@
 %h1 Bulk Data Download
-%p
-  Observations prior to
-  %b= @db_expiry_time
-  are automatically removed from the database.
 
-- if @profile.data_archive_url
-  %p
-    Archived data may be found at:
-    = link_to nil, @profile.data_archive_url
+
+
+
+- if @bulk_download_files.count > 0
+	%h3.text-center
+		Existing Downloads
+	%table.table.table-striped
+		%thead
+			%tr
+				%th
+					Name
+				%th 
+					Creation Date
+				%th 
+					File Size
+				%th
+					Actions 
+		%tbody
+			- @bulk_download_files.each do |bulk_download_file|				  
+				%tr
+					%td
+						= File.basename bulk_download_file
+					%td
+						= File::ctime bulk_download_file
+					%td
+						- compressed_file_size = File.size bulk_download_file
+						= number_to_human_size compressed_file_size
+					%td
+						= link_to 'Download', "/data/send_bulk_download_file?file=#{File.basename bulk_download_file}"
+
+						
+						= link_to "Delete", "/data/delete_bulk_download_file?file=#{File.basename bulk_download_file}", method: "delete", data: {confirm: "Are you sure you want to permanently delete #{File.basename bulk_download_file}?"} 
+
+
+
 
 = render partial: "bulk_download"

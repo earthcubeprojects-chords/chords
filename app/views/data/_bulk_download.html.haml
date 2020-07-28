@@ -90,9 +90,6 @@
 
 
 
-- @bulk_download_files.each do |bulk_download_file|
-  = bulk_download_file
-  %br
 
 %h2.text-center 
   Create New Bulk Download Package
@@ -105,10 +102,9 @@
       %td{:colspan => 4}
         %p
           %span
-            = check_box_tag 'include_test_data'
-
+            = check_box_tag 'include_test_data', 'include_test_data', true
             %strong
-              Include Test Data in Download
+              Include Test Data
         %p
 
         %button.btn-primary.bulkDownloadButton Create Bulk Data Download (zipped csv)
