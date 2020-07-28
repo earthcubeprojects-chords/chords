@@ -52,7 +52,14 @@ class CreateBulkDownloadJob < ApplicationJob
 
     # Generate the header row
     # Get the labels for the master csv file
-    row_labels = BulkDownload.row_labels(site_fields, instrument_fields, var_fields)
+    row_labels =  "# CSV file creation initiated at: #{Time.now.to_s}\n"
+    row_labels += "# Start Date (inclusive): #{start_time.strftime('%Y-%m-%d')}\n"
+    row_labels += "# End Date (inclusive):   #{end_time.strftime('%Y-%m-%d')}\n"
+    row_labels += "# Include Test Data: #{include_test_data}\n"
+    row_labels += "# Instrument IDs: #{instrument_ids.join(', ')}\n"
+    row_labels += "# Instrument Names: #{instruments.pluck(:name).join(', ')}\n"
+
+    row_labels += BulkDownload.row_labels(site_fields, instrument_fields, var_fields)
     File.write(header_row_file_path, row_labels)
 
     # zip the temp file
