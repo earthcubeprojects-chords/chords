@@ -1,4 +1,5 @@
 class DataController < ApplicationController
+
   def index
     authorize! :read, :data
 
@@ -18,14 +19,20 @@ class DataController < ApplicationController
     @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"]
   end
 
+
   def send_bulk_download_file
+		authorize! :read, :data
+
   	file_name = params[:file]
   	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
 
   	send_file  file_path
   end
 
+
   def delete_bulk_download_file
+		authorize! :read, :data
+
   	file_name = params[:file]
   	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
 
@@ -35,9 +42,8 @@ class DataController < ApplicationController
   end
 
 
-
   def create_bulk_download
-  	# Rails.logger.debug "*" * 80
+		authorize! :read, :data
 
     # Get the instrument ids
     instrument_ids = params[:instruments].split(',')
