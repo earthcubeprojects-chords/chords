@@ -85,9 +85,6 @@ class ExportTsPointsToFile
         value = eval("object.#{object_field}")
       rescue
         # rescue in case one of the shild properties is undefined
-        # puts "FAILED " * 40
-        # puts object
-        # puts object_field
         value = ""
       end
       
