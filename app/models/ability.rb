@@ -84,12 +84,14 @@ class Ability
     end
   end
 
+
   def guest_user(profile, user)
     can :read, :about
 
     cannot :read, User
     cannot :read, :data if profile.secure_data_download
     cannot :manage, :bulk_download
+    
 
     if user
       can [:read, :update], User, id: user.id
@@ -107,7 +109,11 @@ class Ability
 
     cannot :read, User
     cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
-    cannot :manage, :bulk_download if profile.secure_data_download && (user && !user.role?(:downloader))
+    cannot :manage, :bulk_download if !user.role?(:downloader)
+
+    Rails.logger.debug "*" * 80
+    Rails.logger.debug "REGISTERED USER"
+
 
     if user
       can [:read, :update], User, id: user.id
@@ -116,13 +122,14 @@ class Ability
 
     cannot :read, Profile
     cannot :read, LinkedDatum
+
+    bulk_downloader(profile, user)    
   end
 
   def data_downloader(profile, user)
     can :read, :about
     can :download, Instrument
     can :read, :data
-    can :manage, :bulk_download
 
 
     cannot :read, User
@@ -131,12 +138,27 @@ class Ability
       can [:read, :update], User, id: user.id
       can :assign_api_key, User, id: user.id
     end
+
+    bulk_downloader(profile, user)
+  end
+
+  def bulk_downloader(profile, user)
+    # Rails.logger.debug "*" * 80
+    # Rails.logger.debug user
+    # only let user with the actual downloader role download data
+    if user.role?(:downloader) || user.role?(:admin)
+      # Rails.logger.debug "GRANT ACCESS"
+      can :manage, :bulk_download
+    else
+      # Rails.logger.debug "DENY ACCESS"
+      cannot :manage, :bulk_download
+    end
   end
 
   def measurement_creator(profile, user)
     cannot :read, User
     cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
-    cannot :manage, :bulk_download if profile.secure_data_download && (user && !user.role?(:downloader))
+    cannot :manage, :bulk_download
 
     if user
       can [:read, :update], User, id: user.id
@@ -146,6 +168,8 @@ class Ability
 
     can :create, :measurement
     can :simulator, Instrument
+
+    bulk_downloader(profile, user)
   end
 
   def site_configurator(profile, user)
@@ -174,6 +198,8 @@ class Ability
     can :import, Profile
 
     cannot :create, :measurement
+
+    bulk_downloader(profile, user)
   end
 
   def admin(profile, user)
@@ -187,5 +213,7 @@ class Ability
     if user
       cannot :destroy, User, id: user.id
     end
+
+    bulk_downloader(profile, user)
   end
 end
