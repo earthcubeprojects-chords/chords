@@ -12,7 +12,7 @@ Total size of all bulk data packages (Includes temporary files):
 	= number_to_human_size Dir["#{BulkDownload.tmp_dir}/**/*"].select { |f| File.file?(f) }.sum { |f| File.size(f) }
 
 
-- if @bulk_download_files.count > 0
+- if @bulk_download_files.count > 0 || @placeholder_files.count > 0
 	%h3.text-center
 		Existing Downloads
 	%table.table.table-striped
