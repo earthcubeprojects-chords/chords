@@ -10,7 +10,7 @@ class DataController < ApplicationController
 
 
   def bulk_download
-    authorize! :read, :data
+    authorize! :manage, :bulk_download
 
     @sites = Site.accessible_by(current_ability)
     @instruments = Instrument.accessible_by(current_ability)
@@ -24,7 +24,7 @@ class DataController < ApplicationController
 
 
   def send_bulk_download_file
-		authorize! :read, :data
+		authorize! :manage, :bulk_download
 
 		# Make sure that the user isn't trying to gain unauthorized access by reomving everything but the base file name
   	file_name = File.basename(params[:file])
@@ -41,7 +41,7 @@ class DataController < ApplicationController
 
 
   def delete_bulk_download_file
-		authorize! :read, :data
+		authorize! :manage, :bulk_download
 
   	file_name = File.basename(params[:file])
   	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
@@ -53,7 +53,7 @@ class DataController < ApplicationController
 
 
   def create_bulk_download
-		authorize! :read, :data
+		authorize! :manage, :bulk_download
 
 
     # Get the instrument ids

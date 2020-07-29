@@ -89,6 +89,7 @@ class Ability
 
     cannot :read, User
     cannot :read, :data if profile.secure_data_download
+    cannot :manage, :bulk_download
 
     if user
       can [:read, :update], User, id: user.id
@@ -106,6 +107,7 @@ class Ability
 
     cannot :read, User
     cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
+    cannot :manage, :bulk_download if profile.secure_data_download && (user && !user.role?(:downloader))
 
     if user
       can [:read, :update], User, id: user.id
@@ -120,6 +122,8 @@ class Ability
     can :read, :about
     can :download, Instrument
     can :read, :data
+    can :manage, :bulk_download
+
 
     cannot :read, User
 
@@ -132,6 +136,7 @@ class Ability
   def measurement_creator(profile, user)
     cannot :read, User
     cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
+    cannot :manage, :bulk_download if profile.secure_data_download && (user && !user.role?(:downloader))
 
     if user
       can [:read, :update], User, id: user.id
@@ -175,6 +180,7 @@ class Ability
     site_configurator(profile, user)
 
     can :manage, :all
+    can :manage, :bulk_download
 
     cannot :create, :measurement
 
