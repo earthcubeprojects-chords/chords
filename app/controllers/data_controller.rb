@@ -43,7 +43,7 @@ class DataController < ApplicationController
   def delete_bulk_download_file
 		authorize! :read, :data
 
-  	file_name = params[:file]
+  	file_name = File.basename(params[:file])
   	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
 
   	File.delete(file_path) if File.exist?(file_path)
@@ -55,33 +55,33 @@ class DataController < ApplicationController
   def create_bulk_download
 		authorize! :read, :data
 
-    # Get the instrument ids
-    instrument_ids = params[:instruments].split(',')
 
-    if instrument_ids.count < 1
-    	instrument_ids = Instrument.accessible_by(current_ability).pluck(:id)
+    # Get the instrument ids
+    sanitized_instrument_ids = params[:instruments].gsub(/[^\w\.]/, '').split(',')
+
+    if sanitized_instrument_ids.count < 1
+    	sanitized_instrument_ids = Instrument.accessible_by(current_ability).pluck(:id)
     end
 
 
+		# sanitize user input
+		santized_start 							= params[:start].gsub(/[^\:\-\w\.]/, '')
+		santized_end 								= params[:end].gsub(/[^\:\-\w\.]/, '')
+		santized_include_test_data	= params[:include_test_data] == 'true' ? true : false
 
-    # Should test data be included?
-		include_test_data = params['include_test_data'] == 'true' ? true : false
-
-		# Site, Instrument and var field selection
-		site_fields 				= params[:site_fields].split(',')
-		instrument_fields 	= params[:instrument_fields].split(',')
-		var_fields 					= params[:var_fields].split(',')
+		sanitized_site_fields 			= params[:site_fields].gsub(/[^\,\w\.]/, '').split(',')
+		sanitized_instrument_fields = params[:instrument_fields].gsub(/[^\,\w\.]/, '').split(',')
+		sanitized_var_fields 				= params[:var_fields].gsub(/[^\,\w\.]/, '').split(',')
 
 
-  	
   	CreateBulkDownloadJob.perform_later(
-  		params[:start], 
-  		params[:end], 
-  		instrument_ids, 
-  		include_test_data,
-  		site_fields,
-  		instrument_fields,
-  		var_fields
+  		santized_start, 
+  		santized_end, 
+  		sanitized_instrument_ids, 
+  		santized_include_test_data,
+  		sanitized_site_fields,
+  		sanitized_instrument_fields,
+  		sanitized_var_fields
   	)
 
 
