@@ -111,10 +111,6 @@ class Ability
     cannot :read, :data if profile.secure_data_download && (user && !user.role?(:downloader))
     cannot :manage, :bulk_download if !user.role?(:downloader)
 
-    Rails.logger.debug "*" * 80
-    Rails.logger.debug "REGISTERED USER"
-
-
     if user
       can [:read, :update], User, id: user.id
       can :assign_api_key, User, id: user.id
@@ -143,14 +139,10 @@ class Ability
   end
 
   def bulk_downloader(profile, user)
-    # Rails.logger.debug "*" * 80
-    # Rails.logger.debug user
-    # only let user with the actual downloader role download data
+    # only let user with the actual downloader role or admins may access the bulk downloads
     if user.role?(:downloader) || user.role?(:admin)
-      # Rails.logger.debug "GRANT ACCESS"
       can :manage, :bulk_download
     else
-      # Rails.logger.debug "DENY ACCESS"
       cannot :manage, :bulk_download
     end
   end
