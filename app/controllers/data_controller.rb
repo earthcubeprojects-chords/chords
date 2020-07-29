@@ -57,7 +57,7 @@ class DataController < ApplicationController
 
 
     # Get the instrument ids
-    sanitized_instrument_ids = params[:instruments].gsub(/[^\w\.]/, '').split(',')
+    sanitized_instrument_ids = params[:instruments].gsub(/[^\w\,]/, '').split(',')
 
     if sanitized_instrument_ids.count < 1
     	sanitized_instrument_ids = Instrument.accessible_by(current_ability).pluck(:id)
