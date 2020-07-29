@@ -30,7 +30,7 @@ class ExportTsPointsToFile
     end
 
 
-    # query += " LIMIT 100"
+    query += " LIMIT 10"
 
     
 

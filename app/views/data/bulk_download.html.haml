@@ -37,9 +37,10 @@ Total size of all bulk data packages (Includes temporary files):
 						- compressed_file_size = File.size bulk_download_file
 						= number_to_human_size compressed_file_size
 					%td
-						= link_to 'Download', "/data/send_bulk_download_file?file=#{File.basename bulk_download_file}"
-
 						
+						= link_to 'Download', "/data/send_bulk_download_file?file=#{File.basename bulk_download_file}"
+						&nbsp;&nbsp;&nbsp;
+
 						= link_to "Delete", "/data/delete_bulk_download_file?file=#{File.basename bulk_download_file}", method: "delete", data: {confirm: "Are you sure you want to permanently delete #{File.basename bulk_download_file}?"} 
 
 			- @placeholder_files.each do |placeholder_file|				  
