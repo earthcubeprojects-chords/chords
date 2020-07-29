@@ -4,9 +4,11 @@ class BulkDownload
     "/tmp/bulk_downloads"
   end
 
+
   def self.processing_dir
     "#{self.tmp_dir}/processing"
   end
+
 
   def self.site_fields
     site_fields = {
@@ -37,6 +39,7 @@ class BulkDownload
 
     return site_fields
   end
+
 
 def self.instrument_fields
     instrument_fields = {
@@ -75,8 +78,6 @@ def self.instrument_fields
 
     return instrument_fields
   end
-
-
 
 
   def self.var_fields
