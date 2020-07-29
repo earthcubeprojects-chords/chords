@@ -29,7 +29,12 @@ class DataController < ApplicationController
   	file_name = params[:file]
   	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
 
-  	send_file  file_path
+  	if File.exists?(file_path)
+	  	send_file  file_path
+	  else
+	  	flash[:notice] = 'That file has been deleted.'
+	  	redirect_to data_bulk_download_path
+	  end
   end
 
 
