@@ -82,9 +82,12 @@ class DataController < ApplicationController
   		var_fields
   	)
 
-    respond_to do |format|
-	    format.html{ redirect_to data_bulk_download_path, notice: 'Your bulk download is being created. Please refesh this page to monitor progress.' }
-    end
+
+		render json: {}, status: 200
+    # respond_to do |format|
+    # 	format.json { head :ok }
+	   #  # format.html{ redirect_to data_bulk_download_path, notice: 'Your bulk download is being created. Please refesh this page to monitor progress.' }
+    # end
   end
 
 end
