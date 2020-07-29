@@ -29,8 +29,8 @@ class ExportTsPointsToFile
       query += " AND test=\'false\'"
     end
 
-
-    query += " LIMIT 10"
+    # false limit on number of results(for testing)
+    # query += " LIMIT 10"
 
     
 
@@ -38,34 +38,47 @@ class ExportTsPointsToFile
     command = "curl -XPOST '#{url}' --data-urlencode \"#{query}\"   > #{output_file_path} "
     system(command)
 
-    # Convert the file from it's native JSON format to CSV
-    self.json_to_csv(output_file_path)
 
-    # Build the string to add to the end of each csv row
-    site_row = self.csv_row(var.instrument.site, site_fields)
-    instrument_row = self.csv_row(var.instrument, instrument_fields)
-    var_row = self.csv_row(var, var_fields)
-
-    row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
-
-
-
-    # Add the suffix on to each line in the csv file
-    script = "s*$*#{row_suffix}*"
-    system "sed", "-i", "-e", script, output_file_path
-
-
-    # zip the temp file
-    command = "gzip -f #{output_file_path}"
-    system(command)
-
-
-    zip_file_name = "#{output_file_path}.gz"
+    # Rails.logger.debug "*" * 80
 
     # file = File.open(output_file_path)
-    # puts file.read
+    # Rails.logger.debug file.read
 
-    return zip_file_name
+
+    command = "grep series #{output_file_path} "
+    file_contains_data = system(command)
+
+
+    if file_contains_data
+      # Convert the file from it's native JSON format to CSV
+      self.json_to_csv(output_file_path)
+
+      # Build the string to add to the end of each csv row
+      site_row = self.csv_row(var.instrument.site, site_fields)
+      instrument_row = self.csv_row(var.instrument, instrument_fields)
+      var_row = self.csv_row(var, var_fields)
+
+      row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
+
+
+      # Add the suffix on to each line in the csv file
+      script = "s*$*#{row_suffix}*"
+      system "sed", "-i", "-e", script, output_file_path
+
+
+      # zip the temp file
+      command = "gzip -f #{output_file_path}"
+      system(command)
+
+
+      zip_file_name = "#{output_file_path}.gz"
+
+      return zip_file_name
+    else
+      # The file contains no results - delete it!
+      File.delete(output_file_path)
+      return false
+    end
   end
 
 

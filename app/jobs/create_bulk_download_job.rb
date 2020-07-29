@@ -97,7 +97,9 @@ class CreateBulkDownloadJob < ApplicationJob
 					output_file_path
 				)
 
-				temp_files.push(zip_file_path)
+				if zip_file_path
+					temp_files.push(zip_file_path)
+				end
 			end
 		end
 
