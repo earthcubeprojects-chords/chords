@@ -26,7 +26,9 @@ class DataController < ApplicationController
   def send_bulk_download_file
 		authorize! :read, :data
 
-  	file_name = params[:file]
+		# Make sure that the user isn't trying to gain unauthorized access by reomving everything but the base file name
+  	file_name = File.basename(params[:file])
+
   	file_path = "#{BulkDownload.tmp_dir}/#{file_name}"
 
   	if File.exists?(file_path)
