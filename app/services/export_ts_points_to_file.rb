@@ -39,12 +39,6 @@ class ExportTsPointsToFile
     system(command)
 
 
-    # Rails.logger.debug "*" * 80
-
-    # file = File.open(output_file_path)
-    # Rails.logger.debug file.read
-
-
     command = "grep series #{output_file_path} "
     file_contains_data = system(command)
 
