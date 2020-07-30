@@ -106,7 +106,8 @@ class CreateBulkDownloadJob < ApplicationJob
 
 		# Merge the zip files together
 		files_string = temp_files.join(" ")
-		command = "cat  #{files_string} > #{final_file_path}"
+		# command = "cat  #{files_string} > #{final_file_path}"
+    command = "zcat #{files_string} | gzip -c > #{final_file_path}"
 		system(command)
 
 
