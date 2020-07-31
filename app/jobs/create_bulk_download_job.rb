@@ -19,26 +19,14 @@ class CreateBulkDownloadJob < ApplicationJob
     FileUtils.touch(bd.placeholder_file_path)
 
 
-    # Generate the header row
-    # Get the labels for the master csv file
-    file_header_text =  "# CSV file creation initiated at: #{bd.creation_time.to_s}\n"
-    file_header_text += "# Start Date (inclusive): #{bd.start_time.strftime('%Y-%m-%d')}\n"
-    file_header_text += "# End Date (inclusive):   #{bd.end_time.strftime('%Y-%m-%d')}\n"
-    file_header_text += "# Include Test Data: #{bd.include_test_data}\n"
-    file_header_text += "# Instrument IDs: #{bd.instrument_ids.join(', ')}\n"
-    file_header_text += "# Instrument Names: #{bd.instruments.pluck(:name).join(', ')}\n"
-
-    file_header_text += bd.row_labels
-
-    File.write(bd.header_row_file_path, file_header_text)
-
-    # zip the temp file
-    command = "gzip -f #{bd.header_row_file_path}"
-    system(command)
-
     # track all the files that are created
-  	temp_files = Array.new
-  	temp_files.push(bd.header_row_zip_file_path)
+    temp_files = Array.new
+
+
+    # Create the header for the master/final csv file 
+    # (If one will be created)
+    header_row_zip_file_path = bd.create_master_csv_header_zip_file
+  	temp_files.push(header_row_zip_file_path)
 
 
 
@@ -63,7 +51,7 @@ class CreateBulkDownloadJob < ApplicationJob
 					var_output_file_path
 				)
 
-				if zip_file_path
+				if zip_file_path # Make sure the file is created - it was not if there were no data point
 					temp_files.push(zip_file_path)
 				end
 			end

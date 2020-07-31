@@ -47,16 +47,6 @@ class BulkDownload
 
 
 
-  def header_row_file_path
-    header_row_file_name = "#{self.random_job_id}_header_row.csv"
-
-    return "#{BulkDownload.processing_dir}/#{header_row_file_name}"
-  end
-
-
-  def header_row_zip_file_path
-    return "#{self.header_row_file_path}.gz"
-  end  
 
 
   def final_file_name_base    
@@ -87,13 +77,47 @@ class BulkDownload
   end
 
 
-  def csv_header
+  def master_csv_header
+    # Get the header rows for the master csv file
+    csv_header_rows =  "# CSV file creation initiated at: #{self.creation_time.to_s}\n"
+    csv_header_rows += "# Start Date (inclusive): #{self.start_time.strftime('%Y-%m-%d')}\n"
+    csv_header_rows += "# End Date (inclusive):   #{self.end_time.strftime('%Y-%m-%d')}\n"
+    csv_header_rows += "# Include Test Data: #{self.include_test_data}\n"
+    csv_header_rows += "# Instrument IDs: #{self.instrument_ids.join(', ')}\n"
+    csv_header_rows += "# Instrument Names: #{self.instruments.pluck(:name).join(', ')}\n"
+
+    csv_header_rows += self.row_labels
   end
 
 
   def instrument_csv_header
   end
 
+
+
+  def header_row_file_path
+    header_row_file_name = "#{self.random_job_id}_header_row.csv"
+
+    return "#{BulkDownload.processing_dir}/#{header_row_file_name}"
+  end
+
+
+  def header_row_zip_file_path
+    return "#{self.header_row_file_path}.gz"
+  end  
+
+
+  def create_master_csv_header_zip_file
+
+    # write the header rows to it's own file
+    File.write(self.header_row_file_path, self.master_csv_header)
+
+    # zip the temp file
+    command = "gzip -f #{self.header_row_file_path}"
+    system(command)
+
+    return self.header_row_zip_file_path
+  end
 
 
 
@@ -126,6 +150,8 @@ class BulkDownload
     
     return row_label
   end
+
+
 
 
 
