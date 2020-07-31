@@ -375,7 +375,7 @@ def self.default_instrument_fields
 
 
   def self.tmp_dir
-    return "/tmp/bulk_downloads"
+    return "/chords/tmp/bulk_downloads"
   end
 
 
