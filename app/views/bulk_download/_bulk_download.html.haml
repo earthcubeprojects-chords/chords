@@ -54,7 +54,8 @@
             include_test_data: $('#include_test_data').is(":checked"),
             site_fields: site_fields.join(),
             instrument_fields: instrument_fields.join(),
-            var_fields: var_fields.join()
+            var_fields: var_fields.join(),
+            create_separate_instrument_files: $('#create_separate_instrument_files').is(":checked")
           }, // data to be submit
           function(data, status, jqXHR) {// success callback
             $('.bulk_data_notifications').html('Your bulk download is now being created. Please reload this page to check its status.');
