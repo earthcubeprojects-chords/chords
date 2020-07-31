@@ -13,6 +13,8 @@ class BulkDownload
   attr_accessor :var_fields
   attr_accessor :create_separate_instrument_files
 
+  attr_accessor :instruments
+
 
   def initialize(*args)
     @random_job_id  = SecureRandom.hex(10)
@@ -20,17 +22,18 @@ class BulkDownload
     @profile        = Profile.first
 
 
-    # if (args.count > 0)
-      @start_time                       = Time.parse(args[0])
-      @end_time                         = Time.parse(args[1])
+    @start_time                       = Time.parse(args[0])
+    @end_time                         = Time.parse(args[1])
 
-      @instrument_ids                   = args[2]
-      @include_test_data                = args[3]
-      @site_fields                      = args[4]
-      @instrument_fields                = args[5]
-      @var_fields                       = args[6]
-      @create_separate_instrument_files = args[7]
-    # end
+    @instrument_ids                   = args[2]
+    @include_test_data                = args[3]
+    @site_fields                      = args[4]
+    @instrument_fields                = args[5]
+    @var_fields                       = args[6]
+    @create_separate_instrument_files = args[7]
+
+
+    @instruments = Instrument.where(id: bd.instrument_ids) 
 
     # Make sure the tmp dir exists
     require 'fileutils'

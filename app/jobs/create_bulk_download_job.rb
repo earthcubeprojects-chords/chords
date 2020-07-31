@@ -7,18 +7,6 @@ class CreateBulkDownloadJob < ApplicationJob
 
     bd = BulkDownload.new(*args)
 
-		instruments = Instrument.where(id: bd.instrument_ids) 
-
-
-		# Define a unique string for this job
-  	random_job_id = SecureRandom.hex(10)
-
-
-  	# Define the tmp directory to store the files in
-  	# tmp_dir = bd.tmp_dir
-  	# processing_dir = bd.processing_dir
-
-
 
   	# define a few file paths
     # final_file_path           = bd.final_file_path
@@ -38,7 +26,7 @@ class CreateBulkDownloadJob < ApplicationJob
     row_labels += "# End Date (inclusive):   #{bd.end_time.strftime('%Y-%m-%d')}\n"
     row_labels += "# Include Test Data: #{bd.include_test_data}\n"
     row_labels += "# Instrument IDs: #{bd.instrument_ids.join(', ')}\n"
-    row_labels += "# Instrument Names: #{instruments.pluck(:name).join(', ')}\n"
+    row_labels += "# Instrument Names: #{bd.instruments.pluck(:name).join(', ')}\n"
 
     row_labels += bd.row_labels
     File.write(bd.header_row_file_path, bd.row_labels)
@@ -54,7 +42,7 @@ class CreateBulkDownloadJob < ApplicationJob
 
 
   	# Create zip files for each variable of each desired instrument
-		instruments.each do |instrument|
+		bd.instruments.each do |instrument|
 
       # define a few file names
 
