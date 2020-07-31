@@ -21,16 +21,16 @@ class CreateBulkDownloadJob < ApplicationJob
 
     # Generate the header row
     # Get the labels for the master csv file
-    row_labels =  "# CSV file creation initiated at: #{bd.creation_time.to_s}\n"
-    row_labels += "# Start Date (inclusive): #{bd.start_time.strftime('%Y-%m-%d')}\n"
-    row_labels += "# End Date (inclusive):   #{bd.end_time.strftime('%Y-%m-%d')}\n"
-    row_labels += "# Include Test Data: #{bd.include_test_data}\n"
-    row_labels += "# Instrument IDs: #{bd.instrument_ids.join(', ')}\n"
-    row_labels += "# Instrument Names: #{bd.instruments.pluck(:name).join(', ')}\n"
+    file_header_text =  "# CSV file creation initiated at: #{bd.creation_time.to_s}\n"
+    file_header_text += "# Start Date (inclusive): #{bd.start_time.strftime('%Y-%m-%d')}\n"
+    file_header_text += "# End Date (inclusive):   #{bd.end_time.strftime('%Y-%m-%d')}\n"
+    file_header_text += "# Include Test Data: #{bd.include_test_data}\n"
+    file_header_text += "# Instrument IDs: #{bd.instrument_ids.join(', ')}\n"
+    file_header_text += "# Instrument Names: #{bd.instruments.pluck(:name).join(', ')}\n"
 
-    row_labels += bd.row_labels
+    file_header_text += bd.row_labels
 
-    File.write(bd.header_row_file_path, row_labels)
+    File.write(bd.header_row_file_path, file_header_text)
 
     # zip the temp file
     command = "gzip -f #{bd.header_row_file_path}"
