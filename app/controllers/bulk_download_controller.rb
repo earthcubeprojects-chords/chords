@@ -7,8 +7,8 @@ class BulkDownloadController < ApplicationController
     @instruments = Instrument.accessible_by(current_ability)
     @db_expiry_time = ApplicationHelper.db_expiry_time
 
-    @bulk_download_files = Dir["/tmp/bulk_downloads/*.gz"].sort
-    @placeholder_files   = Dir["/tmp/bulk_downloads/*.temp"].sort
+    @bulk_download_files = Dir["#{BulkDownload.tmp_dir}/*.gz"].sort
+    @placeholder_files   = Dir["#{BulkDownload.tmp_dir}/*.temp"].sort
 
     @space_left_on_system = `df --block-size=1 .`.split[10]
   end
