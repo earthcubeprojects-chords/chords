@@ -46,6 +46,11 @@ class BulkDownload
   end
 
 
+  def profile_string
+    self.profile.project.parameterize
+  end
+
+
 
 
 
@@ -62,10 +67,6 @@ class BulkDownload
     return "#{BulkDownload.tmp_dir}/#{self.final_file_name_base}.temp"
   end
 
-
-  def profile_string
-    self.profile.project.parameterize
-  end
 
 
   def instrument_final_file_name_base(instrument)
