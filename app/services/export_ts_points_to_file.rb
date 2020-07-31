@@ -1,16 +1,7 @@
 class ExportTsPointsToFile
-  # Return the time series points within the specified time interval. 
-  # An array of points will be returned.
-  #
-  # time_series_db - the database.
-  # field          - the field to return.
-  # inst_id        - the instrument id.
-  # start_time     - beginning time stamp. Times greater or equal will be returned
-  # end_time       - the end time. Times less than this will be returned..
-  # def self.call(time_series_db, instrument_id, var_id)
-  def self.call(var_id, start_time, end_time, include_test_data, site_fields, instrument_fields, var_fields, output_file_path)
+  # def self.call(var_id, start_time, end_time, include_test_data, site_fields, instrument_fields, var_fields, output_file_path)
 
-    var = Var.find(var_id)
+  def self.call(var, bd, output_file_path)
 
     influxdb_database_name = "chords_ts_#{ENV['RAILS_ENV']}"
     series = 'tsdata'
@@ -22,10 +13,10 @@ class ExportTsPointsToFile
     # Build the influxdb query
     query = "q=select value, test from #{series} WHERE var=\'#{var.id}\'"
 
-    query += " AND time >= '#{start_time.strftime('%Y-%m-%d')} 00:00:00' AND time <= '#{end_time.strftime('%Y-%m-%d')} 00:00:00'"
+    query += " AND time >= '#{bd.start_time.strftime('%Y-%m-%d')} 00:00:00' AND time <= '#{bd.end_time.strftime('%Y-%m-%d')} 00:00:00'"
     # query += " AND time >= '2020-05-01 00:00:00' "
 
-    unless include_test_data.to_s == 'true'
+    unless bd.include_test_data.to_s == 'true'
       query += " AND test=\'false\'"
     end
 
@@ -48,9 +39,9 @@ class ExportTsPointsToFile
       self.json_to_csv(output_file_path)
 
       # Build the string to add to the end of each csv row
-      site_row = self.csv_row(var.instrument.site, site_fields)
-      instrument_row = self.csv_row(var.instrument, instrument_fields)
-      var_row = self.csv_row(var, var_fields)
+      site_row = self.csv_row(var.instrument.site, bd.site_fields)
+      instrument_row = self.csv_row(var.instrument, bd.instrument_fields)
+      var_row = self.csv_row(var, bd.var_fields)
 
       row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
 

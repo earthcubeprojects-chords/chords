@@ -131,6 +131,10 @@
 
         #endpicker
       %td
+        %p
+          = check_box_tag 'create_separate_instrument_files', 'create_separate_instrument_files', true
+          Create separate files for each instrument
+
         %p Select instruments for download. If none are checked, all instruments will be downloaded.
 
         %table.table.table-striped
@@ -172,7 +176,7 @@
                 Include
               %th Field Name
           %tbody
-            - BulkDownload.site_fields.each do |field, checked|
+            - BulkDownload.default_site_fields.each do |field, checked|
               %tr
                 %td= check_box_tag 'site_fields[]', field, checked
                 %td= field
@@ -188,7 +192,7 @@
                 Include
               %th Field Name
           %tbody
-            - BulkDownload.instrument_fields.each do |field, checked|
+            - BulkDownload.default_instrument_fields.each do |field, checked|
               %tr
                 %td= check_box_tag 'instrument_fields[]', field, checked
                 %td= field
@@ -204,7 +208,7 @@
                 Include
               %th Field Name
           %tbody
-            - BulkDownload.var_fields.each do |field, checked|
+            - BulkDownload.default_var_fields.each do |field, checked|
               %tr
                 %td= check_box_tag 'var_fields[]', field, checked
                 %td= field

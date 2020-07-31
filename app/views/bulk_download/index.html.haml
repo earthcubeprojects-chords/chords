@@ -9,7 +9,8 @@ Space left on system hard drive:
 %p
 Total size of all bulk data packages (Includes temporary files):
 %b
-	= number_to_human_size Dir["#{BulkDownload.tmp_dir}/**/*"].select { |f| File.file?(f) }.sum { |f| File.size(f) }
+	= number_to_human_size BulkDownload.bulk_data_bytes_used
+
 
 
 - if @bulk_download_files.count > 0 || @placeholder_files.count > 0

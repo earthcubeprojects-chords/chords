@@ -46,7 +46,8 @@ class BulkDownloadController < ApplicationController
 		# sanitize user input
 		santized_start 							= params[:start].gsub(/[^\:\-\w\.]/, '')
 		santized_end 								= params[:end].gsub(/[^\:\-\w\.]/, '')
-		santized_include_test_data	= params[:include_test_data] == 'true' ? true : false
+		santized_include_test_data  = params[:include_test_data] == 'true' ? true : false
+    create_separate_instrument_files  = params[:create_separate_instrument_files] == 'true' ? true : false
 
 		sanitized_site_fields 			= params[:site_fields].gsub(/[^\,\w\.]/, '').split(',')
 		sanitized_instrument_fields = params[:instrument_fields].gsub(/[^\,\w\.]/, '').split(',')
@@ -60,7 +61,8 @@ class BulkDownloadController < ApplicationController
   		santized_include_test_data,
   		sanitized_site_fields,
   		sanitized_instrument_fields,
-  		sanitized_var_fields
+  		sanitized_var_fields,
+      create_separate_instrument_files
   	)
 
 
