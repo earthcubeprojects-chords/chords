@@ -14,6 +14,8 @@ class BulkDownload
   attr_accessor :create_separate_instrument_files
   attr_accessor :create_single_master_file
 
+  attr_accessor :include_full_metadata_on_all_rows
+
   attr_accessor :instruments
 
 
@@ -23,17 +25,19 @@ class BulkDownload
     @profile        = Profile.first
 
 
-    @start_time                       = Time.parse(args[0])
-    @end_time                         = Time.parse(args[1])
+    @start_time                         = Time.parse(args[0])
+    @end_time                           = Time.parse(args[1])
 
-    @instrument_ids                   = args[2]
-    @include_test_data                = args[3]
-    @site_fields                      = args[4]
-    @instrument_fields                = args[5]
-    @var_fields                       = args[6]
-    @create_separate_instrument_files = args[7]
+    @instrument_ids                     = args[2]
+    @include_test_data                  = args[3]
+    @site_fields                        = args[4]
+    @instrument_fields                  = args[5]
+    @var_fields                         = args[6]
+    @create_separate_instrument_files   = args[7]
+    @create_single_master_file          = ! create_separate_instrument_files
 
-    @create_single_master_file = ! create_separate_instrument_files
+    @include_full_metadata_on_all_rows  = args[8]
+
 
 
     @instruments = Instrument.where(id: self.instrument_ids) 
@@ -194,6 +198,17 @@ class BulkDownload
   end
 
 
+  def include_site_and_instrument_rows
+    if (self.create_separate_instrument_files)
+      if (self.include_full_metadata_on_all_rows)
+        return true
+      else
+        return false
+      end
+    else
+      return true
+    end
+  end
 
   def row_labels
     row_labels = Array.new
@@ -202,16 +217,20 @@ class BulkDownload
     row_labels.push('measurement_value')
     row_labels.push('is_test_value')
 
-    prefix = 'site'
-    self.site_fields.each do |field|
-      label = ["#{prefix}_#{field}".parameterize.underscore]
-      row_labels.push(label.to_csv.to_s.chomp.dump)
-    end
 
-    prefix = 'instrument'
-    self.instrument_fields.each do |field|
-      label = ["#{prefix}_#{field}".parameterize.underscore]
-      row_labels.push(label.to_csv.to_s.chomp.dump)
+    if (self.include_site_and_instrument_rows)
+
+      prefix = 'site'
+      self.site_fields.each do |field|
+        label = ["#{prefix}_#{field}".parameterize.underscore]
+        row_labels.push(label.to_csv.to_s.chomp.dump)
+      end
+
+      prefix = 'instrument'
+      self.instrument_fields.each do |field|
+        label = ["#{prefix}_#{field}".parameterize.underscore]
+        row_labels.push(label.to_csv.to_s.chomp.dump)
+      end
     end
 
     prefix = 'var'

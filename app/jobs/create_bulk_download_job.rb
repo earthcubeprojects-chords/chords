@@ -40,11 +40,6 @@ class CreateBulkDownloadJob < ApplicationJob
 
         instrument_header_row_zip_file_path = bd.create_instrument_csv_header_zip_file(instrument)
         var_zip_files.push(instrument_header_row_zip_file_path)
-
-        # Rails.logger.debug "*" * 80
-        # Rails.logger.debug var_zip_files
-        # Rails.logger.debug "*" * 80
-
       end
 
 

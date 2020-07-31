@@ -39,11 +39,17 @@ class ExportTsPointsToFile
       self.json_to_csv(output_file_path)
 
       # Build the string to add to the end of each csv row
-      site_row = self.csv_row(var.instrument.site, bd.site_fields)
-      instrument_row = self.csv_row(var.instrument, bd.instrument_fields)
-      var_row = self.csv_row(var, bd.var_fields)
+      if (bd.include_site_and_instrument_rows)
+        site_row = self.csv_row(var.instrument.site, bd.site_fields)
+        instrument_row = self.csv_row(var.instrument, bd.instrument_fields)
+        var_row = self.csv_row(var, bd.var_fields)
 
-      row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
+        row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
+      else
+          var_row = self.csv_row(var, bd.var_fields)
+
+          row_suffix = ",#{var_row}"
+      end
 
 
       # Add the suffix on to each line in the csv file
