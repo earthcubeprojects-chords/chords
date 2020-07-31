@@ -33,7 +33,7 @@ class BulkDownload
     @create_separate_instrument_files = args[7]
 
 
-    @instruments = Instrument.where(id: bd.instrument_ids) 
+    @instruments = Instrument.where(id: self.instrument_ids) 
 
     # Make sure the tmp dir exists
     require 'fileutils'
