@@ -42,17 +42,16 @@ class CreateBulkDownloadJob < ApplicationJob
 
 			instrument.vars.each do |var|
 		
-		    var_output_file_name = "#{bd.random_job_id}_instrument_#{var.instrument_id}_var_#{var.id}.csv"
-		    var_output_file_path = "#{BulkDownload.processing_dir}/#{var_output_file_name}"
+		    var_output_file_path = bd.var_temp_output_file_path(var)
 
-				zip_file_path = ExportTsPointsToFile.call(
+				zipped_var_file_path = ExportTsPointsToFile.call(
 					var,
           bd,
 					var_output_file_path
 				)
 
-				if zip_file_path # Make sure the file is created - it was not if there were no data point
-					temp_files.push(zip_file_path)
+				if zipped_var_file_path # Make sure the file is created - it was not if there were no data point
+					temp_files.push(zipped_var_file_path)
 				end
 			end
 		end

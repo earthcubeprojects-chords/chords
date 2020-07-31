@@ -67,6 +67,16 @@ class BulkDownload
     return "#{BulkDownload.tmp_dir}/#{self.final_file_name_base}.temp"
   end
 
+  def var_temp_output_file_path(var)
+    var_output_file_name = "#{self.random_job_id}_instrument_#{var.instrument_id}_var_#{var.id}.csv"
+    
+    var_output_file_path = "#{BulkDownload.processing_dir}/#{var_output_file_name}"
+
+    return var_output_file_path
+  end
+        
+        
+
 
 
   def instrument_final_file_name_base(instrument)
