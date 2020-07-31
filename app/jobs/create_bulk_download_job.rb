@@ -29,7 +29,8 @@ class CreateBulkDownloadJob < ApplicationJob
     row_labels += "# Instrument Names: #{bd.instruments.pluck(:name).join(', ')}\n"
 
     row_labels += bd.row_labels
-    File.write(bd.header_row_file_path, bd.row_labels)
+
+    File.write(bd.header_row_file_path, row_labels)
 
     # zip the temp file
     command = "gzip -f #{bd.header_row_file_path}"
