@@ -109,8 +109,20 @@ class BulkDownload
     csv_header_rows += "# Start Date (inclusive): #{self.start_time.strftime('%Y-%m-%d')}\n"
     csv_header_rows += "# End Date (inclusive):   #{self.end_time.strftime('%Y-%m-%d')}\n"
     csv_header_rows += "# Include Test Data: #{self.include_test_data}\n"
+
+    csv_header_rows += "# Site ID:          #{instrument.site.id}\n"
+    csv_header_rows += "# Site Name:        #{instrument.site.name}\n"
+    csv_header_rows += "# Site Latitude:    #{instrument.site.lat}\n"
+    csv_header_rows += "# Site Longitude:   #{instrument.site.lon}\n"
+    csv_header_rows += "# Site Elevation:   #{instrument.site.elevation}\n"
+
     csv_header_rows += "# Instrument ID: #{instrument.id}\n"
     csv_header_rows += "# Instrument Names: #{instrument.name}\n"
+    csv_header_rows += "# Instrument Sensor ID: #{instrument.sensor_id}\n"
+    csv_header_rows += "# Instrument Description: #{instrument.description}\n"
+    csv_header_rows += "# Instrument Display Points: #{instrument.display_points}\n"
+    csv_header_rows += "# Instrument Sample Rate (Seconds): #{instrument.sample_rate_seconds}\n"
+    csv_header_rows += "# Instrument Topic Category Name: #{instrument.topic_category.name}\n"
 
     csv_header_rows += self.row_labels
   end
@@ -226,7 +238,7 @@ class BulkDownload
       'lat'             => true,
       'lon'             => true,
       'elevation'       => true,
-      'site_type.name'  => false,
+      # 'site_type.name'  => false,
     }
 
     # Sites
