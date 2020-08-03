@@ -213,9 +213,9 @@ class BulkDownload
   def row_labels
     row_labels = Array.new
 
-    row_labels.push('measurement_time')
-    row_labels.push('measurement_value')
-    row_labels.push('is_test_value')
+    row_labels.push('"measurement_time"')
+    row_labels.push('"measurement_value"')
+    row_labels.push('"is_test_value"')
 
 
     if (self.include_site_and_instrument_rows)
