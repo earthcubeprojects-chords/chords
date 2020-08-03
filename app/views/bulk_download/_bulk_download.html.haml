@@ -88,6 +88,25 @@
     });
 
 
+    $('.include_full_metadata_on_all_rows').show();
+    $('.instrument-fields').hide();
+    $('.site-fields').hide();
+
+    $('.create_separate_instrument_files').click(function(){
+      if ($('#create_separate_instrument_files').is(":checked")) {
+        $('.include_full_metadata_on_all_rows').show();
+
+        $('.instrument-fields').hide();
+        $('.site-fields').hide();
+      } else {
+        $('.include_full_metadata_on_all_rows').hide();
+
+        $('.instrument-fields').show();
+        $('.site-fields').show();
+      }
+    });
+
+
 
     
 
@@ -133,12 +152,12 @@
 
         #endpicker
       %td
-        %p
+        %p.create_separate_instrument_files
           = check_box_tag 'create_separate_instrument_files', 'create_separate_instrument_files', true
           Create separate files for each instrument
 
 
-        %p
+        %p.include_full_metadata_on_all_rows
           = check_box_tag 'include_full_metadata_on_all_rows', 'include_full_metadata_on_all_rows', false
           Include the full metadata for instruments and sites on every row
           %br
@@ -175,54 +194,56 @@
 
 
       %td
+
         %p Select colums to include
+        .site-fields
+          %b
+            Site Fields
 
-        %b
-          Site Fields
-
-        %table.table.table-striped
-          %thead
-            %tr
-              %th
-                Include
-              %th Field Name
-          %tbody
-            - BulkDownload.default_site_fields.each do |field, checked|
+          %table.table.table-striped
+            %thead
               %tr
-                %td= check_box_tag 'site_fields[]', field, checked
-                %td= field
+                %th
+                  Include
+                %th Field Name
+            %tbody
+              - BulkDownload.default_site_fields.each do |field, checked|
+                %tr
+                  %td= check_box_tag 'site_fields[]', field, checked
+                  %td= field
 
+        .instrument-fields
+          %b
+            Instrument Fields
 
-        %b
-          Instrument Fields
-
-        %table.table.table-striped
-          %thead
-            %tr
-              %th
-                Include
-              %th Field Name
-          %tbody
-            - BulkDownload.default_instrument_fields.each do |field, checked|
+          %table.table.table-striped
+            %thead
               %tr
-                %td= check_box_tag 'instrument_fields[]', field, checked
-                %td= field
+                %th
+                  Include
+                %th Field Name
+            %tbody
+              - BulkDownload.default_instrument_fields.each do |field, checked|
+                %tr
+                  %td= check_box_tag 'instrument_fields[]', field, checked
+                  %td= field
 
 
-        %b
-          Var Fields
+        .var-fields
+          %b
+            Var Fields
 
-        %table.table.table-striped
-          %thead
-            %tr
-              %th
-                Include
-              %th Field Name
-          %tbody
-            - BulkDownload.default_var_fields.each do |field, checked|
+          %table.table.table-striped
+            %thead
               %tr
-                %td= check_box_tag 'var_fields[]', field, checked
-                %td= field
+                %th
+                  Include
+                %th Field Name
+            %tbody
+              - BulkDownload.default_var_fields.each do |field, checked|
+                %tr
+                  %td= check_box_tag 'var_fields[]', field, checked
+                  %td= field
 
 
 
