@@ -1,7 +1,8 @@
 class ExportTsPointsToFile
   # def self.call(var_id, start_time, end_time, include_test_data, site_fields, instrument_fields, var_fields, output_file_path)
 
-  def self.call(var, bd, output_file_path)
+  def self.call(var, bd)
+    output_file_path = bd.var_temp_output_file_path(var)
 
     influxdb_database_name = "chords_ts_#{ENV['RAILS_ENV']}"
     series = 'tsdata'
