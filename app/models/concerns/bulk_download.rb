@@ -269,12 +269,6 @@ class BulkDownload
 
 
   def join_var_files(file_path_1, file_path_2, output_file_path, columns_to_preserve, columns_in_main_file, first_merge = false)
-    Rails.logger.debug "*" * 80
-    # Rails.logger.debug  "file_path_1 #{file_path_1}"
-    # Rails.logger.debug  "file_path_2 #{file_path_2}"
-    # Rails.logger.debug  "output_file_path #{output_file_path}"
-
-    # Rails.logger.debug  "columns_to_preserve #{columns_to_preserve}"
 
     # unzip the files if zipped
     if (File.extname(file_path_1) == '.gz')
@@ -288,6 +282,13 @@ class BulkDownload
       system(command)
       file_path_2 = file_path_2.chomp('.gz')
     end
+
+    Rails.logger.debug "*" * 80
+    Rails.logger.debug  "file_path_1 #{file_path_1}"
+    Rails.logger.debug  "file_path_2 #{file_path_2}"
+    Rails.logger.debug  "output_file_path #{output_file_path}"
+
+    # Rails.logger.debug  "columns_to_preserve #{columns_to_preserve}"
 
 
     second_file_string = ""
@@ -303,6 +304,12 @@ class BulkDownload
 
       Rails.logger.debug command
       system(command)
+
+      # Remove the mergerd files
+      File.delete(file_path_1)
+      File.delete(file_path_2)
+
+
     else
       cols_string = (1..(columns_in_main_file)).to_a.map { |x| "1.#{x}" }.join(',')
       cols_string += ","
@@ -320,8 +327,11 @@ class BulkDownload
       # Move the temp file to the actual output file path
       FileUtils.mv(join_temp_output_file_path, output_file_path)
 
-
+      # Remove the mergerd files
+      File.delete(file_path_2)
     end
+
+
 
   end
 

@@ -62,14 +62,14 @@ class CreateBulkDownloadJob < ApplicationJob
           if (bd.create_separate_instrument_files)
 
             Rails.logger.debug "*" * 80
-            Rails.logger.debug  "var.id #{var.id}"
-            Rails.logger.debug  "instrument.vars[0].id #{instrument.vars[0].id}"
+            # Rails.logger.debug  "var.id #{var.id}"
+            # Rails.logger.debug  "instrument.vars[0].id #{instrument.vars[0].id}"
 
 
             # For the first variable only
             if (instrument.vars[0].id == var.id )
               # Create a full set of all times that include data in the time range for the instrument
-              Rails.logger.debug "******** FIRST *********** "
+              # Rails.logger.debug "******** FIRST *********** "
               instrument_times_file_path = ExportInstrumentTimesToFile.call(instrument, bd)
               columns_in_main_file = 1
               columns_to_preserve = bd.var_fields.count
@@ -81,14 +81,14 @@ class CreateBulkDownloadJob < ApplicationJob
 
             else
               # Create a full set of all times that include data in the time range for the instrument
-              instrument_times_file_path = ExportInstrumentTimesToFile.call(instrument, bd)
+              # instrument_times_file_path = ExportInstrumentTimesToFile.call(instrument, bd)
               columns_in_main_file = 1 + ((var_counter-1) * (bd.var_fields.count + 2))
               columns_to_preserve = bd.var_fields.count
 
-              Rails.logger.debug "******** var_counter #{var_counter} *********** "
-              Rails.logger.debug "******** bd.var_fields.count #{bd.var_fields.count} *********** "
+              # Rails.logger.debug "******** var_counter #{var_counter} *********** "
+              # Rails.logger.debug "******** bd.var_fields.count #{bd.var_fields.count} *********** "
 
-              Rails.logger.debug "******** columns_in_main_file #{columns_in_main_file} *********** "
+              # Rails.logger.debug "******** columns_in_main_file #{columns_in_main_file} *********** "
 
 
               first_merge = false
