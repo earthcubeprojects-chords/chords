@@ -43,9 +43,6 @@ class CreateBulkDownloadJob < ApplicationJob
         instrument_header_row_zip_file_path = bd.create_instrument_csv_header_zip_file(instrument)
         var_zip_files.push(instrument_header_row_zip_file_path)
 
-        # Create a full set of all times that include data in the time range for the instrument
-        instrument_times_file_path = ExportInstrumentTimesToFile.call(instrument, bd)
-
         instrument_final_file_path = bd.instrument_file_path(instrument)
       end
 
@@ -95,6 +92,8 @@ class CreateBulkDownloadJob < ApplicationJob
 
               bd.join_var_files(instrument_final_file_path, zipped_var_file_path, instrument_final_file_path, columns_to_preserve, columns_in_main_file, first_merge)
             end
+
+
             # var_zip_files.push(zipped_var_file_path)
 
             
@@ -104,16 +103,31 @@ class CreateBulkDownloadJob < ApplicationJob
         end
       end
 
-      # If separate instrument files are being created, create the instrument specifix zip file
+      # If separate instrument files are being created, create the instrument specific zip file
       if (bd.create_separate_instrument_files)
 
+        command = "gzip -f #{instrument_final_file_path}"
+        system(command)
+
+
         instrument_zip_file_path = bd.instrument_zip_file_path(instrument)
+        # var_zip_files.push(instrument_final_file_path)
+        var_zip_files.push(instrument_zip_file_path)
+
 
         # create the instument zip file by merging the var files
         files_string = var_zip_files.join(" ")
+
+
         # command = "cat  #{files_string} > #{final_file_path}"
-        command = "zcat #{files_string} | gzip -c > #{instrument_zip_file_path}"
+        instrument_temp_output_file_path = bd.instrument_temp_output_file_path(instrument)
+
+
+        command = "zcat #{files_string} | gzip -c > #{instrument_temp_output_file_path}"
         system(command)
+
+        # Move the temp file to the actual output file path
+        FileUtils.mv(instrument_temp_output_file_path, instrument_zip_file_path)
 
         # Add the instrument file to the list of files to tar at the end of the process
         temp_file_paths.push(instrument_zip_file_path)
@@ -121,9 +135,10 @@ class CreateBulkDownloadJob < ApplicationJob
 
         # Remove the temp var files
         var_zip_files.each do |file_path|
-          Rails.logger.debug file_path
+          next if file_path == instrument_zip_file_path
+          # Rails.logger.debug file_path
 
-          # File.delete(file_path)
+          File.delete(file_path)
         end
 
       end
@@ -133,13 +148,19 @@ class CreateBulkDownloadJob < ApplicationJob
     if (bd.create_separate_instrument_files)
 
       temp_file_names = Array.new
+
       temp_file_paths.each do |temp_file_path|
-        temp_file_names.push(File.basename(temp_file_path))
+        basename = File.basename(temp_file_path)
+
+
+        temp_file_names.push(basename)
       end
+
       files_string = temp_file_names.join(" ")
 
       # create a tar file of all the 
       command = "tar czf #{bd.final_tar_file_path} -C #{BulkDownload.processing_dir} #{files_string}"
+
       results = system(command)
     else
       # Merge the zip files together (this if for the one singe file creation)

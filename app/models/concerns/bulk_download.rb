@@ -94,8 +94,17 @@ class BulkDownload
     file_path = "#{BulkDownload.processing_dir}/#{file_name}"
 
     return file_path
+  end        
+
+
+  def instrument_temp_output_file_path(instrument)
+    output_file_name = "#{self.random_job_id}_instrument_#{instrument.id}_temp.csv.gz"
+    
+    output_file_path = "#{BulkDownload.processing_dir}/#{output_file_name}"
+
+    return output_file_path
   end
-        
+
 
   def instrument_times_temp_output_file_path(instrument)
     output_file_name = "#{self.random_job_id}_instrument_#{instrument.id}_times.csv"
@@ -121,7 +130,7 @@ class BulkDownload
 
 
   def instrument_zip_file_path(instrument)
-    file_path = "#{self.instrument_file_path(instrument)}.csv.gz" 
+    file_path = "#{self.instrument_file_path(instrument)}.gz" 
 
     return file_path
   end
@@ -283,10 +292,10 @@ class BulkDownload
       file_path_2 = file_path_2.chomp('.gz')
     end
 
-    Rails.logger.debug "*" * 80
-    Rails.logger.debug  "file_path_1 #{file_path_1}"
-    Rails.logger.debug  "file_path_2 #{file_path_2}"
-    Rails.logger.debug  "output_file_path #{output_file_path}"
+    # Rails.logger.debug "*" * 80
+    # Rails.logger.debug  "file_path_1 #{file_path_1}"
+    # Rails.logger.debug  "file_path_2 #{file_path_2}"
+    # Rails.logger.debug  "output_file_path #{output_file_path}"
 
     # Rails.logger.debug  "columns_to_preserve #{columns_to_preserve}"
 
@@ -298,11 +307,11 @@ class BulkDownload
       cols_string = '1.1'
       cols_string += ","
       cols_string += (2..(columns_to_preserve + 3)).to_a.map { |x| "2.#{x}" }.join(',')
-      Rails.logger.debug  "cols_string #{cols_string}"
+      # Rails.logger.debug  "cols_string #{cols_string}"
 
       command = "join -o #{cols_string} -a1 -a2 -t , -e \"\" #{file_path_1} #{file_path_2} > #{output_file_path}"
 
-      Rails.logger.debug command
+      # Rails.logger.debug command
       system(command)
 
       # Remove the mergerd files
@@ -314,14 +323,14 @@ class BulkDownload
       cols_string = (1..(columns_in_main_file)).to_a.map { |x| "1.#{x}" }.join(',')
       cols_string += ","
       cols_string += (2..(columns_to_preserve + 3)).to_a.map { |x| "2.#{x}" }.join(',')
-      Rails.logger.debug  "cols_string #{cols_string}"
+      # Rails.logger.debug  "cols_string #{cols_string}"
 
       join_temp_output_file_path = self.join_temp_output_file_path
 
 
       command = "join -o #{cols_string} -a1 -a2 -t , -e \"\" #{file_path_1} #{file_path_2} > #{join_temp_output_file_path}"
 
-      Rails.logger.debug command
+      # Rails.logger.debug command
       system(command)
 
       # Move the temp file to the actual output file path
@@ -413,6 +422,7 @@ def self.default_instrument_fields
 
   def self.default_var_fields
     var_fields = {
+      'id'                        => true,
       'name'                      => true,
       'shortname'                 => true,
       'general_category'          => true,
