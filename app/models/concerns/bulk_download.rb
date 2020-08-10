@@ -159,7 +159,7 @@ class BulkDownload
     csv_header_rows += "# Instrument Sample Rate (Seconds): #{instrument.sample_rate_seconds}\n"
     csv_header_rows += "# Instrument Topic Category Name: #{instrument.topic_category.name}\n"
 
-    csv_header_rows += self.row_labels
+    csv_header_rows += self.instrument_row_labels(instrument)
   end
 
 
@@ -268,6 +268,27 @@ class BulkDownload
     self.var_fields.each do |field|
       label = ["#{prefix}_#{field}".parameterize.underscore]
       row_labels.push(label.to_csv.to_s.chomp.dump)
+    end
+
+    row_label = row_labels.join(',') + "\n"
+    
+    return row_label
+  end
+
+  def instrument_row_labels(instrument)
+    row_labels = Array.new
+
+    row_labels.push('"measurement_time"')
+
+    instrument.vars.each do |var|
+      prefix = "var_#{var.id}"
+      row_labels.push("\"#{prefix}_measurement_value\"")
+      row_labels.push("\"#{prefix}_is_test_value\"")
+
+      self.var_fields.each do |field|
+        label = ["#{prefix}_#{field}".parameterize.underscore]
+        row_labels.push(label.to_csv.to_s.chomp.dump)
+      end
     end
 
     row_label = row_labels.join(',') + "\n"
