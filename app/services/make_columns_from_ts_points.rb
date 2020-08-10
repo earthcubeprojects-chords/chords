@@ -61,7 +61,6 @@ class MakeColumnsFromTsPoints
 #        line = line + " " + vardata[var_id][i].to_s
 #      end 
 #    end
-#    Rails.logger.debug line
 
     return vardata
     

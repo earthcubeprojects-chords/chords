@@ -292,13 +292,6 @@ class BulkDownload
       file_path_2 = file_path_2.chomp('.gz')
     end
 
-    # Rails.logger.debug "*" * 80
-    # Rails.logger.debug  "file_path_1 #{file_path_1}"
-    # Rails.logger.debug  "file_path_2 #{file_path_2}"
-    # Rails.logger.debug  "output_file_path #{output_file_path}"
-
-    # Rails.logger.debug  "columns_to_preserve #{columns_to_preserve}"
-
 
     second_file_string = ""
 
@@ -307,11 +300,8 @@ class BulkDownload
       cols_string = '1.1'
       cols_string += ","
       cols_string += (2..(columns_to_preserve + 3)).to_a.map { |x| "2.#{x}" }.join(',')
-      # Rails.logger.debug  "cols_string #{cols_string}"
 
       command = "join -o #{cols_string} -a1 -a2 -t , -e \"\" #{file_path_1} #{file_path_2} > #{output_file_path}"
-
-      # Rails.logger.debug command
       system(command)
 
       # Remove the mergerd files
@@ -323,14 +313,11 @@ class BulkDownload
       cols_string = (1..(columns_in_main_file)).to_a.map { |x| "1.#{x}" }.join(',')
       cols_string += ","
       cols_string += (2..(columns_to_preserve + 3)).to_a.map { |x| "2.#{x}" }.join(',')
-      # Rails.logger.debug  "cols_string #{cols_string}"
 
       join_temp_output_file_path = self.join_temp_output_file_path
 
 
       command = "join -o #{cols_string} -a1 -a2 -t , -e \"\" #{file_path_1} #{file_path_2} > #{join_temp_output_file_path}"
-
-      # Rails.logger.debug command
       system(command)
 
       # Move the temp file to the actual output file path
