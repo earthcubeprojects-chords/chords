@@ -336,7 +336,7 @@ class BulkDownload
     if (first_merge == true)
       cols_string = '1.1'
       cols_string += ","
-      cols_string += (2..(columns_to_preserve + 3)).to_a.map { |x| "2.#{x}" }.join(',')
+      cols_string += (2..(columns_to_preserve + 1)).to_a.map { |x| "2.#{x}" }.join(',')
 
       command = "join -o #{cols_string} -a1 -a2 -t , -e \"\" #{file_path_1} #{file_path_2} > #{output_file_path}"
       system(command)
@@ -349,7 +349,7 @@ class BulkDownload
     else
       cols_string = (1..(columns_in_main_file)).to_a.map { |x| "1.#{x}" }.join(',')
       cols_string += ","
-      cols_string += (2..(columns_to_preserve + 3)).to_a.map { |x| "2.#{x}" }.join(',')
+      cols_string += (2..(columns_to_preserve + 1)).to_a.map { |x| "2.#{x}" }.join(',')
 
       join_temp_output_file_path = self.join_temp_output_file_path
 
