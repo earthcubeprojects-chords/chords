@@ -142,14 +142,14 @@ class BulkDownload
     # Get the header rows for the master csv file
     csv_header_rows =  "# CSV file creation initiated at: #{self.creation_time.to_s}\n"
     csv_header_rows += "# Start Date (inclusive): #{self.start_time.strftime('%Y-%m-%d')}\n"
-    csv_header_rows += "# End Date (inclusive):   #{self.end_time.strftime('%Y-%m-%d')}\n"
+    csv_header_rows += "# End Date (inclusive): #{self.end_time.strftime('%Y-%m-%d')}\n"
     csv_header_rows += "# Include Test Data: #{self.include_test_data}\n"
 
-    csv_header_rows += "# Site ID:          #{instrument.site.id}\n"
-    csv_header_rows += "# Site Name:        #{instrument.site.name}\n"
-    csv_header_rows += "# Site Latitude:    #{instrument.site.lat}\n"
-    csv_header_rows += "# Site Longitude:   #{instrument.site.lon}\n"
-    csv_header_rows += "# Site Elevation:   #{instrument.site.elevation}\n"
+    csv_header_rows += "# Site ID: #{instrument.site.id}\n"
+    csv_header_rows += "# Site Name: #{instrument.site.name}\n"
+    csv_header_rows += "# Site Latitude: #{instrument.site.lat}\n"
+    csv_header_rows += "# Site Longitude: #{instrument.site.lon}\n"
+    csv_header_rows += "# Site Elevation: #{instrument.site.elevation}\n"
 
     csv_header_rows += "# Instrument ID: #{instrument.id}\n"
     csv_header_rows += "# Instrument Names: #{instrument.name}\n"
@@ -158,6 +158,22 @@ class BulkDownload
     csv_header_rows += "# Instrument Display Points: #{instrument.display_points}\n"
     csv_header_rows += "# Instrument Sample Rate (Seconds): #{instrument.sample_rate_seconds}\n"
     csv_header_rows += "# Instrument Topic Category Name: #{instrument.topic_category.name}\n"
+
+    instrument.vars.each do |var|
+      self.var_fields.each do |var_field|
+
+        label = var_field.parameterize.underscore
+
+        begin
+          value = eval("var.#{var_field}")
+        rescue
+          # rescue in case one of the shild properties is undefined
+          value = ""
+        end
+          
+        csv_header_rows += "# Var #{label} (For Var ID: #{var.id}) : #{value} \n"
+      end
+    end
 
     csv_header_rows += self.instrument_row_labels(instrument)
   end
@@ -285,10 +301,10 @@ class BulkDownload
       row_labels.push("\"#{prefix}_measurement_value\"")
       row_labels.push("\"#{prefix}_is_test_value\"")
 
-      self.var_fields.each do |field|
-        label = ["#{prefix}_#{field}".parameterize.underscore]
-        row_labels.push(label.to_csv.to_s.chomp.dump)
-      end
+      # self.var_fields.each do |field|
+      #   label = ["#{prefix}_#{field}".parameterize.underscore]
+      #   row_labels.push(label.to_csv.to_s.chomp.dump)
+      # end
     end
 
     row_label = row_labels.join(',') + "\n"

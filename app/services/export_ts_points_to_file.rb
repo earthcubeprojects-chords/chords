@@ -39,23 +39,27 @@ class ExportTsPointsToFile
       # Convert the file from it's native JSON format to CSV
       self.json_to_csv(output_file_path)
 
-      # Build the string to add to the end of each csv row
-      if (bd.include_site_and_instrument_rows)
-        site_row = self.csv_row(var.instrument.site, bd.site_fields)
-        instrument_row = self.csv_row(var.instrument, bd.instrument_fields)
-        var_row = self.csv_row(var, bd.var_fields)
+      # don't add the additional fields if separate instrument files are being created
+      unless bd.create_separate_instrument_files
 
-        row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
-      else
+        # Build the string to add to the end of each csv row
+        if (bd.include_site_and_instrument_rows)
+          site_row = self.csv_row(var.instrument.site, bd.site_fields)
+          instrument_row = self.csv_row(var.instrument, bd.instrument_fields)
           var_row = self.csv_row(var, bd.var_fields)
 
-          row_suffix = ",#{var_row}"
+          row_suffix = ",#{site_row},#{instrument_row},#{var_row}"
+        else
+            var_row = self.csv_row(var, bd.var_fields)
+
+            row_suffix = ",#{var_row}"
+        end
+
+
+        # Add the suffix on to each line in the csv file
+        script = "s*$*#{row_suffix}*"
+        system "sed", "-i", "-e", script, output_file_path
       end
-
-
-      # Add the suffix on to each line in the csv file
-      script = "s*$*#{row_suffix}*"
-      system "sed", "-i", "-e", script, output_file_path
 
 
       # zip the temp file

@@ -63,7 +63,8 @@ class CreateBulkDownloadJob < ApplicationJob
               # Create a full set of all times that include data in the time range for the instrument
               instrument_times_file_path = ExportInstrumentTimesToFile.call(instrument, bd)
               columns_in_main_file = 1
-              columns_to_preserve = bd.var_fields.count
+              # columns_to_preserve = bd.var_fields.count
+              columns_to_preserve = 2
 
               first_merge = true
 
@@ -73,8 +74,10 @@ class CreateBulkDownloadJob < ApplicationJob
             else
               # Create a full set of all times that include data in the time range for the instrument
               # instrument_times_file_path = ExportInstrumentTimesToFile.call(instrument, bd)
-              columns_in_main_file = 1 + ((var_counter-1) * (bd.var_fields.count + 2))
-              columns_to_preserve = bd.var_fields.count
+              # columns_in_main_file = 1 + ((var_counter-1) * (bd.var_fields.count + 2))
+              columns_in_main_file = 1 + ((var_counter-1) * (0 + 2))
+              # columns_to_preserve = bd.var_fields.count
+              columns_to_preserve = 2
 
               first_merge = false
 
