@@ -21,14 +21,27 @@ Rails.application.routes.draw do
   end
 
 
+  get '/bulk_download'            , to: 'bulk_download#index'
+  get '/bulk_download/download'  , to: 'bulk_download#download'
+  delete '/bulk_download/delete'  , to: 'bulk_download#destroy'
+  post '/bulk_download'           , to: 'bulk_download#create'
+
+
   resources :dashboard
   resources :data, only: :index
+  # resources :bulk_download, only: [:index, :create, :destroy, :send_file]
   resources :influxdb_tags
   resources :linked_data, only: [:index, :edit, :update, :show]
   resources :measured_properties
   resources :site_types
   resources :topic_categories
   resources :units
+
+
+
+  
+
+
 
   resources :about, only: :index do
     collection do

@@ -1,4 +1,5 @@
 class DataController < ApplicationController
+
   def index
     authorize! :read, :data
 

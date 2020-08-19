@@ -4,9 +4,14 @@
   %b= @db_expiry_time
   are automatically removed from the database.
 
-- if @profile.data_archive_url
+- if @profile.data_archive_url?
   %p
     Archived data may be found at:
     = link_to nil, @profile.data_archive_url
+
+%p
+  Bulk data download is available at:
+  %b= link_to 'Bulk Download', bulk_download_path
+
 
 = render partial: "download_by_day"

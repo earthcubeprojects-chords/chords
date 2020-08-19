@@ -1,0 +1,66 @@
+%h1 Bulk Data Download
+
+
+%p
+Space left on system hard drive:
+%b
+	= number_to_human_size @space_left_on_system
+
+%p
+Total size of all bulk data packages (Includes temporary files):
+%b
+	= number_to_human_size BulkDownload.bulk_data_bytes_used
+
+
+
+- if @bulk_download_files.count > 0 || @placeholder_files.count > 0
+	%h3.text-center
+		Existing Downloads
+	%table.table.table-striped
+		%thead
+			%tr
+				%th
+					Name
+				%th 
+					Creation Date
+				%th 
+					File Size
+				%th
+					Actions 
+		%tbody
+			- @bulk_download_files.each do |bulk_download_file|				  
+				%tr
+					%td
+						= File.basename bulk_download_file
+					%td
+						= File::ctime bulk_download_file
+					%td
+						- compressed_file_size = File.size bulk_download_file
+						= number_to_human_size compressed_file_size
+					%td
+						
+						= link_to 'Download', "/bulk_download/download?file=#{File.basename bulk_download_file}"
+						&nbsp;&nbsp;&nbsp;
+
+						= link_to "Delete", "/bulk_download/delete?file=#{File.basename bulk_download_file}", method: "delete", data: {confirm: "Are you sure you want to permanently delete #{File.basename bulk_download_file}?"} 
+
+			- @placeholder_files.each do |placeholder_file|				  
+				%tr
+					%td
+						= File.basename placeholder_file
+					%td
+						= File::ctime placeholder_file
+					%td
+						(creation in progress)
+					%td
+
+	.text-center
+		Please note that some systems can have difficulty unzipping files using their native software. 
+		%br
+		On OSX if you have trouble unzipping these archives, consider using 
+		= link_to "The Unarchiver", 'https://theunarchiver.com/'
+		instead.
+
+
+
+= render partial: "bulk_download"

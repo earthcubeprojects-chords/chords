@@ -1,0 +1,253 @@
+:javascript
+  $(document).ready(function() {
+
+    $('.bulk_data_notifications').hide();
+
+    $(function() {
+      $("#startpicker").datepicker();
+      $("#startpicker").datepicker('setDate', new Date());
+    });
+
+    $(function() {
+      $("#endpicker").datepicker();
+      $("#endpicker").datepicker('setDate', new Date());
+    });
+
+
+    function send_download_url(datatype) {
+      var startdate = $("#startpicker").datepicker("getDate");
+      var enddate   = $("#endpicker"  ).datepicker("getDate");
+      enddate.setDate(enddate.getDate() + 1);
+
+      var ids = [];
+      $('#instrument_ids_:checked').each(function() {
+        ids.push($(this).attr('value'));
+      });
+
+      var site_fields = [];
+      $('#site_fields_:checked').each(function() {
+        site_fields.push($(this).attr('value'));
+      });
+
+      var instrument_fields = [];
+      $('#instrument_fields_:checked').each(function() {
+        instrument_fields.push($(this).attr('value'));
+      });
+
+      var var_fields = [];
+      $('#var_fields_:checked').each(function() {
+        var_fields.push($(this).attr('value'));
+      });
+
+
+      if (startdate < enddate) {
+        var url = '';
+        url += '/bulk_download';
+
+        //document.location.href = url;
+        $.post(
+          url,
+          { 
+            start: startdate.toISOString(),
+            end: enddate.toISOString(),
+            instruments: ids.join(),
+            include_test_data: $('#include_test_data').is(":checked"),
+            site_fields: site_fields.join(),
+            instrument_fields: instrument_fields.join(),
+            var_fields: var_fields.join(),
+            create_separate_instrument_files: $('#create_separate_instrument_files').is(":checked"),
+            include_full_metadata_on_all_rows: $('#include_full_metadata_on_all_rows').is(":checked")
+          }, // data to be submit
+          function(data, status, jqXHR) {// success callback
+            $('.bulk_data_notifications').html('Your bulk download is now being created. Please reload this page to check its status.');
+            $('.bulk_data_notifications').show();
+          })        
+      } else {
+        alert("Start date must be less than or equal to the end date");
+      }
+    };
+
+    $('.bulkDownloadButton').click(function(){
+      $('.bulk_data_notifications').html('... Initiating CSV Package Creation (this takes a minute - please wait) ...');
+      $('.bulk_data_notifications').show();
+
+      send_download_url('geojson');
+    });
+
+
+    $('#select_all').click(function(){
+      $('.instrument-select-checkbox').each(function() {
+        this.checked = true;
+      });
+    });
+
+    $('#select_none').click(function(){
+      $('.instrument-select-checkbox').each(function() {
+        this.checked = false;
+      });
+    });
+
+
+    $('.include_full_metadata_on_all_rows').show();
+    $('.instrument-fields').hide();
+    $('.site-fields').hide();
+
+    $('.create_separate_instrument_files').click(function(){
+      if ($('#create_separate_instrument_files').is(":checked")) {
+        $('.include_full_metadata_on_all_rows').show();
+
+        $('.instrument-fields').hide();
+        $('.site-fields').hide();
+      } else {
+        $('.include_full_metadata_on_all_rows').hide();
+
+        $('.instrument-fields').show();
+        $('.site-fields').show();
+      }
+    });
+
+
+
+    
+
+  });
+
+
+
+
+%h2.text-center 
+  Create New Bulk Download Package
+%h4.text-center
+  (Zipped csv format)
+%table.table
+  %tbody
+
+    %tr{:align => "center"}
+      %td{:colspan => 4}
+        %p
+          %span
+            = check_box_tag 'include_test_data', 'include_test_data', true
+            %strong
+              Include Test Data
+        %p
+
+        %button.btn-primary.bulkDownloadButton Create Bulk Data Download (zipped csv)
+        %p
+        The creation of the file can take a long time depending on system resouces and runs in the background.
+        %p
+
+        .bulk_data_notifications.alert.alert-success
+
+
+    %tr{:align => "center"}
+      %td
+        %b
+          Start Date (start of day)
+
+        #startpicker
+        %p
+
+        %b
+          End Date (end of day)
+
+        #endpicker
+      %td
+        %p.create_separate_instrument_files
+          = check_box_tag 'create_separate_instrument_files', 'create_separate_instrument_files', true
+          Create separate files for each instrument
+
+
+        %p.include_full_metadata_on_all_rows
+          = check_box_tag 'include_full_metadata_on_all_rows', 'include_full_metadata_on_all_rows', false
+          Include the full metadata for instruments and sites on every row
+          %br
+          (Warning: This results in very large files)
+
+
+
+        %p Select instruments for download. If none are checked, all instruments will be downloaded.
+
+        %table.table.table-striped
+          %thead
+            %tr
+              %th
+                Select for
+                %br
+                Download
+              %th Instrument Name
+              %th Site
+              %th
+                Available
+                %br
+                Measurements
+          %tbody
+            - @instruments.each do |instrument|
+              %tr
+                %td= check_box_tag 'instrument_ids[]', instrument.id, true, class: 'instrument-select-checkbox'
+                %td= link_to(instrument.name, instrument_url(:id => instrument.id) )
+                %td= @sites.find(instrument.site_id).name
+                %td= instrument.sample_count(:either)
+
+        %p
+          %button#select_all Select All
+          %button#select_none Clear All
+
+
+      %td
+
+        %p Select colums to include
+        .site-fields
+          %b
+            Site Fields
+
+          %table.table.table-striped
+            %thead
+              %tr
+                %th
+                  Include
+                %th Field Name
+            %tbody
+              - BulkDownload.default_site_fields.each do |field, checked|
+                %tr
+                  %td= check_box_tag 'site_fields[]', field, checked
+                  %td= field
+
+        .instrument-fields
+          %b
+            Instrument Fields
+
+          %table.table.table-striped
+            %thead
+              %tr
+                %th
+                  Include
+                %th Field Name
+            %tbody
+              - BulkDownload.default_instrument_fields.each do |field, checked|
+                %tr
+                  %td= check_box_tag 'instrument_fields[]', field, checked
+                  %td= field
+
+
+        .var-fields
+          %b
+            Var Fields
+
+          %table.table.table-striped
+            %thead
+              %tr
+                %th
+                  Include
+                %th Field Name
+            %tbody
+              - BulkDownload.default_var_fields.each do |field, checked|
+                %tr
+                  %td= check_box_tag 'var_fields[]', field, checked
+                  %td= field
+
+
+
+
+  
+
+
