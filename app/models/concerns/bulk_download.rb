@@ -297,9 +297,9 @@ class BulkDownload
     row_labels.push('"measurement_time"')
 
     instrument.vars.each do |var|
-      prefix = "var_#{var.id}"
-      row_labels.push("\"#{prefix}_measurement_value\"")
-      row_labels.push("\"#{prefix}_is_test_value\"")
+      prefix = "#{var.shortname} (ID:#{var.id})"
+      row_labels.push("\"#{prefix}\"")
+      row_labels.push("\"#{prefix} is test value\"")
 
       # self.var_fields.each do |field|
       #   label = ["#{prefix}_#{field}".parameterize.underscore]
