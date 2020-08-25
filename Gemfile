@@ -28,7 +28,7 @@ gem 'rack', '>= 2.0.6'
 
 gem 'mini_portile2'
 gem 'whenever', '~> 0.9.7', :require => false
-gem 'rubyzip', '~> 1.2.2'
+gem 'rubyzip', '~> 1.3.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
