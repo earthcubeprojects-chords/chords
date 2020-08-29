@@ -157,7 +157,7 @@ GEM
     multi_json (1.13.1)
     mysql2 (0.5.2)
     nio4r (2.3.1)
-    nokogiri (1.10.8)
+    nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     orm_adapter (0.5.0)
     parallel (1.12.1)
@@ -321,11 +321,11 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jquery-rails (~> 4.3)
   jquery-ui-rails
-  json (~> 1.8.6)
   letter_opener
   loofah (>= 2.3.1)
   mini_portile2
   mysql2 (~> 0.5)
+  nokogiri (~> 1.10.10)
   puma
   rack (>= 2.0.8)
   rails (~> 5.2.3)
