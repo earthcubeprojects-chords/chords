@@ -37,13 +37,11 @@ gem 'bootsnap', require: false
 # Specific gem versions based on Dependabot security scans
 # Updated 9/28/2020
 gem 'nokogiri',             '~> 1.10.10'
-# gem 'rake',                 '~> 12.3.3'
 gem 'websocket-extensions', '~> 0.1.5'
+gem 'json',                 '~> 1.8.6'
+
+# sdoc has a dependency of json ~ 1.7.7
 # gem 'json',                 '~> 2.3.0'
-# gem "actionview",     "~> 5.2.4.3"
-# gem "activesupport", "~> 5.2.4.3"
-# gem "actionpack",     "~> 5.2.4.3"
-# gem 'json', '~> 1.8.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
