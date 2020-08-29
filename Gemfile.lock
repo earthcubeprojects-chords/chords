@@ -345,6 +345,7 @@ DEPENDENCIES
   underscore-rails
   unicorn-rails
   web-console (~> 2.0)
+  websocket-extensions (~> 0.1.5)
   whenever (~> 0.9.7)
 
 BUNDLED WITH
