@@ -309,7 +309,7 @@ DEPENDENCIES
   cancancan (~> 2.3)
   coffee-rails (~> 4.2)
   database_cleaner
-  devise (~> 4.7)
+  devise (~> 4.7.1)
   email_spec
   factory_bot_rails
   faker!

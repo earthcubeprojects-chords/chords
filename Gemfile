@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 5.2.3'
+# gem 'rails', '~> 5.2.4'
 gem 'mysql2', '~> 0.5'
 gem 'influxdb', '~> 0.6'
 gem "influxer", "~> 1.1"
@@ -18,7 +19,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 
-gem 'devise', '~> 4.7'
+gem 'devise', '~> 4.7.1'
 gem 'cancancan', '~> 2.3'
 
 gem 'sys-uptime'
@@ -30,9 +31,19 @@ gem 'mini_portile2'
 gem 'whenever', '~> 0.9.7', :require => false
 gem 'rubyzip', '~> 1.3.0'
 
-gem 'json', '~> 1.8.6'
 
 gem 'bootsnap', require: false
+
+# Specific gem versions based on Dependabot security scans
+# Updated 9/28/2020
+# gem 'nokogiri',             '~> 1.10.10'
+# gem 'rake',                 '~> 12.3.3'
+# gem 'websocket-extensions', '~> 0.1.5'
+# gem 'json',                 '~> 2.3.0'
+# gem "actionview",     "~> 5.2.4.3"
+# gem "activesupport", "~> 5.2.4.3"
+# gem "actionpack",     "~> 5.2.4.3"
+gem 'json', '~> 1.8.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
