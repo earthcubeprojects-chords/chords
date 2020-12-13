@@ -586,15 +586,24 @@ class ChordsGit(object):
     def fetch(self, release_or_branch, files):
         """
         Fetch files from the CHORDS git repository.
-        release_or_branch - the git source branch or tag sha.
+        release_or_branch - the git source branch or Release tag sha.
         files - a single file or a list of files
         """
+
+        # This will be either a branch name or a commit sha.
+        url_specifier = release_or_branch
+
+        # If a Release specification, get the release tag shas.
+        if "Release-" in release_or_branch:
+          tag = re.sub('Release-', '', release_or_branch)
+          tags_and_shas = self.tags_and_shas()
+          url_specifier = tags_and_shas[tag]
 
         if not isinstance(files, list):
             files = [files]
 
         for file_name in files:
-            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ release_or_branch + '/' + file_name
+            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ url_specifier + '/' + file_name
 #            if OS_ARCH[:3] == 'arm':
 #                docker_compose_yml = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/' + release_or_branch + '/rpi-docker-compose.yml'
 
@@ -631,9 +640,7 @@ class ChordsGit(object):
 
     def tags_and_shas(self):
         """
-        Return the tags and associated shas for github.com/earthcubeprojects-chords/chords.
-
-        A list of tuples (t) is returned. t[0] is the tag value, t[1] is the commit sha.
+        Return a dictionary of tags and associated shas for github.com/earthcubeprojects-chords/chords.
 
         Tags containing 'archive/' are ignored.
         """
@@ -644,9 +651,29 @@ class ChordsGit(object):
         shas = shas_and_tags[0::2]
         tags = shas_and_tags[1::2]
         tags = [e.replace('refs/tags/', '') for e in tags]
+        # Create a list of tuples (tag, sha)
         tags_shas = [[tags[i], shas[i]] for i in range(len(shas)-1)]
-        retval = [e for e in tags_shas if 'archive' not in e[0]]
+        # Remove those containing 'archive/'
+        tags_shas = [e for e in tags_shas if 'archive/' not in e[0]]
+        # Convert to a dictionary
+        retval = {e[0]:e[1] for e in tags_shas}
+
         return retval
+
+    def branches_and_releases(self):
+      """
+      Return a list of branch names and releases.
+
+      Release names are prefixed with 'Release-'
+      """
+      # Add the branches
+      branches = self.branches()
+
+      # Add the tags
+      tags_and_shas = self.tags_and_shas()
+      releases = ['Release-'+k for k in tags_and_shas.keys()]
+
+      return branches + releases
 
 #####################################################################
 class Docker(object):
@@ -1818,15 +1845,10 @@ def add_choices_to_git_branch(proxy=""):
     """
     for std_item in STD_CONFIG_ITEMS:
         if std_item[1] == "GIT_BRANCH":
-          # Add the branches
-          branches = ChordsGit(proxy=proxy).branches()
-          for branch in branches:
-              std_item[4].append(branch)
-          # Add the tags
-          tags_and_shas = ChordsGit(proxy=proxy).tags_and_shas()
-          for tag_and_sha in tags_and_shas:
-              std_item[4].append("Release-" + tag_and_sha[0])
-          # Set the default to the most recent tag
+          identifiers = ChordsGit(proxy=proxy).branches_and_releases()
+          for identifier in identifiers:
+              std_item[4].append(identifier)
+          # Set the default to the most recent Release
           std_item[2] = std_item[4][-1]
 
 #####################################################################
@@ -1898,16 +1920,16 @@ def choose_branch(the_file):
     """
     Prompt the user to choose which git branch to fetch the file from.
     """
-    git_branches = ChordsGit().branches()
+    identifiers = ChordsGit().branches_and_releases()
     release_or_branch = ''
     while True:
-        print("Which branch do you want to pull " + the_file + " from (usually master) (", end=' ')
-        for branch in git_branches:
-            print('\''+branch+'\'', end=' ')
+        print("Which branch or release do you want to pull " + the_file + " from (usually the most recent release)\n(", end=' ')
+        for identifier in identifiers:
+            print('\''+identifier+'\'', end=' ')
         print(')? ', end=' ')
         sys.stdout.flush()
         release_or_branch = sys.stdin.readline().strip()
-        if release_or_branch in git_branches:
+        if release_or_branch in identifiers:
             break
         else:
             print("The", release_or_branch, "branch is not available.")
@@ -1971,7 +1993,6 @@ if __name__ == '__main__':
         CONFIG.write_env_file()
         print()
 
-        sys.exit(0)
         # Get items from git that are needed.
         # moved from --update
         ChordsGit(proxy=OPTIONS['proxy']).fetch(release_or_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
