@@ -80,11 +80,28 @@ if platform.system() != "Windows":
 #
 # When you need to add required keys to the configuration, just define them here.
 STD_CONFIG_ITEMS = [
+      [
+        "The CHORDS Release or GIT Branch where the docker-compose recipe will be fetched.\n"
+        "Branch names are prefixed with \'Branch-', release names are prefixed with \'Release-\'.'\n"
+        "Use the most recent release unless you have a valid reason to choose otherwise.\n",
+        "GIT_BRANCH",
+        "master",
+        True,
+        []
+    ],
+    [
+        "The Docker version of the desired CHORDS release.\n"
+        "For normal usage, this should match the CHORDS release that you just selected.\n",
+        "DOCKER_TAG",
+        "latest",
+        True,
+        []
+    ],
     [
         "SSL is only required for systems that need to provide https (a really good idea).\n"
         "You will need to obtain a DNS name which points at your CHORDS instance,\n"
         "and obtain an SSL certificate (which your CHORDS instance will facilitate).\n"
-        "Should SSL be enabled?",
+        "Should SSL be enabled?\n",
         "SSL_ENABLED",
         "false",
         True,
@@ -184,21 +201,6 @@ STD_CONFIG_ITEMS = [
         "DB_RETENTION",
         "inf",
         False,
-        []
-    ],
-    [
-        "The VERSION TAG of the desired CHORDS release.",
-        "DOCKER_TAG",
-        "latest",
-        True,
-        []
-    ],
-    [
-        "The GIT BRANCH where the docker-compose recipe will be fetched.\n"
-        "Use \"master\" unless you have a valid reason to choose otherwise.",
-        "GIT_BRANCH",
-        "master",
-        True,
         []
     ],
     [
@@ -418,7 +420,7 @@ class ChordsConfig(OrderedDict):
         # weren't in the file
         for key in list(self.config_items.keys()):
             if key in list(items.keys()):
-                tmp_config[key] = items[key]
+                tmp_config[key] = self.fix_config_item(key, items[key])
                 del items[key]
             else:
                 tmp_config[key] = self.config_items[key]['default']
@@ -427,6 +429,22 @@ class ChordsConfig(OrderedDict):
             tmp_config[key] = value
         for key in list(tmp_config.keys()):
             self[key] = tmp_config[key]
+
+    def fix_config_item(self, key, value):
+      """
+      Fix configuration values which have changed with later CHORDS releases.
+      """
+
+      # After release 1.1.0-rc1, GIT_BRANCH can now be either a
+      # branch name or a release tag. It is prefixed
+      # with either Branch- or Release-. to designate the difference. 
+      # If these are not present, change it to a Branch- value.
+      if key == 'GIT_BRANCH':
+        if ('Branch-' not in value) and ('Release-' not in value):
+          return 'Branch-' + value
+
+      # Unchanged.
+      return value
 
     def init_config_items(self):
         """
@@ -475,7 +493,7 @@ class ChordsConfig(OrderedDict):
                 print()
                 # If verify is enabled for this item, then we need to populate the valid choices.
                 if self.config_items[key]['verify']:
-                    description = description + ' Valid choices are: '
+                    description = description + 'Valid choices are: '
                     for choice in self.config_items[key]['choices']:
                         description = description + '\'' + choice + '\' '
                 while True:
@@ -489,7 +507,7 @@ class ChordsConfig(OrderedDict):
                         if self[key] in self.config_items[key]['choices']:
                             break
                         else:
-                            print('>>>> You entered an invalid value. Please try again (or use ctrl-C to exit)')
+                            print('>>>>' + TERM_BOLD_ON + ' You entered an invalid value.' + TERM_BOLD_OFF +' Please try again (or use ctrl-C to exit)')
 
         # Process items that extras which are not part of the standard configuration
         for key in list(self.keys()):
@@ -581,10 +599,10 @@ class ChordsGit(object):
         # The path for the docker-compose configuration.
         self.proxy = proxy
 
-    def fetch(self, git_branch, files):
+    def fetch(self, release_or_branch, files):
         """
         Fetch files from the CHORDS git repository.
-        git_branch - the source brance
+        release_or_branch - the git source branch or tag sha.
         files - a single file or a list of files
         """
 
@@ -592,9 +610,9 @@ class ChordsGit(object):
             files = [files]
 
         for file_name in files:
-            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ git_branch + '/' + file_name
+            file_url = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/'+ release_or_branch + '/' + file_name
 #            if OS_ARCH[:3] == 'arm':
-#                docker_compose_yml = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/' + git_branch + '/rpi-docker-compose.yml'
+#                docker_compose_yml = 'https://raw.githubusercontent.com/earthcubeprojects-chords/chords/' + release_or_branch + '/rpi-docker-compose.yml'
 
             proxy_switch = []
             if self.proxy != '':
@@ -617,7 +635,7 @@ class ChordsGit(object):
 
     def branches(self):
         """
-        Return the avaiable branches for github.com/earthcubeprojects-chords/chords.
+        Return the available branches for github.com/earthcubeprojects-chords/chords.
         """
         git_cmd = [
             'git', 'ls-remote', '--heads', 'https://github.com/earthcubeprojects-chords/chords'
@@ -626,6 +644,38 @@ class ChordsGit(object):
         if 'gh-pages' in heads:
             heads.remove('gh-pages')
         return heads
+
+    def tags_and_shas(self):
+        """
+        Return the tags and associated shas for github.com/earthcubeprojects-chords/chords.
+
+        A list of tuples (t) is returned. t[0] is the tag value, t[1] is the commit sha.
+
+        Tags containing 'archive/' are ignored.
+        """
+        git_cmd = [
+            'git', 'ls-remote', '--tags', '--refs', 'https://github.com/earthcubeprojects-chords/chords'
+        ]
+        shas_and_tags = os_cmd(cmd=git_cmd, printlines=False)[0].split()
+        shas = shas_and_tags[0::2]
+        tags = shas_and_tags[1::2]
+        tags = [e.replace('refs/tags/', '') for e in tags]
+        tags_shas = [[tags[i], shas[i]] for i in range(len(shas)-1)]
+        retval = [e for e in tags_shas if 'archive' not in e[0]]
+        return retval
+
+    def get_file(self, file_name, tag):
+      """
+      Return the specified file at the commit associated with the specified tag.
+      """
+      # Get the sha for this tag
+      git_cmd = [
+          'git', 'ls-remote', '--tags', '--refs', 'https://github.com/earthcubeprojects-chords/chords', tag
+      ]
+      sha = os_cmd(cmd=git_cmd, printlines=False)[0].split()[0]
+      print()
+      print('sha for tag:', tag, sha)
+
 
 #####################################################################
 class Docker(object):
@@ -659,9 +709,9 @@ class Docker(object):
                 exit(1)
 
         if not check_file_exists(self.docker_compose_yml, exit_on_failure=False):
-            git_branch = choose_branch(self.docker_compose_yml)
-            print(git_branch)
-            ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=self.docker_compose_yml)
+            release_or_branch = choose_branch(self.docker_compose_yml)
+            print(release_or_branch)
+            ChordsGit(proxy=proxy).fetch(release_or_branch=release_or_branch, files=self.docker_compose_yml)
 
     def running_containers(self):
         """
@@ -1781,8 +1831,7 @@ def prompt(message, choices):
 def add_choices_to_docker_tag(proxy=""):
     """
     Get the available tags and add them to the DOCKER_TAG valid choices.
-    Modifies S
-tdConfigItems.
+    Modifies StdConfigItems.
     """
     for std_item in STD_CONFIG_ITEMS:
         if std_item[1] =="DOCKER_TAG":
@@ -1793,14 +1842,21 @@ tdConfigItems.
 #####################################################################
 def add_choices_to_git_branch(proxy=""):
     """
-    Get the avaiable branches and and them to the GIT_BRANCH valid choices.
+    Get the avaiable branches/releases and and them to the GIT_BRANCH valid choices.
     Modifies StdConfigItems.
     """
     for std_item in STD_CONFIG_ITEMS:
-        if std_item[1] =="GIT_BRANCH":
-            branches = ChordsGit(proxy=proxy).branches()
-            for branch in branches:
-                std_item[4].append(branch)
+        if std_item[1] == "GIT_BRANCH":
+          # Add the branches
+          branches = ChordsGit(proxy=proxy).branches()
+          for branch in branches:
+              std_item[4].append("Branch-" + branch)
+          # Add the tags
+          tags_and_shas = ChordsGit(proxy=proxy).tags_and_shas()
+          for tag_and_sha in tags_and_shas:
+              std_item[4].append("Release-" + tag_and_sha[0])
+          # Set the default to the most recent tag
+          std_item[2] = std_item[4][-1]
 
 #####################################################################
 def check_file_exists(the_file, writeable=False, print_warning=True, exit_on_failure=True):
@@ -1846,13 +1902,13 @@ def renew_script(proxy):
         print("Either " + script_name + " isn't located in this directory, or it is not writeable.")
         exit(1)
 
-    git_branch = choose_branch(script_name)
+    release_or_branch = choose_branch(script_name)
 
     files = [script_name, "docker-compose.yml", "docker-compose-dev.yml"]
     for our_file in files:
         create_backup_file(our_file)
 
-    ChordsGit(proxy=proxy).fetch(git_branch=git_branch, files=files)
+    ChordsGit(proxy=proxy).fetch(release_or_branch=release_or_branch, files=files)
 
 #####################################################################
 def check_cmd_status(exit_status, cmd, err_msg):
@@ -1872,19 +1928,19 @@ def choose_branch(the_file):
     Prompt the user to choose which git branch to fetch the file from.
     """
     git_branches = ChordsGit().branches()
-    git_branch = ''
+    release_or_branch = ''
     while True:
         print("Which branch do you want to pull " + the_file + " from (usually master) (", end=' ')
         for branch in git_branches:
             print('\''+branch+'\'', end=' ')
         print(')? ', end=' ')
         sys.stdout.flush()
-        git_branch = sys.stdin.readline().strip()
-        if git_branch in git_branches:
+        release_or_branch = sys.stdin.readline().strip()
+        if release_or_branch in git_branches:
             break
         else:
-            print("The", git_branch, "branch is not available.")
-    return git_branch
+            print("The", release_or_branch, "branch is not available.")
+    return release_or_branch
 
 #####################################################################
 def config_items(config_file, delimiter=":"):
@@ -1944,9 +2000,10 @@ if __name__ == '__main__':
         CONFIG.write_env_file()
         print()
 
+        sys.exit(0)
         # Get items from git that are needed.
         # moved from --update
-        ChordsGit(proxy=OPTIONS['proxy']).fetch(git_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
+        ChordsGit(proxy=OPTIONS['proxy']).fetch(release_or_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
 
         # Pull the images.
         # moved from --update
@@ -1977,7 +2034,7 @@ if __name__ == '__main__':
         # Get the system configuration.
         CONFIG = ChordsConfig(configfile=OPTIONS['file'])
         # Get items from git that are needed.
-        ChordsGit(proxy=OPTIONS['proxy']).fetch(git_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
+        ChordsGit(proxy=OPTIONS['proxy']).fetch(release_or_branch=CONFIG["GIT_BRANCH"], files="docker-compose.yml")
         # Pull the images.
         Docker(proxy=CONFIG['PROXY']).pull()
 
