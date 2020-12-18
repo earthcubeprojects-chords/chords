@@ -70,6 +70,5 @@ This directory needs to be current enough to run the module "psutil".
 6. A file called `chords_temp.txt` will be generated after starting, but it will be empty.
 
 7. Check your chords portal to see if the stream is successful.
-
-8. This script, if not run from the background, will have to be stopped to run another command in the same terminal window. 
+* This script, if not run from the background, will have to be stopped to run another command in the same terminal window. 
 
