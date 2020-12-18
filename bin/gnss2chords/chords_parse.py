@@ -1,4 +1,4 @@
-#!/Users/joshj55/anaconda/bin/python2.7
+#!INSERT/PATH/HERE
 
 ##Created by: Josh Jones, D. Sarah Stamps, Charles Martin
 ##Date last modified: 18 Dec 2018
