@@ -1,7 +1,9 @@
-#!/Users/joshj55/anaconda/bin/python2.7
+#!ENTER/PATH/HERE
 
-##Created by: Josh Jones, D. Sarah Stamps, Charles Martin
+##Creators: 1. Josh Jones, 1. D. Sarah Stamps, 2. Charles Martin
+##Institutions: 1. Virginia Tech, Blacksburg, Va. 2. UCAR, Boulder, Co.
 ##Date last modified: 18 Dec 2020
+
 ##This script is the streaming section of the UNAVCO -> CHORDS workflow
 ##includes connections to nclient_beta, UNAVCO caster and chords_parse
 ##Please read the README.txt file before starting
@@ -182,8 +184,8 @@ def run_nclient(options):
 
 if __name__=='__main__':
 #	"""Main block of code that repeats a connection request until connection with UNAVCO caster is made."""
-	
-	os.remove("chords_temp.txt")
+	if os.path.exists("chords_temp.txt") == True:	
+		os.remove("chords_temp.txt")
 	logging.basicConfig(level=logging.INFO, stream=sys.stderr,
                         format='%(asctime)s (' + module_name + ') %(levelname)s: %(message)s')
 
@@ -210,7 +212,6 @@ if __name__=='__main__':
 			write_file(gnss_line)
 			chords_parse.send_to_chords(
 				gnss_line=chords_parse.read_file("chords_temp.txt"), 
-				gnss_line=gnss_line,
 				chords_ip=chords_ip, 
 				chords_key=chords_key,
 				chords_inst_id=chords_inst_id, verbose=verbose)
