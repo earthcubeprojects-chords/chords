@@ -1,8 +1,10 @@
 ## Introduction
 
 This is the README file with information and instructions for the suite of scripts used to access UNAVCO Real-Time Data stream and upload parsed data to the online cybertool CHORDS.
-Creators: 1. Josh Jones, 1. D. Sarah Stamps, 2. Charles Martin
-Institution: 1. Virginia Tech, Blacksburg, Va. 2. UCAR, Boulder, Co.
+
+Creators: 1. Josh Jones, 1. D. Sarah Stamps, 2. Charles Martin  
+Institutions: 1. Virginia Tech, Blacksburg, Va. 2. UCAR, Boulder, Co.  
+Date last modified: 18 Dec 2020
 
 The following are the scripts provided and required for the package GNSS2CHORDS.
 These scripts require Python2.7 to run.
