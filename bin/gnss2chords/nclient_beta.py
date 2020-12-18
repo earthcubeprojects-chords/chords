@@ -1,4 +1,4 @@
-#!/Users/joshj55/anaconda/bin/python2.7
+#!ENTER/PATH/HERE
 
 """
 A python client for connecting to a Ntrip server
