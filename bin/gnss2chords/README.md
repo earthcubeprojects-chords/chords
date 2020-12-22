@@ -1,34 +1,77 @@
-# gnss2chords
+## Introduction
 
-Read a datastream from the UNAVCO GNSS Caster server, and write to a CHORDS portal.
+This is the README file with information and instructions for the suite of scripts used to access UNAVCO Real-Time Data streams and upload parsed data to the online cybertool CHORDS. You can find additional CHORDS documentation in this repository or from the main [CHORDS documentation](https://earthcubeprojects-chords.github.io/chords-docs/)
 
-gnss2chords.py will connect to the server for a sepcified GNSS stream, read the
-incoming data, and translate into http puts to a CHORDS server.
+Creators: 1. Josh Jones, 1. D. Sarah Stamps, 2. Charles Martin  
+Institutions: 1. Virginia Tech, Blacksburg, VA. 2. UCAR, Boulder, CO.  
+Date last modified: 18 Dec 2020
 
-It was fashioned after an original method which used the Ntripclient2.py coupled with sed.
-The parameters are identical to the original implementation.
+The following are the scripts provided and required for the package GNSS2CHORDS.
+These scripts require Python2.7 to run.
+Before first run change run path at beginning of each file to current Python2.7 path.
 
-gnss2chords.py is simply a wrapper around Ntripclient2.py. It provides for:
- * blocking reads from Ntripclient2.py, so that it can be started just once,
-   to avoid the multiple restarts in the original implementation. These restarts 
-   led to regular data losses.
- * It checks when initially started to make sure that another instance isn't already 
-   running, and exits if true. This makes it suitable to be run as a cronjob.
- * It performs consistency checks on data returned from Ntripclient2.py, and will
-   only write to CHRDS if there is valid data.
- * The `-t` option will cause it to operate in test mode, where the CHORDS get request is
-   printed rather than being sent CHORDS.
-   
-The shell script run_gnss2chords.sh will run gnss2chords.py for all tzvolcano stations. It
-could be run as a cronjob. It needs to edited to provide the caster credentials  and to set
-the  directory for the source code.
- 
- ## Caveats
-  * _At present_, there is a bug in Ntripclient2.py which causes serious performance issues. 
-    It goes into some sort of loop while waiting for data, which causes the CPU usage
-    to peak at 100%.
-  * The original implmentation did not handle N/S latitude correctly. gnss2chords.py
-    mimics this behvior, but there is a line of code which can be uncommented to
-    enable the correct treatment.
-    
- 
+## chords_stream.py
+Main code that initializes the GNSS2CHORDS package. 
+* Starts the UNAVCO data stream according to parameters in `parameter.json`.
+* Pushes the process to the background as a subprocess.
+* Writes data to a temporary file `chords_temp.txt`.
+
+## chords_parse.py
+* Does not need to be run, is called by `chords_stream.py`. 
+* Reads data from `chords_temp.txt`.
+* Parses the data and converts to proper units.
+* Builds the necessary url for CHORDS upload and sends the data to the CHORDS portal.
+
+## nclient_beta.py
+* UNAVCO Ntripclient that is used to connect and stream UNAVCO's real-time data.
+
+## Parameter file
+* `parameter_file.json`
+* File specifying connection options
+* Username and Password must be added.
+* CHORDS information must be added:
+	* IP
+	* Key
+	* Caster Site
+	* Instrument ID
+* The json file is structured as follows (order is not important):
+```
+{
+  "caster_ip":   "caster IP name",
+  "caster_port": "caster port number",
+  "caster_user": "caster user name",
+  "caster_pw":   "caster password",
+  "chords_ip":   "CHORDS portal IP name",
+  "chords_key":  "CHORDS portal data ingest key",
+  "sites": [
+    {"caster_site": "1st caster site", "chords_inst_id": "1st chords instrument id"},
+    ...
+    {"caster_site": "nth caster site", "chords_inst_id": "nth chords instrument id"}
+  ] 
+```
+
+# Running the scripts
+To run the scripts follow the directions below:
+
+1. Check what Python2.7 instance you are using and change the `#!ENTER/PATH/HERE` in Line 1 for each file appropriately. 
+This directory needs to be current enough to run the python module `psutil`.
+* If you do not have the python module `psutil` it can be downloaded through `pip` or your equivilent method.
+
+2. Make sure that all scripts and files are in the same directory.
+
+3. Edit the parameter file to input your UNAVCO username and password.
+* If you do not have one, please reach out to UNAVCO real-time data services and request one.
+* Information on the process and contact information is available at [UNAVCO Real-Time Services](https://www.unavco.org/data/gps-gnss/real-time/real-time.html) web page.
+
+4. Edit the parameter file to add the sites you want data from and the CHORDS portal ID's.
+
+5. Run either `./chords_stream.py` or to run in the background `./chords_stream.py &&`.
+* Standard output will print connection status and potential errors 
+* For no messages, run `./chords_stream.py > dev/null &&`.
+* This script will call the others in the correct order.
+
+6. A file called `chords_temp.txt` will be generated after starting, but it will be empty.
+
+7. Check your CHORDS portal to see if the stream is successful.
+* This script, if not run from the background, will have to be stopped to run another command in the same terminal window. 
+
