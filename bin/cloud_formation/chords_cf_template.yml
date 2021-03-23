@@ -22,7 +22,6 @@ Parameters:
   ChordsVersion:
     AllowedValues:
       - "1.1.0-rc1"
-      - "1.0.2"
       - "development"
     Default: "1.1.0-rc1"
     Description: The version of CHORDS to deploy (matches the Docker Hub tags)
