@@ -395,6 +395,35 @@ Resources:
                   - 'runas=root
 
                     '
+              /lib/systemd/system/cfn-hup.service:
+                content:
+                  Fn::Join:
+                  - ''
+                  - - '[Unit]
+
+                      '
+                    - 'Description=cfn-hup daemon
+
+                      '
+                    - '[Service]
+
+                      '
+                    - 'Type=simple
+
+                      '
+                    - 'ExecStart=/opt/aws/bin/cfn-hup
+
+                      '
+                    - 'Restart=always
+
+                      '
+                    - '[Install]
+
+                      '
+                    - 'WantedBy=multi-user.target
+
+                      '
+        
           services:
             sysvinit:
               cfn-hup:
