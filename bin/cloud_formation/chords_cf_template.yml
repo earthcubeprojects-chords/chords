@@ -21,9 +21,9 @@ Parameters:
 
   ChordsVersion:
     AllowedValues:
-      - latest
-      - development
-    Default: "latest"
+      - "1.1.0-rc1"
+      - "development"
+    Default: "1.1.0-rc1"
     Description: The version of CHORDS to deploy (matches the Docker Hub tags)
     Type: String
 
@@ -31,8 +31,8 @@ Parameters:
     AllowedValues:
     - master
     - development
-    Default: master
-    Description: CHORDS git branch
+    Default: development
+    Description: CHORDS git branch.
     Type: String
 
   GrafanaAdminPw:
@@ -92,41 +92,9 @@ Parameters:
     - t2.medium
     - t2.large
     - t2.xlarge
-    - t2.2xlarge
-    - m3.medium
-    - m3.large
-    - m3.xlarge
-    - m3.2xlarge
-    - c3.large
-    - c3.xlarge
-    - c3.2xlarge
-    - c3.4xlarge
-    - c3.8xlarge
-    - c4.large
-    - c4.xlarge
-    - c4.2xlarge
-    - c4.4xlarge
-    - c4.8xlarge
-    - r3.large
-    - r3.xlarge
-    - r3.2xlarge
-    - r3.4xlarge
-    - r3.8xlarge
-    - i2.xlarge
-    - i2.2xlarge
-    - i2.4xlarge
-    - i2.8xlarge
-    - d2.xlarge
-    - d2.2xlarge
-    - d2.4xlarge
-    - d2.8xlarge
-    - hi1.4xlarge
-    - hs1.8xlarge
-    - cr1.8xlarge
-    - cc2.8xlarge
-    - cg1.4xlarge
+
     ConstraintDescription: Must be a valid EC2 instance type.
-    Default: t2.small
+    Default: t2.micro
     Description: CHORDS EC2 instance type
     Type: String
 
@@ -146,123 +114,28 @@ Parameters:
 
 #####################################################################
 
-
 Mappings:
   AWSInstanceType2Arch:
-    c3.2xlarge:
-      Arch: HVM64
-    c3.4xlarge:
-      Arch: HVM64
-    c3.8xlarge:
-      Arch: HVM64
-    c3.large:
-      Arch: HVM64
-    c3.xlarge:
-      Arch: HVM64
-    c4.2xlarge:
-      Arch: HVM64
-    c4.4xlarge:
-      Arch: HVM64
-    c4.8xlarge:
-      Arch: HVM64
-    c4.large:
-      Arch: HVM64
-    c4.xlarge:
-      Arch: HVM64
-    cc2.8xlarge:
-      Arch: HVM64
-    cr1.8xlarge:
-      Arch: HVM64
-    d2.2xlarge:
-      Arch: HVM64
-    d2.4xlarge:
-      Arch: HVM64
-    d2.8xlarge:
-      Arch: HVM64
-    d2.xlarge:
-      Arch: HVM64
-    hi1.4xlarge:
-      Arch: HVM64
-    hs1.8xlarge:
-      Arch: HVM64
-    i2.2xlarge:
-      Arch: HVM64
-    i2.4xlarge:
-      Arch: HVM64
-    i2.8xlarge:
-      Arch: HVM64
-    i2.xlarge:
-      Arch: HVM64
-    m3.2xlarge:
-      Arch: HVM64
-    m3.large:
-      Arch: HVM64
-    m3.medium:
-      Arch: HVM64
-    m3.xlarge:
-      Arch: HVM64
-    r3.2xlarge:
-      Arch: HVM64
-    r3.4xlarge:
-      Arch: HVM64
-    r3.8xlarge:
-      Arch: HVM64
-    r3.large:
-      Arch: HVM64
-    r3.xlarge:
-      Arch: HVM64
-    t2.2xlarge:
-      Arch: HVM64
-    t2.xlarge:
-      Arch: HVM64
-    t2.large:
-      Arch: HVM64
-    t2.medium:
-      Arch: HVM64
     t2.micro:
       Arch: HVM64
     t2.small:
       Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.large:
+      Arch: HVM64
+    t2.xlarge:
+      Arch: HVM64
 
   AWSRegionArch2AMI:
-    ap-northeast-1:
-      HVM64: ami-0997de1cd272740c8
-    ap-northeast-2:
-      HVM64: ami-014a7f23cc23439fb
-    ap-northeast-3:
-      HVM64: ami-0b31fb2289bb92d80
-    ap-south-1:
-      HVM64: ami-0688537d4903f3e1b
-    ap-southeast-1:
-      HVM64: ami-0332cf924587fe3fc
-    ap-southeast-2:
-      HVM64: ami-0cd28cf56b0b47a85
-    ca-central-1:
-      HVM64: ami-0477364f56fb51193
-    cn-north-1:
-      HVM64: ami-05a64eb2faa4afbe2
-    cn-northwest-1:
-      HVM64: ami-03bdbb9c6fa74d555
-    eu-central-1:
-      HVM64: ami-04a99c28815f4a706
-    eu-west-1:
-      HVM64: ami-01c855eb410b05de7
-    eu-west-2:
-      HVM64: ami-06d954f8e6d94f918
-    eu-west-3:
-      HVM64: ami-0d86dbb596eeae4f7
-    sa-east-1:
-      HVM64: ami-0fd70fc6265d130e1
     us-east-1:
-      HVM64: ami-020635c16bf5a82ad
+      HVM64: ami-0533f2ba8a1995cf9
     us-east-2:
-      HVM64: ami-0ea8f8e0d477657eb
-    us-gov-west-1:
-      HVM64: ami-a768f2c6
+      HVM64: ami-089c6f2e3866f0f14
     us-west-1:
-      HVM64: ami-0ff42bc1b2ce9d50d
+      HVM64: ami-0a245a00f741d6301 
     us-west-2:
-      HVM64: ami-092015093621866d2
+      HVM64: ami-05b622b5fa0269787
 
 #####################################################################
 Resources:
@@ -395,6 +268,35 @@ Resources:
                   - 'runas=root
 
                     '
+              /lib/systemd/system/cfn-hup.service:
+                content:
+                  Fn::Join:
+                  - ''
+                  - - '[Unit]
+
+                      '
+                    - 'Description=cfn-hup daemon
+
+                      '
+                    - '[Service]
+
+                      '
+                    - 'Type=simple
+
+                      '
+                    - 'ExecStart=/opt/aws/bin/cfn-hup
+
+                      '
+                    - 'Restart=always
+
+                      '
+                    - '[Install]
+
+                      '
+                    - 'WantedBy=multi-user.target
+
+                      '
+        
           services:
             sysvinit:
               cfn-hup:
@@ -414,10 +316,8 @@ Resources:
         yum_extras:
           packages:
             yum:
-              emacs: []
-              sysstat: []
               git: []
-              python2-pip: []
+              python3: []
 
         # Install docker as a service.
         install_docker:
@@ -435,13 +335,15 @@ Resources:
           commands:
             # Install docker-compose.
             01_get_docker_compose:
-              command: "curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > /bin/docker-compose && chmod +x /bin/docker-compose"
+              command: "curl -L https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
+            02_chmod_docker_compose:
+              command: "chmod +x /usr/local/bin/docker-compose"
 
         # Set up CHORDS
         chords_setup:
           commands:
             00_python_pip:
-              command: "pip install sh future"
+              command: "pip3 install sh future"
             01_var_lib_chords:
               command: "mkdir -p /var/lib/chords"
             02_get_chords_control:
@@ -468,17 +370,24 @@ Resources:
                 DB_RETENTION=${DbRetention}
                 SECRET_KEY_BASE=${SecretKeyBase}
                 KAPACITOR_ENABLED=${KapacitorEnabled}
+                CHORDS_HTTP_PORT=80
+                GRAFANA_HTTP_PORT=3000
+                PROXY=
+                SSL_ENABLED=false
+                SSL_EMAIL=
+                SSL_HOST=
+
           commands:
             # Create chords.yml from .env. The .env file will also be updated.
             01_create_chords_yml:
-              command: "cd /var/lib/chords && python chords_control --backwards"
+              command: "cd /var/lib/chords && python3 chords_control --backwards"
 
         # Install docker-compose.yml and get the CHORDS images.
         docker_pull:
           commands:
             # Pull the CHORDS images.
             02_docker_pull:
-              command: "cd /var/lib/chords && /bin/docker-compose pull"
+              command: "cd /var/lib/chords && /usr/local/bin/docker-compose pull"
 
         # Install and enable the chords service
         chords_service:
@@ -493,9 +402,9 @@ Resources:
                 [Service]
                 Type=simple
                 WorkingDirectory=/var/lib/chords
-                ExecStartPre=/bin/docker-compose -p chords down
-                ExecStart=/bin/docker-compose    -p chords up
-                ExecStop=/bin/docker-compose     -p chords down
+                ExecStartPre=/usr/local/bin/docker-compose -p chords down
+                ExecStart=/usr/local/bin/docker-compose    -p chords up
+                ExecStop=/usr/local/bin/docker-compose     -p chords down
                 Restart=always
                 RestartSec=60
 
