@@ -216,7 +216,12 @@ services:
       - GF_SMTP_FROM_NAME=CHORDS Grafana
       - GF_SMTP_HOST=${CHORDS_EMAIL_SERVER}:${CHORDS_EMAIL_PORT}
       - GF_SMTP_USER=${CHORDS_EMAIL_ADDRESS}
-      - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}      
+      - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}   
+
+      - GF_RENDERING_SERVER_URL=http://renderer:8081/render
+      - GF_RENDERING_CALLBACK_URL=http://localhost:${GRAFANA_HTTP_PORT}/
+      - GF_LOG_FILTERS=rendering:debug
+
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
@@ -230,6 +235,13 @@ services:
     user: "104"
     links:
       - influxdb
+
+
+  renderer:
+    container_name: chords_renderer
+    image: grafana/grafana-image-renderer:latest
+    ports:
+      - 8081    
 
 volumes:
   # CHORDS Rails meta-data
