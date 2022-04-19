@@ -239,7 +239,8 @@ services:
 
   renderer:
     container_name: chords_renderer
-    image: grafana/grafana-image-renderer:latest
+    image: earthcubechords/grafana-image-renderer:latest
+    # image: grafana/grafana-image-renderer:latest
     ports:
       - 8081    
 
