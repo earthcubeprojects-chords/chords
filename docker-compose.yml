@@ -140,7 +140,7 @@ services:
   # InfluxData influxdb time-series database
   influxdb:
     container_name: chords_influxdb
-    image: influxdb:1.6
+    image: influxdb:1.8
     volumes:
       - influxdb-data:/var/lib/influxdb
       - influxdb-log:/var/log/influxdb
