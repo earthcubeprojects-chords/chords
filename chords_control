@@ -685,7 +685,7 @@ class Docker(object):
     def __init__(self, proxy=""):
 
         self.docker_compose_yml = 'docker-compose.yml'
-        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/earthcubechords/chords/tags"
+        self.dockerhub_tags_uri = "https://registry.hub.docker.com/v2/repositories/earthcubechords/chords/tags"
         if OS_ARCH[:3] == 'arm':
             self.docker_compose_yml = 'rpi-docker-compose.yml'
             self.dockerhub_tags_uri = "https://registry.hub.docker.com/v1/repositories/earthcubechords/rpi-chords/tags"
@@ -818,7 +818,7 @@ class Docker(object):
             printlines=False)
 
         tags = []
-        for tag in json.loads(curl_result):
+        for tag in json.loads(curl_result)['results']:
             tags.append(tag["name"])
 
         return tags
