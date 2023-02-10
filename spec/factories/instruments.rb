@@ -8,6 +8,6 @@ FactoryBot.define do
     plot_offset_value { rand 1..100 }
     plot_offset_units { ['hours', 'days', 'weeks'].sample }
     topic_category { TopicCategory.all.sample }
-    is_active true
+    is_active { true }
   end
 end
