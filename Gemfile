@@ -34,11 +34,9 @@ gem 'rubyzip', '~> 1.3.0'
 
 gem 'bootsnap', require: false
 
-# Specific gem versions based on Dependabot security scans
-# Updated 9/28/2020
-gem 'nokogiri',             '~> 1.13.9'
-gem 'websocket-extensions', '~> 0.1.5'
-gem 'json',                 '~> 1.8.6'
+gem 'nokogiri'
+gem 'websocket-extensions'
+gem 'json'
 
 # sdoc has a dependency of json ~ 1.7.7
 # gem 'json',                 '~> 2.3.0'

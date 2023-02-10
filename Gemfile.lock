@@ -155,12 +155,12 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.4.0)
+    mini_portile2 (2.8.1)
     minitest (5.17.0)
     msgpack (1.5.1)
     mysql2 (0.5.4)
     nio4r (2.5.8)
-    nokogiri (1.13.9)
+    nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -171,6 +171,7 @@ GEM
     public_suffix (4.0.7)
     puma (5.6.4)
       nio4r (~> 2.0)
+    racc (1.6.2)
     rack (2.2.6.2)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -326,12 +327,12 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jquery-rails (~> 4.3)
   jquery-ui-rails
-  json (~> 1.8.6)
+  json
   letter_opener
   loofah (>= 2.3.1)
   mini_portile2
   mysql2 (~> 0.5)
-  nokogiri (~> 1.13.9)
+  nokogiri
   puma
   rack (>= 2.0.8)
   rails (~> 5.2.4)
@@ -351,8 +352,8 @@ DEPENDENCIES
   underscore-rails
   unicorn-rails
   web-console (~> 2.0)
-  websocket-extensions (~> 0.1.5)
+  websocket-extensions
   whenever (~> 0.9.7)
 
 BUNDLED WITH
-   2.3.14
+   2.4.6
