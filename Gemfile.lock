@@ -327,12 +327,12 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jquery-rails (~> 4.3)
   jquery-ui-rails
-  json
+  json (~> 1.8.6)
   letter_opener
   loofah (>= 2.3.1)
   mini_portile2
   mysql2 (~> 0.5)
-  nokogiri
+  nokogiri (~> 1.13.9)
   puma
   rack (>= 2.0.8)
   rails (~> 5.2.4)
@@ -352,7 +352,7 @@ DEPENDENCIES
   underscore-rails
   unicorn-rails
   web-console (~> 2.0)
-  websocket-extensions
+  websocket-extensions (~> 0.1.5)
   whenever (~> 0.9.7)
 
 BUNDLED WITH
