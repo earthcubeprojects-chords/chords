@@ -15,7 +15,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'underscore-rails'
 
 gem 'jbuilder', '~> 2.7'
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sdoc', '~> 2.6.1', group: :doc
 gem "highcharts-rails"
 gem 'rails4-autocomplete'
 
@@ -38,7 +38,7 @@ gem 'bootsnap', require: false
 # Updated 9/28/2020
 gem 'nokogiri',             '~> 1.10.10'
 gem 'websocket-extensions', '~> 0.1.5'
-gem 'json',                 '~> 1.8.6'
+gem 'json',                 '~> 2.6.3'
 
 # sdoc has a dependency of json ~ 1.7.7
 # gem 'json',                 '~> 2.3.0'
