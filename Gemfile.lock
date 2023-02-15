@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/stympy/faker.git
   revision: 7846d10edaa0786a7b7df707533dbc7e995d3299
-  branch: master
+  branch: main
   specs:
     faker (2.21.0)
       i18n (>= 1.8.11, < 2)
@@ -106,7 +106,7 @@ GEM
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffi (1.9.25)
-    globalid (1.0.0)
+    globalid (1.0.1)
       activesupport (>= 5.0)
     haml (5.2.2)
       temple (>= 0.8.0)
@@ -125,7 +125,7 @@ GEM
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
     htmlentities (4.3.4)
-    i18n (1.10.0)
+    i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     influxdb (0.8.1)
     influxer (1.4.0)
@@ -147,7 +147,7 @@ GEM
       addressable (~> 2.7)
     letter_opener (1.8.1)
       launchy (>= 2.2, < 3)
-    loofah (2.18.0)
+    loofah (2.19.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -155,13 +155,14 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.4.0)
-    minitest (5.15.0)
+    mini_portile2 (2.8.1)
+    minitest (5.17.0)
     msgpack (1.5.1)
     mysql2 (0.5.4)
     nio4r (2.5.8)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.13.10)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
     orm_adapter (0.5.0)
     parallel (1.22.1)
     parser (2.7.2.0)
@@ -170,7 +171,8 @@ GEM
     public_suffix (4.0.7)
     puma (5.6.4)
       nio4r (~> 2.0)
-    rack (2.2.3)
+    racc (1.6.2)
+    rack (2.2.6.2)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (5.2.8)
@@ -193,8 +195,8 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.3)
-      loofah (~> 2.3)
+    rails-html-sanitizer (1.5.0)
+      loofah (~> 2.19, >= 2.19.1)
     rails4-autocomplete (1.1.1)
       rails (>= 3.0)
     rails_layout (1.0.42)
@@ -277,7 +279,7 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.9.5)
-    tzinfo (1.2.9)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -330,7 +332,7 @@ DEPENDENCIES
   loofah (>= 2.3.1)
   mini_portile2
   mysql2 (~> 0.5)
-  nokogiri (~> 1.10.10)
+  nokogiri (~> 1.13.9)
   puma
   rack (>= 2.0.8)
   rails (~> 5.2.4)
@@ -354,4 +356,4 @@ DEPENDENCIES
   whenever (~> 0.9.7)
 
 BUNDLED WITH
-   2.3.14
+   2.3.26
