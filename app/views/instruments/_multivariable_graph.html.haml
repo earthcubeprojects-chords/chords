@@ -1,12 +1,82 @@
+
+:javascript
+
+  var live_updating_run_status = false;
+  var live_updating_interval;
+
+  function toggle_run_state(id, refresh_ms) {
+
+
+    // console.log($('#toggle_live_updating').attr('src'));
+
+    if (live_updating_run_status == false) {
+      // set the run status to true
+      eval("live_updating_run_status = true;");
+
+      // set the indicator to on
+      $('#toggle_live_updating').attr('src', chords.toggleOnSwitch);
+
+      startLiveUpdate();
+
+
+      // start a repeating measurement
+      // repeat_measurement(id, refresh_ms);
+    } else {
+      // set the run status to false
+      eval("live_updating_run_status = false;");
+
+      // set the indicator to off
+      $('#toggle_live_updating').attr('src', chords.toggleOffSwitch);
+
+      stopLiveUpdate();
+    }
+
+
+    // console.log(live_updating_run_status);
+  }
+
+  function startLiveUpdate() {
+    var refresh_seconds = parseInt($('#refresh_seconds').val());
+    if (refresh_seconds) {
+      live_refresh_msecs = refresh_seconds * 1000;
+      console.log(live_refresh_msecs);
+    }
+    
+    live_updating_interval = setInterval(updateHighchartsGraph, live_refresh_msecs);
+  }  
+
+  function stopLiveUpdate() {
+    clearInterval(live_updating_interval);
+  }  
+
+
+  function updateHighchartsGraph() {
+    for (i = 0; i < variables.length; i++) {
+      requestVarLiveData(live_last_times[i], 0, variables[i].shortname);
+    }
+  }
+
+
+
+
 - if (@var_to_plot)
   #instrument_live_chart.instrument_highchart{:style => "min-width: 310px; height: 400px; margin: 0 auto"}
     = (render 'multivariable_graph_chart').html_safe
   %br
-  Data Start Time:
-  %input{type: "datetime-local", id: "start"}
-  Data End Time:
-  %input{type: "datetime-local", id: "end"}
-  %input{id: "adjustRange", type: "button", value: "Adjust Data Range"}
+    .text-center
+      Live Update Interval (in seconds)
+      %input{type: "text", id: "refresh_seconds", value: @instrument.sample_rate_seconds, size: 4}      
+
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Live Data Monitor 
+      = image_tag('toggle_switch_off.png', size:"62X25", id:"toggle_live_updating", onclick:"toggle_run_state(toggle_live_updating, 1000);")
   %br
-  %input{id: "resetZoom", type: "button", value: "Reset Zoom"}
+    .text-center
+      Data Start Time:
+      %input{type: "datetime-local", id: "start"}
+      Data End Time:
+      %input{type: "datetime-local", id: "end"}
+      %input{id: "adjustRange", type: "button", value: "Adjust Data Range"}
   %br
+    .text-center
+      %input{id: "resetZoom", type: "button", value: "Reset Zoom"}

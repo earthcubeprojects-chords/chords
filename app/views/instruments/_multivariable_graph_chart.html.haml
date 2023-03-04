@@ -1,6 +1,13 @@
 %script{type:'text/javascript', src: "https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.js"}
 %link{type: 'text/css', rel: "stylesheet", href: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.4.5/jquery-ui-timepicker-addon.css'}
 
+
+
+:javascript
+
+  var live_updating_run_status = false;
+
+
 :javascript
   //////////////////////////////////////////////////
   ////////// Initialization of Variables ///////////
@@ -18,7 +25,7 @@
   var live_last_times = [];
 
   // initialize variable that determines how often to fetch new data
-  var live_refresh_msecs;
+  var live_refresh_msecs = #{@instrument.sample_rate_seconds} * 1000;
 
   // array that holds all variables of current instrument
   var variables = #{@variables.to_json.html_safe};
@@ -87,7 +94,11 @@
   // used for refreshing data after initial call
   // if 'endtime' is null, then data retrieved from start to most recent data
   function requestVarLiveData(starttime, endtime, currVar) {
-    $.getJSON('/instruments/#{@instrument.id}/live?var=' + currVar + '&start=' + starttime + '&end=' + endtime, function (data) {
+
+    var request_string = '/instruments/#{@instrument.id}/live?var=' + currVar + '&start=' + starttime + '&end=' + endtime;
+
+    $.getJSON(request_string, function (data) {
+      // console.log(data);
       addNewVarData(data, currVar);
     });
   }
@@ -122,6 +133,8 @@
     var multivariable_points = data["multivariable_points"];
     var multivariable_names = data["multivariable_names"];
     var live_refresh_msecs = data["refresh_msecs"];
+
+    // console.log(live_refresh_msecs);
 
     // loop through all variables
     for (i = 0; i < multivariable_names.length; i++) {
@@ -292,11 +305,45 @@
     requestAllLiveData(0, 0, true);
 
     // refresh  data source for each variable
-    // setInterval(function() {
-      // for (i = 0; i < variables.length; i++) {
-        // requestVarLiveData(live_last_times[i], 0, variables[i].shortname);
-      // }
-    // }, live_refresh_msecs);
+
+
+
+
+
+
+    function toggle_run_state(id, refresh_ms) {
+
+
+      // console.log($('#toggle_live_updating').attr('src'));
+
+      if (live_updating_run_status == false) {
+        // set the run status to true
+        eval("live_updating_run_status = true;");
+
+        // set the indicator to on
+        $('#toggle_live_updating').attr('src', chords.toggleOnSwitch);
+
+        startLiveUpdate();
+
+
+        // start a repeating measurement
+        // repeat_measurement(id, refresh_ms);
+      } else {
+        // set the run status to false
+        eval("live_updating_run_status = false;");
+
+        // set the indicator to off
+        $('#toggle_live_updating').attr('src', chords.toggleOffSwitch);
+      }
+
+
+      // console.log(live_updating_run_status);
+    }
+
+
+
+
+
 
     // reset zoom button
     $('#resetZoom').click(function() {
@@ -314,3 +361,5 @@
     document.getElementById('start').defaultValue = new Date(min * 1000).toISOString().slice(0, -1);
     document.getElementById('end').defaultValue = new Date(max * 1000).toISOString().slice(0, -1);
   });
+
+

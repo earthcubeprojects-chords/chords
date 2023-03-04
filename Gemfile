@@ -34,9 +34,7 @@ gem 'rubyzip', '~> 1.3.0'
 
 gem 'bootsnap', require: false
 
-# Specific gem versions based on Dependabot security scans
-# Updated 9/28/2020
-gem 'nokogiri',             '~> 1.10.10'
+gem 'nokogiri',             '~> 1.13.9'
 gem 'websocket-extensions', '~> 0.1.5'
 gem 'json',                 '~> 1.8.6'
 
@@ -52,7 +50,7 @@ group :development, :test do
   gem 'puma'
 
   gem "factory_bot_rails"
-  gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
+  gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'main'
 end
 
 group :test do

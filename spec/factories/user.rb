@@ -1,29 +1,29 @@
 FactoryBot.define do
   factory :user do
     email { Faker::Internet.email }
-    password 'fake_passwd'
-    roles [:registered_user]
+    password { 'fake_passwd' }
+    roles { [:registered_user] }
 
     factory :data_downloader do
-      roles [:downloader, :registered_user]
+      roles { [:downloader, :registered_user] }
       api_key { User.generate_api_key }
     end
 
     factory :admin do
-      roles [:admin]
+      roles { [:admin] }
     end
 
     factory :data_creator do
-      roles [:measurements]
+      roles { [:measurements] }
       api_key { User.generate_api_key }
     end
 
     factory :site_configurator do
-      roles [:site_config]
+      roles { [:site_config] }
     end
 
     factory :guest do
-      roles [:guest]
+      roles { [:guest] }
     end
   end
 end

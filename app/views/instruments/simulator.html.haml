@@ -23,7 +23,7 @@
     var measure_sigma = 2.0;
     var avg   = (measure_max + measure_min)/2.0;
     var value = avg + (Math.random()-0.5) * 2 * measure_sigma + offset;
-    value = value.toPrecision(4);
+    value = value.toPrecision(1);
     return value;
   }
 
@@ -51,7 +51,7 @@
     // add variable values
     var s = shortnames(id);
     for (var i = 0; i < s.length; i++) {
-      url += "&" + s[i] + "=" + random_value(10.0*i + 100*parseInt(id));
+      url += "&" + s[i] + "=" + random_value(10.0*i);
     }
 
     // add the measurement time
