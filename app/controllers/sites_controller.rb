@@ -18,7 +18,9 @@ class SitesController < ApplicationController
   def map
   end
 
-  ## generates json for all sites, format:
+  ## generates json for all sites:
+  # (status is true if all instruments at the site are active and have recent data.
+  #  We should have a more descriptive key than "status" for this.)
   # {
   # "type": "FeatureCollection",
   # "features": [
@@ -39,29 +41,31 @@ class SitesController < ApplicationController
   #   }
   # ]
   # }
-  # status is true if all instruments at the site are active and have recent data.
-  # We should use a better key than "status" for this.
   def map_markers_geojson
     features = []
 
     json_data = @sites.each do |site|
-      # determine whether site is active (ie. all active instruments are receiving data)
-      # filter on the sites that are active but not receiving data.
-      is_receiving = (site.instruments.select{|i| ((i.is_receiving_data == false) && (i.is_active == true))}.length == 0)
+      # Are there any instruments at this site which are active and missing data?
+      missing_recent_data = (site.instruments.select{|i| ((i.is_receiving_data == false) && (i.is_active == true))}.length == 0)
+      # Only consider sites with active instruments
+      if (site.instruments.select{|i| i.is_active == true}.length > 0)
+        geometry = {type: "Point", coordinates: [site.lon, site.lat]}
+        properties = {name: site.name, url: site_url(site), status: missing_recent_data}
 
-      geometry = {type: "Point", coordinates: [site.lon, site.lat]}
-      properties = {name: site.name, url: site_url(site), status: is_receiving}
-
-      feature = {type: "Feature", geometry: geometry, properties: properties}
-      features << feature
+        feature = {type: "Feature", geometry: geometry, properties: properties}
+        features << feature
+      end
     end
+    logger.debug "*** map_markers_geojson features: #{features}"
 
     sites_geojson = {type: "FeatureCollection", features: features}.to_json
 
     render json: sites_geojson
   end
 
-  ## generate json for particular site's active instruments, format:
+  ## generate json for particular site's active instruments
+  # (status is true if the instrument is active and has recent data.
+  #  We should have a more descriptive key than "status" for this.)
   # [
   #  {
   #    "name": "Instrument 1", 
@@ -74,8 +78,7 @@ class SitesController < ApplicationController
   #     "url": "asdfasdf"
   #   }
   # ]
-  # status is true if the instrument is active and has recent data.
-  # We should use a better key than "status" for this.
+  # .
   def map_balloon_json
     instrument_json = []
 
