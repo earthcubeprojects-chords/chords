@@ -46,17 +46,15 @@ class SitesController < ApplicationController
 
     json_data = @sites.each do |site|
       # Are there any instruments at this site which are active and missing data?
-      missing_recent_data = (site.instruments.select{|i| ((i.is_receiving_data == false) && (i.is_active == true))}.length == 0)
+      active_and_missing_recent_data = (site.instruments.select{|i| ((i.is_receiving_data == false) && (i.is_active == true))}.length > 0)
       # Only consider sites with active instruments
       if (site.instruments.select{|i| i.is_active == true}.length > 0)
         geometry = {type: "Point", coordinates: [site.lon, site.lat]}
-        properties = {name: site.name, url: site_url(site), status: missing_recent_data}
-
+        properties = {name: site.name, url: site_url(site), status: !active_and_missing_recent_data}
         feature = {type: "Feature", geometry: geometry, properties: properties}
         features << feature
       end
     end
-    logger.debug "*** map_markers_geojson features: #{features}"
 
     sites_geojson = {type: "FeatureCollection", features: features}.to_json
 
