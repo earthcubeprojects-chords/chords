@@ -13,6 +13,19 @@
   ////////// Initialization of Variables ///////////
   //////////////////////////////////////////////////
 
+  // Increase the size of the Highcharts color pallete
+  var new_colors = [
+    '#FF0000',  '#00FF00',  '#0000FF',  '#FFFF00',  '#FF00FF',  
+    '#00FFFF',  '#800000',  '#008000',  '#000080',  '#808000',  
+    '#800080',  '#008080',  '#FFA500',  '#FF69B4',  '#DC143C',  
+    '#FF6347',  '#00FF7F',  '#8B008B',  '#4B0082',  '#FFD700',  
+    '#FF8C00',  '#A0522D',  '#9400D3',  '#00CED1',  '#FF1493',  
+    '#00FA9A',  '#FF00FF',  '#ADFF2F',  '#FF4500',  '#8FBC8F']
+
+  Highcharts.setOptions({
+        colors: Highcharts.getOptions().colors.concat(new_colors)
+  });
+
   // intialize series array that contain hashes corresponding to each variable
   var live_series = [];
 
@@ -41,16 +54,24 @@
   var variable_index = 0;
   variables.forEach (function(v) {
 
+
+    // Get the color to use for the variable
+    // Make sure that the index of the color exists in the Highcharts configuration, 
+    // and if we've run out of colors, loop them 
+    var highcharts_color_index = variable_index % (Highcharts.getOptions().colors.length) ;
+    
+    var highcharts_color = Highcharts.getOptions().colors[highcharts_color_index].toString();
+
     var y_axis_js_part = '';
     y_axis_js_part += '{\n';
     y_axis_js_part += '  "labels": {\n';
     y_axis_js_part += '      "format": "{value} ' + v.units + '"' +  ',\n';
-    y_axis_js_part += '       "style": { "color": "' + Highcharts.getOptions().colors[variable_index].toString() + '" }\n';
+    y_axis_js_part += '       "style": { "color": "' + highcharts_color + '" }\n';
     y_axis_js_part += '  },\n';
 
     y_axis_js_part += '  "title": {\n ';
     y_axis_js_part += '   "text": "' + v.name + ' (' + v.units + ')",\n';
-    y_axis_js_part += '   "style": { "color": "' + Highcharts.getOptions().colors[variable_index].toString() + '" }\n';
+    y_axis_js_part += '   "style": { "color": "' + highcharts_color + '" }\n';
     y_axis_js_part += '  },\n';
 
     y_axis_js_part += '  "opposite": false,\n';
@@ -231,6 +252,7 @@
   ////////////////////////////////////////
 
   $(document).ready(function () {
+
     // adjust the global timezone offset
     Highcharts.setOptions({
       global: {
