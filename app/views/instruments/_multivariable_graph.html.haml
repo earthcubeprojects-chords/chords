@@ -7,8 +7,6 @@
   function toggle_run_state(id, refresh_ms) {
 
 
-    // console.log($('#toggle_live_updating').attr('src'));
-
     if (live_updating_run_status == false) {
       // set the run status to true
       eval("live_updating_run_status = true;");
@@ -31,15 +29,12 @@
       stopLiveUpdate();
     }
 
-
-    // console.log(live_updating_run_status);
   }
 
   function startLiveUpdate() {
     var refresh_seconds = parseInt($('#refresh_seconds').val());
     if (refresh_seconds) {
       live_refresh_msecs = refresh_seconds * 1000;
-      console.log(live_refresh_msecs);
     }
     
     live_updating_interval = setInterval(updateHighchartsGraph, live_refresh_msecs);

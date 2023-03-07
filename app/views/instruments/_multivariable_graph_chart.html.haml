@@ -98,7 +98,6 @@
     var request_string = '/instruments/#{@instrument.id}/live?var=' + currVar + '&start=' + starttime + '&end=' + endtime;
 
     $.getJSON(request_string, function (data) {
-      // console.log(data);
       addNewVarData(data, currVar);
     });
   }
@@ -133,8 +132,6 @@
     var multivariable_points = data["multivariable_points"];
     var multivariable_names = data["multivariable_names"];
     var live_refresh_msecs = data["refresh_msecs"];
-
-    // console.log(live_refresh_msecs);
 
     // loop through all variables
     for (i = 0; i < multivariable_names.length; i++) {
@@ -313,9 +310,6 @@
 
     function toggle_run_state(id, refresh_ms) {
 
-
-      // console.log($('#toggle_live_updating').attr('src'));
-
       if (live_updating_run_status == false) {
         // set the run status to true
         eval("live_updating_run_status = true;");
@@ -336,8 +330,6 @@
         $('#toggle_live_updating').attr('src', chords.toggleOffSwitch);
       }
 
-
-      // console.log(live_updating_run_status);
     }
 
 
