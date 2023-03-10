@@ -66,7 +66,7 @@ class Instrument < ApplicationRecord
         .where(time: starttime..endtime)
     end
 
-    if count.to_a.empty?
+    if count.to_a.nil? || count.to_a.empty?
         return self.sample_rate_seconds
     end
 
