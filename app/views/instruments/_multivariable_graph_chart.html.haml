@@ -65,13 +65,13 @@
     var y_axis_js_part = '';
     y_axis_js_part += '{\n';
     y_axis_js_part += '  "labels": {\n';
-    y_axis_js_part += '      "format": "{value} ' + v.units + '"' +  ',\n';
-    y_axis_js_part += '       "style": { "color": "' + highcharts_color + '" }\n';
+    y_axis_js_part += '      "format": "{value} ' + $.trim(v.units) + '"' +  ',\n';
+    y_axis_js_part += '       "style": { "color": "' + $.trim(highcharts_color) + '" }\n';
     y_axis_js_part += '  },\n';
 
     y_axis_js_part += '  "title": {\n ';
-    y_axis_js_part += '   "text": "' + v.name + ' (' + v.units + ')",\n';
-    y_axis_js_part += '   "style": { "color": "' + highcharts_color + '" }\n';
+    y_axis_js_part += '   "text": "' + $.trim(v.name) + ' (' + $.trim(v.units) + ')",\n';
+    y_axis_js_part += '   "style": { "color": "' + $.trim(highcharts_color) + '" }\n';
     y_axis_js_part += '  },\n';
 
     y_axis_js_part += '  "opposite": false,\n';
