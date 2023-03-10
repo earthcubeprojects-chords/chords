@@ -141,7 +141,9 @@
       live_chart.series[i].setData(points);
 
       // update last times array for current variable
-      live_last_times[i] = points[points.length - 1][0];
+      if (points.length > 0) {
+        live_last_times[i] = points[points.length - 1][0];
+      }
     }
     live_chart.redraw();
   }
@@ -165,7 +167,9 @@
       }
 
       // update last times array for current variable
-      live_last_times[i] = points[points.length - 1][0];
+      if (points.length > 0) {
+        live_last_times[i] = points[points.length - 1][0];
+      }
     }
     live_chart.redraw();
   }
@@ -192,7 +196,9 @@
     live_chart.redraw();
 
     // update last times array for specific variable
-    live_last_times[series_index] = points[points.length - 1][0];
+    if (points.length > 0) {
+      live_last_times[series_index] = points[points.length - 1][0];
+    }
   }
 
   ////////////////////////////////////////////////////////////////
