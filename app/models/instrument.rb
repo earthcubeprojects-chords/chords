@@ -66,6 +66,10 @@ class Instrument < ApplicationRecord
         .where(time: starttime..endtime)
     end
 
+    if count.to_a.nil?
+        return self.sample_rate_seconds
+    end
+
     num_points = count.to_a[0]["count"].to_i
 
     if num_points > max_points
