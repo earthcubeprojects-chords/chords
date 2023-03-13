@@ -595,9 +595,7 @@ class ChordsGit(object):
 
         # If a Release specification, get the release tag shas.
         if "Release-" in release_or_branch:
-          tag = re.sub('Release-', '', release_or_branch)
-          tags_and_shas = self.tags_and_shas()
-          url_specifier = tags_and_shas[tag]
+          url_specifier = url_specifier.replace('Release-','')
 
         if not isinstance(files, list):
             files = [files]
