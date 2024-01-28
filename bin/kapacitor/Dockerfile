@@ -1,4 +1,4 @@
-FROM kapacitor:1.3 
+FROM kapacitor:1.7
 
 # Update
 RUN apt-get update 

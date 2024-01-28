@@ -32,7 +32,7 @@ COPY Gemfile Gemfile.lock ./
 # output to show up asynchronously, potentially making debugging more difficult
 #
 ENV BUNDLE_JOBS 1
-RUN gem install bundler && bundle install --jobs $BUNDLE_JOBS --retry 5
+RUN gem install bundler -v '2.4.22' && bundle install --jobs $BUNDLE_JOBS --retry 5
 
 # Copy the main application.
 COPY . ./
