@@ -1197,6 +1197,10 @@ class ChordsBackup(object):
             self.influx_tar_file,
             self.grafana_tar_file]
         print(sh.tar(tar_params, _err_to_out=True).stdout.decode('utf-8'))
+        chmod_params = [
+            'go-rw', self.chords_tar_file
+        ]
+        print(sh.chmod(chmod_params, _err_to_out=True).stdout.decode('utf-8'))
         print(sh.rm(self.manifest_file, self.mysql_sql_file, self.influx_tar_file, self.grafana_tar_file))
 
         print("*** Success ***")
