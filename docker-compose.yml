@@ -202,7 +202,7 @@ services:
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
-    image: earthcubechords/grafana:7.1.1
+    image: grafana/grafana:10.3.1
     # Note: GF_ variables are used by grafana, meaning that
     # you should not create your own variables beginning with GF_.
     environment:
@@ -216,7 +216,21 @@ services:
       - GF_SMTP_FROM_NAME=CHORDS Grafana
       - GF_SMTP_HOST=${CHORDS_EMAIL_SERVER}:${CHORDS_EMAIL_PORT}
       - GF_SMTP_USER=${CHORDS_EMAIL_ADDRESS}
-      - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}      
+      - GF_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}
+      - GF_DATASOURCES_SECUREJSONDATA_PASSWORD=guest
+      - GF_INSTALL_PLUGINS= grafana-clock-panel,
+          grafana-worldmap-panel, 
+          grafana-piechart-panel, 
+          satellogic-3d-globe-panel, 
+          ryantxu-ajax-panel, 
+          neocat-cal-heatmap-panel, 
+          petrslavotinek-carpetplot-panel, 
+          briangann-gauge-panel, 
+          jdbranham-diagram-panel, 
+          mtanda-histogram-panel, 
+          bessler-pictureit-panel, 
+          natel-plotly-panel, 
+          btplc-status-dot-panel
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
