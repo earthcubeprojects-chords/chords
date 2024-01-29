@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!python3
 
 """
 The CHORDS management script. Use to manage the CHORDS portal configuration,
