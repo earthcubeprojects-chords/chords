@@ -230,7 +230,8 @@ services:
           mtanda-histogram-panel, 
           bessler-pictureit-panel, 
           natel-plotly-panel, 
-          btplc-status-dot-panel
+          btplc-status-dot-panel,
+          operato-windrose-panel
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
