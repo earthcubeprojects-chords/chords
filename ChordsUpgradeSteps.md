@@ -3,6 +3,8 @@
 
 *Everything is done as root.*
 
+*The following assumes that you have docker installed and that the service is running.*
+
 ## Backups
 
 It's ***critical*** that backups be made so that if something goes sideways
