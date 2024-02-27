@@ -21,6 +21,9 @@ It's recommended that you make two backups:
 
 ## Restoring versus upgrading
 
+You may want to either *restore* a CHORDS instance, *upgrade* a CHORDS instance,
+or both. It depends upon what your goal is.
+
 From above, you will already have made a CHORDS backup file. This contains
 the databases that contain timeseries data and grafana configurations.
 
@@ -128,11 +131,12 @@ Influxdb database aren't set. All of the panels will have an alert:
     *Status: 500. Message: InfluxDB returned error: authorization failed*
 
 Fix this as follows:
+  - Look in the *.env* file, and find the value of *CHORDS_ADMIN_PW*.
   - log in as *admin*
   - Under the left dropdown menu, select Connections->Data sources
   - Select the CHORDS data source
   - Enable *Auth: Basic auth*.
-  - User and Password boxes will appear. Set them to *admin* and *chords_ec_demo*, repectively.
+  - User and Password boxes will appear. Set them to *admin* and the value of *CHORDS_ADMIN_PW*, respectively.
   - Mash the *Save & Test* button.
 
 ### Wind direction gauges
