@@ -3,6 +3,8 @@
 
 *Everything is done as root.*
 
+*The following assumes that you have docker installed and that the service is running.*
+
 ## Backups
 
 It's ***critical*** that backups be made so that if something goes sideways
@@ -89,7 +91,7 @@ upgraded when the new software runs.
 You will do this either:
   - after the [previous procedure](#creating-a-new-chords-instance), if you are testing an upgrade
     against an existing CHORDS backup. 
-  - or you are ready to upgrade a running production instance. 
+  - or starting here if you are ready to upgrade a running production instance. 
 
 Once again, be sure to make backups shortly before upgrading a
 production CHORDS instance.
@@ -98,7 +100,7 @@ production CHORDS instance.
 # Stop CHORDS
 python3 chords_control --stop
 
-# Update the control script
+# Update the control script. Select the new release (e.g Release-1.1.0-rc5.
 python3 chords_control --renew
 
 # Reconfgure. Select the new release (e.g Release-1.1.0-rc5)
