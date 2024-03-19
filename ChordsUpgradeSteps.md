@@ -14,7 +14,7 @@ minimize data loss.
 
 It's recommended that you make two backups:
 
-  - A tar file made with `python3 chords_control --backup`. Copy this to
+  - A tar file made with `sudo python3 chords_control --backup`. Copy this to
     another machine.
   - A snapshot of the AWS VM instance. This will be easiest to use for
     recovery.
@@ -28,7 +28,7 @@ From above, you will already have made a CHORDS backup file. This contains
 the databases that contain timeseries data and grafana configurations.
 
     ***CHORDS backup files are tied directly to the version of CHORDS that
-       was running when it was created***
+       was running when they were created***
 
 Restoring CHORDS involves loading the databases into a running CHORDS instance.
 Thus, to start a restore, you must have a CHORDS instance of the same version as
@@ -41,7 +41,7 @@ For upgrade testing against your current data and grafana configurations,
 it's useful to combine these steps:
 
   1. Create a new throw-away (empty) CHORDS instance of the
-     same version as your backup.
+     ***same version*** as your backup.
   2. Restore the CHORDS backup.
   3. Upgrade CHORDS to the next version.
 
@@ -63,24 +63,29 @@ pip3 install sh==1.14.3  # MUST use this version of sh
 # Fetch the control script:
 curl -O -k https://raw.githubusercontent.com/earthcubeprojects-chords/chords/master/chords_control
 
-# Renew the control script. Choose the one that matches the chords
-# backup file version.
-python3 chords_control --renew
+# Renew the control script:
+# Choose the CHORDS versions that match the version
+# that the backup file was created on.
+sudo python3 chords_control --renew
 
 # Initial installation:
-python3 chords_control --config
-python3 chords_control --update
+# Choose the CHORDS versions that match the version
+# that the backup file was created on.
+# For all config question except the version choices,
+# you can just enter a return to accept the suggested value.
+sudo python3 chords_control --config
+sudo python3 chords_control --update
 
 # Run  the empty CHORDS (verify with web browser):
-python3 chords_control --run
+sudo python3 chords_control --run
 
 # Restore the backup
 # (Answer Y to restore the configuration files):
-python3 chords_control --restore <CHORDS backup file>
+sudo python3 chords_control --restore <CHORDS backup file>
 
 # Restart:
-python3 chords_control --stop
-python3 chords_control --run
+sudo python3 chords_control --stop
+sudo python3 chords_control --run
 
 # Verify using the browser
 ```
@@ -94,29 +99,33 @@ upgraded when the new software runs.
 You will do this either:
   - after the [previous procedure](#creating-a-new-chords-instance), if you are testing an upgrade
     against an existing CHORDS backup. 
-  - or starting here if you are ready to upgrade a running production instance. 
+  - or starting right here if you are ready to upgrade a running production instance. 
 
 Once again, be sure to make backups shortly before upgrading a
 production CHORDS instance.
 
 ```sh
 # Stop CHORDS
-python3 chords_control --stop
+sudo python3 chords_control --stop
 
-# Update the control script. Select the new release (e.g Release-1.1.0-rc5.
-python3 chords_control --renew
+# Update the control script.
+# Select the new release (e.g Release-1.1.0-rc5).
+sudo python3 chords_control --renew
 
 # Reconfgure. Select the new release (e.g Release-1.1.0-rc5)
-python3 chords_control --config
+# Hit enter for all other questions (you should see that the
+# suggesed values are the same as the last configuration step).
+sudo python3 chords_control --config
 
-python3 chords_control --run
+# Run it.
+sudo python3 chords_control --run
 ```
 
 Now use your browser to verify operation.
 
 At this stage, why not go ahead and make a fresh backup:
 ```sh
-python3 chords_control --backup
+sudo python3 chords_control --backup
 ```
 
 ## Grafana gotchas
@@ -131,12 +140,15 @@ Influxdb database aren't set. All of the panels will have an alert:
     *Status: 500. Message: InfluxDB returned error: authorization failed*
 
 Fix this as follows:
-  - Look in the *.env* file, and find the value of *CHORDS_ADMIN_PW*.
-  - log in as *admin*
+  - Look in the *.env* file, and find the value of *CHORDS_ADMIN_PW*. Remember this password;
+    you will use it for the grafana data source authentication below.
+  - Hit the Grafana 'Signin' button (it has moved to the upper right).
+    Log in as *admin*, using the Grafana admin password from the old CHORDS portal.
   - Under the left dropdown menu, select Connections->Data sources
   - Select the CHORDS data source
   - Enable *Auth: Basic auth*.
-  - User and Password boxes will appear. Set them to *admin* and the value of *CHORDS_ADMIN_PW*, respectively.
+  - User and Password boxes will appear. Set them to *admin* and the value of  the *CHORDS_ADMIN_PW*
+    that you got from the *.env* file.
   - Mash the *Save & Test* button.
 
 ### Wind direction gauges
