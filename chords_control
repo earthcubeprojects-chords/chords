@@ -1178,7 +1178,7 @@ class ChordsBackup(object):
 
         print("** Saving grafana ***")
         print(docker_bash(
-            "chords_grafana", "cd / && tar -cvf /tmp/%s etc/grafana/grafana.ini var/lib/grafana/ /opt/grafana-plugins" %
+            "chords_grafana", "cd / && tar -cvf /tmp/%s etc/grafana/grafana.ini var/lib/grafana/" %
             (self.grafana_tar_file)))
         docker_cp('chords_grafana:%s' % ("/tmp/"+self.grafana_tar_file), '.')
         print(docker_bash(
