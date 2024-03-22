@@ -57,11 +57,35 @@ This procdure is almost exactly as that found in the CHORDS install
 mkdir -p chords-test
 cd chords-test
 
+# If you already have docker-compose installed:
 # Install python sh module:
 pip3 install sh==1.14.3  # MUST use this version of sh
 
+# If you do not have docker-compose installed: 
+# Download Docker Compose binary into /usr/local/bin:
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+# Apply execute permissions:
+sudo chmod +x /usr/local/bin/docker-compose
+# Verify installation:
+docker-compose --version
+# Install python sh module:
+pip3 install sh==1.14.3 # MUST use this version of sh
+
+
 # Fetch the control script:
 curl -O -k https://raw.githubusercontent.com/earthcubeprojects-chords/chords/master/chords_control
+
+# Check for competing Docker containers on Port 3000:
+docker ps
+# Stop any containers on Port 3000
+docker stop <Container ID>
+# Alternatively, you can remove the container
+docker rm <Container ID>
+
+# Check for unnecessary docker volumes:
+docker volume ls
+# Remove any competing/unnecessary volumes:
+docker volume rm <Volume Name>
 
 # Renew the control script:
 # Choose the CHORDS versions that match the version
