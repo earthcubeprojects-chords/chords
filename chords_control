@@ -40,7 +40,7 @@ Use -t to see the current portal status.
 The devmode (-m) enables development mode, where the current directory
 is mounted as the CHORDS Rails source.
 
-The the --renew option makes a backup copy of this script, and pulls down
+The the --renew option makes a backup copy of this script and the docker-compose files, and pulls down
 a new version from github.
 """
 from __future__ import print_function
@@ -355,7 +355,7 @@ chords_control is not available on Windows.
         parser.add_argument("--backwards", help="read CHORDS .env file and write config file (use with caution!)", default=False, action="store_true")
         parser.add_argument("--proxy",   help="proxy for curl (e.g. proxy.myorg.com:8080)",           default="",           action="store")
         parser.add_argument("--devmode", help="run containers in source code development mode",       default=False,        action="store_true")
-        parser.add_argument("--renew",   help="replace chords_control with a new version (use with caution!)",  default=False, action="store_true")
+        parser.add_argument("--renew",   help="replace chords_control and docker configs with a new version (use with caution!)",  default=False, action="store_true")
         parser.add_argument("--verbose", help="enable VERBOSE",                                       default=False,        action="store_true")
 
         # If no switches, print the help.
