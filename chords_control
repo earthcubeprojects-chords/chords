@@ -176,6 +176,16 @@ STD_CONFIG_ITEMS = [
         []
     ],
     [
+        "The IP name for the Grafana (and CHORDS) server.\n"
+        "When Grafana sends an alert, it will include a link\n"
+        "back to this server, so that a user can navigate to\n"
+        "the Grafana panel which created the alert.",
+        "GRAFANA_SERVER_DOMAIN",
+        "localhost",
+        False,
+        []
+    ],
+    [
         "The PASSWORD for admin access to Grafana.\n"
         "Once Grafana is initialized with this password,\n"
         "it can only be changed from the Grafana admin web page.\n"
