@@ -922,7 +922,7 @@ and set SSL_ENABLED to false.""")
         reply = prompt("""
 
 If the above text contains the phrase 
-"Congratulations! Your certificate and chain have been saved at ..."
+"Successfully received certificate. Your certificate and chain have been saved at ..."
 then the test certificate was successfully created.
 
 Did the test cert get created properly?""", ['y', 'Y', 'n', 'N'])
