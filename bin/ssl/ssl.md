@@ -60,7 +60,7 @@ docker-compose build  --no-cache  grafana
 docker-compose build  --no-cache  kapacitor
 ```
 
-_mysql_ is the only service in CHORDS which is run with a stock image. All of the
+_mysql_ and _grafana_ are the only services in CHORDS which are run with a stock image. All of the
 rest have CHORDS specific images.
 
 ## Configuration Values
