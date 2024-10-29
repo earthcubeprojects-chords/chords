@@ -56,7 +56,6 @@ from the top CHORDS source directory:
 docker-compose build  --no-cache  app
 docker-compose build  --no-cache  certbot
 docker-compose build  --no-cache  nginx
-docker-compose build  --no-cache  grafana
 docker-compose build  --no-cache  kapacitor
 ```
 
