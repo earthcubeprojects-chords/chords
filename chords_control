@@ -1933,6 +1933,7 @@ def choose_branch(the_file):
     Prompt the user to choose which git branch to fetch the file from.
     """
     identifiers = ChordsGit().branches_and_releases()
+    identifiers.sort()
     release_or_branch = ''
     while True:
         print("Which branch or release do you want to pull " + the_file + " from (usually the most recent release)\n(", end=' ')
