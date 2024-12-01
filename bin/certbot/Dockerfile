@@ -1,4 +1,4 @@
-FROM certbot/certbot 
+FROM certbot/certbot:amd64-v2.5.0 
 
 # Install Docker on the container itself, so that this 
 # container can can ask docker to restart nginx after cert renewal.
