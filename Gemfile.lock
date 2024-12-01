@@ -160,7 +160,7 @@ GEM
     msgpack (1.5.1)
     mysql2 (0.5.4)
     nio4r (2.5.8)
-    nokogiri (1.13.10)
+    nokogiri (1.14.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     orm_adapter (0.5.0)
@@ -328,7 +328,7 @@ DEPENDENCIES
   loofah (>= 2.3.1)
   mini_portile2
   mysql2 (~> 0.5)
-  nokogiri (~> 1.13.9)
+  nokogiri (~> 1.14.3)
   puma
   rack (>= 2.0.8)
   rails (~> 5.2.4)

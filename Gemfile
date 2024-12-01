@@ -33,7 +33,7 @@ gem 'rubyzip', '~> 1.3.0'
 
 gem 'bootsnap', require: false
 
-gem 'nokogiri',             '~> 1.13.9'
+gem 'nokogiri',             '~> 1.14.3'
 gem 'websocket-extensions', '~> 0.1.5'
 gem 'json',                 '~> 2.6.3'
 
