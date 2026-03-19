@@ -841,29 +841,13 @@ class ChordsSSL(object):
     """
     Manage SSL certificates.
 
-    The complete chain of certificate management activities
-    is trigger just by instantiating this class.
+    With Caddy, SSL certificate management is fully automatic.
+    Instantiating this class checks DNS and reports on certificate status.
     """
     def __init__(self, ssl_host, ssl_email):
 
         self.ssl_host = ssl_host
         self.ssl_email = ssl_email
-        self.cert_dir = "/etc/letsencrypt/live/"+self.ssl_host
-
-        print("*** Beginning SSL management. This is a complicated activity, with many steps.")
-        print()
-        print ("""
-CHORDS should not be automatically restarted by a Linux
-service during the SSL process. You should disable or stop
-any such service before proceeding.""")
-        print()
-        reply = prompt("Have you stopped any CHORDS auto-restart services?", ['y', 'Y', 'n', 'N'])
-        if reply == 'n':
-            # Don't create cert now
-            print()
-            print("You will have to continue the SSL configuration later.")
-            print()
-            return
 
         if ssl_host == "" or ssl_email == "":
             raise ChordsSslError("When SSL is enabled, you must provide SSL_HOST and SSL_EMAIL. Rerun with --config to specify these.")
@@ -874,20 +858,11 @@ any such service before proceeding.""")
         result = self.check_cert()
         if result["valid_cert"]:
             print ("You have a valid certificate!")
+            print ("  Not Before: %s" % result["notBefore"])
+            print ("  Not After:  %s" % result["notAfter"])
+            if result["expired"]:
+                print ("WARNING: The certificate has expired. Caddy should renew it automatically.")
         else:
-            if result["test_cert"]:
-                print ("You appear to have a test certificate.")
-                reply = prompt("Do you wish to replace it with a valid certificate?", ['y', 'Y', 'n', 'N'])
-                if reply == 'n':
-                    # Don't create cert now
-                    print()
-                    print("""
-The test certificate will be retained. The CHORDS portal will be using an
-inoperative certificate. We suggest that you rerun the configuration
-and set SSL_ENABLED to false.""")
-                    print()
-                    return
-
             # Create a new certificate
             print ("We need to create a new certificate.")
             self.create_cert()
@@ -895,54 +870,34 @@ and set SSL_ENABLED to false.""")
 
     def create_cert(self):
         """
-        Create a new certificate.
+        With Caddy, SSL certificate creation is fully automatic.
 
-        CHORDS must not be running.
-
-        A staging certificate will be created first, just to insure
-        that the process is working.
+        Caddy obtains and renews Let's Encrypt certificates on its own when
+        CHORDS starts with SSL_ENABLED=true. No manual steps are required.
         """
-        print ("*** Creating the SSL certificate")
-
-        self.stop_nginx()
+        print ("*** SSL certificate creation with Caddy is automatic.")
+        print ()
 
         # docker_check() returns an empty string if the named instance is running.
-        instances = [docker_check([s])=='' for s in ["chords_app", "chords_nginx", "chords_certbot"]]
+        instances = [docker_check([s])=='' for s in ["chords_app", "chords_caddy"]]
         if True in instances:
-            raise ChordsSslError(
-                "SSL certificate creation can't be done while one of the CHORDS \n"
-                "services (chords_app, chords_nginx, or chords_certbot) is running. \n"
-                "Use python chords_control --stop."
+            print (
+                "Note: chords_app or chords_caddy is currently running. Caddy will\n"
+                "attempt to obtain a certificate when it next starts with SSL_ENABLED=true."
             )
+        else:
+            print ("""
+To obtain an SSL certificate:
+  1. Make sure SSL_ENABLED=true, SSL_HOST, and SSL_EMAIL are set in your .env file.
+  2. Start CHORDS normally: docker-compose -p chords up -d
 
-        self.make_dummy_cert()
-        self.make_dh_params()
-        self.request_cert(create_test_cert = True)
+Caddy will automatically obtain a certificate from Let's Encrypt on first startup
+and renew it before it expires. No further action is needed.
 
-        reply = prompt("""
+Note: Let's Encrypt rate limits apply (5 certificates per domain per 7 days).
+Make sure your DNS is configured and pointing to this server before starting.
+""")
 
-If the above text contains the phrase 
-"Successfully received certificate. Your certificate and chain have been saved at ..."
-then the test certificate was successfully created.
-
-Did the test cert get created properly?""", ['y', 'Y', 'n', 'N'])
-        if reply == 'n':
-            print ("Test certificate creation failed. Try again later.")
-            return
-        print ("""
-Test certificates can be created as often as you like.
-However, you can only create 5 real certificates each WEEK.
-If the certificate creation process is failing, do not
-use up your quota of requests!
-        """)
-
-        reply = prompt("Do you want to create a real certificate", ['y', 'Y', 'n', 'N'])
-        if reply == 'n':
-            print ("Test certificate creation failed. Try again later.")
-            return
-
-        # Create the new cert
-        self.request_cert(create_test_cert = False)
 
     def host_dns(self):
         """
@@ -961,186 +916,40 @@ use up your quota of requests!
     def check_cert(self):
         """
         Return a dictionary containing the certificate status.
+
+        Connects to SSL_HOST:443 using Python's ssl module to read the
+        live certificate dates directly from the server.
         """
+        import ssl as _ssl
+        import socket as _socket
 
         retval = {"valid_cert": False, "test_cert": False, "expired": None, "notBefore": None, "notAfter": None}
 
-        # Ask certbot if there are any certificates.
-        result = self.cert_inquire()
-        print(result, "\n")
+        try:
+            context = _ssl.create_default_context()
+            with _socket.create_connection((self.ssl_host, 443), timeout=10) as sock:
+                with context.wrap_socket(sock, server_hostname=self.ssl_host) as ssock:
+                    cert = ssock.getpeercert()
 
-        retval["valid_cert"] =  (not
-                                 ("No certs found." in result or "invalid" in result or "error" in result or "No certificates" in result) or
-                                 "(VALID:" in result)
-        retval["test_cert"] = ("INVALID: TEST_CERT" in result)
-        if retval["test_cert"]:
+            # cert dates are in the form 'Jan  1 00:00:00 2025 GMT'
+            not_before_str = cert.get("notBefore", "")
+            not_after_str  = cert.get("notAfter", "")
+            fmt = "%b %d %H:%M:%S %Y %Z"
+            retval["notBefore"] = datetime.datetime.strptime(not_before_str, fmt)
+            retval["notAfter"]  = datetime.datetime.strptime(not_after_str, fmt)
+            retval["expired"]   = datetime.datetime.now() > retval["notAfter"]
+            retval["valid_cert"] = not retval["expired"]
+
+        except _ssl.SSLCertVerificationError as e:
+            print("SSL certificate verification failed: %s" % e)
             retval["valid_cert"] = False
-
-        if retval["valid_cert"]:
-            # Use openssl to get the timestamps from the certificate.
-            cert_path = self.cert_dir + "/fullchain.pem"
-            cmd = ["run", "--no-deps", "--entrypoint", "openssl x509 -dates -noout -in %s" % cert_path, "certbot"]
-            try:
-                result = docker_compose(cmd).split('\n')
-                not_before = [s.split("=")[1] for s in result if "notBefore" in s]
-                not_after = [s.split("=")[1] for s in result if "notAfter" in s]
-                if not (retval["notBefore"] and retval["notAfter"]):
-                    retval["notBefore"] = datetime.datetime.strptime(not_before[0], '%b %d %H:%M:%S %Y %Z')
-                    retval["notAfter"]  = datetime.datetime.strptime(not_after[0], '%b %d %H:%M:%S %Y %Z')
-                    retval["expired"]   = datetime.datetime.now() > retval["notAfter"]
-                else:
-                    retval["valid_cert"] = False
-            except sh.ErrorReturnCode_1:
-                retval["valid_cert"] = False
+        except (_socket.timeout, ConnectionRefusedError, OSError) as e:
+            print("Could not connect to %s:443 — %s" % (self.ssl_host, e))
+            print("(Caddy may not be running yet, or no certificate has been obtained.)")
+            retval["valid_cert"] = False
 
         return retval
 
-    def make_dummy_cert(self):
-        """
-        Create a dummy key and certificate.
-
-        This allows nginx to run in SSL mode.
-
-        The key will be written to self.cert_dir/privkey.pem.
-        The certificate will be written to self.cert_dir/fullchain.pem.
-        """
-
-        print("*** Creating a dummy certificate.")
-
-        cmd = [
-            "run",
-            "--no-deps",
-            "--entrypoint",
-            "mkdir -p %s" % self.cert_dir,
-            "certbot"]
-        result = docker_compose(cmd)
-        print(result)
-
-        cmd = [
-            "run",
-            "--no-deps",
-            "--entrypoint",
-            "openssl req -x509 -nodes -newkey rsa:2048 -days 1 -keyout '%s/privkey.pem' -out '%s/fullchain.pem' -subj '/CN=localhost'" % (self.cert_dir, self.cert_dir),
-            "certbot"]
-        result = docker_compose(cmd)
-        print(result)
-        print("*** Dummy certificate created.")
-
-    def make_dh_params(self):
-        """
-        Create the Diffie-Hellman parameters.
-
-        They will be written to /etc/letsencrypt/chords-dhparam/dhparam-2048.pem.
-        """
-        print ("*** Creating the Diffie-Hellman parameters. This can take several minutes.")
-
-        cmd = [
-            "run",
-            "--no-deps",
-            "--entrypoint",
-            "mkdir -p /etc/letsencrypt/chords-dhparam",
-            "certbot"]
-        result = docker_compose(cmd)
-        print(result)
-
-        cmd = [
-            "run",
-            "--no-deps",
-            "--entrypoint",
-            "openssl dhparam -out /etc/letsencrypt/chords-dhparam/dhparam-2048.pem 2048",
-            "certbot"]
-        result = docker_compose(cmd)
-        print(result)
-        print ("*** Diffie-Hellman parameters created.")
-
-    def remove_certs(self):
-        """
-        Remove existing certificates.
-
-        Remove the following:
-        /etc/letsencrypt/live/*
-        /etc/letsencrypt/archive/*
-        /etc/letsencrypt/renewal/*
-        """
-        print ("*** Removing the existing certificates.")
-
-        cmd = [
-            "run",
-            "--no-deps",
-            "--entrypoint",
-            "/bin/bash -c 'rm -rf /etc/letsencrypt/live/* /etc/letsencrypt/archive/* /etc/letsencrypt/renewal/*'",
-            "certbot"]
-        result = docker_compose(cmd)
-        print(result)
-
-    def request_cert(self, create_test_cert=True):
-        """
-        Obtain a test or real certificate from letsencrypt.
-        """
-
-        print ("*** Obtaining a new %s certificate from letsencrypt." % ("test" if create_test_cert else "real"))
-
-        # Start nginx for the ACME challenge.
-        self.start_nginx()
-
-        # Remove the existing cert
-        self.remove_certs()
-
-        print("*** Sending certificate request to letsencrypt.")
-        cmd = [
-            "run",
-            "--no-deps",
-            "--entrypoint",
-            "certbot certonly --webroot -w=/acme-challenge %s --email %s --agree-tos --no-eff-email -d %s" %
-            (("--staging" if create_test_cert else ""), self.ssl_email, self.ssl_host),
-            "certbot"]
-        result = docker_compose(cmd)
-        print(result)
-
-        # Shutdown nginx
-        self.stop_nginx()
-
-    def start_nginx(self):
-        """
-        Start an nginx webserver, to service the ACME challenge.
-        """
-
-        print ("*** Starting nginx, to service the ACME challenge.")
-        # Run nginx in certificate creation mode.
-        cmd = [
-            "run",
-            "-e",
-            "CERT_CREATE=1",
-            "-e",
-            "SSL_HOST=%s" % self.ssl_host,
-            "-e",
-            "SSL_EMAIL=%s" % self.ssl_email,
-            "-p",
-            "80:80",
-            "-p",
-            "443:443",
-            "--no-deps",
-            "-d",
-            "nginx"
-        ]
-        result = docker_compose(cmd)
-        print(result)
-
-    def stop_nginx(self):
-        """
-        Stop the nginx container.
-        """
-
-        print("*** Stopping nginx")
-        cmd = ["down"]
-        result = docker_compose(cmd)
-        print(result)
-
-    def cert_inquire(self):
-      # Ask certbot if there are any certificates.
-      cmd = ["run", "--no-deps", "--entrypoint", "certbot certificates", "certbot"]
-      result = docker_compose(cmd)
-      return result
 
 #####################################################################
 class ChordsBackupError(Exception):

@@ -1,0 +1,60 @@
+# Caddy configuration: SSL mode (SSL_ENABLED=true)
+#
+# Caddy reads {$SSL_HOST} and {$SSL_EMAIL} directly from the container environment.
+# Set SSL_HOST and SSL_EMAIL in your .env file.
+
+# HTTP site block: allow IoT measurement ingestion over HTTP, redirect everything else to HTTPS
+http://{$SSL_HOST} {
+    # Exception: low-power IoT devices that cannot use HTTPS may POST measurements via HTTP
+    handle /measurements/url_create* {
+        reverse_proxy app:3042 {
+            header_up X-Forwarded-For {remote_host}
+            header_up Host {host}
+        }
+    }
+
+    # Redirect all other HTTP traffic to HTTPS
+    handle {
+        redir https://{host}{uri} 301
+    }
+}
+
+# HTTPS site block: full SSL with automatic certificate management via Let's Encrypt
+https://{$SSL_HOST} {
+    # Caddy automatically obtains and renews certificates from Let's Encrypt using
+    # the SSL_EMAIL address for the account. No manual certificate steps are needed.
+    tls {$SSL_EMAIL}
+
+    # Security headers
+    header X-Frame-Options SAMEORIGIN
+    header X-XSS-Protection "1; mode=block"
+    header X-Content-Type-Options nosniff
+    header Referrer-Policy no-referrer-when-downgrade
+    header Content-Security-Policy "default-src * data: 'unsafe-eval' 'unsafe-inline'"
+    # HSTS (HTTP Strict Transport Security) is commented out because enabling it has
+    # serious implications: once a browser receives this header, it will refuse to
+    # connect over HTTP for the specified duration. If you later disable SSL or change
+    # your domain, users may be locked out. Enable only if you are committed to HTTPS.
+    # header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Serve static files from the Rails public directory, passing through to the app
+    # if the file is not found.
+    root * /chords/public
+    file_server {
+        pass_thru
+    }
+
+    # Reverse proxy to the Rails app
+    reverse_proxy app:3042 {
+        header_up X-Forwarded-For {remote_host}
+        header_up Host {host}
+    }
+
+    # Log rolling: 10MB max size, keep 10 files
+    log {
+        output file /var/log/caddy/access.log {
+            roll_size 10mb
+            roll_keep 10
+        }
+    }
+}

@@ -12,16 +12,11 @@ services:
   app:
     build: .
 
-  nginx:
-    image: earthcubechords/chords_nginx:${DOCKER_TAG}
+  caddy:
+    image: earthcubechords/chords_caddy:${DOCKER_TAG}
     build:
       context: .
-      dockerfile: ./bin/nginx/Dockerfile
-
-  certbot:
-    build:
-      context: .
-      dockerfile: ./bin/certbot/Dockerfile
+      dockerfile: ./bin/caddy/Dockerfile
 
   kapacitor:
     build:

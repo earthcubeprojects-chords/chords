@@ -6,9 +6,8 @@ version: '3.3'
 #   1. chords_app:       The CHORDS Ruby on Rails server
 #   2. chords_mysql:     A MyQSL database for CHORDS metadata.
 #   3. chords_influxdb:  An InfluxDB database for real-time time series data.
-#   4. chords_nginx:     An nginx reverse-proxy server.
-#   5. chords_certbot:   A letsencrypt certificate manager.
-#   6. chords_grafana:   A Grafana dashboard server.
+#   4. chords_caddy:     A Caddy reverse-proxy server with automatic HTTPS.
+#   5. chords_grafana:   A Grafana dashboard server.
 #   6. chords_kapacitor: An influxdata kapacitor serve.
 #
 # This configuration is used to both build the the service images,
@@ -78,17 +77,15 @@ services:
       - mysql
       - influxdb
 
-  # Nginx web server
-  nginx:
-    container_name: chords_nginx
-    image: earthcubechords/chords_nginx:${DOCKER_TAG}
+  # Caddy reverse proxy and automatic HTTPS
+  caddy:
+    container_name: chords_caddy
+    image: earthcubechords/chords_caddy:${DOCKER_TAG}
     volumes:
-      - nginx-log:/var/log/nginx
-      - letsencrypt-etc:/etc/letsencrypt
-      - letsencrypt-var-lib:/var/lib/letsencrypt
-      - acme-challenge:/acme-challenge
+      - caddy-log:/var/log/caddy
+      - caddy-data:/data
+      - caddy-config:/config
     environment:
-      - WORKERS=${WORKERS}
       - SSL_ENABLED=${SSL_ENABLED}
       - SSL_HOST=${SSL_HOST}
       - SSL_EMAIL=${SSL_EMAIL}
@@ -96,29 +93,12 @@ services:
       driver: "json-file"
       options:
         max-size: "1m"
-        max-file: "5"      
+        max-file: "5"
     ports:
       - ${CHORDS_HTTP_PORT:-80}:80
       - 443:443
     depends_on:
       - app
-
-  # Certbot SSL certificate handling.
-  certbot:
-    container_name: chords_certbot
-    image: earthcubechords/chords_certbot:${DOCKER_TAG}
-    volumes:
-      - letsencrypt-log:/var/log/letsencrypt
-      - letsencrypt-etc:/etc/letsencrypt
-      - letsencrypt-var-lib:/var/lib/letsencrypt
-      - /var/run/docker.sock:/var/run/docker.sock
-      - acme-challenge:/acme-challenge
-    environment:
-        - SSL_ENABLED=${SSL_ENABLED}
-        - SSL_HOST=${SSL_HOST}
-        - SSL_EMAIL=${SSL_EMAIL}
-    depends_on:
-      - nginx
 
   # Rails mysql database
   mysql:
@@ -261,16 +241,11 @@ volumes:
   shared-tmp:
   # log directories
   rails-log:
-  nginx-log:
+  caddy-log:
   mysql-log:
   influxdb-log:
   kapacitor-log:
   grafana-log:
-  letsencrypt-log:
-  # Volumes for letsencrypt configuration
-  # and certificates. Certbot manages these directories;
-  # nginx will access the certificates (in /etc/letsencrypt/live/).
-  # The DH params are also stored here.
-  letsencrypt-etc:
-  letsencrypt-var-lib:
-  acme-challenge:
+  # Volumes for Caddy automatic certificate management (Let's Encrypt)
+  caddy-data:
+  caddy-config:
