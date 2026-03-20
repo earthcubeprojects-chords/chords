@@ -147,6 +147,72 @@ docker-compose -f docker-compose.yml -f docker-compose-build.yml build --no-cach
 docker push earthcubechords/chords_caddy:${DOCKER_TAG}
 ```
 
+## Building and Pushing chords_caddy (on AlmaLinux 9 without Docker)
+
+AlmaLinux 9 ships with Podman and Buildah instead of Docker CE. The following process was used to build and push the `chords_caddy` image.
+
+### Install tools
+
+```sh
+sudo dnf install -y podman buildah
+```
+
+### Fix the Dockerfile base image
+
+Buildah defaults to the Red Hat registry, so the bare `FROM caddy:2-alpine` will fail. Use the fully-qualified name:
+
+```dockerfile
+FROM docker.io/library/caddy:2-alpine
+```
+
+### Build the image
+
+Run from the **repo root** (not from `bin/caddy/`) so that COPY paths resolve correctly:
+
+```sh
+cd /home/martinc/chords
+buildah bud -f bin/caddy/Dockerfile -t chords_caddy .
+```
+
+### Tag the image
+
+```sh
+docker tag chords_caddy docker.io/earthcubechords/chords_caddy:1.1.0-rc7
+```
+
+(`docker` is emulated by Podman on AlmaLinux 9 — the commands are identical.)
+
+### Log in and push
+
+Login must use the fully-qualified registry name or credentials won't match:
+
+```sh
+docker login docker.io
+docker push docker.io/earthcubechords/chords_caddy:1.1.0-rc7
+```
+
+### Duplicate an existing image with a new tag (no rebuild)
+
+To retag an existing Docker Hub image without rebuilding:
+
+```sh
+docker pull docker.io/earthcubechords/chords:1.1.0-rc6
+docker tag earthcubechords/chords:1.1.0-rc6 docker.io/earthcubechords/chords:1.1.0-rc7
+docker push docker.io/earthcubechords/chords:1.1.0-rc7
+```
+
+### List images in a Docker Hub organization
+
+```sh
+curl -s "https://hub.docker.com/v2/repositories/earthcubechords/?page_size=100" | python3 -m json.tool | grep '"name"'
+```
+
+### Inspect a Docker volume from inside a container
+
+```sh
+docker run --rm -it -v chords_caddy-data:/data alpine sh
+```
+
 ## Verification
 
 1. Build: `docker-compose -f docker-compose.yml -f docker-compose-build.yml build caddy`

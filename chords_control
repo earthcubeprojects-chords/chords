@@ -700,18 +700,28 @@ class Docker(object):
 
         # Determine the path for docker-compose
         if OS_NAME == 'nt':
-            self.docker_compose_cmd = 'docker-compose'
+            self.docker_compose_cmd = ['docker-compose']
         else:
             cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose']
             found_cmd = False
             for choice in cmd_choices:
-                self.docker_compose_cmd = choice
-                if check_file_exists(self.docker_compose_cmd, print_warning=False, exit_on_failure=False):
+                if check_file_exists(choice, print_warning=False, exit_on_failure=False):
+                    self.docker_compose_cmd = [choice]
                     found_cmd = True
                     break
             if not found_cmd:
+                # Fall back to 'docker compose' plugin (V2)
+                try:
+                    subprocess.run(['docker', 'compose', 'version'], check=True,
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    self.docker_compose_cmd = ['docker', 'compose']
+                    found_cmd = True
+                except (subprocess.CalledProcessError, FileNotFoundError):
+                    pass
+            if not found_cmd:
                 print('docker-compose was not found in', cmd_choices)
-                print('You must install docker-compose before proceeding.')
+                print('Neither "docker compose" (plugin) nor a standalone docker-compose binary was found.')
+                print('Install docker-compose-plugin or docker-compose before proceeding.')
                 exit(1)
 
         if not check_file_exists(self.docker_compose_yml, exit_on_failure=False):
@@ -774,11 +784,11 @@ class Docker(object):
 
         if not devmode:
             up_cmd = [
-                self.docker_compose_cmd,
+                *self.docker_compose_cmd,
                 '-f', self.docker_compose_yml, '-p', 'chords', 'up', '-d']
         else:
             up_cmd = [
-                self.docker_compose_cmd,
+                *self.docker_compose_cmd,
                 '-p', 'chords',
                 '-f', 'docker-compose.yml', '-f', 'docker-compose-dev.yml',
                 'up', '-d']
@@ -790,7 +800,7 @@ class Docker(object):
         Take the containers down with docker-compose.
         """
         dn_cmd = [
-            self.docker_compose_cmd,
+            *self.docker_compose_cmd,
             '-f', self.docker_compose_yml, '-p', 'chords', 'down']
         os_cmd(cmd=dn_cmd, err_msg='Unable to stop containers')
 
@@ -804,7 +814,7 @@ class Docker(object):
 
         print("*** Pulling Docker images. This may take awhile...")
         pull_cmd = [
-            self.docker_compose_cmd,
+            *self.docker_compose_cmd,
             '-f', self.docker_compose_yml, 'pull']
         os_cmd(cmd=pull_cmd, err_msg='Unable to pull Docker images')
         print("*** ...Docker pull is finished.")
