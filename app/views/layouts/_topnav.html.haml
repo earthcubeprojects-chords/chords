@@ -30,7 +30,8 @@
             %li= link_to 'Map', map_sites_path
 
           - if can? :read, Instrument
-            %li= link_to 'Visualization', "http://#{request.host}:#{Rails.configuration.grafana_http_port}", :target => "_blank"
+            - grafana_url = ENV['SSL_ENABLED'] == 'true' ? "https://#{request.host}/grafana/" : "http://#{request.host}:#{Rails.configuration.grafana_http_port}"
+            %li= link_to 'Visualization', grafana_url, :target => "_blank"
 
         %ul.nav.navbar-nav.navbar-right
           - if can? :simulator, Instrument
