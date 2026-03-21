@@ -283,8 +283,6 @@ if os.name == 'nt':
 OS_NAME = os.name
 OS_ARCH = platform.uname()[4]
 
-# Docker-compatible binary ('docker' or 'podman')
-DOCKER_BIN = 'docker'
 
 #####################################################################
 def create_backup_file(filename, print_note=True):
@@ -705,19 +703,15 @@ class Docker(object):
         if OS_NAME == 'nt':
             self.docker_compose_cmd = ['docker-compose']
         else:
-            cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose',
-                           '/usr/local/bin/podman-compose', '/usr/bin/podman-compose']
+            cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose']
             found_cmd = False
             for choice in cmd_choices:
                 if check_file_exists(choice, print_warning=False, exit_on_failure=False):
                     self.docker_compose_cmd = [choice]
                     found_cmd = True
-                    if 'podman' in choice:
-                        global DOCKER_BIN
-                        DOCKER_BIN = 'podman'
                     break
             if not found_cmd:
-                # Fall back to 'docker compose' plugin (V2) — requires a real Docker daemon
+                # Fall back to 'docker compose' plugin (V2)
                 try:
                     subprocess.run(['docker', 'compose', 'version'], check=True,
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -727,8 +721,8 @@ class Docker(object):
                     pass
             if not found_cmd:
                 print('docker-compose was not found in', cmd_choices)
-                print('Neither "docker compose" (plugin) nor a standalone docker-compose/podman-compose binary was found.')
-                print('Install docker-compose, podman-compose, or docker-compose-plugin before proceeding.')
+                print('Neither "docker compose" (plugin) nor a standalone docker-compose binary was found.')
+                print('Install docker-compose or docker-compose-plugin before proceeding.')
                 exit(1)
 
         if not check_file_exists(self.docker_compose_yml, exit_on_failure=False):
@@ -748,10 +742,10 @@ class Docker(object):
         """
 
         ps_cmd = [
-            DOCKER_BIN,
+            'docker',
             'ps',
             '--format',
-            '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
+            '"name":"{{.Names}}", "runningfor":"{{.RunningFor}}", "status":"{{.Status}}", "createdat":"{{.CreatedAt}}", "image":"{{.Image}}"']
 
         ps_result, _ = os_cmd(cmd=ps_cmd, printlines=False)
 
@@ -759,10 +753,9 @@ class Docker(object):
         containers = []
         for result in ps_result:
             result = result.strip()
-            if result != '':
-                if not re.search("WARNING", result):
-                    result = '{' + result + '}'
-                    containers.append(json.loads(result))
+            if result != '' and result.startswith('"name"'):
+                result = '{' + result + '}'
+                containers.append(json.loads(result))
 
         # Convert the json unicode to bytes
         return containers
@@ -1000,7 +993,7 @@ class ChordsBackup(object):
 
         print("*** Saving mysql ***")
         mysql_file = open(self.mysql_sql_file, 'w')
-        print(sh.Command(DOCKER_BIN)('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
+        print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
                         _out=mysql_file).stdout.decode('utf-8'))
 
         print("*** Saving influxdb ***")
@@ -1274,7 +1267,7 @@ A CHORDS restore cannot be performed.""")
                        "set password for '%s' = '%s';"%(mysql_user, self.env_admin_pw)]
         try:
             print(
-                sh.Command(DOCKER_BIN)(
+                sh.docker(
                     sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
                 ).stdout.decode('utf-8')
             )
@@ -1287,7 +1280,7 @@ A CHORDS restore cannot be performed.""")
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         try:
             print(
-                sh.Command(DOCKER_BIN)(
+                sh.docker(
                     sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
                 ).stdout.decode('utf-8')
             )
@@ -1434,8 +1427,8 @@ def docker_sh(*args):
 
     try:
         if VERBOSE:
-            print("Executing:", DOCKER_BIN, " ".join(args))
-        result = sh.Command(DOCKER_BIN)(args, _err_to_out=True).stdout.decode('utf-8')
+            print("Executing: docker", " ".join(args))
+        result = sh.docker(args, _err_to_out=True).stdout.decode('utf-8')
         if VERBOSE:
             print("Result:", str(result))
         return str(result)

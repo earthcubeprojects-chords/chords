@@ -143,25 +143,20 @@ Users who follow the `chords_control --renew` update path automatically get the 
 To build and push:
 
 ```sh
-# With Docker:
 docker-compose -f docker-compose.yml -f docker-compose-build.yml build --no-cache caddy
 docker push earthcubechords/chords_caddy:${DOCKER_TAG}
-
-# With Podman (AlmaLinux 9) — sudo required for rootful Podman:
-sudo podman-compose -f docker-compose.yml -f docker-compose-build.yml build caddy
-sudo docker push docker.io/earthcubechords/chords_caddy:${DOCKER_TAG}
 ```
 
-## Building and Pushing chords_caddy (on AlmaLinux 9 without Docker)
+## Building and Pushing chords_caddy (on AlmaLinux 9)
 
-AlmaLinux 9 ships with Podman instead of Docker CE. Use `podman-compose` as a drop-in
-replacement. All commands require `sudo` — rootful Podman avoids registry resolution and
-socket permission issues that occur with rootless Podman.
+AlmaLinux 9 ships with Podman instead of Docker CE. Podman provides a `docker` compatibility
+shim, so standard `docker` and `docker compose` commands work — but must be run with `sudo`
+to use rootful Podman, which avoids registry resolution and socket permission issues.
 
 ### Install tools
 
 ```sh
-sudo dnf install -y podman podman-compose
+sudo dnf install -y podman
 ```
 
 ### Fix the Dockerfile base image
@@ -174,31 +169,27 @@ FROM docker.io/library/caddy:2-alpine
 
 ### Build the image
 
-Run from the **repo root** using `podman-compose` and the build overlay file:
+Run from the **repo root** using the build overlay file:
 
 ```sh
-sudo podman-compose -f docker-compose.yml -f docker-compose-build.yml build caddy
+sudo docker compose -f docker-compose.yml -f docker-compose-build.yml build caddy
 ```
 
 ### Log in and push
 
-Login must use the fully-qualified registry name or credentials won't match:
-
 ```sh
 sudo docker login docker.io
-sudo docker push docker.io/earthcubechords/chords_caddy:1.1.0-rc7
+sudo docker push earthcubechords/chords_caddy:${DOCKER_TAG}
 ```
-
-(`docker` is emulated by Podman on AlmaLinux 9 — the commands are identical.)
 
 ### Duplicate an existing image with a new tag (no rebuild)
 
 To retag an existing Docker Hub image without rebuilding:
 
 ```sh
-docker pull docker.io/earthcubechords/chords:1.1.0-rc6
-docker tag earthcubechords/chords:1.1.0-rc6 docker.io/earthcubechords/chords:1.1.0-rc7
-docker push docker.io/earthcubechords/chords:1.1.0-rc7
+sudo docker pull earthcubechords/chords:1.1.0-rc6
+sudo docker tag earthcubechords/chords:1.1.0-rc6 earthcubechords/chords:1.1.0-rc7
+sudo docker push earthcubechords/chords:1.1.0-rc7
 ```
 
 ### List images in a Docker Hub organization
@@ -210,8 +201,64 @@ curl -s "https://hub.docker.com/v2/repositories/earthcubechords/?page_size=100" 
 ### Inspect a Docker volume from inside a container
 
 ```sh
-docker run --rm -it -v chords_caddy-data:/data alpine sh
+sudo docker run --rm -it -v chords_caddy-data:/data alpine sh
 ```
+
+## Workflow Review
+
+The end-to-end workflow for building, publishing, and deploying a new `chords_caddy` release:
+
+### 1. Edit and commit source changes
+
+Make changes to files under `bin/caddy/` (Caddyfile, Dockerfile, startup script), commit, and push to the repo.
+
+### 2. Build the image
+
+From the repo root:
+
+```sh
+sudo docker compose -f docker-compose.yml -f docker-compose-build.yml build caddy
+```
+
+### 3. Tag and push to Docker Hub
+
+```sh
+sudo docker login docker.io
+sudo docker push earthcubechords/chords_caddy:${DOCKER_TAG}
+```
+
+### 4. Deploy
+
+On the target host, with a populated `.env` file and `docker-compose.yml` in the working directory:
+
+```sh
+sudo docker compose -p chords pull
+sudo docker compose -p chords up -d
+```
+
+Or via `chords_control`:
+
+```sh
+sudo python3 chords_control --update
+sudo python3 chords_control --run
+```
+
+### 5. Verify
+
+```sh
+sudo python3 chords_control --status
+curl -I http://localhost
+```
+
+---
+
+### Notes
+
+- All `docker` commands require `sudo` on AlmaLinux 9 (rootful Podman).
+- `docker` on AlmaLinux 9 is Podman with a Docker compatibility shim — behavior is identical.
+- Suppress the Podman emulation notice: `sudo touch /etc/containers/nodocker`
+- `DOCKER_TAG` is set in `.env` and controls which image tag is pulled and run.
+- To retag an existing image without rebuilding, see the "Duplicate an existing image" section above.
 
 ## Verification
 
