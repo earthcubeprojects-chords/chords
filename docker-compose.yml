@@ -74,8 +74,10 @@ services:
     expose:
       - "3042"
     depends_on:
-      - mysql
-      - influxdb
+      mysql:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
 
   # Caddy reverse proxy and automatic HTTPS
   caddy:
@@ -111,6 +113,11 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     logging:
       driver: "json-file"
       options:
@@ -132,7 +139,12 @@ services:
       - INFLUXDB_DATA_QUERY_LOG_ENABLED=false
       - INFLUXDB_REPORTING_DISABLED=true
       - INFLUXDB_USERNAME=admin
-      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}      
+      - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
     logging:
       driver: "json-file"
       options:
