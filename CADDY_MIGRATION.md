@@ -143,23 +143,30 @@ Users who follow the `chords_control --renew` update path automatically get the 
 To build and push:
 
 ```sh
+# With Docker:
 docker-compose -f docker-compose.yml -f docker-compose-build.yml build --no-cache caddy
 docker push earthcubechords/chords_caddy:${DOCKER_TAG}
+
+# With Podman (AlmaLinux 9) — sudo required for rootful Podman:
+sudo podman-compose -f docker-compose.yml -f docker-compose-build.yml build caddy
+sudo docker push docker.io/earthcubechords/chords_caddy:${DOCKER_TAG}
 ```
 
 ## Building and Pushing chords_caddy (on AlmaLinux 9 without Docker)
 
-AlmaLinux 9 ships with Podman and Buildah instead of Docker CE. The following process was used to build and push the `chords_caddy` image.
+AlmaLinux 9 ships with Podman instead of Docker CE. Use `podman-compose` as a drop-in
+replacement. All commands require `sudo` — rootful Podman avoids registry resolution and
+socket permission issues that occur with rootless Podman.
 
 ### Install tools
 
 ```sh
-sudo dnf install -y podman buildah
+sudo dnf install -y podman podman-compose
 ```
 
 ### Fix the Dockerfile base image
 
-Buildah defaults to the Red Hat registry, so the bare `FROM caddy:2-alpine` will fail. Use the fully-qualified name:
+Podman defaults to the Red Hat registry, so the bare `FROM caddy:2-alpine` will fail. Use the fully-qualified name:
 
 ```dockerfile
 FROM docker.io/library/caddy:2-alpine
@@ -167,29 +174,22 @@ FROM docker.io/library/caddy:2-alpine
 
 ### Build the image
 
-Run from the **repo root** (not from `bin/caddy/`) so that COPY paths resolve correctly:
+Run from the **repo root** using `podman-compose` and the build overlay file:
 
 ```sh
-cd /home/martinc/chords
-buildah bud -f bin/caddy/Dockerfile -t chords_caddy .
+sudo podman-compose -f docker-compose.yml -f docker-compose-build.yml build caddy
 ```
-
-### Tag the image
-
-```sh
-docker tag chords_caddy docker.io/earthcubechords/chords_caddy:1.1.0-rc7
-```
-
-(`docker` is emulated by Podman on AlmaLinux 9 — the commands are identical.)
 
 ### Log in and push
 
 Login must use the fully-qualified registry name or credentials won't match:
 
 ```sh
-docker login docker.io
-docker push docker.io/earthcubechords/chords_caddy:1.1.0-rc7
+sudo docker login docker.io
+sudo docker push docker.io/earthcubechords/chords_caddy:1.1.0-rc7
 ```
+
+(`docker` is emulated by Podman on AlmaLinux 9 — the commands are identical.)
 
 ### Duplicate an existing image with a new tag (no rebuild)
 
