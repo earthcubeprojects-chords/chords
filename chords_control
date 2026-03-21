@@ -283,6 +283,9 @@ if os.name == 'nt':
 OS_NAME = os.name
 OS_ARCH = platform.uname()[4]
 
+# Docker-compatible binary ('docker' or 'podman')
+DOCKER_BIN = 'docker'
+
 #####################################################################
 def create_backup_file(filename, print_note=True):
     """
@@ -702,15 +705,19 @@ class Docker(object):
         if OS_NAME == 'nt':
             self.docker_compose_cmd = ['docker-compose']
         else:
-            cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose']
+            cmd_choices = ['/usr/local/bin/docker-compose', '/usr/bin/docker-compose', '/bin/docker-compose',
+                           '/usr/local/bin/podman-compose', '/usr/bin/podman-compose']
             found_cmd = False
             for choice in cmd_choices:
                 if check_file_exists(choice, print_warning=False, exit_on_failure=False):
                     self.docker_compose_cmd = [choice]
                     found_cmd = True
+                    if 'podman' in choice:
+                        global DOCKER_BIN
+                        DOCKER_BIN = 'podman'
                     break
             if not found_cmd:
-                # Fall back to 'docker compose' plugin (V2)
+                # Fall back to 'docker compose' plugin (V2) — requires a real Docker daemon
                 try:
                     subprocess.run(['docker', 'compose', 'version'], check=True,
                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -720,8 +727,8 @@ class Docker(object):
                     pass
             if not found_cmd:
                 print('docker-compose was not found in', cmd_choices)
-                print('Neither "docker compose" (plugin) nor a standalone docker-compose binary was found.')
-                print('Install docker-compose-plugin or docker-compose before proceeding.')
+                print('Neither "docker compose" (plugin) nor a standalone docker-compose/podman-compose binary was found.')
+                print('Install docker-compose, podman-compose, or docker-compose-plugin before proceeding.')
                 exit(1)
 
         if not check_file_exists(self.docker_compose_yml, exit_on_failure=False):
@@ -741,7 +748,7 @@ class Docker(object):
         """
 
         ps_cmd = [
-            'docker',
+            DOCKER_BIN,
             'ps',
             '--format',
             '\"name\":\"{{.Names}}\", \"runningfor\":\"{{.RunningFor}}\", \"status\":\"{{.Status}}\", \"createdat\":\"{{.CreatedAt}}\", \"image\":\"{{.Image}}\"']
@@ -993,7 +1000,7 @@ class ChordsBackup(object):
 
         print("*** Saving mysql ***")
         mysql_file = open(self.mysql_sql_file, 'w')
-        print(sh.docker('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
+        print(sh.Command(DOCKER_BIN)('exec -t chords_mysql /usr/bin/mysqldump chords_demo_production'.split(),
                         _out=mysql_file).stdout.decode('utf-8'))
 
         print("*** Saving influxdb ***")
@@ -1267,7 +1274,7 @@ A CHORDS restore cannot be performed.""")
                        "set password for '%s' = '%s';"%(mysql_user, self.env_admin_pw)]
         try:
             print(
-                sh.docker(
+                sh.Command(DOCKER_BIN)(
                     sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
                 ).stdout.decode('utf-8')
             )
@@ -1280,7 +1287,7 @@ A CHORDS restore cannot be performed.""")
         docker_args = ['exec', '-i', container, '/usr/bin/mysql', database_name]
         try:
             print(
-                sh.docker(
+                sh.Command(DOCKER_BIN)(
                     sh.cat(self.file_paths["mysql"]), docker_args, _err_to_out=True
                 ).stdout.decode('utf-8')
             )
@@ -1427,8 +1434,8 @@ def docker_sh(*args):
 
     try:
         if VERBOSE:
-            print("Executing: docker", " ".join(args))
-        result = sh.docker(args, _err_to_out=True).stdout.decode('utf-8')
+            print("Executing:", DOCKER_BIN, " ".join(args))
+        result = sh.Command(DOCKER_BIN)(args, _err_to_out=True).stdout.decode('utf-8')
         if VERBOSE:
             print("Result:", str(result))
         return str(result)
@@ -1664,7 +1671,7 @@ def add_choices_to_docker_tag(proxy=""):
     """
     for std_item in STD_CONFIG_ITEMS:
         if std_item[1] =="DOCKER_TAG":
-            tags = Docker(proxy=proxy).tags()
+            tags = sorted(Docker(proxy=proxy).tags())
             for tag in tags:
                 std_item[4].append(tag)
 
@@ -1676,11 +1683,13 @@ def add_choices_to_git_branch(proxy=""):
     """
     for std_item in STD_CONFIG_ITEMS:
         if std_item[1] == "GIT_BRANCH":
-          identifiers = ChordsGit(proxy=proxy).branches_and_releases()
+          identifiers = sorted(ChordsGit(proxy=proxy).branches_and_releases())
           for identifier in identifiers:
               std_item[4].append(identifier)
-          # Set the default to the most recent Release
-          std_item[2] = std_item[4][-1]
+          # Set the default to the most recent Release (last alphabetically after sort)
+          releases = [x for x in std_item[4] if x.startswith('Release-')]
+          if releases:
+              std_item[2] = releases[-1]
 
 #####################################################################
 def check_file_exists(the_file, writeable=False, print_warning=True, exit_on_failure=True):
