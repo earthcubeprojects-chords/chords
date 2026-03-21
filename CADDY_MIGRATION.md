@@ -213,17 +213,28 @@ FROM docker.io/library/caddy:2-alpine
 
 ### Build the image
 
-Run from the **repo root** using the build overlay file:
+Use `buildah` directly with the fully-qualified `docker.io/` tag to avoid a separate tag step.
+Run from the **repo root**:
 
 ```sh
-sudo docker compose -f docker-compose.yml -f docker-compose-build.yml build caddy
+sudo buildah bud --no-cache -f bin/caddy/Dockerfile -t docker.io/earthcubechords/chords_caddy:${DOCKER_TAG} .
+```
+
+Using `docker.io/` in the tag means buildah stores the image under `docker.io/` rather than
+`localhost/`, so no re-tagging is needed before pushing.
+
+To build the main chords app image:
+
+```sh
+sudo buildah bud --no-cache -f Dockerfile -t docker.io/earthcubechords/chords:${DOCKER_TAG} .
 ```
 
 ### Log in and push
 
 ```sh
 sudo docker login docker.io
-sudo docker push earthcubechords/chords_caddy:${DOCKER_TAG}
+sudo docker push docker.io/earthcubechords/chords_caddy:${DOCKER_TAG}
+sudo docker push docker.io/earthcubechords/chords:${DOCKER_TAG}
 ```
 
 ### Duplicate an existing image with a new tag (no rebuild)
@@ -256,19 +267,21 @@ The end-to-end workflow for building, publishing, and deploying a new `chords_ca
 
 Make changes to files under `bin/caddy/` (Caddyfile, Dockerfile, startup script), commit, and push to the repo.
 
-### 2. Build the image
+### 2. Build the images
 
-From the repo root:
+From the repo root. Use the fully-qualified `docker.io/` tag so no re-tagging is needed before pushing:
 
 ```sh
-sudo docker compose -f docker-compose.yml -f docker-compose-build.yml build caddy
+sudo buildah bud --no-cache -f bin/caddy/Dockerfile -t docker.io/earthcubechords/chords_caddy:${DOCKER_TAG} .
+sudo buildah bud --no-cache -f Dockerfile -t docker.io/earthcubechords/chords:${DOCKER_TAG} .
 ```
 
-### 3. Tag and push to Docker Hub
+### 3. Push to Docker Hub
 
 ```sh
 sudo docker login docker.io
-sudo docker push earthcubechords/chords_caddy:${DOCKER_TAG}
+sudo docker push docker.io/earthcubechords/chords_caddy:${DOCKER_TAG}
+sudo docker push docker.io/earthcubechords/chords:${DOCKER_TAG}
 ```
 
 ### 4. Deploy
