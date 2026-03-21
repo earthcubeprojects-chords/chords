@@ -115,6 +115,50 @@ Rewrite to document the simplified SSL process: set `SSL_ENABLED=true`, `SSL_HOS
 | logrotate hourly, 10MB, keep 10 | `log { output file ... { roll_size 10mb; roll_keep 10 } }` |
 | TLS 1.0/1.1/1.2 + custom ciphers | Caddy defaults: TLS 1.2+ with modern ciphers (security improvement) |
 
+## Grafana via Caddy
+
+Grafana is proxied through Caddy at `/grafana/`, giving it HTTPS when SSL is enabled. This
+replaces direct port access as the primary way to reach Grafana.
+
+### How it works
+
+- Caddy routes `https://SSL_HOST/grafana/*` → `grafana:{$GRAFANA_HTTP_PORT}` (SSL on)
+- Caddy routes `http://host/grafana/*` → `grafana:{$GRAFANA_HTTP_PORT}` (SSL off)
+- The direct Grafana port (`GRAFANA_HTTP_PORT`, default 3000) remains available for local/dev access
+
+### Changes made
+
+**`Caddyfile.ssl_on` and `Caddyfile.ssl_off`**: Added a `handle /grafana*` block before the
+catch-all Rails app handler. The app-serving directives were wrapped in a `handle` block so
+path-specific routing takes precedence:
+
+```
+handle /grafana* {
+    reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
+}
+
+handle {
+    root * /chords/public
+    file_server { pass_thru }
+    reverse_proxy app:3042 { ... }
+}
+```
+
+**`docker-compose.yml`** — caddy service:
+```yaml
+- GRAFANA_HTTP_PORT=${GRAFANA_HTTP_PORT}
+```
+
+**`docker-compose.yml`** — grafana service:
+```yaml
+- GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
+- GF_SERVER_SERVE_FROM_SUB_PATH=true
+```
+
+`%(protocol)s://%(domain)s/` is Grafana's dynamic format — it uses whatever protocol and
+domain the request arrived on, so it works correctly for both HTTP and HTTPS without
+hardcoding `SSL_HOST`.
+
 ## SSL_EMAIL Note
 
 Caddy only uses `SSL_EMAIL` when registering a new ACME account with Let's Encrypt on first
