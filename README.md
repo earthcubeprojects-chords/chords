@@ -1,6 +1,6 @@
 # Summary
 
-The [CHORDS website](http://chordsrt.com) is the offical documentation for CHORDS.
+The [CHORDS website](https://earthcubeprojects-chords.github.io/chords-docs/) is the offical documentation for CHORDS.
 
 There are also condensed instructions for running the
 [CHORDS Docker containers](https://github.com/earthcubeprojects-chords/chords/wiki/Running-CHORDS).

@@ -7,7 +7,7 @@ EarthCube CHORDS StackScript
     Version: 0.1.0.0
     Requirements:
 
-This StackScript deploys the EarthCube CHORDS Portal (https://chordsrt.com).
+This StackScript deploys the EarthCube CHORDS Portal (https://earthcubeprojects-chords.github.io/chords-docs/).
 
 StackScript User-Defined Variables (UDF):
     

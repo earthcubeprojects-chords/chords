@@ -2,7 +2,7 @@
 
 """
 psql_forwarder is used to relay time series observations from a postgress database to
-a CHORDS Portal (http://chordsrt.com)
+a CHORDS Portal (https://earthcubeprojects-chords.github.io/chords-docs/)
 
 It connects to the database, and then LISTENS for NOTIFY events. Upon reception
 of the event, it reads the last row from the selected table, extracts those values,

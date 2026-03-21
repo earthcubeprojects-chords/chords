@@ -12,7 +12,7 @@
           - if user_signed_in?
             / li><haml_loud> current_user.email </haml_loud></li
           %li= link_to 'About', '/about'
-          %li= link_to 'Help', 'http://chordsrt.com', :target => "_blank"
+          %li= link_to 'Help', 'https://earthcubeprojects-chords.github.io/chords-docs/', :target => "_blank"
 
           - if can? :read, :dashboard
             %li= link_to 'Dashboard', '/dashboard'
