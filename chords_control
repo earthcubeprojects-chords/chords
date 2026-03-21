@@ -1445,23 +1445,6 @@ def docker_cp(src, dest):
 
     docker_sh('cp', src, dest)
 
-def docker_compose(cmd, err_to_out=True):
-    """
-    Run a docker-compose command.
-
-    By default, stderr is combined into stdout.
-    """
-
-    if VERBOSE:
-        print("docker_compose:", cmd)
-
-    try:
-        result = sh.docker_compose(cmd, _err_to_out=err_to_out, _internal_bufsize=100).stdout.decode('utf-8')
-    except sh.ErrorReturnCode as e:
-        print('docker_compose command failed:', cmd, '\n', e.stdout, '/n', e.stderr)
-        exit(1)
-    return result
-
 #####################################################################
 def run():
     """
@@ -1593,7 +1576,7 @@ def os_cmd(cmd, err_msg=None, printlines=True):
     and chk_cmd_status() will be called.
     """
     if VERBOSE:
-        print(' '.join(str(x) for x in cmd))
+        print('CMD:', ' '.join(str(x) for x in cmd))
 
     try:
         proc = subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
