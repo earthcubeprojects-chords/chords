@@ -58,6 +58,11 @@ https://{$SSL_HOST} {
     }
 }
 
+# Grafana — redirect HTTP to HTTPS on the Grafana port
+http://{$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
+    redir https://{host}:{$GRAFANA_HTTP_PORT}{uri} 301
+}
+
 # Grafana — proxied on its own port with HTTPS via the same SSL cert
 {$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
     tls {$SSL_EMAIL}
