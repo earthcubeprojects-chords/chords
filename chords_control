@@ -1240,6 +1240,8 @@ A CHORDS restore cannot be performed.""")
         print("However, we can restore the CHORDS configuration files %s" % (str(config_files)))
         print("from %s." % (self.dump_file))
         print("Backup copies of these files will be made, in case you need to reverse this action.")
+        print("Note: if you are changing CHORDS release, run '--config' after restoring to update")
+        print("settings (passwords, versions, etc.) for the new release.")
         print('Would you like to restore these files [Y/y]? ')
         response = sys.stdin.readline().strip()
         if response not in ['Y', 'y']:
