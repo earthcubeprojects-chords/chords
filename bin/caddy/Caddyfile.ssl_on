@@ -37,23 +37,16 @@ https://{$SSL_HOST} {
     # your domain, users may be locked out. Enable only if you are committed to HTTPS.
     # header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
-    # Grafana route
-    handle /grafana* {
-        reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
+    # Rails app: serve static files, pass through to app if not found
+    root * /chords/public
+    file_server {
+        pass_thru
     }
 
-    # Rails app: serve static files, pass through to app if not found
-    handle {
-        root * /chords/public
-        file_server {
-            pass_thru
-        }
-
-        # Reverse proxy to the Rails app
-        reverse_proxy app:3042 {
-            header_up X-Forwarded-For {remote_host}
-            header_up Host {host}
-        }
+    # Reverse proxy to the Rails app
+    reverse_proxy app:3042 {
+        header_up X-Forwarded-For {remote_host}
+        header_up Host {host}
     }
 
     # Log rolling: 10MB max size, keep 10 files
@@ -63,4 +56,10 @@ https://{$SSL_HOST} {
             roll_keep 10
         }
     }
+}
+
+# Grafana — proxied on its own port with HTTPS via the same SSL cert
+{$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
+    tls {$SSL_EMAIL}
+    reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
 }

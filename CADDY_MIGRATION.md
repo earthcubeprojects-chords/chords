@@ -117,47 +117,52 @@ Rewrite to document the simplified SSL process: set `SSL_ENABLED=true`, `SSL_HOS
 
 ## Grafana via Caddy
 
-Grafana is proxied through Caddy at `/grafana/`, giving it HTTPS when SSL is enabled. This
-replaces direct port access as the primary way to reach Grafana.
+Grafana is proxied through Caddy on its own port (`GRAFANA_HTTP_PORT`, default 3000), giving
+it HTTPS when SSL is enabled while preserving backward compatibility with existing port 3000
+references.
 
 ### How it works
 
-- Caddy routes `https://SSL_HOST/grafana/*` → `grafana:{$GRAFANA_HTTP_PORT}` (SSL on)
-- Caddy routes `http://host/grafana/*` → `grafana:{$GRAFANA_HTTP_PORT}` (SSL off)
-- The direct Grafana port (`GRAFANA_HTTP_PORT`, default 3000) remains available for local/dev access
+- **SSL on**: `https://SSL_HOST:3000/` → `grafana:3000` (HTTPS via Caddy's cert for `SSL_HOST`)
+- **SSL off**: `http://host:3000/` → `grafana:3000` (plain HTTP passthrough)
+- Caddy owns port 3000 and proxies to the Grafana container; Grafana is not directly exposed
 
 ### Changes made
 
-**`Caddyfile.ssl_on` and `Caddyfile.ssl_off`**: Added a `handle /grafana*` block before the
-catch-all Rails app handler. The app-serving directives were wrapped in a `handle` block so
-path-specific routing takes precedence:
-
+**`Caddyfile.ssl_off`** — port-based site block at the end:
 ```
-handle /grafana* {
+:{$GRAFANA_HTTP_PORT} {
     reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
 }
+```
 
-handle {
-    root * /chords/public
-    file_server { pass_thru }
-    reverse_proxy app:3042 { ... }
+**`Caddyfile.ssl_on`** — port-based site block using the SSL cert:
+```
+{$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
+    tls {$SSL_EMAIL}
+    reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
 }
 ```
 
-**`docker-compose.yml`** — caddy service:
+**`docker-compose.yml`** — caddy service gets the Grafana port exposed:
 ```yaml
-- GRAFANA_HTTP_PORT=${GRAFANA_HTTP_PORT}
+ports:
+  - ${CHORDS_HTTP_PORT:-80}:80
+  - 443:443
+  - ${GRAFANA_HTTP_PORT:-3000}:${GRAFANA_HTTP_PORT:-3000}
+environment:
+  - GRAFANA_HTTP_PORT=${GRAFANA_HTTP_PORT}
 ```
 
-**`docker-compose.yml`** — grafana service:
-```yaml
-- GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s/grafana/
-- GF_SERVER_SERVE_FROM_SUB_PATH=true
-```
+**`docker-compose.yml`** — grafana service: no sub-path configuration needed; Grafana runs
+normally at its root path, accessed through Caddy's port proxy.
 
-`%(protocol)s://%(domain)s/` is Grafana's dynamic format — it uses whatever protocol and
-domain the request arrived on, so it works correctly for both HTTP and HTTPS without
-hardcoding `SSL_HOST`.
+**`_topnav.html.haml`** — Visualization link uses the same protocol as the current request
+with the Grafana port:
+```haml
+- grafana_url = "#{request.protocol}#{request.host}:#{ENV['GRAFANA_HTTP_PORT'] || '3000'}/"
+```
+This gives `https://mysite.com:3000/` in SSL mode and `http://mysite.com:3000/` otherwise.
 
 ## SSL_EMAIL Note
 

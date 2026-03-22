@@ -8,24 +8,17 @@
     header Referrer-Policy no-referrer-when-downgrade
     header Content-Security-Policy "default-src * data: 'unsafe-eval' 'unsafe-inline'"
 
-    # Grafana route
-    handle /grafana* {
-        reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
-    }
-
     # Serve static files from the Rails public directory, passing through to the app
     # if the file is not found.
-    handle {
-        root * /chords/public
-        file_server {
-            pass_thru
-        }
+    root * /chords/public
+    file_server {
+        pass_thru
+    }
 
-        # Reverse proxy to the Rails app
-        reverse_proxy app:3042 {
-            header_up X-Forwarded-For {remote_host}
-            header_up Host {host}
-        }
+    # Reverse proxy to the Rails app
+    reverse_proxy app:3042 {
+        header_up X-Forwarded-For {remote_host}
+        header_up Host {host}
     }
 
     # Log rolling: 10MB max size, keep 10 files
@@ -35,4 +28,9 @@
             roll_keep 10
         }
     }
+}
+
+# Grafana — proxied on its own port so existing references to :3000 keep working
+:{$GRAFANA_HTTP_PORT} {
+    reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
 }
