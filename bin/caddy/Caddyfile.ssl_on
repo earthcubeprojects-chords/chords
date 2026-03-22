@@ -64,7 +64,7 @@ http://{$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
 }
 
 # Grafana — proxied on its own port with HTTPS via the same SSL cert
-{$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
+https://{$SSL_HOST}:{$GRAFANA_HTTP_PORT} {
     tls {$SSL_EMAIL}
     reverse_proxy grafana:{$GRAFANA_HTTP_PORT}
 }
