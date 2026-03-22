@@ -64,6 +64,7 @@ services:
       - SSL_HOST=${SSL_HOST}
       - SSL_EMAIL=${SSL_EMAIL}
 
+    restart: unless-stopped
     command: bash -c "dos2unix ./chords_start.sh && chmod a+x ./chords_start.sh && ./chords_start.sh"
     logging:
       driver: "json-file"
@@ -91,6 +92,7 @@ services:
       - SSL_HOST=${SSL_HOST}
       - SSL_EMAIL=${SSL_EMAIL}
       - GRAFANA_HTTP_PORT=${GRAFANA_HTTP_PORT}
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
@@ -114,6 +116,7 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=1
       - MYSQL_USER=chords_demo_user
       - MYSQL_PASSWORD=${CHORDS_ADMIN_PW}
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
@@ -124,7 +127,7 @@ services:
       options:
         max-size: "1m"
         max-file: "5"
-      
+
   # InfluxData influxdb time-series database
   influxdb:
     container_name: chords_influxdb
@@ -141,6 +144,7 @@ services:
       - INFLUXDB_REPORTING_DISABLED=true
       - INFLUXDB_USERNAME=admin
       - INFLUXDB_PASSWORD=${CHORDS_ADMIN_PW}
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8086/ping"]
       interval: 5s
@@ -182,6 +186,7 @@ services:
       - KAPACITOR_SMTP_PORT=${CHORDS_EMAIL_PORT}
       - KAPACITOR_SMTP_USERNAME=${CHORDS_EMAIL_ADDRESS}
       - KAPACITOR_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
@@ -227,6 +232,7 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - grafana-log:/var/log/grafana
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
