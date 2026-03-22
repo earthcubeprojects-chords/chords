@@ -186,7 +186,7 @@ services:
       - KAPACITOR_SMTP_PORT=${CHORDS_EMAIL_PORT}
       - KAPACITOR_SMTP_USERNAME=${CHORDS_EMAIL_ADDRESS}
       - KAPACITOR_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}
-    restart: unless-stopped
+    restart: "no"
     logging:
       driver: "json-file"
       options:
