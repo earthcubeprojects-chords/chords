@@ -7,7 +7,6 @@
 #   3. chords_influxdb:  An InfluxDB database for real-time time series data.
 #   4. chords_caddy:     A Caddy reverse-proxy server with automatic HTTPS.
 #   5. chords_grafana:   A Grafana dashboard server.
-#   6. chords_kapacitor: An influxdata kapacitor serve.
 #
 # This configuration is used to both build the the service images,
 # and to deploy the CHORDS system. Dockerfiles provide the recipes
@@ -159,42 +158,6 @@ services:
       - 8086:8086
       - 8083:8083
       
-  # InfluxData kapacitor time series monitoring
-  kapacitor:
-    container_name: chords_kapacitor
-    image: earthcubechords/kapacitor
-    volumes:
-      - kapacitor-data:/var/lib/kapacitor
-      - kapacitor-log:/var/log/kapacitor
-    environment:
-      # Custom environment variable, used by earthcubechords/kapacitor
-      - KAPACITOR_ENABLED=${KAPACITOR_ENABLED}
-      #
-      - KAPACITOR_HOSTNAME=chords_kapacitor
-      - KAPACITOR_LOGGING_LEVEL=INFO
-      - KAPACITOR_REPORTING_ENABLED=false
-      #
-      - KAPACITOR_HTTP_AUTH_ENABLED=true
-      #
-      - KAPACITOR_INFLUXDB_0_URLS_0=http://chords_influxdb:8086
-      - KAPACITOR_INFLUXDB_0_USERNAME=admin
-      - KAPACITOR_INFLUXDB_0_PASSWORD=${CHORDS_ADMIN_PW}      
-      #
-      - KAPACITOR_SMTP_ENABLED=true
-      - KAPACITOR_SMTP_FROM=${CHORDS_EMAIL_ADDRESS}
-      - KAPACITOR_SMTP_HOST=${CHORDS_EMAIL_SERVER}
-      - KAPACITOR_SMTP_PORT=${CHORDS_EMAIL_PORT}
-      - KAPACITOR_SMTP_USERNAME=${CHORDS_EMAIL_ADDRESS}
-      - KAPACITOR_SMTP_PASSWORD=${CHORDS_EMAIL_PASSWORD}
-    restart: "no"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-    ports:
-      - 9092:9092
-
   # Grafana graphing server. It draws data from influxdb.
   grafana:
     container_name: chords_grafana
@@ -247,8 +210,6 @@ volumes:
   mysql-data: 
   # CHORDS time-series data
   influxdb-data:
-  # kapacitor data
-  kapacitor-data:
   # Grafana configuration data
   grafana-data:
   # shared /tmp volume, used for influxdb backup sharing
@@ -259,7 +220,6 @@ volumes:
   caddy-log:
   mysql-log:
   influxdb-log:
-  kapacitor-log:
   grafana-log:
   # Volumes for Caddy automatic certificate management (Let's Encrypt)
   caddy-data:

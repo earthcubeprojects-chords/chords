@@ -238,18 +238,6 @@ STD_CONFIG_ITEMS = [
         []
     ],
     [
-        "Enable InfluxData kapacitor.\n"
-        "This is experimental.In general, do NOT enable,\n"
-        "as it opens a security hole.",
-        "KAPACITOR_ENABLED",
-        "false",
-        True,
-        [
-            "true",
-            "false"
-        ]
-    ],
-    [
         "The RAILS ENVIRONMENT. Unlikely to to be anything other than \"production\".",
         "RAILS_ENV",
         "production",
