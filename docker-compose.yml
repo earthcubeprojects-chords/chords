@@ -154,6 +154,10 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     ports:
       - 8086:8086
       - 8083:8083
