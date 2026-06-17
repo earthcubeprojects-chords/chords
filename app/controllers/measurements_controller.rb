@@ -72,7 +72,7 @@ class MeasurementsController < ApplicationController
         tags[:test] = is_test_value
 
         instrument.vars.each do |var|
-          if params[var.shortname]
+          if params[var.shortname].present?
             value = params[var.shortname].to_f
             tags[:var]  = var.id
 
